@@ -1,7 +1,0 @@
-syntax = "proto3";
-
-package pb.facade.game;
-
-option go_package = "./pb_facade_game";
-
-
