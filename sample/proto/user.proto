@@ -1,0 +1,46 @@
+syntax = "proto3";
+
+package example;
+
+// 使用者基本資料
+message User {
+  int64 id = 1;                  // proto message 的編號 相當 json object 的索引編號
+  int32 age = 2;
+  string name = 3;
+  string email = 4;
+  // 組合另一個 message
+  UserDetail detail = 5;
+}
+
+/**
+{
+  "id": 1001,
+  "age": 25,
+  "name": "Alice",
+  "email": "alice@example.com",
+  "detail": {
+    "address": "Tokyo",
+    "phone": "090-xxxx-xxxx"
+  }
+}
+
+{
+  "1": 1001,
+  "2": 25,
+  "3": "Alice",
+  "4": "alice@example.com",
+  "5": {
+    "1": "Tokyo",
+    "2": "090-xxxx-xxxx"
+  }
+}
+
+ */
+
+// 使用者詳細資料
+message UserDetail {
+  string address = 1;
+  string phone = 2;
+
+  repeated string tags = 3;
+}

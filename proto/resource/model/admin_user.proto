@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package pb.resource.model;
+
+option go_package = "./pb_resource_model";
+
+service AdminUserModel {
+  rpc ShowOneByName(AdminUserShowOneByNameInput) returns (AdminUserShowOneByNameOutput);
+  rpc ShowOneById(AdminUserShowOneByIdInput) returns (AdminUserShowOneByIdOutput);
+  rpc AddOne(AdminUserAddOneInput) returns (AdminUserAddOneOutput);
+}
+
+message AdminUserShowOneByNameInput {
+  string name = 1;
+}
+
+message AdminUserShowOneByNameOutput {
+  int32 id = 1;
+  string name = 2;
+  string password = 3;
+}
+
+message AdminUserShowOneByIdInput {
+  uint32 id = 1;
+}
+
+message AdminUserShowOneByIdOutput {
+  uint32 id = 1;
+  string name = 2;
+  string password = 3;
+}
+
+message AdminUserAddOneInput {
+  optional string name = 1;
+  optional string password = 2;
+}
+
+message AdminUserAddOneOutput {
+  bool status = 1;
+}
+
+
+

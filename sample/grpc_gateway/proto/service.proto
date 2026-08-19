@@ -1,0 +1,35 @@
+/**
+  proto 是一個
+  1. 跨語言平台的 (兼容 go node php python java...)
+  2. 他是一個以 OOP 思維來規範傳輸格式
+  3. 他用的是2進制數據，性能高
+ */
+
+syntax = "proto3";
+package api;
+option go_package = "./pb";
+
+// 必須引入這個檔案來支援 HTTP 註解
+import "google/api/annotations.proto";
+
+message TransRequest {
+  string text = 1;
+}
+
+message TransReply {
+  string translated_text = 1;
+}
+
+// Protobuf 的官方規範中 【Message名稱】 為大駝峰 --> 轉譯為 go
+// Protobuf 的官方規範中 【Message屬性】 為小底線 -->
+
+service Translator {
+  // RPC 方法
+  rpc Translate(TransRequest) returns (TransReply) {
+    // 適配器規則：將 POST /v1/translate 對應到這個 RPC
+    option (google.api.http) = {
+      post: "/v1/translate"
+      body: "*"
+    };
+  }
+}

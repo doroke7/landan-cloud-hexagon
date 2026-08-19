@@ -1,0 +1,82 @@
+package resource
+
+import (
+	"errors"
+
+	domain "example/internal/domain"
+	outputPortAnyModel "example/internal/output/port/any/model"
+	pbResourceModel "example/pb/resource/model"
+	pkg "example/pkg"
+)
+
+type AdminUserModel struct {
+	*AbstractModel
+}
+
+func NewAdminUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminUserModel {
+	return &AdminUserModel{
+		AbstractModel: oAbstractModel,
+	}
+}
+
+func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, error) {
+
+	oResp, err := oSelf.ResourceModelClient.AdminUser.ShowOneByName(
+		oSelf.Context,
+		&pbResourceModel.AdminUserShowOneByNameInput{Name: sName},
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &domain.AdminUser{
+		Id:       uint(oResp.GetId()),
+		Name:     oResp.GetName(),
+		Password: oResp.GetPassword(),
+	}, nil
+}
+
+func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
+
+	oResp, err := oSelf.ResourceModelClient.AdminUser.ShowOneById(
+		oSelf.Context,
+		&pbResourceModel.AdminUserShowOneByIdInput{Id: uint32(iId)},
+	)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &domain.AdminUser{
+		Id:       uint(oResp.GetId()),
+		Name:     oResp.GetName(),
+		Password: oResp.GetPassword(),
+	}, nil
+}
+
+// ShowOnesByWheresWithOrdersLimit 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
+func (oSelf *AdminUserModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.AdminUser, error) {
+	return nil, errors.New("not supported by resource")
+}
+
+// TotalByWheres 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
+func (oSelf *AdminUserModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
+	return 0, errors.New("not supported by resource")
+}
+
+func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
+
+	oRequest := &pbResourceModel.AdminUserAddOneInput{
+		Name:     oAdminUser.Name,
+		Password: oAdminUser.Password,
+	}
+
+	oResponse, oErr := oSelf.ResourceModelClient.AdminUser.AddOne(oSelf.Context, oRequest)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return oResponse.GetStatus(), nil
+}

@@ -1,0 +1,88 @@
+package mysql
+
+import (
+	"strings"
+	"sync"
+
+	domain "example/internal/domain"
+	outputPortAnyLogic "example/internal/output/port/any/logic"
+	pkg "example/pkg"
+)
+
+type GameLogic struct {
+	*AbstractLogic
+}
+
+func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
+	return &GameLogic{
+		AbstractLogic: oAbstractLogic,
+	}
+}
+
+func (oSelf *GameLogic) ShowGamesTotalByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Game, int64, error) {
+
+	var aGames []*domain.Game
+	var oGame domain.Game
+	var iTotal int64
+	var oFindErr error
+	var oCountErr error
+
+	var oWaitGroup sync.WaitGroup
+	oWaitGroup.Add(2)
+
+	go func() {
+		defer oWaitGroup.Done()
+
+		oQuery := oSelf.
+			DB.
+			WithContext(oSelf.Context).
+			Preload("GameType").
+			Model(&oGame).
+			Where("deleted_at = ?", "2038-01-19 03:14:07")
+		for _, oWhere := range aWheres {
+
+			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
+		}
+
+		for _, oOrder := range aOrders {
+			if oOrder == nil || oOrder.Field == nil {
+				continue
+			}
+
+			sDirection := "ASC"
+			if oOrder.Value != nil && strings.EqualFold(*oOrder.Value, "desc") {
+				sDirection = "DESC"
+			}
+
+			oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
+		}
+
+		oFindErr = oQuery.
+			Limit(int(*oLimit.Count)).
+			Offset(int(*oLimit.Offset)).
+			Find(&aGames).Error
+	}()
+
+	go func() {
+		defer oWaitGroup.Done()
+
+		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oGame).Where("deleted_at = ?", "2038-01-19 03:14:07")
+		for _, oWhere := range aWheres {
+			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
+		}
+
+		oCountErr = oQuery.Count(&iTotal).Error
+	}()
+
+	oWaitGroup.Wait()
+
+	if oFindErr != nil {
+		return aGames, 0, oFindErr
+	}
+
+	if oCountErr != nil {
+		return aGames, 0, oCountErr
+	}
+
+	return aGames, iTotal, nil
+}

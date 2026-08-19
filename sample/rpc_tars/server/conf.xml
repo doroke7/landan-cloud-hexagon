@@ -1,0 +1,23 @@
+<tars>
+    <application>
+        <server>
+            app=Module
+            server=HelloServer
+            local=tcp -h 127.0.0.1 -p 10014 -t 30000
+            logpath=/tmp
+
+            <Module.HelloServer.HelloAdapter>
+                endpoint=tcp -h 0.0.0.0 -p 10015 -t 60000
+                handlegroup=Module.HelloServer.HelloAdapter
+                maxconns=200000
+                protocol=tars
+                queuecap=10000
+                queuetimeout=60000
+                servant=Module.HelloServer.Hello
+                shmcap=0
+                shmkey=0
+                threads=1
+            </Module.HelloServer.HelloAdapter>
+        </server>
+    </application>
+</tars>

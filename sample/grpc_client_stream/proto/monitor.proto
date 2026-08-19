@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+package monitor;
+option go_package = "grpc_client_stream/protobuf";
+
+service Monitor {
+  // Client Streaming
+  rpc PushData(stream DataRequest) returns (DataResponse);  // stream 模式
+  rpc Repeat(DataRequest1) returns (DataResponse1);         // 一般    模式
+
+}
+
+message DataRequest {
+  string device_id = 1;
+  string payload   = 2;
+}
+
+message DataResponse {
+  int32 count = 1;
+}
+
+message DataRequest1 {
+  string input = 1;
+}
+
+message DataResponse1 {
+  string result = 1;
+}

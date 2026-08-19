@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package pb.facade.table;
+
+option go_package = "./pb_facade_table";
+
+service ScannerController {
+  rpc ReportOne(ScannerReportOneRequest) returns (ScannerReportOneResponse);
+}
+
+message ScannerReportOneRequest {
+  string name = 1;
+}
+
+message ScannerReportOneResponse {
+  string name = 1;
+}
+
+
+

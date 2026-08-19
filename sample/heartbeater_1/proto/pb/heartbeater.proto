@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package pb.heartbeater;
+option go_package = "./pb_heartbeater";
+
+// 移除 Service 後綴，直接命名為 Heartbeater
+service Heartbeater {
+  // 一問一答型 (Unary RPC) 的心跳探測
+  rpc Ping (PingRequest) returns (PongResponse);
+}
+
+message PingRequest {
+  string client_id = 1; // 客户端唯一識別碼
+  int64 timestamp  = 2; // 發送時間戳
+}
+
+message PongResponse {
+  string status     = 1; // 狀態，例如 "OK"
+  int64 server_time = 2; // 伺服器接收時間戳
+}

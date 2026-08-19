@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+// 定義生成的 Go 程式碼路徑
+option go_package = "./pb";
+
+package greeter;
+
+// 定義服務
+service Greeter {
+  rpc SayHello (HelloRequest) returns (HelloReply) {}
+}
+
+// 定義請求訊息
+message HelloRequest {
+  string name = 1;
+}
+
+// 定義回應訊息
+message HelloReply {
+  string message = 1;
+}
+
+//

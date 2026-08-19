@@ -1,0 +1,50 @@
+default:
+  directory: './runtime/logger/default'
+  max_size: 10000
+  max_backups: 7
+  max_age: 30
+  compress: true
+  status: true
+middleware:
+  directory: './runtime/logger/middleware'
+  max_size: 10000
+  max_backups: 7
+  max_age: 30
+  compress: true
+  status: true
+interceptor:
+  directory: './runtime/logger/interceptor'
+  max_size: 10000
+  max_backups: 7
+  max_age: 30
+  compress: true
+  status: true
+controller:
+  directory: './runtime/logger/controller'
+  max_size: 10000
+  max_backups: 7
+  max_age: 30
+  compress: true
+  status: true
+cron:
+  directory: './runtime/logger/cron'
+  max_size: 10000
+  max_backups: 7
+  max_age: 30
+  compress: true
+  status: true
+
+sdk:
+  directory: './runtime/logger/sdk'
+  max_size: 10000
+  max_backups: 7
+  max_age: 30
+  compress: true
+  status: true
+service:
+  directory: './runtime/logger/service'
+  max_size: 10000
+  max_backups: 7
+  max_age: 30
+  compress: true
+  status: true

@@ -1,0 +1,18 @@
+.env
+/vendor/**
+
+tmp/**
+!tmp/gitforkeep
+
+
+# 如果父目錄被忽略，子檔案即使 ! 也不會被重新包含。
+runtime/*
+!runtime/log/
+
+runtime/log/*
+!runtime/log/gitforkeep
+
+# 每個 Module 各自的 log 子目錄，同樣只保留 gitforkeep、忽略實際產生的 log 檔。
+!runtime/log/*/
+runtime/log/*/*
+!runtime/log/*/gitforkeep

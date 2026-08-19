@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package monitor;
+
+// 指定生成的 Go 代码所在的包路径
+option go_package = "grpc_0/protobuf";
+
+message MonitorRequest {
+  string resource_name = 1;
+}
+
+message MetricResponse {
+  float value = 1;
+  int64 timestamp = 2;
+}
+
+service MonitorService {
+  rpc WatchMetrics(MonitorRequest) returns (stream MetricResponse);
+}

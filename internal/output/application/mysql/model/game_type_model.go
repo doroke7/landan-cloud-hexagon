@@ -1,0 +1,153 @@
+package mysql
+
+import (
+	"errors"
+	"strings"
+	"time"
+
+	"gorm.io/gorm"
+
+	domain "example/internal/domain"
+	outputPortAnyModel "example/internal/output/port/any/model"
+	pkg "example/pkg"
+)
+
+type GameTypeModel struct {
+	*AbstractModel
+}
+
+func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameTypeModel {
+	return &GameTypeModel{
+		AbstractModel: oAbstractModel,
+	}
+}
+
+func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
+	var oGameType domain.GameType
+
+	if oErr := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.GameType{}).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		First(&oGameType, iId).Error; oErr != nil {
+		if errors.Is(oErr, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+
+		return nil, oErr
+	}
+
+	return &oGameType, nil
+}
+
+func (oSelf *GameTypeModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.GameType, error) {
+	var aGameTypes []*domain.GameType
+
+	oQuery := oSelf.
+		DB.
+		WithContext(oSelf.Context).
+		Model(&domain.GameType{}).
+		Where("deleted_at = ?", "2038-01-19 03:14:07")
+
+	for _, oWhere := range aWheres {
+		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
+	}
+
+	for _, oOrder := range aOrders {
+		if oOrder == nil || oOrder.Field == nil {
+			continue
+		}
+
+		sDirection := "ASC"
+		if oOrder.Value != nil && strings.EqualFold(*oOrder.Value, "desc") {
+			sDirection = "DESC"
+		}
+
+		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
+	}
+
+	if oErr := oQuery.
+		Limit(int(*oLimit.Count)).
+		Offset(int(*oLimit.Offset)).
+		Find(&aGameTypes).Error; oErr != nil {
+		return nil, oErr
+	}
+
+	return aGameTypes, nil
+}
+
+func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) (bool, error) {
+
+	oGameType, _ := pkg.StructToMap(oValue)
+
+	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.GameType{}).
+		Create(oGameType)
+
+	if oResult.Error != nil {
+		return false, oResult.Error
+	}
+
+	if oResult.RowsAffected == 0 {
+		return false, errors.New("新增0筆")
+	}
+
+	return true, nil
+}
+
+func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) (bool, error) {
+	oGameType, _ := pkg.StructToMap(oValue)
+
+	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.GameType{}).
+		Where("id = ?", iId).
+		UpdateColumns(oGameType)
+
+	if oResult.Error != nil {
+		return false, oResult.Error
+	}
+
+	if oResult.RowsAffected == 0 {
+		return false, errors.New("更新0筆")
+	}
+
+	return true, nil
+}
+
+func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
+
+	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.GameType{}).
+		Where("id = ?", iId).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		UpdateColumn("deleted_at", time.Now())
+
+	if oResult.Error != nil {
+		return false, oResult.Error
+	}
+
+	if oResult.RowsAffected == 0 {
+		return false, errors.New("刪除0筆")
+	}
+
+	return true, nil
+}
+
+func (oSelf *GameTypeModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
+	var iTotal int64
+
+	oQuery := oSelf.
+		DB.
+		WithContext(oSelf.Context).
+		Model(&domain.GameType{})
+
+	for _, oWhere := range aWheres {
+		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
+	}
+
+	if oErr := oQuery.
+		Count(&iTotal).Error; oErr != nil {
+		return 0, oErr
+	}
+
+	return uint64(iTotal), nil
+}

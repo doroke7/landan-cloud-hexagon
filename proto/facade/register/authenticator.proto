@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package pb.facade.register;
+
+option go_package = "./pb_facade_register";
+
+service AuthenticatorController {
+  rpc SignIn(AuthenticatorSignInRequest) returns (AuthenticatorSignInResponse);
+}
+
+message AuthenticatorSignInRequest {
+  string name = 1;
+}
+
+message AuthenticatorSignInResponse {
+  string name = 1;
+}
+
+
+

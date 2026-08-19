@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+package pb.resource.model;
+
+option go_package = "./pb_resource_model";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "resource/model/game.proto";
+
+service TableModel {
+  rpc AddOne(TableAddOneInput) returns (TableAddOneOutput);
+  rpc ShowOneById(TableShowOneByIdInput) returns (TableShowOneByIdOutput);
+  rpc EditOneById(TableEditOneByIdInput) returns (TableEditOneByIdOutput);
+  rpc RemoveOneById(TableRemoveOneByIdInput) returns (TableRemoveOneByIdOutput);
+  rpc ShowOnesByWheresWithOrdersLimit(TableShowOnesByWheresWithOrdersLimitInput) returns (TableShowOnesByWheresWithOrdersLimitOutput);
+  rpc TotalByWheres(TableTotalByWheresInput) returns (TableTotalByWheresOutput);
+}
+
+message TableAddOneInput {
+  optional string no = 1;
+  optional uint32 game_id = 2;
+  optional string key = 3;
+  optional uint32 state = 4;
+  optional string description = 5;
+  optional string result = 6;
+  google.protobuf.Timestamp started_at = 7;
+  google.protobuf.Timestamp ended_at = 8;
+}
+
+message TableAddOneOutput {
+  bool status = 1;
+}
+
+message TableShowOneByIdInput {
+  uint32 id = 1;
+}
+
+message TableShowOneByIdOutput {
+  uint32 id = 1;
+  string no = 2;
+  uint32 game_id = 3;
+  string key = 4;
+  uint32 state = 5;
+  string description = 6;
+  string result = 7;
+  google.protobuf.Timestamp started_at = 8;
+  google.protobuf.Timestamp ended_at = 9;
+  google.protobuf.Timestamp created_at = 10;
+  google.protobuf.Timestamp updated_at = 11;
+  google.protobuf.Timestamp deleted_at = 12;
+  Game game = 13;
+}
+
+message TableEditOneByIdInput {
+  uint32 id = 1;
+  optional string no = 2;
+  optional uint32 game_id = 3;
+  optional string key = 4;
+  optional uint32 state = 5;
+  optional string description = 6;
+  optional string result = 7;
+  google.protobuf.Timestamp started_at = 8;
+  google.protobuf.Timestamp ended_at = 9;
+}
+
+message TableEditOneByIdOutput {
+  bool status = 1;
+}
+
+message TableRemoveOneByIdInput {
+  uint32 id = 1;
+}
+
+message TableRemoveOneByIdOutput {
+  bool status = 1;
+}
+
+message TableWhere {
+  string field = 1;
+  string operator = 2;
+  google.protobuf.Value value = 3;
+}
+
+message TableOrder {
+  string field = 1;
+  string value = 2;
+}
+
+message TableLimit {
+  uint64 offset = 1;
+  uint64 count = 2;
+}
+
+message TableShowOnesByWheresWithOrdersLimitInput {
+  repeated TableWhere wheres = 1;
+  repeated TableOrder orders = 3;
+  TableLimit limit = 2;
+}
+
+message TableShowOnesByWheresWithOrdersLimitOutput {
+  repeated TableShowOneByIdOutput tables = 1;
+}
+
+message TableTotalByWheresInput {
+  repeated TableWhere wheres = 1;
+}
+
+message TableTotalByWheresOutput {
+  uint64 total = 1;
+}

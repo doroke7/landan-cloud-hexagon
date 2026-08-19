@@ -1,0 +1,6 @@
+module Module {
+    interface Hello {
+        // 定義一個 RPC 方法：傳入 sReq 字串，傳出 sRsp 字串，並回傳一個 int 狀態碼
+        int testHello(string sReq, out string sRsp);
+    };
+};

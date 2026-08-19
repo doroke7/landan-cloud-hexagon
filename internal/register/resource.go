@@ -1,0 +1,62 @@
+package register
+
+import (
+	"time"
+
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/keepalive"
+
+	pbResourceLogic "example/pb/resource/logic"
+	pbResourceModel "example/pb/resource/model"
+
+	container "example/container"
+	pkg "example/pkg"
+)
+
+func resourceInterceptors(oContainer *container.ResourceContainer) grpc.UnaryServerInterceptor {
+
+	oRouter := pkg.NewGrpcRouter()
+
+	// pb.resource.model.* / pb.resource.logic.* 兩個 gRPC 服務各自獨立的
+	// error + logger + Basic Auth 攔截器，互不共用；error 放外層才能包住其他攔截器一起處理。
+	oRouter.Group("pb.resource.model",
+		oContainer.ResourceModelErrorInterceptor.Handle(),
+		oContainer.ResourceModelLoggerInterceptor.Handle(),
+		oContainer.ResourceModelAuthenticationInterceptor.Handle(),
+	)
+	oRouter.Group("pb.resource.logic",
+		oContainer.ResourceLogicErrorInterceptor.Handle(),
+		oContainer.ResourceLogicLoggerInterceptor.Handle(),
+		oContainer.ResourceLogicAuthenticationInterceptor.Handle(),
+	)
+
+	return oRouter.Build()
+}
+
+func ResourceInit(oContainer *container.ResourceContainer) *grpc.Server {
+
+	oGrpcServer := grpc.NewServer(
+		grpc.ChainUnaryInterceptor(resourceInterceptors(oContainer)),
+		grpc.KeepaliveParams(
+			keepalive.ServerParameters{
+				Time:    1 * time.Second,
+				Timeout: 5 * time.Second,
+			},
+		),
+		grpc.KeepaliveEnforcementPolicy(
+			keepalive.EnforcementPolicy{
+				MinTime:             10 * time.Second,
+				PermitWithoutStream: true,
+			},
+		),
+	)
+
+	pbResourceModel.RegisterAdminUserModelServer(oGrpcServer, oContainer.ResourceModelAdminUser)
+	pbResourceModel.RegisterGameModelServer(oGrpcServer, oContainer.ResourceModelGame)
+	pbResourceModel.RegisterTableModelServer(oGrpcServer, oContainer.ResourceModelTable)
+	pbResourceModel.RegisterGameTypeModelServer(oGrpcServer, oContainer.ResourceModelGameType)
+	pbResourceLogic.RegisterGameLogicServer(oGrpcServer, oContainer.ResourceLogicGame)
+	pbResourceLogic.RegisterTableLogicServer(oGrpcServer, oContainer.ResourceLogicTable)
+
+	return oGrpcServer
+}

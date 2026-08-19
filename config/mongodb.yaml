@@ -1,0 +1,8 @@
+protocol: "mongodb"
+host: "127.0.0.1"
+port: "27017"
+name: "gogin"
+user: "backend"
+password: "mongo_pass_backend"
+max_pool_size: 50
+min_pool_size: 10
