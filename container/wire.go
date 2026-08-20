@@ -94,6 +94,7 @@ type HttpContainer struct {
 
 	// pkg
 	*pkg.Response
+	Clock *pkg.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -132,6 +133,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 
 		// pkg
 		pkg.NewResponse,
+		pkg.NewClock,
 
 		// bootstrap
 		bootstrap.NewResource,
@@ -198,6 +200,9 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 
 type FacadeContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -228,6 +233,9 @@ type FacadeContainer struct {
 
 func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 	wire.Build(
+
+		// pkg
+		pkg.NewClock,
 
 		// bootstrap
 		bootstrap.NewResource,
@@ -280,6 +288,9 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 
 type ResourceContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -320,6 +331,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		bootstrap.NewAmqp,
 		bootstrap.NewRedis,
 		pkg.NewAop,
+		pkg.NewClock,
 
 		// helper
 		helper.NewAbstractHelper,
@@ -377,6 +389,9 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 // ConsumerContainer 只給 `consumer` MQ 消費者服務使用。
 type ConsumerContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -394,6 +409,7 @@ func InitConsumerContainer(ctx context.Context) (*ConsumerContainer, error) {
 		bootstrap.NewAmqp,
 		bootstrap.NewRedis,
 		pkg.NewAop,
+		pkg.NewClock,
 
 		// helper
 		helper.NewAbstractHelper,
@@ -421,6 +437,9 @@ func InitConsumerContainer(ctx context.Context) (*ConsumerContainer, error) {
 // CronContainer 只給 `cron` 排程服務使用。
 type CronContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -438,6 +457,7 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 		bootstrap.NewMysql,
 		bootstrap.NewRedis,
 		pkg.NewAop,
+		pkg.NewClock,
 
 		// helper
 		helper.NewAbstractHelper,
@@ -470,6 +490,9 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 // WebsocketContainer 只給 `websocket` 服務使用。
 type WebsocketContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -499,6 +522,9 @@ type WebsocketContainer struct {
 
 func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 	wire.Build(
+
+		// pkg
+		pkg.NewClock,
 
 		// bootstrap
 		bootstrap.NewResource,
@@ -549,13 +575,19 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 // ClientContainer 只給 `client` （訂閱外部 gRPC stream）服務使用。
 type ClientContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
 }
 
-func InitClientContainer() (*ClientContainer, error) {
+func InitClientContainer(ctx context.Context) (*ClientContainer, error) {
 	wire.Build(
+
+		// pkg
+		pkg.NewClock,
 
 		// helper 部份
 		helper.NewAbstractHelper,
@@ -568,6 +600,9 @@ func InitClientContainer() (*ClientContainer, error) {
 
 // 、
 type CommandContainer struct {
+
+	// pkg
+	Clock *pkg.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -587,6 +622,7 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 		bootstrap.NewMysql,
 		bootstrap.NewRedis,
 		pkg.NewAop,
+		pkg.NewClock,
 
 		// helper
 		helper.NewAbstractHelper,
@@ -616,6 +652,9 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 
 type TcpContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -631,6 +670,9 @@ type TcpContainer struct {
 
 func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 	wire.Build(
+
+		// pkg
+		pkg.NewClock,
 
 		// bootstrap
 		bootstrap.NewResource,
@@ -664,6 +706,9 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 
 type SourceContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -673,6 +718,9 @@ type SourceContainer struct {
 
 func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 	wire.Build(
+
+		// pkg
+		pkg.NewClock,
 
 		// bootstrap
 
@@ -695,6 +743,9 @@ func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 
 type DaemonContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -707,6 +758,9 @@ type DaemonContainer struct {
 
 func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
 	wire.Build(
+
+		// pkg
+		pkg.NewClock,
 
 		// bootstrap
 		bootstrap.NewSource,

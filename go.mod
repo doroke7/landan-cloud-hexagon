@@ -3,6 +3,7 @@ module example
 go 1.26.4
 
 require (
+	github.com/beevik/ntp v1.5.0
 	github.com/gin-gonic/gin v1.12.0
 	github.com/go-pkgz/syncs v1.3.2
 	github.com/go-redis/redis_rate/v10 v10.0.1

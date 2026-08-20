@@ -66,6 +66,10 @@ import (
 
 func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	response := pkg.NewResponse()
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	rsaHelper := helper.NewRsaHelper(abstractHelper)
@@ -96,8 +100,8 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	gameTypeUsecase := resource3.NewGameTypeUsecase(gameTypeModel, resourceAbstractUsecase)
 	gameTypeHandler := handler2.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
 	optionAbstractUsecase := option.NewAbstractUsecase(aesHelper)
-	optionGameTypeUsecase := option.NewGameTypeUsecase(gameTypeModel, optionAbstractUsecase)
-	optionGameTypeHandler := handler3.NewGameTypeHandler(abstractHandler, optionGameTypeUsecase)
+	anyGameTypeUsecase := option.NewGameTypeUsecase(gameTypeModel, optionAbstractUsecase)
+	handlerGameTypeHandler := handler3.NewGameTypeHandler(abstractHandler, anyGameTypeUsecase)
 	abstractMiddleware := middleware_admin.NewAbstractMiddleware(response, rsaHelper, aesHelper, jwtHelper)
 	adminMiddleware := middleware_admin.NewAdminMiddleware(abstractMiddleware)
 	authenticationMiddleware := middleware_admin.NewAuthenticationMiddleware(abstractMiddleware)
@@ -111,6 +115,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	signatureMiddleware := middleware_admin.NewSignatureMiddleware(abstractMiddleware)
 	httpContainer := &HttpContainer{
 		Response:                             response,
+		Clock:                                clock,
 		AbstractHelper:                       abstractHelper,
 		AesHelper:                            aesHelper,
 		RsaHelper:                            rsaHelper,
@@ -121,7 +126,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		HttpAdminResourceTable:               tableHandler,
 		HttpAdminResourceAdminUser:           adminUserHandler,
 		HttpAdminResourceGameType:            gameTypeHandler,
-		HttpAdminOptionGameType:              optionGameTypeHandler,
+		HttpAdminOptionGameType:              handlerGameTypeHandler,
 		HttpAdminAbstractMiddleware:          abstractMiddleware,
 		HttpAdminAdminMiddleware:             adminMiddleware,
 		HttpAdminAuthenticationMiddleware:    authenticationMiddleware,
@@ -138,6 +143,10 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 }
 
 func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	rsaHelper := helper.NewRsaHelper(abstractHelper)
@@ -167,6 +176,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 	decryptionInterceptor := interceptor_facade_admin.NewDecryptionInterceptor(interceptor_facade_adminAbstractInterceptor)
 	encryptionInterceptor := interceptor_facade_admin.NewEncryptionInterceptor(interceptor_facade_adminAbstractInterceptor)
 	facadeContainer := &FacadeContainer{
+		Clock:                                  clock,
 		AbstractHelper:                         abstractHelper,
 		AesHelper:                              aesHelper,
 		RsaHelper:                              rsaHelper,
@@ -191,6 +201,10 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 }
 
 func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	rsaHelper := helper.NewRsaHelper(abstractHelper)
@@ -247,6 +261,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		return nil, err
 	}
 	resourceContainer := &ResourceContainer{
+		Clock:                                  clock,
 		AbstractHelper:                         abstractHelper,
 		AesHelper:                              aesHelper,
 		RsaHelper:                              rsaHelper,
@@ -274,6 +289,10 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 }
 
 func InitConsumerContainer(ctx context.Context) (*ConsumerContainer, error) {
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	connection, err := bootstrap.NewAmqp()
@@ -296,6 +315,7 @@ func InitConsumerContainer(ctx context.Context) (*ConsumerContainer, error) {
 	appUserUsecase := resource3.NewAppUserUsecase(appUserModel, abstractUsecase)
 	appUserHandler := consumer2.NewAppUserHandler(appUserUsecase, abstractHandler)
 	consumerContainer := &ConsumerContainer{
+		Clock:                        clock,
 		AbstractHelper:               abstractHelper,
 		AesHelper:                    aesHelper,
 		AbstractHandler:              abstractHandler,
@@ -305,6 +325,10 @@ func InitConsumerContainer(ctx context.Context) (*ConsumerContainer, error) {
 }
 
 func InitCronContainer(ctx context.Context) (*CronContainer, error) {
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	jwtHelper := helper.NewJwtHelper(abstractHelper)
@@ -328,6 +352,7 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 	authenticatorUsecase := usecase.NewAuthenticatorUsecase(adminUserModel, usecaseAbstractUsecase)
 	authenticatorHandler := authentication2.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	cronContainer := &CronContainer{
+		Clock:                                clock,
 		AbstractHelper:                       abstractHelper,
 		AesHelper:                            aesHelper,
 		JwtHelper:                            jwtHelper,
@@ -338,6 +363,10 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 }
 
 func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	rsaHelper := helper.NewRsaHelper(abstractHelper)
@@ -364,6 +393,7 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 	responseMiddleware := middleware_admin2.NewResponseMiddleware(abstractMiddleware)
 	signatureMiddleware := middleware_admin2.NewSignatureMiddleware(abstractMiddleware)
 	websocketContainer := &WebsocketContainer{
+		Clock:           clock,
 		AbstractHelper:  abstractHelper,
 		AesHelper:       aesHelper,
 		RsaHelper:       rsaHelper,
@@ -386,10 +416,15 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 	return websocketContainer, nil
 }
 
-func InitClientContainer() (*ClientContainer, error) {
+func InitClientContainer(ctx context.Context) (*ClientContainer, error) {
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	clientContainer := &ClientContainer{
+		Clock:          clock,
 		AbstractHelper: abstractHelper,
 		AesHelper:      aesHelper,
 	}
@@ -397,6 +432,10 @@ func InitClientContainer() (*ClientContainer, error) {
 }
 
 func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	jwtHelper := helper.NewJwtHelper(abstractHelper)
@@ -420,6 +459,7 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 	authenticatorUsecase := usecase.NewAuthenticatorUsecase(adminUserModel, usecaseAbstractUsecase)
 	authenticatorHandler := authentication4.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	commandContainer := &CommandContainer{
+		Clock:                            clock,
 		AbstractHelper:                   abstractHelper,
 		AesHelper:                        aesHelper,
 		JwtHelper:                        jwtHelper,
@@ -431,6 +471,10 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 }
 
 func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	jwtHelper := helper.NewJwtHelper(abstractHelper)
@@ -445,6 +489,7 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 	authenticatorUsecase := usecase.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
 	authenticatorHandler := authentication5.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	tcpContainer := &TcpContainer{
+		Clock:                        clock,
 		AbstractHelper:               abstractHelper,
 		AesHelper:                    aesHelper,
 		JwtHelper:                    jwtHelper,
@@ -456,6 +501,10 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 }
 
 func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	abstractHandler := resource5.NewAbstractHandler()
@@ -465,6 +514,7 @@ func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 	lotteryUsecase := usecase4.NewLotteryUsecase(abstractUsecase, lotteryModel)
 	lotteryHandler := announcement.NewLotteryHandler(abstractHandler, lotteryUsecase)
 	sourceContainer := &SourceContainer{
+		Clock:                     clock,
 		AbstractHelper:            abstractHelper,
 		AesHelper:                 aesHelper,
 		SourceAnnouncementLottery: lotteryHandler,
@@ -473,6 +523,10 @@ func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 }
 
 func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	clientConn := bootstrap.NewSource(ctx)
@@ -490,6 +544,7 @@ func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
 	abstractHandler := daemon.NewAbstractHandler(aesHelper)
 	announcementLotteryHandler := source2.NewAnnouncementLotteryHandler(announcementLotteryUsecase, abstractHandler)
 	daemonContainer := &DaemonContainer{
+		Clock:                                  clock,
 		AbstractHelper:                         abstractHelper,
 		AesHelper:                              aesHelper,
 		SourceClient:                           sourceClient,
@@ -505,6 +560,7 @@ type HttpContainer struct {
 
 	// pkg
 	*pkg.Response
+	Clock *pkg.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -540,6 +596,9 @@ type HttpContainer struct {
 
 type FacadeContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -569,6 +628,9 @@ type FacadeContainer struct {
 }
 
 type ResourceContainer struct {
+
+	// pkg
+	Clock *pkg.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -605,6 +667,9 @@ type ResourceContainer struct {
 // ConsumerContainer 只給 `consumer` MQ 消費者服務使用。
 type ConsumerContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -616,6 +681,9 @@ type ConsumerContainer struct {
 
 // CronContainer 只給 `cron` 排程服務使用。
 type CronContainer struct {
+
+	// pkg
+	Clock *pkg.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -629,6 +697,9 @@ type CronContainer struct {
 
 // WebsocketContainer 只給 `websocket` 服務使用。
 type WebsocketContainer struct {
+
+	// pkg
+	Clock *pkg.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -660,6 +731,9 @@ type WebsocketContainer struct {
 // ClientContainer 只給 `client` （訂閱外部 gRPC stream）服務使用。
 type ClientContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -667,6 +741,9 @@ type ClientContainer struct {
 
 // 、
 type CommandContainer struct {
+
+	// pkg
+	Clock *pkg.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -680,6 +757,9 @@ type CommandContainer struct {
 }
 
 type TcpContainer struct {
+
+	// pkg
+	Clock *pkg.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -696,6 +776,9 @@ type TcpContainer struct {
 
 type SourceContainer struct {
 
+	// pkg
+	Clock *pkg.Clock
+
 	// Helper
 	*helper.AbstractHelper
 	*helper.AesHelper
@@ -704,6 +787,9 @@ type SourceContainer struct {
 }
 
 type DaemonContainer struct {
+
+	// pkg
+	Clock *pkg.Clock
 
 	// Helper
 	*helper.AbstractHelper
