@@ -5,6 +5,7 @@ import (
 	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
+	utility "example/internal/utility"
 	pkg "example/pkg"
 )
 
@@ -25,7 +26,7 @@ func NewLoggerMiddleware(oAbstractMiddleware *AbstractMiddleware) *LoggerMiddlew
 func (oSelf *LoggerMiddleware) Handle() gin.HandlerFunc {
 	return func(oContext *gin.Context) {
 
-		iTime1 := int(oSelf.clock.Now().UnixMilli())
+		iTime1 := utility.Time[int](true)
 		sPath := oContext.Request.URL.Path
 		sRawQuery := oContext.Request.URL.RawQuery
 		oMapHeaders := oContext.Request.Header
@@ -39,7 +40,7 @@ func (oSelf *LoggerMiddleware) Handle() gin.HandlerFunc {
 		}
 
 		oContext.Next()
-		iTime2 := int(oSelf.clock.Now().UnixMilli())
+		iTime2 := utility.Time[int](true)
 
 		if bootstrap.CONFIG.LOGGERS.MIDDLEWARE.STATUS {
 			pkg.Logger(pkg.HttpAdminMiddleware).Info(

@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc"
 
 	bootstrap "example/bootstrap"
+	utility "example/internal/utility"
 	pkg "example/pkg"
 )
 
@@ -24,7 +25,7 @@ func (oSelf *LoggerInterceptor) Handle() grpc.UnaryServerInterceptor {
 
 	return func(oContext context.Context, oRequest any, oServerInfo *grpc.UnaryServerInfo, fnHandler grpc.UnaryHandler) (any, error) {
 
-		iTime1 := int(oSelf.Clock.Now().UnixMilli())
+		iTime1 := utility.Time[int](true)
 
 		if bootstrap.CONFIG.LOGGERS.INTERCEPTOR.STATUS {
 			pkg.Logger(pkg.ResourceModelInterceptor).Info(
@@ -35,7 +36,7 @@ func (oSelf *LoggerInterceptor) Handle() grpc.UnaryServerInterceptor {
 		}
 
 		oResponse, oErr := fnHandler(oContext, oRequest)
-		iTime2 := int(oSelf.Clock.Now().UnixMilli())
+		iTime2 := utility.Time[int](true)
 
 		if bootstrap.CONFIG.LOGGERS.INTERCEPTOR.STATUS {
 			pkg.Logger(pkg.ResourceModelInterceptor).Info(

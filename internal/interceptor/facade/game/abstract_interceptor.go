@@ -6,19 +6,16 @@ import (
 	"google.golang.org/grpc"
 
 	helper "example/internal/helper"
-	pkg "example/pkg"
 )
 
 type AbstractInterceptor struct {
-	Clock     *pkg.Clock
 	JwtHelper *helper.JwtHelper
 	AesHelper *helper.AesHelper
 	RsaHelper *helper.RsaHelper
 }
 
-func NewAbstractInterceptor(oClock *pkg.Clock, oJwtHelper *helper.JwtHelper, oAesHelper *helper.AesHelper, oRsaHelper *helper.RsaHelper) *AbstractInterceptor {
+func NewAbstractInterceptor(oJwtHelper *helper.JwtHelper, oAesHelper *helper.AesHelper, oRsaHelper *helper.RsaHelper) *AbstractInterceptor {
 	return &AbstractInterceptor{
-		Clock:     oClock,
 		JwtHelper: oJwtHelper,
 		AesHelper: oAesHelper,
 		RsaHelper: oRsaHelper,
