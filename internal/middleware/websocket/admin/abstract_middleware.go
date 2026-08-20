@@ -2,6 +2,7 @@ package middleware_admin
 
 import (
 	helper "example/internal/helper"
+	pkg "example/pkg"
 )
 
 // AbstractMiddleware 放 websocket admin middleware 共用依賴，跟 http 版本的 AbstractMiddleware
@@ -9,13 +10,15 @@ import (
 // Result，jwtHelper 驗證 A 解密後的 JWT。Signature/Decryption/Encryption/Authentication
 // 都已經有真正的邏輯。
 type AbstractMiddleware struct {
+	clock     *pkg.Clock
 	rsaHelper *helper.RsaHelper
 	aesHelper *helper.AesHelper
 	jwtHelper *helper.JwtHelper
 }
 
-func NewAbstractMiddleware(oRsaHelper *helper.RsaHelper, oAesHelper *helper.AesHelper, oJwtHelper *helper.JwtHelper) *AbstractMiddleware {
+func NewAbstractMiddleware(oClock *pkg.Clock, oRsaHelper *helper.RsaHelper, oAesHelper *helper.AesHelper, oJwtHelper *helper.JwtHelper) *AbstractMiddleware {
 	return &AbstractMiddleware{
+		clock:     oClock,
 		rsaHelper: oRsaHelper,
 		aesHelper: oAesHelper,
 		jwtHelper: oJwtHelper,

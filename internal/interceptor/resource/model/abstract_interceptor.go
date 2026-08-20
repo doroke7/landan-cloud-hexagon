@@ -4,13 +4,18 @@ import (
 	"context"
 
 	"google.golang.org/grpc"
+
+	pkg "example/pkg"
 )
 
 type AbstractInterceptor struct {
+	Clock *pkg.Clock
 }
 
-func NewAbstractInterceptor() *AbstractInterceptor {
-	return &AbstractInterceptor{}
+func NewAbstractInterceptor(oClock *pkg.Clock) *AbstractInterceptor {
+	return &AbstractInterceptor{
+		Clock: oClock,
+	}
 }
 
 func (oSelf *AbstractInterceptor) Handle() grpc.UnaryServerInterceptor {

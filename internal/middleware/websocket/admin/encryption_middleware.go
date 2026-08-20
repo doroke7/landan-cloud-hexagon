@@ -3,6 +3,7 @@ package middleware_admin
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 
 	bootstrap "example/bootstrap"
@@ -78,7 +79,7 @@ func (oSelf *EncryptionMiddleware) Handle() types.WebsocketMiddlewareFunc {
 			return oResp
 		}
 
-		sTime := utility.Time[string](false)
+		sTime := strconv.FormatInt(oSelf.clock.Now().Unix(), 10)
 		aStrings := []string{sTime, sC, sM, sR, bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN.SALT}
 		sSignature := utility.Md5(strings.Join(aStrings, ","))
 

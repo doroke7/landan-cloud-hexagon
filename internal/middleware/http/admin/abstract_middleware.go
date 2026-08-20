@@ -10,15 +10,17 @@ import (
 
 type AbstractMiddleware struct {
 	*pkg.Response
+	clock     *pkg.Clock
 	rsaHelper *helper.RsaHelper
 	aesHelper *helper.AesHelper
 	jwtHelper *helper.JwtHelper
 }
 
 // 2. 在結構體上定義一個「構造函數」
-func NewAbstractMiddleware(oResponse *pkg.Response, oRsaHelper *helper.RsaHelper, oAesHelper *helper.AesHelper, oJwtHelper *helper.JwtHelper) *AbstractMiddleware {
+func NewAbstractMiddleware(oResponse *pkg.Response, oClock *pkg.Clock, oRsaHelper *helper.RsaHelper, oAesHelper *helper.AesHelper, oJwtHelper *helper.JwtHelper) *AbstractMiddleware {
 	return &AbstractMiddleware{
 		Response:  oResponse,
+		clock:     oClock,
 		rsaHelper: oRsaHelper,
 		aesHelper: oAesHelper,
 		jwtHelper: oJwtHelper,

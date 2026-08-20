@@ -2,6 +2,7 @@ package middleware_admin
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 
 	"github.com/gin-gonic/gin"
@@ -47,7 +48,7 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 
 		sMessage := mMessage.(string)
 
-		sTime := utility.Time[string](false)
+		sTime := strconv.FormatInt(oSelf.clock.Now().Unix(), 10)
 		sResult, _ := utility.JsonEncode(mResult)
 
 		sR, oErr := oSelf.aesHelper.Encrypt(sResult, sKey, sIv)
