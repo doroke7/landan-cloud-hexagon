@@ -1,6 +1,5 @@
 'use strict'
 
-const SocketRouter = require('./socket-router')
 const { encodeRequest, decryptResponse } = require('./protocol')
 
 // -------------------- SocketClient --------------------
@@ -11,11 +10,11 @@ const { encodeRequest, decryptResponse } = require('./protocol')
 // server 對 client 大部分 消息。   不要 ack
 
 class SocketClient {
-  constructor (sUrl) {
+  constructor (sUrl, oSocketRouter) {
     this.socket = new WebSocket(sUrl)
     this.requestId = 0
     this.callbacks = new Map()
-    this.socketRouter = new SocketRouter()
+    this.socketRouter = oSocketRouter
 
     this.socket.addEventListener('message', (oEvent) => {
       const oResponse = JSON.parse(oEvent.data)
