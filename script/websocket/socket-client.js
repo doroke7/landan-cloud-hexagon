@@ -10,11 +10,13 @@ const { encodeRequest, decryptResponse } = require('./protocol')
 // server 對 client 大部分 消息。   不要 ack
 
 class SocketClient {
-  constructor (sUrl, oSocketRouter) {
+  constructor (sUrl, oSocketRouter, oSocketController) {
+
     this.socket = new WebSocket(sUrl)
     this.requestId = 0
     this.callbacks = new Map()
     this.socketRouter = oSocketRouter
+    this.socketController = oSocketController
 
     this.socket.addEventListener('message', (oEvent) => {
       const oResponse = JSON.parse(oEvent.data)

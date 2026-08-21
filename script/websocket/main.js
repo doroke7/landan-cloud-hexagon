@@ -11,9 +11,9 @@ function main () {
   const sName = process.argv[2] || 'admin'
   const sPassword = process.argv[3] || 'password'
 
-  const oSocketController = new SocketController();
   const oSocketRouter = new SocketRouter()
-  const oClient = new SocketClient(WEBSOCKET_URL, oSocketRouter)
+  const oSocketController = new SocketController()
+  const oClient = new SocketClient(WEBSOCKET_URL, oSocketRouter, oSocketController)
 
   oSocketRouter.handle('Admin.Authentication.Authenticator.SignIn.Welcome', oSocketController.adminAuthenticationAuthenticatorSignInWelcome)
 
