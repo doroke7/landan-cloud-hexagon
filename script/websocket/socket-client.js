@@ -18,14 +18,14 @@ class SocketClient {
     this.eventRouter = new EventRouter()
 
     this.socket.addEventListener('message', (oEvent) => {
-      const oResp = JSON.parse(oEvent.data)
+      const oResponse = JSON.parse(oEvent.data)
 
-      if (oResp.type == 'event') {
-        this.eventRouter.dispatch(oResp)
+      if (oResponse.type == 'event') {
+        this.eventRouter.dispatch(oResponse)
         return
       }
 
-      const iRequestId = oResp['request-id']
+      const iRequestId = oResponse['request-id']
       const oCallback = this.callbacks.get(iRequestId)
       if (!oCallback) {
         return
@@ -35,12 +35,12 @@ class SocketClient {
       // request 已經送達、不算「沒收到回應」，停止重送計時器。
       clearInterval(oCallback.timer)
 
-      if(oResp.type == 'ack') {
-        oCallback.callback(decryptResponse(oResp, oCallback.key, oCallback.iv))
+      if(oResponse.type == 'ack') {
+        oCallback.callback(decryptResponse(oResponse, oCallback.key, oCallback.iv))
         return
       }
 
-      if(oResp.type == 'normal') {
+      if(oResponse.type == 'normal') {
         // DO NOTHING
         // normal 不 callback
         console.error('normal 不 callback')
