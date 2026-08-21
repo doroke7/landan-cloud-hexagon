@@ -287,6 +287,7 @@ CREATE TABLE `tx-table_record_logs` (
   `state` tinyint NOT NULL DEFAULT '0',
   `text` json NOT NULL,
   `image` json NOT NULL,
+  `time` bigint unsigned NOT NULL DEFAULT '0' COMMENT '地端事件發生 unix-micro 時間',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
