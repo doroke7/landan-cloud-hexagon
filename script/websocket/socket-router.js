@@ -1,9 +1,9 @@
 'use strict'
 
-// EventRouter 對應 server 端 pkg.WebsocketRouter：用 method 當 key 找對應的處理方法，
+// SocketRouter 對應 server 端 pkg.WebsocketRouter：用 method 當 key 找對應的處理方法，
 // 只是這裡分派的是 server 主動推播的 "event"（例如 Admin.Authentication.Authenticator.
 // SignIn.Welcome），不是呼叫的回應（ack，走 SocketClient.callbacks 那條路）。
-class EventRouter {
+class SocketRouter {
   constructor () {
     this.routes = new Map()
   }
@@ -24,4 +24,4 @@ class EventRouter {
   }
 }
 
-module.exports = EventRouter
+module.exports = SocketRouter

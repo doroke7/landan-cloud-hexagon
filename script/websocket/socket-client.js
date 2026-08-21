@@ -1,6 +1,6 @@
 'use strict'
 
-const EventRouter = require('./event-router')
+const SocketRouter = require('./socket-router')
 const { encodeRequest, decryptResponse } = require('./protocol')
 
 // -------------------- SocketClient --------------------
@@ -15,13 +15,13 @@ class SocketClient {
     this.socket = new WebSocket(sUrl)
     this.requestId = 0
     this.callbacks = new Map()
-    this.eventRouter = new EventRouter()
+    this.socketRouter = new SocketRouter()
 
     this.socket.addEventListener('message', (oEvent) => {
       const oResponse = JSON.parse(oEvent.data)
 
       if (oResponse.type == 'event') {
-        this.eventRouter.dispatch(oResponse)
+        this.socketRouter.dispatch(oResponse)
         return
       }
 
@@ -84,15 +84,11 @@ class SocketClient {
     fnSend()
   }
 
-  // 對應 server 端 pkg.WebsocketRouter.HandleFunc：註冊一個 method 收到 server 主動
-  // 推播的 "event" 時要怎麼處理，跟 emit() 是相反方向（emit 是送出去等 ack，onEvent
-  // 是被動等 server 推進來）。
+
   onRoute (sMethod, fnHandler) {
-    this.eventRouter.handle(sMethod, fnHandler)
+    this.socketRouter.handle(sMethod, fnHandler)
   }
 
-  // 對應 server 端 internal/register/websocket.go 的
-  // oRouter.Group("Admin.").HandleFunc("Authentication.Authenticator.SignIn", ...)
   AdminAuthenticationAuthenticatorSignIn (oParam, fnCallback) {
     this.emit('Admin.Authentication.Authenticator.SignIn', oParam, fnCallback)
   }
