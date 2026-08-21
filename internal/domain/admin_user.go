@@ -29,3 +29,14 @@ type AdminUserValue struct {
 	// UpdatedAt *time.Time `json:"updated_at"`
 	// DeletedAt *time.Time `json:"deleted_at"`
 }
+
+func AdminUserRowToAdminUser(oRow *AdminUserRow) *AdminUser {
+	return &AdminUser{
+		Id:        oRow.Id,
+		Name:      oRow.Name,
+		Password:  oRow.Password,
+		CreatedAt: oRow.CreatedAt,
+		UpdatedAt: oRow.UpdatedAt,
+		DeletedAt: oRow.DeletedAt,
+	}
+}

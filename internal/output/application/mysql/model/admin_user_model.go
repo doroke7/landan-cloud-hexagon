@@ -6,12 +6,13 @@ import (
 	"strings"
 	"time"
 
+	pkg "example/pkg"
+
 	"gorm.io/gorm"
 
 	bootstrap "example/bootstrap"
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pkg "example/pkg"
 )
 
 type AdminUserModel struct {
@@ -21,17 +22,6 @@ type AdminUserModel struct {
 func NewAdminUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminUserModel {
 	return &AdminUserModel{
 		AbstractModel: oAbstractModel,
-	}
-}
-
-func adminUserRowToAdminUser(oRow *domain.AdminUserRow) *domain.AdminUser {
-	return &domain.AdminUser{
-		Id:        oRow.Id,
-		Name:      oRow.Name,
-		Password:  oRow.Password,
-		CreatedAt: oRow.CreatedAt,
-		UpdatedAt: oRow.UpdatedAt,
-		DeletedAt: oRow.DeletedAt,
 	}
 }
 
@@ -51,7 +41,7 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 		return nil, err
 	}
 
-	return adminUserRowToAdminUser(&oAdminUserRow), nil
+	return domain.AdminUserRowToAdminUser(&oAdminUserRow), nil
 }
 
 func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
@@ -77,7 +67,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 		return oAdminUserRow, nil
 	})
 
-	return adminUserRowToAdminUser(&oAdminUserRow), err
+	return domain.AdminUserRowToAdminUser(&oAdminUserRow), err
 }
 
 func (oSelf *AdminUserModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.AdminUser, error) {
@@ -112,7 +102,7 @@ func (oSelf *AdminUserModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Wher
 
 	aAdminUsers := make([]*domain.AdminUser, len(aAdminUserRows))
 	for i, oAdminUserRow := range aAdminUserRows {
-		aAdminUsers[i] = adminUserRowToAdminUser(oAdminUserRow)
+		aAdminUsers[i] = domain.AdminUserRowToAdminUser(oAdminUserRow)
 	}
 
 	return aAdminUsers, nil
