@@ -84,10 +84,6 @@ class SocketClient {
   }
 
 
-  onRoute (sMethod, fnHandler) {
-    this.socketRouter.handle(sMethod, fnHandler)
-  }
-
   AdminAuthenticationAuthenticatorSignIn (oParam, fnCallback) {
     this.emit('Admin.Authentication.Authenticator.SignIn', oParam, fnCallback)
   }

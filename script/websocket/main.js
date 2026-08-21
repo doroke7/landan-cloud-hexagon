@@ -13,7 +13,7 @@ function main () {
   const oSocketRouter = new SocketRouter()
   const oClient = new SocketClient(WEBSOCKET_URL, oSocketRouter)
 
-  oClient.onRoute('Admin.Authentication.Authenticator.SignIn.Welcome', (oParam) => {
+  oSocketRouter.handle('Admin.Authentication.Authenticator.SignIn.Welcome', (oParam) => {
     console.log('--- 收到 Welcome event ---')
     console.log(oParam)
   })
