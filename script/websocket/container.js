@@ -15,8 +15,14 @@ function initContainer () {
   const oSocketController = new SocketController()
   const oSocketClient = new SocketClient(WEBSOCKET_URL, oSocketRouter, oSocketController)
 
+  let oContainer = {
+    router: oSocketRouter, 
+    controller: oSocketController, 
+    client: oSocketClient
+  };
 
-  return { router: oSocketRouter, controller: oSocketController, client: oSocketClient }
+
+  return oContainer
 }
 
 module.exports = initContainer
