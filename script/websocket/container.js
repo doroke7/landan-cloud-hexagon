@@ -15,7 +15,6 @@ function initContainer () {
   const oSocketController = new SocketController()
   const oSocketClient = new SocketClient(WEBSOCKET_URL, oSocketRouter, oSocketController)
 
-  oSocketRouter.handle('Admin.Authentication.Authenticator.SignIn.Welcome', oSocketController.adminAuthenticationAuthenticatorSignInWelcome)
 
   return { router: oSocketRouter, controller: oSocketController, client: oSocketClient }
 }

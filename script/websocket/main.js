@@ -11,7 +11,7 @@ function main () {
 
   const container = initContainer();
 
-  container.router.handle();
+  container.router.handle('Admin.Authentication.Authenticator.SignIn.Welcome', oSocketController.adminAuthenticationAuthenticatorSignInWelcome);
 
   container.client.ready(() => {
     console.log(`已連線到 ${WEBSOCKET_URL}`)
