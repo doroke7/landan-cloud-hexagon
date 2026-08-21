@@ -13,11 +13,11 @@ const SocketController = require('./socket-controller')
 function initContainer () {
   const oSocketRouter = new SocketRouter()
   const oSocketController = new SocketController()
-  const oClient = new SocketClient(WEBSOCKET_URL, oSocketRouter, oSocketController)
+  const oSocketClient = new SocketClient(WEBSOCKET_URL, oSocketRouter, oSocketController)
 
   oSocketRouter.handle('Admin.Authentication.Authenticator.SignIn.Welcome', oSocketController.adminAuthenticationAuthenticatorSignInWelcome)
 
-  return { router: oSocketRouter, controller: oSocketController, client: oClient }
+  return { router: oSocketRouter, controller: oSocketController, client: oSocketClient }
 }
 
 module.exports = initContainer

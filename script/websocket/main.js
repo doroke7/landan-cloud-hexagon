@@ -11,6 +11,8 @@ function main () {
 
   const container = initContainer();
 
+  container.router.handle();
+
   container.client.ready(() => {
     console.log(`已連線到 ${WEBSOCKET_URL}`)
 
