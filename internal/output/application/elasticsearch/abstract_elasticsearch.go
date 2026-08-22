@@ -198,7 +198,7 @@ func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sInde
 	return aOptions, oErr
 }
 
-func (oSelf *AbstractElasticsearch) SearchWithOptions(sIndex string, aOptions []func(*esapi.SearchRequest)) (*ElasticsearchSearchResult, error) {
+func (oSelf *AbstractElasticsearch) SearchWithOptions(aOptions []func(*esapi.SearchRequest)) (*ElasticsearchSearchResult, error) {
 	oResponse, oErr := oSelf.Client.Search(aOptions...)
 	if oErr != nil {
 		return nil, oErr
@@ -211,7 +211,7 @@ func (oSelf *AbstractElasticsearch) SearchWithOptions(sIndex string, aOptions []
 	}
 
 	if oResponse.IsError() {
-		return nil, fmt.Errorf("elasticsearch search %s failed: %s", sIndex, string(aResponseBody))
+		return nil, fmt.Errorf("elasticsearch search index failed:", string(aResponseBody))
 	}
 
 	var oResult struct {

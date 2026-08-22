@@ -37,7 +37,7 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 		return nil, oErr
 	}
 
-	oResult, oErr := oSelf.SearchWithOptions(oSelf.Index, aOptions)
+	oResult, oErr := oSelf.SearchWithOptions(aOptions)
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -75,7 +75,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 		return nil, oErr
 	}
 
-	oResult, oErr := oSelf.SearchWithOptions(oSelf.Index, aOptions)
+	oResult, oErr := oSelf.SearchWithOptions(aOptions)
 	if oErr != nil {
 		return nil, oErr
 	}

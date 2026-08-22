@@ -47,7 +47,7 @@ func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*p
 		return nil, oErr
 	}
 
-	oResult, oErr := oSelf.SearchWithOptions(oSelf.Index, aOptions)
+	oResult, oErr := oSelf.SearchWithOptions(aOptions)
 	if oErr != nil {
 		return nil, oErr
 	}
