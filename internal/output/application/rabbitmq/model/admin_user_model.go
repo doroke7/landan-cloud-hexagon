@@ -1,4 +1,4 @@
-package producer
+package rabbitmq
 
 import (
 	"encoding/json"
@@ -7,26 +7,26 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 
 	domain "example/internal/domain"
-	producerBase "example/internal/output/application/producer"
+	outputApplicationRabbitmq "example/internal/output/application/rabbitmq"
 )
 
 type AdminUserModel struct {
-	*producerBase.AbstractProducer
+	*outputApplicationRabbitmq.AbstractRabbitmq
 }
 
-func NewAdminUserModel(oAbstractProducer *producerBase.AbstractProducer) (*AdminUserModel, error) {
-	_, err := oAbstractProducer.Channel.QueueDeclare("AdminUser.AddOne", true, false, false, false, nil)
+func NewAdminUserModel(oAbstractRabbitmq *outputApplicationRabbitmq.AbstractRabbitmq) (*AdminUserModel, error) {
+	_, err := oAbstractRabbitmq.Channel.QueueDeclare("AdminUser.AddOne", true, false, false, false, nil)
 	if err != nil {
 		return nil, err
 	}
 
 	return &AdminUserModel{
-		AbstractProducer: oAbstractProducer,
+		AbstractRabbitmq: oAbstractRabbitmq,
 	}, nil
 }
 
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
-	body, err := json.Marshal(oAdminUser)
+	aByteBody, err := json.Marshal(oAdminUser)
 	if err != nil {
 		return err
 	}
@@ -38,13 +38,13 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
 		false,
 		amqp.Publishing{
 			ContentType: "application/json",
-			Body:        body,
+			Body:        aByteBody,
 		},
 	)
 }
 
 func (oSelf *AdminUserModel) ShowOneById(id uint) (*domain.AdminUser, error) {
-	return nil, errors.New("not supported by producer")
+	return nil, errors.New("not supported by rabbitmq")
 }
 
 // Close 是空實作：Conn／Channel 現在都是從 AbstractRepository 注入的共用資源，

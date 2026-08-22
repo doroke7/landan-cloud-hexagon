@@ -1,4 +1,4 @@
-package producer
+package rabbitmq
 
 import (
 	"context"
@@ -10,19 +10,19 @@ import (
 // AbstractModel 做法一致。
 // Conn／Channel 是從 bootstrap 注入的共用 amqp 連線與 channel，
 // 跟 mysql.AbstractModel 持有 *gorm.DB 是同一種角色。
-type AbstractProducer struct {
+type AbstractRabbitmq struct {
 	Context context.Context
 	Conn    *amqp.Connection
 	Channel *amqp.Channel
 }
 
-func NewAbstractProducer(oContext context.Context, oConn *amqp.Connection) (*AbstractProducer, error) {
+func NewAbstractRabbitmq(oContext context.Context, oConn *amqp.Connection) (*AbstractRabbitmq, error) {
 	oChannel, err := oConn.Channel()
 	if err != nil {
 		return nil, err
 	}
 
-	return &AbstractProducer{
+	return &AbstractRabbitmq{
 		Context: oContext,
 		Conn:    oConn,
 		Channel: oChannel,

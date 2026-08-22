@@ -51,8 +51,8 @@ import (
 	"example/internal/output/application/mysql"
 	mysql3 "example/internal/output/application/mysql/logic"
 	mysql2 "example/internal/output/application/mysql/model"
-	"example/internal/output/application/producer"
-	producer2 "example/internal/output/application/producer/model"
+	"example/internal/output/application/rabbitmq"
+	rabbitmq2 "example/internal/output/application/rabbitmq/model"
 	"example/internal/output/application/resource"
 	resource3 "example/internal/output/application/resource/logic"
 	resource2 "example/internal/output/application/resource/model"
@@ -255,11 +255,11 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	if err != nil {
 		return nil, err
 	}
-	abstractProducer, err := producer.NewAbstractProducer(ctx, connection)
+	abstractRabbitmq, err := rabbitmq.NewAbstractRabbitmq(ctx, connection)
 	if err != nil {
 		return nil, err
 	}
-	producerAdminUserModel, err := producer2.NewAdminUserModel(abstractProducer)
+	rabbitmqAdminUserModel, err := rabbitmq2.NewAdminUserModel(abstractRabbitmq)
 	if err != nil {
 		return nil, err
 	}
@@ -286,7 +286,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		ResourceModelAuthenticationInterceptor: interceptor_resource_modelAuthenticationInterceptor,
 		ResourceModelErrorInterceptor:          interceptor_resource_modelErrorInterceptor,
 		ResourceModelLoggerInterceptor:         interceptor_resource_modelLoggerInterceptor,
-		ResourceProducerAdminUser:              producerAdminUserModel,
+		ResourceRabbitmqAdminUser:              rabbitmqAdminUserModel,
 	}
 	return resourceContainer, nil
 }
@@ -664,7 +664,7 @@ type ResourceContainer struct {
 	ResourceModelLoggerInterceptor         *interceptor_resource_model.LoggerInterceptor
 
 	// MQ 生產者
-	ResourceProducerAdminUser *producer2.AdminUserModel
+	ResourceRabbitmqAdminUser *rabbitmq2.AdminUserModel
 }
 
 // ConsumerContainer 只給 `consumer` MQ 消費者服務使用。

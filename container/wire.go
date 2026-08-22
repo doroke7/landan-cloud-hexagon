@@ -31,8 +31,8 @@ import (
 	outputApplicationMysqlLogic "example/internal/output/application/mysql/logic"
 	outputApplicationMysqlModel "example/internal/output/application/mysql/model"
 
-	outputApplicationProducer "example/internal/output/application/producer"
-	outputApplicationProducerModel "example/internal/output/application/producer/model"
+	outputApplicationRabbitmq "example/internal/output/application/rabbitmq"
+	outputApplicationRabbitmqModel "example/internal/output/application/rabbitmq/model"
 	outputApplicationResource "example/internal/output/application/resource"
 	outputApplicationResourceLogic "example/internal/output/application/resource/logic"
 	outputApplicationResourceModel "example/internal/output/application/resource/model"
@@ -324,7 +324,7 @@ type ResourceContainer struct {
 	ResourceModelLoggerInterceptor         *interceptorResourceModel.LoggerInterceptor
 
 	// MQ 生產者
-	ResourceProducerAdminUser *outputApplicationProducerModel.AdminUserModel
+	ResourceRabbitmqAdminUser *outputApplicationRabbitmqModel.AdminUserModel
 }
 
 func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
@@ -350,8 +350,8 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		outputApplicationMysqlModel.NewGameTypeModel,
 		outputApplicationMysqlLogic.NewGameLogic,
 		outputApplicationMysqlLogic.NewTableLogic,
-		outputApplicationProducer.NewAbstractProducer,
-		outputApplicationProducerModel.NewAdminUserModel,
+		outputApplicationRabbitmq.NewAbstractRabbitmq,
+		outputApplicationRabbitmqModel.NewAdminUserModel,
 
 		// usecase
 		usecaseApplicationAnyModel.NewAbstractUsecase,
