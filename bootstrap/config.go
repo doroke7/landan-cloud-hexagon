@@ -258,6 +258,12 @@ type Config struct {
 		PASS    string   `mapstructure:"pass"`
 		VERSION string   `mapstructure:"version"`
 	} `mapstructure:"kafka"`
+	ROCKETMQ struct {
+		NAME_SERVERS []string `mapstructure:"name_servers"`
+		GROUP        string   `mapstructure:"group"`
+		ACCESS_KEY   string   `mapstructure:"access_key"`
+		SECRET_KEY   string   `mapstructure:"secret_key"`
+	} `mapstructure:"rocketmq"`
 	BEANSTALK struct {
 		HOST    string `mapstructure:"host"`
 		PORT    string `mapstructure:"port"`
@@ -293,6 +299,32 @@ type Config struct {
 		PASS    string   `mapstructure:"pass"`
 		VERSION string   `mapstructure:"version"`
 	} `mapstructure:"redpanda"`
+	ETCD struct {
+		HOSTS   []string `mapstructure:"hosts"`
+		PORTS   []string `mapstructure:"ports"`
+		USER    string   `mapstructure:"user"`
+		PASS    string   `mapstructure:"pass"`
+		TIMEOUT int      `mapstructure:"timeout"`
+	} `mapstructure:"etcd"`
+	ELASTICSEARCH struct {
+		HOSTS []string `mapstructure:"hosts"`
+		USER  string   `mapstructure:"user"`
+		PASS  string   `mapstructure:"pass"`
+	} `mapstructure:"elasticsearch"`
+	MOSQUITTO struct {
+		HOST    string `mapstructure:"host"`
+		PORT    string `mapstructure:"port"`
+		USER    string `mapstructure:"user"`
+		PASS    string `mapstructure:"pass"`
+		TIMEOUT int    `mapstructure:"timeout"`
+	} `mapstructure:"mosquitto"`
+	EMQX struct {
+		HOST    string `mapstructure:"host"`
+		PORT    string `mapstructure:"port"`
+		USER    string `mapstructure:"user"`
+		PASS    string `mapstructure:"pass"`
+		TIMEOUT int    `mapstructure:"timeout"`
+	} `mapstructure:"emqx"`
 	DEFAULT struct {
 		DEBUG bool `mapstructure:"debug"`
 	} `mapstructure:"default"`

@@ -1,0 +1,5 @@
+hosts: ["127.0.0.1"]
+ports: ["2379"]
+user: ""
+pass: ""
+timeout: 10000

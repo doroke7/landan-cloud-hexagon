@@ -1,0 +1,4 @@
+name_servers: ["127.0.0.1:9876"]
+group: "resource"
+access_key: ""
+secret_key: ""
