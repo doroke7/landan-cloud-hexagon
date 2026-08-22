@@ -35,107 +35,19 @@ func (oSelf *AbstractElasticsearch) IndexName(sName string) string {
 }
 
 var oOperatorMap = map[string]bool{
-	"eq": true, "ne": true, "gt": true, "gte": true, "lt": true, "lte": true,
-	"contains": true, "notContains": true, "startsWith": true, "endsWith": true,
-	"in": true, "notIn": true, "between": true,
-}
-
-func (oSelf *AbstractElasticsearch) FiltersToWheres(aFilters []*pkg.Filter) []map[string]any {
-	aWheres := make([]map[string]any, 0, len(aFilters))
-
-	for _, oFilter := range aFilters {
-		if oFilter == nil || oFilter.Field == nil {
-			continue
-		}
-
-		sField := *oFilter.Field
-		oValue := oFilter.Value
-
-		sOperator := "eq"
-		if oFilter.Operator != nil && oOperatorMap[*oFilter.Operator] {
-			sOperator = *oFilter.Operator
-		}
-
-		switch sOperator {
-		case "ne":
-			aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"term": map[string]any{sField: oValue}}}})
-		case "gt", "gte", "lt", "lte":
-			aWheres = append(aWheres, map[string]any{"range": map[string]any{sField: map[string]any{sOperator: oValue}}})
-		case "contains":
-			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}})
-			}
-		case "notContains":
-			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}}}})
-			}
-		case "startsWith":
-			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"prefix": map[string]any{sField: map[string]any{"value": sValue, "case_insensitive": true}}})
-			}
-		case "endsWith":
-			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue, "case_insensitive": true}}})
-			}
-		case "in":
-			aWheres = append(aWheres, map[string]any{"terms": map[string]any{sField: oValue}})
-		case "notIn":
-			aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"terms": map[string]any{sField: oValue}}}})
-		case "between":
-			if aRange, bOk := oValue.([]any); bOk && len(aRange) == 2 {
-				aWheres = append(aWheres, map[string]any{"range": map[string]any{sField: map[string]any{"gte": aRange[0], "lte": aRange[1]}}})
-			}
-		default:
-			aWheres = append(aWheres, map[string]any{"term": map[string]any{sField: oValue}})
-		}
-	}
-
-	return aWheres
-}
-
-func (oSelf *AbstractElasticsearch) SortersToOrders(aSorters []*pkg.Sorter) []map[string]any {
-	aOrders := make([]map[string]any, 0, len(aSorters))
-
-	for _, oSorter := range aSorters {
-		if oSorter == nil || oSorter.Field == nil {
-			continue
-		}
-
-		sDirection := "asc"
-		if oSorter.Order != nil && strings.EqualFold(*oSorter.Order, "desc") {
-			sDirection = "desc"
-		}
-
-		aOrders = append(aOrders, map[string]any{*oSorter.Field: map[string]any{"order": sDirection}})
-	}
-
-	return aOrders
-}
-
-type ElasticsearchLimit struct {
-	From *int
-	Size *int
-}
-
-func (oSelf *AbstractElasticsearch) PaginationToLimit(oPagination *pkg.Pagination) *ElasticsearchLimit {
-	iSize := uint(10)
-	iPage := uint(1)
-
-	if oPagination != nil && oPagination.Size != nil && *oPagination.Size != 0 {
-		iSize = *oPagination.Size
-	}
-
-	if oPagination != nil && oPagination.Page != nil && *oPagination.Page != 0 {
-		iPage = *oPagination.Page
-	}
-
-	iFrom := int((iPage - 1) * iSize)
-	iSizeInt := int(iSize)
-
-	return &ElasticsearchLimit{
-		From: &iFrom,
-		Size: &iSizeInt,
-	}
+	"eq":          true,
+	"ne":          true,
+	"gt":          true,
+	"gte":         true,
+	"lt":          true,
+	"lte":         true,
+	"contains":    true,
+	"notContains": true,
+	"startsWith":  true,
+	"endsWith":    true,
+	"in":          true,
+	"notIn":       true,
+	"between":     true,
 }
 
 // ---- 查詢/寫入的共用底層操作，取代 mysql 版本裡 *gorm.DB 幫忙做的事 ----
@@ -150,41 +62,8 @@ type ElasticsearchSearchResult struct {
 	Hits  []ElasticsearchHit
 }
 
-func (oSelf *AbstractElasticsearch) IndexWheresOrdersLimitToOptions(sIndex string, aWheres []map[string]any, aOrders []map[string]any, oLimit *ElasticsearchLimit) ([]func(*esapi.SearchRequest), error) {
-	oQuery := map[string]any{"match_all": map[string]any{}}
-	if len(aWheres) > 0 {
-		oQuery = map[string]any{"bool": map[string]any{"must": aWheres}}
-	}
-
-	oBody := map[string]any{"query": oQuery}
-	if len(aOrders) > 0 {
-		oBody["sort"] = aOrders
-	}
-
-	aBodyBytes, oErr := json.Marshal(oBody)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	aOptions := []func(*esapi.SearchRequest){
-		oSelf.Client.Search.WithContext(oSelf.Context),
-		oSelf.Client.Search.WithIndex(sIndex),
-		oSelf.Client.Search.WithBody(bytes.NewReader(aBodyBytes)),
-		oSelf.Client.Search.WithTrackTotalHits(true),
-	}
-
-	if oLimit != nil {
-		if oLimit.From != nil {
-			aOptions = append(aOptions, oSelf.Client.Search.WithFrom(*oLimit.From))
-		}
-		if oLimit.Size != nil {
-			aOptions = append(aOptions, oSelf.Client.Search.WithSize(*oLimit.Size))
-		}
-	}
-	return aOptions, nil
-}
-
 func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sIndex string, aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]func(*esapi.SearchRequest), error) {
+
 	aWheres := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -325,23 +204,8 @@ func (oSelf *AbstractElasticsearch) SearchWithOptions(aOptions []func(*esapi.Sea
 		Hits:  oResult.Hits.Hits,
 	}, nil
 }
-
-func (oSelf *AbstractElasticsearch) Count(sIndex string, aWheres []map[string]any) (uint64, error) {
-	oQuery := map[string]any{"match_all": map[string]any{}}
-	if len(aWheres) > 0 {
-		oQuery = map[string]any{"bool": map[string]any{"must": aWheres}}
-	}
-
-	aBodyBytes, oErr := json.Marshal(map[string]any{"query": oQuery})
-	if oErr != nil {
-		return 0, oErr
-	}
-
-	oResponse, oErr := oSelf.Client.Count(
-		oSelf.Client.Count.WithContext(oSelf.Context),
-		oSelf.Client.Count.WithIndex(sIndex),
-		oSelf.Client.Count.WithBody(bytes.NewReader(aBodyBytes)),
-	)
+func (oSelf *AbstractElasticsearch) CountWithOptions(aOptions []func(*esapi.CountRequest)) (uint64, error) {
+	oResponse, oErr := oSelf.Client.Count(aOptions...)
 	if oErr != nil {
 		return 0, oErr
 	}
@@ -353,7 +217,7 @@ func (oSelf *AbstractElasticsearch) Count(sIndex string, aWheres []map[string]an
 	}
 
 	if oResponse.IsError() {
-		return 0, fmt.Errorf("elasticsearch count %s failed: %s", sIndex, string(aResponseBody))
+		return 0, fmt.Errorf("elasticsearch count failed: %s", string(aResponseBody))
 	}
 
 	var oResult struct {
