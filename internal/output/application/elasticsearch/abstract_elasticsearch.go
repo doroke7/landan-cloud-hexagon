@@ -62,8 +62,7 @@ type ElasticsearchSearchResult struct {
 	Hits  []ElasticsearchHit
 }
 
-func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sIndex string, aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]func(*esapi.SearchRequest), error) {
-
+func (oSelf *AbstractElasticsearch) FiltersToMust(aFilters []*pkg.Filter) []map[string]any {
 	aWheres := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -113,6 +112,10 @@ func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sInde
 		}
 	}
 
+	return aWheres
+}
+
+func (oSelf *AbstractElasticsearch) SortersToSort(aSorters []*pkg.Sorter) []map[string]any {
 	aOrders := make([]map[string]any, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
@@ -127,6 +130,13 @@ func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sInde
 
 		aOrders = append(aOrders, map[string]any{*oSorter.Field: map[string]any{"order": sDirection}})
 	}
+
+	return aOrders
+}
+
+func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sIndex string, aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]func(*esapi.SearchRequest), error) {
+	aMusts := oSelf.FiltersToMust(aFilters)
+	aSorts := oSelf.SortersToSort(aSorters)
 
 	iSize := uint(10)
 	iPage := uint(1)
@@ -143,13 +153,13 @@ func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sInde
 	iSizeInt := int(iSize)
 
 	oQuery := map[string]any{"match_all": map[string]any{}}
-	if len(aWheres) > 0 {
-		oQuery = map[string]any{"bool": map[string]any{"must": aWheres}}
+	if len(aMusts) > 0 {
+		oQuery = map[string]any{"bool": map[string]any{"must": aMusts}}
 	}
 
 	oBody := map[string]any{"query": oQuery}
-	if len(aOrders) > 0 {
-		oBody["sort"] = aOrders
+	if len(aSorts) > 0 {
+		oBody["sort"] = aSorts
 	}
 
 	aBodyBytes, oErr := json.Marshal(oBody)
