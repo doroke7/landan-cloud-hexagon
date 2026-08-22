@@ -115,3 +115,39 @@ func (oSelf *AbstractMongodb) SortersToFindOptions(aSorters []*pkg.Sorter) *opti
 
 	return oFindOptions
 }
+
+func (oSelf *AbstractMongodb) SortersPaginationToFindOptions(aSorters []*pkg.Sorter, oPagination *pkg.Pagination) *options.FindOptionsBuilder {
+	oSort := bson.D{}
+	oFindOptions := options.Find()
+
+	for _, oSorter := range aSorters {
+		if oSorter == nil || oSorter.Field == nil {
+			continue
+		}
+
+		iDirection := 1
+		if oSorter.Order != nil && strings.EqualFold(*oSorter.Order, "desc") {
+			iDirection = -1
+		}
+
+		oSort = append(oSort, bson.E{Key: *oSorter.Field, Value: iDirection})
+	}
+
+	if len(oSort) > 0 {
+		oFindOptions.SetSort(oSort)
+	}
+
+	iSize := uint(10)
+	iPage := uint(1)
+	if oPagination != nil {
+		if oPagination.Size != nil && *oPagination.Size != 0 {
+			iSize = *oPagination.Size
+		}
+		if oPagination.Page != nil && *oPagination.Page != 0 {
+			iPage = *oPagination.Page
+		}
+	}
+	oFindOptions.SetLimit(int64(iSize)).SetSkip(int64((iPage - 1) * iSize))
+
+	return oFindOptions
+}
