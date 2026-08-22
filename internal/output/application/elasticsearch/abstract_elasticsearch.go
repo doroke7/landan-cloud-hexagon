@@ -62,8 +62,35 @@ type ElasticsearchSearchResult struct {
 	Hits  []ElasticsearchHit
 }
 
+func (oSelf *AbstractElasticsearch) PaginationToFrom(oPagination *pkg.Pagination) int {
+	iSize := uint(10)
+	iPage := uint(1)
+
+	if oPagination != nil && oPagination.Size != nil && *oPagination.Size != 0 {
+		iSize = *oPagination.Size
+	}
+
+	if oPagination != nil && oPagination.Page != nil && *oPagination.Page != 0 {
+		iPage = *oPagination.Page
+	}
+
+	iFrom := int((iPage - 1) * iSize)
+
+	return iFrom
+}
+
+func (oSelf *AbstractElasticsearch) PaginationToSize(oPagination *pkg.Pagination) int {
+	iSize := uint(10)
+
+	if oPagination != nil && oPagination.Size != nil && *oPagination.Size != 0 {
+		iSize = *oPagination.Size
+	}
+
+	return int(iSize)
+}
+
 func (oSelf *AbstractElasticsearch) FiltersToMust(aFilters []*pkg.Filter) []map[string]any {
-	aWheres := make([]map[string]any, 0, len(aFilters))
+	aMusts := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil {
@@ -80,39 +107,39 @@ func (oSelf *AbstractElasticsearch) FiltersToMust(aFilters []*pkg.Filter) []map[
 
 		switch sOperator {
 		case "ne":
-			aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"term": map[string]any{sField: oValue}}}})
+			aMusts = append(aMusts, map[string]any{"bool": map[string]any{"must_not": map[string]any{"term": map[string]any{sField: oValue}}}})
 		case "gt", "gte", "lt", "lte":
-			aWheres = append(aWheres, map[string]any{"range": map[string]any{sField: map[string]any{sOperator: oValue}}})
+			aMusts = append(aMusts, map[string]any{"range": map[string]any{sField: map[string]any{sOperator: oValue}}})
 		case "contains":
 			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}})
+				aMusts = append(aMusts, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}})
 			}
 		case "notContains":
 			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}}}})
+				aMusts = append(aMusts, map[string]any{"bool": map[string]any{"must_not": map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}}}})
 			}
 		case "startsWith":
 			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"prefix": map[string]any{sField: map[string]any{"value": sValue, "case_insensitive": true}}})
+				aMusts = append(aMusts, map[string]any{"prefix": map[string]any{sField: map[string]any{"value": sValue, "case_insensitive": true}}})
 			}
 		case "endsWith":
 			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue, "case_insensitive": true}}})
+				aMusts = append(aMusts, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue, "case_insensitive": true}}})
 			}
 		case "in":
-			aWheres = append(aWheres, map[string]any{"terms": map[string]any{sField: oValue}})
+			aMusts = append(aMusts, map[string]any{"terms": map[string]any{sField: oValue}})
 		case "notIn":
-			aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"terms": map[string]any{sField: oValue}}}})
+			aMusts = append(aMusts, map[string]any{"bool": map[string]any{"must_not": map[string]any{"terms": map[string]any{sField: oValue}}}})
 		case "between":
 			if aRange, bOk := oValue.([]any); bOk && len(aRange) == 2 {
-				aWheres = append(aWheres, map[string]any{"range": map[string]any{sField: map[string]any{"gte": aRange[0], "lte": aRange[1]}}})
+				aMusts = append(aMusts, map[string]any{"range": map[string]any{sField: map[string]any{"gte": aRange[0], "lte": aRange[1]}}})
 			}
 		default:
-			aWheres = append(aWheres, map[string]any{"term": map[string]any{sField: oValue}})
+			aMusts = append(aMusts, map[string]any{"term": map[string]any{sField: oValue}})
 		}
 	}
 
-	return aWheres
+	return aMusts
 }
 
 func (oSelf *AbstractElasticsearch) SortersToSort(aSorters []*pkg.Sorter) []map[string]any {
@@ -135,22 +162,11 @@ func (oSelf *AbstractElasticsearch) SortersToSort(aSorters []*pkg.Sorter) []map[
 }
 
 func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sIndex string, aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]func(*esapi.SearchRequest), error) {
+
 	aMusts := oSelf.FiltersToMust(aFilters)
 	aSorts := oSelf.SortersToSort(aSorters)
-
-	iSize := uint(10)
-	iPage := uint(1)
-
-	if oPagination != nil && oPagination.Size != nil && *oPagination.Size != 0 {
-		iSize = *oPagination.Size
-	}
-
-	if oPagination != nil && oPagination.Page != nil && *oPagination.Page != 0 {
-		iPage = *oPagination.Page
-	}
-
-	iFrom := int((iPage - 1) * iSize)
-	iSizeInt := int(iSize)
+	iFrom := oSelf.PaginationToFrom(oPagination)
+	iSize := oSelf.PaginationToSize(oPagination)
 
 	oQuery := map[string]any{"match_all": map[string]any{}}
 	if len(aMusts) > 0 {
@@ -173,7 +189,7 @@ func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sInde
 		oSelf.Client.Search.WithBody(bytes.NewReader(aBodyBytes)),
 		oSelf.Client.Search.WithTrackTotalHits(true),
 		oSelf.Client.Search.WithFrom(iFrom),
-		oSelf.Client.Search.WithSize(iSizeInt),
+		oSelf.Client.Search.WithSize(iSize),
 	}
 
 	return aOptions, nil
