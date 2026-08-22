@@ -20,9 +20,9 @@ func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic 
 }
 
 func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, int64, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
-	oLimit := pkg.PaginationToMysqlLimit(oPagination)
+	aWheres := oSelf.AbstractLogic.FiltersToWheres(aFilters)
+	aOrders := oSelf.AbstractLogic.SortersToOrders(aSorters)
+	oLimit := oSelf.PaginationToLimit(oPagination)
 
 	var aTableRows []*domain.TableRow
 	var oTableRow domain.TableRow
