@@ -389,8 +389,8 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 
 //////////////////////////////////////////////////////////////////////////////
 
-// ConsumerContainer 只給 `consumer` MQ 消費者服務使用。
-type ConsumerContainer struct {
+// RabbitmqContainer 只給 `rabbitmq` MQ 消費者服務使用。
+type RabbitmqContainer struct {
 
 	// pkg
 	Clock *pkg.Clock
@@ -404,7 +404,7 @@ type ConsumerContainer struct {
 	ConsumerAdminResourceAppUser *inputApplicationConsumerAdminResource.AppUserHandler
 }
 
-func InitConsumerContainer(ctx context.Context) (*ConsumerContainer, error) {
+func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 	wire.Build(
 
 		// bootstrap
@@ -430,7 +430,7 @@ func InitConsumerContainer(ctx context.Context) (*ConsumerContainer, error) {
 		inputApplicationConsumer.NewAbstractHandler,
 		inputApplicationConsumerAdminResource.NewAppUserHandler,
 
-		wire.Struct(new(ConsumerContainer), "*"),
+		wire.Struct(new(RabbitmqContainer), "*"),
 	)
 	return nil, nil
 }

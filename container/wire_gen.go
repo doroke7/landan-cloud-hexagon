@@ -291,7 +291,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	return resourceContainer, nil
 }
 
-func InitConsumerContainer(ctx context.Context) (*ConsumerContainer, error) {
+func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 	clock, err := pkg.NewClock(ctx)
 	if err != nil {
 		return nil, err
@@ -317,14 +317,14 @@ func InitConsumerContainer(ctx context.Context) (*ConsumerContainer, error) {
 	abstractUsecase := resource4.NewAbstractUsecase(aesHelper)
 	appUserUsecase := resource4.NewAppUserUsecase(appUserModel, abstractUsecase)
 	appUserHandler := consumer2.NewAppUserHandler(appUserUsecase, abstractHandler)
-	consumerContainer := &ConsumerContainer{
+	rabbitmqContainer := &RabbitmqContainer{
 		Clock:                        clock,
 		AbstractHelper:               abstractHelper,
 		AesHelper:                    aesHelper,
 		AbstractHandler:              abstractHandler,
 		ConsumerAdminResourceAppUser: appUserHandler,
 	}
-	return consumerContainer, nil
+	return rabbitmqContainer, nil
 }
 
 func InitCronContainer(ctx context.Context) (*CronContainer, error) {
@@ -667,8 +667,8 @@ type ResourceContainer struct {
 	ResourceRabbitmqAdminUser *rabbitmq2.AdminUserModel
 }
 
-// ConsumerContainer 只給 `consumer` MQ 消費者服務使用。
-type ConsumerContainer struct {
+// RabbitmqContainer 只給 `rabbitmq` MQ 消費者服務使用。
+type RabbitmqContainer struct {
 
 	// pkg
 	Clock *pkg.Clock

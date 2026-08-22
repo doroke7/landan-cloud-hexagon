@@ -6,7 +6,7 @@ import (
 	container "example/container"
 )
 
-func ConsumerInit(oContainer *container.ConsumerContainer) *pkg.ConsumerRouter {
+func RabbitmqInit(oContainer *container.RabbitmqContainer) *pkg.ConsumerRouter {
 	oRouter := pkg.NewConsumerRouter(oContainer.Conn)
 	oRouter.HandleFunc("Admin.Resource.AppUser.IncreaseBalance", oContainer.ConsumerAdminResourceAppUser.IncreaseBalance)
 
