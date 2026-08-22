@@ -70,7 +70,11 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return domain.AdminUserRowToAdminUser(&oAdminUserRow), err
 }
 
-func (oSelf *AdminUserModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.AdminUser, error) {
+func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.AdminUser, error) {
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
+	oLimit := pkg.PaginationToMysqlLimit(oPagination)
+
 	var aAdminUserRows []*domain.AdminUserRow
 	var oAdminUserRow domain.AdminUserRow
 
@@ -108,7 +112,9 @@ func (oSelf *AdminUserModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Wher
 	return aAdminUsers, nil
 }
 
-func (oSelf *AdminUserModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
+func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+
 	var iTotal int64
 	var oAdminUserRow domain.AdminUserRow
 

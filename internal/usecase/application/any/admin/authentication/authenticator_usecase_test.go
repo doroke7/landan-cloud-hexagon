@@ -30,11 +30,11 @@ func (f *fakeAdminUserRepository) AddOne(oAdminUser *domain.AdminUserValue) (boo
 	return true, nil
 }
 
-func (f *fakeAdminUserRepository) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.AdminUser, error) {
+func (f *fakeAdminUserRepository) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.AdminUser, error) {
 	return nil, nil
 }
 
-func (f *fakeAdminUserRepository) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
+func (f *fakeAdminUserRepository) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
 	return 0, nil
 }
 

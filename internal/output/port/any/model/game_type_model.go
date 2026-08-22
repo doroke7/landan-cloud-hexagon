@@ -13,4 +13,7 @@ type GameTypeModel interface {
 
 	ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.GameType, error)
 	TotalByWheres(aWheres []*pkg.Where) (uint64, error)
+
+	ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, error)
+	TotalByFilters(aFilters []*pkg.Filter) (uint64, error)
 }

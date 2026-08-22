@@ -118,6 +118,20 @@ func (oSelf *GameTypeModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where
 	return aGameTypes, nil
 }
 
+func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, error) {
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
+	oLimit := pkg.PaginationToMysqlLimit(oPagination)
+
+	return oSelf.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
+}
+
+func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+
+	return oSelf.TotalByWheres(aWheres)
+}
+
 func (oSelf *GameTypeModel) EditOneById(oGameType *domain.GameTypeValue, iId uint) (bool, error) {
 
 	oRequest := &pbResourceModel.GameTypeEditOneByIdInput{Id: uint32(iId)}

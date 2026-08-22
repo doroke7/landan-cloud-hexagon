@@ -60,17 +60,12 @@ func (oSelf *GameTypeUsecase) ShowOne(iId uint) (*domain.GameType, error) {
 
 func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, uint64, error) {
 
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
-
-	oLimit := pkg.PaginationToMysqlLimit(oPagination)
-
-	aGameTypes, oErr := oSelf.GameTypeModel.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
+	aGameTypes, oErr := oSelf.GameTypeModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {
 		return nil, 0, oErr
 	}
 
-	iTotal, oErr := oSelf.GameTypeModel.TotalByWheres(aWheres)
+	iTotal, oErr := oSelf.GameTypeModel.TotalByFilters(aFilters)
 
 	return aGameTypes, iTotal, oErr
 }
