@@ -187,9 +187,23 @@ func (oSelf *AbstractElasticsearch) IndexWheresOrdersLimitToOptions(sIndex strin
 	return aOptions, nil
 }
 
+func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sIndex string, aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]func(*esapi.SearchRequest), error) {
+
+	aWheres := oSelf.FiltersToWheres(aFilters)
+	aOrders := oSelf.SortersToOrders(aSorters)
+	oLimit := oSelf.PaginationToLimit(oPagination)
+
+	aOptions, oErr := oSelf.IndexWheresOrdersLimitToOptions(sIndex, aWheres, aOrders, oLimit)
+
+	return aOptions, oErr
+}
+
 func (oSelf *AbstractElasticsearch) Search(sIndex string, aWheres []map[string]any, aOrders []map[string]any, oLimit *ElasticsearchLimit) (*ElasticsearchSearchResult, error) {
 
 	aOptions, oErr := oSelf.IndexWheresOrdersLimitToOptions(sIndex, aWheres, aOrders, oLimit)
+	if oErr != nil {
+		return nil, oErr
+	}
 
 	oResponse, oErr := oSelf.Client.Search(aOptions...)
 	if oErr != nil {
