@@ -3,11 +3,8 @@ package resource
 import (
 	"encoding/json"
 
-	"google.golang.org/protobuf/types/known/structpb"
-
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
-	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkg "example/pkg"
 )
@@ -24,49 +21,13 @@ func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic 
 
 func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, int64, error) {
 
-	oRequest := &pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationInput{}
+	oRequest := &pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationInput{
+		Filters: oSelf.ToFilters(aFilters),
+		Sorters: oSelf.ToSorters(aSorters),
+	}
 
 	if oPagination != nil {
-		oPbPagination := &pbResource.Pagination{}
-		if oPagination.Size != nil {
-			oPbPagination.Size = uint64(*oPagination.Size)
-		}
-		if oPagination.Page != nil {
-			oPbPagination.Page = uint64(*oPagination.Page)
-		}
-		oRequest.Pagination = oPbPagination
-	}
-
-	for _, oFilter := range aFilters {
-		if oFilter == nil || oFilter.Field == nil {
-			continue
-		}
-
-		oValue, oErr := structpb.NewValue(oFilter.Value)
-		if oErr != nil {
-			continue
-		}
-
-		oPbFilter := &pbResource.Filter{
-			Field: *oFilter.Field,
-			Value: oValue,
-		}
-		if oFilter.Operator != nil {
-			oPbFilter.Operator = *oFilter.Operator
-		}
-
-		oRequest.Filters = append(oRequest.Filters, oPbFilter)
-	}
-
-	for _, oSorter := range aSorters {
-		if oSorter == nil || oSorter.Field == nil || oSorter.Order == nil {
-			continue
-		}
-
-		oRequest.Sorters = append(oRequest.Sorters, &pbResource.Sorter{
-			Field: *oSorter.Field,
-			Order: *oSorter.Order,
-		})
+		oRequest.Pagination = oSelf.ToPagination(oPagination)
 	}
 
 	oResponse, oErr := oSelf.ResourceLogicClient.Table.ShowTablesTotalByFiltersWithSortersPagination(oSelf.Context, oRequest)
