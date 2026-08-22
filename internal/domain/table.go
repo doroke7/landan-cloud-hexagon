@@ -69,6 +69,43 @@ func TableRowToTable(oRow *TableRow) *Table {
 	}
 }
 
+// TableDocument 是 mongo 版 TableModel 實際存進去的 schema：Result 在 mysql
+// 是 json 欄位，這裡故意存成字串而不是拆成巢狀 bson 文件——Table.Result 是
+// json.RawMessage（底層是 []byte），mongo-driver 對 []byte 預設會走 BSON
+// binary 編碼，不是我們要的 JSON 文字語意，所以自己控制編解碼，不假手驅動的
+// 預設行為。
+type TableDocument struct {
+	Id          uint      `bson:"_id"`
+	No          string    `bson:"no"`
+	GameId      uint      `bson:"game_id"`
+	Key         string    `bson:"key"`
+	State       uint8     `bson:"state"`
+	Description string    `bson:"description"`
+	Result      string    `bson:"result"`
+	StartedAt   time.Time `bson:"started_at"`
+	EndedAt     time.Time `bson:"ended_at"`
+	CreatedAt   time.Time `bson:"created_at"`
+	UpdatedAt   time.Time `bson:"updated_at"`
+	DeletedAt   time.Time `bson:"deleted_at"`
+}
+
+func TableDocumentToTable(oDoc *TableDocument) *Table {
+	return &Table{
+		Id:          oDoc.Id,
+		No:          oDoc.No,
+		GameId:      oDoc.GameId,
+		Key:         oDoc.Key,
+		State:       oDoc.State,
+		Description: oDoc.Description,
+		Result:      json.RawMessage(oDoc.Result),
+		StartedAt:   oDoc.StartedAt,
+		EndedAt:     oDoc.EndedAt,
+		CreatedAt:   oDoc.CreatedAt,
+		UpdatedAt:   oDoc.UpdatedAt,
+		DeletedAt:   oDoc.DeletedAt,
+	}
+}
+
 type TableFilter struct {
 	Id     *uint `json:"id,omitempty"`
 	GameId *uint `json:"game_id,omitempty"`
