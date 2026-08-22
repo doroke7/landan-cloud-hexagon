@@ -251,6 +251,47 @@ type Config struct {
 		USER string `mapstructure:"user"`
 		PASS string `mapstructure:"pass"` //
 	} `mapstructure:"amqp"`
+	KAFKA struct {
+		BROKERS []string `mapstructure:"brokers"`
+		USER    string   `mapstructure:"user"`
+		PASS    string   `mapstructure:"pass"`
+		VERSION string   `mapstructure:"version"`
+	} `mapstructure:"kafka"`
+	BEANSTALK struct {
+		HOST    string `mapstructure:"host"`
+		PORT    string `mapstructure:"port"`
+		TIMEOUT int    `mapstructure:"timeout"`
+	} `mapstructure:"beanstalk"`
+	NATS struct {
+		HOST    string `mapstructure:"host"`
+		PORT    string `mapstructure:"port"`
+		USER    string `mapstructure:"user"`
+		PASS    string `mapstructure:"pass"`
+		TIMEOUT int    `mapstructure:"timeout"`
+	} `mapstructure:"nats"`
+	ACTIVEMQ struct {
+		HOST    string `mapstructure:"host"`
+		PORT    string `mapstructure:"port"`
+		USER    string `mapstructure:"user"`
+		PASS    string `mapstructure:"pass"`
+		TIMEOUT int    `mapstructure:"timeout"`
+	} `mapstructure:"activemq"`
+	ZEROMQ struct {
+		HOST    string `mapstructure:"host"`
+		PORT    string `mapstructure:"port"`
+		TIMEOUT int    `mapstructure:"timeout"`
+	} `mapstructure:"zeromq"`
+	PULSAR struct {
+		HOST    string `mapstructure:"host"`
+		PORT    string `mapstructure:"port"`
+		TIMEOUT int    `mapstructure:"timeout"`
+	} `mapstructure:"pulsar"`
+	REDPANDA struct {
+		BROKERS []string `mapstructure:"brokers"`
+		USER    string   `mapstructure:"user"`
+		PASS    string   `mapstructure:"pass"`
+		VERSION string   `mapstructure:"version"`
+	} `mapstructure:"redpanda"`
 	DEFAULT struct {
 		DEBUG bool `mapstructure:"debug"`
 	} `mapstructure:"default"`
