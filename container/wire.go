@@ -29,6 +29,7 @@ import (
 	outputApplicationMysqlModel "example/internal/output/application/mysql/model"
 
 	outputApplicationProducerModel "example/internal/output/application/producer/model"
+	outputApplicationResource "example/internal/output/application/resource"
 	outputApplicationResourceLogic "example/internal/output/application/resource/logic"
 	outputApplicationResourceModel "example/internal/output/application/resource/model"
 
@@ -145,12 +146,12 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		helper.NewJwtHelper,
 
 		// output
-		outputApplicationResourceModel.NewAbstractModel,
+		outputApplicationResource.NewAbstractModel,
 		outputApplicationResourceModel.NewAdminUserModel,
 		outputApplicationResourceModel.NewGameModel,
 		outputApplicationResourceModel.NewTableModel,
 		outputApplicationResourceModel.NewGameTypeModel,
-		outputApplicationResourceLogic.NewAbstractLogic,
+		outputApplicationResource.NewAbstractLogic,
 		outputApplicationResourceLogic.NewGameLogic,
 		outputApplicationResourceLogic.NewTableLogic,
 
@@ -247,7 +248,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 		helper.NewJwtHelper,
 
 		// output
-		outputApplicationResourceModel.NewAbstractModel,
+		outputApplicationResource.NewAbstractModel,
 		outputApplicationResourceModel.NewAdminUserModel,
 
 		// usecase
@@ -536,7 +537,7 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 		helper.NewJwtHelper,
 
 		// output
-		outputApplicationResourceModel.NewAbstractModel,
+		outputApplicationResource.NewAbstractModel,
 		outputApplicationResourceModel.NewAdminUserModel,
 
 		// usecase
@@ -683,7 +684,7 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 		helper.NewJwtHelper,
 
 		// output
-		outputApplicationResourceModel.NewAbstractModel,
+		outputApplicationResource.NewAbstractModel,
 		outputApplicationResourceModel.NewAdminUserModel,
 
 		// usecase

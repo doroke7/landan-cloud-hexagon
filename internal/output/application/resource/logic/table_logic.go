@@ -4,16 +4,17 @@ import (
 	"encoding/json"
 
 	domain "example/internal/domain"
+	resourceBase "example/internal/output/application/resource"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pbResourceLogic "example/pb/resource/logic"
 	pkg "example/pkg"
 )
 
 type TableLogic struct {
-	*AbstractLogic
+	*resourceBase.AbstractLogic
 }
 
-func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractLogic *resourceBase.AbstractLogic) outputPortAnyLogic.TableLogic {
 	return &TableLogic{
 		AbstractLogic: oAbstractLogic,
 	}

@@ -12,19 +12,11 @@ import (
 
 // Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
 // AbstractRepository 做法一致。
-type AbstractModel struct {
-	Context             context.Context
-	ResourceModelClient *client.Model
+type Abstract struct {
+	Context context.Context
 }
 
-func NewAbstractModel(oContext context.Context, oResourceClient *client.ResourceClient) *AbstractModel {
-	return &AbstractModel{
-		Context:             oContext,
-		ResourceModelClient: oResourceClient.Model,
-	}
-}
-
-func (oSelf *AbstractModel) ToFilters(aFilters []*pkg.Filter) []*pbResource.Filter {
+func (oSelf *Abstract) ToFilters(aFilters []*pkg.Filter) []*pbResource.Filter {
 	aPbFilters := make([]*pbResource.Filter, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -51,7 +43,7 @@ func (oSelf *AbstractModel) ToFilters(aFilters []*pkg.Filter) []*pbResource.Filt
 	return aPbFilters
 }
 
-func (oSelf *AbstractModel) ToSorters(aSorters []*pkg.Sorter) []*pbResource.Sorter {
+func (oSelf *Abstract) ToSorters(aSorters []*pkg.Sorter) []*pbResource.Sorter {
 	aPbSorters := make([]*pbResource.Sorter, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
@@ -68,7 +60,7 @@ func (oSelf *AbstractModel) ToSorters(aSorters []*pkg.Sorter) []*pbResource.Sort
 	return aPbSorters
 }
 
-func (oSelf *AbstractModel) ToPagination(oPagination *pkg.Pagination) *pbResource.Pagination {
+func (oSelf *Abstract) ToPagination(oPagination *pkg.Pagination) *pbResource.Pagination {
 	if oPagination == nil {
 		return nil
 	}
@@ -83,4 +75,28 @@ func (oSelf *AbstractModel) ToPagination(oPagination *pkg.Pagination) *pbResourc
 	}
 
 	return oPbPagination
+}
+
+type AbstractLogic struct {
+	*Abstract
+	ResourceLogicClient *client.Logic
+}
+
+func NewAbstractLogic(oContext context.Context, oResourceClient *client.ResourceClient) *AbstractLogic {
+	return &AbstractLogic{
+		Abstract:            &Abstract{Context: oContext},
+		ResourceLogicClient: oResourceClient.Logic,
+	}
+}
+
+type AbstractModel struct {
+	*Abstract
+	ResourceModelClient *client.Model
+}
+
+func NewAbstractModel(oContext context.Context, oResourceClient *client.ResourceClient) *AbstractModel {
+	return &AbstractModel{
+		Abstract:            &Abstract{Context: oContext},
+		ResourceModelClient: oResourceClient.Model,
+	}
 }

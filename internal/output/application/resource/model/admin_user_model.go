@@ -4,16 +4,17 @@ import (
 	"errors"
 
 	domain "example/internal/domain"
+	resourceBase "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pbResourceModel "example/pb/resource/model"
 	pkg "example/pkg"
 )
 
 type AdminUserModel struct {
-	*AbstractModel
+	*resourceBase.AbstractModel
 }
 
-func NewAdminUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminUserModel {
+func NewAdminUserModel(oAbstractModel *resourceBase.AbstractModel) outputPortAnyModel.AdminUserModel {
 	return &AdminUserModel{
 		AbstractModel: oAbstractModel,
 	}

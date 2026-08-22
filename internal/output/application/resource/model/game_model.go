@@ -2,16 +2,17 @@ package resource
 
 import (
 	domain "example/internal/domain"
+	resourceBase "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pbResourceModel "example/pb/resource/model"
 	pkg "example/pkg"
 )
 
 type GameModel struct {
-	*AbstractModel
+	*resourceBase.AbstractModel
 }
 
-func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
+func NewGameModel(oAbstractModel *resourceBase.AbstractModel) outputPortAnyModel.GameModel {
 	return &GameModel{
 		AbstractModel: oAbstractModel,
 	}
