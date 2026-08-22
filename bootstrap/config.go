@@ -175,6 +175,7 @@ type Config struct {
 		NAME          string `mapstructure:"name"`
 		USER          string `mapstructure:"user"`
 		PASSWORD      string `mapstructure:"password"`
+		AUTH_SOURCE   string `mapstructure:"auth_source"`
 		MAX_POOL_SIZE uint64 `mapstructure:"max_pool_size"`
 		MIN_POOL_SIZE uint64 `mapstructure:"min_pool_size"`
 	} `mapstructure:"mongodb"`
