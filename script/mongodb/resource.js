@@ -2,13 +2,21 @@
 // MongoDB 版本（由 script/mysql/resource.sql 轉換而成）
 // 原始來源: Sequel Ace SQL dump, MySQL 8.0.46, 資料庫 resource
 //
-// 用法（mongosh 連到 config/mongodb.yaml 的 name，預設是 gogin）：
-//   mongosh "mongodb://backend:mongo_pass_backend@127.0.0.1:27017/gogin" script/mongodb/resource.js
+// 用法（不需要先手動 use，這個 script 自己會切到 config/mongodb.yaml
+// 的 name 指定的 resource 資料庫；Mongo 沒有 CREATE DATABASE，
+// 資料庫是第一次寫入時才真的建立起來）：
+//   mongosh "mongodb://backend:mongo_pass_backend@127.0.0.1:27017/admin" script/mongodb/resource.js
 //
 // counters collection 是給 internal/output/application/mongodb 的
 // AbstractMongodb.nextId() 用的自增序號來源，每個 collection 一筆，
 // seq 要設成該 collection 目前最大的 _id，之後 AddOne 才會接著往下編號。
 // ************************************************************
+
+// ------------------------------------------------------------
+// 建立／切換到 resource 資料庫
+// ------------------------------------------------------------
+
+db = db.getSiblingDB("resource");
 
 // ------------------------------------------------------------
 // 清空舊資料
