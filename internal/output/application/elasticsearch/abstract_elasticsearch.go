@@ -150,16 +150,13 @@ type ElasticsearchSearchResult struct {
 	Hits  []ElasticsearchHit
 }
 
-func wheresToQuery(aWheres []map[string]any) map[string]any {
-	if len(aWheres) == 0 {
-		return map[string]any{"match_all": map[string]any{}}
+func (oSelf *AbstractElasticsearch) IndexWheresOrdersLimitToOptions(sIndex string, aWheres []map[string]any, aOrders []map[string]any, oLimit *ElasticsearchLimit) ([]func(*esapi.SearchRequest), error) {
+	oQuery := map[string]any{"match_all": map[string]any{}}
+	if len(aWheres) > 0 {
+		oQuery = map[string]any{"bool": map[string]any{"must": aWheres}}
 	}
 
-	return map[string]any{"bool": map[string]any{"must": aWheres}}
-}
-
-func (oSelf *AbstractElasticsearch) IndexWheresOrdersLimitToOptions(sIndex string, aWheres []map[string]any, aOrders []map[string]any, oLimit *ElasticsearchLimit) ([]func(*esapi.SearchRequest), error) {
-	oBody := map[string]any{"query": wheresToQuery(aWheres)}
+	oBody := map[string]any{"query": oQuery}
 	if len(aOrders) > 0 {
 		oBody["sort"] = aOrders
 	}
@@ -188,17 +185,113 @@ func (oSelf *AbstractElasticsearch) IndexWheresOrdersLimitToOptions(sIndex strin
 }
 
 func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sIndex string, aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]func(*esapi.SearchRequest), error) {
+	aWheres := make([]map[string]any, 0, len(aFilters))
 
-	aWheres := oSelf.FiltersToWheres(aFilters)
-	aOrders := oSelf.SortersToOrders(aSorters)
-	oLimit := oSelf.PaginationToLimit(oPagination)
+	for _, oFilter := range aFilters {
+		if oFilter == nil || oFilter.Field == nil {
+			continue
+		}
 
-	aOptions, oErr := oSelf.IndexWheresOrdersLimitToOptions(sIndex, aWheres, aOrders, oLimit)
+		sField := *oFilter.Field
+		oValue := oFilter.Value
 
-	return aOptions, oErr
+		sOperator := "eq"
+		if oFilter.Operator != nil && oOperatorMap[*oFilter.Operator] {
+			sOperator = *oFilter.Operator
+		}
+
+		switch sOperator {
+		case "ne":
+			aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"term": map[string]any{sField: oValue}}}})
+		case "gt", "gte", "lt", "lte":
+			aWheres = append(aWheres, map[string]any{"range": map[string]any{sField: map[string]any{sOperator: oValue}}})
+		case "contains":
+			if sValue, bOk := oValue.(string); bOk {
+				aWheres = append(aWheres, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}})
+			}
+		case "notContains":
+			if sValue, bOk := oValue.(string); bOk {
+				aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}}}})
+			}
+		case "startsWith":
+			if sValue, bOk := oValue.(string); bOk {
+				aWheres = append(aWheres, map[string]any{"prefix": map[string]any{sField: map[string]any{"value": sValue, "case_insensitive": true}}})
+			}
+		case "endsWith":
+			if sValue, bOk := oValue.(string); bOk {
+				aWheres = append(aWheres, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue, "case_insensitive": true}}})
+			}
+		case "in":
+			aWheres = append(aWheres, map[string]any{"terms": map[string]any{sField: oValue}})
+		case "notIn":
+			aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"terms": map[string]any{sField: oValue}}}})
+		case "between":
+			if aRange, bOk := oValue.([]any); bOk && len(aRange) == 2 {
+				aWheres = append(aWheres, map[string]any{"range": map[string]any{sField: map[string]any{"gte": aRange[0], "lte": aRange[1]}}})
+			}
+		default:
+			aWheres = append(aWheres, map[string]any{"term": map[string]any{sField: oValue}})
+		}
+	}
+
+	aOrders := make([]map[string]any, 0, len(aSorters))
+
+	for _, oSorter := range aSorters {
+		if oSorter == nil || oSorter.Field == nil {
+			continue
+		}
+
+		sDirection := "asc"
+		if oSorter.Order != nil && strings.EqualFold(*oSorter.Order, "desc") {
+			sDirection = "desc"
+		}
+
+		aOrders = append(aOrders, map[string]any{*oSorter.Field: map[string]any{"order": sDirection}})
+	}
+
+	iSize := uint(10)
+	iPage := uint(1)
+
+	if oPagination != nil && oPagination.Size != nil && *oPagination.Size != 0 {
+		iSize = *oPagination.Size
+	}
+
+	if oPagination != nil && oPagination.Page != nil && *oPagination.Page != 0 {
+		iPage = *oPagination.Page
+	}
+
+	iFrom := int((iPage - 1) * iSize)
+	iSizeInt := int(iSize)
+
+	oQuery := map[string]any{"match_all": map[string]any{}}
+	if len(aWheres) > 0 {
+		oQuery = map[string]any{"bool": map[string]any{"must": aWheres}}
+	}
+
+	oBody := map[string]any{"query": oQuery}
+	if len(aOrders) > 0 {
+		oBody["sort"] = aOrders
+	}
+
+	aBodyBytes, oErr := json.Marshal(oBody)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aOptions := []func(*esapi.SearchRequest){
+		oSelf.Client.Search.WithContext(oSelf.Context),
+		oSelf.Client.Search.WithIndex(sIndex),
+		oSelf.Client.Search.WithBody(bytes.NewReader(aBodyBytes)),
+		oSelf.Client.Search.WithTrackTotalHits(true),
+		oSelf.Client.Search.WithFrom(iFrom),
+		oSelf.Client.Search.WithSize(iSizeInt),
+	}
+
+	return aOptions, nil
 }
 
 func (oSelf *AbstractElasticsearch) SearchWithOptions(aOptions []func(*esapi.SearchRequest)) (*ElasticsearchSearchResult, error) {
+
 	oResponse, oErr := oSelf.Client.Search(aOptions...)
 	if oErr != nil {
 		return nil, oErr
@@ -211,7 +304,7 @@ func (oSelf *AbstractElasticsearch) SearchWithOptions(aOptions []func(*esapi.Sea
 	}
 
 	if oResponse.IsError() {
-		return nil, fmt.Errorf("elasticsearch search index failed:", string(aResponseBody))
+		return nil, fmt.Errorf("elasticsearch search failed: %s", string(aResponseBody))
 	}
 
 	var oResult struct {
@@ -234,7 +327,12 @@ func (oSelf *AbstractElasticsearch) SearchWithOptions(aOptions []func(*esapi.Sea
 }
 
 func (oSelf *AbstractElasticsearch) Count(sIndex string, aWheres []map[string]any) (uint64, error) {
-	aBodyBytes, oErr := json.Marshal(map[string]any{"query": wheresToQuery(aWheres)})
+	oQuery := map[string]any{"match_all": map[string]any{}}
+	if len(aWheres) > 0 {
+		oQuery = map[string]any{"bool": map[string]any{"must": aWheres}}
+	}
+
+	aBodyBytes, oErr := json.Marshal(map[string]any{"query": oQuery})
 	if oErr != nil {
 		return 0, oErr
 	}
