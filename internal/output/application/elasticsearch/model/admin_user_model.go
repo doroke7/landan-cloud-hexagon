@@ -27,12 +27,17 @@ func NewAdminUserModel(oAbstractModel *elasticsearchBase.AbstractElasticsearch) 
 func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, error) {
 	iSize := 1
 
-	oResult, oErr := oSelf.Search(
+	aOptions, oErr := oSelf.IndexWheresOrdersLimitToOptions(
 		oSelf.Index,
 		[]map[string]any{{"term": map[string]any{"name": sName}}},
 		nil,
 		&elasticsearchBase.ElasticsearchLimit{Size: &iSize},
 	)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oResult, oErr := oSelf.SearchWithOptions(oSelf.Index, aOptions)
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -65,11 +70,12 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 }
 
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.AdminUser, error) {
-	aWheres := oSelf.FiltersToWheres(aFilters)
-	aOrders := oSelf.SortersToOrders(aSorters)
-	oLimit := oSelf.PaginationToLimit(oPagination)
+	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, aSorters, oPagination)
+	if oErr != nil {
+		return nil, oErr
+	}
 
-	oResult, oErr := oSelf.Search(oSelf.Index, aWheres, aOrders, oLimit)
+	oResult, oErr := oSelf.SearchWithOptions(oSelf.Index, aOptions)
 	if oErr != nil {
 		return nil, oErr
 	}

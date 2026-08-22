@@ -198,17 +198,6 @@ func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sInde
 	return aOptions, oErr
 }
 
-func (oSelf *AbstractElasticsearch) Search(sIndex string, aWheres []map[string]any, aOrders []map[string]any, oLimit *ElasticsearchLimit) (*ElasticsearchSearchResult, error) {
-	aOptions, oErr := oSelf.IndexWheresOrdersLimitToOptions(sIndex, aWheres, aOrders, oLimit)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	oResult, oErr := oSelf.SearchWithOptions(sIndex, aOptions)
-
-	return oResult, oErr
-}
-
 func (oSelf *AbstractElasticsearch) SearchWithOptions(sIndex string, aOptions []func(*esapi.SearchRequest)) (*ElasticsearchSearchResult, error) {
 	oResponse, oErr := oSelf.Client.Search(aOptions...)
 	if oErr != nil {
