@@ -58,8 +58,8 @@ import (
 	inputApplicationCommandAdminAuthentication "example/internal/input/application/command/admin/authentication"
 	inputApplicationCommandAdminResource "example/internal/input/application/command/admin/resource"
 
-	inputApplicationConsumer "example/internal/input/application/consumer"
-	inputApplicationConsumerAdminResource "example/internal/input/application/consumer/admin/resource"
+	inputApplicationRabbitmq "example/internal/input/application/rabbitmq"
+	inputApplicationRabbitmqAdminResource "example/internal/input/application/rabbitmq/admin/resource"
 
 	inputApplicationCron "example/internal/input/application/cron"
 	inputApplicationCronAdminAuthentication "example/internal/input/application/cron/admin/authentication"
@@ -400,8 +400,8 @@ type RabbitmqContainer struct {
 	*helper.AesHelper
 
 	// MQ 消費者
-	*inputApplicationConsumer.AbstractHandler
-	ConsumerAdminResourceAppUser *inputApplicationConsumerAdminResource.AppUserHandler
+	*inputApplicationRabbitmq.AbstractHandler
+	ConsumerAdminResourceAppUser *inputApplicationRabbitmqAdminResource.AppUserHandler
 }
 
 func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
@@ -427,8 +427,8 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 		usecaseApplicationAnyAdminResource.NewAppUserUsecase,
 
 		// input-consumer
-		inputApplicationConsumer.NewAbstractHandler,
-		inputApplicationConsumerAdminResource.NewAppUserHandler,
+		inputApplicationRabbitmq.NewAbstractHandler,
+		inputApplicationRabbitmqAdminResource.NewAppUserHandler,
 
 		wire.Struct(new(RabbitmqContainer), "*"),
 	)

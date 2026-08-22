@@ -1,4 +1,4 @@
-package consumer
+package rabbitmq
 
 import (
 	"encoding/json"
@@ -9,7 +9,7 @@ import (
 
 	pkg "example/pkg"
 
-	inputApplicationConsumer "example/internal/input/application/consumer"
+	inputApplicationRabbitmq "example/internal/input/application/rabbitmq"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 )
 
@@ -19,11 +19,11 @@ type increaseBalanceMessage struct {
 }
 
 type AppUserHandler struct {
-	*inputApplicationConsumer.AbstractHandler
+	*inputApplicationRabbitmq.AbstractHandler
 	appUserUsecase usecasePortAnyAdminResource.AppUserUsecase
 }
 
-func NewAppUserHandler(oAppUserUsecase usecasePortAnyAdminResource.AppUserUsecase, oAbstractHandler *inputApplicationConsumer.AbstractHandler) *AppUserHandler {
+func NewAppUserHandler(oAppUserUsecase usecasePortAnyAdminResource.AppUserUsecase, oAbstractHandler *inputApplicationRabbitmq.AbstractHandler) *AppUserHandler {
 	return &AppUserHandler{
 		AbstractHandler: oAbstractHandler,
 		appUserUsecase:  oAppUserUsecase,

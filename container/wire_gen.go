@@ -14,8 +14,6 @@ import (
 	"example/internal/input/application/command"
 	authentication4 "example/internal/input/application/command/admin/authentication"
 	command2 "example/internal/input/application/command/admin/resource"
-	"example/internal/input/application/consumer"
-	consumer2 "example/internal/input/application/consumer/admin/resource"
 	"example/internal/input/application/cron"
 	authentication2 "example/internal/input/application/cron/admin/authentication"
 	cron2 "example/internal/input/application/cron/admin/resource"
@@ -29,6 +27,8 @@ import (
 	"example/internal/input/application/http/admin/authentication"
 	handler3 "example/internal/input/application/http/admin/option"
 	handler2 "example/internal/input/application/http/admin/resource"
+	rabbitmq3 "example/internal/input/application/rabbitmq"
+	rabbitmq4 "example/internal/input/application/rabbitmq/admin/resource"
 	resource5 "example/internal/input/application/resource"
 	"example/internal/input/application/resource/logic"
 	"example/internal/input/application/resource/model"
@@ -302,7 +302,7 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 	if err != nil {
 		return nil, err
 	}
-	abstractHandler := consumer.NewAbstractHandler(aesHelper, connection)
+	abstractHandler := rabbitmq3.NewAbstractHandler(aesHelper, connection)
 	db, err := bootstrap.NewMysql()
 	if err != nil {
 		return nil, err
@@ -316,7 +316,7 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 	appUserModel := mysql2.NewAppUserModel(abstractMysql)
 	abstractUsecase := resource4.NewAbstractUsecase(aesHelper)
 	appUserUsecase := resource4.NewAppUserUsecase(appUserModel, abstractUsecase)
-	appUserHandler := consumer2.NewAppUserHandler(appUserUsecase, abstractHandler)
+	appUserHandler := rabbitmq4.NewAppUserHandler(appUserUsecase, abstractHandler)
 	rabbitmqContainer := &RabbitmqContainer{
 		Clock:                        clock,
 		AbstractHelper:               abstractHelper,
@@ -678,8 +678,8 @@ type RabbitmqContainer struct {
 	*helper.AesHelper
 
 	// MQ 消費者
-	*consumer.AbstractHandler
-	ConsumerAdminResourceAppUser *consumer2.AppUserHandler
+	*rabbitmq3.AbstractHandler
+	ConsumerAdminResourceAppUser *rabbitmq4.AppUserHandler
 }
 
 // CronContainer 只給 `cron` 排程服務使用。
