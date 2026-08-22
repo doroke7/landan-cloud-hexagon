@@ -24,45 +24,45 @@ func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler,
 	}
 }
 
-func (oSelf *TableHandler) ShowTablesTotalByWheresWithOrdersLimit(oContext context.Context, oReq *pbResourceLogic.TableShowTablesTotalByWheresWithOrdersLimitInput) (*pbResourceLogic.TableShowTablesTotalByWheresWithOrdersLimitOutput, error) {
+func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationInput) (*pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationOutput, error) {
 
-	iOffset := uint(oReq.GetLimit().GetOffset())
-	iCount := uint(oReq.GetLimit().GetCount())
-	oLimit := &pkg.Limit{
-		Offset: &iOffset,
-		Count:  &iCount,
+	iSize := uint(oReq.GetPagination().GetSize())
+	iPage := uint(oReq.GetPagination().GetPage())
+	oPagination := &pkg.Pagination{
+		Size: &iSize,
+		Page: &iPage,
 	}
 
-	aWheres := make([]*pkg.Where, 0, len(oReq.GetWheres()))
-	for _, oOne := range oReq.GetWheres() {
+	aFilters := make([]*pkg.Filter, 0, len(oReq.GetFilters()))
+	for _, oOne := range oReq.GetFilters() {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aWheres = append(aWheres, &pkg.Where{
+		aFilters = append(aFilters, &pkg.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oOne.GetValue().AsInterface(),
 		})
 	}
 
-	aOrders := make([]*pkg.Order, 0, len(oReq.GetOrders()))
-	for _, oOne := range oReq.GetOrders() {
+	aSorters := make([]*pkg.Sorter, 0, len(oReq.GetSorters()))
+	for _, oOne := range oReq.GetSorters() {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
-		sValue := oOne.GetValue()
-		aOrders = append(aOrders, &pkg.Order{
+		sOrder := oOne.GetOrder()
+		aSorters = append(aSorters, &pkg.Sorter{
 			Field: &sField,
-			Value: &sValue,
+			Order: &sOrder,
 		})
 	}
 
-	aTables, iTotal, oErr := oSelf.TableUsecase.ShowTablesTotalByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
+	aTables, iTotal, oErr := oSelf.TableUsecase.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	aPbTables := make([]*pbResourceLogic.Table, 0, len(aTables))
 	for _, oTable := range aTables {
@@ -83,7 +83,7 @@ func (oSelf *TableHandler) ShowTablesTotalByWheresWithOrdersLimit(oContext conte
 		})
 	}
 
-	return &pbResourceLogic.TableShowTablesTotalByWheresWithOrdersLimitOutput{
+	return &pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationOutput{
 		Total:  uint64(iTotal),
 		Tables: aPbTables,
 	}, oErr

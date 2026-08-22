@@ -52,47 +52,57 @@ func gameFromPb(oPbGame *pbResourceLogic.Game) domain.Game {
 	}
 }
 
-func (oSelf *GameLogic) ShowGamesTotalByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Game, int64, error) {
+func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, int64, error) {
 
-	oRequest := &pbResourceLogic.GameShowGamesTotalByWheresWithOrdersLimitInput{
-		Limit: &pbResourceLogic.GameLimit{
-			Offset: uint64(*oLimit.Offset),
-			Count:  uint64(*oLimit.Count),
-		},
+	oRequest := &pbResourceLogic.GameShowGamesTotalByFiltersWithSortersPaginationInput{}
+
+	if oPagination != nil {
+		oPbPagination := &pbResourceLogic.GamePagination{}
+		if oPagination.Size != nil {
+			oPbPagination.Size = uint64(*oPagination.Size)
+		}
+		if oPagination.Page != nil {
+			oPbPagination.Page = uint64(*oPagination.Page)
+		}
+		oRequest.Pagination = oPbPagination
 	}
 
-	for _, oWhere := range aWheres {
-		if oWhere == nil || oWhere.Field == nil || oWhere.Operator == nil {
+	for _, oFilter := range aFilters {
+		if oFilter == nil || oFilter.Field == nil {
 			continue
 		}
 
-		oValue, oErr := structpb.NewValue(oWhere.Value)
+		oValue, oErr := structpb.NewValue(oFilter.Value)
 		if oErr != nil {
 			continue
 		}
 
-		oRequest.Wheres = append(oRequest.Wheres, &pbResourceLogic.GameWhere{
-			Field:    *oWhere.Field,
-			Operator: *oWhere.Operator,
-			Value:    oValue,
-		})
+		oPbFilter := &pbResourceLogic.GameFilter{
+			Field: *oFilter.Field,
+			Value: oValue,
+		}
+		if oFilter.Operator != nil {
+			oPbFilter.Operator = *oFilter.Operator
+		}
+
+		oRequest.Filters = append(oRequest.Filters, oPbFilter)
 	}
 
-	for _, oOrder := range aOrders {
-		if oOrder == nil || oOrder.Field == nil || oOrder.Value == nil {
+	for _, oSorter := range aSorters {
+		if oSorter == nil || oSorter.Field == nil || oSorter.Order == nil {
 			continue
 		}
 
-		oRequest.Orders = append(oRequest.Orders, &pbResourceLogic.GameOrder{
-			Field: *oOrder.Field,
-			Value: *oOrder.Value,
+		oRequest.Sorters = append(oRequest.Sorters, &pbResourceLogic.GameSorter{
+			Field: *oSorter.Field,
+			Order: *oSorter.Order,
 		})
 	}
 
-	oResponse, oErr := oSelf.ResourceLogicClient.Game.ShowGamesTotalByWheresWithOrdersLimit(oSelf.Context, oRequest)
+	oResponse, oErr := oSelf.ResourceLogicClient.Game.ShowGamesTotalByFiltersWithSortersPagination(oSelf.Context, oRequest)
 
 	aGames := make([]*domain.Game, 0, len(oResponse.GetGames()))
-	for sKey, oOne := range oResponse.GetGames() {
+	for _, oOne := range oResponse.GetGames() {
 		aGames = append(aGames, &domain.Game{
 			Id:          uint(oOne.GetId()),
 			GameTypeId:  uint(oOne.GetGameTypeId()),
@@ -104,7 +114,6 @@ func (oSelf *GameLogic) ShowGamesTotalByWheresWithOrdersLimit(aWheres []*pkg.Whe
 			DeletedAt:   oOne.GetDeletedAt().AsTime(),
 			GameType:    gameTypeFromPb(oOne.GetGameType()),
 		})
-		_ = sKey
 	}
 
 	iTotal := oResponse.GetTotal()

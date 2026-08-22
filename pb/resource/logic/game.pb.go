@@ -215,7 +215,7 @@ func (x *Game) GetGameType() *GameType {
 	return nil
 }
 
-type GameWhere struct {
+type GameFilter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Field         string                 `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
 	Operator      string                 `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
@@ -224,20 +224,20 @@ type GameWhere struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GameWhere) Reset() {
-	*x = GameWhere{}
+func (x *GameFilter) Reset() {
+	*x = GameFilter{}
 	mi := &file_resource_logic_game_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GameWhere) String() string {
+func (x *GameFilter) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GameWhere) ProtoMessage() {}
+func (*GameFilter) ProtoMessage() {}
 
-func (x *GameWhere) ProtoReflect() protoreflect.Message {
+func (x *GameFilter) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_logic_game_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -249,54 +249,54 @@ func (x *GameWhere) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GameWhere.ProtoReflect.Descriptor instead.
-func (*GameWhere) Descriptor() ([]byte, []int) {
+// Deprecated: Use GameFilter.ProtoReflect.Descriptor instead.
+func (*GameFilter) Descriptor() ([]byte, []int) {
 	return file_resource_logic_game_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GameWhere) GetField() string {
+func (x *GameFilter) GetField() string {
 	if x != nil {
 		return x.Field
 	}
 	return ""
 }
 
-func (x *GameWhere) GetOperator() string {
+func (x *GameFilter) GetOperator() string {
 	if x != nil {
 		return x.Operator
 	}
 	return ""
 }
 
-func (x *GameWhere) GetValue() *structpb.Value {
+func (x *GameFilter) GetValue() *structpb.Value {
 	if x != nil {
 		return x.Value
 	}
 	return nil
 }
 
-type GameOrder struct {
+type GameSorter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Field         string                 `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
-	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Order         string                 `protobuf:"bytes,2,opt,name=order,proto3" json:"order,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GameOrder) Reset() {
-	*x = GameOrder{}
+func (x *GameSorter) Reset() {
+	*x = GameSorter{}
 	mi := &file_resource_logic_game_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GameOrder) String() string {
+func (x *GameSorter) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GameOrder) ProtoMessage() {}
+func (*GameSorter) ProtoMessage() {}
 
-func (x *GameOrder) ProtoReflect() protoreflect.Message {
+func (x *GameSorter) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_logic_game_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -308,47 +308,47 @@ func (x *GameOrder) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GameOrder.ProtoReflect.Descriptor instead.
-func (*GameOrder) Descriptor() ([]byte, []int) {
+// Deprecated: Use GameSorter.ProtoReflect.Descriptor instead.
+func (*GameSorter) Descriptor() ([]byte, []int) {
 	return file_resource_logic_game_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GameOrder) GetField() string {
+func (x *GameSorter) GetField() string {
 	if x != nil {
 		return x.Field
 	}
 	return ""
 }
 
-func (x *GameOrder) GetValue() string {
+func (x *GameSorter) GetOrder() string {
 	if x != nil {
-		return x.Value
+		return x.Order
 	}
 	return ""
 }
 
-type GameLimit struct {
+type GamePagination struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Offset        uint64                 `protobuf:"varint,1,opt,name=offset,proto3" json:"offset,omitempty"`
-	Count         uint64                 `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+	Size          uint64                 `protobuf:"varint,1,opt,name=size,proto3" json:"size,omitempty"`
+	Page          uint64                 `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GameLimit) Reset() {
-	*x = GameLimit{}
+func (x *GamePagination) Reset() {
+	*x = GamePagination{}
 	mi := &file_resource_logic_game_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GameLimit) String() string {
+func (x *GamePagination) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GameLimit) ProtoMessage() {}
+func (*GamePagination) ProtoMessage() {}
 
-func (x *GameLimit) ProtoReflect() protoreflect.Message {
+func (x *GamePagination) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_logic_game_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -360,48 +360,48 @@ func (x *GameLimit) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GameLimit.ProtoReflect.Descriptor instead.
-func (*GameLimit) Descriptor() ([]byte, []int) {
+// Deprecated: Use GamePagination.ProtoReflect.Descriptor instead.
+func (*GamePagination) Descriptor() ([]byte, []int) {
 	return file_resource_logic_game_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GameLimit) GetOffset() uint64 {
+func (x *GamePagination) GetSize() uint64 {
 	if x != nil {
-		return x.Offset
+		return x.Size
 	}
 	return 0
 }
 
-func (x *GameLimit) GetCount() uint64 {
+func (x *GamePagination) GetPage() uint64 {
 	if x != nil {
-		return x.Count
+		return x.Page
 	}
 	return 0
 }
 
-type GameShowGamesTotalByWheresWithOrdersLimitInput struct {
+type GameShowGamesTotalByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Wheres        []*GameWhere           `protobuf:"bytes,1,rep,name=wheres,proto3" json:"wheres,omitempty"`
-	Orders        []*GameOrder           `protobuf:"bytes,2,rep,name=orders,proto3" json:"orders,omitempty"`
-	Limit         *GameLimit             `protobuf:"bytes,3,opt,name=limit,proto3" json:"limit,omitempty"`
+	Filters       []*GameFilter          `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*GameSorter          `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *GamePagination        `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GameShowGamesTotalByWheresWithOrdersLimitInput) Reset() {
-	*x = GameShowGamesTotalByWheresWithOrdersLimitInput{}
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) Reset() {
+	*x = GameShowGamesTotalByFiltersWithSortersPaginationInput{}
 	mi := &file_resource_logic_game_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GameShowGamesTotalByWheresWithOrdersLimitInput) String() string {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GameShowGamesTotalByWheresWithOrdersLimitInput) ProtoMessage() {}
+func (*GameShowGamesTotalByFiltersWithSortersPaginationInput) ProtoMessage() {}
 
-func (x *GameShowGamesTotalByWheresWithOrdersLimitInput) ProtoReflect() protoreflect.Message {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_logic_game_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -413,33 +413,33 @@ func (x *GameShowGamesTotalByWheresWithOrdersLimitInput) ProtoReflect() protoref
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GameShowGamesTotalByWheresWithOrdersLimitInput.ProtoReflect.Descriptor instead.
-func (*GameShowGamesTotalByWheresWithOrdersLimitInput) Descriptor() ([]byte, []int) {
+// Deprecated: Use GameShowGamesTotalByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
+func (*GameShowGamesTotalByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_game_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *GameShowGamesTotalByWheresWithOrdersLimitInput) GetWheres() []*GameWhere {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) GetFilters() []*GameFilter {
 	if x != nil {
-		return x.Wheres
+		return x.Filters
 	}
 	return nil
 }
 
-func (x *GameShowGamesTotalByWheresWithOrdersLimitInput) GetOrders() []*GameOrder {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) GetSorters() []*GameSorter {
 	if x != nil {
-		return x.Orders
+		return x.Sorters
 	}
 	return nil
 }
 
-func (x *GameShowGamesTotalByWheresWithOrdersLimitInput) GetLimit() *GameLimit {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) GetPagination() *GamePagination {
 	if x != nil {
-		return x.Limit
+		return x.Pagination
 	}
 	return nil
 }
 
-type GameShowGamesTotalByWheresWithOrdersLimitOutput struct {
+type GameShowGamesTotalByFiltersWithSortersPaginationOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Games         []*Game                `protobuf:"bytes,1,rep,name=games,proto3" json:"games,omitempty"`
 	Total         uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
@@ -447,20 +447,20 @@ type GameShowGamesTotalByWheresWithOrdersLimitOutput struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GameShowGamesTotalByWheresWithOrdersLimitOutput) Reset() {
-	*x = GameShowGamesTotalByWheresWithOrdersLimitOutput{}
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationOutput) Reset() {
+	*x = GameShowGamesTotalByFiltersWithSortersPaginationOutput{}
 	mi := &file_resource_logic_game_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GameShowGamesTotalByWheresWithOrdersLimitOutput) String() string {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationOutput) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GameShowGamesTotalByWheresWithOrdersLimitOutput) ProtoMessage() {}
+func (*GameShowGamesTotalByFiltersWithSortersPaginationOutput) ProtoMessage() {}
 
-func (x *GameShowGamesTotalByWheresWithOrdersLimitOutput) ProtoReflect() protoreflect.Message {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_logic_game_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -472,19 +472,19 @@ func (x *GameShowGamesTotalByWheresWithOrdersLimitOutput) ProtoReflect() protore
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GameShowGamesTotalByWheresWithOrdersLimitOutput.ProtoReflect.Descriptor instead.
-func (*GameShowGamesTotalByWheresWithOrdersLimitOutput) Descriptor() ([]byte, []int) {
+// Deprecated: Use GameShowGamesTotalByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
+func (*GameShowGamesTotalByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_game_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *GameShowGamesTotalByWheresWithOrdersLimitOutput) GetGames() []*Game {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationOutput) GetGames() []*Game {
 	if x != nil {
 		return x.Games
 	}
 	return nil
 }
 
-func (x *GameShowGamesTotalByWheresWithOrdersLimitOutput) GetTotal() uint64 {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationOutput) GetTotal() uint64 {
 	if x != nil {
 		return x.Total
 	}
@@ -519,26 +519,30 @@ const file_resource_logic_game_proto_rawDesc = "" +
 	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
 	"deleted_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x128\n" +
-	"\tgame_type\x18\t \x01(\v2\x1b.pb.resource.logic.GameTypeR\bgameType\"k\n" +
-	"\tGameWhere\x12\x14\n" +
+	"\tgame_type\x18\t \x01(\v2\x1b.pb.resource.logic.GameTypeR\bgameType\"l\n" +
+	"\n" +
+	"GameFilter\x12\x14\n" +
 	"\x05field\x18\x01 \x01(\tR\x05field\x12\x1a\n" +
 	"\boperator\x18\x02 \x01(\tR\boperator\x12,\n" +
-	"\x05value\x18\x03 \x01(\v2\x16.google.protobuf.ValueR\x05value\"7\n" +
-	"\tGameOrder\x12\x14\n" +
+	"\x05value\x18\x03 \x01(\v2\x16.google.protobuf.ValueR\x05value\"8\n" +
+	"\n" +
+	"GameSorter\x12\x14\n" +
 	"\x05field\x18\x01 \x01(\tR\x05field\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\"9\n" +
-	"\tGameLimit\x12\x16\n" +
-	"\x06offset\x18\x01 \x01(\x04R\x06offset\x12\x14\n" +
-	"\x05count\x18\x02 \x01(\x04R\x05count\"\xd0\x01\n" +
-	".GameShowGamesTotalByWheresWithOrdersLimitInput\x124\n" +
-	"\x06wheres\x18\x01 \x03(\v2\x1c.pb.resource.logic.GameWhereR\x06wheres\x124\n" +
-	"\x06orders\x18\x02 \x03(\v2\x1c.pb.resource.logic.GameOrderR\x06orders\x122\n" +
-	"\x05limit\x18\x03 \x01(\v2\x1c.pb.resource.logic.GameLimitR\x05limit\"v\n" +
-	"/GameShowGamesTotalByWheresWithOrdersLimitOutput\x12-\n" +
+	"\x05order\x18\x02 \x01(\tR\x05order\"8\n" +
+	"\x0eGamePagination\x12\x12\n" +
+	"\x04size\x18\x01 \x01(\x04R\x04size\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x04R\x04page\"\xec\x01\n" +
+	"5GameShowGamesTotalByFiltersWithSortersPaginationInput\x127\n" +
+	"\afilters\x18\x01 \x03(\v2\x1d.pb.resource.logic.GameFilterR\afilters\x127\n" +
+	"\asorters\x18\x02 \x03(\v2\x1d.pb.resource.logic.GameSorterR\asorters\x12A\n" +
+	"\n" +
+	"pagination\x18\x03 \x01(\v2!.pb.resource.logic.GamePaginationR\n" +
+	"pagination\"}\n" +
+	"6GameShowGamesTotalByFiltersWithSortersPaginationOutput\x12-\n" +
 	"\x05games\x18\x01 \x03(\v2\x17.pb.resource.logic.GameR\x05games\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total2\xbc\x01\n" +
-	"\tGameLogic\x12\xae\x01\n" +
-	"%ShowGamesTotalByWheresWithOrdersLimit\x12A.pb.resource.logic.GameShowGamesTotalByWheresWithOrdersLimitInput\x1aB.pb.resource.logic.GameShowGamesTotalByWheresWithOrdersLimitOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
+	"\x05total\x18\x02 \x01(\x04R\x05total2\xd1\x01\n" +
+	"\tGameLogic\x12\xc3\x01\n" +
+	",ShowGamesTotalByFiltersWithSortersPagination\x12H.pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput\x1aI.pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
 
 var (
 	file_resource_logic_game_proto_rawDescOnce sync.Once
@@ -554,15 +558,15 @@ func file_resource_logic_game_proto_rawDescGZIP() []byte {
 
 var file_resource_logic_game_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_resource_logic_game_proto_goTypes = []any{
-	(*GameType)(nil),  // 0: pb.resource.logic.GameType
-	(*Game)(nil),      // 1: pb.resource.logic.Game
-	(*GameWhere)(nil), // 2: pb.resource.logic.GameWhere
-	(*GameOrder)(nil), // 3: pb.resource.logic.GameOrder
-	(*GameLimit)(nil), // 4: pb.resource.logic.GameLimit
-	(*GameShowGamesTotalByWheresWithOrdersLimitInput)(nil),  // 5: pb.resource.logic.GameShowGamesTotalByWheresWithOrdersLimitInput
-	(*GameShowGamesTotalByWheresWithOrdersLimitOutput)(nil), // 6: pb.resource.logic.GameShowGamesTotalByWheresWithOrdersLimitOutput
-	(*timestamppb.Timestamp)(nil),                           // 7: google.protobuf.Timestamp
-	(*structpb.Value)(nil),                                  // 8: google.protobuf.Value
+	(*GameType)(nil),       // 0: pb.resource.logic.GameType
+	(*Game)(nil),           // 1: pb.resource.logic.Game
+	(*GameFilter)(nil),     // 2: pb.resource.logic.GameFilter
+	(*GameSorter)(nil),     // 3: pb.resource.logic.GameSorter
+	(*GamePagination)(nil), // 4: pb.resource.logic.GamePagination
+	(*GameShowGamesTotalByFiltersWithSortersPaginationInput)(nil),  // 5: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput
+	(*GameShowGamesTotalByFiltersWithSortersPaginationOutput)(nil), // 6: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput
+	(*timestamppb.Timestamp)(nil),                                  // 7: google.protobuf.Timestamp
+	(*structpb.Value)(nil),                                         // 8: google.protobuf.Value
 }
 var file_resource_logic_game_proto_depIdxs = []int32{
 	7,  // 0: pb.resource.logic.GameType.created_at:type_name -> google.protobuf.Timestamp
@@ -572,13 +576,13 @@ var file_resource_logic_game_proto_depIdxs = []int32{
 	7,  // 4: pb.resource.logic.Game.updated_at:type_name -> google.protobuf.Timestamp
 	7,  // 5: pb.resource.logic.Game.deleted_at:type_name -> google.protobuf.Timestamp
 	0,  // 6: pb.resource.logic.Game.game_type:type_name -> pb.resource.logic.GameType
-	8,  // 7: pb.resource.logic.GameWhere.value:type_name -> google.protobuf.Value
-	2,  // 8: pb.resource.logic.GameShowGamesTotalByWheresWithOrdersLimitInput.wheres:type_name -> pb.resource.logic.GameWhere
-	3,  // 9: pb.resource.logic.GameShowGamesTotalByWheresWithOrdersLimitInput.orders:type_name -> pb.resource.logic.GameOrder
-	4,  // 10: pb.resource.logic.GameShowGamesTotalByWheresWithOrdersLimitInput.limit:type_name -> pb.resource.logic.GameLimit
-	1,  // 11: pb.resource.logic.GameShowGamesTotalByWheresWithOrdersLimitOutput.games:type_name -> pb.resource.logic.Game
-	5,  // 12: pb.resource.logic.GameLogic.ShowGamesTotalByWheresWithOrdersLimit:input_type -> pb.resource.logic.GameShowGamesTotalByWheresWithOrdersLimitInput
-	6,  // 13: pb.resource.logic.GameLogic.ShowGamesTotalByWheresWithOrdersLimit:output_type -> pb.resource.logic.GameShowGamesTotalByWheresWithOrdersLimitOutput
+	8,  // 7: pb.resource.logic.GameFilter.value:type_name -> google.protobuf.Value
+	2,  // 8: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.logic.GameFilter
+	3,  // 9: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.logic.GameSorter
+	4,  // 10: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.logic.GamePagination
+	1,  // 11: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput.games:type_name -> pb.resource.logic.Game
+	5,  // 12: pb.resource.logic.GameLogic.ShowGamesTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput
+	6,  // 13: pb.resource.logic.GameLogic.ShowGamesTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput
 	13, // [13:14] is the sub-list for method output_type
 	12, // [12:13] is the sub-list for method input_type
 	12, // [12:12] is the sub-list for extension type_name

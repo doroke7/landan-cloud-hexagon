@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	GameLogic_ShowGamesTotalByWheresWithOrdersLimit_FullMethodName = "/pb.resource.logic.GameLogic/ShowGamesTotalByWheresWithOrdersLimit"
+	GameLogic_ShowGamesTotalByFiltersWithSortersPagination_FullMethodName = "/pb.resource.logic.GameLogic/ShowGamesTotalByFiltersWithSortersPagination"
 )
 
 // GameLogicClient is the client API for GameLogic service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GameLogicClient interface {
-	ShowGamesTotalByWheresWithOrdersLimit(ctx context.Context, in *GameShowGamesTotalByWheresWithOrdersLimitInput, opts ...grpc.CallOption) (*GameShowGamesTotalByWheresWithOrdersLimitOutput, error)
+	ShowGamesTotalByFiltersWithSortersPagination(ctx context.Context, in *GameShowGamesTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*GameShowGamesTotalByFiltersWithSortersPaginationOutput, error)
 }
 
 type gameLogicClient struct {
@@ -37,10 +37,10 @@ func NewGameLogicClient(cc grpc.ClientConnInterface) GameLogicClient {
 	return &gameLogicClient{cc}
 }
 
-func (c *gameLogicClient) ShowGamesTotalByWheresWithOrdersLimit(ctx context.Context, in *GameShowGamesTotalByWheresWithOrdersLimitInput, opts ...grpc.CallOption) (*GameShowGamesTotalByWheresWithOrdersLimitOutput, error) {
+func (c *gameLogicClient) ShowGamesTotalByFiltersWithSortersPagination(ctx context.Context, in *GameShowGamesTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*GameShowGamesTotalByFiltersWithSortersPaginationOutput, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GameShowGamesTotalByWheresWithOrdersLimitOutput)
-	err := c.cc.Invoke(ctx, GameLogic_ShowGamesTotalByWheresWithOrdersLimit_FullMethodName, in, out, cOpts...)
+	out := new(GameShowGamesTotalByFiltersWithSortersPaginationOutput)
+	err := c.cc.Invoke(ctx, GameLogic_ShowGamesTotalByFiltersWithSortersPagination_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *gameLogicClient) ShowGamesTotalByWheresWithOrdersLimit(ctx context.Cont
 // All implementations must embed UnimplementedGameLogicServer
 // for forward compatibility.
 type GameLogicServer interface {
-	ShowGamesTotalByWheresWithOrdersLimit(context.Context, *GameShowGamesTotalByWheresWithOrdersLimitInput) (*GameShowGamesTotalByWheresWithOrdersLimitOutput, error)
+	ShowGamesTotalByFiltersWithSortersPagination(context.Context, *GameShowGamesTotalByFiltersWithSortersPaginationInput) (*GameShowGamesTotalByFiltersWithSortersPaginationOutput, error)
 	mustEmbedUnimplementedGameLogicServer()
 }
 
@@ -62,8 +62,8 @@ type GameLogicServer interface {
 // pointer dereference when methods are called.
 type UnimplementedGameLogicServer struct{}
 
-func (UnimplementedGameLogicServer) ShowGamesTotalByWheresWithOrdersLimit(context.Context, *GameShowGamesTotalByWheresWithOrdersLimitInput) (*GameShowGamesTotalByWheresWithOrdersLimitOutput, error) {
-	return nil, status.Error(codes.Unimplemented, "method ShowGamesTotalByWheresWithOrdersLimit not implemented")
+func (UnimplementedGameLogicServer) ShowGamesTotalByFiltersWithSortersPagination(context.Context, *GameShowGamesTotalByFiltersWithSortersPaginationInput) (*GameShowGamesTotalByFiltersWithSortersPaginationOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowGamesTotalByFiltersWithSortersPagination not implemented")
 }
 func (UnimplementedGameLogicServer) mustEmbedUnimplementedGameLogicServer() {}
 func (UnimplementedGameLogicServer) testEmbeddedByValue()                   {}
@@ -86,20 +86,20 @@ func RegisterGameLogicServer(s grpc.ServiceRegistrar, srv GameLogicServer) {
 	s.RegisterService(&GameLogic_ServiceDesc, srv)
 }
 
-func _GameLogic_ShowGamesTotalByWheresWithOrdersLimit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GameShowGamesTotalByWheresWithOrdersLimitInput)
+func _GameLogic_ShowGamesTotalByFiltersWithSortersPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GameShowGamesTotalByFiltersWithSortersPaginationInput)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GameLogicServer).ShowGamesTotalByWheresWithOrdersLimit(ctx, in)
+		return srv.(GameLogicServer).ShowGamesTotalByFiltersWithSortersPagination(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GameLogic_ShowGamesTotalByWheresWithOrdersLimit_FullMethodName,
+		FullMethod: GameLogic_ShowGamesTotalByFiltersWithSortersPagination_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GameLogicServer).ShowGamesTotalByWheresWithOrdersLimit(ctx, req.(*GameShowGamesTotalByWheresWithOrdersLimitInput))
+		return srv.(GameLogicServer).ShowGamesTotalByFiltersWithSortersPagination(ctx, req.(*GameShowGamesTotalByFiltersWithSortersPaginationInput))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -112,8 +112,8 @@ var GameLogic_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*GameLogicServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ShowGamesTotalByWheresWithOrdersLimit",
-			Handler:    _GameLogic_ShowGamesTotalByWheresWithOrdersLimit_Handler,
+			MethodName: "ShowGamesTotalByFiltersWithSortersPagination",
+			Handler:    _GameLogic_ShowGamesTotalByFiltersWithSortersPagination_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -21,44 +21,54 @@ func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic 
 	}
 }
 
-func (oSelf *TableLogic) ShowTablesTotalByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Table, int64, error) {
+func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, int64, error) {
 
-	oRequest := &pbResourceLogic.TableShowTablesTotalByWheresWithOrdersLimitInput{
-		Limit: &pbResourceLogic.TableLimit{
-			Offset: uint64(*oLimit.Offset),
-			Count:  uint64(*oLimit.Count),
-		},
+	oRequest := &pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationInput{}
+
+	if oPagination != nil {
+		oPbPagination := &pbResourceLogic.TablePagination{}
+		if oPagination.Size != nil {
+			oPbPagination.Size = uint64(*oPagination.Size)
+		}
+		if oPagination.Page != nil {
+			oPbPagination.Page = uint64(*oPagination.Page)
+		}
+		oRequest.Pagination = oPbPagination
 	}
 
-	for _, oWhere := range aWheres {
-		if oWhere == nil || oWhere.Field == nil || oWhere.Operator == nil {
+	for _, oFilter := range aFilters {
+		if oFilter == nil || oFilter.Field == nil {
 			continue
 		}
 
-		oValue, oErr := structpb.NewValue(oWhere.Value)
+		oValue, oErr := structpb.NewValue(oFilter.Value)
 		if oErr != nil {
 			continue
 		}
 
-		oRequest.Wheres = append(oRequest.Wheres, &pbResourceLogic.TableWhere{
-			Field:    *oWhere.Field,
-			Operator: *oWhere.Operator,
-			Value:    oValue,
-		})
+		oPbFilter := &pbResourceLogic.TableFilter{
+			Field: *oFilter.Field,
+			Value: oValue,
+		}
+		if oFilter.Operator != nil {
+			oPbFilter.Operator = *oFilter.Operator
+		}
+
+		oRequest.Filters = append(oRequest.Filters, oPbFilter)
 	}
 
-	for _, oOrder := range aOrders {
-		if oOrder == nil || oOrder.Field == nil || oOrder.Value == nil {
+	for _, oSorter := range aSorters {
+		if oSorter == nil || oSorter.Field == nil || oSorter.Order == nil {
 			continue
 		}
 
-		oRequest.Orders = append(oRequest.Orders, &pbResourceLogic.TableOrder{
-			Field: *oOrder.Field,
-			Value: *oOrder.Value,
+		oRequest.Sorters = append(oRequest.Sorters, &pbResourceLogic.TableSorter{
+			Field: *oSorter.Field,
+			Order: *oSorter.Order,
 		})
 	}
 
-	oResponse, oErr := oSelf.ResourceLogicClient.Table.ShowTablesTotalByWheresWithOrdersLimit(oSelf.Context, oRequest)
+	oResponse, oErr := oSelf.ResourceLogicClient.Table.ShowTablesTotalByFiltersWithSortersPagination(oSelf.Context, oRequest)
 
 	aTables := make([]*domain.Table, 0, len(oResponse.GetTables()))
 	for _, oOne := range oResponse.GetTables() {

@@ -19,9 +19,9 @@ func NewTableUsecase(oAbstractUsecase *AbstractUsecase, oTableLogic outputPortAn
 	}
 }
 
-func (oSelf *TableUsecase) ShowTablesTotalByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Table, int64, error) {
+func (oSelf *TableUsecase) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, int64, error) {
 
-	aTables, iTotal, oErr := oSelf.TableLogic.ShowTablesTotalByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
+	aTables, iTotal, oErr := oSelf.TableLogic.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	return aTables, iTotal, oErr
 }

@@ -46,52 +46,52 @@ func gameToPb(oGame *domain.Game) *pbResourceLogic.Game {
 	}
 }
 
-func (oSelf *GameHandler) ShowGamesTotalByWheresWithOrdersLimit(oContext context.Context, oReq *pbResourceLogic.GameShowGamesTotalByWheresWithOrdersLimitInput) (*pbResourceLogic.GameShowGamesTotalByWheresWithOrdersLimitOutput, error) {
+func (oSelf *GameHandler) ShowGamesTotalByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceLogic.GameShowGamesTotalByFiltersWithSortersPaginationInput) (*pbResourceLogic.GameShowGamesTotalByFiltersWithSortersPaginationOutput, error) {
 
-	iOffset := uint(oReq.GetLimit().GetOffset())
-	iCount := uint(oReq.GetLimit().GetCount())
-	oLimit := &pkg.Limit{
-		Offset: &iOffset,
-		Count:  &iCount,
+	iSize := uint(oReq.GetPagination().GetSize())
+	iPage := uint(oReq.GetPagination().GetPage())
+	oPagination := &pkg.Pagination{
+		Size: &iSize,
+		Page: &iPage,
 	}
 
-	aWheres := make([]*pkg.Where, 0, len(oReq.GetWheres()))
-	for _, oOne := range oReq.GetWheres() {
+	aFilters := make([]*pkg.Filter, 0, len(oReq.GetFilters()))
+	for _, oOne := range oReq.GetFilters() {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aWheres = append(aWheres, &pkg.Where{
+		aFilters = append(aFilters, &pkg.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oOne.GetValue().AsInterface(),
 		})
 	}
 
-	aOrders := make([]*pkg.Order, 0, len(oReq.GetOrders()))
-	for _, oOne := range oReq.GetOrders() {
+	aSorters := make([]*pkg.Sorter, 0, len(oReq.GetSorters()))
+	for _, oOne := range oReq.GetSorters() {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
-		sValue := oOne.GetValue()
-		aOrders = append(aOrders, &pkg.Order{
+		sOrder := oOne.GetOrder()
+		aSorters = append(aSorters, &pkg.Sorter{
 			Field: &sField,
-			Value: &sValue,
+			Order: &sOrder,
 		})
 	}
 
-	aGames, iTotal, oErr := oSelf.GameUsecase.ShowGamesTotalByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
+	aGames, iTotal, oErr := oSelf.GameUsecase.ShowGamesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	aPbGames := make([]*pbResourceLogic.Game, 0, len(aGames))
 	for _, oGame := range aGames {
 		aPbGames = append(aPbGames, gameToPb(oGame))
 	}
 
-	return &pbResourceLogic.GameShowGamesTotalByWheresWithOrdersLimitOutput{
+	return &pbResourceLogic.GameShowGamesTotalByFiltersWithSortersPaginationOutput{
 		Total: uint64(iTotal),
 		Games: aPbGames,
 	}, oErr

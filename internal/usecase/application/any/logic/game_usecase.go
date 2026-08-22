@@ -19,9 +19,9 @@ func NewGameUsecase(oAbstractUsecase *AbstractUsecase, oGameLogic outputPortAnyL
 	}
 }
 
-func (oSelf *GameUsecase) ShowGamesTotalByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Game, int64, error) {
+func (oSelf *GameUsecase) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, int64, error) {
 
-	aGames, iTotal, oErr := oSelf.GameLogic.ShowGamesTotalByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
+	aGames, iTotal, oErr := oSelf.GameLogic.ShowGamesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	return aGames, iTotal, oErr
 }

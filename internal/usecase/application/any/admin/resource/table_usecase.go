@@ -62,12 +62,7 @@ func (oSelf *TableUsecase) RemoveOne(iId uint) (bool, error) {
 
 func (oSelf *TableUsecase) ShowOnes(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, uint64, error) {
 
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
-
-	oLimit := pkg.PaginationToMysqlLimit(oPagination)
-
-	aTables, iTotal, oErr := oSelf.TableLogic.ShowTablesTotalByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
+	aTables, iTotal, oErr := oSelf.TableLogic.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	return aTables, uint64(iTotal), oErr
 }

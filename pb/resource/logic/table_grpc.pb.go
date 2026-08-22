@@ -19,14 +19,14 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TableLogic_ShowTablesTotalByWheresWithOrdersLimit_FullMethodName = "/pb.resource.logic.TableLogic/ShowTablesTotalByWheresWithOrdersLimit"
+	TableLogic_ShowTablesTotalByFiltersWithSortersPagination_FullMethodName = "/pb.resource.logic.TableLogic/ShowTablesTotalByFiltersWithSortersPagination"
 )
 
 // TableLogicClient is the client API for TableLogic service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TableLogicClient interface {
-	ShowTablesTotalByWheresWithOrdersLimit(ctx context.Context, in *TableShowTablesTotalByWheresWithOrdersLimitInput, opts ...grpc.CallOption) (*TableShowTablesTotalByWheresWithOrdersLimitOutput, error)
+	ShowTablesTotalByFiltersWithSortersPagination(ctx context.Context, in *TableShowTablesTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*TableShowTablesTotalByFiltersWithSortersPaginationOutput, error)
 }
 
 type tableLogicClient struct {
@@ -37,10 +37,10 @@ func NewTableLogicClient(cc grpc.ClientConnInterface) TableLogicClient {
 	return &tableLogicClient{cc}
 }
 
-func (c *tableLogicClient) ShowTablesTotalByWheresWithOrdersLimit(ctx context.Context, in *TableShowTablesTotalByWheresWithOrdersLimitInput, opts ...grpc.CallOption) (*TableShowTablesTotalByWheresWithOrdersLimitOutput, error) {
+func (c *tableLogicClient) ShowTablesTotalByFiltersWithSortersPagination(ctx context.Context, in *TableShowTablesTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*TableShowTablesTotalByFiltersWithSortersPaginationOutput, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(TableShowTablesTotalByWheresWithOrdersLimitOutput)
-	err := c.cc.Invoke(ctx, TableLogic_ShowTablesTotalByWheresWithOrdersLimit_FullMethodName, in, out, cOpts...)
+	out := new(TableShowTablesTotalByFiltersWithSortersPaginationOutput)
+	err := c.cc.Invoke(ctx, TableLogic_ShowTablesTotalByFiltersWithSortersPagination_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -51,7 +51,7 @@ func (c *tableLogicClient) ShowTablesTotalByWheresWithOrdersLimit(ctx context.Co
 // All implementations must embed UnimplementedTableLogicServer
 // for forward compatibility.
 type TableLogicServer interface {
-	ShowTablesTotalByWheresWithOrdersLimit(context.Context, *TableShowTablesTotalByWheresWithOrdersLimitInput) (*TableShowTablesTotalByWheresWithOrdersLimitOutput, error)
+	ShowTablesTotalByFiltersWithSortersPagination(context.Context, *TableShowTablesTotalByFiltersWithSortersPaginationInput) (*TableShowTablesTotalByFiltersWithSortersPaginationOutput, error)
 	mustEmbedUnimplementedTableLogicServer()
 }
 
@@ -62,8 +62,8 @@ type TableLogicServer interface {
 // pointer dereference when methods are called.
 type UnimplementedTableLogicServer struct{}
 
-func (UnimplementedTableLogicServer) ShowTablesTotalByWheresWithOrdersLimit(context.Context, *TableShowTablesTotalByWheresWithOrdersLimitInput) (*TableShowTablesTotalByWheresWithOrdersLimitOutput, error) {
-	return nil, status.Error(codes.Unimplemented, "method ShowTablesTotalByWheresWithOrdersLimit not implemented")
+func (UnimplementedTableLogicServer) ShowTablesTotalByFiltersWithSortersPagination(context.Context, *TableShowTablesTotalByFiltersWithSortersPaginationInput) (*TableShowTablesTotalByFiltersWithSortersPaginationOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowTablesTotalByFiltersWithSortersPagination not implemented")
 }
 func (UnimplementedTableLogicServer) mustEmbedUnimplementedTableLogicServer() {}
 func (UnimplementedTableLogicServer) testEmbeddedByValue()                    {}
@@ -86,20 +86,20 @@ func RegisterTableLogicServer(s grpc.ServiceRegistrar, srv TableLogicServer) {
 	s.RegisterService(&TableLogic_ServiceDesc, srv)
 }
 
-func _TableLogic_ShowTablesTotalByWheresWithOrdersLimit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TableShowTablesTotalByWheresWithOrdersLimitInput)
+func _TableLogic_ShowTablesTotalByFiltersWithSortersPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TableShowTablesTotalByFiltersWithSortersPaginationInput)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(TableLogicServer).ShowTablesTotalByWheresWithOrdersLimit(ctx, in)
+		return srv.(TableLogicServer).ShowTablesTotalByFiltersWithSortersPagination(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: TableLogic_ShowTablesTotalByWheresWithOrdersLimit_FullMethodName,
+		FullMethod: TableLogic_ShowTablesTotalByFiltersWithSortersPagination_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TableLogicServer).ShowTablesTotalByWheresWithOrdersLimit(ctx, req.(*TableShowTablesTotalByWheresWithOrdersLimitInput))
+		return srv.(TableLogicServer).ShowTablesTotalByFiltersWithSortersPagination(ctx, req.(*TableShowTablesTotalByFiltersWithSortersPaginationInput))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -112,8 +112,8 @@ var TableLogic_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*TableLogicServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "ShowTablesTotalByWheresWithOrdersLimit",
-			Handler:    _TableLogic_ShowTablesTotalByWheresWithOrdersLimit_Handler,
+			MethodName: "ShowTablesTotalByFiltersWithSortersPagination",
+			Handler:    _TableLogic_ShowTablesTotalByFiltersWithSortersPagination_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

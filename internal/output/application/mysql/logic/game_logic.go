@@ -19,7 +19,10 @@ func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
 	}
 }
 
-func (oSelf *GameLogic) ShowGamesTotalByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Game, int64, error) {
+func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, int64, error) {
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
+	oLimit := pkg.PaginationToMysqlLimit(oPagination)
 
 	var aGameRows []*domain.GameRow
 	var oGameRow domain.GameRow
