@@ -7,28 +7,28 @@ import (
 )
 
 // ConsumerHandlerFunc 是一個 queue 對應的處理方法，簽名統一，方便用 queue name 當 key 做路由。
-type ConsumerHandlerFunc func(msg amqp.Delivery)
+type RabbitmqHandlerFunc func(msg amqp.Delivery)
 
-// ConsumerRouter 職責跟 http.ServeMux／grpc 的 service registry 一樣，
+// RabbitmqRouter 職責跟 http.ServeMux／grpc 的 service registry 一樣，
 // 只負責把 queue name 對應到一個處理方法，不管 unmarshal／business 邏輯。
-type ConsumerRouter struct {
+type RabbitmqRouter struct {
 	conn   *amqp.Connection
-	routes map[string]ConsumerHandlerFunc
+	routes map[string]RabbitmqHandlerFunc
 }
 
-func NewConsumerRouter(oConn *amqp.Connection) *ConsumerRouter {
-	return &ConsumerRouter{
+func NewRabbitmqRouter(oConn *amqp.Connection) *RabbitmqRouter {
+	return &RabbitmqRouter{
 		conn:   oConn,
-		routes: make(map[string]ConsumerHandlerFunc),
+		routes: make(map[string]RabbitmqHandlerFunc),
 	}
 }
 
 // HandleFunc 註冊一個 queue name 對應的處理方法，用法跟 http.HandleFunc 一樣。
-func (oSelf *ConsumerRouter) HandleFunc(sQueue string, fnHandler ConsumerHandlerFunc) {
+func (oSelf *RabbitmqRouter) HandleFunc(sQueue string, fnHandler RabbitmqHandlerFunc) {
 	oSelf.routes[sQueue] = fnHandler
 }
 
-func (oSelf *ConsumerRouter) Serve(ctx context.Context) error {
+func (oSelf *RabbitmqRouter) Serve(ctx context.Context) error {
 	oChannel, err := oSelf.conn.Channel()
 	if err != nil {
 		return err
@@ -53,7 +53,7 @@ func (oSelf *ConsumerRouter) Serve(ctx context.Context) error {
 	return nil
 }
 
-func consume(ctx context.Context, msgs <-chan amqp.Delivery, fnHandler ConsumerHandlerFunc) {
+func consume(ctx context.Context, msgs <-chan amqp.Delivery, fnHandler RabbitmqHandlerFunc) {
 	for {
 		select {
 		case <-ctx.Done():
