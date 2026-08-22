@@ -43,7 +43,7 @@ func NewAbstractModel(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *Ab
 	}
 }
 
-func (oSelf *AbstractModel) ToWheres(aFilters []*pkg.Filter) []*pkg.MysqlWhere {
+func (oSelf *AbstractModel) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.MysqlWhere {
 	aWheres := make([]*pkg.MysqlWhere, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -82,7 +82,7 @@ func (oSelf *AbstractModel) ToWheres(aFilters []*pkg.Filter) []*pkg.MysqlWhere {
 	return aWheres
 }
 
-func (oSelf *AbstractModel) ToOrders(aSorters []*pkg.Sorter) []*pkg.MysqlOrder {
+func (oSelf *AbstractModel) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.MysqlOrder {
 	aOrders := make([]*pkg.MysqlOrder, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
@@ -105,7 +105,7 @@ func (oSelf *AbstractModel) ToOrders(aSorters []*pkg.Sorter) []*pkg.MysqlOrder {
 	return aOrders
 }
 
-func (oSelf *AbstractModel) ToLimit(oPagination *pkg.Pagination) *pkg.MysqlLimit {
+func (oSelf *AbstractModel) PaginationToLimit(oPagination *pkg.Pagination) *pkg.MysqlLimit {
 	iSize := uint(10)
 	iPage := uint(1)
 

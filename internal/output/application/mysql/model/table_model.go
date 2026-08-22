@@ -86,9 +86,9 @@ func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
 }
 
 func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
-	oLimit := pkg.PaginationToMysqlLimit(oPagination)
+	aWheres := oSelf.FiltersToWheres(aFilters)
+	aOrders := oSelf.SortersToOrders(aSorters)
+	oLimit := oSelf.PaginationToLimit(oPagination)
 
 	var aTableRows []*domain.TableRow
 	var oTableRow domain.TableRow
@@ -134,7 +134,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.
 }
 
 func (oSelf *TableModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+	aWheres := oSelf.FiltersToWheres(aFilters)
 
 	var iTotal int64
 	var oTableRow domain.TableRow

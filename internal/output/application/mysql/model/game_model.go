@@ -41,9 +41,9 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 }
 
 func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
-	oLimit := pkg.PaginationToMysqlLimit(oPagination)
+	aWheres := oSelf.FiltersToWheres(aFilters)
+	aOrders := oSelf.SortersToOrders(aSorters)
+	oLimit := oSelf.PaginationToLimit(oPagination)
 
 	var aGameRows []*domain.GameRow
 	var oGameRow domain.GameRow
@@ -88,7 +88,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Fi
 }
 
 func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+	aWheres := oSelf.FiltersToWheres(aFilters)
 
 	var iTotal int64
 	var oGameRow domain.GameRow
