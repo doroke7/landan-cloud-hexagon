@@ -83,6 +83,20 @@ func (oSelf *GameModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aO
 	return aGames, nil
 }
 
+func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
+	oLimit := pkg.PaginationToMysqlLimit(oPagination)
+
+	return oSelf.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
+}
+
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+
+	return oSelf.TotalByWheres(aWheres)
+}
+
 func (oSelf *GameModel) AddOne(oValue *domain.GameValue) (bool, error) {
 	var oGameRow domain.GameRow
 
