@@ -40,7 +40,11 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 	return domain.GameRowToGame(&oGameRow), nil
 }
 
-func (oSelf *GameModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
+	oLimit := pkg.PaginationToMysqlLimit(oPagination)
+
 	var aGameRows []*domain.GameRow
 	var oGameRow domain.GameRow
 
@@ -83,18 +87,29 @@ func (oSelf *GameModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aO
 	return aGames, nil
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
-	oLimit := pkg.PaginationToMysqlLimit(oPagination)
-
-	return oSelf.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
-}
-
 func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
 	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
 
-	return oSelf.TotalByWheres(aWheres)
+	var iTotal int64
+	var oGameRow domain.GameRow
+
+	oQuery := oSelf.
+		DB.
+		WithContext(oSelf.Context).
+		Model(&oGameRow)
+
+	for _, oWhere := range aWheres {
+		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
+	}
+
+	// Go 很常先在外面宣告變數，然後把它的 pointer 傳進函數，讓函數可以直接修改原本的變數。
+	if oErr := oQuery.
+		Count(&iTotal).Error; oErr != nil {
+		return 0, oErr
+	}
+
+	return uint64(iTotal), nil
+
 }
 
 func (oSelf *GameModel) AddOne(oValue *domain.GameValue) (bool, error) {
@@ -159,26 +174,4 @@ func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
 	}
 
 	return true, nil
-}
-
-func (oSelf *GameModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
-	var iTotal int64
-	var oGameRow domain.GameRow
-
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
-		Model(&oGameRow)
-
-	for _, oWhere := range aWheres {
-		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
-	}
-
-	// Go 很常先在外面宣告變數，然後把它的 pointer 傳進函數，讓函數可以直接修改原本的變數。
-	if oErr := oQuery.
-		Count(&iTotal).Error; oErr != nil {
-		return 0, oErr
-	}
-
-	return uint64(iTotal), nil
 }
