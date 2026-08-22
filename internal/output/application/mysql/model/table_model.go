@@ -136,7 +136,7 @@ func (oSelf *TableModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
-		Model(oTableRow)
+		Model(&oTableRow)
 
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)

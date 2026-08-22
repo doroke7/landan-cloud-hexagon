@@ -26,7 +26,7 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 	var oGameTypeRow domain.GameTypeRow
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.GameTypeRow{}).
+		Model(&oGameTypeRow).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		First(&oGameTypeRow, iId).Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
