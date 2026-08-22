@@ -33,6 +33,29 @@ func GameTypeRowToGameType(oRow *GameTypeRow) *GameType {
 	}
 }
 
+// GameTypeDocument 是 game_type 這個 collection 在 Mongo 裡的儲存結構。
+// Mongo 沒有像 SQL 那樣的自增主鍵，_id 改用 counters collection 累加出來的數字，
+// 讓 GameType.Id 維持跟其他 adapter 一樣是 uint。
+type GameTypeDocument struct {
+	Id        uint      `bson:"_id"`
+	Key       string    `bson:"key"`
+	Name      string    `bson:"name"`
+	CreatedAt time.Time `bson:"created_at"`
+	UpdatedAt time.Time `bson:"updated_at"`
+	DeletedAt time.Time `bson:"deleted_at"`
+}
+
+func GameTypeDocumentToGameType(oDoc *GameTypeDocument) *GameType {
+	return &GameType{
+		Id:        oDoc.Id,
+		Key:       oDoc.Key,
+		Name:      oDoc.Name,
+		CreatedAt: oDoc.CreatedAt,
+		UpdatedAt: oDoc.UpdatedAt,
+		DeletedAt: oDoc.DeletedAt,
+	}
+}
+
 type GameTypeValue struct {
 	Key  *string `json:"key,omitempty"`
 	Name *string `json:"name,omitempty"`

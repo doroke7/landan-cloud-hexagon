@@ -40,3 +40,26 @@ func AdminUserRowToAdminUser(oRow *AdminUserRow) *AdminUser {
 		DeletedAt: oRow.DeletedAt,
 	}
 }
+
+// AdminUserDocument 是 admin_user 這個 collection 在 Mongo 裡的儲存結構。
+// Mongo 沒有像 SQL 那樣的自增主鍵，_id 改用 counters collection 累加出來的數字，
+// 讓 AdminUser.Id 維持跟其他 adapter 一樣是 uint。
+type AdminUserDocument struct {
+	Id        uint      `bson:"_id"`
+	Name      string    `bson:"name"`
+	Password  string    `bson:"password"`
+	CreatedAt time.Time `bson:"created_at"`
+	UpdatedAt time.Time `bson:"updated_at"`
+	DeletedAt time.Time `bson:"deleted_at"`
+}
+
+func AdminUserDocumentToAdminUser(oDoc *AdminUserDocument) *AdminUser {
+	return &AdminUser{
+		Id:        oDoc.Id,
+		Name:      oDoc.Name,
+		Password:  oDoc.Password,
+		CreatedAt: oDoc.CreatedAt,
+		UpdatedAt: oDoc.UpdatedAt,
+		DeletedAt: oDoc.DeletedAt,
+	}
+}

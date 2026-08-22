@@ -1,0 +1,10 @@
+user: "root"
+password: "tidb_pass_backend"
+name: "resource"
+prefix: "tx-"
+charset: "utf8mb4"
+max_idle_connections: 12
+timeout: 10000
+
+hosts: ["127.0.0.1"]
+ports: ["4000"]

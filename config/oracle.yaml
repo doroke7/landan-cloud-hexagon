@@ -1,0 +1,7 @@
+host: "127.0.0.1"
+port: "1521"
+user: "oracle"
+password: "oracle_pass_backend"
+service: "orclpdb1"
+max_idle_connections: 12
+timeout: 10000

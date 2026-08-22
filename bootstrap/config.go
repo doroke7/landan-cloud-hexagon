@@ -193,6 +193,47 @@ type Config struct {
 		MAX_IDLE_CONNECTIONS int    `mapstructure:"max_idle_connections"`
 		TIMEOUT              int    `mapstructure:"timeout"`
 	} `mapstructure:"sqlite"`
+	TIDB struct {
+		USER                 string   `mapstructure:"user"`
+		PASSWORD             string   `mapstructure:"password"`
+		PREFIX               string   `mapstructure:"prefix"`
+		CHARSET              string   `mapstructure:"charset"`
+		NAME                 string   `mapstructure:"name"`
+		MAX_IDLE_CONNECTIONS int      `mapstructure:"max_idle_connections"`
+		TIMEOUT              int      `mapstructure:"timeout"`
+		HOSTS                []string `mapstructure:"hosts"`
+		PORTS                []string `mapstructure:"ports"`
+	} `mapstructure:"tidb"`
+	GAUSSDB struct {
+		HOST                 string `mapstructure:"host"`
+		PORT                 string `mapstructure:"port"`
+		USER                 string `mapstructure:"user"`
+		PASSWORD             string `mapstructure:"password"`
+		NAME                 string `mapstructure:"name"`
+		SSLMODE              string `mapstructure:"sslmode"`
+		MAX_IDLE_CONNECTIONS int    `mapstructure:"max_idle_connections"`
+		TIMEOUT              int    `mapstructure:"timeout"`
+	} `mapstructure:"gaussdb"`
+	ORACLE struct {
+		HOST                 string `mapstructure:"host"`
+		PORT                 string `mapstructure:"port"`
+		USER                 string `mapstructure:"user"`
+		PASSWORD             string `mapstructure:"password"`
+		SERVICE              string `mapstructure:"service"`
+		MAX_IDLE_CONNECTIONS int    `mapstructure:"max_idle_connections"`
+		TIMEOUT              int    `mapstructure:"timeout"`
+	} `mapstructure:"oracle"`
+	CLICKHOUSE struct {
+		HOST                 string `mapstructure:"host"`
+		PORT                 string `mapstructure:"port"`
+		USER                 string `mapstructure:"user"`
+		PASSWORD             string `mapstructure:"password"`
+		NAME                 string `mapstructure:"name"`
+		DIAL_TIMEOUT         string `mapstructure:"dial_timeout"`
+		READ_TIMEOUT         string `mapstructure:"read_timeout"`
+		MAX_IDLE_CONNECTIONS int    `mapstructure:"max_idle_connections"`
+		TIMEOUT              int    `mapstructure:"timeout"`
+	} `mapstructure:"clickhouse"`
 	REDIS struct {
 		HOST     string   `mapstructure:"host"`
 		HOSTS    []string `mapstructure:"hosts"`

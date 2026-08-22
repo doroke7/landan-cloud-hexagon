@@ -13,28 +13,24 @@ import (
 	pkg "example/pkg"
 )
 
-// oDeletedAtZero 跟 mysql/resource adapter 用同一個「未刪除」標記值，
-// 讓軟刪除的語意在各個 adapter 間保持一致。
-var oDeletedAtZero = time.Date(2038, 1, 19, 3, 14, 7, 0, time.UTC)
-
-type GameModel struct {
+type TableRecordModel struct {
 	*outputApplicationMongodb.AbstractMongodb
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
-func NewGameModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyModel.GameModel {
-	return &GameModel{
+func NewTableRecordModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyModel.TableRecordModel {
+	return &TableRecordModel{
 		AbstractMongodb: oAbstractMongodb,
-		Collection:      oAbstractMongodb.Database.Collection("games"),
+		Collection:      oAbstractMongodb.Database.Collection("table_records"),
 		Counters:        oAbstractMongodb.Database.Collection("counters"),
 	}
 }
 
-func (oSelf *GameModel) nextId() (uint, error) {
+func (oSelf *TableRecordModel) nextId() (uint, error) {
 	oResult := oSelf.Counters.FindOneAndUpdate(
 		oSelf.Context,
-		bson.M{"_id": "game"},
+		bson.M{"_id": "table_record"},
 		bson.M{"$inc": bson.M{"seq": 1}},
 		options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After),
 	)
@@ -49,31 +45,46 @@ func (oSelf *GameModel) nextId() (uint, error) {
 	return oCounter.Seq, nil
 }
 
-func (oSelf *GameModel) AddOne(oGame *domain.GameValue) (bool, error) {
+func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) (bool, error) {
 	iId, oErr := oSelf.nextId()
 	if oErr != nil {
 		return false, oErr
 	}
 
 	oNow := time.Now()
-	oDoc := &domain.GameDocument{
+	oDoc := &domain.TableRecordDocument{
 		Id:        iId,
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
 		DeletedAt: oDeletedAtZero,
 	}
 
-	if oGame.GameTypeId != nil {
-		oDoc.GameTypeId = *oGame.GameTypeId
+	if oTableRecord.No != nil {
+		oDoc.No = *oTableRecord.No
 	}
-	if oGame.Key != nil {
-		oDoc.Key = *oGame.Key
+	if oTableRecord.GameId != nil {
+		oDoc.GameId = *oTableRecord.GameId
 	}
-	if oGame.Name != nil {
-		oDoc.Name = *oGame.Name
+	if oTableRecord.TableId != nil {
+		oDoc.TableId = *oTableRecord.TableId
 	}
-	if oGame.Description != nil {
-		oDoc.Description = *oGame.Description
+	if oTableRecord.State != nil {
+		oDoc.State = *oTableRecord.State
+	}
+	if oTableRecord.Text != nil {
+		oDoc.Text = string(*oTableRecord.Text)
+	}
+	if oTableRecord.Image != nil {
+		oDoc.Image = string(*oTableRecord.Image)
+	}
+	if oTableRecord.Result != nil {
+		oDoc.Result = string(*oTableRecord.Result)
+	}
+	if oTableRecord.StartedAt != nil {
+		oDoc.StartedAt = *oTableRecord.StartedAt
+	}
+	if oTableRecord.EndedAt != nil {
+		oDoc.EndedAt = *oTableRecord.EndedAt
 	}
 
 	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oDoc); oErr != nil {
@@ -83,8 +94,8 @@ func (oSelf *GameModel) AddOne(oGame *domain.GameValue) (bool, error) {
 	return true, nil
 }
 
-func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
-	var oDoc domain.GameDocument
+func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error) {
+	var oDoc domain.TableRecordDocument
 
 	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
@@ -98,23 +109,38 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 		return nil, oErr
 	}
 
-	return domain.GameDocumentToGame(&oDoc), nil
+	return domain.TableRecordDocumentToTableRecord(&oDoc), nil
 }
 
-func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) (bool, error) {
+func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue, iId uint) (bool, error) {
 	oSet := bson.M{"updated_at": time.Now()}
 
-	if oGame.GameTypeId != nil {
-		oSet["game_type_id"] = *oGame.GameTypeId
+	if oTableRecord.No != nil {
+		oSet["no"] = *oTableRecord.No
 	}
-	if oGame.Key != nil {
-		oSet["key"] = *oGame.Key
+	if oTableRecord.GameId != nil {
+		oSet["game_id"] = *oTableRecord.GameId
 	}
-	if oGame.Name != nil {
-		oSet["name"] = *oGame.Name
+	if oTableRecord.TableId != nil {
+		oSet["table_id"] = *oTableRecord.TableId
 	}
-	if oGame.Description != nil {
-		oSet["description"] = *oGame.Description
+	if oTableRecord.State != nil {
+		oSet["state"] = *oTableRecord.State
+	}
+	if oTableRecord.Text != nil {
+		oSet["text"] = string(*oTableRecord.Text)
+	}
+	if oTableRecord.Image != nil {
+		oSet["image"] = string(*oTableRecord.Image)
+	}
+	if oTableRecord.Result != nil {
+		oSet["result"] = string(*oTableRecord.Result)
+	}
+	if oTableRecord.StartedAt != nil {
+		oSet["started_at"] = *oTableRecord.StartedAt
+	}
+	if oTableRecord.EndedAt != nil {
+		oSet["ended_at"] = *oTableRecord.EndedAt
 	}
 
 	oResult, oErr := oSelf.Collection.UpdateOne(
@@ -129,7 +155,7 @@ func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) (bool, er
 	return oResult.MatchedCount > 0, nil
 }
 
-func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *TableRecordModel) RemoveOneById(iId uint) (bool, error) {
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
@@ -142,7 +168,7 @@ func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
 	return oResult.ModifiedCount > 0, nil
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
+func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.TableRecord, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
@@ -170,20 +196,20 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Fi
 	}
 	defer oCursor.Close(oSelf.Context)
 
-	var aDocs []*domain.GameDocument
+	var aDocs []*domain.TableRecordDocument
 	if oErr := oCursor.All(oSelf.Context, &aDocs); oErr != nil {
 		return nil, oErr
 	}
 
-	aGames := make([]*domain.Game, len(aDocs))
+	aTableRecords := make([]*domain.TableRecord, len(aDocs))
 	for i, oDoc := range aDocs {
-		aGames[i] = domain.GameDocumentToGame(oDoc)
+		aTableRecords[i] = domain.TableRecordDocumentToTableRecord(oDoc)
 	}
 
-	return aGames, nil
+	return aTableRecords, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 

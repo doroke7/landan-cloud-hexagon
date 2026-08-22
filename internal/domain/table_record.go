@@ -55,6 +55,44 @@ func TableRecordRowToTableRecord(oRow *TableRecordRow) *TableRecord {
 	}
 }
 
+// TableRecordDocument 是 mongo 版 TableRecordModel 實際存進去的 schema：Text/Image/Result
+// 在 mysql 是 json 欄位，這裡故意存成字串而不是拆成巢狀 bson 文件——它們在 domain 是
+// json.RawMessage（底層是 []byte），mongo-driver 對 []byte 預設會走 BSON binary 編碼，
+// 不是我們要的 JSON 文字語意，所以自己控制編解碼，不假手驅動的預設行為。
+type TableRecordDocument struct {
+	Id        uint      `bson:"_id"`
+	No        string    `bson:"no"`
+	GameId    uint      `bson:"game_id"`
+	TableId   uint      `bson:"table_id"`
+	State     uint8     `bson:"state"`
+	Text      string    `bson:"text"`
+	Image     string    `bson:"image"`
+	Result    string    `bson:"result"`
+	StartedAt time.Time `bson:"started_at"`
+	EndedAt   time.Time `bson:"ended_at"`
+	CreatedAt time.Time `bson:"created_at"`
+	UpdatedAt time.Time `bson:"updated_at"`
+	DeletedAt time.Time `bson:"deleted_at"`
+}
+
+func TableRecordDocumentToTableRecord(oDoc *TableRecordDocument) *TableRecord {
+	return &TableRecord{
+		Id:        oDoc.Id,
+		No:        oDoc.No,
+		GameId:    oDoc.GameId,
+		TableId:   oDoc.TableId,
+		State:     oDoc.State,
+		Text:      json.RawMessage(oDoc.Text),
+		Image:     json.RawMessage(oDoc.Image),
+		Result:    json.RawMessage(oDoc.Result),
+		StartedAt: oDoc.StartedAt,
+		EndedAt:   oDoc.EndedAt,
+		CreatedAt: oDoc.CreatedAt,
+		UpdatedAt: oDoc.UpdatedAt,
+		DeletedAt: oDoc.DeletedAt,
+	}
+}
+
 type TableRecordValue struct {
 	No        *string          `json:"no,omitempty"` // 年-月日-桌號-局號-期號
 	GameId    *uint            `json:"game_id,omitempty"`
