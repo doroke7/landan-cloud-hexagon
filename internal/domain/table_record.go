@@ -3,6 +3,8 @@ package domain
 import (
 	"encoding/json"
 	"time"
+
+	bootstrap "example/bootstrap"
 )
 
 type TableRecord struct {
@@ -19,6 +21,13 @@ type TableRecord struct {
 	CreatedAt time.Time       `json:"created_at"`
 	UpdatedAt time.Time       `json:"updated_at"`
 	DeletedAt time.Time       `json:"deleted_at"`
+}
+
+// TableName 顯式指定表名 table_records，但 gorm 的 TableName() 是直接取用的原始字串，
+// 不會再套用 bootstrap/mysql.go NamingStrategy 設的 TablePrefix，
+// 所以這裡自己把 CONFIG.DATABASE.PREFIX 接回去，維持跟 tx-table_records 一致。
+func (TableRecordRow) TableName() string {
+	return bootstrap.CONFIG.DATABASE.PREFIX + "table_records"
 }
 
 type TableRecordRow struct {

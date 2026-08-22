@@ -23,7 +23,8 @@ type Clock struct {
 	server string
 }
 
-// NewClock 建立並啟動一個 Clock：先同步一次 offset（失敗直接回傳錯誤），
+// NewClock 建立並啟動一個 Clock：先嘗試同步一次 offset，失敗只記錄警告、
+// 不讓整個程序啟動失敗（offset 先維持 0，等同直接用系統時間），
 // 之後背景每 10 分鐘 refresh 一次，直到 ctx 被取消或呼叫 Stop() 為止。
 // 設計成 wire provider，在 container 組裝時建立一次，透過 DI 注入給需要的元件共用同一個實例。
 func NewClock(oContext context.Context) (*Clock, error) {
@@ -32,9 +33,7 @@ func NewClock(oContext context.Context) (*Clock, error) {
 		stop:   make(chan struct{}),
 	}
 
-	if oErr := oClock.Start(oContext); oErr != nil {
-		return nil, oErr
-	}
+	oClock.Start(oContext)
 
 	return oClock, nil
 }
@@ -63,17 +62,16 @@ func (oClock *Clock) Sync() error {
 	return nil
 }
 
-// Start 啟動時先同步一次 offset（失敗直接回傳錯誤），成功後開一個背景 goroutine，
-// 每隔固定時間 refresh 一次，直到 ctx 被取消或呼叫 Stop() 為止。
-func (oSelf *Clock) Start(oContext context.Context) error {
+// Start 啟動時先嘗試同步一次 offset，失敗只記錄警告（offset 維持 0），
+// 接著開一個背景 goroutine，每隔固定時間 refresh 一次，
+// 直到 ctx 被取消或呼叫 Stop() 為止。
+func (oSelf *Clock) Start(oContext context.Context) {
 	if err := oSelf.Sync(); err != nil {
-		return err
+		log.Printf("[clock] initial sync offset failed, falling back to system time: %v", err)
 	}
 
 	oSelf.wg.Add(1)
 	go oSelf.forever(oContext)
-
-	return nil
 }
 
 func (oSelf *Clock) forever(oContext context.Context) {

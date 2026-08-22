@@ -55,7 +55,7 @@ func NewMysql() (*gorm.DB, error) {
 			},
 		),
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix: CONFIG.DATABASE.PREFIX, // 例如所有表都加上 sys_ 前綴
+			TablePrefix: "",
 		},
 	})
 	if err != nil {

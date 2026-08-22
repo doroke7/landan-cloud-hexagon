@@ -1,10 +1,16 @@
 package domain
 
+import bootstrap "example/bootstrap"
+
 type AppUser struct {
 	Id       uint   `json:"id"`
 	Name     string `json:"name"`
 	Password string `json:"password"`
 	Balance  uint   `json:"balance"`
+}
+
+func (AppUserRow) TableName() string {
+	return bootstrap.CONFIG.DATABASE.PREFIX + "app_users"
 }
 
 type AppUserRow struct {

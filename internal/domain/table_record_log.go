@@ -3,6 +3,8 @@ package domain
 import (
 	"encoding/json"
 	"time"
+
+	bootstrap "example/bootstrap"
 )
 
 type TableRecordLog struct {
@@ -15,6 +17,10 @@ type TableRecordLog struct {
 	CreatedAt     time.Time       `json:"created_at"`
 	UpdatedAt     time.Time       `json:"updated_at"`
 	DeletedAt     time.Time       `json:"deleted_at"`
+}
+
+func (TableRecordLogRow) TableName() string {
+	return bootstrap.CONFIG.DATABASE.PREFIX + "table_record_logs"
 }
 
 type TableRecordLogRow struct {

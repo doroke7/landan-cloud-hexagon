@@ -2,6 +2,8 @@ package domain
 
 import (
 	"time"
+
+	bootstrap "example/bootstrap"
 )
 
 type Game struct {
@@ -14,6 +16,13 @@ type Game struct {
 	UpdatedAt   time.Time `json:"updated_at"`
 	DeletedAt   time.Time `json:"deleted_at" gorm:"default:2038-01-19 03:14:07"`
 	GameType    GameType  `json:"game_type" gorm:"foreignKey:GameTypeId;references:Id"`
+}
+
+// TableName 顯式指定表名 games，但 gorm 的 TableName() 是直接取用的原始字串，
+// 不會再套用 bootstrap/mysql.go NamingStrategy 設的 TablePrefix，
+// 所以這裡自己把 CONFIG.DATABASE.PREFIX 接回去，維持跟 tx-games 一致。
+func (GameRow) TableName() string {
+	return bootstrap.CONFIG.DATABASE.PREFIX + "games"
 }
 
 type GameRow struct {
