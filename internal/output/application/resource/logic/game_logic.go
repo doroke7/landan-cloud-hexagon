@@ -5,6 +5,7 @@ import (
 
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
+	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkg "example/pkg"
 )
@@ -57,7 +58,7 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 	oRequest := &pbResourceLogic.GameShowGamesTotalByFiltersWithSortersPaginationInput{}
 
 	if oPagination != nil {
-		oPbPagination := &pbResourceLogic.GamePagination{}
+		oPbPagination := &pbResource.Pagination{}
 		if oPagination.Size != nil {
 			oPbPagination.Size = uint64(*oPagination.Size)
 		}
@@ -77,7 +78,7 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 			continue
 		}
 
-		oPbFilter := &pbResourceLogic.GameFilter{
+		oPbFilter := &pbResource.Filter{
 			Field: *oFilter.Field,
 			Value: oValue,
 		}
@@ -93,7 +94,7 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 			continue
 		}
 
-		oRequest.Sorters = append(oRequest.Sorters, &pbResourceLogic.GameSorter{
+		oRequest.Sorters = append(oRequest.Sorters, &pbResource.Sorter{
 			Field: *oSorter.Field,
 			Order: *oSorter.Order,
 		})

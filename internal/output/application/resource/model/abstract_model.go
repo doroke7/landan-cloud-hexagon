@@ -4,6 +4,7 @@ import (
 	"context"
 
 	client "example/internal/client"
+	pkg "example/pkg"
 )
 
 // Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
@@ -18,4 +19,8 @@ func NewAbstractModel(oContext context.Context, oResourceClient *client.Resource
 		Context:             oContext,
 		ResourceModelClient: oResourceClient.Model,
 	}
+}
+
+func (oSelf *AbstractModel) ToFilters(aFilters []*pkg.Filter) {
+
 }

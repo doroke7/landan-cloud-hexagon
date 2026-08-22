@@ -5,6 +5,7 @@ import (
 
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkg "example/pkg"
 )
@@ -108,7 +109,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Fi
 	oRequest := &pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationInput{}
 
 	if oPagination != nil {
-		oPbPagination := &pbResourceModel.GamePagination{}
+		oPbPagination := &pbResource.Pagination{}
 		if oPagination.Size != nil {
 			oPbPagination.Size = uint64(*oPagination.Size)
 		}
@@ -128,7 +129,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Fi
 			continue
 		}
 
-		oPbFilter := &pbResourceModel.GameFilter{
+		oPbFilter := &pbResource.Filter{
 			Field: *oFilter.Field,
 			Value: oValue,
 		}
@@ -144,7 +145,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Fi
 			continue
 		}
 
-		oRequest.Sorters = append(oRequest.Sorters, &pbResourceModel.GameSorter{
+		oRequest.Sorters = append(oRequest.Sorters, &pbResource.Sorter{
 			Field: *oSorter.Field,
 			Order: *oSorter.Order,
 		})
@@ -188,7 +189,7 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
 			continue
 		}
 
-		oPbFilter := &pbResourceModel.GameFilter{
+		oPbFilter := &pbResource.Filter{
 			Field: *oFilter.Field,
 			Value: oValue,
 		}

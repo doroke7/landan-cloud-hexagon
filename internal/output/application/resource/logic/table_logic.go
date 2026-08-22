@@ -7,6 +7,7 @@ import (
 
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
+	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkg "example/pkg"
 )
@@ -26,7 +27,7 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 	oRequest := &pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationInput{}
 
 	if oPagination != nil {
-		oPbPagination := &pbResourceLogic.TablePagination{}
+		oPbPagination := &pbResource.Pagination{}
 		if oPagination.Size != nil {
 			oPbPagination.Size = uint64(*oPagination.Size)
 		}
@@ -46,7 +47,7 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 			continue
 		}
 
-		oPbFilter := &pbResourceLogic.TableFilter{
+		oPbFilter := &pbResource.Filter{
 			Field: *oFilter.Field,
 			Value: oValue,
 		}
@@ -62,7 +63,7 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 			continue
 		}
 
-		oRequest.Sorters = append(oRequest.Sorters, &pbResourceLogic.TableSorter{
+		oRequest.Sorters = append(oRequest.Sorters, &pbResource.Sorter{
 			Field: *oSorter.Field,
 			Order: *oSorter.Order,
 		})

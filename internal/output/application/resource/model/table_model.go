@@ -8,6 +8,7 @@ import (
 
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkg "example/pkg"
 )
@@ -113,7 +114,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.
 	oRequest := &pbResourceModel.TableShowOnesByFiltersWithSortersPaginationInput{}
 
 	if oPagination != nil {
-		oPbPagination := &pbResourceModel.TablePagination{}
+		oPbPagination := &pbResource.Pagination{}
 		if oPagination.Size != nil {
 			oPbPagination.Size = uint64(*oPagination.Size)
 		}
@@ -133,7 +134,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.
 			continue
 		}
 
-		oPbFilter := &pbResourceModel.TableFilter{
+		oPbFilter := &pbResource.Filter{
 			Field: *oFilter.Field,
 			Value: oValue,
 		}
@@ -149,7 +150,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.
 			continue
 		}
 
-		oRequest.Sorters = append(oRequest.Sorters, &pbResourceModel.TableSorter{
+		oRequest.Sorters = append(oRequest.Sorters, &pbResource.Sorter{
 			Field: *oSorter.Field,
 			Order: *oSorter.Order,
 		})
@@ -197,7 +198,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) 
 			continue
 		}
 
-		oPbFilter := &pbResourceModel.TableFilter{
+		oPbFilter := &pbResource.Filter{
 			Field: *oFilter.Field,
 			Value: oValue,
 		}
