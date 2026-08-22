@@ -66,10 +66,10 @@ func (oSelf *GameUsecase) ShowOne(iId uint) (*domain.Game, error) {
 
 func (oSelf *GameUsecase) ShowOnes(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, uint64, error) {
 
-	aWheres := pkg.FiltersToWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToOrders([]string{}, aSorters)
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
 
-	oGameLimit := pkg.PaginationToLimit(oPagination)
+	oGameLimit := pkg.PaginationToMysqlLimit(oPagination)
 
 	aGames, iTotal, oErr := oSelf.GameLogic.ShowGamesTotalByWheresWithOrdersLimit(aWheres, aOrders, oGameLimit)
 

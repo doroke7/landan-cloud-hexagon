@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func SortersToOrders(aFields []string, aSorters []*Sorter) []*Order {
+func SortersToMysqlOrders(aFields []string, aSorters []*Sorter) []*Order {
 	bAllowAll := len(aFields) == 0
 
 	oAllowed := make(map[string]bool, len(aFields))

@@ -21,10 +21,10 @@ func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAbs
 
 func (oSelf *AdminUserUsecase) ShowOnes(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.AdminUser, uint64, error) {
 
-	aWheres := pkg.FiltersToWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToOrders([]string{}, aSorters)
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
 
-	oLimit := pkg.PaginationToLimit(oPagination)
+	oLimit := pkg.PaginationToMysqlLimit(oPagination)
 
 	aAdminUsers, oErr := oSelf.AdminUserModel.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
 	if oErr != nil {

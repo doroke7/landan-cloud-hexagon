@@ -17,7 +17,7 @@ var oOperatorMap = map[string]string{
 	"between":     "BETWEEN",
 }
 
-func FiltersToWheres(aFields []string, aFilters []*Filter) []*Where {
+func FiltersToMysqlWheres(aFields []string, aFilters []*Filter) []*Where {
 	bAllowAll := len(aFields) == 0
 
 	oAllowed := make(map[string]bool, len(aFields))

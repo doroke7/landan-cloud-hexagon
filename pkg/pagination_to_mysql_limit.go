@@ -1,6 +1,6 @@
 package pkg
 
-func PaginationToLimit(oPagination *Pagination) *Limit {
+func PaginationToMysqlLimit(oPagination *Pagination) *Limit {
 	iSize := uint(10)
 	iPage := uint(1)
 
