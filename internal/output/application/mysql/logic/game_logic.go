@@ -21,8 +21,8 @@ func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
 
 func (oSelf *GameLogic) ShowGamesTotalByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Game, int64, error) {
 
-	var aGames []*domain.Game
-	var oGame domain.Game
+	var aGameRows []*domain.GameRow
+	var oGameRow domain.GameRow
 	var iTotal int64
 	var oFindErr error
 	var oCountErr error
@@ -37,7 +37,7 @@ func (oSelf *GameLogic) ShowGamesTotalByWheresWithOrdersLimit(aWheres []*pkg.Whe
 			DB.
 			WithContext(oSelf.Context).
 			Preload("GameType").
-			Model(&oGame).
+			Model(&oGameRow).
 			Where("deleted_at = ?", "2038-01-19 03:14:07")
 		for _, oWhere := range aWheres {
 
@@ -60,13 +60,13 @@ func (oSelf *GameLogic) ShowGamesTotalByWheresWithOrdersLimit(aWheres []*pkg.Whe
 		oFindErr = oQuery.
 			Limit(int(*oLimit.Count)).
 			Offset(int(*oLimit.Offset)).
-			Find(&aGames).Error
+			Find(&aGameRows).Error
 	}()
 
 	go func() {
 		defer oWaitGroup.Done()
 
-		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oGame).Where("deleted_at = ?", "2038-01-19 03:14:07")
+		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oGameRow).Where("deleted_at = ?", "2038-01-19 03:14:07")
 		for _, oWhere := range aWheres {
 			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 		}
@@ -75,6 +75,11 @@ func (oSelf *GameLogic) ShowGamesTotalByWheresWithOrdersLimit(aWheres []*pkg.Whe
 	}()
 
 	oWaitGroup.Wait()
+
+	aGames := make([]*domain.Game, len(aGameRows))
+	for i, oRow := range aGameRows {
+		aGames[i] = domain.GameRowToGame(oRow)
+	}
 
 	if oFindErr != nil {
 		return aGames, 0, oFindErr

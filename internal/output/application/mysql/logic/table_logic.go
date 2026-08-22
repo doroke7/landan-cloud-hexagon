@@ -21,8 +21,8 @@ func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic 
 
 func (oSelf *TableLogic) ShowTablesTotalByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Table, int64, error) {
 
-	var aTables []*domain.Table
-	var oTable domain.Table
+	var aTableRows []*domain.TableRow
+	var oTableRow domain.TableRow
 	var iTotal int64
 	var oFindErr error
 	var oCountErr error
@@ -33,7 +33,7 @@ func (oSelf *TableLogic) ShowTablesTotalByWheresWithOrdersLimit(aWheres []*pkg.W
 	go func() {
 		defer oWaitGroup.Done()
 
-		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oTable).Where("deleted_at = ?", "2038-01-19 03:14:07")
+		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oTableRow).Where("deleted_at = ?", "2038-01-19 03:14:07")
 		for _, oWhere := range aWheres {
 			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 		}
@@ -54,13 +54,13 @@ func (oSelf *TableLogic) ShowTablesTotalByWheresWithOrdersLimit(aWheres []*pkg.W
 		oFindErr = oQuery.
 			Limit(int(*oLimit.Count)).
 			Offset(int(*oLimit.Offset)).
-			Find(&aTables).Error
+			Find(&aTableRows).Error
 	}()
 
 	go func() {
 		defer oWaitGroup.Done()
 
-		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oTable).Where("deleted_at = ?", "2038-01-19 03:14:07")
+		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oTableRow).Where("deleted_at = ?", "2038-01-19 03:14:07")
 		for _, oWhere := range aWheres {
 			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 		}
@@ -69,6 +69,11 @@ func (oSelf *TableLogic) ShowTablesTotalByWheresWithOrdersLimit(aWheres []*pkg.W
 	}()
 
 	oWaitGroup.Wait()
+
+	aTables := make([]*domain.Table, len(aTableRows))
+	for i, oRow := range aTableRows {
+		aTables[i] = domain.TableRowToTable(oRow)
+	}
 
 	if oFindErr != nil {
 		return aTables, 0, oFindErr
