@@ -5,7 +5,7 @@ import (
 	"strings"
 )
 
-func SortersToMysqlOrders(aFields []string, aSorters []*Sorter) []*Order {
+func SortersToMysqlOrders(aFields []string, aSorters []*Sorter) []*MysqlOrder {
 	bAllowAll := len(aFields) == 0
 
 	oAllowed := make(map[string]bool, len(aFields))
@@ -13,7 +13,7 @@ func SortersToMysqlOrders(aFields []string, aSorters []*Sorter) []*Order {
 		oAllowed[sField] = true
 	}
 
-	aOrders := make([]*Order, 0, len(aSorters))
+	aOrders := make([]*MysqlOrder, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
 		fmt.Printf("%#v", oSorter)
@@ -29,7 +29,7 @@ func SortersToMysqlOrders(aFields []string, aSorters []*Sorter) []*Order {
 		}
 
 		sField := "`" + *oSorter.Field + "`"
-		aOrders = append(aOrders, &Order{
+		aOrders = append(aOrders, &MysqlOrder{
 			Field: &sField,
 			Value: &sDirection,
 		})

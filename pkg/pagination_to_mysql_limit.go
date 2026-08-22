@@ -1,6 +1,6 @@
 package pkg
 
-func PaginationToMysqlLimit(oPagination *Pagination) *Limit {
+func PaginationToMysqlLimit(oPagination *Pagination) *MysqlLimit {
 	iSize := uint(10)
 	iPage := uint(1)
 
@@ -14,7 +14,7 @@ func PaginationToMysqlLimit(oPagination *Pagination) *Limit {
 
 	iOffset := (iPage - 1) * iSize
 
-	oLimit := &Limit{
+	oLimit := &MysqlLimit{
 		Offset: &iOffset,
 		Count:  &iSize,
 	}

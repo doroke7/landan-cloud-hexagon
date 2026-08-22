@@ -17,7 +17,7 @@ var oOperatorMap = map[string]string{
 	"between":     "BETWEEN",
 }
 
-func FiltersToMysqlWheres(aFields []string, aFilters []*Filter) []*Where {
+func FiltersToMysqlWheres(aFields []string, aFilters []*Filter) []*MysqlWhere {
 	bAllowAll := len(aFields) == 0
 
 	oAllowed := make(map[string]bool, len(aFields))
@@ -25,7 +25,7 @@ func FiltersToMysqlWheres(aFields []string, aFilters []*Filter) []*Where {
 		oAllowed[sField] = true
 	}
 
-	aWheres := make([]*Where, 0, len(aFilters))
+	aWheres := make([]*MysqlWhere, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil || (!bAllowAll && !oAllowed[*oFilter.Field]) {
@@ -53,7 +53,7 @@ func FiltersToMysqlWheres(aFields []string, aFilters []*Filter) []*Where {
 		}
 
 		sField := "`" + *oFilter.Field + "`"
-		aWheres = append(aWheres, &Where{
+		aWheres = append(aWheres, &MysqlWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,

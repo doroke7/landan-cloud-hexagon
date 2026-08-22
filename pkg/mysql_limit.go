@@ -1,6 +1,6 @@
 package pkg
 
-type Limit struct {
+type MysqlLimit struct {
 	Offset *uint
 	Count  *uint
 }
