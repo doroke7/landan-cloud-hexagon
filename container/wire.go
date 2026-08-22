@@ -24,11 +24,14 @@ import (
 	outputApplicationCache "example/internal/output/application/cache"
 	outputApplicationCacheModel "example/internal/output/application/cache/model"
 
+	outputApplicationMemory "example/internal/output/application/memory"
 	outputApplicationMemoryModel "example/internal/output/application/memory/model"
 
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputApplicationMysqlLogic "example/internal/output/application/mysql/logic"
 	outputApplicationMysqlModel "example/internal/output/application/mysql/model"
 
+	outputApplicationProducer "example/internal/output/application/producer"
 	outputApplicationProducerModel "example/internal/output/application/producer/model"
 	outputApplicationResource "example/internal/output/application/resource"
 	outputApplicationResourceLogic "example/internal/output/application/resource/logic"
@@ -340,15 +343,14 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		helper.NewRsaHelper,
 
 		// output
-		outputApplicationMysqlModel.NewAbstractModel,
+		outputApplicationMysql.NewAbstractMysql,
 		outputApplicationMysqlModel.NewAdminUserModel,
 		outputApplicationMysqlModel.NewGameModel,
 		outputApplicationMysqlModel.NewTableModel,
 		outputApplicationMysqlModel.NewGameTypeModel,
-		outputApplicationMysqlLogic.NewAbstractLogic,
 		outputApplicationMysqlLogic.NewGameLogic,
 		outputApplicationMysqlLogic.NewTableLogic,
-		outputApplicationProducerModel.NewAbstractModel,
+		outputApplicationProducer.NewAbstractProducer,
 		outputApplicationProducerModel.NewAdminUserModel,
 
 		// usecase
@@ -417,7 +419,7 @@ func InitConsumerContainer(ctx context.Context) (*ConsumerContainer, error) {
 		helper.NewAesHelper,
 
 		// output
-		outputApplicationMysqlModel.NewAbstractModel,
+		outputApplicationMysql.NewAbstractMysql,
 		outputApplicationMysqlModel.NewAppUserModel,
 
 		// usecase
@@ -466,7 +468,7 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 		helper.NewJwtHelper,
 
 		// output
-		outputApplicationMysqlModel.NewAbstractModel,
+		outputApplicationMysql.NewAbstractMysql,
 		outputApplicationMysqlModel.NewAppUserModel,
 		outputApplicationMysqlModel.NewAdminUserModel,
 
@@ -631,7 +633,7 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 		helper.NewJwtHelper,
 
 		// output
-		outputApplicationMysqlModel.NewAbstractModel,
+		outputApplicationMysql.NewAbstractMysql,
 		outputApplicationMysqlModel.NewAppUserModel,
 		outputApplicationMysqlModel.NewAdminUserModel,
 
@@ -729,7 +731,7 @@ func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 		helper.NewAbstractHelper,
 		helper.NewAesHelper,
 
-		outputApplicationMemoryModel.NewAbstractModel,
+		outputApplicationMemory.NewAbstractMemory,
 		outputApplicationMemoryModel.NewLotteryModel,
 		usecaseApplicationAnyAnnouncement.NewAbstractUsecase,
 		usecaseApplicationAnyAnnouncement.NewLotteryUsecase,

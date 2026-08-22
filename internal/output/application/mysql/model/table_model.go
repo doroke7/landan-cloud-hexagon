@@ -8,17 +8,18 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
+	mysqlBase "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkg "example/pkg"
 )
 
 type TableModel struct {
-	*AbstractModel
+	*mysqlBase.AbstractMysql
 }
 
-func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel {
+func NewTableModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyModel.TableModel {
 	return &TableModel{
-		AbstractModel: oAbstractModel,
+		AbstractMysql: oAbstractModel,
 	}
 }
 
@@ -86,9 +87,9 @@ func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
 }
 
 func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, error) {
-	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
-	aOrders := oSelf.AbstractModel.SortersToOrders(aSorters)
-	oLimit := oSelf.AbstractModel.PaginationToLimit(oPagination)
+	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
+	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
+	oLimit := oSelf.AbstractMysql.PaginationToLimit(oPagination)
 
 	var aTableRows []*domain.TableRow
 	var oTableRow domain.TableRow
@@ -134,7 +135,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.
 }
 
 func (oSelf *TableModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
+	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
 	var oTableRow domain.TableRow

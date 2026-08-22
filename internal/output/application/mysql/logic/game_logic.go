@@ -5,23 +5,24 @@ import (
 	"sync"
 
 	domain "example/internal/domain"
+	mysqlBase "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkg "example/pkg"
 )
 
 type GameLogic struct {
-	*AbstractLogic
+	*mysqlBase.AbstractMysql
 }
 
-func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
+func NewGameLogic(oAbstractLogic *mysqlBase.AbstractMysql) outputPortAnyLogic.GameLogic {
 	return &GameLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractMysql: oAbstractLogic,
 	}
 }
 
 func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, int64, error) {
-	aWheres := oSelf.AbstractLogic.FiltersToWheres(aFilters)
-	aOrders := oSelf.AbstractLogic.SortersToOrders(aSorters)
+	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
+	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
 
 	var aGameRows []*domain.GameRow

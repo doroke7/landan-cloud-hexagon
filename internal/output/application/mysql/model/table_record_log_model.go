@@ -7,17 +7,18 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
+	mysqlBase "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkg "example/pkg"
 )
 
 type TableRecordLogModel struct {
-	*AbstractModel
+	*mysqlBase.AbstractMysql
 }
 
-func NewTableRecordLogModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableRecordLogModel {
+func NewTableRecordLogModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyModel.TableRecordLogModel {
 	return &TableRecordLogModel{
-		AbstractModel: oAbstractModel,
+		AbstractMysql: oAbstractModel,
 	}
 }
 
@@ -39,9 +40,9 @@ func (oSelf *TableRecordLogModel) ShowOneById(iId uint) (*domain.TableRecordLog,
 }
 
 func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.TableRecordLog, error) {
-	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
-	aOrders := oSelf.AbstractModel.SortersToOrders(aSorters)
-	oLimit := oSelf.AbstractModel.PaginationToLimit(oPagination)
+	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
+	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
+	oLimit := oSelf.AbstractMysql.PaginationToLimit(oPagination)
 
 	var aTableRecordLogRows []*domain.TableRecordLogRow
 	var oTableRecordLogRow domain.TableRecordLogRow
@@ -85,7 +86,7 @@ func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilter
 }
 
 func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
+	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
 	var oTableRecordLogRow domain.TableRecordLogRow

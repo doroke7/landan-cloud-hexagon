@@ -12,16 +12,17 @@ import (
 
 	bootstrap "example/bootstrap"
 	domain "example/internal/domain"
+	mysqlBase "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
 )
 
 type AdminUserModel struct {
-	*AbstractModel
+	*mysqlBase.AbstractMysql
 }
 
-func NewAdminUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminUserModel {
+func NewAdminUserModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyModel.AdminUserModel {
 	return &AdminUserModel{
-		AbstractModel: oAbstractModel,
+		AbstractMysql: oAbstractModel,
 	}
 }
 
@@ -71,9 +72,9 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 }
 
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.AdminUser, error) {
-	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
-	aOrders := oSelf.AbstractModel.SortersToOrders(aSorters)
-	oLimit := oSelf.AbstractModel.PaginationToLimit(oPagination)
+	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
+	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
+	oLimit := oSelf.AbstractMysql.PaginationToLimit(oPagination)
 
 	var aAdminUserRows []*domain.AdminUserRow
 	var oAdminUserRow domain.AdminUserRow
@@ -113,7 +114,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 }
 
 func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
+	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
 	var oAdminUserRow domain.AdminUserRow

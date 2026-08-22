@@ -5,23 +5,24 @@ import (
 	"sync"
 
 	domain "example/internal/domain"
+	mysqlBase "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkg "example/pkg"
 )
 
 type TableLogic struct {
-	*AbstractLogic
+	*mysqlBase.AbstractMysql
 }
 
-func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractLogic *mysqlBase.AbstractMysql) outputPortAnyLogic.TableLogic {
 	return &TableLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractMysql: oAbstractLogic,
 	}
 }
 
 func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, int64, error) {
-	aWheres := oSelf.AbstractLogic.FiltersToWheres(aFilters)
-	aOrders := oSelf.AbstractLogic.SortersToOrders(aSorters)
+	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
+	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
 
 	var aTableRows []*domain.TableRow

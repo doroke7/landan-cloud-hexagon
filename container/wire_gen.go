@@ -46,10 +46,13 @@ import (
 	middleware_admin2 "example/internal/middleware/websocket/admin"
 	"example/internal/output/application/cache"
 	model2 "example/internal/output/application/cache/model"
+	"example/internal/output/application/memory"
 	"example/internal/output/application/memory/model"
-	mysql2 "example/internal/output/application/mysql/logic"
-	"example/internal/output/application/mysql/model"
-	"example/internal/output/application/producer/model"
+	"example/internal/output/application/mysql"
+	mysql3 "example/internal/output/application/mysql/logic"
+	mysql2 "example/internal/output/application/mysql/model"
+	"example/internal/output/application/producer"
+	producer2 "example/internal/output/application/producer/model"
 	"example/internal/output/application/resource"
 	resource3 "example/internal/output/application/resource/logic"
 	resource2 "example/internal/output/application/resource/model"
@@ -219,14 +222,14 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		return nil, err
 	}
 	aop := pkg.NewAop(ctx, universalClient)
-	abstractModel := mysql.NewAbstractModel(ctx, db, aop)
-	adminUserModel := mysql.NewAdminUserModel(abstractModel)
+	abstractMysql := mysql.NewAbstractMysql(ctx, db, aop)
+	adminUserModel := mysql2.NewAdminUserModel(abstractMysql)
 	adminUserUsecase := usecase2.NewAdminUserUsecase(adminUserModel, abstractUsecase)
-	gameModel := mysql.NewGameModel(abstractModel)
+	gameModel := mysql2.NewGameModel(abstractMysql)
 	gameUsecase := usecase2.NewGameUsecase(gameModel, abstractUsecase)
-	tableModel := mysql.NewTableModel(abstractModel)
+	tableModel := mysql2.NewTableModel(abstractMysql)
 	tableUsecase := usecase2.NewTableUsecase(tableModel)
-	gameTypeModel := mysql.NewGameTypeModel(abstractModel)
+	gameTypeModel := mysql2.NewGameTypeModel(abstractMysql)
 	gameTypeUsecase := usecase2.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
 	abstractHandler := resource5.NewAbstractHandler()
 	adminUserHandler := input_application_resource_model.NewAdminUserHandler(abstractHandler, adminUserUsecase)
@@ -234,11 +237,10 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	tableHandler := input_application_resource_model.NewTableHandler(abstractHandler, tableUsecase)
 	gameTypeHandler := input_application_resource_model.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
 	usecaseAbstractUsecase := usecase3.NewAbstractUsecase(aesHelper)
-	abstractLogic := mysql2.NewAbstractLogic(ctx, db, aop)
-	gameLogic := mysql2.NewGameLogic(abstractLogic)
+	gameLogic := mysql3.NewGameLogic(abstractMysql)
 	anyGameUsecase := usecase3.NewGameUsecase(usecaseAbstractUsecase, gameLogic)
 	input_application_resource_logicGameHandler := input_application_resource_logic.NewGameHandler(abstractHandler, anyGameUsecase)
-	tableLogic := mysql2.NewTableLogic(abstractLogic)
+	tableLogic := mysql3.NewTableLogic(abstractMysql)
 	anyTableUsecase := usecase3.NewTableUsecase(usecaseAbstractUsecase, tableLogic)
 	input_application_resource_logicTableHandler := input_application_resource_logic.NewTableHandler(abstractHandler, anyTableUsecase)
 	abstractInterceptor := interceptor_resource_logic.NewAbstractInterceptor()
@@ -253,11 +255,11 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	if err != nil {
 		return nil, err
 	}
-	producerAbstractModel, err := producer.NewAbstractModel(ctx, connection)
+	abstractProducer, err := producer.NewAbstractProducer(ctx, connection)
 	if err != nil {
 		return nil, err
 	}
-	producerAdminUserModel, err := producer.NewAdminUserModel(producerAbstractModel)
+	producerAdminUserModel, err := producer2.NewAdminUserModel(abstractProducer)
 	if err != nil {
 		return nil, err
 	}
@@ -310,8 +312,8 @@ func InitConsumerContainer(ctx context.Context) (*ConsumerContainer, error) {
 		return nil, err
 	}
 	aop := pkg.NewAop(ctx, universalClient)
-	abstractModel := mysql.NewAbstractModel(ctx, db, aop)
-	appUserModel := mysql.NewAppUserModel(abstractModel)
+	abstractMysql := mysql.NewAbstractMysql(ctx, db, aop)
+	appUserModel := mysql2.NewAppUserModel(abstractMysql)
 	abstractUsecase := resource4.NewAbstractUsecase(aesHelper)
 	appUserUsecase := resource4.NewAppUserUsecase(appUserModel, abstractUsecase)
 	appUserHandler := consumer2.NewAppUserHandler(appUserUsecase, abstractHandler)
@@ -342,13 +344,13 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 		return nil, err
 	}
 	aop := pkg.NewAop(ctx, universalClient)
-	abstractModel := mysql.NewAbstractModel(ctx, db, aop)
-	appUserModel := mysql.NewAppUserModel(abstractModel)
+	abstractMysql := mysql.NewAbstractMysql(ctx, db, aop)
+	appUserModel := mysql2.NewAppUserModel(abstractMysql)
 	abstractUsecase := resource4.NewAbstractUsecase(aesHelper)
 	appUserUsecase := resource4.NewAppUserUsecase(appUserModel, abstractUsecase)
 	abstractHandler := cron.NewAbstractHandler(aesHelper)
 	appUserHandler := cron2.NewAppUserHandler(appUserUsecase, abstractHandler)
-	adminUserModel := mysql.NewAdminUserModel(abstractModel)
+	adminUserModel := mysql2.NewAdminUserModel(abstractMysql)
 	usecaseAbstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecase.NewAuthenticatorUsecase(adminUserModel, usecaseAbstractUsecase)
 	authenticatorHandler := authentication2.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
@@ -450,12 +452,12 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 		return nil, err
 	}
 	aop := pkg.NewAop(ctx, universalClient)
-	abstractModel := mysql.NewAbstractModel(ctx, db, aop)
-	appUserModel := mysql.NewAppUserModel(abstractModel)
+	abstractMysql := mysql.NewAbstractMysql(ctx, db, aop)
+	appUserModel := mysql2.NewAppUserModel(abstractMysql)
 	abstractUsecase := resource4.NewAbstractUsecase(aesHelper)
 	appUserUsecase := resource4.NewAppUserUsecase(appUserModel, abstractUsecase)
 	appUserHandler := command2.NewAppUserHandler(appUserUsecase, abstractHandler)
-	adminUserModel := mysql.NewAdminUserModel(abstractModel)
+	adminUserModel := mysql2.NewAdminUserModel(abstractMysql)
 	usecaseAbstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecase.NewAuthenticatorUsecase(adminUserModel, usecaseAbstractUsecase)
 	authenticatorHandler := authentication4.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
@@ -510,8 +512,8 @@ func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	abstractHandler := resource6.NewAbstractHandler()
 	abstractUsecase := usecase4.NewAbstractUsecase(aesHelper)
-	abstractModel := model.NewAbstractModel(ctx)
-	lotteryModel := model.NewLotteryModel(abstractModel)
+	abstractMemory := memory.NewAbstractMemory(ctx)
+	lotteryModel := model.NewLotteryModel(abstractMemory)
 	lotteryUsecase := usecase4.NewLotteryUsecase(abstractUsecase, lotteryModel)
 	lotteryHandler := announcement.NewLotteryHandler(abstractHandler, lotteryUsecase)
 	sourceContainer := &SourceContainer{
@@ -662,7 +664,7 @@ type ResourceContainer struct {
 	ResourceModelLoggerInterceptor         *interceptor_resource_model.LoggerInterceptor
 
 	// MQ 生產者
-	ResourceProducerAdminUser *producer.AdminUserModel
+	ResourceProducerAdminUser *producer2.AdminUserModel
 }
 
 // ConsumerContainer 只給 `consumer` MQ 消費者服務使用。

@@ -7,20 +7,21 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 
 	domain "example/internal/domain"
+	producerBase "example/internal/output/application/producer"
 )
 
 type AdminUserModel struct {
-	*AbstractModel
+	*producerBase.AbstractProducer
 }
 
-func NewAdminUserModel(oAbstractModel *AbstractModel) (*AdminUserModel, error) {
-	_, err := oAbstractModel.Channel.QueueDeclare("AdminUser.AddOne", true, false, false, false, nil)
+func NewAdminUserModel(oAbstractProducer *producerBase.AbstractProducer) (*AdminUserModel, error) {
+	_, err := oAbstractProducer.Channel.QueueDeclare("AdminUser.AddOne", true, false, false, false, nil)
 	if err != nil {
 		return nil, err
 	}
 
 	return &AdminUserModel{
-		AbstractModel: oAbstractModel,
+		AbstractProducer: oAbstractProducer,
 	}, nil
 }
 

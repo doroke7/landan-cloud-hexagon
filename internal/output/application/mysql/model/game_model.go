@@ -8,17 +8,18 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
+	mysqlBase "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkg "example/pkg"
 )
 
 type GameModel struct {
-	*AbstractModel
+	*mysqlBase.AbstractMysql
 }
 
-func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
+func NewGameModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyModel.GameModel {
 	return &GameModel{
-		AbstractModel: oAbstractModel,
+		AbstractMysql: oAbstractModel,
 	}
 }
 
@@ -41,9 +42,9 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 }
 
 func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
-	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
-	aOrders := oSelf.AbstractModel.SortersToOrders(aSorters)
-	oLimit := oSelf.AbstractModel.PaginationToLimit(oPagination)
+	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
+	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
+	oLimit := oSelf.AbstractMysql.PaginationToLimit(oPagination)
 
 	var aGameRows []*domain.GameRow
 	var oGameRow domain.GameRow
@@ -88,7 +89,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Fi
 }
 
 func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
+	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
 	var oGameRow domain.GameRow

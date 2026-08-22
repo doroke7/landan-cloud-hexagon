@@ -9,7 +9,6 @@ import (
 	"gorm.io/gorm"
 )
 
-// eq, ne, gt, gte, lt, lte, contains, startsWith, endsWith, notContains, in, notIn, between
 var oOperatorMap = map[string]string{
 	"eq":          "=",
 	"ne":          "!=",
@@ -28,22 +27,22 @@ var oOperatorMap = map[string]string{
 
 // Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
 // AbstractRepository 做法一致。
-type AbstractModel struct {
+type AbstractMysql struct {
 	DB      *gorm.DB
 	Context context.Context
 	*pkg.Aop
 }
 
-func NewAbstractModel(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *AbstractModel {
+func NewAbstractMysql(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *AbstractMysql {
 
-	return &AbstractModel{
+	return &AbstractMysql{
 		DB:      oDb,
 		Context: oContext,
 		Aop:     oAop,
 	}
 }
 
-func (oSelf *AbstractModel) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.MysqlWhere {
+func (oSelf *AbstractMysql) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.MysqlWhere {
 	aWheres := make([]*pkg.MysqlWhere, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -82,7 +81,7 @@ func (oSelf *AbstractModel) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.Mysql
 	return aWheres
 }
 
-func (oSelf *AbstractModel) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.MysqlOrder {
+func (oSelf *AbstractMysql) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.MysqlOrder {
 	aOrders := make([]*pkg.MysqlOrder, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
@@ -105,7 +104,7 @@ func (oSelf *AbstractModel) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.Mysql
 	return aOrders
 }
 
-func (oSelf *AbstractModel) PaginationToLimit(oPagination *pkg.Pagination) *pkg.MysqlLimit {
+func (oSelf *AbstractMysql) PaginationToLimit(oPagination *pkg.Pagination) *pkg.MysqlLimit {
 	iSize := uint(10)
 	iPage := uint(1)
 
