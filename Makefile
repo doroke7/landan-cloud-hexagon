@@ -23,13 +23,13 @@ wire:
 
 
 .PHONY: watch-http
-watch-http:
+http-watch:
 	air -c .air.http.toml
 
 .PHONY: watch-facade
-watch-facade:
+facade-watch:
 	air -c .air.facade.toml
 
 .PHONY: watch-resource
-watch-resource:
+resource-watch:
 	air -c .air.resource.toml
