@@ -6,6 +6,7 @@ import (
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
 	bootstrap "example/bootstrap"
 	pkg "example/pkg"
@@ -108,4 +109,28 @@ func (oSelf *AbstractMongodb) SortersToSort(aSorters []*pkg.Sorter) bson.D {
 	}
 
 	return oSort
+}
+
+func (oSelf *AbstractMongodb) SortersToFindOptions(aSorters []*pkg.Sorter) *options.FindOptionsBuilder {
+	oSort := bson.D{}
+	oFindOptions := options.Find()
+
+	for _, oSorter := range aSorters {
+		if oSorter == nil || oSorter.Field == nil {
+			continue
+		}
+
+		iDirection := 1
+		if oSorter.Order != nil && strings.EqualFold(*oSorter.Order, "desc") {
+			iDirection = -1
+		}
+
+		oSort = append(oSort, bson.E{Key: *oSorter.Field, Value: iDirection})
+	}
+
+	if oSort := oSelf.SortersToSort(aSorters); len(oSort) > 0 {
+		oFindOptions.SetSort(oSort)
+	}
+
+	return oFindOptions
 }
