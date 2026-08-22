@@ -11,12 +11,12 @@ import (
 )
 
 type TableLogic struct {
-	*resourceBase.AbstractLogic
+	*resourceBase.AbstractResource
 }
 
-func NewTableLogic(oAbstractLogic *resourceBase.AbstractLogic) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractLogic *resourceBase.AbstractResource) outputPortAnyLogic.TableLogic {
 	return &TableLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractResource: oAbstractLogic,
 	}
 }
 

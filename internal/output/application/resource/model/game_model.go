@@ -9,12 +9,12 @@ import (
 )
 
 type GameModel struct {
-	*resourceBase.AbstractModel
+	*resourceBase.AbstractResource
 }
 
-func NewGameModel(oAbstractModel *resourceBase.AbstractModel) outputPortAnyModel.GameModel {
+func NewGameModel(oAbstractModel *resourceBase.AbstractResource) outputPortAnyModel.GameModel {
 	return &GameModel{
-		AbstractModel: oAbstractModel,
+		AbstractResource: oAbstractModel,
 	}
 }
 

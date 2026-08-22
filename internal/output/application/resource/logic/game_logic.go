@@ -9,12 +9,12 @@ import (
 )
 
 type GameLogic struct {
-	*resourceBase.AbstractLogic
+	*resourceBase.AbstractResource
 }
 
-func NewGameLogic(oAbstractLogic *resourceBase.AbstractLogic) outputPortAnyLogic.GameLogic {
+func NewGameLogic(oAbstractLogic *resourceBase.AbstractResource) outputPortAnyLogic.GameLogic {
 	return &GameLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractResource: oAbstractLogic,
 	}
 }
 

@@ -7,12 +7,12 @@ import (
 )
 
 type AppUserLogic struct {
-	*resourceBase.AbstractLogic
+	*resourceBase.AbstractResource
 }
 
-func NewAppUserLogic(oAbstractLogic *resourceBase.AbstractLogic) outputPortAnyModel.AppUserModel {
+func NewAppUserLogic(oAbstractLogic *resourceBase.AbstractResource) outputPortAnyModel.AppUserModel {
 	return &AppUserLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractResource: oAbstractLogic,
 	}
 }
 

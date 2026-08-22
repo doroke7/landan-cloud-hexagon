@@ -11,12 +11,12 @@ import (
 )
 
 type AdminUserModel struct {
-	*resourceBase.AbstractModel
+	*resourceBase.AbstractResource
 }
 
-func NewAdminUserModel(oAbstractModel *resourceBase.AbstractModel) outputPortAnyModel.AdminUserModel {
+func NewAdminUserModel(oAbstractModel *resourceBase.AbstractResource) outputPortAnyModel.AdminUserModel {
 	return &AdminUserModel{
-		AbstractModel: oAbstractModel,
+		AbstractResource: oAbstractModel,
 	}
 }
 

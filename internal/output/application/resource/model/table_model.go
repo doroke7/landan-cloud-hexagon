@@ -13,12 +13,12 @@ import (
 )
 
 type TableModel struct {
-	*resourceBase.AbstractModel
+	*resourceBase.AbstractResource
 }
 
-func NewTableModel(oAbstractModel *resourceBase.AbstractModel) outputPortAnyModel.TableModel {
+func NewTableModel(oAbstractModel *resourceBase.AbstractResource) outputPortAnyModel.TableModel {
 	return &TableModel{
-		AbstractModel: oAbstractModel,
+		AbstractResource: oAbstractModel,
 	}
 }
 

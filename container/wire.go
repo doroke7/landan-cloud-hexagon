@@ -146,12 +146,11 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		helper.NewJwtHelper,
 
 		// output
-		outputApplicationResource.NewAbstractModel,
+		outputApplicationResource.NewAbstractResource,
 		outputApplicationResourceModel.NewAdminUserModel,
 		outputApplicationResourceModel.NewGameModel,
 		outputApplicationResourceModel.NewTableModel,
 		outputApplicationResourceModel.NewGameTypeModel,
-		outputApplicationResource.NewAbstractLogic,
 		outputApplicationResourceLogic.NewGameLogic,
 		outputApplicationResourceLogic.NewTableLogic,
 
@@ -248,7 +247,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 		helper.NewJwtHelper,
 
 		// output
-		outputApplicationResource.NewAbstractModel,
+		outputApplicationResource.NewAbstractResource,
 		outputApplicationResourceModel.NewAdminUserModel,
 
 		// usecase
@@ -537,7 +536,7 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 		helper.NewJwtHelper,
 
 		// output
-		outputApplicationResource.NewAbstractModel,
+		outputApplicationResource.NewAbstractResource,
 		outputApplicationResourceModel.NewAdminUserModel,
 
 		// usecase
@@ -684,7 +683,7 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 		helper.NewJwtHelper,
 
 		// output
-		outputApplicationResource.NewAbstractModel,
+		outputApplicationResource.NewAbstractResource,
 		outputApplicationResourceModel.NewAdminUserModel,
 
 		// usecase
