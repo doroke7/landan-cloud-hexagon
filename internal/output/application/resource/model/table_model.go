@@ -108,44 +108,54 @@ func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
 	return oResponse.GetStatus(), nil
 }
 
-func (oSelf *TableModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Table, error) {
+func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, error) {
 
-	oRequest := &pbResourceModel.TableShowOnesByWheresWithOrdersLimitInput{
-		Limit: &pbResourceModel.TableLimit{
-			Offset: uint64(*oLimit.Offset),
-			Count:  uint64(*oLimit.Count),
-		},
+	oRequest := &pbResourceModel.TableShowOnesByFiltersWithSortersPaginationInput{}
+
+	if oPagination != nil {
+		oPbPagination := &pbResourceModel.TablePagination{}
+		if oPagination.Size != nil {
+			oPbPagination.Size = uint64(*oPagination.Size)
+		}
+		if oPagination.Page != nil {
+			oPbPagination.Page = uint64(*oPagination.Page)
+		}
+		oRequest.Pagination = oPbPagination
 	}
 
-	for _, oWhere := range aWheres {
-		if oWhere == nil || oWhere.Field == nil || oWhere.Operator == nil {
+	for _, oFilter := range aFilters {
+		if oFilter == nil || oFilter.Field == nil {
 			continue
 		}
 
-		oValue, oErr := structpb.NewValue(oWhere.Value)
+		oValue, oErr := structpb.NewValue(oFilter.Value)
 		if oErr != nil {
 			continue
 		}
 
-		oRequest.Wheres = append(oRequest.Wheres, &pbResourceModel.TableWhere{
-			Field:    *oWhere.Field,
-			Operator: *oWhere.Operator,
-			Value:    oValue,
-		})
+		oPbFilter := &pbResourceModel.TableFilter{
+			Field: *oFilter.Field,
+			Value: oValue,
+		}
+		if oFilter.Operator != nil {
+			oPbFilter.Operator = *oFilter.Operator
+		}
+
+		oRequest.Filters = append(oRequest.Filters, oPbFilter)
 	}
 
-	for _, oOrder := range aOrders {
-		if oOrder == nil || oOrder.Field == nil || oOrder.Value == nil {
+	for _, oSorter := range aSorters {
+		if oSorter == nil || oSorter.Field == nil || oSorter.Order == nil {
 			continue
 		}
 
-		oRequest.Orders = append(oRequest.Orders, &pbResourceModel.TableOrder{
-			Field: *oOrder.Field,
-			Value: *oOrder.Value,
+		oRequest.Sorters = append(oRequest.Sorters, &pbResourceModel.TableSorter{
+			Field: *oSorter.Field,
+			Order: *oSorter.Order,
 		})
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.Table.ShowOnesByWheresWithOrdersLimit(oSelf.Context, oRequest)
+	oResponse, oErr := oSelf.ResourceModelClient.Table.ShowOnesByFiltersWithSortersPagination(oSelf.Context, oRequest)
 
 	if oErr != nil {
 		return nil, oErr
@@ -173,28 +183,32 @@ func (oSelf *TableModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, a
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
 
-	oRequest := &pbResourceModel.TableTotalByWheresInput{}
+	oRequest := &pbResourceModel.TableTotalByFiltersInput{}
 
-	for _, oWhere := range aWheres {
-		if oWhere == nil || oWhere.Field == nil || oWhere.Operator == nil {
+	for _, oFilter := range aFilters {
+		if oFilter == nil || oFilter.Field == nil {
 			continue
 		}
 
-		oValue, oErr := structpb.NewValue(oWhere.Value)
+		oValue, oErr := structpb.NewValue(oFilter.Value)
 		if oErr != nil {
 			continue
 		}
 
-		oRequest.Wheres = append(oRequest.Wheres, &pbResourceModel.TableWhere{
-			Field:    *oWhere.Field,
-			Operator: *oWhere.Operator,
-			Value:    oValue,
-		})
+		oPbFilter := &pbResourceModel.TableFilter{
+			Field: *oFilter.Field,
+			Value: oValue,
+		}
+		if oFilter.Operator != nil {
+			oPbFilter.Operator = *oFilter.Operator
+		}
+
+		oRequest.Filters = append(oRequest.Filters, oPbFilter)
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.Table.TotalByWheres(oSelf.Context, oRequest)
+	oResponse, oErr := oSelf.ResourceModelClient.Table.TotalByFilters(oSelf.Context, oRequest)
 
 	iTotal := oResponse.GetTotal()
 

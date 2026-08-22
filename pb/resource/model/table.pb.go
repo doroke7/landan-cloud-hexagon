@@ -591,7 +591,7 @@ func (x *TableRemoveOneByIdOutput) GetStatus() bool {
 	return false
 }
 
-type TableWhere struct {
+type TableFilter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Field         string                 `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
 	Operator      string                 `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
@@ -600,20 +600,20 @@ type TableWhere struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TableWhere) Reset() {
-	*x = TableWhere{}
+func (x *TableFilter) Reset() {
+	*x = TableFilter{}
 	mi := &file_resource_model_table_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *TableWhere) String() string {
+func (x *TableFilter) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TableWhere) ProtoMessage() {}
+func (*TableFilter) ProtoMessage() {}
 
-func (x *TableWhere) ProtoReflect() protoreflect.Message {
+func (x *TableFilter) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_table_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -625,54 +625,54 @@ func (x *TableWhere) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TableWhere.ProtoReflect.Descriptor instead.
-func (*TableWhere) Descriptor() ([]byte, []int) {
+// Deprecated: Use TableFilter.ProtoReflect.Descriptor instead.
+func (*TableFilter) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *TableWhere) GetField() string {
+func (x *TableFilter) GetField() string {
 	if x != nil {
 		return x.Field
 	}
 	return ""
 }
 
-func (x *TableWhere) GetOperator() string {
+func (x *TableFilter) GetOperator() string {
 	if x != nil {
 		return x.Operator
 	}
 	return ""
 }
 
-func (x *TableWhere) GetValue() *structpb.Value {
+func (x *TableFilter) GetValue() *structpb.Value {
 	if x != nil {
 		return x.Value
 	}
 	return nil
 }
 
-type TableOrder struct {
+type TableSorter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Field         string                 `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
-	Value         string                 `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
+	Order         string                 `protobuf:"bytes,2,opt,name=order,proto3" json:"order,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TableOrder) Reset() {
-	*x = TableOrder{}
+func (x *TableSorter) Reset() {
+	*x = TableSorter{}
 	mi := &file_resource_model_table_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *TableOrder) String() string {
+func (x *TableSorter) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TableOrder) ProtoMessage() {}
+func (*TableSorter) ProtoMessage() {}
 
-func (x *TableOrder) ProtoReflect() protoreflect.Message {
+func (x *TableSorter) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_table_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -684,47 +684,47 @@ func (x *TableOrder) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TableOrder.ProtoReflect.Descriptor instead.
-func (*TableOrder) Descriptor() ([]byte, []int) {
+// Deprecated: Use TableSorter.ProtoReflect.Descriptor instead.
+func (*TableSorter) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *TableOrder) GetField() string {
+func (x *TableSorter) GetField() string {
 	if x != nil {
 		return x.Field
 	}
 	return ""
 }
 
-func (x *TableOrder) GetValue() string {
+func (x *TableSorter) GetOrder() string {
 	if x != nil {
-		return x.Value
+		return x.Order
 	}
 	return ""
 }
 
-type TableLimit struct {
+type TablePagination struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Offset        uint64                 `protobuf:"varint,1,opt,name=offset,proto3" json:"offset,omitempty"`
-	Count         uint64                 `protobuf:"varint,2,opt,name=count,proto3" json:"count,omitempty"`
+	Size          uint64                 `protobuf:"varint,1,opt,name=size,proto3" json:"size,omitempty"`
+	Page          uint64                 `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TableLimit) Reset() {
-	*x = TableLimit{}
+func (x *TablePagination) Reset() {
+	*x = TablePagination{}
 	mi := &file_resource_model_table_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *TableLimit) String() string {
+func (x *TablePagination) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TableLimit) ProtoMessage() {}
+func (*TablePagination) ProtoMessage() {}
 
-func (x *TableLimit) ProtoReflect() protoreflect.Message {
+func (x *TablePagination) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_table_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -736,48 +736,48 @@ func (x *TableLimit) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TableLimit.ProtoReflect.Descriptor instead.
-func (*TableLimit) Descriptor() ([]byte, []int) {
+// Deprecated: Use TablePagination.ProtoReflect.Descriptor instead.
+func (*TablePagination) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *TableLimit) GetOffset() uint64 {
+func (x *TablePagination) GetSize() uint64 {
 	if x != nil {
-		return x.Offset
+		return x.Size
 	}
 	return 0
 }
 
-func (x *TableLimit) GetCount() uint64 {
+func (x *TablePagination) GetPage() uint64 {
 	if x != nil {
-		return x.Count
+		return x.Page
 	}
 	return 0
 }
 
-type TableShowOnesByWheresWithOrdersLimitInput struct {
+type TableShowOnesByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Wheres        []*TableWhere          `protobuf:"bytes,1,rep,name=wheres,proto3" json:"wheres,omitempty"`
-	Orders        []*TableOrder          `protobuf:"bytes,3,rep,name=orders,proto3" json:"orders,omitempty"`
-	Limit         *TableLimit            `protobuf:"bytes,2,opt,name=limit,proto3" json:"limit,omitempty"`
+	Filters       []*TableFilter         `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*TableSorter         `protobuf:"bytes,3,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *TablePagination       `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TableShowOnesByWheresWithOrdersLimitInput) Reset() {
-	*x = TableShowOnesByWheresWithOrdersLimitInput{}
+func (x *TableShowOnesByFiltersWithSortersPaginationInput) Reset() {
+	*x = TableShowOnesByFiltersWithSortersPaginationInput{}
 	mi := &file_resource_model_table_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *TableShowOnesByWheresWithOrdersLimitInput) String() string {
+func (x *TableShowOnesByFiltersWithSortersPaginationInput) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TableShowOnesByWheresWithOrdersLimitInput) ProtoMessage() {}
+func (*TableShowOnesByFiltersWithSortersPaginationInput) ProtoMessage() {}
 
-func (x *TableShowOnesByWheresWithOrdersLimitInput) ProtoReflect() protoreflect.Message {
+func (x *TableShowOnesByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_table_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -789,53 +789,53 @@ func (x *TableShowOnesByWheresWithOrdersLimitInput) ProtoReflect() protoreflect.
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TableShowOnesByWheresWithOrdersLimitInput.ProtoReflect.Descriptor instead.
-func (*TableShowOnesByWheresWithOrdersLimitInput) Descriptor() ([]byte, []int) {
+// Deprecated: Use TableShowOnesByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
+func (*TableShowOnesByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *TableShowOnesByWheresWithOrdersLimitInput) GetWheres() []*TableWhere {
+func (x *TableShowOnesByFiltersWithSortersPaginationInput) GetFilters() []*TableFilter {
 	if x != nil {
-		return x.Wheres
+		return x.Filters
 	}
 	return nil
 }
 
-func (x *TableShowOnesByWheresWithOrdersLimitInput) GetOrders() []*TableOrder {
+func (x *TableShowOnesByFiltersWithSortersPaginationInput) GetSorters() []*TableSorter {
 	if x != nil {
-		return x.Orders
+		return x.Sorters
 	}
 	return nil
 }
 
-func (x *TableShowOnesByWheresWithOrdersLimitInput) GetLimit() *TableLimit {
+func (x *TableShowOnesByFiltersWithSortersPaginationInput) GetPagination() *TablePagination {
 	if x != nil {
-		return x.Limit
+		return x.Pagination
 	}
 	return nil
 }
 
-type TableShowOnesByWheresWithOrdersLimitOutput struct {
+type TableShowOnesByFiltersWithSortersPaginationOutput struct {
 	state         protoimpl.MessageState    `protogen:"open.v1"`
 	Tables        []*TableShowOneByIdOutput `protobuf:"bytes,1,rep,name=tables,proto3" json:"tables,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TableShowOnesByWheresWithOrdersLimitOutput) Reset() {
-	*x = TableShowOnesByWheresWithOrdersLimitOutput{}
+func (x *TableShowOnesByFiltersWithSortersPaginationOutput) Reset() {
+	*x = TableShowOnesByFiltersWithSortersPaginationOutput{}
 	mi := &file_resource_model_table_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *TableShowOnesByWheresWithOrdersLimitOutput) String() string {
+func (x *TableShowOnesByFiltersWithSortersPaginationOutput) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TableShowOnesByWheresWithOrdersLimitOutput) ProtoMessage() {}
+func (*TableShowOnesByFiltersWithSortersPaginationOutput) ProtoMessage() {}
 
-func (x *TableShowOnesByWheresWithOrdersLimitOutput) ProtoReflect() protoreflect.Message {
+func (x *TableShowOnesByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_table_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -847,39 +847,39 @@ func (x *TableShowOnesByWheresWithOrdersLimitOutput) ProtoReflect() protoreflect
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TableShowOnesByWheresWithOrdersLimitOutput.ProtoReflect.Descriptor instead.
-func (*TableShowOnesByWheresWithOrdersLimitOutput) Descriptor() ([]byte, []int) {
+// Deprecated: Use TableShowOnesByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
+func (*TableShowOnesByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *TableShowOnesByWheresWithOrdersLimitOutput) GetTables() []*TableShowOneByIdOutput {
+func (x *TableShowOnesByFiltersWithSortersPaginationOutput) GetTables() []*TableShowOneByIdOutput {
 	if x != nil {
 		return x.Tables
 	}
 	return nil
 }
 
-type TableTotalByWheresInput struct {
+type TableTotalByFiltersInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Wheres        []*TableWhere          `protobuf:"bytes,1,rep,name=wheres,proto3" json:"wheres,omitempty"`
+	Filters       []*TableFilter         `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TableTotalByWheresInput) Reset() {
-	*x = TableTotalByWheresInput{}
+func (x *TableTotalByFiltersInput) Reset() {
+	*x = TableTotalByFiltersInput{}
 	mi := &file_resource_model_table_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *TableTotalByWheresInput) String() string {
+func (x *TableTotalByFiltersInput) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TableTotalByWheresInput) ProtoMessage() {}
+func (*TableTotalByFiltersInput) ProtoMessage() {}
 
-func (x *TableTotalByWheresInput) ProtoReflect() protoreflect.Message {
+func (x *TableTotalByFiltersInput) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_table_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -891,39 +891,39 @@ func (x *TableTotalByWheresInput) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TableTotalByWheresInput.ProtoReflect.Descriptor instead.
-func (*TableTotalByWheresInput) Descriptor() ([]byte, []int) {
+// Deprecated: Use TableTotalByFiltersInput.ProtoReflect.Descriptor instead.
+func (*TableTotalByFiltersInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{13}
 }
 
-func (x *TableTotalByWheresInput) GetWheres() []*TableWhere {
+func (x *TableTotalByFiltersInput) GetFilters() []*TableFilter {
 	if x != nil {
-		return x.Wheres
+		return x.Filters
 	}
 	return nil
 }
 
-type TableTotalByWheresOutput struct {
+type TableTotalByFiltersOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Total         uint64                 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TableTotalByWheresOutput) Reset() {
-	*x = TableTotalByWheresOutput{}
+func (x *TableTotalByFiltersOutput) Reset() {
+	*x = TableTotalByFiltersOutput{}
 	mi := &file_resource_model_table_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *TableTotalByWheresOutput) String() string {
+func (x *TableTotalByFiltersOutput) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TableTotalByWheresOutput) ProtoMessage() {}
+func (*TableTotalByFiltersOutput) ProtoMessage() {}
 
-func (x *TableTotalByWheresOutput) ProtoReflect() protoreflect.Message {
+func (x *TableTotalByFiltersOutput) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_table_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -935,12 +935,12 @@ func (x *TableTotalByWheresOutput) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TableTotalByWheresOutput.ProtoReflect.Descriptor instead.
-func (*TableTotalByWheresOutput) Descriptor() ([]byte, []int) {
+// Deprecated: Use TableTotalByFiltersOutput.ProtoReflect.Descriptor instead.
+func (*TableTotalByFiltersOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{14}
 }
 
-func (x *TableTotalByWheresOutput) GetTotal() uint64 {
+func (x *TableTotalByFiltersOutput) GetTotal() uint64 {
 	if x != nil {
 		return x.Total
 	}
@@ -1015,38 +1015,37 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\x17TableRemoveOneByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\"2\n" +
 	"\x18TableRemoveOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"l\n" +
-	"\n" +
-	"TableWhere\x12\x14\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\"m\n" +
+	"\vTableFilter\x12\x14\n" +
 	"\x05field\x18\x01 \x01(\tR\x05field\x12\x1a\n" +
 	"\boperator\x18\x02 \x01(\tR\boperator\x12,\n" +
-	"\x05value\x18\x03 \x01(\v2\x16.google.protobuf.ValueR\x05value\"8\n" +
-	"\n" +
-	"TableOrder\x12\x14\n" +
+	"\x05value\x18\x03 \x01(\v2\x16.google.protobuf.ValueR\x05value\"9\n" +
+	"\vTableSorter\x12\x14\n" +
 	"\x05field\x18\x01 \x01(\tR\x05field\x12\x14\n" +
-	"\x05value\x18\x02 \x01(\tR\x05value\":\n" +
+	"\x05order\x18\x02 \x01(\tR\x05order\"9\n" +
+	"\x0fTablePagination\x12\x12\n" +
+	"\x04size\x18\x01 \x01(\x04R\x04size\x12\x12\n" +
+	"\x04page\x18\x02 \x01(\x04R\x04page\"\xea\x01\n" +
+	"0TableShowOnesByFiltersWithSortersPaginationInput\x128\n" +
+	"\afilters\x18\x01 \x03(\v2\x1e.pb.resource.model.TableFilterR\afilters\x128\n" +
+	"\asorters\x18\x03 \x03(\v2\x1e.pb.resource.model.TableSorterR\asorters\x12B\n" +
 	"\n" +
-	"TableLimit\x12\x16\n" +
-	"\x06offset\x18\x01 \x01(\x04R\x06offset\x12\x14\n" +
-	"\x05count\x18\x02 \x01(\x04R\x05count\"\xce\x01\n" +
-	")TableShowOnesByWheresWithOrdersLimitInput\x125\n" +
-	"\x06wheres\x18\x01 \x03(\v2\x1d.pb.resource.model.TableWhereR\x06wheres\x125\n" +
-	"\x06orders\x18\x03 \x03(\v2\x1d.pb.resource.model.TableOrderR\x06orders\x123\n" +
-	"\x05limit\x18\x02 \x01(\v2\x1d.pb.resource.model.TableLimitR\x05limit\"o\n" +
-	"*TableShowOnesByWheresWithOrdersLimitOutput\x12A\n" +
-	"\x06tables\x18\x01 \x03(\v2).pb.resource.model.TableShowOneByIdOutputR\x06tables\"P\n" +
-	"\x17TableTotalByWheresInput\x125\n" +
-	"\x06wheres\x18\x01 \x03(\v2\x1d.pb.resource.model.TableWhereR\x06wheres\"0\n" +
-	"\x18TableTotalByWheresOutput\x12\x14\n" +
-	"\x05total\x18\x01 \x01(\x04R\x05total2\x9e\x05\n" +
+	"pagination\x18\x02 \x01(\v2\".pb.resource.model.TablePaginationR\n" +
+	"pagination\"v\n" +
+	"1TableShowOnesByFiltersWithSortersPaginationOutput\x12A\n" +
+	"\x06tables\x18\x01 \x03(\v2).pb.resource.model.TableShowOneByIdOutputR\x06tables\"T\n" +
+	"\x18TableTotalByFiltersInput\x128\n" +
+	"\afilters\x18\x01 \x03(\v2\x1e.pb.resource.model.TableFilterR\afilters\"1\n" +
+	"\x19TableTotalByFiltersOutput\x12\x14\n" +
+	"\x05total\x18\x01 \x01(\x04R\x05total2\xb6\x05\n" +
 	"\n" +
 	"TableModel\x12S\n" +
 	"\x06AddOne\x12#.pb.resource.model.TableAddOneInput\x1a$.pb.resource.model.TableAddOneOutput\x12b\n" +
 	"\vShowOneById\x12(.pb.resource.model.TableShowOneByIdInput\x1a).pb.resource.model.TableShowOneByIdOutput\x12b\n" +
 	"\vEditOneById\x12(.pb.resource.model.TableEditOneByIdInput\x1a).pb.resource.model.TableEditOneByIdOutput\x12h\n" +
-	"\rRemoveOneById\x12*.pb.resource.model.TableRemoveOneByIdInput\x1a+.pb.resource.model.TableRemoveOneByIdOutput\x12\x9e\x01\n" +
-	"\x1fShowOnesByWheresWithOrdersLimit\x12<.pb.resource.model.TableShowOnesByWheresWithOrdersLimitInput\x1a=.pb.resource.model.TableShowOnesByWheresWithOrdersLimitOutput\x12h\n" +
-	"\rTotalByWheres\x12*.pb.resource.model.TableTotalByWheresInput\x1a+.pb.resource.model.TableTotalByWheresOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
+	"\rRemoveOneById\x12*.pb.resource.model.TableRemoveOneByIdInput\x1a+.pb.resource.model.TableRemoveOneByIdOutput\x12\xb3\x01\n" +
+	"&ShowOnesByFiltersWithSortersPagination\x12C.pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput\x1aD.pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput\x12k\n" +
+	"\x0eTotalByFilters\x12+.pb.resource.model.TableTotalByFiltersInput\x1a,.pb.resource.model.TableTotalByFiltersOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
 
 var (
 	file_resource_model_table_proto_rawDescOnce sync.Once
@@ -1062,24 +1061,24 @@ func file_resource_model_table_proto_rawDescGZIP() []byte {
 
 var file_resource_model_table_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_resource_model_table_proto_goTypes = []any{
-	(*TableAddOneInput)(nil),                           // 0: pb.resource.model.TableAddOneInput
-	(*TableAddOneOutput)(nil),                          // 1: pb.resource.model.TableAddOneOutput
-	(*TableShowOneByIdInput)(nil),                      // 2: pb.resource.model.TableShowOneByIdInput
-	(*TableShowOneByIdOutput)(nil),                     // 3: pb.resource.model.TableShowOneByIdOutput
-	(*TableEditOneByIdInput)(nil),                      // 4: pb.resource.model.TableEditOneByIdInput
-	(*TableEditOneByIdOutput)(nil),                     // 5: pb.resource.model.TableEditOneByIdOutput
-	(*TableRemoveOneByIdInput)(nil),                    // 6: pb.resource.model.TableRemoveOneByIdInput
-	(*TableRemoveOneByIdOutput)(nil),                   // 7: pb.resource.model.TableRemoveOneByIdOutput
-	(*TableWhere)(nil),                                 // 8: pb.resource.model.TableWhere
-	(*TableOrder)(nil),                                 // 9: pb.resource.model.TableOrder
-	(*TableLimit)(nil),                                 // 10: pb.resource.model.TableLimit
-	(*TableShowOnesByWheresWithOrdersLimitInput)(nil),  // 11: pb.resource.model.TableShowOnesByWheresWithOrdersLimitInput
-	(*TableShowOnesByWheresWithOrdersLimitOutput)(nil), // 12: pb.resource.model.TableShowOnesByWheresWithOrdersLimitOutput
-	(*TableTotalByWheresInput)(nil),                    // 13: pb.resource.model.TableTotalByWheresInput
-	(*TableTotalByWheresOutput)(nil),                   // 14: pb.resource.model.TableTotalByWheresOutput
-	(*timestamppb.Timestamp)(nil),                      // 15: google.protobuf.Timestamp
-	(*Game)(nil),                                       // 16: pb.resource.model.Game
-	(*structpb.Value)(nil),                             // 17: google.protobuf.Value
+	(*TableAddOneInput)(nil),                                  // 0: pb.resource.model.TableAddOneInput
+	(*TableAddOneOutput)(nil),                                 // 1: pb.resource.model.TableAddOneOutput
+	(*TableShowOneByIdInput)(nil),                             // 2: pb.resource.model.TableShowOneByIdInput
+	(*TableShowOneByIdOutput)(nil),                            // 3: pb.resource.model.TableShowOneByIdOutput
+	(*TableEditOneByIdInput)(nil),                             // 4: pb.resource.model.TableEditOneByIdInput
+	(*TableEditOneByIdOutput)(nil),                            // 5: pb.resource.model.TableEditOneByIdOutput
+	(*TableRemoveOneByIdInput)(nil),                           // 6: pb.resource.model.TableRemoveOneByIdInput
+	(*TableRemoveOneByIdOutput)(nil),                          // 7: pb.resource.model.TableRemoveOneByIdOutput
+	(*TableFilter)(nil),                                       // 8: pb.resource.model.TableFilter
+	(*TableSorter)(nil),                                       // 9: pb.resource.model.TableSorter
+	(*TablePagination)(nil),                                   // 10: pb.resource.model.TablePagination
+	(*TableShowOnesByFiltersWithSortersPaginationInput)(nil),  // 11: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput
+	(*TableShowOnesByFiltersWithSortersPaginationOutput)(nil), // 12: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput
+	(*TableTotalByFiltersInput)(nil),                          // 13: pb.resource.model.TableTotalByFiltersInput
+	(*TableTotalByFiltersOutput)(nil),                         // 14: pb.resource.model.TableTotalByFiltersOutput
+	(*timestamppb.Timestamp)(nil),                             // 15: google.protobuf.Timestamp
+	(*Game)(nil),                                              // 16: pb.resource.model.Game
+	(*structpb.Value)(nil),                                    // 17: google.protobuf.Value
 }
 var file_resource_model_table_proto_depIdxs = []int32{
 	15, // 0: pb.resource.model.TableAddOneInput.started_at:type_name -> google.protobuf.Timestamp
@@ -1092,24 +1091,24 @@ var file_resource_model_table_proto_depIdxs = []int32{
 	16, // 7: pb.resource.model.TableShowOneByIdOutput.game:type_name -> pb.resource.model.Game
 	15, // 8: pb.resource.model.TableEditOneByIdInput.started_at:type_name -> google.protobuf.Timestamp
 	15, // 9: pb.resource.model.TableEditOneByIdInput.ended_at:type_name -> google.protobuf.Timestamp
-	17, // 10: pb.resource.model.TableWhere.value:type_name -> google.protobuf.Value
-	8,  // 11: pb.resource.model.TableShowOnesByWheresWithOrdersLimitInput.wheres:type_name -> pb.resource.model.TableWhere
-	9,  // 12: pb.resource.model.TableShowOnesByWheresWithOrdersLimitInput.orders:type_name -> pb.resource.model.TableOrder
-	10, // 13: pb.resource.model.TableShowOnesByWheresWithOrdersLimitInput.limit:type_name -> pb.resource.model.TableLimit
-	3,  // 14: pb.resource.model.TableShowOnesByWheresWithOrdersLimitOutput.tables:type_name -> pb.resource.model.TableShowOneByIdOutput
-	8,  // 15: pb.resource.model.TableTotalByWheresInput.wheres:type_name -> pb.resource.model.TableWhere
+	17, // 10: pb.resource.model.TableFilter.value:type_name -> google.protobuf.Value
+	8,  // 11: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.model.TableFilter
+	9,  // 12: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.model.TableSorter
+	10, // 13: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.model.TablePagination
+	3,  // 14: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput.tables:type_name -> pb.resource.model.TableShowOneByIdOutput
+	8,  // 15: pb.resource.model.TableTotalByFiltersInput.filters:type_name -> pb.resource.model.TableFilter
 	0,  // 16: pb.resource.model.TableModel.AddOne:input_type -> pb.resource.model.TableAddOneInput
 	2,  // 17: pb.resource.model.TableModel.ShowOneById:input_type -> pb.resource.model.TableShowOneByIdInput
 	4,  // 18: pb.resource.model.TableModel.EditOneById:input_type -> pb.resource.model.TableEditOneByIdInput
 	6,  // 19: pb.resource.model.TableModel.RemoveOneById:input_type -> pb.resource.model.TableRemoveOneByIdInput
-	11, // 20: pb.resource.model.TableModel.ShowOnesByWheresWithOrdersLimit:input_type -> pb.resource.model.TableShowOnesByWheresWithOrdersLimitInput
-	13, // 21: pb.resource.model.TableModel.TotalByWheres:input_type -> pb.resource.model.TableTotalByWheresInput
+	11, // 20: pb.resource.model.TableModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput
+	13, // 21: pb.resource.model.TableModel.TotalByFilters:input_type -> pb.resource.model.TableTotalByFiltersInput
 	1,  // 22: pb.resource.model.TableModel.AddOne:output_type -> pb.resource.model.TableAddOneOutput
 	3,  // 23: pb.resource.model.TableModel.ShowOneById:output_type -> pb.resource.model.TableShowOneByIdOutput
 	5,  // 24: pb.resource.model.TableModel.EditOneById:output_type -> pb.resource.model.TableEditOneByIdOutput
 	7,  // 25: pb.resource.model.TableModel.RemoveOneById:output_type -> pb.resource.model.TableRemoveOneByIdOutput
-	12, // 26: pb.resource.model.TableModel.ShowOnesByWheresWithOrdersLimit:output_type -> pb.resource.model.TableShowOnesByWheresWithOrdersLimitOutput
-	14, // 27: pb.resource.model.TableModel.TotalByWheres:output_type -> pb.resource.model.TableTotalByWheresOutput
+	12, // 26: pb.resource.model.TableModel.ShowOnesByFiltersWithSortersPagination:output_type -> pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput
+	14, // 27: pb.resource.model.TableModel.TotalByFilters:output_type -> pb.resource.model.TableTotalByFiltersOutput
 	22, // [22:28] is the sub-list for method output_type
 	16, // [16:22] is the sub-list for method input_type
 	16, // [16:16] is the sub-list for extension type_name

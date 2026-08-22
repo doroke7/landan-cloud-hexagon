@@ -158,45 +158,45 @@ func (oSelf *TableHandler) RemoveOneById(oContext context.Context, oReq *pbResou
 	}, nil
 }
 
-func (oSelf *TableHandler) ShowOnesByWheresWithOrdersLimit(oContext context.Context, oReq *pbResourceModel.TableShowOnesByWheresWithOrdersLimitInput) (*pbResourceModel.TableShowOnesByWheresWithOrdersLimitOutput, error) {
+func (oSelf *TableHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.TableShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.TableShowOnesByFiltersWithSortersPaginationOutput, error) {
 
-	aWheres := make([]*pkg.Where, 0, len(oReq.GetWheres()))
-	for _, oOne := range oReq.GetWheres() {
+	aFilters := make([]*pkg.Filter, 0, len(oReq.GetFilters()))
+	for _, oOne := range oReq.GetFilters() {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aWheres = append(aWheres, &pkg.Where{
+		aFilters = append(aFilters, &pkg.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oOne.GetValue().AsInterface(),
 		})
 	}
 
-	iOffset := uint(oReq.GetLimit().GetOffset())
-	iCount := uint(oReq.GetLimit().GetCount())
-	oLimit := &pkg.Limit{
-		Offset: &iOffset,
-		Count:  &iCount,
-	}
-
-	aOrders := make([]*pkg.Order, 0, len(oReq.GetOrders()))
-	for _, oOne := range oReq.GetOrders() {
+	aSorters := make([]*pkg.Sorter, 0, len(oReq.GetSorters()))
+	for _, oOne := range oReq.GetSorters() {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
-		sValue := oOne.GetValue()
-		aOrders = append(aOrders, &pkg.Order{
+		sOrder := oOne.GetOrder()
+		aSorters = append(aSorters, &pkg.Sorter{
 			Field: &sField,
-			Value: &sValue,
+			Order: &sOrder,
 		})
 	}
 
-	aTables, oErr := oSelf.TableUsecase.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
+	iSize := uint(oReq.GetPagination().GetSize())
+	iPage := uint(oReq.GetPagination().GetPage())
+	oPagination := &pkg.Pagination{
+		Size: &iSize,
+		Page: &iPage,
+	}
+
+	aTables, oErr := oSelf.TableUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
@@ -221,34 +221,34 @@ func (oSelf *TableHandler) ShowOnesByWheresWithOrdersLimit(oContext context.Cont
 		})
 	}
 
-	return &pbResourceModel.TableShowOnesByWheresWithOrdersLimitOutput{
+	return &pbResourceModel.TableShowOnesByFiltersWithSortersPaginationOutput{
 		Tables: aPbTables,
 	}, nil
 }
 
-func (oSelf *TableHandler) TotalByWheres(oContext context.Context, oReq *pbResourceModel.TableTotalByWheresInput) (*pbResourceModel.TableTotalByWheresOutput, error) {
+func (oSelf *TableHandler) TotalByFilters(oContext context.Context, oReq *pbResourceModel.TableTotalByFiltersInput) (*pbResourceModel.TableTotalByFiltersOutput, error) {
 
-	aWheres := make([]*pkg.Where, 0, len(oReq.GetWheres()))
-	for _, oOne := range oReq.GetWheres() {
+	aFilters := make([]*pkg.Filter, 0, len(oReq.GetFilters()))
+	for _, oOne := range oReq.GetFilters() {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aWheres = append(aWheres, &pkg.Where{
+		aFilters = append(aFilters, &pkg.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oOne.GetValue().AsInterface(),
 		})
 	}
 
-	iTotal, oErr := oSelf.TableUsecase.TotalByWheres(aWheres)
+	iTotal, oErr := oSelf.TableUsecase.TotalByFilters(aFilters)
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
 
-	return &pbResourceModel.TableTotalByWheresOutput{
+	return &pbResourceModel.TableTotalByFiltersOutput{
 		Total: iTotal,
 	}, nil
 }
