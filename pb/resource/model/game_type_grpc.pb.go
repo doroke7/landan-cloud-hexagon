@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	GameTypeModel_AddOne_FullMethodName                          = "/pb.resource.model.GameTypeModel/AddOne"
-	GameTypeModel_ShowOneById_FullMethodName                     = "/pb.resource.model.GameTypeModel/ShowOneById"
-	GameTypeModel_ShowOnesByWheresWithOrdersLimit_FullMethodName = "/pb.resource.model.GameTypeModel/ShowOnesByWheresWithOrdersLimit"
-	GameTypeModel_EditOneById_FullMethodName                     = "/pb.resource.model.GameTypeModel/EditOneById"
-	GameTypeModel_RemoveOneById_FullMethodName                   = "/pb.resource.model.GameTypeModel/RemoveOneById"
-	GameTypeModel_TotalByWheres_FullMethodName                   = "/pb.resource.model.GameTypeModel/TotalByWheres"
+	GameTypeModel_AddOne_FullMethodName                                 = "/pb.resource.model.GameTypeModel/AddOne"
+	GameTypeModel_ShowOneById_FullMethodName                            = "/pb.resource.model.GameTypeModel/ShowOneById"
+	GameTypeModel_ShowOnesByFiltersWithSortersPagination_FullMethodName = "/pb.resource.model.GameTypeModel/ShowOnesByFiltersWithSortersPagination"
+	GameTypeModel_EditOneById_FullMethodName                            = "/pb.resource.model.GameTypeModel/EditOneById"
+	GameTypeModel_RemoveOneById_FullMethodName                          = "/pb.resource.model.GameTypeModel/RemoveOneById"
+	GameTypeModel_TotalByFilters_FullMethodName                         = "/pb.resource.model.GameTypeModel/TotalByFilters"
 )
 
 // GameTypeModelClient is the client API for GameTypeModel service.
@@ -33,10 +33,10 @@ const (
 type GameTypeModelClient interface {
 	AddOne(ctx context.Context, in *GameTypeAddOneInput, opts ...grpc.CallOption) (*GameTypeAddOneOutput, error)
 	ShowOneById(ctx context.Context, in *GameTypeShowOneByIdInput, opts ...grpc.CallOption) (*GameTypeShowOneByIdOutput, error)
-	ShowOnesByWheresWithOrdersLimit(ctx context.Context, in *GameTypeShowOnesByWheresWithOrdersLimitInput, opts ...grpc.CallOption) (*GameTypeShowOnesByWheresWithOrdersLimitOutput, error)
+	ShowOnesByFiltersWithSortersPagination(ctx context.Context, in *GameTypeShowOnesByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*GameTypeShowOnesByFiltersWithSortersPaginationOutput, error)
 	EditOneById(ctx context.Context, in *GameTypeEditOneByIdInput, opts ...grpc.CallOption) (*GameTypeEditOneByIdOutput, error)
 	RemoveOneById(ctx context.Context, in *GameTypeRemoveOneByIdInput, opts ...grpc.CallOption) (*GameTypeRemoveOneByIdOutput, error)
-	TotalByWheres(ctx context.Context, in *GameTypeTotalByWheresInput, opts ...grpc.CallOption) (*GameTypeTotalByWheresOutput, error)
+	TotalByFilters(ctx context.Context, in *GameTypeTotalByFiltersInput, opts ...grpc.CallOption) (*GameTypeTotalByFiltersOutput, error)
 }
 
 type gameTypeModelClient struct {
@@ -67,10 +67,10 @@ func (c *gameTypeModelClient) ShowOneById(ctx context.Context, in *GameTypeShowO
 	return out, nil
 }
 
-func (c *gameTypeModelClient) ShowOnesByWheresWithOrdersLimit(ctx context.Context, in *GameTypeShowOnesByWheresWithOrdersLimitInput, opts ...grpc.CallOption) (*GameTypeShowOnesByWheresWithOrdersLimitOutput, error) {
+func (c *gameTypeModelClient) ShowOnesByFiltersWithSortersPagination(ctx context.Context, in *GameTypeShowOnesByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*GameTypeShowOnesByFiltersWithSortersPaginationOutput, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GameTypeShowOnesByWheresWithOrdersLimitOutput)
-	err := c.cc.Invoke(ctx, GameTypeModel_ShowOnesByWheresWithOrdersLimit_FullMethodName, in, out, cOpts...)
+	out := new(GameTypeShowOnesByFiltersWithSortersPaginationOutput)
+	err := c.cc.Invoke(ctx, GameTypeModel_ShowOnesByFiltersWithSortersPagination_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -97,10 +97,10 @@ func (c *gameTypeModelClient) RemoveOneById(ctx context.Context, in *GameTypeRem
 	return out, nil
 }
 
-func (c *gameTypeModelClient) TotalByWheres(ctx context.Context, in *GameTypeTotalByWheresInput, opts ...grpc.CallOption) (*GameTypeTotalByWheresOutput, error) {
+func (c *gameTypeModelClient) TotalByFilters(ctx context.Context, in *GameTypeTotalByFiltersInput, opts ...grpc.CallOption) (*GameTypeTotalByFiltersOutput, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GameTypeTotalByWheresOutput)
-	err := c.cc.Invoke(ctx, GameTypeModel_TotalByWheres_FullMethodName, in, out, cOpts...)
+	out := new(GameTypeTotalByFiltersOutput)
+	err := c.cc.Invoke(ctx, GameTypeModel_TotalByFilters_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -113,10 +113,10 @@ func (c *gameTypeModelClient) TotalByWheres(ctx context.Context, in *GameTypeTot
 type GameTypeModelServer interface {
 	AddOne(context.Context, *GameTypeAddOneInput) (*GameTypeAddOneOutput, error)
 	ShowOneById(context.Context, *GameTypeShowOneByIdInput) (*GameTypeShowOneByIdOutput, error)
-	ShowOnesByWheresWithOrdersLimit(context.Context, *GameTypeShowOnesByWheresWithOrdersLimitInput) (*GameTypeShowOnesByWheresWithOrdersLimitOutput, error)
+	ShowOnesByFiltersWithSortersPagination(context.Context, *GameTypeShowOnesByFiltersWithSortersPaginationInput) (*GameTypeShowOnesByFiltersWithSortersPaginationOutput, error)
 	EditOneById(context.Context, *GameTypeEditOneByIdInput) (*GameTypeEditOneByIdOutput, error)
 	RemoveOneById(context.Context, *GameTypeRemoveOneByIdInput) (*GameTypeRemoveOneByIdOutput, error)
-	TotalByWheres(context.Context, *GameTypeTotalByWheresInput) (*GameTypeTotalByWheresOutput, error)
+	TotalByFilters(context.Context, *GameTypeTotalByFiltersInput) (*GameTypeTotalByFiltersOutput, error)
 	mustEmbedUnimplementedGameTypeModelServer()
 }
 
@@ -133,8 +133,8 @@ func (UnimplementedGameTypeModelServer) AddOne(context.Context, *GameTypeAddOneI
 func (UnimplementedGameTypeModelServer) ShowOneById(context.Context, *GameTypeShowOneByIdInput) (*GameTypeShowOneByIdOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowOneById not implemented")
 }
-func (UnimplementedGameTypeModelServer) ShowOnesByWheresWithOrdersLimit(context.Context, *GameTypeShowOnesByWheresWithOrdersLimitInput) (*GameTypeShowOnesByWheresWithOrdersLimitOutput, error) {
-	return nil, status.Error(codes.Unimplemented, "method ShowOnesByWheresWithOrdersLimit not implemented")
+func (UnimplementedGameTypeModelServer) ShowOnesByFiltersWithSortersPagination(context.Context, *GameTypeShowOnesByFiltersWithSortersPaginationInput) (*GameTypeShowOnesByFiltersWithSortersPaginationOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowOnesByFiltersWithSortersPagination not implemented")
 }
 func (UnimplementedGameTypeModelServer) EditOneById(context.Context, *GameTypeEditOneByIdInput) (*GameTypeEditOneByIdOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method EditOneById not implemented")
@@ -142,8 +142,8 @@ func (UnimplementedGameTypeModelServer) EditOneById(context.Context, *GameTypeEd
 func (UnimplementedGameTypeModelServer) RemoveOneById(context.Context, *GameTypeRemoveOneByIdInput) (*GameTypeRemoveOneByIdOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method RemoveOneById not implemented")
 }
-func (UnimplementedGameTypeModelServer) TotalByWheres(context.Context, *GameTypeTotalByWheresInput) (*GameTypeTotalByWheresOutput, error) {
-	return nil, status.Error(codes.Unimplemented, "method TotalByWheres not implemented")
+func (UnimplementedGameTypeModelServer) TotalByFilters(context.Context, *GameTypeTotalByFiltersInput) (*GameTypeTotalByFiltersOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method TotalByFilters not implemented")
 }
 func (UnimplementedGameTypeModelServer) mustEmbedUnimplementedGameTypeModelServer() {}
 func (UnimplementedGameTypeModelServer) testEmbeddedByValue()                       {}
@@ -202,20 +202,20 @@ func _GameTypeModel_ShowOneById_Handler(srv interface{}, ctx context.Context, de
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GameTypeModel_ShowOnesByWheresWithOrdersLimit_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GameTypeShowOnesByWheresWithOrdersLimitInput)
+func _GameTypeModel_ShowOnesByFiltersWithSortersPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GameTypeShowOnesByFiltersWithSortersPaginationInput)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GameTypeModelServer).ShowOnesByWheresWithOrdersLimit(ctx, in)
+		return srv.(GameTypeModelServer).ShowOnesByFiltersWithSortersPagination(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GameTypeModel_ShowOnesByWheresWithOrdersLimit_FullMethodName,
+		FullMethod: GameTypeModel_ShowOnesByFiltersWithSortersPagination_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GameTypeModelServer).ShowOnesByWheresWithOrdersLimit(ctx, req.(*GameTypeShowOnesByWheresWithOrdersLimitInput))
+		return srv.(GameTypeModelServer).ShowOnesByFiltersWithSortersPagination(ctx, req.(*GameTypeShowOnesByFiltersWithSortersPaginationInput))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -256,20 +256,20 @@ func _GameTypeModel_RemoveOneById_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GameTypeModel_TotalByWheres_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GameTypeTotalByWheresInput)
+func _GameTypeModel_TotalByFilters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GameTypeTotalByFiltersInput)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(GameTypeModelServer).TotalByWheres(ctx, in)
+		return srv.(GameTypeModelServer).TotalByFilters(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: GameTypeModel_TotalByWheres_FullMethodName,
+		FullMethod: GameTypeModel_TotalByFilters_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GameTypeModelServer).TotalByWheres(ctx, req.(*GameTypeTotalByWheresInput))
+		return srv.(GameTypeModelServer).TotalByFilters(ctx, req.(*GameTypeTotalByFiltersInput))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -290,8 +290,8 @@ var GameTypeModel_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _GameTypeModel_ShowOneById_Handler,
 		},
 		{
-			MethodName: "ShowOnesByWheresWithOrdersLimit",
-			Handler:    _GameTypeModel_ShowOnesByWheresWithOrdersLimit_Handler,
+			MethodName: "ShowOnesByFiltersWithSortersPagination",
+			Handler:    _GameTypeModel_ShowOnesByFiltersWithSortersPagination_Handler,
 		},
 		{
 			MethodName: "EditOneById",
@@ -302,8 +302,8 @@ var GameTypeModel_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _GameTypeModel_RemoveOneById_Handler,
 		},
 		{
-			MethodName: "TotalByWheres",
-			Handler:    _GameTypeModel_TotalByWheres_Handler,
+			MethodName: "TotalByFilters",
+			Handler:    _GameTypeModel_TotalByFilters_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

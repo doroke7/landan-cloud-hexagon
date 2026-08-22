@@ -37,9 +37,9 @@ func (oSelf *GameTypeUsecase) ShowOneById(iId uint) (*domain.GameType, error) {
 	return oGameType, oErr
 }
 
-func (oSelf *GameTypeUsecase) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.GameType, error) {
+func (oSelf *GameTypeUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, error) {
 
-	aGameTypes, oErr := oSelf.GameTypeModel.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
+	aGameTypes, oErr := oSelf.GameTypeModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	return aGameTypes, oErr
 }
@@ -66,9 +66,9 @@ func (oSelf *GameTypeUsecase) RemoveOneById(iId uint) (bool, error) {
 	return true, nil
 }
 
-func (oSelf *GameTypeUsecase) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
+func (oSelf *GameTypeUsecase) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
 
-	iTotal, oErr := oSelf.GameTypeModel.TotalByWheres(aWheres)
+	iTotal, oErr := oSelf.GameTypeModel.TotalByFilters(aFilters)
 
 	return iTotal, oErr
 }

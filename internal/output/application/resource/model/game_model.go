@@ -103,51 +103,61 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 	}, nil
 }
 
-func (oSelf *GameModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
 
-	oRequest := &pbResourceModel.GameShowOnesByWheresWithOrdersLimitInput{
-		Limit: &pbResourceModel.GameLimit{
-			Offset: uint64(*oLimit.Offset),
-			Count:  uint64(*oLimit.Count),
-		},
+	oRequest := &pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationInput{}
+
+	if oPagination != nil {
+		oPbPagination := &pbResourceModel.GamePagination{}
+		if oPagination.Size != nil {
+			oPbPagination.Size = uint64(*oPagination.Size)
+		}
+		if oPagination.Page != nil {
+			oPbPagination.Page = uint64(*oPagination.Page)
+		}
+		oRequest.Pagination = oPbPagination
 	}
 
-	for _, oWhere := range aWheres {
-		if oWhere == nil || oWhere.Field == nil || oWhere.Operator == nil {
+	for _, oFilter := range aFilters {
+		if oFilter == nil || oFilter.Field == nil {
 			continue
 		}
 
-		oValue, oErr := structpb.NewValue(oWhere.Value)
+		oValue, oErr := structpb.NewValue(oFilter.Value)
 		if oErr != nil {
 			continue
 		}
 
-		oRequest.Wheres = append(oRequest.Wheres, &pbResourceModel.GameWhere{
-			Field:    *oWhere.Field,
-			Operator: *oWhere.Operator,
-			Value:    oValue,
-		})
+		oPbFilter := &pbResourceModel.GameFilter{
+			Field: *oFilter.Field,
+			Value: oValue,
+		}
+		if oFilter.Operator != nil {
+			oPbFilter.Operator = *oFilter.Operator
+		}
+
+		oRequest.Filters = append(oRequest.Filters, oPbFilter)
 	}
 
-	for _, oOrder := range aOrders {
-		if oOrder == nil || oOrder.Field == nil || oOrder.Value == nil {
+	for _, oSorter := range aSorters {
+		if oSorter == nil || oSorter.Field == nil || oSorter.Order == nil {
 			continue
 		}
 
-		oRequest.Orders = append(oRequest.Orders, &pbResourceModel.GameOrder{
-			Field: *oOrder.Field,
-			Value: *oOrder.Value,
+		oRequest.Sorters = append(oRequest.Sorters, &pbResourceModel.GameSorter{
+			Field: *oSorter.Field,
+			Order: *oSorter.Order,
 		})
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.Game.ShowOnesByWheresWithOrdersLimit(oSelf.Context, oRequest)
+	oResponse, oErr := oSelf.ResourceModelClient.Game.ShowOnesByFiltersWithOrdersPagination(oSelf.Context, oRequest)
 
 	if oErr != nil {
 		return nil, oErr
 	}
 
 	aGames := make([]*domain.Game, 0, len(oResponse.GetGames()))
-	for sKey, oOne := range oResponse.GetGames() {
+	for _, oOne := range oResponse.GetGames() {
 		aGames = append(aGames, &domain.Game{
 			Id:          uint(oOne.GetId()),
 			GameTypeId:  uint(oOne.GetGameTypeId()),
@@ -159,24 +169,41 @@ func (oSelf *GameModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aO
 			DeletedAt:   oOne.GetDeletedAt().AsTime(),
 			GameType:    gameTypeFromPb(oOne.GetGameType()),
 		})
-		_ = sKey
 	}
 
 	return aGames, nil
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
-	oLimit := pkg.PaginationToMysqlLimit(oPagination)
-
-	return oSelf.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
-}
-
 func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
 
-	return oSelf.TotalByWheres(aWheres)
+	oRequest := &pbResourceModel.GameTotalByFiltersInput{}
+
+	for _, oFilter := range aFilters {
+		if oFilter == nil || oFilter.Field == nil {
+			continue
+		}
+
+		oValue, oErr := structpb.NewValue(oFilter.Value)
+		if oErr != nil {
+			continue
+		}
+
+		oPbFilter := &pbResourceModel.GameFilter{
+			Field: *oFilter.Field,
+			Value: oValue,
+		}
+		if oFilter.Operator != nil {
+			oPbFilter.Operator = *oFilter.Operator
+		}
+
+		oRequest.Filters = append(oRequest.Filters, oPbFilter)
+	}
+
+	oResponse, oErr := oSelf.ResourceModelClient.Game.TotalByFilters(oSelf.Context, oRequest)
+
+	iTotal := oResponse.GetTotal()
+
+	return iTotal, oErr
 }
 
 func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) (bool, error) {
@@ -215,30 +242,3 @@ func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
 	return oResponse.GetStatus(), nil
 }
 
-func (oSelf *GameModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
-
-	oRequest := &pbResourceModel.GameTotalByWheresInput{}
-
-	for _, oWhere := range aWheres {
-		if oWhere == nil || oWhere.Field == nil || oWhere.Operator == nil {
-			continue
-		}
-
-		oValue, oErr := structpb.NewValue(oWhere.Value)
-		if oErr != nil {
-			continue
-		}
-
-		oRequest.Wheres = append(oRequest.Wheres, &pbResourceModel.GameWhere{
-			Field:    *oWhere.Field,
-			Operator: *oWhere.Operator,
-			Value:    oValue,
-		})
-	}
-
-	oResponse, oErr := oSelf.ResourceModelClient.Game.TotalByWheres(oSelf.Context, oRequest)
-
-	iTotal := oResponse.GetTotal()
-
-	return iTotal, oErr
-}

@@ -89,45 +89,45 @@ func (oSelf *GameTypeHandler) ShowOneById(oContext context.Context, oReq *pbReso
 	}, nil
 }
 
-func (oSelf *GameTypeHandler) ShowOnesByWheresWithOrdersLimit(oContext context.Context, oReq *pbResourceModel.GameTypeShowOnesByWheresWithOrdersLimitInput) (*pbResourceModel.GameTypeShowOnesByWheresWithOrdersLimitOutput, error) {
+func (oSelf *GameTypeHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.GameTypeShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.GameTypeShowOnesByFiltersWithSortersPaginationOutput, error) {
 
-	aWheres := make([]*pkg.Where, 0, len(oReq.GetWheres()))
-	for _, oOne := range oReq.GetWheres() {
+	aFilters := make([]*pkg.Filter, 0, len(oReq.GetFilters()))
+	for _, oOne := range oReq.GetFilters() {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aWheres = append(aWheres, &pkg.Where{
+		aFilters = append(aFilters, &pkg.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oOne.GetValue().AsInterface(),
 		})
 	}
 
-	iOffset := uint(oReq.GetLimit().GetOffset())
-	iCount := uint(oReq.GetLimit().GetCount())
-	oLimit := &pkg.Limit{
-		Offset: &iOffset,
-		Count:  &iCount,
-	}
-
-	aOrders := make([]*pkg.Order, 0, len(oReq.GetOrders()))
-	for _, oOne := range oReq.GetOrders() {
+	aSorters := make([]*pkg.Sorter, 0, len(oReq.GetSorters()))
+	for _, oOne := range oReq.GetSorters() {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
-		sValue := oOne.GetValue()
-		aOrders = append(aOrders, &pkg.Order{
+		sOrder := oOne.GetOrder()
+		aSorters = append(aSorters, &pkg.Sorter{
 			Field: &sField,
-			Value: &sValue,
+			Order: &sOrder,
 		})
 	}
 
-	aGameTypes, oErr := oSelf.GameTypeUsecase.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
+	iSize := uint(oReq.GetPagination().GetSize())
+	iPage := uint(oReq.GetPagination().GetPage())
+	oPagination := &pkg.Pagination{
+		Size: &iSize,
+		Page: &iPage,
+	}
+
+	aGameTypes, oErr := oSelf.GameTypeUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		return nil, oErr
@@ -138,7 +138,7 @@ func (oSelf *GameTypeHandler) ShowOnesByWheresWithOrdersLimit(oContext context.C
 		aPbGameTypes = append(aPbGameTypes, gameTypeToPb(oGameType))
 	}
 
-	return &pbResourceModel.GameTypeShowOnesByWheresWithOrdersLimitOutput{
+	return &pbResourceModel.GameTypeShowOnesByFiltersWithSortersPaginationOutput{
 		GameTypes: aPbGameTypes,
 	}, nil
 }
@@ -172,30 +172,30 @@ func (oSelf *GameTypeHandler) RemoveOneById(oContext context.Context, oReq *pbRe
 	}, nil
 }
 
-func (oSelf *GameTypeHandler) TotalByWheres(oContext context.Context, oReq *pbResourceModel.GameTypeTotalByWheresInput) (*pbResourceModel.GameTypeTotalByWheresOutput, error) {
+func (oSelf *GameTypeHandler) TotalByFilters(oContext context.Context, oReq *pbResourceModel.GameTypeTotalByFiltersInput) (*pbResourceModel.GameTypeTotalByFiltersOutput, error) {
 
-	aWheres := make([]*pkg.Where, 0, len(oReq.GetWheres()))
-	for _, oOne := range oReq.GetWheres() {
+	aFilters := make([]*pkg.Filter, 0, len(oReq.GetFilters()))
+	for _, oOne := range oReq.GetFilters() {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aWheres = append(aWheres, &pkg.Where{
+		aFilters = append(aFilters, &pkg.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oOne.GetValue().AsInterface(),
 		})
 	}
 
-	iTotal, oErr := oSelf.GameTypeUsecase.TotalByWheres(aWheres)
+	iTotal, oErr := oSelf.GameTypeUsecase.TotalByFilters(aFilters)
 
 	if oErr != nil {
 		return nil, oErr
 	}
 
-	return &pbResourceModel.GameTypeTotalByWheresOutput{
+	return &pbResourceModel.GameTypeTotalByFiltersOutput{
 		Total: iTotal,
 	}, nil
 }

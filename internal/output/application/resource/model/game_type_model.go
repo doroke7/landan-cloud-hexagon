@@ -60,44 +60,54 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 	}, nil
 }
 
-func (oSelf *GameTypeModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.GameType, error) {
+func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, error) {
 
-	oRequest := &pbResourceModel.GameTypeShowOnesByWheresWithOrdersLimitInput{
-		Limit: &pbResourceModel.GameTypeLimit{
-			Offset: uint64(*oLimit.Offset),
-			Count:  uint64(*oLimit.Count),
-		},
+	oRequest := &pbResourceModel.GameTypeShowOnesByFiltersWithSortersPaginationInput{}
+
+	if oPagination != nil {
+		oPbPagination := &pbResourceModel.GameTypePagination{}
+		if oPagination.Size != nil {
+			oPbPagination.Size = uint64(*oPagination.Size)
+		}
+		if oPagination.Page != nil {
+			oPbPagination.Page = uint64(*oPagination.Page)
+		}
+		oRequest.Pagination = oPbPagination
 	}
 
-	for _, oWhere := range aWheres {
-		if oWhere == nil || oWhere.Field == nil || oWhere.Operator == nil {
+	for _, oFilter := range aFilters {
+		if oFilter == nil || oFilter.Field == nil {
 			continue
 		}
 
-		oValue, oErr := structpb.NewValue(oWhere.Value)
+		oValue, oErr := structpb.NewValue(oFilter.Value)
 		if oErr != nil {
 			continue
 		}
 
-		oRequest.Wheres = append(oRequest.Wheres, &pbResourceModel.GameTypeWhere{
-			Field:    *oWhere.Field,
-			Operator: *oWhere.Operator,
-			Value:    oValue,
-		})
+		oPbFilter := &pbResourceModel.GameTypeFilter{
+			Field: *oFilter.Field,
+			Value: oValue,
+		}
+		if oFilter.Operator != nil {
+			oPbFilter.Operator = *oFilter.Operator
+		}
+
+		oRequest.Filters = append(oRequest.Filters, oPbFilter)
 	}
 
-	for _, oOrder := range aOrders {
-		if oOrder == nil || oOrder.Field == nil || oOrder.Value == nil {
+	for _, oSorter := range aSorters {
+		if oSorter == nil || oSorter.Field == nil || oSorter.Order == nil {
 			continue
 		}
 
-		oRequest.Orders = append(oRequest.Orders, &pbResourceModel.GameTypeOrder{
-			Field: *oOrder.Field,
-			Value: *oOrder.Value,
+		oRequest.Sorters = append(oRequest.Sorters, &pbResourceModel.GameTypeSorter{
+			Field: *oSorter.Field,
+			Order: *oSorter.Order,
 		})
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.GameType.ShowOnesByWheresWithOrdersLimit(oSelf.Context, oRequest)
+	oResponse, oErr := oSelf.ResourceModelClient.GameType.ShowOnesByFiltersWithSortersPagination(oSelf.Context, oRequest)
 
 	if oErr != nil {
 		return nil, oErr
@@ -118,18 +128,36 @@ func (oSelf *GameTypeModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where
 	return aGameTypes, nil
 }
 
-func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
-	oLimit := pkg.PaginationToMysqlLimit(oPagination)
-
-	return oSelf.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
-}
-
 func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
 
-	return oSelf.TotalByWheres(aWheres)
+	oRequest := &pbResourceModel.GameTypeTotalByFiltersInput{}
+
+	for _, oFilter := range aFilters {
+		if oFilter == nil || oFilter.Field == nil {
+			continue
+		}
+
+		oValue, oErr := structpb.NewValue(oFilter.Value)
+		if oErr != nil {
+			continue
+		}
+
+		oPbFilter := &pbResourceModel.GameTypeFilter{
+			Field: *oFilter.Field,
+			Value: oValue,
+		}
+		if oFilter.Operator != nil {
+			oPbFilter.Operator = *oFilter.Operator
+		}
+
+		oRequest.Filters = append(oRequest.Filters, oPbFilter)
+	}
+
+	oResponse, oErr := oSelf.ResourceModelClient.GameType.TotalByFilters(oSelf.Context, oRequest)
+
+	iTotal := oResponse.GetTotal()
+
+	return iTotal, oErr
 }
 
 func (oSelf *GameTypeModel) EditOneById(oGameType *domain.GameTypeValue, iId uint) (bool, error) {
@@ -162,30 +190,3 @@ func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
 	return oResponse.GetStatus(), nil
 }
 
-func (oSelf *GameTypeModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
-
-	oRequest := &pbResourceModel.GameTypeTotalByWheresInput{}
-
-	for _, oWhere := range aWheres {
-		if oWhere == nil || oWhere.Field == nil || oWhere.Operator == nil {
-			continue
-		}
-
-		oValue, oErr := structpb.NewValue(oWhere.Value)
-		if oErr != nil {
-			continue
-		}
-
-		oRequest.Wheres = append(oRequest.Wheres, &pbResourceModel.GameTypeWhere{
-			Field:    *oWhere.Field,
-			Operator: *oWhere.Operator,
-			Value:    oValue,
-		})
-	}
-
-	oResponse, oErr := oSelf.ResourceModelClient.GameType.TotalByWheres(oSelf.Context, oRequest)
-
-	iTotal := oResponse.GetTotal()
-
-	return iTotal, oErr
-}
