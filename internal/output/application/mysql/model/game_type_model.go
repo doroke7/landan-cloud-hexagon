@@ -41,11 +41,12 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 
 func (oSelf *GameTypeModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.GameType, error) {
 	var aGameTypeRows []*domain.GameTypeRow
+	var oGameTypeRow domain.GameTypeRow
 
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
-		Model(&domain.GameTypeRow{}).
+		Model(&oGameTypeRow).
 		Where("deleted_at = ?", "2038-01-19 03:14:07")
 
 	for _, oWhere := range aWheres {
@@ -81,11 +82,12 @@ func (oSelf *GameTypeModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where
 }
 
 func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) (bool, error) {
+	var oGameTypeRow domain.GameTypeRow
 
 	oGameType, _ := pkg.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.GameTypeRow{}).
+		Model(&oGameTypeRow).
 		Create(oGameType)
 
 	if oResult.Error != nil {
@@ -100,10 +102,12 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) (bool, error) {
 }
 
 func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) (bool, error) {
+	var oGameTypeRow domain.GameTypeRow
+
 	oGameType, _ := pkg.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.GameTypeRow{}).
+		Model(&oGameTypeRow).
 		Where("id = ?", iId).
 		UpdateColumns(oGameType)
 
@@ -119,9 +123,10 @@ func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) 
 }
 
 func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
+	var oGameTypeRow domain.GameTypeRow
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.GameTypeRow{}).
+		Model(&oGameTypeRow).
 		Where("id = ?", iId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		UpdateColumn("deleted_at", time.Now())
@@ -139,11 +144,12 @@ func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
 
 func (oSelf *GameTypeModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
 	var iTotal int64
+	var oGameTypeRow domain.GameTypeRow
 
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
-		Model(&domain.GameTypeRow{})
+		Model(&oGameTypeRow)
 
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)

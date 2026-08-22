@@ -126,6 +126,7 @@ func (oSelf *AdminUserModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error)
 }
 
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
+	var oAdminUserRow domain.AdminUserRow
 
 	oColumns, oErr := pkg.StructToMap(oAdminUser)
 	if oErr != nil {
@@ -133,7 +134,7 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, er
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.AdminUserRow{}).
+		Model(&oAdminUserRow).
 		Create(oColumns)
 
 	if oResult.Error != nil {
