@@ -92,25 +92,6 @@ func (oSelf *AbstractMongodb) FiltersToFilter(aFilters []*pkg.Filter) bson.M {
 	return oFilter
 }
 
-func (oSelf *AbstractMongodb) SortersToSort(aSorters []*pkg.Sorter) bson.D {
-	oSort := bson.D{}
-
-	for _, oSorter := range aSorters {
-		if oSorter == nil || oSorter.Field == nil {
-			continue
-		}
-
-		iDirection := 1
-		if oSorter.Order != nil && strings.EqualFold(*oSorter.Order, "desc") {
-			iDirection = -1
-		}
-
-		oSort = append(oSort, bson.E{Key: *oSorter.Field, Value: iDirection})
-	}
-
-	return oSort
-}
-
 func (oSelf *AbstractMongodb) SortersToFindOptions(aSorters []*pkg.Sorter) *options.FindOptionsBuilder {
 	oSort := bson.D{}
 	oFindOptions := options.Find()
@@ -128,7 +109,7 @@ func (oSelf *AbstractMongodb) SortersToFindOptions(aSorters []*pkg.Sorter) *opti
 		oSort = append(oSort, bson.E{Key: *oSorter.Field, Value: iDirection})
 	}
 
-	if oSort := oSelf.SortersToSort(aSorters); len(oSort) > 0 {
+	if len(oSort) > 0 {
 		oFindOptions.SetSort(oSort)
 	}
 
