@@ -1,8 +1,6 @@
 package controller_admin_authentication
 
 import (
-	"time"
-
 	"github.com/gin-gonic/gin"
 
 	bootstrap "example/bootstrap"
@@ -29,7 +27,7 @@ func NewAuthenticatorHandler(oAbstractHandler *inputApplicationHttp.AbstractHand
 func (oSelf *AuthenticatorHandler) SignIn(oContext *gin.Context) {
 
 	// 模擬 遠程長時間 ，方便前端做效果
-	time.Sleep(2 * time.Second)
+	// time.Sleep(2 * time.Second)
 
 	oRequest := &pkg.Request{Context: oContext}
 
@@ -68,7 +66,7 @@ func (oSelf *AuthenticatorHandler) SignIn(oContext *gin.Context) {
 func (oSelf *AuthenticatorHandler) Refresh(oContext *gin.Context) {
 
 	// 模擬 遠程長時間 ，方便前端做效果
-	time.Sleep(2 * time.Second)
+	// time.Sleep(2 * time.Second)
 
 	sJwt := oContext.GetHeader("Authorization")
 

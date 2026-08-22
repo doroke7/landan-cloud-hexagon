@@ -2,7 +2,8 @@ protocol: "mongodb"
 host: "127.0.0.1"
 port: "27017"
 name: "resource"
-user: "backend"
-password: "mongo_pass_backend"
+user: "root"
+password: "mongo_pass_cli"
+auth_source: "admin"
 max_pool_size: 50
 min_pool_size: 10
