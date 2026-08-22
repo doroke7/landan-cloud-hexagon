@@ -204,7 +204,9 @@ func (oSelf *AbstractElasticsearch) Search(sIndex string, aWheres []map[string]a
 		return nil, oErr
 	}
 
-	return oSelf.SearchWithOptions(sIndex, aOptions)
+	oResult, oErr := oSelf.SearchWithOptions(sIndex, aOptions)
+
+	return oResult, oErr
 }
 
 func (oSelf *AbstractElasticsearch) SearchWithOptions(sIndex string, aOptions []func(*esapi.SearchRequest)) (*ElasticsearchSearchResult, error) {

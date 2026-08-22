@@ -65,7 +65,11 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.
 }
 
 func (oSelf *TableModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	return oSelf.Count(oSelf.Index, oSelf.FiltersToWheres(aFilters))
+	aWheres := oSelf.FiltersToWheres(aFilters)
+
+	iTotal, oErr := oSelf.Count(oSelf.Index, aWheres)
+
+	return iTotal, oErr
 }
 
 func (oSelf *TableModel) AddOne(oValue *domain.TableValue) (bool, error) {
@@ -121,9 +125,18 @@ func (oSelf *TableModel) EditOneById(oValue *domain.TableValue, iId uint) (bool,
 	}
 	oColumns["updated_at"] = time.Now()
 
-	return oSelf.UpdateOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oColumns)
+	sId := strconv.FormatUint(uint64(iId), 10)
+
+	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oColumns)
+
+	return bOk, oErr
 }
 
 func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
-	return oSelf.UpdateOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), map[string]any{"deleted_at": time.Now()})
+	sId := strconv.FormatUint(uint64(iId), 10)
+	oPartial := map[string]any{"deleted_at": time.Now()}
+
+	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oPartial)
+
+	return bOk, oErr
 }

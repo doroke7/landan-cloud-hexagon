@@ -69,7 +69,11 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Fi
 }
 
 func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	return oSelf.Count(oSelf.Index, oSelf.FiltersToWheres(aFilters))
+	aWheres := oSelf.FiltersToWheres(aFilters)
+
+	iTotal, oErr := oSelf.Count(oSelf.Index, aWheres)
+
+	return iTotal, oErr
 }
 
 func (oSelf *GameModel) AddOne(oValue *domain.GameValue) (bool, error) {
@@ -113,9 +117,18 @@ func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) (bool, e
 	}
 	oColumns["updated_at"] = time.Now()
 
-	return oSelf.UpdateOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oColumns)
+	sId := strconv.FormatUint(uint64(iId), 10)
+
+	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oColumns)
+
+	return bOk, oErr
 }
 
 func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
-	return oSelf.UpdateOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), map[string]any{"deleted_at": time.Now()})
+	sId := strconv.FormatUint(uint64(iId), 10)
+	oPartial := map[string]any{"deleted_at": time.Now()}
+
+	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oPartial)
+
+	return bOk, oErr
 }

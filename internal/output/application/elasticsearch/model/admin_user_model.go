@@ -87,7 +87,11 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 }
 
 func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	return oSelf.Count(oSelf.Index, oSelf.FiltersToWheres(aFilters))
+	aWheres := oSelf.FiltersToWheres(aFilters)
+
+	iTotal, oErr := oSelf.Count(oSelf.Index, aWheres)
+
+	return iTotal, oErr
 }
 
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
