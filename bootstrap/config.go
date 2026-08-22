@@ -178,6 +178,21 @@ type Config struct {
 		MAX_POOL_SIZE uint64 `mapstructure:"max_pool_size"`
 		MIN_POOL_SIZE uint64 `mapstructure:"min_pool_size"`
 	} `mapstructure:"mongodb"`
+	POSTGRESQL struct {
+		HOST                 string `mapstructure:"host"`
+		PORT                 string `mapstructure:"port"`
+		USER                 string `mapstructure:"user"`
+		PASSWORD             string `mapstructure:"password"`
+		NAME                 string `mapstructure:"name"`
+		SSLMODE              string `mapstructure:"sslmode"`
+		MAX_IDLE_CONNECTIONS int    `mapstructure:"max_idle_connections"`
+		TIMEOUT              int    `mapstructure:"timeout"`
+	} `mapstructure:"postgresql"`
+	SQLITE struct {
+		PATH                 string `mapstructure:"path"`
+		MAX_IDLE_CONNECTIONS int    `mapstructure:"max_idle_connections"`
+		TIMEOUT              int    `mapstructure:"timeout"`
+	} `mapstructure:"sqlite"`
 	REDIS struct {
 		HOST     string   `mapstructure:"host"`
 		HOSTS    []string `mapstructure:"hosts"`

@@ -1,0 +1,3 @@
+path: "./runtime/sqlite/resource.db"
+max_idle_connections: 12
+timeout: 10000

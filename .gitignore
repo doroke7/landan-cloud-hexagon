@@ -16,3 +16,6 @@ runtime/log/*
 !runtime/log/*/
 runtime/log/*/*
 !runtime/log/*/gitforkeep
+
+!runtime/sqlite/
+!runtime/sqlite/gitforkeep
