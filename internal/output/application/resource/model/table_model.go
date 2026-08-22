@@ -3,12 +3,10 @@ package resource
 import (
 	"encoding/json"
 
-	"google.golang.org/protobuf/types/known/structpb"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkg "example/pkg"
 )
@@ -111,49 +109,10 @@ func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
 
 func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, error) {
 
-	oRequest := &pbResourceModel.TableShowOnesByFiltersWithSortersPaginationInput{}
-
-	if oPagination != nil {
-		oPbPagination := &pbResource.Pagination{}
-		if oPagination.Size != nil {
-			oPbPagination.Size = uint64(*oPagination.Size)
-		}
-		if oPagination.Page != nil {
-			oPbPagination.Page = uint64(*oPagination.Page)
-		}
-		oRequest.Pagination = oPbPagination
-	}
-
-	for _, oFilter := range aFilters {
-		if oFilter == nil || oFilter.Field == nil {
-			continue
-		}
-
-		oValue, oErr := structpb.NewValue(oFilter.Value)
-		if oErr != nil {
-			continue
-		}
-
-		oPbFilter := &pbResource.Filter{
-			Field: *oFilter.Field,
-			Value: oValue,
-		}
-		if oFilter.Operator != nil {
-			oPbFilter.Operator = *oFilter.Operator
-		}
-
-		oRequest.Filters = append(oRequest.Filters, oPbFilter)
-	}
-
-	for _, oSorter := range aSorters {
-		if oSorter == nil || oSorter.Field == nil || oSorter.Order == nil {
-			continue
-		}
-
-		oRequest.Sorters = append(oRequest.Sorters, &pbResource.Sorter{
-			Field: *oSorter.Field,
-			Order: *oSorter.Order,
-		})
+	oRequest := &pbResourceModel.TableShowOnesByFiltersWithSortersPaginationInput{
+		Filters:    oSelf.ToFilters(aFilters),
+		Sorters:    oSelf.ToSorters(aSorters),
+		Pagination: oSelf.ToPagination(oPagination),
 	}
 
 	oResponse, oErr := oSelf.ResourceModelClient.Table.ShowOnesByFiltersWithSortersPagination(oSelf.Context, oRequest)
@@ -186,27 +145,8 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.
 
 func (oSelf *TableModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
 
-	oRequest := &pbResourceModel.TableTotalByFiltersInput{}
-
-	for _, oFilter := range aFilters {
-		if oFilter == nil || oFilter.Field == nil {
-			continue
-		}
-
-		oValue, oErr := structpb.NewValue(oFilter.Value)
-		if oErr != nil {
-			continue
-		}
-
-		oPbFilter := &pbResource.Filter{
-			Field: *oFilter.Field,
-			Value: oValue,
-		}
-		if oFilter.Operator != nil {
-			oPbFilter.Operator = *oFilter.Operator
-		}
-
-		oRequest.Filters = append(oRequest.Filters, oPbFilter)
+	oRequest := &pbResourceModel.TableTotalByFiltersInput{
+		Filters: oSelf.ToFilters(aFilters),
 	}
 
 	oResponse, oErr := oSelf.ResourceModelClient.Table.TotalByFilters(oSelf.Context, oRequest)
