@@ -39,12 +39,15 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 }
 
 func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, error) {
-	aWheres := oSelf.FiltersToWheres(aFilters)
-	aWheres = append(aWheres, map[string]any{"term": map[string]any{"deleted_at": oDeletedAtZero}})
-	aOrders := oSelf.SortersToOrders(aSorters)
-	oLimit := oSelf.PaginationToLimit(oPagination)
+	sDeletedAtField := "deleted_at"
+	aFilters = append(aFilters, &pkg.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
 
-	oResult, oErr := oSelf.Search(oSelf.Index, aWheres, aOrders, oLimit)
+	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, aSorters, oPagination)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oResult, oErr := oSelf.SearchWithOptions(oSelf.Index, aOptions)
 	if oErr != nil {
 		return nil, oErr
 	}

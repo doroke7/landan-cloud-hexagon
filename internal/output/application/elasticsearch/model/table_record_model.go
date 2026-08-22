@@ -39,12 +39,15 @@ func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error
 }
 
 func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.TableRecord, error) {
-	aWheres := oSelf.FiltersToWheres(aFilters)
-	aWheres = append(aWheres, map[string]any{"term": map[string]any{"deleted_at": oDeletedAtZero}})
-	aOrders := oSelf.SortersToOrders(aSorters)
-	oLimit := oSelf.PaginationToLimit(oPagination)
+	sDeletedAtField := "deleted_at"
+	aFilters = append(aFilters, &pkg.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
 
-	oResult, oErr := oSelf.Search(oSelf.Index, aWheres, aOrders, oLimit)
+	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, aSorters, oPagination)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oResult, oErr := oSelf.SearchWithOptions(oSelf.Index, aOptions)
 	if oErr != nil {
 		return nil, oErr
 	}
