@@ -21,6 +21,7 @@ import (
 
 	helper "example/internal/helper"
 
+	outputApplicationCache "example/internal/output/application/cache"
 	outputApplicationCacheModel "example/internal/output/application/cache/model"
 
 	outputApplicationMemoryModel "example/internal/output/application/memory/model"
@@ -776,7 +777,7 @@ func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
 		helper.NewCacheHelper,
 
 		// output
-		outputApplicationCacheModel.NewAbstractRepository,
+		outputApplicationCache.NewAbstractCache,
 		outputApplicationCacheModel.NewLotteryModel,
 
 		// usecase

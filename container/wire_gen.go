@@ -44,6 +44,7 @@ import (
 	"example/internal/interceptor/resource/model"
 	"example/internal/middleware/http/admin"
 	middleware_admin2 "example/internal/middleware/websocket/admin"
+	"example/internal/output/application/cache"
 	model2 "example/internal/output/application/cache/model"
 	"example/internal/output/application/memory/model"
 	mysql2 "example/internal/output/application/mysql/logic"
@@ -538,8 +539,8 @@ func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
 		return nil, err
 	}
 	cacheHelper := helper.NewCacheHelper(abstractHelper, universalClient)
-	abstractRepository := model2.NewAbstractRepository(ctx, cacheHelper)
-	lotteryModel := model2.NewLotteryModel(abstractRepository)
+	abstractCache := cache.NewAbstractCache(ctx, cacheHelper)
+	lotteryModel := model2.NewLotteryModel(abstractCache)
 	announcementLotteryUsecase := source.NewAnnouncementLotteryUsecase(abstractUsecase, lotteryModel)
 	abstractHandler := daemon.NewAbstractHandler(aesHelper)
 	announcementLotteryHandler := source2.NewAnnouncementLotteryHandler(announcementLotteryUsecase, abstractHandler)

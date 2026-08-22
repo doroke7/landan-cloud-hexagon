@@ -1,4 +1,4 @@
-package model
+package cache
 
 import (
 	"context"
@@ -11,13 +11,13 @@ import (
 //
 // Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop 的做法一致：
 // 程序收到中斷/終止訊號時，掛在這個 repository 底下的操作能跟著一起停止。
-type AbstractRepository struct {
+type AbstractCache struct {
 	CacheHelper *helper.CacheHelper
 	Context     context.Context
 }
 
-func NewAbstractRepository(oContext context.Context, oCacheHelper *helper.CacheHelper) *AbstractRepository {
-	return &AbstractRepository{
+func NewAbstractCache(oContext context.Context, oCacheHelper *helper.CacheHelper) *AbstractCache {
+	return &AbstractCache{
 		CacheHelper: oCacheHelper,
 		Context:     oContext,
 	}
