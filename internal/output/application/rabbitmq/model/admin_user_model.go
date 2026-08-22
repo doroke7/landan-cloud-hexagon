@@ -33,7 +33,7 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
 
 	return oSelf.Channel.Publish(
 		"",
-		"AdminUser.AddOne",
+		"/Queue/AdminUser.AddOne",
 		false,
 		false,
 		amqp.Publishing{

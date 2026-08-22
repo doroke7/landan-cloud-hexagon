@@ -27,7 +27,7 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
 	}
 
 	_, _, err = oSelf.Producer.SendMessage(&sarama.ProducerMessage{
-		Topic: "AdminUser.AddOne",
+		Topic: "/Queue/AdminUser.AddOne",
 		Value: sarama.ByteEncoder(aByteBody),
 	})
 

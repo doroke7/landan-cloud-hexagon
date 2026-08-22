@@ -17,7 +17,7 @@ type AdminUserModel struct {
 
 func NewAdminUserModel(oAbstractPulsar *outputApplicationPulsar.AbstractPulsar) (*AdminUserModel, error) {
 	oProducer, err := oAbstractPulsar.Client.CreateProducer(pulsar.ProducerOptions{
-		Topic: "AdminUser.AddOne",
+		Topic: "/Queue/AdminUser.AddOne",
 	})
 	if err != nil {
 		return nil, err

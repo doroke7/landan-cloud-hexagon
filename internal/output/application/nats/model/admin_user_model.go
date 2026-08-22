@@ -24,7 +24,7 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
 		return err
 	}
 
-	return oSelf.Conn.Publish("AdminUser.AddOne", aByteBody)
+	return oSelf.Conn.Publish("/Queue/AdminUser.AddOne", aByteBody)
 }
 
 func (oSelf *AdminUserModel) ShowOneById(id uint) (*domain.AdminUser, error) {

@@ -27,7 +27,7 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
 	}
 
 	return oSelf.Socket.SendMulti(zmq4.NewMsgFrom(
-		[]byte("AdminUser.AddOne"),
+		[]byte("/Queue/AdminUser.AddOne"),
 		aByteBody,
 	))
 }
