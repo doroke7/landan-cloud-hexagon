@@ -23,5 +23,9 @@ func NewRedpanda() (sarama.Client, error) {
 		oConfig.Net.SASL.Password = CONFIG.REDPANDA.PASS
 	}
 
+	// sarama.NewSyncProducerFromClient 要求 Producer.Return.Successes 是 true，
+	// 這裡先開起來，讓 output adapter 可以直接拿這個 client 建 SyncProducer。
+	oConfig.Producer.Return.Successes = true
+
 	return sarama.NewClient(CONFIG.REDPANDA.BROKERS, oConfig)
 }
