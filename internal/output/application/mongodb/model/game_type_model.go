@@ -7,10 +7,11 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
+	pkg "example/pkg"
+
 	domain "example/internal/domain"
 	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pkg "example/pkg"
 )
 
 type GameTypeModel struct {
@@ -67,11 +68,7 @@ func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*p
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
-	oFindOptions := options.Find()
-
-	if oSort := oSelf.SortersToSort(aSorters); len(oSort) > 0 {
-		oFindOptions.SetSort(oSort)
-	}
+	oFindOptions := oSelf.SortersToFindOptions(aSorters)
 
 	iSize := uint(10)
 	iPage := uint(1)
