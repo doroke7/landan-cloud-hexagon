@@ -21,12 +21,28 @@ type AdminUserModel struct {
 	Counters   *mongo.Collection
 }
 
-func NewAdminUserModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyModel.AdminUserModel {
+// 索引跟 script/mongodb/resource.js 建的一致：name 唯一、deleted_at 供軟刪除過濾用。
+func NewAdminUserModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.AdminUserModel, error) {
+	oCollection := oAbstractMongodb.Database.Collection("admin_users")
+
+	if _, oErr := oCollection.Indexes().CreateMany(oAbstractMongodb.Context, []mongo.IndexModel{
+		{
+			Keys:    bson.D{{Key: "name", Value: 1}},
+			Options: options.Index().SetUnique(true).SetName("admin_users-name"),
+		},
+		{
+			Keys:    bson.D{{Key: "deleted_at", Value: 1}},
+			Options: options.Index().SetName("admin_users-da"),
+		},
+	}); oErr != nil {
+		return nil, oErr
+	}
+
 	return &AdminUserModel{
 		AbstractMongodb: oAbstractMongodb,
-		Collection:      oAbstractMongodb.Database.Collection("admin_users"),
+		Collection:      oCollection,
 		Counters:        oAbstractMongodb.Database.Collection("counters"),
-	}
+	}, nil
 }
 
 /*

@@ -43,6 +43,36 @@ func TableRecordLogRowToTableRecordLog(oRow *TableRecordLogRow) *TableRecordLog 
 	}
 }
 
+// TableRecordLogDocument 是 table_record_log 這個 collection 在 Mongo 裡的儲存結構。
+// Mongo 沒有像 SQL 那樣的自增主鍵，_id 改用 counters collection 累加出來的數字，
+// 讓 TableRecordLog.Id 維持跟其他 adapter 一樣是 uint。
+// Text/Image 故意存成字串而不是拆成巢狀 bson 文件，理由跟 TableDocument.Result 一樣。
+type TableRecordLogDocument struct {
+	Id            uint      `bson:"_id"`
+	GameId        uint      `bson:"game_id"`
+	TableRecordId uint      `bson:"table_record_id"`
+	State         uint8     `bson:"state"`
+	Text          string    `bson:"text"`
+	Image         string    `bson:"image"`
+	CreatedAt     time.Time `bson:"created_at"`
+	UpdatedAt     time.Time `bson:"updated_at"`
+	DeletedAt     time.Time `bson:"deleted_at"`
+}
+
+func TableRecordLogDocumentToTableRecordLog(oDoc *TableRecordLogDocument) *TableRecordLog {
+	return &TableRecordLog{
+		Id:            oDoc.Id,
+		GameId:        oDoc.GameId,
+		TableRecordId: oDoc.TableRecordId,
+		State:         oDoc.State,
+		Text:          json.RawMessage(oDoc.Text),
+		Image:         json.RawMessage(oDoc.Image),
+		CreatedAt:     oDoc.CreatedAt,
+		UpdatedAt:     oDoc.UpdatedAt,
+		DeletedAt:     oDoc.DeletedAt,
+	}
+}
+
 type TableRecordLogValue struct {
 	GameId        *uint            `json:"game_id,omitempty"`
 	TableRecordId *uint            `json:"table_record_id,omitempty"`

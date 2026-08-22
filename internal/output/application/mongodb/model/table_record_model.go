@@ -19,12 +19,33 @@ type TableRecordModel struct {
 	Counters   *mongo.Collection
 }
 
-func NewTableRecordModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyModel.TableRecordModel {
+// 索引跟 script/mongodb/resource.js 建的一致：no 唯一、table_id+game_id+no+deleted_at 供查詢用。
+func NewTableRecordModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.TableRecordModel, error) {
+	oCollection := oAbstractMongodb.Database.Collection("table_records")
+
+	if _, oErr := oCollection.Indexes().CreateMany(oAbstractMongodb.Context, []mongo.IndexModel{
+		{
+			Keys:    bson.D{{Key: "no", Value: 1}},
+			Options: options.Index().SetUnique(true).SetName("table_records-n"),
+		},
+		{
+			Keys: bson.D{
+				{Key: "table_id", Value: 1},
+				{Key: "game_id", Value: 1},
+				{Key: "no", Value: 1},
+				{Key: "deleted_at", Value: 1},
+			},
+			Options: options.Index().SetName("table_records-ti-gi-n-da"),
+		},
+	}); oErr != nil {
+		return nil, oErr
+	}
+
 	return &TableRecordModel{
 		AbstractMongodb: oAbstractMongodb,
-		Collection:      oAbstractMongodb.Database.Collection("table_records"),
+		Collection:      oCollection,
 		Counters:        oAbstractMongodb.Database.Collection("counters"),
-	}
+	}, nil
 }
 
 func (oSelf *TableRecordModel) nextId() (uint, error) {

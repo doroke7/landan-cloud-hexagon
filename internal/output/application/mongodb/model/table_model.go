@@ -19,12 +19,32 @@ type TableModel struct {
 	Counters   *mongo.Collection
 }
 
-func NewTableModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyModel.TableModel {
+// 索引跟 script/mongodb/resource.js 建的一致：key 唯一、deleted_at、no+deleted_at 供查詢用。
+func NewTableModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.TableModel, error) {
+	oCollection := oAbstractMongodb.Database.Collection("tables")
+
+	if _, oErr := oCollection.Indexes().CreateMany(oAbstractMongodb.Context, []mongo.IndexModel{
+		{
+			Keys:    bson.D{{Key: "key", Value: 1}},
+			Options: options.Index().SetUnique(true).SetName("tables-key"),
+		},
+		{
+			Keys:    bson.D{{Key: "deleted_at", Value: 1}},
+			Options: options.Index().SetName("tables-da"),
+		},
+		{
+			Keys:    bson.D{{Key: "no", Value: 1}, {Key: "deleted_at", Value: 1}},
+			Options: options.Index().SetName("tables-n-da"),
+		},
+	}); oErr != nil {
+		return nil, oErr
+	}
+
 	return &TableModel{
 		AbstractMongodb: oAbstractMongodb,
-		Collection:      oAbstractMongodb.Database.Collection("tables"),
+		Collection:      oCollection,
 		Counters:        oAbstractMongodb.Database.Collection("counters"),
-	}
+	}, nil
 }
 
 func (oSelf *TableModel) nextId() (uint, error) {

@@ -23,12 +23,37 @@ type GameModel struct {
 	Counters   *mongo.Collection
 }
 
-func NewGameModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyModel.GameModel {
+// 索引跟 script/mongodb/resource.js 建的一致：key 唯一、
+// name+deleted_at、deleted_at、game_type_id+deleted_at 供查詢用。
+func NewGameModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.GameModel, error) {
+	oCollection := oAbstractMongodb.Database.Collection("games")
+
+	if _, oErr := oCollection.Indexes().CreateMany(oAbstractMongodb.Context, []mongo.IndexModel{
+		{
+			Keys:    bson.D{{Key: "key", Value: 1}},
+			Options: options.Index().SetUnique(true).SetName("games-k"),
+		},
+		{
+			Keys:    bson.D{{Key: "name", Value: 1}, {Key: "deleted_at", Value: 1}},
+			Options: options.Index().SetName("games-n-da"),
+		},
+		{
+			Keys:    bson.D{{Key: "deleted_at", Value: 1}},
+			Options: options.Index().SetName("games-da"),
+		},
+		{
+			Keys:    bson.D{{Key: "game_type_id", Value: 1}, {Key: "deleted_at", Value: 1}},
+			Options: options.Index().SetName("games-gti-da"),
+		},
+	}); oErr != nil {
+		return nil, oErr
+	}
+
 	return &GameModel{
 		AbstractMongodb: oAbstractMongodb,
-		Collection:      oAbstractMongodb.Database.Collection("games"),
+		Collection:      oCollection,
 		Counters:        oAbstractMongodb.Database.Collection("counters"),
-	}
+	}, nil
 }
 
 func (oSelf *GameModel) nextId() (uint, error) {
