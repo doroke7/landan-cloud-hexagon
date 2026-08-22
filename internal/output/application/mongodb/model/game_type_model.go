@@ -68,19 +68,7 @@ func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*p
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
-	oFindOptions := oSelf.SortersToFindOptions(aSorters)
-
-	iSize := uint(10)
-	iPage := uint(1)
-	if oPagination != nil {
-		if oPagination.Size != nil && *oPagination.Size != 0 {
-			iSize = *oPagination.Size
-		}
-		if oPagination.Page != nil && *oPagination.Page != 0 {
-			iPage = *oPagination.Page
-		}
-	}
-	oFindOptions.SetLimit(int64(iSize)).SetSkip(int64((iPage - 1) * iSize))
+	oFindOptions := oSelf.SortersPaginationToFindOptions(aSorters, oPagination)
 
 	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, oFilter, oFindOptions)
 	if oErr != nil {
