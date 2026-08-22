@@ -51,6 +51,24 @@ type TableValue struct {
 	// DeletedAt   *time.Time       `json:"deleted_at"`
 }
 
+func TableRowToTable(oRow *TableRow) *Table {
+	return &Table{
+		Id:          oRow.Id,
+		No:          oRow.No,
+		GameId:      oRow.GameId,
+		Key:         oRow.Key,
+		State:       oRow.State,
+		Description: oRow.Description,
+		Result:      oRow.Result,
+		StartedAt:   oRow.StartedAt,
+		EndedAt:     oRow.EndedAt,
+		CreatedAt:   oRow.CreatedAt,
+		UpdatedAt:   oRow.UpdatedAt,
+		DeletedAt:   oRow.DeletedAt,
+		Game:        oRow.Game,
+	}
+}
+
 type TableFilter struct {
 	Id     *uint `json:"id,omitempty"`
 	GameId *uint `json:"game_id,omitempty"`

@@ -18,9 +18,9 @@ func NewAppUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AppUserMo
 }
 
 func (oSelf *AppUserModel) IncreaseBalance(id uint, amount uint) (bool, error) {
-	var oAppUser domain.AppUser
+	var oAppUserRow domain.AppUserRow
 
-	if err := oSelf.DB.WithContext(oSelf.Context).Model(&oAppUser).
+	if err := oSelf.DB.WithContext(oSelf.Context).Model(&oAppUserRow).
 		Where("id = ?", id).
 		UpdateColumn("balance", gorm.Expr("balance + ?", amount)).Error; err != nil {
 		return false, err

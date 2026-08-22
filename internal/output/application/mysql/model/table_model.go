@@ -23,14 +23,14 @@ func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel 
 }
 
 func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
-	var oTable domain.Table
+	var oTableRow domain.TableRow
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
 		Preload("Game").
 		Preload("Game.GameType").
-		Model(&domain.Table{}).
+		Model(&oTableRow).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oTable, iId).Error; oErr != nil {
+		First(&oTableRow, iId).Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
@@ -38,10 +38,11 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 		return nil, oErr
 	}
 
-	return &oTable, nil
+	return domain.TableRowToTable(&oTableRow), nil
 }
 
 func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool, error) {
+	var oTableRow domain.TableRow
 
 	oColumns, oErr := pkg.StructToMap(oTable)
 	if oErr != nil {
@@ -49,7 +50,7 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool,
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.Table{}).
+		Model(&oTableRow).
 		Where("id = ?", iId).
 		UpdateColumns(oColumns)
 
@@ -65,9 +66,10 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool,
 }
 
 func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
+	var oTableRow domain.TableRow
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.Table{}).
+		Model(&oTableRow).
 		Where("id = ?", iId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		UpdateColumn("deleted_at", time.Now())
@@ -84,14 +86,15 @@ func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
 }
 
 func (oSelf *TableModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Table, error) {
-	var aTables []*domain.Table
+	var aTableRows []*domain.TableRow
+	var oTableRow domain.TableRow
 
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
 		Preload("Game").
 		Preload("Game.GameType").
-		Model(&domain.Table{}).
+		Model(&oTableRow).
 		Where("deleted_at = ?", "2038-01-19 03:14:07")
 
 	for _, oWhere := range aWheres {
@@ -114,8 +117,13 @@ func (oSelf *TableModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, a
 	if oErr := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aTables).Error; oErr != nil {
+		Find(&aTableRows).Error; oErr != nil {
 		return nil, oErr
+	}
+
+	aTables := make([]*domain.Table, len(aTableRows))
+	for i, oTableRow := range aTableRows {
+		aTables[i] = domain.TableRowToTable(oTableRow)
 	}
 
 	return aTables, nil
@@ -123,11 +131,12 @@ func (oSelf *TableModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, a
 
 func (oSelf *TableModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
 	var iTotal int64
+	var oTableRow domain.TableRow
 
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
-		Model(&domain.Table{})
+		Model(oTableRow)
 
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
@@ -142,6 +151,7 @@ func (oSelf *TableModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
 }
 
 func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
+	var oTableRow domain.TableRow
 
 	oColumns, oErr := pkg.StructToMap(oTable)
 	if oErr != nil {
@@ -149,7 +159,7 @@ func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.Table{}).
+		Model(&oTableRow).
 		Create(oColumns)
 
 	if oResult.Error != nil {

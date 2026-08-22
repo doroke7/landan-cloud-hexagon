@@ -23,13 +23,13 @@ func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
 }
 
 func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
-	var oGame domain.Game
+	var oGameRow domain.GameRow
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
 		Preload("GameType").
-		Model(&domain.Game{}).
+		Model(&domain.GameRow{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oGame, iId).Error; oErr != nil {
+		First(&oGameRow, iId).Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
@@ -37,17 +37,17 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 		return nil, oErr
 	}
 
-	return &oGame, nil
+	return domain.GameRowToGame(&oGameRow), nil
 }
 
 func (oSelf *GameModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.Game, error) {
-	var aGames []*domain.Game
+	var aGameRows []*domain.GameRow
 
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
 		Preload("GameType").
-		Model(&domain.Game{}).
+		Model(&domain.GameRow{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07")
 
 	for _, oWhere := range aWheres {
@@ -70,8 +70,13 @@ func (oSelf *GameModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aO
 	if oErr := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aGames).Error; oErr != nil {
+		Find(&aGameRows).Error; oErr != nil {
 		return nil, oErr
+	}
+
+	aGames := make([]*domain.Game, len(aGameRows))
+	for i, oGameRow := range aGameRows {
+		aGames[i] = domain.GameRowToGame(oGameRow)
 	}
 
 	return aGames, nil
@@ -82,7 +87,7 @@ func (oSelf *GameModel) AddOne(oValue *domain.GameValue) (bool, error) {
 	oGame, _ := pkg.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.Game{}).
+		Model(&domain.GameRow{}).
 		Create(oGame)
 
 	if oResult.Error != nil {
@@ -101,7 +106,7 @@ func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) (bool, e
 	oGame, _ := pkg.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.Game{}).
+		Model(&domain.GameRow{}).
 		Where("id = ?", iId).
 		UpdateColumns(oGame)
 
@@ -120,7 +125,7 @@ func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) (bool, e
 func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.Game{}).
+		Model(&domain.GameRow{}).
 		Where("id = ?", iId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		UpdateColumn("deleted_at", time.Now())
@@ -143,7 +148,7 @@ func (oSelf *GameModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
-		Model(&domain.Game{})
+		Model(&domain.GameRow{})
 
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)

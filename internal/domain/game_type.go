@@ -22,6 +22,17 @@ type GameTypeRow struct {
 	DeletedAt time.Time `json:"deleted_at"`
 }
 
+func GameTypeRowToGameType(oRow *GameTypeRow) *GameType {
+	return &GameType{
+		Id:        oRow.Id,
+		Key:       oRow.Key,
+		Name:      oRow.Name,
+		CreatedAt: oRow.CreatedAt,
+		UpdatedAt: oRow.UpdatedAt,
+		DeletedAt: oRow.DeletedAt,
+	}
+}
+
 type GameTypeValue struct {
 	Key  *string `json:"key,omitempty"`
 	Name *string `json:"name,omitempty"`

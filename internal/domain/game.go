@@ -38,6 +38,20 @@ type GameValue struct {
 	// DeletedAt   *time.Time `json:"deleted_at" gorm:"default:2038-01-19 03:14:07"`
 }
 
+func GameRowToGame(oRow *GameRow) *Game {
+	return &Game{
+		Id:          oRow.Id,
+		GameTypeId:  oRow.GameTypeId,
+		Key:         oRow.Key,
+		Name:        oRow.Name,
+		Description: oRow.Description,
+		CreatedAt:   oRow.CreatedAt,
+		UpdatedAt:   oRow.UpdatedAt,
+		DeletedAt:   oRow.DeletedAt,
+		GameType:    oRow.GameType,
+	}
+}
+
 type GameFilter struct {
 	Id         *uint `json:"id,omitempty"`
 	GameTypeId *uint `json:"game_type_id,omitempty"`
