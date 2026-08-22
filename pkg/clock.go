@@ -12,17 +12,15 @@ import (
 // defaultNTPServer 為 Clock 用來校時的 NTP 伺服器位址。
 const defaultNTPServer = "pool.ntp.org"
 
-// Clock 是會定期跟 NTP 伺服器校時、記錄與本地時鐘差值(offset)的時鐘。
-// 啟動時先同步一次，之後背景每隔固定時間再 refresh 一次 offset。
 type Clock struct {
-	mu     sync.RWMutex
-	offset time.Duration
+	mu       sync.RWMutex
+	stopOnce sync.Once
+	wg       sync.WaitGroup
+	offset   time.Duration
+
+	stop chan struct{}
 
 	server string
-
-	stopOnce sync.Once
-	stop     chan struct{}
-	wg       sync.WaitGroup
 }
 
 // NewClock 建立並啟動一個 Clock：先同步一次 offset（失敗直接回傳錯誤），
