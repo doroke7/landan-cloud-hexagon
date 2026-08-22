@@ -39,7 +39,11 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 	return domain.GameTypeRowToGameType(&oGameTypeRow), nil
 }
 
-func (oSelf *GameTypeModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.GameType, error) {
+func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, error) {
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
+	oLimit := pkg.PaginationToMysqlLimit(oPagination)
+
 	var aGameTypeRows []*domain.GameTypeRow
 	var oGameTypeRow domain.GameTypeRow
 
@@ -142,21 +146,9 @@ func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
 	return true, nil
 }
 
-func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
-	oLimit := pkg.PaginationToMysqlLimit(oPagination)
-
-	return oSelf.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
-}
-
 func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
 	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
 
-	return oSelf.TotalByWheres(aWheres)
-}
-
-func (oSelf *GameTypeModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
 	var iTotal int64
 	var oGameTypeRow domain.GameTypeRow
 

@@ -83,7 +83,11 @@ func (oSelf *TableRecordModel) RemoveOneById(iId uint) (bool, error) {
 	return true, nil
 }
 
-func (oSelf *TableRecordModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Where, aOrders []*pkg.Order, oLimit *pkg.Limit) ([]*domain.TableRecord, error) {
+func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.TableRecord, error) {
+	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
+	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
+	oLimit := pkg.PaginationToMysqlLimit(oPagination)
+
 	var aTableRecordRows []*domain.TableRecordRow
 	var oTableRecordRow domain.TableRecordRow
 
@@ -125,21 +129,9 @@ func (oSelf *TableRecordModel) ShowOnesByWheresWithOrdersLimit(aWheres []*pkg.Wh
 	return aTableRecords, nil
 }
 
-func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.TableRecord, error) {
-	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
-	aOrders := pkg.SortersToMysqlOrders([]string{}, aSorters)
-	oLimit := pkg.PaginationToMysqlLimit(oPagination)
-
-	return oSelf.ShowOnesByWheresWithOrdersLimit(aWheres, aOrders, oLimit)
-}
-
 func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
 	aWheres := pkg.FiltersToMysqlWheres([]string{}, aFilters)
 
-	return oSelf.TotalByWheres(aWheres)
-}
-
-func (oSelf *TableRecordModel) TotalByWheres(aWheres []*pkg.Where) (uint64, error) {
 	var iTotal int64
 	var oTableRecordRow domain.TableRecordRow
 
