@@ -37,6 +37,24 @@ type TableRecordRow struct {
 	DeletedAt time.Time       `json:"deleted_at"`
 }
 
+func TableRecordRowToTableRecord(oRow *TableRecordRow) *TableRecord {
+	return &TableRecord{
+		Id:        oRow.Id,
+		No:        oRow.No,
+		GameId:    oRow.GameId,
+		TableId:   oRow.TableId,
+		State:     oRow.State,
+		Text:      oRow.Text,
+		Image:     oRow.Image,
+		Result:    oRow.Result,
+		StartedAt: oRow.StartedAt,
+		EndedAt:   oRow.EndedAt,
+		CreatedAt: oRow.CreatedAt,
+		UpdatedAt: oRow.UpdatedAt,
+		DeletedAt: oRow.DeletedAt,
+	}
+}
+
 type TableRecordValue struct {
 	No        *string          `json:"no,omitempty"` // 年-月日-桌號-局號-期號
 	GameId    *uint            `json:"game_id,omitempty"`

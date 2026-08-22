@@ -29,6 +29,20 @@ type TableRecordLogRow struct {
 	DeletedAt     time.Time       `json:"deleted_at"`
 }
 
+func TableRecordLogRowToTableRecordLog(oRow *TableRecordLogRow) *TableRecordLog {
+	return &TableRecordLog{
+		Id:            oRow.Id,
+		GameId:        oRow.GameId,
+		TableRecordId: oRow.TableRecordId,
+		State:         oRow.State,
+		Text:          oRow.Text,
+		Image:         oRow.Image,
+		CreatedAt:     oRow.CreatedAt,
+		UpdatedAt:     oRow.UpdatedAt,
+		DeletedAt:     oRow.DeletedAt,
+	}
+}
+
 type TableRecordLogValue struct {
 	GameId        *uint            `json:"game_id,omitempty"`
 	TableRecordId *uint            `json:"table_record_id,omitempty"`
