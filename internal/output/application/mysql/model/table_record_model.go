@@ -84,9 +84,9 @@ func (oSelf *TableRecordModel) RemoveOneById(iId uint) (bool, error) {
 }
 
 func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.TableRecord, error) {
-	aWheres := oSelf.FiltersToWheres(aFilters)
-	aOrders := oSelf.SortersToOrders(aSorters)
-	oLimit := oSelf.PaginationToLimit(oPagination)
+	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
+	aOrders := oSelf.AbstractModel.SortersToOrders(aSorters)
+	oLimit := oSelf.AbstractModel.PaginationToLimit(oPagination)
 
 	var aTableRecordRows []*domain.TableRecordRow
 	var oTableRecordRow domain.TableRecordRow
@@ -130,7 +130,7 @@ func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters [
 }
 
 func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := oSelf.FiltersToWheres(aFilters)
+	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
 
 	var iTotal int64
 	var oTableRecordRow domain.TableRecordRow

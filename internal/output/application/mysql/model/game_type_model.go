@@ -40,9 +40,9 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 }
 
 func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, error) {
-	aWheres := oSelf.FiltersToWheres(aFilters)
-	aOrders := oSelf.SortersToOrders(aSorters)
-	oLimit := oSelf.PaginationToLimit(oPagination)
+	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
+	aOrders := oSelf.AbstractModel.SortersToOrders(aSorters)
+	oLimit := oSelf.AbstractModel.PaginationToLimit(oPagination)
 
 	var aGameTypeRows []*domain.GameTypeRow
 	var oGameTypeRow domain.GameTypeRow
@@ -147,7 +147,7 @@ func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
 }
 
 func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := oSelf.FiltersToWheres(aFilters)
+	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
 
 	var iTotal int64
 	var oGameTypeRow domain.GameTypeRow

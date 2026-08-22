@@ -71,9 +71,9 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 }
 
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.AdminUser, error) {
-	aWheres := oSelf.FiltersToWheres(aFilters)
-	aOrders := oSelf.SortersToOrders(aSorters)
-	oLimit := oSelf.PaginationToLimit(oPagination)
+	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
+	aOrders := oSelf.AbstractModel.SortersToOrders(aSorters)
+	oLimit := oSelf.AbstractModel.PaginationToLimit(oPagination)
 
 	var aAdminUserRows []*domain.AdminUserRow
 	var oAdminUserRow domain.AdminUserRow
@@ -113,7 +113,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 }
 
 func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := oSelf.FiltersToWheres(aFilters)
+	aWheres := oSelf.AbstractModel.FiltersToWheres(aFilters)
 
 	var iTotal int64
 	var oAdminUserRow domain.AdminUserRow
