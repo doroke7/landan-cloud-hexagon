@@ -121,13 +121,16 @@ func (oSelf *WebsocketRouter) Serve(oContext context.Context) {
 	})
 }
 
-func (oSelf *WebsocketRouter) serveConn(oContext context.Context, w http.ResponseWriter, oResquest *http.Request) {
-	oRawConn, err := oSelf.upgrader.Upgrade(w, oResquest, nil)
+func (oSelf *WebsocketRouter) serveConn(oContext context.Context, oResponseWriter http.ResponseWriter, oResquest *http.Request) {
+
+	oConn, err := oSelf.upgrader.Upgrade(oResponseWriter, oResquest, nil)
+
 	if err != nil {
 		log.Printf("websocket: upgrade failed: %v", err)
 		return
 	}
-	defer oRawConn.Close()
+
+	defer oConn.Close()
 
 	// 用全局 ctx 衍生一個連線等級的子 ctx：全局 ctx 取消（優雅關機）或這條連線自己結束時
 	// 都要能讓下面的 watcher/ping goroutine 退出，不然每條連線都會卡著永遠不返回的
@@ -137,16 +140,16 @@ func (oSelf *WebsocketRouter) serveConn(oContext context.Context, w http.Respons
 
 	go func() {
 		<-oCtx.Done()
-		oRawConn.Close()
+		oConn.Close()
 	}()
 
 	// SetReadLimit 擋住異常/惡意的超大訊息；pong handler 每收到一次 client 的 pong
 	// 就把 read deadline 往後延，client 斷線或卡死超過 pongWait 沒回應，
 	// 下面的 ReadJSON 就會因為逾時出錯、跳出迴圈，連線才不會無限期占著。
-	oRawConn.SetReadLimit(websocketMaxMessageSize)
-	oRawConn.SetReadDeadline(time.Now().Add(websocketPongWait))
-	oRawConn.SetPongHandler(func(string) error {
-		return oRawConn.SetReadDeadline(time.Now().Add(websocketPongWait))
+	oConn.SetReadLimit(websocketMaxMessageSize)
+	oConn.SetReadDeadline(time.Now().Add(websocketPongWait))
+	oConn.SetPongHandler(func(string) error {
+		return oConn.SetReadDeadline(time.Now().Add(websocketPongWait))
 	})
 
 	// oWriteMu 保護「往同一個 oRawConn 寫東西」這個動作：gorilla websocket 規定同一條
@@ -154,11 +157,11 @@ func (oSelf *WebsocketRouter) serveConn(oContext context.Context, w http.Respons
 	// ack、跟 handler 透過 oConn.Push 主動推播，三方都要序列化，跟 TcpRouter.serveConn
 	// 的 oWriteMu 是同一個道理。
 	var oWriteMu sync.Mutex
-	go oSelf.ping(oCtx, oRawConn, &oWriteMu)
+	go oSelf.ping(oCtx, oConn, &oWriteMu)
 
 	// oConn 是傳給 handler／middleware 的 types.WebsocketConn 實作，整條連線只需要
 	// 一份，不用每個 request 各自建一個。
-	oWebsocketConn := NewWebsocketConn(oRawConn, &oWriteMu)
+	oWebsocketConn := NewWebsocketConn(oConn, &oWriteMu)
 
 	// oSeenResponses 快取「這個 RequestId 算過的回應」：script/websocket/client.js 的
 	// emit() 如果一直沒收到回應會重送同一個 RequestId，如果每次重送都重新 dispatch，
@@ -175,12 +178,13 @@ func (oSelf *WebsocketRouter) serveConn(oContext context.Context, w http.Respons
 	// sample/websocket/client.js 的 requestId -> callback 對應）。
 	for {
 		var oReq types.WebsocketRequest
-		if err := oRawConn.ReadJSON(&oReq); err != nil {
+		if err := oConn.ReadJSON(&oReq); err != nil {
 			return
 		}
 
 		// 多路復用
 		go func(oReq types.WebsocketRequest) {
+
 			oSeenMu.Lock()
 			oResp, bSeen := oSeenResponses[oReq.RequestId]
 			oSeenMu.Unlock()
@@ -208,7 +212,7 @@ func (oSelf *WebsocketRouter) serveConn(oContext context.Context, w http.Respons
 			oWriteMu.Lock()
 			defer oWriteMu.Unlock()
 
-			if err := oRawConn.WriteJSON(oResp); err != nil {
+			if err := oConn.WriteJSON(oResp); err != nil {
 				log.Printf("websocket: write failed: method=%s err=%v", oReq.Method, err)
 			}
 		}(oReq)
@@ -243,20 +247,22 @@ func (oSelf *websocketConn) Push(sMethod string, oParam any) error {
 	})
 }
 
-func (oSelf *WebsocketRouter) dispatch(oConn types.WebsocketConn, oReq types.WebsocketRequest) types.WebsocketResponse {
-	oRoute, ok := oSelf.routes[oReq.Method]
+func (oSelf *WebsocketRouter) dispatch(oConn types.WebsocketConn, oRequest types.WebsocketRequest) types.WebsocketResponse {
+
+	oRoute, ok := oSelf.routes[oRequest.Method]
+
 	if !ok {
 		fnNotFound := types.WebsocketNextFunc(func(oConn types.WebsocketConn, oReq types.WebsocketRequest) types.WebsocketResponse {
 			return types.WebsocketResponse{Code: -1, Message: ErrWebsocketMethodNotFound.Error()}
 		})
 
 		if oSelf.noMethodFunc == nil {
-			return fnNotFound(oConn, oReq)
+			return fnNotFound(oConn, oRequest)
 		}
-		return oSelf.noMethodFunc(oConn, oReq, fnNotFound)
+		return oSelf.noMethodFunc(oConn, oRequest, fnNotFound)
 	}
 
-	return oSelf.chain(oRoute)(oConn, oReq)
+	return oSelf.chain(oRoute)(oConn, oRequest)
 }
 
 // chain 把套用到這個 method 的 middleware 由外往內包住 handler，組成跟 gin
