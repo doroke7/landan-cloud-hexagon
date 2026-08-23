@@ -1,9 +1,12 @@
 package bootstrap
 
 import (
+	"strings"
+
 	rocketmq "github.com/apache/rocketmq-client-go/v2"
 	"github.com/apache/rocketmq-client-go/v2/primitive"
 	"github.com/apache/rocketmq-client-go/v2/producer"
+	"github.com/charmbracelet/log"
 )
 
 // RocketMQ 用 NameServer 定址，跟其他 broker 常見的 host:port 連線方式不同；
@@ -30,6 +33,8 @@ func NewRocketmq() (rocketmq.Producer, error) {
 	if oErr := oProducer.Start(); oErr != nil {
 		return nil, oErr
 	}
+
+	log.Info("[INFO] ROCKETMQ 連線完成. ", strings.Join(CONFIG.ROCKETMQ.NAME_SERVERS, ","))
 
 	return oProducer, nil
 }

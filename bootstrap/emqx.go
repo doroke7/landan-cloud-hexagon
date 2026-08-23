@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/charmbracelet/log"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
@@ -26,6 +27,8 @@ func NewEmqx() (mqtt.Client, error) {
 	if oToken := oClient.Connect(); oToken.WaitTimeout(time.Duration(CONFIG.EMQX.TIMEOUT)*time.Millisecond) && oToken.Error() != nil {
 		return nil, oToken.Error()
 	}
+
+	log.Info("[INFO] EMQX 連線完成. ", sBroker)
 
 	return oClient, nil
 }

@@ -7,9 +7,11 @@ import (
 	"math/rand"
 	"net"
 	"sort"
+	"strings"
 	"sync"
 	"time"
 
+	clog "github.com/charmbracelet/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/attributes"
 	"google.golang.org/grpc/backoff"
@@ -224,6 +226,12 @@ func NewSource(oContext context.Context) *grpc.ClientConn {
 		}
 
 	}()
+
+	aAddrStrings := make([]string, len(aAddrs))
+	for iIndex, oAddr := range aAddrs {
+		aAddrStrings[iIndex] = oAddr.Addr
+	}
+	clog.Info("[INFO] SOURCE 連線完成. ", strings.Join(aAddrStrings, ","))
 
 	return conn
 }

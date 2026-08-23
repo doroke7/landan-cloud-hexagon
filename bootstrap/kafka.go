@@ -1,9 +1,10 @@
 package bootstrap
 
 import (
-	"fmt"
+	"strings"
 
 	"github.com/IBM/sarama"
+	"github.com/charmbracelet/log"
 )
 
 func NewKafka() (sarama.Client, error) {
@@ -29,7 +30,7 @@ func NewKafka() (sarama.Client, error) {
 
 	oClient, oErr := sarama.NewClient(CONFIG.KAFKA.BROKERS, oConfig)
 
-	fmt.Println("[INFO] KAFKA 連線完成. ", CONFIG.KAFKA.BROKERS)
+	log.Info("[INFO] KAFKA 連線完成. ", strings.Join(CONFIG.KAFKA.BROKERS, ","))
 
 	return oClient, oErr
 }

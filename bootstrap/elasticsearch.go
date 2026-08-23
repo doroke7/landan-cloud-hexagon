@@ -1,15 +1,22 @@
 package bootstrap
 
 import (
+	"strings"
+
+	"github.com/charmbracelet/log"
 	"github.com/elastic/go-elasticsearch/v8"
 )
 
 func NewElasticsearch() (*elasticsearch.Client, error) {
-	return elasticsearch.NewClient(elasticsearch.Config{
+	oClient, oErr := elasticsearch.NewClient(elasticsearch.Config{
 		Addresses: CONFIG.ELASTICSEARCH.HOSTS,
 		Username:  CONFIG.ELASTICSEARCH.USER,
 		Password:  CONFIG.ELASTICSEARCH.PASS,
 	})
+
+	log.Info("[INFO] ELASTICSEARCH 連線完成. ", strings.Join(CONFIG.ELASTICSEARCH.HOSTS, ","))
+
+	return oClient, oErr
 }
 
 /**

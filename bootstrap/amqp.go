@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"fmt"
 
+	"github.com/charmbracelet/log"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -17,7 +18,7 @@ func NewAmqp() (*amqp.Connection, error) {
 
 	oConnection, oErr := amqp.Dial(sDSN)
 
-	fmt.Println("[INFO] AMQP 連線完成. ", CONFIG.AMQP.HOST+":"+CONFIG.AMQP.PORT)
+	log.Info("[INFO] AMQP 連線完成. ", CONFIG.AMQP.HOST+":"+CONFIG.AMQP.PORT)
 
 	return oConnection, oErr
 }

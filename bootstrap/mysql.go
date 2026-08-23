@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	clog "github.com/charmbracelet/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -67,6 +68,8 @@ func NewMysql() (*gorm.DB, error) {
 		return nil, err
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.DATABASE.MAX_IDLE_CONNECTIONS)
+
+	clog.Info("[INFO] MYSQL 連線完成. ", sHost+":"+sPort)
 
 	return oMysqlConnectionPool, nil
 }

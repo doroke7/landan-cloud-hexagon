@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/charmbracelet/log"
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
@@ -25,6 +26,8 @@ func NewMosquitto() (mqtt.Client, error) {
 	if oToken := oClient.Connect(); oToken.WaitTimeout(time.Duration(CONFIG.MOSQUITTO.TIMEOUT)*time.Millisecond) && oToken.Error() != nil {
 		return nil, oToken.Error()
 	}
+
+	log.Info("[INFO] MOSQUITTO 連線完成. ", sBroker)
 
 	return oClient, nil
 }

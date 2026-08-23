@@ -6,6 +6,7 @@ import (
 	"os"
 	"time"
 
+	clog "github.com/charmbracelet/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -49,6 +50,8 @@ func NewPostgresql() (*gorm.DB, error) {
 		return nil, err
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.POSTGRESQL.MAX_IDLE_CONNECTIONS)
+
+	clog.Info("[INFO] POSTGRESQL 連線完成. ", CONFIG.POSTGRESQL.HOST+":"+CONFIG.POSTGRESQL.PORT)
 
 	return oPostgresqlConnectionPool, nil
 }

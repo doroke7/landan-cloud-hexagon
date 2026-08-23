@@ -3,8 +3,10 @@ package bootstrap
 import (
 	"context"
 	"net"
+	"strings"
 	"time"
 
+	"github.com/charmbracelet/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/backoff"
 	"google.golang.org/grpc/connectivity"
@@ -103,6 +105,12 @@ func NewResource(oContext context.Context) *grpc.ClientConn {
 		}
 
 	}()
+
+	aAddrStrings := make([]string, len(aAddrs))
+	for iIndex, oAddr := range aAddrs {
+		aAddrStrings[iIndex] = oAddr.Addr
+	}
+	log.Info("[INFO] RESOURCE 連線完成. ", strings.Join(aAddrStrings, ","))
 
 	return oConnection
 }

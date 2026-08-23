@@ -3,6 +3,8 @@ package bootstrap
 import (
 	"net"
 	"time"
+
+	"github.com/charmbracelet/log"
 )
 
 func NewTcp() (net.Conn, error) {
@@ -23,6 +25,7 @@ func NewTcp() (net.Conn, error) {
 
 		var oConn net.Conn
 		if oConn, err = oDialer.Dial("tcp", net.JoinHostPort(sHost, sPort)); err == nil {
+			log.Info("[INFO] TCP 連線完成. ", sHost+":"+sPort)
 			return oConn, nil
 		}
 	}

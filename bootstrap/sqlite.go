@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 	"time"
 
+	clog "github.com/charmbracelet/log"
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -45,6 +46,8 @@ func NewSqlite() (*gorm.DB, error) {
 		return nil, err
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.SQLITE.MAX_IDLE_CONNECTIONS)
+
+	clog.Info("[INFO] SQLITE 連線完成. ", CONFIG.SQLITE.PATH)
 
 	return oSqliteConnectionPool, nil
 }

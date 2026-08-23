@@ -3,6 +3,7 @@ package bootstrap
 import (
 	"fmt"
 
+	"github.com/charmbracelet/log"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 )
@@ -30,7 +31,7 @@ func NewMongo() (*mongo.Client, error) {
 
 	oMongoConnectionPool, oErr := mongo.Connect(oOptions)
 
-	fmt.Println("[INFO] MONGODB 連線完成. ", CONFIG.MONGODB.HOST+":"+CONFIG.MONGODB.PORT)
+	log.Info("[INFO] MONGODB 連線完成. ", CONFIG.MONGODB.HOST+":"+CONFIG.MONGODB.PORT)
 
 	return oMongoConnectionPool, oErr
 }

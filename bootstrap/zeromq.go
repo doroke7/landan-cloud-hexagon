@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/charmbracelet/log"
 	"github.com/go-zeromq/zmq4"
 )
 
@@ -18,6 +19,8 @@ func NewZeromq() (zmq4.Socket, error) {
 	if err := oSocket.Listen(sEndpoint); err != nil {
 		return nil, err
 	}
+
+	log.Info("[INFO] ZEROMQ 連線完成. ", sEndpoint)
 
 	return oSocket, nil
 }

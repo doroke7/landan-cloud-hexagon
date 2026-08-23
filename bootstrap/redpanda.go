@@ -1,7 +1,10 @@
 package bootstrap
 
 import (
+	"strings"
+
 	"github.com/IBM/sarama"
+	"github.com/charmbracelet/log"
 )
 
 // Redpanda 跟 Kafka 走同一套 wire protocol，所以直接沿用 sarama，
@@ -27,5 +30,9 @@ func NewRedpanda() (sarama.Client, error) {
 	// 這裡先開起來，讓 output adapter 可以直接拿這個 client 建 SyncProducer。
 	oConfig.Producer.Return.Successes = true
 
-	return sarama.NewClient(CONFIG.REDPANDA.BROKERS, oConfig)
+	oClient, oErr := sarama.NewClient(CONFIG.REDPANDA.BROKERS, oConfig)
+
+	log.Info("[INFO] REDPANDA 連線完成. ", strings.Join(CONFIG.REDPANDA.BROKERS, ","))
+
+	return oClient, oErr
 }
