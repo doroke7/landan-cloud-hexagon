@@ -3,10 +3,11 @@ package authentication
 import (
 	"github.com/gin-gonic/gin"
 
+	pkg "example/pkg"
+
 	bootstrap "example/bootstrap"
 	inputApplicationHttp "example/internal/input/application/http"
 	usecasePortAnyGameAuthentication "example/internal/usecase/port/any/game/authentication"
-	pkg "example/pkg"
 )
 
 type AuthenticatorHandler struct {
@@ -21,7 +22,7 @@ func NewAuthenticatorHandler(oAbstractHandler *inputApplicationHttp.AbstractHand
 	}
 }
 
-func (oSelf *AuthenticatorHandler) SignIn(oContext *gin.Context) {
+func (oSelf *AuthenticatorHandler) LogIn(oContext *gin.Context) {
 
 	oRequest := &pkg.Request{Context: oContext}
 
@@ -35,7 +36,7 @@ func (oSelf *AuthenticatorHandler) SignIn(oContext *gin.Context) {
 		return
 	}
 
-	sAuthorization, oErr := oSelf.AuthenticatorUsecase.SignIn(
+	sAuthorization, oErr := oSelf.AuthenticatorUsecase.LogIn(
 		*oValue.Name,
 		*oValue.Password,
 		bootstrap.CONFIG.SERVICES.HTTP.GAME.JWT.SECRET,

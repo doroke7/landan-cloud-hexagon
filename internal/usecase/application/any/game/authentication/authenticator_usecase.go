@@ -20,7 +20,7 @@ func NewAuthenticatorUsecase(oAppUserRepository outputPortAnyModel.AppUserModel,
 	}
 }
 
-func (oSelf *AuthenticatorUsecase) SignIn(sName string, sPassword string, sSecret string) (string, error) {
+func (oSelf *AuthenticatorUsecase) LogIn(sName string, sPassword string, sSecret string) (string, error) {
 
 	if sName == "" {
 		return "", pkg.NewDefaultError("name 不能為空", -1, 200)

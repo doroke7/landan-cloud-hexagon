@@ -43,6 +43,7 @@ import (
 	usecaseApplicationAnyAdminOption "example/internal/usecase/application/any/admin/option"
 	usecaseApplicationAnyAdminResource "example/internal/usecase/application/any/admin/resource"
 	usecaseApplicationAnyAnnouncement "example/internal/usecase/application/any/annoucement"
+	usecaseApplicationAnyGameAuthentication "example/internal/usecase/application/any/game/authentication"
 	usecaseApplicationAnyLogic "example/internal/usecase/application/any/logic"
 	usecaseApplicationAnyModel "example/internal/usecase/application/any/model"
 	usecaseApplicationAnyWatcherSource "example/internal/usecase/application/any/watcher/source"
@@ -86,6 +87,7 @@ import (
 	inputApplicationHttpAdminAuthentication "example/internal/input/application/http/admin/authentication"
 	inputApplicationHttpAdminOption "example/internal/input/application/http/admin/option"
 	inputApplicationHttpAdminResource "example/internal/input/application/http/admin/resource"
+	inputApplicationHttpGameAuthentication "example/internal/input/application/http/game/authentication"
 
 	inputApplicationTcp "example/internal/input/application/tcp"
 	inputApplicationTcpAdminAuthentication "example/internal/input/application/tcp/admin/authentication"
@@ -119,6 +121,7 @@ type HttpContainer struct {
 	HttpAdminResourceAdminUser           *inputApplicationHttpAdminResource.AdminUserHandler
 	HttpAdminResourceGameType            *inputApplicationHttpAdminResource.GameTypeHandler
 	HttpAdminOptionGameType              *inputApplicationHttpAdminOption.GameTypeHandler
+	HttpGameAuthenticationAuthenticator  *inputApplicationHttpGameAuthentication.AuthenticatorHandler
 
 	// HTTP server -Middleware
 	// Middleware 部分
@@ -183,10 +186,13 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		outputApplicationResourceModel.NewGameTypeModel,
 		outputApplicationResourceLogic.NewGameLogic,
 		outputApplicationResourceLogic.NewTableLogic,
+		outputApplicationResourceLogic.NewAppUserLogic,
 
 		// usecase
 		usecaseApplicationAnyAdminAuthentication.NewAbstractUsecase,
 		usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase,
+		usecaseApplicationAnyGameAuthentication.NewAbstractUsecase,
+		usecaseApplicationAnyGameAuthentication.NewAuthenticatorUsecase,
 		usecaseApplicationAnyAdminResource.NewAbstractUsecase,
 		usecaseApplicationAnyAdminResource.NewGameUsecase,
 		usecaseApplicationAnyAdminResource.NewTableUsecase,
@@ -204,6 +210,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		inputApplicationHttp.NewAbstractHandler,
 
 		inputApplicationHttpAdminAuthentication.NewAuthenticatorHandler,
+		inputApplicationHttpGameAuthentication.NewAuthenticatorHandler,
 		inputApplicationHttpAdminResource.NewGameHandler,
 		inputApplicationHttpAdminResource.NewTableHandler,
 		inputApplicationHttpAdminResource.NewAdminUserHandler,

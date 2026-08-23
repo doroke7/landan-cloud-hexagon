@@ -12,21 +12,22 @@ import (
 	"example/internal/client"
 	"example/internal/helper"
 	"example/internal/input/application/command"
-	authentication4 "example/internal/input/application/command/admin/authentication"
+	authentication5 "example/internal/input/application/command/admin/authentication"
 	command2 "example/internal/input/application/command/admin/resource"
 	"example/internal/input/application/cron"
-	authentication2 "example/internal/input/application/cron/admin/authentication"
+	authentication3 "example/internal/input/application/cron/admin/authentication"
 	cron2 "example/internal/input/application/cron/admin/resource"
 	"example/internal/input/application/daemon"
 	source2 "example/internal/input/application/daemon/watcher/source"
 	"example/internal/input/application/facade"
-	"example/internal/input/application/facade/admin/authentication"
+	authentication2 "example/internal/input/application/facade/admin/authentication"
 	facade3 "example/internal/input/application/facade/register"
 	facade2 "example/internal/input/application/facade/table"
 	"example/internal/input/application/http"
 	"example/internal/input/application/http/admin/authentication"
 	handler3 "example/internal/input/application/http/admin/option"
 	handler2 "example/internal/input/application/http/admin/resource"
+	"example/internal/input/application/http/game/authentication"
 	rabbitmq3 "example/internal/input/application/rabbitmq"
 	rabbitmq4 "example/internal/input/application/rabbitmq/admin/resource"
 	resource5 "example/internal/input/application/resource"
@@ -35,9 +36,9 @@ import (
 	resource6 "example/internal/input/application/source"
 	"example/internal/input/application/source/announcement"
 	"example/internal/input/application/tcp"
-	authentication5 "example/internal/input/application/tcp/admin/authentication"
+	authentication6 "example/internal/input/application/tcp/admin/authentication"
 	"example/internal/input/application/websocket"
-	authentication3 "example/internal/input/application/websocket/admin/authentication"
+	authentication4 "example/internal/input/application/websocket/admin/authentication"
 	"example/internal/interceptor/facade/admin"
 	"example/internal/interceptor/facade/game"
 	"example/internal/interceptor/resource/logic"
@@ -61,9 +62,10 @@ import (
 	"example/internal/usecase/application/any/admin/authentication"
 	"example/internal/usecase/application/any/admin/option"
 	resource4 "example/internal/usecase/application/any/admin/resource"
-	usecase4 "example/internal/usecase/application/any/annoucement"
-	usecase3 "example/internal/usecase/application/any/logic"
-	usecase2 "example/internal/usecase/application/any/model"
+	usecase5 "example/internal/usecase/application/any/annoucement"
+	usecase2 "example/internal/usecase/application/any/game/authentication"
+	usecase4 "example/internal/usecase/application/any/logic"
+	usecase3 "example/internal/usecase/application/any/model"
 	"example/internal/usecase/application/any/watcher/source"
 	any2 "example/internal/usecase/port/any/model"
 	"example/pkg"
@@ -108,6 +110,10 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	optionAbstractUsecase := option.NewAbstractUsecase(aesHelper)
 	anyGameTypeUsecase := option.NewGameTypeUsecase(gameTypeModel, optionAbstractUsecase)
 	handlerGameTypeHandler := handler3.NewGameTypeHandler(abstractHandler, anyGameTypeUsecase)
+	appUserModel := resource3.NewAppUserLogic(abstractResource)
+	usecaseAbstractUsecase := usecase2.NewAbstractUsecase(aesHelper, jwtHelper)
+	anyAuthenticatorUsecase := usecase2.NewAuthenticatorUsecase(appUserModel, usecaseAbstractUsecase)
+	authenticationAuthenticatorHandler := authentication.NewAuthenticatorHandler(abstractHandler, anyAuthenticatorUsecase)
 	abstractMiddleware := middleware_admin.NewAbstractMiddleware(response, clock, rsaHelper, aesHelper, jwtHelper)
 	adminMiddleware := middleware_admin.NewAdminMiddleware(abstractMiddleware)
 	authenticationMiddleware := middleware_admin.NewAuthenticationMiddleware(abstractMiddleware)
@@ -155,6 +161,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		HttpAdminResourceAdminUser:           adminUserHandler,
 		HttpAdminResourceGameType:            gameTypeHandler,
 		HttpAdminOptionGameType:              handlerGameTypeHandler,
+		HttpGameAuthenticationAuthenticator:  authenticationAuthenticatorHandler,
 		HttpAdminAbstractMiddleware:          abstractMiddleware,
 		HttpAdminAdminMiddleware:             adminMiddleware,
 		HttpAdminAuthenticationMiddleware:    authenticationMiddleware,
@@ -212,7 +219,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 	adminUserModel := resource2.NewAdminUserModel(abstractResource)
 	abstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecase.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
-	authenticationAuthenticatorHandler := authentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
+	authenticationAuthenticatorHandler := authentication2.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	abstractInterceptor := interceptor_facade_game.NewAbstractInterceptor(jwtHelper, aesHelper, rsaHelper)
 	errorInterceptor := interceptor_facade_game.NewErrorInterceptor(abstractInterceptor)
 	statusInterceptor := interceptor_facade_game.NewStatusInterceptor(abstractInterceptor)
@@ -258,7 +265,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	rsaHelper := helper.NewRsaHelper(abstractHelper)
-	abstractUsecase := usecase2.NewAbstractUsecase(aesHelper)
+	abstractUsecase := usecase3.NewAbstractUsecase(aesHelper)
 	db, err := bootstrap.NewMysql()
 	if err != nil {
 		return nil, err
@@ -270,24 +277,24 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	aop := pkg.NewAop(ctx, universalClient)
 	abstractMysql := mysql.NewAbstractMysql(ctx, db, aop)
 	adminUserModel := mysql2.NewAdminUserModel(abstractMysql)
-	adminUserUsecase := usecase2.NewAdminUserUsecase(adminUserModel, abstractUsecase)
+	adminUserUsecase := usecase3.NewAdminUserUsecase(adminUserModel, abstractUsecase)
 	gameModel := mysql2.NewGameModel(abstractMysql)
-	gameUsecase := usecase2.NewGameUsecase(gameModel, abstractUsecase)
+	gameUsecase := usecase3.NewGameUsecase(gameModel, abstractUsecase)
 	tableModel := mysql2.NewTableModel(abstractMysql)
-	tableUsecase := usecase2.NewTableUsecase(tableModel)
+	tableUsecase := usecase3.NewTableUsecase(tableModel)
 	gameTypeModel := mysql2.NewGameTypeModel(abstractMysql)
-	gameTypeUsecase := usecase2.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
+	gameTypeUsecase := usecase3.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
 	abstractHandler := resource5.NewAbstractHandler()
 	adminUserHandler := input_application_resource_model.NewAdminUserHandler(abstractHandler, adminUserUsecase)
 	gameHandler := input_application_resource_model.NewGameHandler(abstractHandler, gameUsecase)
 	tableHandler := input_application_resource_model.NewTableHandler(abstractHandler, tableUsecase)
 	gameTypeHandler := input_application_resource_model.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
-	usecaseAbstractUsecase := usecase3.NewAbstractUsecase(aesHelper)
+	usecaseAbstractUsecase := usecase4.NewAbstractUsecase(aesHelper)
 	gameLogic := mysql3.NewGameLogic(abstractMysql)
-	anyGameUsecase := usecase3.NewGameUsecase(usecaseAbstractUsecase, gameLogic)
+	anyGameUsecase := usecase4.NewGameUsecase(usecaseAbstractUsecase, gameLogic)
 	input_application_resource_logicGameHandler := input_application_resource_logic.NewGameHandler(abstractHandler, anyGameUsecase)
 	tableLogic := mysql3.NewTableLogic(abstractMysql)
-	anyTableUsecase := usecase3.NewTableUsecase(usecaseAbstractUsecase, tableLogic)
+	anyTableUsecase := usecase4.NewTableUsecase(usecaseAbstractUsecase, tableLogic)
 	input_application_resource_logicTableHandler := input_application_resource_logic.NewTableHandler(abstractHandler, anyTableUsecase)
 	abstractInterceptor := interceptor_resource_logic.NewAbstractInterceptor()
 	authenticationInterceptor := interceptor_resource_logic.NewAuthenticationInterceptor(abstractInterceptor)
@@ -399,7 +406,7 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 	adminUserModel := mysql2.NewAdminUserModel(abstractMysql)
 	usecaseAbstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecase.NewAuthenticatorUsecase(adminUserModel, usecaseAbstractUsecase)
-	authenticatorHandler := authentication2.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
+	authenticatorHandler := authentication3.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	cronContainer := &CronContainer{
 		Clock:                                clock,
 		AbstractHelper:                       abstractHelper,
@@ -429,7 +436,7 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 	adminUserModel := resource2.NewAdminUserModel(abstractResource)
 	abstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecase.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
-	authenticatorHandler := authentication3.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
+	authenticatorHandler := authentication4.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	abstractMiddleware := middleware_admin2.NewAbstractMiddleware(clock, rsaHelper, aesHelper, jwtHelper)
 	adminMiddleware := middleware_admin2.NewAdminMiddleware(abstractMiddleware)
 	authenticationMiddleware := middleware_admin2.NewAuthenticationMiddleware(abstractMiddleware)
@@ -506,7 +513,7 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 	adminUserModel := mysql2.NewAdminUserModel(abstractMysql)
 	usecaseAbstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecase.NewAuthenticatorUsecase(adminUserModel, usecaseAbstractUsecase)
-	authenticatorHandler := authentication4.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
+	authenticatorHandler := authentication5.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	commandContainer := &CommandContainer{
 		Clock:                            clock,
 		AbstractHelper:                   abstractHelper,
@@ -536,7 +543,7 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 	adminUserModel := resource2.NewAdminUserModel(abstractResource)
 	abstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecase.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
-	authenticatorHandler := authentication5.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
+	authenticatorHandler := authentication6.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	tcpContainer := &TcpContainer{
 		Clock:                        clock,
 		AbstractHelper:               abstractHelper,
@@ -557,10 +564,10 @@ func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	abstractHandler := resource6.NewAbstractHandler()
-	abstractUsecase := usecase4.NewAbstractUsecase(aesHelper)
+	abstractUsecase := usecase5.NewAbstractUsecase(aesHelper)
 	abstractMemory := memory.NewAbstractMemory(ctx)
 	lotteryModel := model.NewLotteryModel(abstractMemory)
-	lotteryUsecase := usecase4.NewLotteryUsecase(abstractUsecase, lotteryModel)
+	lotteryUsecase := usecase5.NewLotteryUsecase(abstractUsecase, lotteryModel)
 	lotteryHandler := announcement.NewLotteryHandler(abstractHandler, lotteryUsecase)
 	sourceContainer := &SourceContainer{
 		Clock:                     clock,
@@ -627,6 +634,7 @@ type HttpContainer struct {
 	HttpAdminResourceAdminUser           *handler2.AdminUserHandler
 	HttpAdminResourceGameType            *handler2.GameTypeHandler
 	HttpAdminOptionGameType              *handler3.GameTypeHandler
+	HttpGameAuthenticationAuthenticator  *authentication.AuthenticatorHandler
 
 	// HTTP server -Middleware
 	// Middleware 部分
@@ -685,7 +693,7 @@ type FacadeContainer struct {
 	FacadeAbstract                         *facade.AbstractHandler
 	FacadeTableScanner                     *facade2.ScannerHandler
 	FacadeTableAuthenticator               *facade3.AuthenticatorHandler
-	FacadeAdminAuthenticationAuthenticator *authentication.AuthenticatorHandler
+	FacadeAdminAuthenticationAuthenticator *authentication2.AuthenticatorHandler
 
 	// gRPC Facade Interceptor
 	FacadeGameErrorInterceptor          *interceptor_facade_game.ErrorInterceptor
@@ -710,7 +718,7 @@ type ResourceContainer struct {
 	*helper.AesHelper
 	*helper.RsaHelper
 
-	*usecase2.AbstractUsecase
+	*usecase3.AbstractUsecase
 	any2.AdminUserUsecase
 	any2.GameUsecase
 	any2.TableUsecase
@@ -765,7 +773,7 @@ type CronContainer struct {
 
 	// 排程 server
 	CronAdminResourceAppUser             *cron2.AppUserHandler
-	CronAdminAuthenticationAuthenticator *authentication2.AuthenticatorHandler
+	CronAdminAuthenticationAuthenticator *authentication3.AuthenticatorHandler
 }
 
 // WebsocketContainer 只給 `websocket` 服務使用。
@@ -785,7 +793,7 @@ type WebsocketContainer struct {
 
 	// websocket
 	*websocket.AbstractHandler
-	WebsocketAdminAuthenticationAuthenticator *authentication3.AuthenticatorHandler
+	WebsocketAdminAuthenticationAuthenticator *authentication4.AuthenticatorHandler
 
 	// Websocket server -Middleware
 	WebsocketAdminAbstractMiddleware       *middleware_admin2.AbstractMiddleware
@@ -826,7 +834,7 @@ type CommandContainer struct {
 	// command
 	*command.AbstractHandler
 	CommandAdminReourceAppUser       *command2.AppUserHandler
-	CommandAdminAuthenticationSignIn *authentication4.AuthenticatorHandler
+	CommandAdminAuthenticationSignIn *authentication5.AuthenticatorHandler
 }
 
 type TcpContainer struct {
@@ -844,7 +852,7 @@ type TcpContainer struct {
 
 	// tcp
 	*tcp.AbstractHandler
-	TcpAdminAuthenticationSignIn *authentication5.AuthenticatorHandler
+	TcpAdminAuthenticationSignIn *authentication6.AuthenticatorHandler
 }
 
 type SourceContainer struct {
