@@ -233,10 +233,10 @@ func (oSelf *WebsocketRouter) dispatch(oConn types.WebsocketConn, oRequest types
 
 	}
 
-	// hearbeat ： 心跳
-	// event: 一般訊息，之後需要接受 server 來的 ack
-	// broacast： 廣播訊息 （client 傳給 server 後。 server loop 傳給其他 client， 並且透過 NATS）
-	// ack: 基本上只做 client -> server 丟消息後， server 過來的 ack
+	// Type: hearbeat ： 心跳
+	// Type: event: 一般訊息，之後需要接受 server 來的 ack
+	// Type: broacast： 廣播訊息 （client 傳給 server 後。 server loop 傳給其他 client， 並且透過 NATS）
+	// Type: ack: 基本上只做 client -> server 丟消息後， server 過來的 ack
 
 	return types.WebsocketResponse{Type: oRequest.Type, Code: 1, Message: "尚未支持"}
 }

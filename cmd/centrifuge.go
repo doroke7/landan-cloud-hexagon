@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"encoding/json"
 	"log"
 	"net/http"
 	"os"
@@ -16,6 +17,40 @@ import (
 	container "example/container"
 	pkg "example/pkg"
 )
+
+/*
+   Channel:
+   Type: heartbeat / heartbeat-ack
+   Method:
+   Value:
+
+
+
+   Channel:
+   Type: room / room-ack
+   Method: join/leave
+   Value: room-01
+
+
+   Channel:
+   Type: event / event-ack
+   Method: Admin/Authentication/Authenticator/SignIn
+   Value: {}
+
+
+   Channel: room-01
+   Type: message / message-ack
+   Method: broast
+   Value: {}
+
+   Channel: room-01
+   Type: message / messages-ack
+   Method: send
+   Value: {}
+
+
+
+*/
 
 var oCentrifugeCommand = &cobra.Command{
 	Use:   "centrifuge",
@@ -61,10 +96,38 @@ var oCentrifugeCommand = &cobra.Command{
 				// 斷線
 				oClient.OnDisconnect(func(oEvent centrifuge.DisconnectEvent) {})
 
-				// client 訂閱 channel
 				if oErr := oClient.Subscribe("all"); oErr != nil {
 					log.Println("subscribe error:", oErr)
 				}
+				// if oErr := oClient.Subscribe("room-01"); oErr != nil {
+				// 	log.Println("subscribe error:", oErr)
+				// }
+
+				/*
+				   1. 所有的 client 過來的消息 ， OnPublish 都會handler
+				*/
+				oClient.OnPublish(func(oEvent centrifuge.PublishEvent, fnCallback centrifuge.PublishCallback) {
+					log.Printf(
+						"收到訊息 channel=%s method=%s value=%s\n",
+						oEvent.Channel,
+					)
+					var oPayload struct {
+						Method string          `json:"method"`
+						Value  json.RawMessage `json:"value"`
+					}
+					if oErr := json.Unmarshal(oEvent.Data, &oPayload); oErr != nil {
+						log.Println("publish payload 解析失敗:", oErr)
+					} else {
+						log.Printf(
+							"收到訊息 channel=%s method=%s value=%s\n",
+							oEvent.Channel,
+							oPayload.Method,
+							oPayload.Value,
+						)
+					}
+
+					fnCallback(centrifuge.PublishReply{}, nil)
+				})
 			},
 		)
 
@@ -76,8 +139,7 @@ var oCentrifugeCommand = &cobra.Command{
 		fnHandler := centrifuge.NewWebsocketHandler(
 			oNode,
 			centrifuge.WebsocketConfig{
-				// CORS：centrifuge 預設用 sameHostOriginCheck，要求 Origin host 跟 request Host
-				// 一致，跨源的瀏覽器前端會直接被拒絕，這裡跟 pkg/websocket_router.go 同一套慣例全部放行。
+
 				CheckOrigin: func(oRequest *http.Request) bool { return true },
 			},
 		)
@@ -97,15 +159,22 @@ var oCentrifugeCommand = &cobra.Command{
 		}()
 
 		go func() {
-			oTicker := time.NewTicker(time.Second * 10)
-			defer oTicker.Stop()
+			oTicker10 := time.NewTicker(time.Second * 10)
+			oTicker5 := time.NewTicker(time.Second * 5)
+
+			defer oTicker10.Stop()
+			defer oTicker5.Stop()
 
 			for {
 				select {
 				case <-ctx.Done():
 					return
-				case <-oTicker.C:
+				case <-oTicker10.C:
 					if _, oErr := oNode.Publish("all", []byte(`{"message": "Hi!!"}`)); oErr != nil {
+						log.Println("publish error:", oErr)
+					}
+				case <-oTicker5.C:
+					if _, oErr := oNode.Publish("room-01", []byte(`{"message": "你好"}`)); oErr != nil {
 						log.Println("publish error:", oErr)
 					}
 				}
