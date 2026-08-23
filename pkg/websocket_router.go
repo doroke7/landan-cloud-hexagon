@@ -52,6 +52,12 @@ func NewWebsocketRouter(sPrefix string) *WebsocketRouter {
 	return &WebsocketRouter{
 		prefix: sPrefix,
 		routes: make(map[string]websocketRoute),
+		// CheckOrigin 預設會拿 Origin header 跟 Host 比對，跨來源（例如 script/websocket/index.html
+		// 用 file:// 打開，或前端跑在不同 host:port）一律被擋。這裡先全部放行，
+		// 讓 demo／跨網域的前端可以連上；真的要收斂 Origin 白名單再另外設定。
+		upgrader: websocket.Upgrader{
+			CheckOrigin: func(r *http.Request) bool { return true },
+		},
 	}
 }
 
@@ -109,14 +115,14 @@ func (oSelf *WebsocketRouter) NoMethod(fnMiddleware types.WebsocketMiddlewareFun
 
 // Serve 把這個 router 註冊到全局 http（http.DefaultServeMux）的 prefix 路徑上；
 // ctx 取消時（優雅關機），每條已經 upgrade 的連線都會被主動關掉，不用等 client 自己斷線。
-func (oSelf *WebsocketRouter) Serve(ctx context.Context) {
-	http.HandleFunc(oSelf.prefix, func(w http.ResponseWriter, r *http.Request) {
-		oSelf.serveConn(ctx, w, r)
+func (oSelf *WebsocketRouter) Serve(oContext context.Context) {
+	http.HandleFunc(oSelf.prefix, func(oResponseWriter http.ResponseWriter, oResquest *http.Request) {
+		oSelf.serveConn(oContext, oResponseWriter, oResquest)
 	})
 }
 
-func (oSelf *WebsocketRouter) serveConn(ctx context.Context, w http.ResponseWriter, r *http.Request) {
-	oRawConn, err := oSelf.upgrader.Upgrade(w, r, nil)
+func (oSelf *WebsocketRouter) serveConn(oContext context.Context, w http.ResponseWriter, oResquest *http.Request) {
+	oRawConn, err := oSelf.upgrader.Upgrade(w, oResquest, nil)
 	if err != nil {
 		log.Printf("websocket: upgrade failed: %v", err)
 		return
@@ -126,7 +132,7 @@ func (oSelf *WebsocketRouter) serveConn(ctx context.Context, w http.ResponseWrit
 	// 用全局 ctx 衍生一個連線等級的子 ctx：全局 ctx 取消（優雅關機）或這條連線自己結束時
 	// 都要能讓下面的 watcher/ping goroutine 退出，不然每條連線都會卡著永遠不返回的
 	// goroutine，直到整個服務關機才釋放——是明確的 goroutine 洩漏。
-	oCtx, fnCancel := context.WithCancel(ctx)
+	oCtx, fnCancel := context.WithCancel(oContext)
 	defer fnCancel()
 
 	go func() {
@@ -209,10 +215,10 @@ func (oSelf *WebsocketRouter) serveConn(ctx context.Context, w http.ResponseWrit
 	}
 }
 
-func NewWebsocketConn(conn *websocket.Conn, writeMu *sync.Mutex) *websocketConn {
+func NewWebsocketConn(oConn *websocket.Conn, oWriteMu *sync.Mutex) *websocketConn {
 	return &websocketConn{
-		conn:    conn,
-		writeMu: writeMu,
+		conn:    oConn,
+		writeMu: oWriteMu,
 	}
 }
 
