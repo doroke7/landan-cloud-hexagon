@@ -1,4 +1,4 @@
-package applicationFacadeTable
+package inputApplicationFacadeTable
 
 import (
 	inputApplicationFacade "example/internal/input/application/facade"

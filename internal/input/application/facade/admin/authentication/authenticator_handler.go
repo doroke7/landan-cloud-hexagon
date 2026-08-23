@@ -1,4 +1,4 @@
-package applicationFacadeAdminAuthentication
+package inputApplicationFacadeAdminAuthentication
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package applicationHttpAdminAuthentication
+package inputApplicationHttpAdminAuthentication
 
 import (
 	"github.com/gin-gonic/gin"

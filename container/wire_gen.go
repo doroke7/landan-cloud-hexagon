@@ -90,31 +90,31 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	model := client.NewModel(clientConn)
 	logic := client.NewLogic(clientConn)
 	resourceClient := client.NewResourceClient(clientConn, model, logic)
-	abstractHandler := applicationHttp.NewAbstractHandler(response, aesHelper, jwtHelper)
+	abstractHandler := inputApplicationHttp.NewAbstractHandler(response, aesHelper, jwtHelper)
 	abstractResource := outputApplicationResource.NewAbstractResource(ctx, resourceClient)
 	adminUserModel := outputApplicationResourceModel.NewAdminUserModel(abstractResource)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
-	authenticatorHandler := applicationHttpAdminAuthentication.NewAuthenticatorHandler(abstractHandler, authenticatorUsecase)
+	authenticatorHandler := inputApplicationHttpAdminAuthentication.NewAuthenticatorHandler(abstractHandler, authenticatorUsecase)
 	gameModel := outputApplicationResourceModel.NewGameModel(abstractResource)
 	gameLogic := outputApplicationResourceLogic.NewGameLogic(abstractResource)
 	gameUsecase := usecaseApplicationAnyAdminResource.NewGameUsecase(gameModel, gameLogic, abstractUsecase)
-	gameHandler := applicationHttpAdminResource.NewGameHandler(abstractHandler, gameUsecase)
+	gameHandler := inputApplicationHttpAdminResource.NewGameHandler(abstractHandler, gameUsecase)
 	tableModel := outputApplicationResourceModel.NewTableModel(abstractResource)
 	tableLogic := outputApplicationResourceLogic.NewTableLogic(abstractResource)
 	tableUsecase := usecaseApplicationAnyAdminResource.NewTableUsecase(tableModel, tableLogic, abstractUsecase)
-	tableHandler := applicationHttpAdminResource.NewTableHandler(abstractHandler, tableUsecase)
+	tableHandler := inputApplicationHttpAdminResource.NewTableHandler(abstractHandler, tableUsecase)
 	adminUserUsecase := usecaseApplicationAnyAdminResource.NewAdminUserUsecase(adminUserModel, abstractUsecase)
-	adminUserHandler := applicationHttpAdminResource.NewAdminUserHandler(abstractHandler, adminUserUsecase)
+	adminUserHandler := inputApplicationHttpAdminResource.NewAdminUserHandler(abstractHandler, adminUserUsecase)
 	gameTypeModel := outputApplicationResourceModel.NewGameTypeModel(abstractResource)
 	gameTypeUsecase := usecaseApplicationAnyAdminResource.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
-	gameTypeHandler := applicationHttpAdminResource.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
+	gameTypeHandler := inputApplicationHttpAdminResource.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
 	usecasePortAnyAdminOptionGameTypeUsecase := usecaseApplicationAnyAdminOption.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
-	applicationHttpAdminOptionGameTypeHandler := applicationHttpAdminOption.NewGameTypeHandler(abstractHandler, usecasePortAnyAdminOptionGameTypeUsecase)
+	inputApplicationHttpAdminOptionGameTypeHandler := inputApplicationHttpAdminOption.NewGameTypeHandler(abstractHandler, usecasePortAnyAdminOptionGameTypeUsecase)
 	appUserModel := outputApplicationResourceLogic.NewAppUserLogic(abstractResource)
 	usecaseApplicationAnyGameAbstractUsecase := usecaseApplicationAnyGame.NewAbstractUsecase(aesHelper, jwtHelper)
 	usecasePortAnyGameAuthenticationAuthenticatorUsecase := usecaseApplicationAnyGameAuthentication.NewAuthenticatorUsecase(appUserModel, usecaseApplicationAnyGameAbstractUsecase)
-	applicationHttpGameAuthenticationAuthenticatorHandler := applicationHttpGameAuthentication.NewAuthenticatorHandler(abstractHandler, usecasePortAnyGameAuthenticationAuthenticatorUsecase)
+	inputApplicationHttpGameAuthenticationAuthenticatorHandler := inputApplicationHttpGameAuthentication.NewAuthenticatorHandler(abstractHandler, usecasePortAnyGameAuthenticationAuthenticatorUsecase)
 	abstractMiddleware := middlewareHttpAdmin.NewAbstractMiddleware(response, clock, rsaHelper, aesHelper, jwtHelper)
 	adminMiddleware := middlewareHttpAdmin.NewAdminMiddleware(abstractMiddleware)
 	authenticationMiddleware := middlewareHttpAdmin.NewAuthenticationMiddleware(abstractMiddleware)
@@ -161,8 +161,8 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		HttpAdminResourceTable:               tableHandler,
 		HttpAdminResourceAdminUser:           adminUserHandler,
 		HttpAdminResourceGameType:            gameTypeHandler,
-		HttpAdminOptionGameType:              applicationHttpAdminOptionGameTypeHandler,
-		HttpGameAuthenticationAuthenticator:  applicationHttpGameAuthenticationAuthenticatorHandler,
+		HttpAdminOptionGameType:              inputApplicationHttpAdminOptionGameTypeHandler,
+		HttpGameAuthenticationAuthenticator:  inputApplicationHttpGameAuthenticationAuthenticatorHandler,
 		HttpAdminAbstractMiddleware:          abstractMiddleware,
 		HttpAdminAdminMiddleware:             adminMiddleware,
 		HttpAdminAuthenticationMiddleware:    authenticationMiddleware,
@@ -213,14 +213,14 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 	model := client.NewModel(clientConn)
 	logic := client.NewLogic(clientConn)
 	resourceClient := client.NewResourceClient(clientConn, model, logic)
-	abstractHandler := applicationFacade.NewAbstractHandler(aesHelper)
-	scannerHandler := applicationFacadeTable.NewScannerHandler(abstractHandler)
-	authenticatorHandler := applicationFacadeRegister.NewAuthenticatorHandler(abstractHandler)
+	abstractHandler := inputApplicationFacade.NewAbstractHandler(aesHelper)
+	scannerHandler := inputApplicationFacadeTable.NewScannerHandler(abstractHandler)
+	authenticatorHandler := inputApplicationFacadeRegister.NewAuthenticatorHandler(abstractHandler)
 	abstractResource := outputApplicationResource.NewAbstractResource(ctx, resourceClient)
 	adminUserModel := outputApplicationResourceModel.NewAdminUserModel(abstractResource)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
-	applicationFacadeAdminAuthenticationAuthenticatorHandler := applicationFacadeAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
+	inputApplicationFacadeAdminAuthenticationAuthenticatorHandler := inputApplicationFacadeAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	abstractInterceptor := interceptorFacadeGame.NewAbstractInterceptor(jwtHelper, aesHelper, rsaHelper)
 	errorInterceptor := interceptorFacadeGame.NewErrorInterceptor(abstractInterceptor)
 	statusInterceptor := interceptorFacadeGame.NewStatusInterceptor(abstractInterceptor)
@@ -243,7 +243,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 		FacadeAbstract:                         abstractHandler,
 		FacadeTableScanner:                     scannerHandler,
 		FacadeTableAuthenticator:               authenticatorHandler,
-		FacadeAdminAuthenticationAuthenticator: applicationFacadeAdminAuthenticationAuthenticatorHandler,
+		FacadeAdminAuthenticationAuthenticator: inputApplicationFacadeAdminAuthenticationAuthenticatorHandler,
 		FacadeGameErrorInterceptor:             errorInterceptor,
 		FacadeGameStatusInterceptor:            statusInterceptor,
 		FacadeGameLoggerInterceptor:            loggerInterceptor,
@@ -285,18 +285,18 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	tableUsecase := usecaseApplicationAnyModel.NewTableUsecase(tableModel)
 	gameTypeModel := outputApplicationMysqlModel.NewGameTypeModel(abstractMysql)
 	gameTypeUsecase := usecaseApplicationAnyModel.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
-	abstractHandler := applicationResource.NewAbstractHandler()
-	adminUserHandler := applicationResourceModel.NewAdminUserHandler(abstractHandler, adminUserUsecase)
-	gameHandler := applicationResourceModel.NewGameHandler(abstractHandler, gameUsecase)
-	tableHandler := applicationResourceModel.NewTableHandler(abstractHandler, tableUsecase)
-	gameTypeHandler := applicationResourceModel.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
+	abstractHandler := inputApplicationResource.NewAbstractHandler()
+	adminUserHandler := inputApplicationResourceModel.NewAdminUserHandler(abstractHandler, adminUserUsecase)
+	gameHandler := inputApplicationResourceModel.NewGameHandler(abstractHandler, gameUsecase)
+	tableHandler := inputApplicationResourceModel.NewTableHandler(abstractHandler, tableUsecase)
+	gameTypeHandler := inputApplicationResourceModel.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
 	usecaseApplicationAnyLogicAbstractUsecase := usecaseApplicationAnyLogic.NewAbstractUsecase(aesHelper)
 	gameLogic := outputApplicationMysqlLogic.NewGameLogic(abstractMysql)
 	usecasePortAnyLogicGameUsecase := usecaseApplicationAnyLogic.NewGameUsecase(usecaseApplicationAnyLogicAbstractUsecase, gameLogic)
-	applicationResourceModelLogicGameHandler := applicationResourceModelLogic.NewGameHandler(abstractHandler, usecasePortAnyLogicGameUsecase)
+	inputApplicationResourceLogicGameHandler := inputApplicationResourceLogic.NewGameHandler(abstractHandler, usecasePortAnyLogicGameUsecase)
 	tableLogic := outputApplicationMysqlLogic.NewTableLogic(abstractMysql)
 	usecasePortAnyLogicTableUsecase := usecaseApplicationAnyLogic.NewTableUsecase(usecaseApplicationAnyLogicAbstractUsecase, tableLogic)
-	applicationResourceModelLogicTableHandler := applicationResourceModelLogic.NewTableHandler(abstractHandler, usecasePortAnyLogicTableUsecase)
+	inputApplicationResourceLogicTableHandler := inputApplicationResourceLogic.NewTableHandler(abstractHandler, usecasePortAnyLogicTableUsecase)
 	abstractInterceptor := interceptorResourceLogic.NewAbstractInterceptor()
 	authenticationInterceptor := interceptorResourceLogic.NewAuthenticationInterceptor(abstractInterceptor)
 	errorInterceptor := interceptorResourceLogic.NewErrorInterceptor(abstractInterceptor)
@@ -332,8 +332,8 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		ResourceModelGame:                      gameHandler,
 		ResourceModelTable:                     tableHandler,
 		ResourceModelGameType:                  gameTypeHandler,
-		ResourceLogicGame:                      applicationResourceModelLogicGameHandler,
-		ResourceLogicTable:                     applicationResourceModelLogicTableHandler,
+		ResourceLogicGame:                      inputApplicationResourceLogicGameHandler,
+		ResourceLogicTable:                     inputApplicationResourceLogicTableHandler,
 		ResourceLogicAuthenticationInterceptor: authenticationInterceptor,
 		ResourceLogicErrorInterceptor:          errorInterceptor,
 		ResourceLogicLoggerInterceptor:         loggerInterceptor,
@@ -356,7 +356,7 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 	if err != nil {
 		return nil, err
 	}
-	abstractHandler := applicationRabbitmq.NewAbstractHandler(aesHelper, connection)
+	abstractHandler := inputApplicationRabbitmq.NewAbstractHandler(aesHelper, connection)
 	db, err := bootstrap.NewMysql()
 	if err != nil {
 		return nil, err
@@ -371,7 +371,7 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 	jwtHelper := helper.NewJwtHelper(abstractHelper)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper)
 	appUserUsecase := usecaseApplicationAnyAdminResource.NewAppUserUsecase(appUserModel, abstractUsecase)
-	appUserHandler := applicationRabbitmqAdminResource.NewAppUserHandler(appUserUsecase, abstractHandler)
+	appUserHandler := inputApplicationRabbitmqAdminResource.NewAppUserHandler(appUserUsecase, abstractHandler)
 	rabbitmqContainer := &RabbitmqContainer{
 		Clock:                        clock,
 		AbstractHelper:               abstractHelper,
@@ -403,11 +403,11 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 	appUserModel := outputApplicationMysqlModel.NewAppUserModel(abstractMysql)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper)
 	appUserUsecase := usecaseApplicationAnyAdminResource.NewAppUserUsecase(appUserModel, abstractUsecase)
-	abstractHandler := applicationCron.NewAbstractHandler(aesHelper)
-	appUserHandler := applicationCronResource.NewAppUserHandler(appUserUsecase, abstractHandler)
+	abstractHandler := inputApplicationCron.NewAbstractHandler(aesHelper)
+	appUserHandler := inputApplicationCronAdminResource.NewAppUserHandler(appUserUsecase, abstractHandler)
 	adminUserModel := outputApplicationMysqlModel.NewAdminUserModel(abstractMysql)
 	authenticatorUsecase := usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
-	authenticatorHandler := applicationCronAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
+	authenticatorHandler := inputApplicationCronAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	cronContainer := &CronContainer{
 		Clock:                                clock,
 		AbstractHelper:                       abstractHelper,
@@ -432,12 +432,12 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 	model := client.NewModel(clientConn)
 	logic := client.NewLogic(clientConn)
 	resourceClient := client.NewResourceClient(clientConn, model, logic)
-	abstractHandler := applicationWebsocket.NewAbstractHandler(aesHelper)
+	abstractHandler := inputApplicationWebsocket.NewAbstractHandler(aesHelper)
 	abstractResource := outputApplicationResource.NewAbstractResource(ctx, resourceClient)
 	adminUserModel := outputApplicationResourceModel.NewAdminUserModel(abstractResource)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
-	authenticatorHandler := applicationWebsocketAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
+	authenticatorHandler := inputApplicationWebsocketAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	abstractMiddleware := middlewareWebsocketAdmin.NewAbstractMiddleware(clock, rsaHelper, aesHelper, jwtHelper)
 	adminMiddleware := middlewareWebsocketAdmin.NewAdminMiddleware(abstractMiddleware)
 	authenticationMiddleware := middlewareWebsocketAdmin.NewAuthenticationMiddleware(abstractMiddleware)
@@ -496,7 +496,7 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
 	jwtHelper := helper.NewJwtHelper(abstractHelper)
-	abstractHandler := applicationCommand.NewAbstractHandler(aesHelper)
+	abstractHandler := inputApplicationCommand.NewAbstractHandler(aesHelper)
 	db, err := bootstrap.NewMysql()
 	if err != nil {
 		return nil, err
@@ -510,10 +510,10 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 	appUserModel := outputApplicationMysqlModel.NewAppUserModel(abstractMysql)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper)
 	appUserUsecase := usecaseApplicationAnyAdminResource.NewAppUserUsecase(appUserModel, abstractUsecase)
-	appUserHandler := applicationCommandAdminResource.NewAppUserHandler(appUserUsecase, abstractHandler)
+	appUserHandler := inputApplicationCommandAdminResource.NewAppUserHandler(appUserUsecase, abstractHandler)
 	adminUserModel := outputApplicationMysqlModel.NewAdminUserModel(abstractMysql)
 	authenticatorUsecase := usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
-	authenticatorHandler := applicationCommandAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
+	authenticatorHandler := inputApplicationCommandAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	commandContainer := &CommandContainer{
 		Clock:                            clock,
 		AbstractHelper:                   abstractHelper,
@@ -538,12 +538,12 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 	model := client.NewModel(clientConn)
 	logic := client.NewLogic(clientConn)
 	resourceClient := client.NewResourceClient(clientConn, model, logic)
-	abstractHandler := applicationTcp.NewAbstractHandler(aesHelper)
+	abstractHandler := inputApplicationTcp.NewAbstractHandler(aesHelper)
 	abstractResource := outputApplicationResource.NewAbstractResource(ctx, resourceClient)
 	adminUserModel := outputApplicationResourceModel.NewAdminUserModel(abstractResource)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
-	authenticatorHandler := applicationTcpAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
+	authenticatorHandler := inputApplicationTcpAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	tcpContainer := &TcpContainer{
 		Clock:                        clock,
 		AbstractHelper:               abstractHelper,
@@ -563,12 +563,12 @@ func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 	}
 	abstractHelper := helper.NewAbstractHelper()
 	aesHelper := helper.NewAesHelper(abstractHelper)
-	abstractHandler := applicationSource.NewAbstractHandler()
+	abstractHandler := inputApplicationSource.NewAbstractHandler()
 	abstractUsecase := usecaseApplicationAnyAnnouncement.NewAbstractUsecase(aesHelper)
 	abstractMemory := outputApplicationMemory.NewAbstractMemory(ctx)
 	lotteryModel := outputApplicationMemoryModel.NewLotteryModel(abstractMemory)
 	lotteryUsecase := usecaseApplicationAnyAnnouncement.NewLotteryUsecase(abstractUsecase, lotteryModel)
-	lotteryHandler := applicationSourceAnnouncement.NewLotteryHandler(abstractHandler, lotteryUsecase)
+	lotteryHandler := inputApplicationSourceAnnouncement.NewLotteryHandler(abstractHandler, lotteryUsecase)
 	sourceContainer := &SourceContainer{
 		Clock:                     clock,
 		AbstractHelper:            abstractHelper,
@@ -597,8 +597,8 @@ func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
 	abstractCache := outputApplicationCache.NewAbstractCache(ctx, cacheHelper)
 	lotteryModel := outputApplicationCacheModel.NewLotteryModel(abstractCache)
 	announcementLotteryUsecase := usecaseApplicationAnyWatcherSource.NewAnnouncementLotteryUsecase(abstractUsecase, lotteryModel)
-	abstractHandler := applicationDaemon.NewAbstractHandler(aesHelper)
-	announcementLotteryHandler := applicationDaemonWatcherSource.NewAnnouncementLotteryHandler(announcementLotteryUsecase, abstractHandler)
+	abstractHandler := inputApplicationDaemon.NewAbstractHandler(aesHelper)
+	announcementLotteryHandler := inputApplicationDaemonWatcherSource.NewAnnouncementLotteryHandler(announcementLotteryUsecase, abstractHandler)
 	daemonContainer := &DaemonContainer{
 		Clock:                                  clock,
 		AbstractHelper:                         abstractHelper,
@@ -628,13 +628,13 @@ type HttpContainer struct {
 	ResourceClient *client.ResourceClient
 
 	// HTTP server -Controller
-	HttpAdminAuthenticationAuthenticator *applicationHttpAdminAuthentication.AuthenticatorHandler
-	HttpAdminResourceGame                *applicationHttpAdminResource.GameHandler
-	HttpAdminResourceTable               *applicationHttpAdminResource.TableHandler
-	HttpAdminResourceAdminUser           *applicationHttpAdminResource.AdminUserHandler
-	HttpAdminResourceGameType            *applicationHttpAdminResource.GameTypeHandler
-	HttpAdminOptionGameType              *applicationHttpAdminOption.GameTypeHandler
-	HttpGameAuthenticationAuthenticator  *applicationHttpGameAuthentication.AuthenticatorHandler
+	HttpAdminAuthenticationAuthenticator *inputApplicationHttpAdminAuthentication.AuthenticatorHandler
+	HttpAdminResourceGame                *inputApplicationHttpAdminResource.GameHandler
+	HttpAdminResourceTable               *inputApplicationHttpAdminResource.TableHandler
+	HttpAdminResourceAdminUser           *inputApplicationHttpAdminResource.AdminUserHandler
+	HttpAdminResourceGameType            *inputApplicationHttpAdminResource.GameTypeHandler
+	HttpAdminOptionGameType              *inputApplicationHttpAdminOption.GameTypeHandler
+	HttpGameAuthenticationAuthenticator  *inputApplicationHttpGameAuthentication.AuthenticatorHandler
 
 	// HTTP server -Middleware
 	// Middleware 部分
@@ -690,10 +690,10 @@ type FacadeContainer struct {
 	ResourceClient *client.ResourceClient
 
 	// gRPC Facade service
-	FacadeAbstract                         *applicationFacade.AbstractHandler
-	FacadeTableScanner                     *applicationFacadeTable.ScannerHandler
-	FacadeTableAuthenticator               *applicationFacadeRegister.AuthenticatorHandler
-	FacadeAdminAuthenticationAuthenticator *applicationFacadeAdminAuthentication.AuthenticatorHandler
+	FacadeAbstract                         *inputApplicationFacade.AbstractHandler
+	FacadeTableScanner                     *inputApplicationFacadeTable.ScannerHandler
+	FacadeTableAuthenticator               *inputApplicationFacadeRegister.AuthenticatorHandler
+	FacadeAdminAuthenticationAuthenticator *inputApplicationFacadeAdminAuthentication.AuthenticatorHandler
 
 	// gRPC Facade Interceptor
 	FacadeGameErrorInterceptor          *interceptorFacadeGame.ErrorInterceptor
@@ -725,13 +725,13 @@ type ResourceContainer struct {
 	usecasePortAnyModel.GameTypeUsecase
 
 	// gRPC Resource server
-	ResourceAbstract       *applicationResource.AbstractHandler
-	ResourceModelAdminUser *applicationResourceModel.AdminUserHandler
-	ResourceModelGame      *applicationResourceModel.GameHandler
-	ResourceModelTable     *applicationResourceModel.TableHandler
-	ResourceModelGameType  *applicationResourceModel.GameTypeHandler
-	ResourceLogicGame      *applicationResourceModelLogic.GameHandler
-	ResourceLogicTable     *applicationResourceModelLogic.TableHandler
+	ResourceAbstract       *inputApplicationResource.AbstractHandler
+	ResourceModelAdminUser *inputApplicationResourceModel.AdminUserHandler
+	ResourceModelGame      *inputApplicationResourceModel.GameHandler
+	ResourceModelTable     *inputApplicationResourceModel.TableHandler
+	ResourceModelGameType  *inputApplicationResourceModel.GameTypeHandler
+	ResourceLogicGame      *inputApplicationResourceLogic.GameHandler
+	ResourceLogicTable     *inputApplicationResourceLogic.TableHandler
 
 	// gRPC Resource Interceptor
 	ResourceLogicAuthenticationInterceptor *interceptorResourceLogic.AuthenticationInterceptor
@@ -756,8 +756,8 @@ type RabbitmqContainer struct {
 	*helper.AesHelper
 
 	// MQ 消費者
-	*applicationRabbitmq.AbstractHandler
-	ConsumerAdminResourceAppUser *applicationRabbitmqAdminResource.AppUserHandler
+	*inputApplicationRabbitmq.AbstractHandler
+	ConsumerAdminResourceAppUser *inputApplicationRabbitmqAdminResource.AppUserHandler
 }
 
 // CronContainer 只給 `cron` 排程服務使用。
@@ -772,8 +772,8 @@ type CronContainer struct {
 	*helper.JwtHelper
 
 	// 排程 server
-	CronAdminResourceAppUser             *applicationCronResource.AppUserHandler
-	CronAdminAuthenticationAuthenticator *applicationCronAuthentication.AuthenticatorHandler
+	CronAdminResourceAppUser             *inputApplicationCronAdminResource.AppUserHandler
+	CronAdminAuthenticationAuthenticator *inputApplicationCronAdminAuthentication.AuthenticatorHandler
 }
 
 // WebsocketContainer 只給 `websocket` 服務使用。
@@ -792,8 +792,8 @@ type WebsocketContainer struct {
 	ResourceClient *client.ResourceClient
 
 	// websocket
-	*applicationWebsocket.AbstractHandler
-	WebsocketAdminAuthenticationAuthenticator *applicationWebsocketAdminAuthentication.AuthenticatorHandler
+	*inputApplicationWebsocket.AbstractHandler
+	WebsocketAdminAuthenticationAuthenticator *inputApplicationWebsocketAdminAuthentication.AuthenticatorHandler
 
 	// Websocket server -Middleware
 	WebsocketAdminAbstractMiddleware       *middlewareWebsocketAdmin.AbstractMiddleware
@@ -832,9 +832,9 @@ type CommandContainer struct {
 	*helper.JwtHelper
 
 	// command
-	*applicationCommand.AbstractHandler
-	CommandAdminReourceAppUser       *applicationCommandAdminResource.AppUserHandler
-	CommandAdminAuthenticationSignIn *applicationCommandAdminAuthentication.AuthenticatorHandler
+	*inputApplicationCommand.AbstractHandler
+	CommandAdminReourceAppUser       *inputApplicationCommandAdminResource.AppUserHandler
+	CommandAdminAuthenticationSignIn *inputApplicationCommandAdminAuthentication.AuthenticatorHandler
 }
 
 type TcpContainer struct {
@@ -851,8 +851,8 @@ type TcpContainer struct {
 	ResourceClient *client.ResourceClient
 
 	// tcp
-	*applicationTcp.AbstractHandler
-	TcpAdminAuthenticationSignIn *applicationTcpAdminAuthentication.AuthenticatorHandler
+	*inputApplicationTcp.AbstractHandler
+	TcpAdminAuthenticationSignIn *inputApplicationTcpAdminAuthentication.AuthenticatorHandler
 }
 
 type SourceContainer struct {
@@ -864,7 +864,7 @@ type SourceContainer struct {
 	*helper.AbstractHelper
 	*helper.AesHelper
 
-	SourceAnnouncementLottery *applicationSourceAnnouncement.LotteryHandler
+	SourceAnnouncementLottery *inputApplicationSourceAnnouncement.LotteryHandler
 }
 
 type DaemonContainer struct {
@@ -879,5 +879,5 @@ type DaemonContainer struct {
 	// Clients
 	SourceClient *client.SourceClient
 
-	DaemonWatcherSourceAnnouncementLottery *applicationDaemonWatcherSource.AnnouncementLotteryHandler
+	DaemonWatcherSourceAnnouncementLottery *inputApplicationDaemonWatcherSource.AnnouncementLotteryHandler
 }

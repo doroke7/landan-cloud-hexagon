@@ -1,4 +1,4 @@
-package applicationCronAuthentication
+package inputApplicationCronAdminAuthentication
 
 import (
 	"go.uber.org/zap"

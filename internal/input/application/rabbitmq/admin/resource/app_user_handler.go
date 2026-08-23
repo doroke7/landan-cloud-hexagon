@@ -1,4 +1,4 @@
-package applicationRabbitmqAdminResource
+package inputApplicationRabbitmqAdminResource
 
 import (
 	"encoding/json"

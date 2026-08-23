@@ -1,4 +1,4 @@
-package applicationFacadeRegister
+package inputApplicationFacadeRegister
 
 import (
 	"context"

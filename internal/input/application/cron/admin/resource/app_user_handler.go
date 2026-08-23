@@ -1,4 +1,4 @@
-package applicationCronResource
+package inputApplicationCronAdminResource
 
 import (
 	"go.uber.org/zap"

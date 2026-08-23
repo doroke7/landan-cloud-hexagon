@@ -1,1 +1,1 @@
-package applicationRabbitmqAdminResource
+package inputApplicationRabbitmqAdminResource

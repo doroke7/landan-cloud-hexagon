@@ -1,4 +1,4 @@
-package applicationResource
+package inputApplicationResource
 
 func NewAbstractHandler() *AbstractHandler {
 	return &AbstractHandler{}

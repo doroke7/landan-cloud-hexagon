@@ -1,4 +1,4 @@
-package applicationCron
+package inputApplicationCron
 
 import (
 	helper "example/internal/helper"

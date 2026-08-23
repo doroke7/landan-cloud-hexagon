@@ -1,4 +1,4 @@
-package applicationWebsocketAdminAuthentication
+package inputApplicationWebsocketAdminAuthentication
 
 import (
 	"encoding/json"

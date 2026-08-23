@@ -1,4 +1,4 @@
-package applicationHttpAdminResource
+package inputApplicationHttpAdminResource
 
 import (
 	"github.com/gin-gonic/gin"

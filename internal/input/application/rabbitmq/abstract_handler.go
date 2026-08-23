@@ -1,4 +1,4 @@
-package applicationRabbitmq
+package inputApplicationRabbitmq
 
 import (
 	amqp "github.com/rabbitmq/amqp091-go"

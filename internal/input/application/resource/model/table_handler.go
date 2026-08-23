@@ -1,4 +1,4 @@
-package applicationResourceModel
+package inputApplicationResourceModel
 
 import (
 	"context"

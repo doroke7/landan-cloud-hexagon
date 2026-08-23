@@ -1,4 +1,4 @@
-package applicationHttp
+package inputApplicationHttp
 
 import (
 	pkg "example/pkg"

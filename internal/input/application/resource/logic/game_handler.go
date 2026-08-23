@@ -1,4 +1,4 @@
-package applicationResourceModelLogic
+package inputApplicationResourceLogic
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package applicationFacade
+package inputApplicationFacade
 
 import (
 	helper "example/internal/helper"

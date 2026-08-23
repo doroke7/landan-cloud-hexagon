@@ -1,4 +1,4 @@
-package applicationHttpGameAuthentication
+package inputApplicationHttpGameAuthentication
 
 import (
 	"github.com/gin-gonic/gin"

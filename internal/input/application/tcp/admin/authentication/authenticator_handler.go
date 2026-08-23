@@ -1,4 +1,4 @@
-package applicationTcpAdminAuthentication
+package inputApplicationTcpAdminAuthentication
 
 import (
 	"strings"

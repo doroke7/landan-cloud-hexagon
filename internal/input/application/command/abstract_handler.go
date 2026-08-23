@@ -1,4 +1,4 @@
-package applicationCommand
+package inputApplicationCommand
 
 import (
 	helper "example/internal/helper"

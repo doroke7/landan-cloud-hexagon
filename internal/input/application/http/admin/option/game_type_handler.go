@@ -1,4 +1,4 @@
-package applicationHttpAdminOption
+package inputApplicationHttpAdminOption
 
 import (
 	"github.com/gin-gonic/gin"

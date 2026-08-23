@@ -1,4 +1,4 @@
-package applicationDaemon
+package inputApplicationDaemon
 
 import (
 	helper "example/internal/helper"

@@ -1,4 +1,4 @@
-package applicationDaemonWatcherSource
+package inputApplicationDaemonWatcherSource
 
 import (
 	"io"

@@ -1,4 +1,4 @@
-package applicationTcp
+package inputApplicationTcp
 
 import (
 	helper "example/internal/helper"

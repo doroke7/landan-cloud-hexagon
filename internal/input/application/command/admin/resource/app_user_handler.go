@@ -1,4 +1,4 @@
-package applicationCommandAdminResource
+package inputApplicationCommandAdminResource
 
 import (
 	inputApplicationCommand "example/internal/input/application/command"
