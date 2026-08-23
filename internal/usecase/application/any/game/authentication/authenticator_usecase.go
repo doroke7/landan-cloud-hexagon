@@ -7,6 +7,7 @@ import (
 	usecasePortAnyGameAuthentication "example/internal/usecase/port/any/game/authentication"
 	utility "example/internal/utility"
 	pkg "example/pkg"
+	"fmt"
 )
 
 type AuthenticatorUsecase struct {
@@ -40,6 +41,7 @@ func (oSelf *AuthenticatorUsecase) LogIn(sName string, sPassword string, sSecret
 	}
 
 	sMd5 := utility.Md5(sPassword + bootstrap.CONFIG.TABLE.APP_USER.PASSWORD)
+	fmt.Println("sMd5=", sMd5)
 	if oAppUser.Password != sMd5 {
 		return "", pkg.NewDefaultError("密碼錯誤", -2, 200)
 	}

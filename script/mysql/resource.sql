@@ -23,6 +23,24 @@ SET NAMES utf8mb4;
 # 傾印（Dump）資料表 tx-admin_users
 # ------------------------------------------------------------
 
+
+DROP TABLE IF EXISTS `tx-app_users`;
+
+CREATE TABLE `tx-app_users` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`),
+  KEY `da` (`deleted_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+
+
+
 DROP TABLE IF EXISTS `tx-admin_users`;
 
 CREATE TABLE `tx-admin_users` (
