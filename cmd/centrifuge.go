@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"github.com/centrifugal/centrifuge"
 	"github.com/spf13/cobra"
@@ -57,25 +58,11 @@ var oCentrifugeCommand = &cobra.Command{
 		oNode.OnConnect(
 			func(oClient *centrifuge.Client) {
 
-				log.Println(
-					"connected:",
-					oClient.ID(),
-				)
-
 				// 斷線
-				oClient.OnDisconnect(
-					func(e centrifuge.DisconnectEvent) {
-
-						log.Println(
-							"disconnect:",
-							oClient.ID(),
-						)
-
-					},
-				)
+				oClient.OnDisconnect(func(oEvent centrifuge.DisconnectEvent) {})
 
 				// client 訂閱 channel
-				if oErr := oClient.Subscribe("chat:room1"); oErr != nil {
+				if oErr := oClient.Subscribe("all"); oErr != nil {
 					log.Println("subscribe error:", oErr)
 				}
 			},
@@ -89,9 +76,8 @@ var oCentrifugeCommand = &cobra.Command{
 		fnHandler := centrifuge.NewWebsocketHandler(
 			oNode,
 			centrifuge.WebsocketConfig{
-				// centrifuge 預設用 sameHostOriginCheck，要求 Origin host 跟 request Host 一致，
-				// 跨源的瀏覽器前端（例如另一個 port 的網頁）會直接被拒絕。這裡跟 pkg/websocket_router.go
-				// 的 CheckOrigin 用同一套慣例，全部放行。
+				// CORS：centrifuge 預設用 sameHostOriginCheck，要求 Origin host 跟 request Host
+				// 一致，跨源的瀏覽器前端會直接被拒絕，這裡跟 pkg/websocket_router.go 同一套慣例全部放行。
 				CheckOrigin: func(oRequest *http.Request) bool { return true },
 			},
 		)
@@ -111,25 +97,19 @@ var oCentrifugeCommand = &cobra.Command{
 		}()
 
 		go func() {
+			oTicker := time.NewTicker(time.Second * 10)
+			defer oTicker.Stop()
 
 			for {
-
 				select {
 				case <-ctx.Done():
 					return
-				default:
+				case <-oTicker.C:
+					if _, oErr := oNode.Publish("all", []byte(`{"message": "Hi!!"}`)); oErr != nil {
+						log.Println("publish error:", oErr)
+					}
 				}
-
-				// // 模擬 broadcast
-				// oNode.Publish(
-				// 	"chat:room1",
-				// 	[]byte(
-				// 		`{"message":"hello"}`,
-				// 	),
-				// )
-
 			}
-
 		}()
 
 		pkg.Logger(pkg.Default).Info("啟動 CENTRIFUGE 服務。 port: " + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT)
