@@ -43,6 +43,7 @@ import (
 	usecaseApplicationAnyAdminOption "example/internal/usecase/application/any/admin/option"
 	usecaseApplicationAnyAdminResource "example/internal/usecase/application/any/admin/resource"
 	usecaseApplicationAnyAnnouncement "example/internal/usecase/application/any/annoucement"
+	usecaseApplicationAnyGame "example/internal/usecase/application/any/game"
 	usecaseApplicationAnyGameAuthentication "example/internal/usecase/application/any/game/authentication"
 	usecaseApplicationAnyLogic "example/internal/usecase/application/any/logic"
 	usecaseApplicationAnyModel "example/internal/usecase/application/any/model"
@@ -191,7 +192,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		// usecase
 		usecaseApplicationAnyAdminAuthentication.NewAbstractUsecase,
 		usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase,
-		usecaseApplicationAnyGameAuthentication.NewAbstractUsecase,
+		usecaseApplicationAnyGame.NewAbstractUsecase,
 		usecaseApplicationAnyGameAuthentication.NewAuthenticatorUsecase,
 		usecaseApplicationAnyAdminResource.NewAbstractUsecase,
 		usecaseApplicationAnyAdminResource.NewGameUsecase,

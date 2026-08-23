@@ -3,17 +3,18 @@ package usecase
 import (
 	bootstrap "example/bootstrap"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	usecaseApplicationAnyGame "example/internal/usecase/application/any/game"
 	usecasePortAnyGameAuthentication "example/internal/usecase/port/any/game/authentication"
 	utility "example/internal/utility"
 	pkg "example/pkg"
 )
 
 type AuthenticatorUsecase struct {
-	*AbstractUsecase
+	*usecaseApplicationAnyGame.AbstractUsecase
 	outputPortAnyModel.AppUserModel
 }
 
-func NewAuthenticatorUsecase(oAppUserRepository outputPortAnyModel.AppUserModel, oAbstractUsecase *AbstractUsecase) usecasePortAnyGameAuthentication.AuthenticatorUsecase {
+func NewAuthenticatorUsecase(oAppUserRepository outputPortAnyModel.AppUserModel, oAbstractUsecase *usecaseApplicationAnyGame.AbstractUsecase) usecasePortAnyGameAuthentication.AuthenticatorUsecase {
 	return &AuthenticatorUsecase{
 		AbstractUsecase: oAbstractUsecase,
 		AppUserModel:    oAppUserRepository,
