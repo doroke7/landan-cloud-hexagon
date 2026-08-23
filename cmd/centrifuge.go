@@ -13,6 +13,7 @@ import (
 
 	bootstrap "example/bootstrap"
 	container "example/container"
+	pkg "example/pkg"
 )
 
 var oCentrifugeCommand = &cobra.Command{
@@ -121,6 +122,8 @@ var oCentrifugeCommand = &cobra.Command{
 			}
 
 		}()
+
+		pkg.Logger(pkg.Default).Info("啟動 CENTRIFUGE 服務。 port: " + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT)
 
 		if oErr := oCentrifugeServer.ListenAndServe(); oErr != nil && oErr != http.ErrServerClosed {
 			log.Fatal(oErr)

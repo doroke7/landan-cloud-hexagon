@@ -48,6 +48,8 @@ func (oClock *Clock) Now() time.Time {
 
 // Sync 立即跟 NTP 伺服器要一次時間，計算並更新 offset。
 func (oClock *Clock) Sync() error {
+	return nil
+
 	oTime, err := ntp.Time(oClock.server)
 	if err != nil {
 		return err

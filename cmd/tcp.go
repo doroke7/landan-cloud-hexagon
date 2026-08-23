@@ -3,7 +3,6 @@ package cmd
 import (
 	"context"
 	bootstrap "example/bootstrap"
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -13,6 +12,7 @@ import (
 
 	container "example/container"
 	register "example/internal/register"
+	pkg "example/pkg"
 )
 
 var oTcpCommand = &cobra.Command{
@@ -31,7 +31,7 @@ var oTcpCommand = &cobra.Command{
 
 		oTcpRouter := register.TcpInit(oContainer)
 
-		fmt.Println("TCP Server Start :" + bootstrap.CONFIG.SERVICES.TCP.PORT)
+		pkg.Logger(pkg.Default).Info("啟動 TCP 服務。 port: " + bootstrap.CONFIG.SERVICES.TCP.PORT)
 
 		if err := oTcpRouter.Serve(ctx, ":"+bootstrap.CONFIG.SERVICES.TCP.PORT); err != nil {
 			log.Fatal(err)

@@ -10,6 +10,7 @@ import (
 
 	container "example/container"
 	register "example/internal/register"
+	pkg "example/pkg"
 )
 
 var oCronCommand = &cobra.Command{
@@ -22,6 +23,9 @@ var oCronCommand = &cobra.Command{
 		oContainer, _ := container.InitCronContainer(ctx)
 
 		oCron := register.CronInit(oContainer)
+
+		pkg.Logger(pkg.Default).Info("啟動 CRON 服務。")
+
 		oCron.Start()
 
 		<-ctx.Done()

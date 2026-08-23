@@ -46,7 +46,7 @@ var oHttpCommand = &cobra.Command{
 			oHttpServer.Shutdown(context.Background())
 		}()
 
-		pkg.Logger(pkg.Default).Info("啟動 RESOURCE 服務。 port: " + bootstrap.CONFIG.SERVICES.HTTP.PORT)
+		pkg.Logger(pkg.Default).Info("啟動 HTTP 服務。 port: " + bootstrap.CONFIG.SERVICES.HTTP.PORT)
 
 		if err := oHttpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatal(err)

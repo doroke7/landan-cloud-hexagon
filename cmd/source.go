@@ -21,8 +21,6 @@ var oSourceCommand = &cobra.Command{
 	Use:   "source",
 	Short: "啟動 Rource 服務",
 	Run: func(cmd *cobra.Command, args []string) {
-		pkg.Logger(pkg.Default).Info("啟動 source 服務。 port: " + bootstrap.CONFIG.SERVICES.SOURCE.PORT)
-
 		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
@@ -37,6 +35,7 @@ var oSourceCommand = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
+		pkg.Logger(pkg.Default).Info("啟動 SOURCE 服務。 port: " + bootstrap.CONFIG.SERVICES.SOURCE.PORT)
 
 		// 收到中斷/終止訊號時 ctx 會被取消，主動 GracefulStop，讓 gRPC 停止 accept 新連線、
 		// 關掉 listener，Serve() 才會正常返回並釋放 port，

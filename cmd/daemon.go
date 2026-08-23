@@ -10,6 +10,7 @@ import (
 
 	container "example/container"
 	register "example/internal/register"
+	pkg "example/pkg"
 )
 
 var oDaemonCommand = &cobra.Command{
@@ -22,6 +23,9 @@ var oDaemonCommand = &cobra.Command{
 		oContainer, _ := container.InitDaemonContainer(ctx)
 
 		oDaemonRouter := register.DaemonInit(oContainer)
+
+		pkg.Logger(pkg.Default).Info("啟動 DAEMON 服務。")
+
 		oDaemonRouter.Serve(ctx)
 	},
 }
