@@ -48,6 +48,7 @@ import (
 	usecaseApplicationAnyWatcherSource "example/internal/usecase/application/any/watcher/source"
 
 	middlewareHttpAdmin "example/internal/middleware/http/admin"
+	middlewareHttpTable "example/internal/middleware/http/table"
 
 	interceptorFacadeAdmin "example/internal/interceptor/facade/admin"
 	interceptorFacadeGame "example/internal/interceptor/facade/game"
@@ -131,6 +132,18 @@ type HttpContainer struct {
 	HttpAdminRequestMiddleware        *middlewareHttpAdmin.RequestMiddleware
 	HttpAdminResponseMiddleware       *middlewareHttpAdmin.ResponseMiddleware
 	HttpAdminSignatureMiddleware      *middlewareHttpAdmin.SignatureMiddleware
+
+	HttpTableAbstractMiddleware       *middlewareHttpTable.AbstractMiddleware
+	HttpTableTableMiddleware          *middlewareHttpTable.TableMiddleware
+	HttpTableAuthenticationMiddleware *middlewareHttpTable.AuthenticationMiddleware
+	HttpTableDecryptionMiddleware     *middlewareHttpTable.DecryptionMiddleware
+	HttpTableEncryptionMiddleware     *middlewareHttpTable.EncryptionMiddleware
+	HttpTableErrorMiddleware          *middlewareHttpTable.ErrorMiddleware
+	HttpTableLoggerMiddleware         *middlewareHttpTable.LoggerMiddleware
+	HttpTableNonexistentMiddleware    *middlewareHttpTable.NonexistentMiddleware
+	HttpTableRequestMiddleware        *middlewareHttpTable.RequestMiddleware
+	HttpTableResponseMiddleware       *middlewareHttpTable.ResponseMiddleware
+	HttpTableSignatureMiddleware      *middlewareHttpTable.SignatureMiddleware
 }
 
 func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
@@ -196,6 +209,18 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		middlewareHttpAdmin.NewRequestMiddleware,
 		middlewareHttpAdmin.NewResponseMiddleware,
 		middlewareHttpAdmin.NewSignatureMiddleware,
+
+		middlewareHttpTable.NewAbstractMiddleware,
+		middlewareHttpTable.NewTableMiddleware,
+		middlewareHttpTable.NewAuthenticationMiddleware,
+		middlewareHttpTable.NewDecryptionMiddleware,
+		middlewareHttpTable.NewEncryptionMiddleware,
+		middlewareHttpTable.NewErrorMiddleware,
+		middlewareHttpTable.NewLoggerMiddleware,
+		middlewareHttpTable.NewNonexistentMiddleware,
+		middlewareHttpTable.NewRequestMiddleware,
+		middlewareHttpTable.NewResponseMiddleware,
+		middlewareHttpTable.NewSignatureMiddleware,
 
 		wire.Struct(new(HttpContainer), "*"),
 	)

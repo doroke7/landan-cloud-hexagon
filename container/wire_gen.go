@@ -43,6 +43,7 @@ import (
 	"example/internal/interceptor/resource/logic"
 	"example/internal/interceptor/resource/model"
 	"example/internal/middleware/http/admin"
+	"example/internal/middleware/http/table"
 	middleware_admin2 "example/internal/middleware/websocket/admin"
 	"example/internal/output/application/cache"
 	model2 "example/internal/output/application/cache/model"
@@ -117,6 +118,17 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	requestMiddleware := middleware_admin.NewRequestMiddleware(abstractMiddleware)
 	responseMiddleware := middleware_admin.NewResponseMiddleware(abstractMiddleware)
 	signatureMiddleware := middleware_admin.NewSignatureMiddleware(abstractMiddleware)
+	middleware_tableAbstractMiddleware := middleware_table.NewAbstractMiddleware(response, clock, rsaHelper, aesHelper, jwtHelper)
+	tableMiddleware := middleware_table.NewTableMiddleware(middleware_tableAbstractMiddleware)
+	middleware_tableAuthenticationMiddleware := middleware_table.NewAuthenticationMiddleware(middleware_tableAbstractMiddleware)
+	middleware_tableDecryptionMiddleware := middleware_table.NewDecryptionMiddleware(middleware_tableAbstractMiddleware)
+	middleware_tableEncryptionMiddleware := middleware_table.NewEncryptionMiddleware(middleware_tableAbstractMiddleware)
+	middleware_tableErrorMiddleware := middleware_table.NewErrorMiddleware(middleware_tableAbstractMiddleware)
+	middleware_tableLoggerMiddleware := middleware_table.NewLoggerMiddleware(middleware_tableAbstractMiddleware)
+	middleware_tableNonexistentMiddleware := middleware_table.NewNonexistentMiddleware(middleware_tableAbstractMiddleware)
+	middleware_tableRequestMiddleware := middleware_table.NewRequestMiddleware(middleware_tableAbstractMiddleware)
+	middleware_tableResponseMiddleware := middleware_table.NewResponseMiddleware(middleware_tableAbstractMiddleware)
+	middleware_tableSignatureMiddleware := middleware_table.NewSignatureMiddleware(middleware_tableAbstractMiddleware)
 	httpContainer := &HttpContainer{
 		Response:                             response,
 		Clock:                                clock,
@@ -142,6 +154,17 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		HttpAdminRequestMiddleware:           requestMiddleware,
 		HttpAdminResponseMiddleware:          responseMiddleware,
 		HttpAdminSignatureMiddleware:         signatureMiddleware,
+		HttpTableAbstractMiddleware:          middleware_tableAbstractMiddleware,
+		HttpTableTableMiddleware:             tableMiddleware,
+		HttpTableAuthenticationMiddleware:    middleware_tableAuthenticationMiddleware,
+		HttpTableDecryptionMiddleware:        middleware_tableDecryptionMiddleware,
+		HttpTableEncryptionMiddleware:        middleware_tableEncryptionMiddleware,
+		HttpTableErrorMiddleware:             middleware_tableErrorMiddleware,
+		HttpTableLoggerMiddleware:            middleware_tableLoggerMiddleware,
+		HttpTableNonexistentMiddleware:       middleware_tableNonexistentMiddleware,
+		HttpTableRequestMiddleware:           middleware_tableRequestMiddleware,
+		HttpTableResponseMiddleware:          middleware_tableResponseMiddleware,
+		HttpTableSignatureMiddleware:         middleware_tableSignatureMiddleware,
 	}
 	return httpContainer, nil
 }
@@ -595,6 +618,18 @@ type HttpContainer struct {
 	HttpAdminRequestMiddleware        *middleware_admin.RequestMiddleware
 	HttpAdminResponseMiddleware       *middleware_admin.ResponseMiddleware
 	HttpAdminSignatureMiddleware      *middleware_admin.SignatureMiddleware
+
+	HttpTableAbstractMiddleware       *middleware_table.AbstractMiddleware
+	HttpTableTableMiddleware          *middleware_table.TableMiddleware
+	HttpTableAuthenticationMiddleware *middleware_table.AuthenticationMiddleware
+	HttpTableDecryptionMiddleware     *middleware_table.DecryptionMiddleware
+	HttpTableEncryptionMiddleware     *middleware_table.EncryptionMiddleware
+	HttpTableErrorMiddleware          *middleware_table.ErrorMiddleware
+	HttpTableLoggerMiddleware         *middleware_table.LoggerMiddleware
+	HttpTableNonexistentMiddleware    *middleware_table.NonexistentMiddleware
+	HttpTableRequestMiddleware        *middleware_table.RequestMiddleware
+	HttpTableResponseMiddleware       *middleware_table.ResponseMiddleware
+	HttpTableSignatureMiddleware      *middleware_table.SignatureMiddleware
 }
 
 type FacadeContainer struct {

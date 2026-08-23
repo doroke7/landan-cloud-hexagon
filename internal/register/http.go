@@ -59,6 +59,24 @@ func httpAdminOptionMiddlewares(oContainer *container.HttpContainer) []gin.Handl
 	}
 }
 
+func httpTableMiddlewares(oContainer *container.HttpContainer) []gin.HandlerFunc {
+	return []gin.HandlerFunc{
+		// ALL middleware
+		oContainer.HttpTableLoggerMiddleware.Handle(),
+
+		// Before Middleware
+		oContainer.HttpTableErrorMiddleware.Handle(),
+		oContainer.HttpTableSignatureMiddleware.Handle(),
+		oContainer.HttpTableDecryptionMiddleware.Handle(),
+		oContainer.HttpTableAuthenticationMiddleware.Handle(),
+		oContainer.HttpTableRequestMiddleware.Handle(),
+
+		// After Middleware
+		oContainer.HttpTableResponseMiddleware.Handle(),
+		oContainer.HttpTableEncryptionMiddleware.Handle(),
+	}
+}
+
 func HttpInit(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 
 	oAdmin := oGin.Group("/Admin")
