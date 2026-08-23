@@ -43,9 +43,13 @@ var oCentrifugeCommand = &cobra.Command{
 		oNode.SetBroker(oContainer.NatsBroker)
 
 		// Connecting：驗證/接受連線，這個 demo 不做任何驗證，一律接受成匿名連線。
+		// Credentials 一定要給值（UserID 留空即代表匿名），不然 centrifuge 會在
+		// connectCmd 判斷 credentials == nil 直接以 bad request 斷線。
 		oNode.OnConnecting(
 			func(oCtx context.Context, oEvent centrifuge.ConnectEvent) (centrifuge.ConnectReply, error) {
-				return centrifuge.ConnectReply{}, nil
+				return centrifuge.ConnectReply{
+					Credentials: &centrifuge.Credentials{UserID: ""},
+				}, nil
 			},
 		)
 
@@ -84,7 +88,12 @@ var oCentrifugeCommand = &cobra.Command{
 
 		fnHandler := centrifuge.NewWebsocketHandler(
 			oNode,
-			centrifuge.WebsocketConfig{},
+			centrifuge.WebsocketConfig{
+				// centrifuge 預設用 sameHostOriginCheck，要求 Origin host 跟 request Host 一致，
+				// 跨源的瀏覽器前端（例如另一個 port 的網頁）會直接被拒絕。這裡跟 pkg/websocket_router.go
+				// 的 CheckOrigin 用同一套慣例，全部放行。
+				CheckOrigin: func(oRequest *http.Request) bool { return true },
+			},
 		)
 
 		oMux := http.NewServeMux()
@@ -111,13 +120,13 @@ var oCentrifugeCommand = &cobra.Command{
 				default:
 				}
 
-				// 模擬 broadcast
-				oNode.Publish(
-					"chat:room1",
-					[]byte(
-						`{"message":"hello"}`,
-					),
-				)
+				// // 模擬 broadcast
+				// oNode.Publish(
+				// 	"chat:room1",
+				// 	[]byte(
+				// 		`{"message":"hello"}`,
+				// 	),
+				// )
 
 			}
 

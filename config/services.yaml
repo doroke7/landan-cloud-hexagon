@@ -395,6 +395,6 @@ udp:
   port: 4008
 
 centrifuge:
-  port: 8000
+  port: 4021
 
 daemon:

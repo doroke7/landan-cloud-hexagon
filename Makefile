@@ -34,6 +34,13 @@ facade-watch:
 websocket-watch:
 	air -c .air.websocket.toml
 
+
+.PHONY: centrifuge-watch
+centrifuge-watch:
+	air -c .air.centrifuge.toml
+
 .PHONY: resource-watch
 resource-watch:
 	air -c .air.resource.toml
+
+
