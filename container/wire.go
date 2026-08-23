@@ -636,6 +636,48 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 	return nil, nil
 }
 
+type CentrifugeContainer struct {
+
+	// pkg
+	Clock *pkg.Clock
+
+	// Helper
+	*helper.AbstractHelper
+	*helper.AesHelper
+	*helper.RsaHelper
+	*helper.JwtHelper
+
+	// Clients
+	ResourceClient *client.ResourceClient
+}
+
+func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) {
+	wire.Build(
+
+		// pkg
+		pkg.NewClock,
+
+		// bootstrap
+		bootstrap.NewResource,
+
+		// helper
+		helper.NewAbstractHelper,
+		helper.NewAesHelper,
+		helper.NewRsaHelper,
+		helper.NewJwtHelper,
+
+		// client
+		client.NewModel,
+		client.NewLogic,
+		client.NewResourceClient,
+
+		// websocket
+
+		wire.Struct(new(CentrifugeContainer), "*"),
+	)
+	return nil, nil
+}
+
 //////////////////////////////////////////////////////////////////////////////
 
 // ClientContainer 只給 `client` （訂閱外部 gRPC stream）服務使用。
