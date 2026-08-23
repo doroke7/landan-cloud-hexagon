@@ -143,6 +143,10 @@ type Config struct {
 			HOST string `mapstructure:"host"`
 			PORT string `mapstructure:"port"`
 		} `mapstructure:"udp"`
+		CENTRIFUGE struct {
+			HOST string `mapstructure:"host"`
+			PORT string `mapstructure:"port"`
+		} `mapstructure:"centrifuge"`
 	} `mapstructure:"services"`
 	CLIENTS struct {
 		FACADE struct {

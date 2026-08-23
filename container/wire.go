@@ -13,6 +13,7 @@ import (
 	"context"
 
 	"github.com/google/wire"
+	"github.com/nats-io/nats.go"
 
 	bootstrap "example/bootstrap"
 	pkg "example/pkg"
@@ -649,6 +650,10 @@ type CentrifugeContainer struct {
 
 	// Clients
 	ResourceClient *client.ResourceClient
+
+	// NATS
+	Nats       *nats.Conn
+	NatsBroker *pkg.NATSBroker
 }
 
 func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) {
@@ -659,6 +664,7 @@ func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) 
 
 		// bootstrap
 		bootstrap.NewResource,
+		bootstrap.NewNats,
 
 		// helper
 		helper.NewAbstractHelper,
@@ -671,7 +677,8 @@ func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) 
 		client.NewLogic,
 		client.NewResourceClient,
 
-		// websocket
+		// centrifuge
+		pkg.NewNATSBroker,
 
 		wire.Struct(new(CentrifugeContainer), "*"),
 	)

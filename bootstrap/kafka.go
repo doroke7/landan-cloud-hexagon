@@ -1,6 +1,8 @@
 package bootstrap
 
 import (
+	"fmt"
+
 	"github.com/IBM/sarama"
 )
 
@@ -25,5 +27,9 @@ func NewKafka() (sarama.Client, error) {
 	// 這裡先開起來，讓 output adapter 可以直接拿這個 client 建 SyncProducer。
 	oConfig.Producer.Return.Successes = true
 
-	return sarama.NewClient(CONFIG.KAFKA.BROKERS, oConfig)
+	oClient, oErr := sarama.NewClient(CONFIG.KAFKA.BROKERS, oConfig)
+
+	fmt.Println("[INFO] KAFKA 連線完成. ", CONFIG.KAFKA.BROKERS)
+
+	return oClient, oErr
 }

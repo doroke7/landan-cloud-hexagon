@@ -4,13 +4,15 @@ import (
 	"context"
 	"log"
 	"net/http"
-
-	"github.com/nats-io/nats.go"
-
-	"example/pkg"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/centrifugal/centrifuge"
 	"github.com/spf13/cobra"
+
+	bootstrap "example/bootstrap"
+	container "example/container"
 )
 
 var oCentrifugeCommand = &cobra.Command{
@@ -18,26 +20,14 @@ var oCentrifugeCommand = &cobra.Command{
 	Short: "啟動 centrifuge 服務",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		oNats, oErr := nats.Connect(
-			"nats://localhost:4222",
-		)
+		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		defer stop()
 
+		oContainer, oErr := container.InitCentrifugeContainer(ctx)
 		if oErr != nil {
-			panic(oErr)
+			log.Fatal(oErr)
 		}
-
-		defer oNats.Close()
-
-		oNats.Publish(
-			"chat.room1",
-			[]byte(
-				`{"msg":"hello"}`,
-			),
-		)
-
-		oBroker := pkg.NewNATSBroker(
-			oNats,
-		)
+		defer oContainer.Nats.Close()
 
 		oNode, oErr := centrifuge.New(
 			centrifuge.Config{
@@ -49,7 +39,7 @@ var oCentrifugeCommand = &cobra.Command{
 			panic(oErr)
 		}
 
-		oNode.SetBroker(oBroker)
+		oNode.SetBroker(oContainer.NatsBroker)
 
 		// Connecting：驗證/接受連線，這個 demo 不做任何驗證，一律接受成匿名連線。
 		oNode.OnConnecting(
@@ -60,27 +50,27 @@ var oCentrifugeCommand = &cobra.Command{
 
 		// Connect：連線建立完成後才能拿到 *centrifuge.Client，在這裡掛 client 層級的事件、訂閱 channel。
 		oNode.OnConnect(
-			func(client *centrifuge.Client) {
+			func(oClient *centrifuge.Client) {
 
 				log.Println(
 					"connected:",
-					client.ID(),
+					oClient.ID(),
 				)
 
 				// 斷線
-				client.OnDisconnect(
+				oClient.OnDisconnect(
 					func(e centrifuge.DisconnectEvent) {
 
 						log.Println(
 							"disconnect:",
-							client.ID(),
+							oClient.ID(),
 						)
 
 					},
 				)
 
 				// client 訂閱 channel
-				if oErr := client.Subscribe("chat:room1"); oErr != nil {
+				if oErr := oClient.Subscribe("chat:room1"); oErr != nil {
 					log.Println("subscribe error:", oErr)
 				}
 			},
@@ -96,17 +86,31 @@ var oCentrifugeCommand = &cobra.Command{
 			centrifuge.WebsocketConfig{},
 		)
 
-		http.Handle(
-			"/connection/websocket",
-			fnHandler,
-		)
+		oMux := http.NewServeMux()
+		oMux.Handle("/connection/websocket", fnHandler)
+
+		oCentrifugeServer := &http.Server{
+			Addr:    ":" + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT,
+			Handler: oMux,
+		}
+
+		go func() {
+			<-ctx.Done()
+			oNode.Shutdown(context.Background())
+			oCentrifugeServer.Shutdown(context.Background())
+		}()
 
 		go func() {
 
 			for {
 
-				// 模擬 broadcast
+				select {
+				case <-ctx.Done():
+					return
+				default:
+				}
 
+				// 模擬 broadcast
 				oNode.Publish(
 					"chat:room1",
 					[]byte(
@@ -118,14 +122,9 @@ var oCentrifugeCommand = &cobra.Command{
 
 		}()
 
-		log.Println(
-			"listen :8000",
-		)
-
-		http.ListenAndServe(
-			":8000",
-			nil,
-		)
+		if oErr := oCentrifugeServer.ListenAndServe(); oErr != nil && oErr != http.ErrServerClosed {
+			log.Fatal(oErr)
+		}
 	},
 }
 

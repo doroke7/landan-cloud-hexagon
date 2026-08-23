@@ -15,5 +15,9 @@ func NewAmqp() (*amqp.Connection, error) {
 		CONFIG.AMQP.PORT,
 	)
 
-	return amqp.Dial(sDSN)
+	oConnection, oErr := amqp.Dial(sDSN)
+
+	fmt.Println("[INFO] AMQP 連線完成. ", CONFIG.AMQP.HOST+":"+CONFIG.AMQP.PORT)
+
+	return oConnection, oErr
 }

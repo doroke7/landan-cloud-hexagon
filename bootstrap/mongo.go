@@ -30,5 +30,7 @@ func NewMongo() (*mongo.Client, error) {
 
 	oMongoConnectionPool, oErr := mongo.Connect(oOptions)
 
+	fmt.Println("[INFO] MONGODB 連線完成. ", CONFIG.MONGODB.HOST+":"+CONFIG.MONGODB.PORT)
+
 	return oMongoConnectionPool, oErr
 }

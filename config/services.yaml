@@ -394,4 +394,7 @@ tcp:
 udp:
   port: 4008
 
+centrifuge:
+  port: 8000
+
 daemon:

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/charmbracelet/log"
 	"github.com/nats-io/nats.go"
 )
 
@@ -18,5 +19,9 @@ func NewNats() (*nats.Conn, error) {
 		aOptions = append(aOptions, nats.UserInfo(CONFIG.NATS.USER, CONFIG.NATS.PASS))
 	}
 
-	return nats.Connect(sURL, aOptions...)
+	oConn, oErr := nats.Connect(sURL, aOptions...)
+
+	log.Info("[INFO] NATS 連線完成. ", CONFIG.NATS.HOST+":"+CONFIG.NATS.PORT)
+
+	return oConn, oErr
 }

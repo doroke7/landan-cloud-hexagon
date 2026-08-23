@@ -72,6 +72,7 @@ import (
 	"example/internal/usecase/application/any/watcher/source"
 	"example/internal/usecase/port/any/model"
 	"example/pkg"
+	"github.com/nats-io/nats.go"
 )
 
 // Injectors from wire.go:
@@ -478,6 +479,37 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 	return websocketContainer, nil
 }
 
+func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) {
+	clock, err := pkg.NewClock(ctx)
+	if err != nil {
+		return nil, err
+	}
+	abstractHelper := helper.NewAbstractHelper()
+	aesHelper := helper.NewAesHelper(abstractHelper)
+	rsaHelper := helper.NewRsaHelper(abstractHelper)
+	jwtHelper := helper.NewJwtHelper(abstractHelper)
+	clientConn := bootstrap.NewResource(ctx)
+	model := client.NewModel(clientConn)
+	logic := client.NewLogic(clientConn)
+	resourceClient := client.NewResourceClient(clientConn, model, logic)
+	conn, err := bootstrap.NewNats()
+	if err != nil {
+		return nil, err
+	}
+	natsBroker := pkg.NewNATSBroker(conn)
+	centrifugeContainer := &CentrifugeContainer{
+		Clock:          clock,
+		AbstractHelper: abstractHelper,
+		AesHelper:      aesHelper,
+		RsaHelper:      rsaHelper,
+		JwtHelper:      jwtHelper,
+		ResourceClient: resourceClient,
+		Nats:           conn,
+		NatsBroker:     natsBroker,
+	}
+	return centrifugeContainer, nil
+}
+
 func InitClientContainer(ctx context.Context) (*ClientContainer, error) {
 	clock, err := pkg.NewClock(ctx)
 	if err != nil {
@@ -814,6 +846,25 @@ type WebsocketContainer struct {
 	WebsocketAdminRequestMiddleware        *middlewareWebsocketAdmin.RequestMiddleware
 	WebsocketAdminResponseMiddleware       *middlewareWebsocketAdmin.ResponseMiddleware
 	WebsocketAdminSignatureMiddleware      *middlewareWebsocketAdmin.SignatureMiddleware
+}
+
+type CentrifugeContainer struct {
+
+	// pkg
+	Clock *pkg.Clock
+
+	// Helper
+	*helper.AbstractHelper
+	*helper.AesHelper
+	*helper.RsaHelper
+	*helper.JwtHelper
+
+	// Clients
+	ResourceClient *client.ResourceClient
+
+	// NATS
+	Nats       *nats.Conn
+	NatsBroker *pkg.NATSBroker
 }
 
 // ClientContainer 只給 `client` （訂閱外部 gRPC stream）服務使用。
