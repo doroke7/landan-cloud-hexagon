@@ -20,11 +20,14 @@ import (
 
 /*
    Channel:
-   Type: heartbeat / heartbeat-ack
-   Method:
+   Type:  rpc /rpc-ack
+   Method: heartbeat
    Value:
 
-
+   Channel:
+   Type: rpc / rpc-ack
+   Method: Admin/Authentication/Authenticator/SignIn
+   Value: {}
 
    Channel:
    Type: room / room-ack
@@ -32,10 +35,7 @@ import (
    Value: room-01
 
 
-   Channel:
-   Type: event / event-ack
-   Method: Admin/Authentication/Authenticator/SignIn
-   Value: {}
+
 
 
    Channel: room-01
@@ -107,10 +107,6 @@ var oCentrifugeCommand = &cobra.Command{
 				   1. 所有的 client 過來的消息 ， OnPublish 都會handler
 				*/
 				oClient.OnPublish(func(oEvent centrifuge.PublishEvent, fnCallback centrifuge.PublishCallback) {
-					log.Printf(
-						"收到訊息 channel=%s method=%s value=%s\n",
-						oEvent.Channel,
-					)
 					var oPayload struct {
 						Method string          `json:"method"`
 						Value  json.RawMessage `json:"value"`
@@ -127,6 +123,16 @@ var oCentrifugeCommand = &cobra.Command{
 					}
 
 					fnCallback(centrifuge.PublishReply{}, nil)
+				})
+
+				oClient.OnRPC(func(oEvent centrifuge.RPCEvent, fnCallback centrifuge.RPCCallback) {
+					switch oEvent.Method {
+					case "heartbeat":
+						aData, _ := json.Marshal(map[string]string{"type": "rpc-ack", "method": "heartbeat"})
+						fnCallback(centrifuge.RPCReply{Data: aData}, nil)
+					default:
+						fnCallback(centrifuge.RPCReply{}, centrifuge.ErrorMethodNotFound)
+					}
 				})
 			},
 		)
@@ -170,13 +176,9 @@ var oCentrifugeCommand = &cobra.Command{
 				case <-ctx.Done():
 					return
 				case <-oTicker10.C:
-					if _, oErr := oNode.Publish("all", []byte(`{"message": "Hi!!"}`)); oErr != nil {
-						log.Println("publish error:", oErr)
-					}
+
 				case <-oTicker5.C:
-					if _, oErr := oNode.Publish("room-01", []byte(`{"message": "你好"}`)); oErr != nil {
-						log.Println("publish error:", oErr)
-					}
+
 				}
 			}
 		}()
