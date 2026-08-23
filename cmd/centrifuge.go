@@ -53,7 +53,7 @@ var oCentrifugeCommand = &cobra.Command{
 
 		// Connecting：驗證/接受連線，這個 demo 不做任何驗證，一律接受成匿名連線。
 		oNode.OnConnecting(
-			func(ctx context.Context, e centrifuge.ConnectEvent) (centrifuge.ConnectReply, error) {
+			func(oCtx context.Context, oEvent centrifuge.ConnectEvent) (centrifuge.ConnectReply, error) {
 				return centrifuge.ConnectReply{}, nil
 			},
 		)
@@ -80,15 +80,15 @@ var oCentrifugeCommand = &cobra.Command{
 				)
 
 				// client 訂閱 channel
-				if err := client.Subscribe("chat:room1"); err != nil {
-					log.Println("subscribe error:", err)
+				if oErr := client.Subscribe("chat:room1"); oErr != nil {
+					log.Println("subscribe error:", oErr)
 				}
 			},
 		)
 
 		// 啟動 node
-		if err := oNode.Run(); err != nil {
-			panic(err)
+		if oErr := oNode.Run(); oErr != nil {
+			panic(oErr)
 		}
 
 		fnHandler := centrifuge.NewWebsocketHandler(
