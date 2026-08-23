@@ -1,8 +1,5 @@
 'use strict'
 
-const { RSA_PUBLIC_KEY, SIGNATURE_SALT, TYPE_EVENT } = require('./config')
-const { rsaEncrypt, aesEncrypt, aesDecrypt, md5, randomString } = require('./crypto')
-
 // 對應 internal/middleware/websocket/admin 那條 Signature -> Decryption -> ... -> Encryption
 // chain：這裡在 client 端做「反過來」的事——加密 param、算簽名，讓 server 那條 chain
 // 可以正確驗簽、解密。
@@ -55,9 +52,4 @@ function decryptResponse (oResp, sKey, sIv) {
       result: aesDecrypt(oResp.r, sKey, sIv)
     }
   }
-}
-
-module.exports = {
-  encodeRequest,
-  decryptResponse
 }

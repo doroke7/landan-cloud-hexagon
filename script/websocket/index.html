@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>Websocket Admin Demo</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/forge/1.3.1/forge.min.js"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      max-width: 720px;
+      margin: 40px auto;
+      padding: 0 16px;
+      color: #222;
+    }
+    h1 { font-size: 20px; }
+    .row { margin-bottom: 12px; }
+    label { display: inline-block; width: 80px; }
+    input {
+      padding: 6px 8px;
+      width: 220px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 6px 14px;
+      margin-right: 8px;
+      cursor: pointer;
+    }
+    button:disabled { cursor: not-allowed; opacity: 0.5; }
+    #status {
+      font-weight: bold;
+    }
+    #log {
+      margin-top: 16px;
+      height: 360px;
+      overflow-y: auto;
+      background: #111;
+      color: #ddd;
+      padding: 10px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 12px;
+      white-space: pre-wrap;
+      word-break: break-all;
+      border-radius: 4px;
+    }
+    .log-line { padding: 2px 0; border-bottom: 1px solid #222; }
+    .log-info { color: #8ab4f8; }
+    .log-request { color: #fdd663; }
+    .log-response { color: #81c995; }
+    .log-event { color: #d7aefb; }
+    .log-error { color: #f28b82; }
+  </style>
+</head>
+<body>
+  <h1>Websocket Admin Demo</h1>
+  <p>對應 internal/middleware/websocket/admin 那條 Signature -&gt; Decryption -&gt; ... -&gt; Encryption
+    chain，是 Node 版 script/websocket 的瀏覽器版本（同一套加解密/協定邏輯，只是跑在瀏覽器裡）。</p>
+
+  <div class="row">
+    狀態：<span id="status">尚未連線</span>
+  </div>
+
+  <div class="row">
+    <button id="connect-btn">連線</button>
+  </div>
+
+  <div class="row">
+    <label for="name">帳號</label>
+    <input id="name" type="text" value="admin">
+  </div>
+  <div class="row">
+    <label for="password">密碼</label>
+    <input id="password" type="password" value="password">
+  </div>
+  <div class="row">
+    <button id="signin-btn" disabled>SignIn</button>
+  </div>
+
+  <div id="log"></div>
+
+  <!-- 依賴順序：config/crypto/protocol 是底層工具，router/controller/client 是物件，
+       container 把它們兜起來，main 是進入點，一定要最後載入。 -->
+  <script src="config.js"></script>
+  <script src="crypto.js"></script>
+  <script src="protocol.js"></script>
+  <script src="socket-router.js"></script>
+  <script src="socket-controller.js"></script>
+  <script src="socket-client.js"></script>
+  <script src="container.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>

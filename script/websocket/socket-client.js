@@ -1,7 +1,5 @@
 'use strict'
 
-const { encodeRequest, decryptResponse } = require('./protocol')
-
 // -------------------- SocketClient --------------------
 
 // 一般
@@ -90,5 +88,3 @@ class SocketClient {
     this.emit('Admin.Authentication.Authenticator.SignIn', oParam, fnCallback)
   }
 }
-
-module.exports = SocketClient

@@ -23,5 +23,3 @@ class SocketRouter {
     fnHandler(oPacket.param)
   }
 }
-
-module.exports = SocketRouter

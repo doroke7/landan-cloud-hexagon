@@ -1,10 +1,5 @@
 'use strict'
 
-const { WEBSOCKET_URL } = require('./config')
-const SocketClient = require('./socket-client')
-const SocketRouter = require('./socket-router')
-const SocketController = require('./socket-controller')
-
 // -------------------- 依賴注入容器 --------------------
 
 // 組裝 SocketRouter -> SocketController -> SocketClient 的注入鏈，並把 route
@@ -15,14 +10,9 @@ function initContainer () {
   const oSocketController = new SocketController()
   const oSocketClient = new SocketClient(WEBSOCKET_URL, oSocketRouter, oSocketController)
 
-  let oContainer = {
-    router: oSocketRouter, 
-    controller: oSocketController, 
+  return {
+    router: oSocketRouter,
+    controller: oSocketController,
     client: oSocketClient
-  };
-
-
-  return oContainer
+  }
 }
-
-module.exports = initContainer
