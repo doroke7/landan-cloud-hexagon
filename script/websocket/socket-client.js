@@ -24,7 +24,7 @@ class SocketClient {
         return
       }
 
-      const iRequestId = oResponse['request-id']
+      const iRequestId = oResponse.id
       const oCallback = this.callbacks.get(iRequestId)
       if (!oCallback) {
         return

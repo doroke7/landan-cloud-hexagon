@@ -28,7 +28,7 @@ func NewAuthenticatorHandler(oAuthenticatorUsecase usecasePortAnyAdminAuthentica
 
 func (oSelf *AuthenticatorHandler) SignIn(oConn types.WebsocketConn, oReq types.WebsocketRequest) types.WebsocketResponse {
 	var oParam signInParam
-	if err := json.Unmarshal(oReq.Param, &oParam); err != nil {
+	if err := json.Unmarshal(oReq.Value, &oParam); err != nil {
 		return types.WebsocketResponse{Type: "normal", Code: -1, Message: "invalid param, expect {\"name\":..., \"password\":...}"}
 	}
 

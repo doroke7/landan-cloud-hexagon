@@ -25,23 +25,60 @@ var ErrWebsocketMethodNotFound = errors.New("websocket: method not found")
 
 type WebsocketHandlerFunc func(oConn types.WebsocketConn, oReq types.WebsocketRequest) types.WebsocketResponse
 
-type WebsocketRouter struct {
-	prefix       string
-	upgrader     websocket.Upgrader
-	routes       map[string]websocketRoute
-	middlewares  []types.WebsocketMiddlewareFunc
-	noMethodFunc types.WebsocketMiddlewareFunc
+/*
+WebsocketRouter 的 group 模仿 GrpcRouter（見 pkg/grpc_router.go）：prefix 用「.」「/」
+分段建成一棵樹，dispatch 時沿著 oRequest.Method 的每一段往下走，沿路每經過一個真的被
+Group() 註冊過的節點，就把該節點自己的 middleware 疊加上去——子 group 會自動繼承所有
+祖先 group 的 middleware，再疊加自己的，順序是「祖先在前、自己在後」，且跟 Group()
+呼叫的先後順序完全無關。tokenize() 直接複用 grpc_router.go 那個（同一個 package）。
+
+沒有獨立的「全局 middlewares」概念：root 本身就是樹的一個節點，想要「不管打哪個 method
+都要跑」的全局 middleware，直接 Group("", 全局middleware...) 註冊在 root 上即可，
+dispatch 時一定會先經過 root，效果一樣，只是統一成同一套機制，不用額外的欄位。
+
+handler 也直接掛在對應的樹節點上（不再另外開一個 map[string]handler）：HandleFunc
+跟 Group 用同一套 tokenize 建樹，method 裡的「.」「/」視為同一種分隔符——這樣
+Group("Admin").HandleFunc("/Authentication/Authenticator.SignIn", ...) 跟 client 端
+送出的 "Admin.Authentication.Authenticator.SignIn"（分隔符不同）才能對到同一個節點；
+如果 handler 另外存一份用原始字串當 key 的 map，兩種分隔符寫法會被當成不同的 key，
+永遠查不到。
+*/
+type websocketRouteNode struct {
+	children    map[string]*websocketRouteNode
+	middlewares []types.WebsocketMiddlewareFunc // 這個節點自己註冊的 middleware，不含祖先節點的
+	handler     WebsocketHandlerFunc            // 這個節點自己註冊的 handler，沒有就是 nil
+	registered  bool                            // 這個節點是不是真的被 Group() 註冊過，還是只是路過的中繼節點
 }
 
-type websocketRoute struct {
-	handler WebsocketHandlerFunc
-	group   *WebsocketGroup
+func newWebsocketRouteNode() *websocketRouteNode {
+	return &websocketRouteNode{children: make(map[string]*websocketRouteNode)}
+}
+
+// websocketNodeFor 沿著 sPath 的每一段走過樹，不存在的節點沿路建起來，回傳最終的
+// 葉節點；Group()、WebsocketGroup.Group()、HandleFunc() 都靠它定位/建樹，只是
+// 起點不同（router 從 root 開始，group 從自己的節點開始）。
+func websocketNodeFor(oNode *websocketRouteNode, sPath string) *websocketRouteNode {
+	for _, sSegment := range tokenize(sPath) {
+		oChild, bOk := oNode.children[sSegment]
+		if !bOk {
+			oChild = newWebsocketRouteNode()
+			oNode.children[sSegment] = oChild
+		}
+		oNode = oChild
+	}
+	return oNode
+}
+
+type WebsocketRouter struct {
+	prefix   string
+	upgrader websocket.Upgrader
+	root     *websocketRouteNode
 }
 
 func NewWebsocketRouter(sPrefix string) *WebsocketRouter {
 	return &WebsocketRouter{
 		prefix: sPrefix,
-		routes: make(map[string]websocketRoute),
+		root:   newWebsocketRouteNode(),
 
 		upgrader: websocket.Upgrader{
 			CheckOrigin: func(r *http.Request) bool { return true },
@@ -50,45 +87,51 @@ func NewWebsocketRouter(sPrefix string) *WebsocketRouter {
 }
 
 func (oSelf *WebsocketRouter) HandleFunc(sMethod string, fnHandler WebsocketHandlerFunc) *WebsocketRouter {
-	oSelf.routes[sMethod] = websocketRoute{handler: fnHandler}
+	websocketNodeFor(oSelf.root, sMethod).handler = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketRouter) Use(fnMiddlewares []types.WebsocketMiddlewareFunc) *WebsocketRouter {
-	oSelf.middlewares = append(oSelf.middlewares, fnMiddlewares...)
-	return oSelf
-}
+// Group 每次 aaa.bbb.ccc 的 path 就生成 tree 的結構，並且在最後的節點掛上 middleware，
+// 用法跟 pkg.GrpcRouter.Group 是同一套慣例。
+func (oSelf *WebsocketRouter) Group(sPrefix string, aMiddlewares ...types.WebsocketMiddlewareFunc) *WebsocketGroup {
+	oNode := websocketNodeFor(oSelf.root, sPrefix)
+	oNode.middlewares = append(oNode.middlewares, aMiddlewares...)
+	oNode.registered = true
 
-func (oSelf *WebsocketRouter) Group(sPrefix string) *WebsocketGroup {
-	return &WebsocketGroup{router: oSelf, prefix: sPrefix}
+	return &WebsocketGroup{router: oSelf, node: oNode, prefix: sPrefix}
 }
 
 // WebsocketGroup 用法跟 gin.RouterGroup 一樣：Use() 加這個 group 專屬的 middleware，
-// HandleFunc() 用 group 的 prefix + method name 註冊到共用的 router 上。
+// HandleFunc() 用 group 的 prefix + method name 註冊到共用的 router 上；Group() 可以
+// 在這個 group 底下再開子 group（children），一路巢狀下去，跟 GrpcRouter 的樹狀結構
+// 是同一顆樹，只是進入點不同（從這個節點往下建，不是從 root）。
 type WebsocketGroup struct {
-	router      *WebsocketRouter
-	prefix      string
-	middlewares []types.WebsocketMiddlewareFunc
+	router *WebsocketRouter
+	node   *websocketRouteNode
+	prefix string // 從 root 累加下來的完整路徑，組 HandleFunc 的 method key 用
 }
 
-// Use 註冊只套用到「這個 group 底下的 method」的 middleware，疊在 WebsocketRouter.Use
-// 全局 middleware 之後、handler 之前。吃 slice 而不是 variadic，跟 WebsocketRouter.Use
-// 保持同一套簽名。
+// Use 註冊只套用到「這個 group（含底下所有 children）」的 middleware，疊在祖先 group
+// 的 middleware 之後、handler 之前。吃 slice 而不是 variadic，跟 WebsocketGroup.Group
+// 的 variadic 簽名不同，是刻意維持跟舊版一樣的呼叫方式。
 func (oSelf *WebsocketGroup) Use(fnMiddlewares []types.WebsocketMiddlewareFunc) *WebsocketGroup {
-	oSelf.middlewares = append(oSelf.middlewares, fnMiddlewares...)
+	oSelf.node.middlewares = append(oSelf.node.middlewares, fnMiddlewares...)
+	oSelf.node.registered = true
 	return oSelf
+}
+
+// Group 在這個 group 底下開一個子 group（children），繼承這個 group 的完整路徑，
+// 子 group 的 middleware 只套用在它自己跟它底下的 method，不會影響同層的其他 group。
+func (oSelf *WebsocketGroup) Group(sPrefix string, aMiddlewares ...types.WebsocketMiddlewareFunc) *WebsocketGroup {
+	oNode := websocketNodeFor(oSelf.node, sPrefix)
+	oNode.middlewares = append(oNode.middlewares, aMiddlewares...)
+	oNode.registered = true
+
+	return &WebsocketGroup{router: oSelf.router, node: oNode, prefix: oSelf.prefix + sPrefix}
 }
 
 func (oSelf *WebsocketGroup) HandleFunc(sMethod string, fnHandler WebsocketHandlerFunc) *WebsocketGroup {
-	oSelf.router.routes[oSelf.prefix+sMethod] = websocketRoute{handler: fnHandler, group: oSelf}
-	return oSelf
-}
-
-// NoMethod 註冊「method 不存在」時要包住預設回應的 middleware，用法跟 gin.Engine.NoRoute
-// 一樣：fnNext 是內建的 ErrWebsocketMethodNotFound 回應，NoMethod 可以在外面包一層自己的
-// 邏輯（記錄、覆寫訊息……），不呼叫 fnNext 就等於自己決定要回什麼。沒註冊就直接用內建回應。
-func (oSelf *WebsocketRouter) NoMethod(fnMiddleware types.WebsocketMiddlewareFunc) *WebsocketRouter {
-	oSelf.noMethodFunc = fnMiddleware
+	websocketNodeFor(oSelf.node, sMethod).handler = fnHandler
 	return oSelf
 }
 
@@ -155,12 +198,12 @@ func (oSelf *WebsocketRouter) serveConn(oContext context.Context, oResponseWrite
 		go func(oReq types.WebsocketRequest) {
 
 			oSeenMu.Lock()
-			oResp, bSeen := oSeenResponses[oReq.RequestId]
+			oResp, bSeen := oSeenResponses[oReq.Id]
 			oSeenMu.Unlock()
 
 			if !bSeen {
 				oResp = oSelf.dispatch(oWebsocketConn, oReq)
-				oResp.RequestId = oReq.RequestId
+				oResp.Id = oReq.Id
 
 				// Type 由 handler 自己決定（ack/normal/none），router 只根據這個欄位
 				// 決定要不要真的送出去；handler 沒設就預設 "normal"（多數情況都不需要
@@ -170,7 +213,7 @@ func (oSelf *WebsocketRouter) serveConn(oContext context.Context, oResponseWrite
 				}
 
 				oSeenMu.Lock()
-				oSeenResponses[oReq.RequestId] = oResp
+				oSeenResponses[oReq.Id] = oResp
 				oSeenMu.Unlock()
 			}
 
@@ -212,35 +255,47 @@ func (oSelf *websocketConn) Push(sMethod string, oParam any) error {
 	return oSelf.conn.WriteJSON(types.WebsocketRequest{
 		Type:   "event",
 		Method: sMethod,
-		Param:  aParam,
+		Value:  aParam,
 	})
 }
 
 func (oSelf *WebsocketRouter) dispatch(oConn types.WebsocketConn, oRequest types.WebsocketRequest) types.WebsocketResponse {
-
-	oRoute, ok := oSelf.routes[oRequest.Method]
-
-	if !ok {
-		fnNotFound := types.WebsocketNextFunc(func(oConn types.WebsocketConn, oReq types.WebsocketRequest) types.WebsocketResponse {
-			return types.WebsocketResponse{Code: -1, Message: ErrWebsocketMethodNotFound.Error()}
-		})
-
-		if oSelf.noMethodFunc == nil {
-			return fnNotFound(oConn, oRequest)
-		}
-		return oSelf.noMethodFunc(oConn, oRequest, fnNotFound)
+	fnNext := oSelf.chain(oRequest.Method)
+	if fnNext == nil {
+		return types.WebsocketResponse{Code: -1, Message: ErrWebsocketMethodNotFound.Error()}
 	}
 
-	return oSelf.chain(oRoute)(oConn, oRequest)
+	return fnNext(oConn, oRequest)
 }
 
-func (oSelf *WebsocketRouter) chain(oRoute websocketRoute) types.WebsocketNextFunc {
-	fnNext := types.WebsocketNextFunc(oRoute.handler)
+// chain 沿著 sMethod 的每一段走過樹（跟 GrpcRouter.Build 內部查找同一套邏輯），一路
+// 把「真的被 Group() 註冊過」的節點的 middleware 依序疊上去（祖先在前、自己在後），
+// 走到底那個節點的 handler 就是最終要呼叫的方法；沒有 handler（純中繼節點，或
+// method 根本沒註冊過）回傳 nil，交給呼叫端決定要怎麼回應「method not found」。
+func (oSelf *WebsocketRouter) chain(sMethod string) types.WebsocketNextFunc {
+	var aMiddlewares []types.WebsocketMiddlewareFunc
 
-	aMiddlewares := oSelf.middlewares
-	if oRoute.group != nil {
-		aMiddlewares = append(append([]types.WebsocketMiddlewareFunc{}, oSelf.middlewares...), oRoute.group.middlewares...)
+	oNode := oSelf.root
+	if oNode.registered {
+		aMiddlewares = append(aMiddlewares, oNode.middlewares...)
 	}
+
+	for _, sSegment := range tokenize(sMethod) {
+		oChild, bOk := oNode.children[sSegment]
+		if !bOk {
+			return nil
+		}
+		oNode = oChild
+		if oNode.registered {
+			aMiddlewares = append(aMiddlewares, oNode.middlewares...)
+		}
+	}
+
+	if oNode.handler == nil {
+		return nil
+	}
+
+	fnNext := types.WebsocketNextFunc(oNode.handler)
 
 	for i := len(aMiddlewares) - 1; i >= 0; i-- {
 		fnMiddleware := aMiddlewares[i]

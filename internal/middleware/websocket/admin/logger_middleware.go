@@ -28,7 +28,7 @@ func (oSelf *LoggerMiddleware) Handle() types.WebsocketMiddlewareFunc {
 		pkg.Logger(pkg.WebsocketAdminMiddleware).Info(
 			"進入 websocket",
 			zap.String("method", oReq.Method),
-			zap.ByteString("param", oReq.Param),
+			zap.ByteString("value", oReq.Value),
 		)
 
 		oResp := fnNext(oConn, oReq)

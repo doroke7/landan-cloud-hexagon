@@ -32,7 +32,7 @@ func NewSignatureMiddleware(oAbstractMiddleware *AbstractMiddleware) *SignatureM
 }
 
 // Handle 職責跟 http 版本的 SignatureMiddleware 一樣：把 Ver/Version/K/Time 跟這筆訊息
-// 加密前的 s/o/p 三個欄位（對應 oReq.S/oReq.O/oReq.P）串起來算 md5，比對 Header 裡的
+// 加密前的 c/v/f/p 四個欄位（對應 oReq.C/oReq.V/oReq.F/oReq.P）串起來算 md5，比對 Header 裡的
 // Signature，簽名對不上就直接擋掉，不呼叫 fnNext；是否真的要擋用
 // bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN 這組獨立設定，不再跟 http 共用。
 func (oSelf *SignatureMiddleware) Handle() types.WebsocketMiddlewareFunc {
@@ -44,12 +44,12 @@ func (oSelf *SignatureMiddleware) Handle() types.WebsocketMiddlewareFunc {
 			}
 		}
 
-		// NOTE: 簽的是 oReq.S/oReq.O/oReq.P 這三個「加密前」的密文欄位，不是
-		// DecryptionMiddleware 解密後才會有值的 oReq.Search/oReq.Option/oReq.Param——
-		// Signature 跑在 Decryption 之前，這時候 Search/Option/Param 都還是零值，簽那些
-		// 等於什麼都沒簽到；跟 http 版本簽 s/o/p 是同一個道理：一律簽「加密前」的內容，
-		// 不要簽解密後的明文，多此一舉。
-		aStrings := []string{oHeader.Ver, oHeader.Version, oHeader.K, oHeader.Time, oReq.S, oReq.O, oReq.P, bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN.SALT}
+		// NOTE: 簽的是 oReq.C/oReq.V/oReq.F/oReq.P 這四個「加密前」的密文欄位，不是
+		// DecryptionMiddleware 解密後才會有值的 oReq.Code/oReq.Value/oReq.Filters/
+		// oReq.Pagination——Signature 跑在 Decryption 之前，這時候那幾個明文欄位都還是
+		// 零值，簽那些等於什麼都沒簽到；跟 http 版本簽 c/v/f/p 是同一個道理：一律簽
+		// 「加密前」的內容，不要簽解密後的明文，多此一舉。
+		aStrings := []string{oHeader.Ver, oHeader.Version, oHeader.K, oHeader.Time, oReq.C, oReq.V, oReq.F, oReq.P, bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN.SALT}
 		sMd5Signature := utility.Md5(strings.Join(aStrings, "|"))
 
 		if bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN.SIGNATURE && sMd5Signature != oHeader.Signature {
