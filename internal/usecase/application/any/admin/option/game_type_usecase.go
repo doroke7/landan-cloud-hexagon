@@ -3,16 +3,17 @@ package option
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminOption "example/internal/usecase/port/any/admin/option"
 	pkg "example/pkg"
 )
 
 type GameTypeUsecase struct {
-	*AbstractUsecase
+	*usecaseApplicationAnyAdmin.AbstractUsecase
 	GameTypeModel outputPortAnyModel.GameTypeModel
 }
 
-func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oAbstractUsecase *AbstractUsecase) usecasePortAnyAdminOption.GameTypeUsecase {
+func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminOption.GameTypeUsecase {
 	return &GameTypeUsecase{
 		AbstractUsecase: oAbstractUsecase,
 		GameTypeModel:   oGameTypeModel,

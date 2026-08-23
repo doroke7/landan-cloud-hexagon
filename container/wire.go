@@ -39,6 +39,7 @@ import (
 
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
 
+	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecaseApplicationAnyAdminAuthentication "example/internal/usecase/application/any/admin/authentication"
 	usecaseApplicationAnyAdminOption "example/internal/usecase/application/any/admin/option"
 	usecaseApplicationAnyAdminResource "example/internal/usecase/application/any/admin/resource"
@@ -190,16 +191,14 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		outputApplicationResourceLogic.NewAppUserLogic,
 
 		// usecase
-		usecaseApplicationAnyAdminAuthentication.NewAbstractUsecase,
+		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase,
 		usecaseApplicationAnyGame.NewAbstractUsecase,
 		usecaseApplicationAnyGameAuthentication.NewAuthenticatorUsecase,
-		usecaseApplicationAnyAdminResource.NewAbstractUsecase,
 		usecaseApplicationAnyAdminResource.NewGameUsecase,
 		usecaseApplicationAnyAdminResource.NewTableUsecase,
 		usecaseApplicationAnyAdminResource.NewAdminUserUsecase,
 		usecaseApplicationAnyAdminResource.NewGameTypeUsecase,
-		usecaseApplicationAnyAdminOption.NewAbstractUsecase,
 		usecaseApplicationAnyAdminOption.NewGameTypeUsecase,
 
 		// client
@@ -313,7 +312,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 		outputApplicationResourceModel.NewAdminUserModel,
 
 		// usecase
-		usecaseApplicationAnyAdminAuthentication.NewAbstractUsecase,
+		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase,
 
 		// client
@@ -481,7 +480,7 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 		outputApplicationMysqlModel.NewAppUserModel,
 
 		// usecase
-		usecaseApplicationAnyAdminResource.NewAbstractUsecase,
+		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminResource.NewAppUserUsecase,
 
 		// input-consumer
@@ -531,9 +530,9 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 		outputApplicationMysqlModel.NewAdminUserModel,
 
 		// usecase
-		usecaseApplicationAnyAdminResource.NewAbstractUsecase,
+		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminResource.NewAppUserUsecase,
-		usecaseApplicationAnyAdminAuthentication.NewAbstractUsecase,
+		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase,
 
 		// input-cron
@@ -601,7 +600,7 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 		outputApplicationResourceModel.NewAdminUserModel,
 
 		// usecase
-		usecaseApplicationAnyAdminAuthentication.NewAbstractUsecase,
+		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase,
 
 		// client
@@ -696,9 +695,9 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 		outputApplicationMysqlModel.NewAdminUserModel,
 
 		// usecase
-		usecaseApplicationAnyAdminResource.NewAbstractUsecase,
+		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminResource.NewAppUserUsecase,
-		usecaseApplicationAnyAdminAuthentication.NewAbstractUsecase,
+		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase,
 
 		// command
@@ -748,7 +747,7 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 		outputApplicationResourceModel.NewAdminUserModel,
 
 		// usecase
-		usecaseApplicationAnyAdminAuthentication.NewAbstractUsecase,
+		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase,
 
 		// client

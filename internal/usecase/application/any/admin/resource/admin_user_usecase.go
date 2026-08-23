@@ -3,16 +3,17 @@ package resource
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkg "example/pkg"
 )
 
 type AdminUserUsecase struct {
-	*AbstractUsecase
+	*usecaseApplicationAnyAdmin.AbstractUsecase
 	outputPortAnyModel.AdminUserModel
 }
 
-func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAbstractUsecase *AbstractUsecase) usecasePortAnyAdminResource.AdminUserUsecase {
+func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminResource.AdminUserUsecase {
 	return &AdminUserUsecase{
 		AbstractUsecase: oAbstractUsecase,
 		AdminUserModel:  oAdminUserModel,

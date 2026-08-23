@@ -6,17 +6,18 @@ import (
 	outputPortAnyModel "example/internal/output/port/any/model"
 	"fmt"
 
+	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkg "example/pkg"
 )
 
 type GameUsecase struct {
-	*AbstractUsecase
+	*usecaseApplicationAnyAdmin.AbstractUsecase
 	GameModel outputPortAnyModel.GameModel
 	GameLogic outputPortAnylogic.GameLogic
 }
 
-func NewGameUsecase(oGameModel outputPortAnyModel.GameModel, oGameLogic outputPortAnylogic.GameLogic, oAbstractUsecase *AbstractUsecase) usecasePortAnyAdminResource.GameUsecase {
+func NewGameUsecase(oGameModel outputPortAnyModel.GameModel, oGameLogic outputPortAnylogic.GameLogic, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminResource.GameUsecase {
 	return &GameUsecase{
 		AbstractUsecase: oAbstractUsecase,
 		GameModel:       oGameModel,

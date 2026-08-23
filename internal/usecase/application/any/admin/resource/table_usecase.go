@@ -4,17 +4,18 @@ import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkg "example/pkg"
 )
 
 type TableUsecase struct {
-	*AbstractUsecase
+	*usecaseApplicationAnyAdmin.AbstractUsecase
 	TableModel outputPortAnyModel.TableModel
 	TableLogic outputPortAnyLogic.TableLogic
 }
 
-func NewTableUsecase(oTableModel outputPortAnyModel.TableModel, oTableLogic outputPortAnyLogic.TableLogic, oAbstractUsecase *AbstractUsecase) usecasePortAnyAdminResource.TableUsecase {
+func NewTableUsecase(oTableModel outputPortAnyModel.TableModel, oTableLogic outputPortAnyLogic.TableLogic, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminResource.TableUsecase {
 	return &TableUsecase{
 		AbstractUsecase: oAbstractUsecase,
 		TableModel:      oTableModel,

@@ -3,16 +3,17 @@ package resource
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkg "example/pkg"
 )
 
 type GameTypeUsecase struct {
-	*AbstractUsecase
+	*usecaseApplicationAnyAdmin.AbstractUsecase
 	GameTypeModel outputPortAnyModel.GameTypeModel
 }
 
-func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oAbstractUsecase *AbstractUsecase) usecasePortAnyAdminResource.GameTypeUsecase {
+func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminResource.GameTypeUsecase {
 	return &GameTypeUsecase{
 		AbstractUsecase: oAbstractUsecase,
 		GameTypeModel:   oGameTypeModel,
