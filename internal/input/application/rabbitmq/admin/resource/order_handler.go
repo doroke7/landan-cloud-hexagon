@@ -1,1 +1,1 @@
-package rabbitmq
+package applicationRabbitmqAdminResource

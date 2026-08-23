@@ -1,4 +1,4 @@
-package controller_admin_authentication
+package applicationHttpAdminAuthentication
 
 import (
 	"github.com/gin-gonic/gin"

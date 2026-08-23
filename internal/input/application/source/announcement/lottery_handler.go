@@ -1,4 +1,4 @@
-package announcement
+package applicationSourceAnnouncement
 
 import (
 	"log"

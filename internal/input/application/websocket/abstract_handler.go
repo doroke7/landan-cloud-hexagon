@@ -1,4 +1,4 @@
-package websocket
+package applicationWebsocket
 
 import (
 	helper "example/internal/helper"

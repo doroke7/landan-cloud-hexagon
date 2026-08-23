@@ -1,4 +1,4 @@
-package input_application_resource_model
+package applicationResourceModel
 
 import (
 	"context"

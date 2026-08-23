@@ -1,4 +1,4 @@
-package handler
+package applicationHttpAdminResource
 
 import (
 	"github.com/gin-gonic/gin"

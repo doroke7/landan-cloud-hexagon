@@ -1,4 +1,4 @@
-package handler
+package applicationHttp
 
 import (
 	pkg "example/pkg"
