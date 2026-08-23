@@ -281,7 +281,7 @@ facade:
       -----END RSA PRIVATE KEY-----
 
 websocket:
-  port: 6001
+  port: 4031
   admin:
     authentication: true
     signature: true
