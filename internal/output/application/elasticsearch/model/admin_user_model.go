@@ -103,7 +103,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 }
 
 func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	aWheres := make([]map[string]any, 0, len(aFilters))
+	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil {
@@ -120,45 +120,45 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, err
 
 		switch sOperator {
 		case "ne":
-			aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"term": map[string]any{sField: oValue}}}})
+			aFilterClauses = append(aFilterClauses, map[string]any{"bool": map[string]any{"must_not": map[string]any{"term": map[string]any{sField: oValue}}}})
 		case "gt", "gte", "lt", "lte":
-			aWheres = append(aWheres, map[string]any{"range": map[string]any{sField: map[string]any{sOperator: oValue}}})
+			aFilterClauses = append(aFilterClauses, map[string]any{"range": map[string]any{sField: map[string]any{sOperator: oValue}}})
 		case "contains":
 			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}})
+				aFilterClauses = append(aFilterClauses, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}})
 			}
 		case "notContains":
 			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}}}})
+				aFilterClauses = append(aFilterClauses, map[string]any{"bool": map[string]any{"must_not": map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}}}})
 			}
 		case "startsWith":
 			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"prefix": map[string]any{sField: map[string]any{"value": sValue, "case_insensitive": true}}})
+				aFilterClauses = append(aFilterClauses, map[string]any{"prefix": map[string]any{sField: map[string]any{"value": sValue, "case_insensitive": true}}})
 			}
 		case "endsWith":
 			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue, "case_insensitive": true}}})
+				aFilterClauses = append(aFilterClauses, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue, "case_insensitive": true}}})
 			}
 		case "in":
-			aWheres = append(aWheres, map[string]any{"terms": map[string]any{sField: oValue}})
+			aFilterClauses = append(aFilterClauses, map[string]any{"terms": map[string]any{sField: oValue}})
 		case "notIn":
-			aWheres = append(aWheres, map[string]any{"bool": map[string]any{"must_not": map[string]any{"terms": map[string]any{sField: oValue}}}})
+			aFilterClauses = append(aFilterClauses, map[string]any{"bool": map[string]any{"must_not": map[string]any{"terms": map[string]any{sField: oValue}}}})
 		case "between":
 			if aRange, bOk := oValue.([]any); bOk && len(aRange) == 2 {
-				aWheres = append(aWheres, map[string]any{"range": map[string]any{sField: map[string]any{"gte": aRange[0], "lte": aRange[1]}}})
+				aFilterClauses = append(aFilterClauses, map[string]any{"range": map[string]any{sField: map[string]any{"gte": aRange[0], "lte": aRange[1]}}})
 			}
 		case "match":
 			if sValue, bOk := oValue.(string); bOk {
-				aWheres = append(aWheres, map[string]any{"match": map[string]any{sField: sValue}})
+				aFilterClauses = append(aFilterClauses, map[string]any{"match": map[string]any{sField: sValue}})
 			}
 		default:
-			aWheres = append(aWheres, map[string]any{"term": map[string]any{sField: oValue}})
+			aFilterClauses = append(aFilterClauses, map[string]any{"term": map[string]any{sField: oValue}})
 		}
 	}
 
 	oQuery := map[string]any{"match_all": map[string]any{}}
-	if len(aWheres) > 0 {
-		oQuery = map[string]any{"bool": map[string]any{"filter": aWheres}}
+	if len(aFilterClauses) > 0 {
+		oQuery = map[string]any{"bool": map[string]any{"filter": aFilterClauses}}
 	}
 
 	aBodyBytes, oErr := json.Marshal(map[string]any{"query": oQuery})
