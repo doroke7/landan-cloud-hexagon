@@ -1,4 +1,4 @@
-package logic
+package outputPortAnyLogic
 
 import (
 	domain "example/internal/domain"

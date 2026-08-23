@@ -1,4 +1,4 @@
-package port
+package outputPortAnyModel
 
 import (
 	domain "example/internal/domain"
