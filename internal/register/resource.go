@@ -52,6 +52,7 @@ func ResourceInit(oContainer *container.ResourceContainer) *grpc.Server {
 	)
 
 	pbResourceModel.RegisterAdminUserModelServer(oGrpcServer, oContainer.ResourceModelAdminUser)
+	pbResourceModel.RegisterAppUserModelServer(oGrpcServer, oContainer.ResourceModelAppUser)
 	pbResourceModel.RegisterGameModelServer(oGrpcServer, oContainer.ResourceModelGame)
 	pbResourceModel.RegisterTableModelServer(oGrpcServer, oContainer.ResourceModelTable)
 	pbResourceModel.RegisterGameTypeModelServer(oGrpcServer, oContainer.ResourceModelGameType)

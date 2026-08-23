@@ -19,7 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AppUserModel_AddAppUser_FullMethodName = "/pb.resource.model.AppUserModel/AddAppUser"
+	AppUserModel_AddAppUser_FullMethodName      = "/pb.resource.model.AppUserModel/AddAppUser"
+	AppUserModel_ShowOneByName_FullMethodName   = "/pb.resource.model.AppUserModel/ShowOneByName"
+	AppUserModel_ShowOneById_FullMethodName     = "/pb.resource.model.AppUserModel/ShowOneById"
+	AppUserModel_IncreaseBalance_FullMethodName = "/pb.resource.model.AppUserModel/IncreaseBalance"
 )
 
 // AppUserModelClient is the client API for AppUserModel service.
@@ -27,6 +30,9 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AppUserModelClient interface {
 	AddAppUser(ctx context.Context, in *AppUserAddOneInput, opts ...grpc.CallOption) (*AppUserAddOneOutput, error)
+	ShowOneByName(ctx context.Context, in *AppUserShowOneByNameInput, opts ...grpc.CallOption) (*AppUserShowOneByNameOutput, error)
+	ShowOneById(ctx context.Context, in *AppUserShowOneByIdInput, opts ...grpc.CallOption) (*AppUserShowOneByIdOutput, error)
+	IncreaseBalance(ctx context.Context, in *AppUserIncreaseBalanceInput, opts ...grpc.CallOption) (*AppUserIncreaseBalanceOutput, error)
 }
 
 type appUserModelClient struct {
@@ -47,11 +53,44 @@ func (c *appUserModelClient) AddAppUser(ctx context.Context, in *AppUserAddOneIn
 	return out, nil
 }
 
+func (c *appUserModelClient) ShowOneByName(ctx context.Context, in *AppUserShowOneByNameInput, opts ...grpc.CallOption) (*AppUserShowOneByNameOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AppUserShowOneByNameOutput)
+	err := c.cc.Invoke(ctx, AppUserModel_ShowOneByName_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appUserModelClient) ShowOneById(ctx context.Context, in *AppUserShowOneByIdInput, opts ...grpc.CallOption) (*AppUserShowOneByIdOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AppUserShowOneByIdOutput)
+	err := c.cc.Invoke(ctx, AppUserModel_ShowOneById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *appUserModelClient) IncreaseBalance(ctx context.Context, in *AppUserIncreaseBalanceInput, opts ...grpc.CallOption) (*AppUserIncreaseBalanceOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AppUserIncreaseBalanceOutput)
+	err := c.cc.Invoke(ctx, AppUserModel_IncreaseBalance_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AppUserModelServer is the server API for AppUserModel service.
 // All implementations must embed UnimplementedAppUserModelServer
 // for forward compatibility.
 type AppUserModelServer interface {
 	AddAppUser(context.Context, *AppUserAddOneInput) (*AppUserAddOneOutput, error)
+	ShowOneByName(context.Context, *AppUserShowOneByNameInput) (*AppUserShowOneByNameOutput, error)
+	ShowOneById(context.Context, *AppUserShowOneByIdInput) (*AppUserShowOneByIdOutput, error)
+	IncreaseBalance(context.Context, *AppUserIncreaseBalanceInput) (*AppUserIncreaseBalanceOutput, error)
 	mustEmbedUnimplementedAppUserModelServer()
 }
 
@@ -64,6 +103,15 @@ type UnimplementedAppUserModelServer struct{}
 
 func (UnimplementedAppUserModelServer) AddAppUser(context.Context, *AppUserAddOneInput) (*AppUserAddOneOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method AddAppUser not implemented")
+}
+func (UnimplementedAppUserModelServer) ShowOneByName(context.Context, *AppUserShowOneByNameInput) (*AppUserShowOneByNameOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowOneByName not implemented")
+}
+func (UnimplementedAppUserModelServer) ShowOneById(context.Context, *AppUserShowOneByIdInput) (*AppUserShowOneByIdOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowOneById not implemented")
+}
+func (UnimplementedAppUserModelServer) IncreaseBalance(context.Context, *AppUserIncreaseBalanceInput) (*AppUserIncreaseBalanceOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method IncreaseBalance not implemented")
 }
 func (UnimplementedAppUserModelServer) mustEmbedUnimplementedAppUserModelServer() {}
 func (UnimplementedAppUserModelServer) testEmbeddedByValue()                      {}
@@ -104,6 +152,60 @@ func _AppUserModel_AddAppUser_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AppUserModel_ShowOneByName_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AppUserShowOneByNameInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppUserModelServer).ShowOneByName(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppUserModel_ShowOneByName_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppUserModelServer).ShowOneByName(ctx, req.(*AppUserShowOneByNameInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppUserModel_ShowOneById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AppUserShowOneByIdInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppUserModelServer).ShowOneById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppUserModel_ShowOneById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppUserModelServer).ShowOneById(ctx, req.(*AppUserShowOneByIdInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AppUserModel_IncreaseBalance_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AppUserIncreaseBalanceInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AppUserModelServer).IncreaseBalance(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AppUserModel_IncreaseBalance_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AppUserModelServer).IncreaseBalance(ctx, req.(*AppUserIncreaseBalanceInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AppUserModel_ServiceDesc is the grpc.ServiceDesc for AppUserModel service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +216,18 @@ var AppUserModel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddAppUser",
 			Handler:    _AppUserModel_AddAppUser_Handler,
+		},
+		{
+			MethodName: "ShowOneByName",
+			Handler:    _AppUserModel_ShowOneByName_Handler,
+		},
+		{
+			MethodName: "ShowOneById",
+			Handler:    _AppUserModel_ShowOneById_Handler,
+		},
+		{
+			MethodName: "IncreaseBalance",
+			Handler:    _AppUserModel_IncreaseBalance_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

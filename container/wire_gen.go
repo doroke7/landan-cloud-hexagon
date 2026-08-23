@@ -279,6 +279,8 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	abstractMysql := outputApplicationMysql.NewAbstractMysql(ctx, db, aop)
 	adminUserModel := outputApplicationMysqlModel.NewAdminUserModel(abstractMysql)
 	adminUserUsecase := usecaseApplicationAnyModel.NewAdminUserUsecase(adminUserModel, abstractUsecase)
+	appUserModel := outputApplicationMysqlModel.NewAppUserModel(abstractMysql)
+	appUserUsecase := usecaseApplicationAnyModel.NewAppUserUsecase(appUserModel, abstractUsecase)
 	gameModel := outputApplicationMysqlModel.NewGameModel(abstractMysql)
 	gameUsecase := usecaseApplicationAnyModel.NewGameUsecase(gameModel, abstractUsecase)
 	tableModel := outputApplicationMysqlModel.NewTableModel(abstractMysql)
@@ -287,6 +289,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	gameTypeUsecase := usecaseApplicationAnyModel.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
 	abstractHandler := inputApplicationResource.NewAbstractHandler()
 	adminUserHandler := inputApplicationResourceModel.NewAdminUserHandler(abstractHandler, adminUserUsecase)
+	appUserHandler := inputApplicationResourceModel.NewAppUserHandler(abstractHandler, appUserUsecase)
 	gameHandler := inputApplicationResourceModel.NewGameHandler(abstractHandler, gameUsecase)
 	tableHandler := inputApplicationResourceModel.NewTableHandler(abstractHandler, tableUsecase)
 	gameTypeHandler := inputApplicationResourceModel.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
@@ -324,11 +327,13 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		RsaHelper:                              rsaHelper,
 		AbstractUsecase:                        abstractUsecase,
 		AdminUserUsecase:                       adminUserUsecase,
+		AppUserUsecase:                         appUserUsecase,
 		GameUsecase:                            gameUsecase,
 		TableUsecase:                           tableUsecase,
 		GameTypeUsecase:                        gameTypeUsecase,
 		ResourceAbstract:                       abstractHandler,
 		ResourceModelAdminUser:                 adminUserHandler,
+		ResourceModelAppUser:                   appUserHandler,
 		ResourceModelGame:                      gameHandler,
 		ResourceModelTable:                     tableHandler,
 		ResourceModelGameType:                  gameTypeHandler,
@@ -720,6 +725,7 @@ type ResourceContainer struct {
 
 	*usecaseApplicationAnyModel.AbstractUsecase
 	usecasePortAnyModel.AdminUserUsecase
+	usecasePortAnyModel.AppUserUsecase
 	usecasePortAnyModel.GameUsecase
 	usecasePortAnyModel.TableUsecase
 	usecasePortAnyModel.GameTypeUsecase
@@ -727,6 +733,7 @@ type ResourceContainer struct {
 	// gRPC Resource server
 	ResourceAbstract       *inputApplicationResource.AbstractHandler
 	ResourceModelAdminUser *inputApplicationResourceModel.AdminUserHandler
+	ResourceModelAppUser   *inputApplicationResourceModel.AppUserHandler
 	ResourceModelGame      *inputApplicationResourceModel.GameHandler
 	ResourceModelTable     *inputApplicationResourceModel.TableHandler
 	ResourceModelGameType  *inputApplicationResourceModel.GameTypeHandler

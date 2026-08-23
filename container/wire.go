@@ -360,6 +360,7 @@ type ResourceContainer struct {
 
 	*usecaseApplicationAnyModel.AbstractUsecase
 	usecasePortAnyModel.AdminUserUsecase
+	usecasePortAnyModel.AppUserUsecase
 	usecasePortAnyModel.GameUsecase
 	usecasePortAnyModel.TableUsecase
 	usecasePortAnyModel.GameTypeUsecase
@@ -367,6 +368,7 @@ type ResourceContainer struct {
 	// gRPC Resource server
 	ResourceAbstract       *inputApplicationResource.AbstractHandler
 	ResourceModelAdminUser *inputApplicationResourceModel.AdminUserHandler
+	ResourceModelAppUser   *inputApplicationResourceModel.AppUserHandler
 	ResourceModelGame      *inputApplicationResourceModel.GameHandler
 	ResourceModelTable     *inputApplicationResourceModel.TableHandler
 	ResourceModelGameType  *inputApplicationResourceModel.GameTypeHandler
@@ -403,6 +405,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		// output
 		outputApplicationMysql.NewAbstractMysql,
 		outputApplicationMysqlModel.NewAdminUserModel,
+		outputApplicationMysqlModel.NewAppUserModel,
 		outputApplicationMysqlModel.NewGameModel,
 		outputApplicationMysqlModel.NewTableModel,
 		outputApplicationMysqlModel.NewGameTypeModel,
@@ -414,6 +417,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		// usecase
 		usecaseApplicationAnyModel.NewAbstractUsecase,
 		usecaseApplicationAnyModel.NewAdminUserUsecase,
+		usecaseApplicationAnyModel.NewAppUserUsecase,
 		usecaseApplicationAnyModel.NewGameUsecase,
 		usecaseApplicationAnyModel.NewTableUsecase,
 		usecaseApplicationAnyModel.NewGameTypeUsecase,
@@ -424,6 +428,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		// input-resource
 		inputApplicationResource.NewAbstractHandler,
 		inputApplicationResourceModel.NewAdminUserHandler,
+		inputApplicationResourceModel.NewAppUserHandler,
 		inputApplicationResourceModel.NewGameHandler,
 		inputApplicationResourceModel.NewTableHandler,
 		inputApplicationResourceModel.NewGameTypeHandler,

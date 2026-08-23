@@ -109,6 +109,326 @@ func (x *AppUserAddOneOutput) GetName() string {
 	return ""
 }
 
+type AppUserShowOneByNameInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AppUserShowOneByNameInput) Reset() {
+	*x = AppUserShowOneByNameInput{}
+	mi := &file_resource_model_app_user_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AppUserShowOneByNameInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AppUserShowOneByNameInput) ProtoMessage() {}
+
+func (x *AppUserShowOneByNameInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_app_user_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AppUserShowOneByNameInput.ProtoReflect.Descriptor instead.
+func (*AppUserShowOneByNameInput) Descriptor() ([]byte, []int) {
+	return file_resource_model_app_user_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *AppUserShowOneByNameInput) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+type AppUserShowOneByNameOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	Balance       uint32                 `protobuf:"varint,4,opt,name=balance,proto3" json:"balance,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AppUserShowOneByNameOutput) Reset() {
+	*x = AppUserShowOneByNameOutput{}
+	mi := &file_resource_model_app_user_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AppUserShowOneByNameOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AppUserShowOneByNameOutput) ProtoMessage() {}
+
+func (x *AppUserShowOneByNameOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_app_user_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AppUserShowOneByNameOutput.ProtoReflect.Descriptor instead.
+func (*AppUserShowOneByNameOutput) Descriptor() ([]byte, []int) {
+	return file_resource_model_app_user_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *AppUserShowOneByNameOutput) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *AppUserShowOneByNameOutput) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *AppUserShowOneByNameOutput) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *AppUserShowOneByNameOutput) GetBalance() uint32 {
+	if x != nil {
+		return x.Balance
+	}
+	return 0
+}
+
+type AppUserShowOneByIdInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AppUserShowOneByIdInput) Reset() {
+	*x = AppUserShowOneByIdInput{}
+	mi := &file_resource_model_app_user_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AppUserShowOneByIdInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AppUserShowOneByIdInput) ProtoMessage() {}
+
+func (x *AppUserShowOneByIdInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_app_user_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AppUserShowOneByIdInput.ProtoReflect.Descriptor instead.
+func (*AppUserShowOneByIdInput) Descriptor() ([]byte, []int) {
+	return file_resource_model_app_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *AppUserShowOneByIdInput) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type AppUserShowOneByIdOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	Balance       uint32                 `protobuf:"varint,4,opt,name=balance,proto3" json:"balance,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AppUserShowOneByIdOutput) Reset() {
+	*x = AppUserShowOneByIdOutput{}
+	mi := &file_resource_model_app_user_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AppUserShowOneByIdOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AppUserShowOneByIdOutput) ProtoMessage() {}
+
+func (x *AppUserShowOneByIdOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_app_user_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AppUserShowOneByIdOutput.ProtoReflect.Descriptor instead.
+func (*AppUserShowOneByIdOutput) Descriptor() ([]byte, []int) {
+	return file_resource_model_app_user_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *AppUserShowOneByIdOutput) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *AppUserShowOneByIdOutput) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *AppUserShowOneByIdOutput) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
+func (x *AppUserShowOneByIdOutput) GetBalance() uint32 {
+	if x != nil {
+		return x.Balance
+	}
+	return 0
+}
+
+type AppUserIncreaseBalanceInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Amount        uint32                 `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AppUserIncreaseBalanceInput) Reset() {
+	*x = AppUserIncreaseBalanceInput{}
+	mi := &file_resource_model_app_user_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AppUserIncreaseBalanceInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AppUserIncreaseBalanceInput) ProtoMessage() {}
+
+func (x *AppUserIncreaseBalanceInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_app_user_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AppUserIncreaseBalanceInput.ProtoReflect.Descriptor instead.
+func (*AppUserIncreaseBalanceInput) Descriptor() ([]byte, []int) {
+	return file_resource_model_app_user_proto_rawDescGZIP(), []int{6}
+}
+
+func (x *AppUserIncreaseBalanceInput) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *AppUserIncreaseBalanceInput) GetAmount() uint32 {
+	if x != nil {
+		return x.Amount
+	}
+	return 0
+}
+
+type AppUserIncreaseBalanceOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AppUserIncreaseBalanceOutput) Reset() {
+	*x = AppUserIncreaseBalanceOutput{}
+	mi := &file_resource_model_app_user_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AppUserIncreaseBalanceOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AppUserIncreaseBalanceOutput) ProtoMessage() {}
+
+func (x *AppUserIncreaseBalanceOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_app_user_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AppUserIncreaseBalanceOutput.ProtoReflect.Descriptor instead.
+func (*AppUserIncreaseBalanceOutput) Descriptor() ([]byte, []int) {
+	return file_resource_model_app_user_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *AppUserIncreaseBalanceOutput) GetStatus() bool {
+	if x != nil {
+		return x.Status
+	}
+	return false
+}
+
 var File_resource_model_app_user_proto protoreflect.FileDescriptor
 
 const file_resource_model_app_user_proto_rawDesc = "" +
@@ -117,10 +437,32 @@ const file_resource_model_app_user_proto_rawDesc = "" +
 	"\x12AppUserAddOneInput\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\")\n" +
 	"\x13AppUserAddOneOutput\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name2k\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"/\n" +
+	"\x19AppUserShowOneByNameInput\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"v\n" +
+	"\x1aAppUserShowOneByNameOutput\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\x18\n" +
+	"\abalance\x18\x04 \x01(\rR\abalance\")\n" +
+	"\x17AppUserShowOneByIdInput\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"t\n" +
+	"\x18AppUserShowOneByIdOutput\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\x18\n" +
+	"\abalance\x18\x04 \x01(\rR\abalance\"E\n" +
+	"\x1bAppUserIncreaseBalanceInput\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x16\n" +
+	"\x06amount\x18\x02 \x01(\rR\x06amount\"6\n" +
+	"\x1cAppUserIncreaseBalanceOutput\x12\x16\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status2\xb5\x03\n" +
 	"\fAppUserModel\x12[\n" +
 	"\n" +
-	"AddAppUser\x12%.pb.resource.model.AppUserAddOneInput\x1a&.pb.resource.model.AppUserAddOneOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
+	"AddAppUser\x12%.pb.resource.model.AppUserAddOneInput\x1a&.pb.resource.model.AppUserAddOneOutput\x12l\n" +
+	"\rShowOneByName\x12,.pb.resource.model.AppUserShowOneByNameInput\x1a-.pb.resource.model.AppUserShowOneByNameOutput\x12f\n" +
+	"\vShowOneById\x12*.pb.resource.model.AppUserShowOneByIdInput\x1a+.pb.resource.model.AppUserShowOneByIdOutput\x12r\n" +
+	"\x0fIncreaseBalance\x12..pb.resource.model.AppUserIncreaseBalanceInput\x1a/.pb.resource.model.AppUserIncreaseBalanceOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
 
 var (
 	file_resource_model_app_user_proto_rawDescOnce sync.Once
@@ -134,16 +476,28 @@ func file_resource_model_app_user_proto_rawDescGZIP() []byte {
 	return file_resource_model_app_user_proto_rawDescData
 }
 
-var file_resource_model_app_user_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_resource_model_app_user_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_resource_model_app_user_proto_goTypes = []any{
-	(*AppUserAddOneInput)(nil),  // 0: pb.resource.model.AppUserAddOneInput
-	(*AppUserAddOneOutput)(nil), // 1: pb.resource.model.AppUserAddOneOutput
+	(*AppUserAddOneInput)(nil),           // 0: pb.resource.model.AppUserAddOneInput
+	(*AppUserAddOneOutput)(nil),          // 1: pb.resource.model.AppUserAddOneOutput
+	(*AppUserShowOneByNameInput)(nil),    // 2: pb.resource.model.AppUserShowOneByNameInput
+	(*AppUserShowOneByNameOutput)(nil),   // 3: pb.resource.model.AppUserShowOneByNameOutput
+	(*AppUserShowOneByIdInput)(nil),      // 4: pb.resource.model.AppUserShowOneByIdInput
+	(*AppUserShowOneByIdOutput)(nil),     // 5: pb.resource.model.AppUserShowOneByIdOutput
+	(*AppUserIncreaseBalanceInput)(nil),  // 6: pb.resource.model.AppUserIncreaseBalanceInput
+	(*AppUserIncreaseBalanceOutput)(nil), // 7: pb.resource.model.AppUserIncreaseBalanceOutput
 }
 var file_resource_model_app_user_proto_depIdxs = []int32{
 	0, // 0: pb.resource.model.AppUserModel.AddAppUser:input_type -> pb.resource.model.AppUserAddOneInput
-	1, // 1: pb.resource.model.AppUserModel.AddAppUser:output_type -> pb.resource.model.AppUserAddOneOutput
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
+	2, // 1: pb.resource.model.AppUserModel.ShowOneByName:input_type -> pb.resource.model.AppUserShowOneByNameInput
+	4, // 2: pb.resource.model.AppUserModel.ShowOneById:input_type -> pb.resource.model.AppUserShowOneByIdInput
+	6, // 3: pb.resource.model.AppUserModel.IncreaseBalance:input_type -> pb.resource.model.AppUserIncreaseBalanceInput
+	1, // 4: pb.resource.model.AppUserModel.AddAppUser:output_type -> pb.resource.model.AppUserAddOneOutput
+	3, // 5: pb.resource.model.AppUserModel.ShowOneByName:output_type -> pb.resource.model.AppUserShowOneByNameOutput
+	5, // 6: pb.resource.model.AppUserModel.ShowOneById:output_type -> pb.resource.model.AppUserShowOneByIdOutput
+	7, // 7: pb.resource.model.AppUserModel.IncreaseBalance:output_type -> pb.resource.model.AppUserIncreaseBalanceOutput
+	4, // [4:8] is the sub-list for method output_type
+	0, // [0:4] is the sub-list for method input_type
 	0, // [0:0] is the sub-list for extension type_name
 	0, // [0:0] is the sub-list for extension extendee
 	0, // [0:0] is the sub-list for field type_name
@@ -160,7 +514,7 @@ func file_resource_model_app_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_model_app_user_proto_rawDesc), len(file_resource_model_app_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

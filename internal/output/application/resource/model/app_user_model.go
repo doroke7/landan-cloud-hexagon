@@ -1,8 +1,6 @@
 package outputApplicationResourceModel
 
 import (
-	"errors"
-
 	domain "example/internal/domain"
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
@@ -34,17 +32,51 @@ func (oSelf *AppUserModel) AddOne(oAppUser *domain.AppUserValue) (bool, error) {
 	return true, nil
 }
 
-// ShowOneByName 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
 func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) {
-	return nil, errors.New("not supported by resource")
+
+	oResp, oErr := oSelf.ResourceModelClient.AppUser.ShowOneByName(
+		oSelf.Context,
+		&pbResourceModel.AppUserShowOneByNameInput{Name: sName},
+	)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	return &domain.AppUser{
+		Id:       uint(oResp.GetId()),
+		Name:     oResp.GetName(),
+		Password: oResp.GetPassword(),
+		Balance:  uint(oResp.GetBalance()),
+	}, nil
 }
 
-// ShowOneById 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
 func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
-	return nil, errors.New("not supported by resource")
+
+	oResp, oErr := oSelf.ResourceModelClient.AppUser.ShowOneById(
+		oSelf.Context,
+		&pbResourceModel.AppUserShowOneByIdInput{Id: uint32(iId)},
+	)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	return &domain.AppUser{
+		Id:       uint(oResp.GetId()),
+		Name:     oResp.GetName(),
+		Password: oResp.GetPassword(),
+		Balance:  uint(oResp.GetBalance()),
+	}, nil
 }
 
-// IncreaseBalance 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
 func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint) (bool, error) {
-	return false, errors.New("not supported by resource")
+
+	oResp, oErr := oSelf.ResourceModelClient.AppUser.IncreaseBalance(
+		oSelf.Context,
+		&pbResourceModel.AppUserIncreaseBalanceInput{Id: uint32(iId), Amount: uint32(iAmount)},
+	)
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return oResp.GetStatus(), nil
 }
