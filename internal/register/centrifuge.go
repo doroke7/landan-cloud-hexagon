@@ -75,13 +75,7 @@ func CentrifugeInit(oContainer *container.CentrifugeContainer) (*centrifuge.Node
 			if oErr := oClient.Subscribe("all"); oErr != nil {
 				log.Println("subscribe error:", oErr)
 			}
-			// if oErr := oClient.Subscribe("room-01"); oErr != nil {
-			// 	log.Println("subscribe error:", oErr)
-			// }
 
-			/*
-			   1. 所有的 client 過來的消息 ， OnPublish 都會handler
-			*/
 			oClient.OnPublish(func(oEvent centrifuge.PublishEvent, fnCallback centrifuge.PublishCallback) {
 				var oPayload struct {
 					Method string          `json:"method"`
@@ -101,12 +95,6 @@ func CentrifugeInit(oContainer *container.CentrifugeContainer) (*centrifuge.Node
 				fnCallback(centrifuge.PublishReply{}, nil)
 			})
 
-			// 心跳：對應設計文件最上面 "Channel: (空)" 那組 heartbeat/heartbeat-ack。
-			// RPC 命令本來就沒有 channel 概念（protocol.RPCRequest 只有 Method/Data，
-			// 沒有 Channel 欄位），跟 Publish 需要帶 channel 不一樣，所以 channel="" 這種
-			// 心跳/room join-leave/event 類型的協議走 RPC，不走 Publish。
-			// client 端呼叫 centrifuge.rpc("heartbeat", ...)，這裡收到後直接回 heartbeat-ack，
-			// 之後要記錄「最後上線時間」之類的副作用可以加在 case "heartbeat" 這裡。
 			oClient.OnRPC(func(oEvent centrifuge.RPCEvent, fnCallback centrifuge.RPCCallback) {
 				switch oEvent.Method {
 				case "heartbeat":
@@ -115,6 +103,45 @@ func CentrifugeInit(oContainer *container.CentrifugeContainer) (*centrifuge.Node
 				default:
 					fnCallback(centrifuge.RPCReply{}, centrifuge.ErrorMethodNotFound)
 				}
+			})
+
+			// OnRefresh：client-side 連線過期時要不要延長連線。
+			oClient.OnRefresh(func(oEvent centrifuge.RefreshEvent, fnCallback centrifuge.RefreshCallback) {
+				fnCallback(centrifuge.RefreshReply{}, centrifuge.ErrorNotAvailable)
+			})
+
+			// OnMessage：client 用 Send（單向訊息，沒有 reply）送過來的資料，沒有 callback 可以回。
+			oClient.OnMessage(func(oEvent centrifuge.MessageEvent) {
+				//
+			})
+
+			// OnSubRefresh：client-side 訂閱過期時要不要延長訂閱。
+			oClient.OnSubRefresh(func(oEvent centrifuge.SubRefreshEvent, fnCallback centrifuge.SubRefreshCallback) {
+				fnCallback(centrifuge.SubRefreshReply{}, centrifuge.ErrorNotAvailable)
+			})
+
+			// OnSubscribe：client 端主動 subscribe 任意 channel 的權限判斷，"all"/"room-01"
+			// 目前都是上面 server-side 主動 Subscribe，不會走到這個 handler，先占位不開放。
+			oClient.OnSubscribe(func(oEvent centrifuge.SubscribeEvent, fnCallback centrifuge.SubscribeCallback) {
+				fnCallback(centrifuge.SubscribeReply{}, centrifuge.ErrorNotAvailable)
+			})
+
+			// OnUnsubscribe：純通知事件，沒有 callback 可以回。
+			oClient.OnUnsubscribe(func(oEvent centrifuge.UnsubscribeEvent) {
+				//
+			})
+
+			// OnPresence / OnPresenceStats：channel 在線名單／人數查詢。
+			oClient.OnPresence(func(oEvent centrifuge.PresenceEvent, fnCallback centrifuge.PresenceCallback) {
+				fnCallback(centrifuge.PresenceReply{}, centrifuge.ErrorNotAvailable)
+			})
+			oClient.OnPresenceStats(func(oEvent centrifuge.PresenceStatsEvent, fnCallback centrifuge.PresenceStatsCallback) {
+				fnCallback(centrifuge.PresenceStatsReply{}, centrifuge.ErrorNotAvailable)
+			})
+
+			// OnHistory：channel 歷史訊息查詢。
+			oClient.OnHistory(func(oEvent centrifuge.HistoryEvent, fnCallback centrifuge.HistoryCallback) {
+				fnCallback(centrifuge.HistoryReply{}, centrifuge.ErrorNotAvailable)
 			})
 		},
 	)
