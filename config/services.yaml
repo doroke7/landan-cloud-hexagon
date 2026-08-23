@@ -138,6 +138,52 @@ http:
       4zFWSwbgohpX38E1smBDIllQjqAQ/0wUXp0lYe+pqJBNsdj7LdKCM+AhU4hLrOVW
       mV+jvKeEpJJ0IubD6QfKsQp29jm8XCsabmRI8GvO+GMRrlE444cR
       -----END RSA PRIVATE KEY-----
+  game:
+    authentication: true
+    signature: true
+    salt: '~9U7g2R8zgW&dZ_u'
+    jwt:
+      secret: 'Ar*&4C[#s!Eef/~dI{\DgRe-&5'
+      key: '1111222233334444'
+      iv: '6666777788889999'
+    public_key: |
+      -----BEGIN PUBLIC KEY-----
+      MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAqBbztPHxvEsnb5BcMTjv
+      693XqRMYte+ORJvrgc0RsdHlC4W4lSqvjnH2JcsTGgtSqmmvsvoPQ9dKGs6+OD3E
+      zIClDiEr4n7QRFFjYKP3IBqhkR5a5wZdiOCoYCx2dOKjBTkLgIzMO145nITHR0za
+      Yv7k22eNdIzlLVat1Oq1DlWCHWBEQHUUm/OhiBSHnRb2DXiMa+vBvHHrZBIcDb0+
+      TRD14zLArY5ijKWkzTLGzr4IDi3TcwDz6xEkLm4grzi/KEYtjAweVTClqm19vYAk
+      SDe+BtVYNxODv3yQSSIrDEzeCnbimIBCBfwxL65YrbIAUx7YqVbtNry56C4MI95h
+      rQIDAQAB
+      -----END PUBLIC KEY-----
+    private_key: |
+      -----BEGIN RSA PRIVATE KEY-----
+      MIIEowIBAAKCAQEAqBbztPHxvEsnb5BcMTjv693XqRMYte+ORJvrgc0RsdHlC4W4
+      lSqvjnH2JcsTGgtSqmmvsvoPQ9dKGs6+OD3EzIClDiEr4n7QRFFjYKP3IBqhkR5a
+      5wZdiOCoYCx2dOKjBTkLgIzMO145nITHR0zaYv7k22eNdIzlLVat1Oq1DlWCHWBE
+      QHUUm/OhiBSHnRb2DXiMa+vBvHHrZBIcDb0+TRD14zLArY5ijKWkzTLGzr4IDi3T
+      cwDz6xEkLm4grzi/KEYtjAweVTClqm19vYAkSDe+BtVYNxODv3yQSSIrDEzeCnbi
+      mIBCBfwxL65YrbIAUx7YqVbtNry56C4MI95hrQIDAQABAoIBADTozJuXUMU5TteC
+      NFLWHkc7VEgHF88k8b5M6gu4lipH7HX9CIYDorEO1DE/Q+r9x26Wx9Rpe+aZ3Nyl
+      WSDw6IKKt+nDrUGlMz9d8w8XbZFwcIzyZiC0UzrjpHxpYnwWXsQlGabEKwFA/pdz
+      ABtEaLWikD0z0kXul7D2yM7tdkJlSpY8oxJ07GuZsFzlRwA9x9IyZOwU2DWpC5kd
+      xiGk1FjhTw19oHwNOVgBYlCixJiINTmlIoU+4mKhc9mkRgeHpdG1XMJVubqWmscg
+      TUW6ZVQNeI3LiTChIwvlozB8t7Xmo3K/yhnzow6ivgS9SU4QMDqVIHaBqALl6GAl
+      dFRMgCECgYEA6I9k+nC0c0f3Rr/ovJP3A9C9QrGrrtKyr+vVBxKY/i5COMrwA6bn
+      4m3sCWBVilmzC7NxofuQ7mjcRNx/zEYFWywbDlyMZS6pFrppfrPEDkVdPWP78KkA
+      UsxG9mn+ExdFwyHy0W8EUL26oljyZRaQmnMIkwFnKlLbHncQ20i9bOUCgYEAuQgQ
+      ymAAxwwOxWYgWkZIVs5LfMZzsdaImf4SoBBc2e4RBQ+qLHTwa5Q/l0Fd++xHI38a
+      gUf3JKAz7Flc5FdcDYjXvDJvGxizcmxigPFKrEMs8fIomn6rotu/HK5PVsekHvLz
+      EuPkysWCg8Nrvzq76F3H1GjU6aOJtK66+XZKHSkCgYBSxebs9Hxlo7GxbtDJfein
+      ZP5X5KD0om2TC99Qmx/1KEXNrP1sb1WNVA507+LCUVbWzVGek8lr8cqkf87EyA9T
+      +gjPPcWCpe7s9gBiZl1brviWxyV+7Mf+sFJ5lhQme1wLLeQdAuSIUF9DNWFg9X0W
+      W+crW456k+8Fkt9fDS7OuQKBgQCdXmHBbXNb10J820Yq4VnHEn+baMGfgCIALtoy
+      bpg59cNd9Zu7Yd3U8WpAP6UqjSNX6lNlnwpwiRyAKOTbg/1TuY4ajx52AkUkzU/d
+      8Nqctil0wYuNEqzxv0nEn+/0k6lfdSwNZewCFYfSfxOVueN1VsWNP3fOGnwVQwLd
+      BqE0OQKBgGcHyKxyUV2w4r0wgoCalPdpG9JIbv2YtlDkhNfJwwb0b23gWzWSfoKl
+      4zFWSwbgohpX38E1smBDIllQjqAQ/0wUXp0lYe+pqJBNsdj7LdKCM+AhU4hLrOVW
+      mV+jvKeEpJJ0IubD6QfKsQp29jm8XCsabmRI8GvO+GMRrlE444cR
+      -----END RSA PRIVATE KEY-----
 
 
 facade:

@@ -43,6 +43,7 @@ import (
 	"example/internal/interceptor/resource/logic"
 	"example/internal/interceptor/resource/model"
 	"example/internal/middleware/http/admin"
+	"example/internal/middleware/http/game"
 	"example/internal/middleware/http/table"
 	middleware_admin2 "example/internal/middleware/websocket/admin"
 	"example/internal/output/application/cache"
@@ -129,6 +130,17 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	middleware_tableRequestMiddleware := middleware_table.NewRequestMiddleware(middleware_tableAbstractMiddleware)
 	middleware_tableResponseMiddleware := middleware_table.NewResponseMiddleware(middleware_tableAbstractMiddleware)
 	middleware_tableSignatureMiddleware := middleware_table.NewSignatureMiddleware(middleware_tableAbstractMiddleware)
+	middleware_gameAbstractMiddleware := middleware_game.NewAbstractMiddleware(response, clock, rsaHelper, aesHelper, jwtHelper)
+	gameMiddleware := middleware_game.NewGameMiddleware(middleware_gameAbstractMiddleware)
+	middleware_gameAuthenticationMiddleware := middleware_game.NewAuthenticationMiddleware(middleware_gameAbstractMiddleware)
+	middleware_gameDecryptionMiddleware := middleware_game.NewDecryptionMiddleware(middleware_gameAbstractMiddleware)
+	middleware_gameEncryptionMiddleware := middleware_game.NewEncryptionMiddleware(middleware_gameAbstractMiddleware)
+	middleware_gameErrorMiddleware := middleware_game.NewErrorMiddleware(middleware_gameAbstractMiddleware)
+	middleware_gameLoggerMiddleware := middleware_game.NewLoggerMiddleware(middleware_gameAbstractMiddleware)
+	middleware_gameNonexistentMiddleware := middleware_game.NewNonexistentMiddleware(middleware_gameAbstractMiddleware)
+	middleware_gameRequestMiddleware := middleware_game.NewRequestMiddleware(middleware_gameAbstractMiddleware)
+	middleware_gameResponseMiddleware := middleware_game.NewResponseMiddleware(middleware_gameAbstractMiddleware)
+	middleware_gameSignatureMiddleware := middleware_game.NewSignatureMiddleware(middleware_gameAbstractMiddleware)
 	httpContainer := &HttpContainer{
 		Response:                             response,
 		Clock:                                clock,
@@ -165,6 +177,17 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		HttpTableRequestMiddleware:           middleware_tableRequestMiddleware,
 		HttpTableResponseMiddleware:          middleware_tableResponseMiddleware,
 		HttpTableSignatureMiddleware:         middleware_tableSignatureMiddleware,
+		HttpGameAbstractMiddleware:           middleware_gameAbstractMiddleware,
+		HttpGameGameMiddleware:               gameMiddleware,
+		HttpGameAuthenticationMiddleware:     middleware_gameAuthenticationMiddleware,
+		HttpGameDecryptionMiddleware:         middleware_gameDecryptionMiddleware,
+		HttpGameEncryptionMiddleware:         middleware_gameEncryptionMiddleware,
+		HttpGameErrorMiddleware:              middleware_gameErrorMiddleware,
+		HttpGameLoggerMiddleware:             middleware_gameLoggerMiddleware,
+		HttpGameNonexistentMiddleware:        middleware_gameNonexistentMiddleware,
+		HttpGameRequestMiddleware:            middleware_gameRequestMiddleware,
+		HttpGameResponseMiddleware:           middleware_gameResponseMiddleware,
+		HttpGameSignatureMiddleware:          middleware_gameSignatureMiddleware,
 	}
 	return httpContainer, nil
 }
@@ -630,6 +653,18 @@ type HttpContainer struct {
 	HttpTableRequestMiddleware        *middleware_table.RequestMiddleware
 	HttpTableResponseMiddleware       *middleware_table.ResponseMiddleware
 	HttpTableSignatureMiddleware      *middleware_table.SignatureMiddleware
+
+	HttpGameAbstractMiddleware       *middleware_game.AbstractMiddleware
+	HttpGameGameMiddleware           *middleware_game.GameMiddleware
+	HttpGameAuthenticationMiddleware *middleware_game.AuthenticationMiddleware
+	HttpGameDecryptionMiddleware     *middleware_game.DecryptionMiddleware
+	HttpGameEncryptionMiddleware     *middleware_game.EncryptionMiddleware
+	HttpGameErrorMiddleware          *middleware_game.ErrorMiddleware
+	HttpGameLoggerMiddleware         *middleware_game.LoggerMiddleware
+	HttpGameNonexistentMiddleware    *middleware_game.NonexistentMiddleware
+	HttpGameRequestMiddleware        *middleware_game.RequestMiddleware
+	HttpGameResponseMiddleware       *middleware_game.ResponseMiddleware
+	HttpGameSignatureMiddleware      *middleware_game.SignatureMiddleware
 }
 
 type FacadeContainer struct {

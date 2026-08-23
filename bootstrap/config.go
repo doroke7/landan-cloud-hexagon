@@ -57,6 +57,18 @@ type Config struct {
 					IV     string `mapstructure:"iv"`
 				} `mapstructure:"jwt"`
 			} `mapstructure:"table"`
+			GAME struct {
+				PUBLIC_KEY     string `mapstructure:"public_key"`
+				PRIVATE_KEY    string `mapstructure:"private_key"`
+				SIGNATURE      bool   `mapstructure:"signature"`
+				AUTHENTICATION bool   `mapstructure:"authentication"`
+				SALT           string `mapstructure:"salt"`
+				JWT            struct {
+					SECRET string `mapstructure:"secret"`
+					KEY    string `mapstructure:"key"`
+					IV     string `mapstructure:"iv"`
+				} `mapstructure:"jwt"`
+			} `mapstructure:"game"`
 		} `mapstructure:"http"`
 		FACADE struct {
 			HOST  string `mapstructure:"host"`

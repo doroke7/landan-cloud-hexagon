@@ -48,6 +48,7 @@ import (
 	usecaseApplicationAnyWatcherSource "example/internal/usecase/application/any/watcher/source"
 
 	middlewareHttpAdmin "example/internal/middleware/http/admin"
+	middlewareHttpGame "example/internal/middleware/http/game"
 	middlewareHttpTable "example/internal/middleware/http/table"
 
 	interceptorFacadeAdmin "example/internal/interceptor/facade/admin"
@@ -144,6 +145,18 @@ type HttpContainer struct {
 	HttpTableRequestMiddleware        *middlewareHttpTable.RequestMiddleware
 	HttpTableResponseMiddleware       *middlewareHttpTable.ResponseMiddleware
 	HttpTableSignatureMiddleware      *middlewareHttpTable.SignatureMiddleware
+
+	HttpGameAbstractMiddleware       *middlewareHttpGame.AbstractMiddleware
+	HttpGameGameMiddleware           *middlewareHttpGame.GameMiddleware
+	HttpGameAuthenticationMiddleware *middlewareHttpGame.AuthenticationMiddleware
+	HttpGameDecryptionMiddleware     *middlewareHttpGame.DecryptionMiddleware
+	HttpGameEncryptionMiddleware     *middlewareHttpGame.EncryptionMiddleware
+	HttpGameErrorMiddleware          *middlewareHttpGame.ErrorMiddleware
+	HttpGameLoggerMiddleware         *middlewareHttpGame.LoggerMiddleware
+	HttpGameNonexistentMiddleware    *middlewareHttpGame.NonexistentMiddleware
+	HttpGameRequestMiddleware        *middlewareHttpGame.RequestMiddleware
+	HttpGameResponseMiddleware       *middlewareHttpGame.ResponseMiddleware
+	HttpGameSignatureMiddleware      *middlewareHttpGame.SignatureMiddleware
 }
 
 func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
@@ -221,6 +234,18 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		middlewareHttpTable.NewRequestMiddleware,
 		middlewareHttpTable.NewResponseMiddleware,
 		middlewareHttpTable.NewSignatureMiddleware,
+
+		middlewareHttpGame.NewAbstractMiddleware,
+		middlewareHttpGame.NewGameMiddleware,
+		middlewareHttpGame.NewAuthenticationMiddleware,
+		middlewareHttpGame.NewDecryptionMiddleware,
+		middlewareHttpGame.NewEncryptionMiddleware,
+		middlewareHttpGame.NewErrorMiddleware,
+		middlewareHttpGame.NewLoggerMiddleware,
+		middlewareHttpGame.NewNonexistentMiddleware,
+		middlewareHttpGame.NewRequestMiddleware,
+		middlewareHttpGame.NewResponseMiddleware,
+		middlewareHttpGame.NewSignatureMiddleware,
 
 		wire.Struct(new(HttpContainer), "*"),
 	)

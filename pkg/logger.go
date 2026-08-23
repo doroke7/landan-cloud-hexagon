@@ -21,10 +21,12 @@ const (
 	HttpApp             Module = "http-app"
 	HttpThird           Module = "http-third"
 	HttpTable           Module = "http-table"
+	HttpGame            Module = "http-game"
 	HttpAdminMiddleware Module = "http-admin-middleware"
 	HttpAppMiddleware   Module = "http-app-middleware"
 	HttpThirdMiddleware Module = "http-third-middleware"
 	HttpTableMiddleware Module = "http-table-middleware"
+	HttpGameMiddleware  Module = "http-game-middleware"
 
 	Websocket                Module = "websocket"
 	WebsocketAdmin           Module = "websocket-admin"

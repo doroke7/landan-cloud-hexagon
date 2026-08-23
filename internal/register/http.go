@@ -77,6 +77,24 @@ func httpTableMiddlewares(oContainer *container.HttpContainer) []gin.HandlerFunc
 	}
 }
 
+func httpGameMiddlewares(oContainer *container.HttpContainer) []gin.HandlerFunc {
+	return []gin.HandlerFunc{
+		// ALL middleware
+		oContainer.HttpGameLoggerMiddleware.Handle(),
+
+		// Before Middleware
+		oContainer.HttpGameErrorMiddleware.Handle(),
+		oContainer.HttpGameSignatureMiddleware.Handle(),
+		oContainer.HttpGameDecryptionMiddleware.Handle(),
+		oContainer.HttpGameAuthenticationMiddleware.Handle(),
+		oContainer.HttpGameRequestMiddleware.Handle(),
+
+		// After Middleware
+		oContainer.HttpGameResponseMiddleware.Handle(),
+		oContainer.HttpGameEncryptionMiddleware.Handle(),
+	}
+}
+
 func HttpInit(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 
 	oAdmin := oGin.Group("/Admin")
