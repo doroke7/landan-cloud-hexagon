@@ -1,4 +1,4 @@
-package cron
+package applicationCron
 
 import (
 	helper "example/internal/helper"

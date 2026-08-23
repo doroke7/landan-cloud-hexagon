@@ -1,4 +1,4 @@
-package authentication
+package applicationCommandAdminAuthentication
 
 import (
 	inputApplicationCommand "example/internal/input/application/command"

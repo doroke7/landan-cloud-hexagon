@@ -1,4 +1,4 @@
-package facade
+package applicationFacade
 
 import (
 	helper "example/internal/helper"
