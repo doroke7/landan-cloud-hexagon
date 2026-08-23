@@ -25,3 +25,12 @@ type AppUserValue struct {
 	Password *string `json:"password,omitempty"`
 	Balance  *uint   `json:"balance,omitempty"`
 }
+
+func AppUserRowToAppUser(oRow *AppUserRow) *AppUser {
+	return &AppUser{
+		Id:       oRow.Id,
+		Name:     oRow.Name,
+		Password: oRow.Password,
+		Balance:  oRow.Balance,
+	}
+}

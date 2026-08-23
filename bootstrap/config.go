@@ -409,6 +409,9 @@ type Config struct {
 		ADMIN_USER struct {
 			PASSWORD string `mapstructure:"password"`
 		} `mapstructure:"admin_user"`
+		APP_USER struct {
+			PASSWORD string `mapstructure:"password"`
+		} `mapstructure:"app_user"`
 	} `mapstructure:"table"`
 }
 
