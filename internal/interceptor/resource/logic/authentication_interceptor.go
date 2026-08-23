@@ -1,4 +1,4 @@
-package interceptor_resource_logic
+package interceptorResourceLogic
 
 import (
 	"context"

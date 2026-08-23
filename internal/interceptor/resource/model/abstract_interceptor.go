@@ -1,4 +1,4 @@
-package interceptor_resource_model
+package interceptorResourceModel
 
 import (
 	"context"

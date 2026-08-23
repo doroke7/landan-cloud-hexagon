@@ -1,4 +1,4 @@
-package interceptor_facade_admin
+package interceptorFacadeAdmin
 
 import (
 	"context"
