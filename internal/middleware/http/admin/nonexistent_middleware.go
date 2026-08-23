@@ -1,4 +1,4 @@
-package middleware_admin
+package middlewareHttpAdmin
 
 import (
 	"github.com/gin-gonic/gin"

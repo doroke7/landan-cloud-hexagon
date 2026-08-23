@@ -1,4 +1,4 @@
-package zeromq
+package outputApplicationZeromqModel
 
 import (
 	"encoding/json"

@@ -1,4 +1,4 @@
-package postgresql
+package outputApplicationPostgresqlModel
 
 import (
 	"context"

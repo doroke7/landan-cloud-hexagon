@@ -1,4 +1,4 @@
-package middleware_game
+package middlewareHttpGame
 
 import (
 	"github.com/gin-gonic/gin"

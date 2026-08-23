@@ -1,4 +1,4 @@
-package cache
+package outputApplicationCache
 
 import (
 	"context"

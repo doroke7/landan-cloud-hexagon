@@ -1,4 +1,4 @@
-package kafka
+package outputApplicationKafkaModel
 
 import (
 	"encoding/json"

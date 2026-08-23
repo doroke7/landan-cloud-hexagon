@@ -1,4 +1,4 @@
-package usecase
+package usecaseApplicationAnyGameAuthentication
 
 import (
 	bootstrap "example/bootstrap"

@@ -1,4 +1,4 @@
-package usecase
+package usecaseApplicationAnyModel
 
 import (
 	domain "example/internal/domain"

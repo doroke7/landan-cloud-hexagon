@@ -1,4 +1,4 @@
-package model
+package outputApplicationCacheModel
 
 import (
 	domain "example/internal/domain"

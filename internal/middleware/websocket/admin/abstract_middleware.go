@@ -1,4 +1,4 @@
-package middleware_admin
+package middlewareWebsocketAdmin
 
 import (
 	helper "example/internal/helper"

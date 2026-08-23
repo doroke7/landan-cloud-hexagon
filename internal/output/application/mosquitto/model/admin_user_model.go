@@ -1,4 +1,4 @@
-package mosquitto
+package outputApplicationMosquittoModel
 
 import (
 	"encoding/json"

@@ -1,4 +1,4 @@
-package rabbitmq
+package outputApplicationRabbitmqModel
 
 import (
 	"encoding/json"

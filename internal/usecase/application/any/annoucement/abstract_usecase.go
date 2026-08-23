@@ -1,4 +1,4 @@
-package usecase
+package usecaseApplicationAnyAnnouncement
 
 import (
 	helper "example/internal/helper"

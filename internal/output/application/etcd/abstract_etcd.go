@@ -1,4 +1,4 @@
-package etcd
+package outputApplicationEtcd
 
 import (
 	"context"

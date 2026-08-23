@@ -1,4 +1,4 @@
-package resource
+package usecaseApplicationAnyAdminResource
 
 import (
 	outputPortAnyModel "example/internal/output/port/any/model"

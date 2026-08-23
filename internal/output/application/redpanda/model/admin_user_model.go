@@ -1,4 +1,4 @@
-package redpanda
+package outputApplicationRedpandaModel
 
 import (
 	"encoding/json"

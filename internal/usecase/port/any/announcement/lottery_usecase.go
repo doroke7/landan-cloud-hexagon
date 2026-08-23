@@ -1,4 +1,4 @@
-package announcement
+package usecasePortAnyAnnouncement
 
 import (
 	domain "example/internal/domain"

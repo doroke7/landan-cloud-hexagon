@@ -1,4 +1,4 @@
-package any
+package usecasePortAnyGameAuthentication
 
 type AuthenticatorUsecase interface {
 	LogIn(name string, password string, secret string) (authorization string, err error)

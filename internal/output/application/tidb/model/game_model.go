@@ -1,4 +1,4 @@
-package tidb
+package outputApplicationTidbModel
 
 import (
 	"errors"

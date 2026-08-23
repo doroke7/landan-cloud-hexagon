@@ -1,4 +1,4 @@
-package emqx
+package outputApplicationEmqxModel
 
 import (
 	"encoding/json"

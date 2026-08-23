@@ -1,4 +1,4 @@
-package gaussdb
+package outputApplicationGaussdb
 
 import (
 	"context"

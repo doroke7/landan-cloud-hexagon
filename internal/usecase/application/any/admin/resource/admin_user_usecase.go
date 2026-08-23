@@ -1,4 +1,4 @@
-package resource
+package usecaseApplicationAnyAdminResource
 
 import (
 	domain "example/internal/domain"

@@ -1,4 +1,4 @@
-package option
+package usecaseApplicationAnyAdminOption
 
 import (
 	domain "example/internal/domain"

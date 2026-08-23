@@ -1,4 +1,4 @@
-package usecase
+package usecaseApplicationAnyRegister
 
 import (
 	helper "example/internal/helper"

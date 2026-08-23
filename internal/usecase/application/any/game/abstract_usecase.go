@@ -1,4 +1,4 @@
-package usecase
+package usecaseApplicationAnyGame
 
 import (
 	helper "example/internal/helper"

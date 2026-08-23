@@ -1,4 +1,4 @@
-package usecase
+package usecaseApplicationAnyLogic
 
 import (
 	helper "example/internal/helper"

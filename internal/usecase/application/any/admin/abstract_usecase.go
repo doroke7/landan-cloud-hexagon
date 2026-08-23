@@ -1,4 +1,4 @@
-package usecase
+package usecaseApplicationAnyAdmin
 
 import (
 	helper "example/internal/helper"

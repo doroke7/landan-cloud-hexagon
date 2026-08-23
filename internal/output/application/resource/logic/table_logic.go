@@ -1,4 +1,4 @@
-package resource
+package outputApplicationResourceLogic
 
 import (
 	"encoding/json"

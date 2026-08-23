@@ -1,4 +1,4 @@
-package resource
+package outputApplicationResourceModel
 
 import (
 	domain "example/internal/domain"
@@ -130,4 +130,3 @@ func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
 
 	return oResponse.GetStatus(), nil
 }
-

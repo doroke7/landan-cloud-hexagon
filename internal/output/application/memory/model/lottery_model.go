@@ -1,4 +1,4 @@
-package model
+package outputApplicationMemoryModel
 
 import (
 	"fmt"

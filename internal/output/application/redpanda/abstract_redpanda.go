@@ -1,4 +1,4 @@
-package redpanda
+package outputApplicationRedpanda
 
 import (
 	"context"

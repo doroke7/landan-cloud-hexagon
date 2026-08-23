@@ -1,4 +1,4 @@
-package usecase
+package usecaseApplicationAnyModel
 
 import (
 	helper "example/internal/helper"

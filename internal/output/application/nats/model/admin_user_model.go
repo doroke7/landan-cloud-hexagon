@@ -1,4 +1,4 @@
-package nats
+package outputApplicationNatsModel
 
 import (
 	"encoding/json"

@@ -1,4 +1,4 @@
-package any
+package usecasePortAnyLogic
 
 import (
 	"example/internal/domain"

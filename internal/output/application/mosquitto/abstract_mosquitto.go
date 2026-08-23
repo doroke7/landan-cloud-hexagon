@@ -1,4 +1,4 @@
-package mosquitto
+package outputApplicationMosquitto
 
 import (
 	"context"

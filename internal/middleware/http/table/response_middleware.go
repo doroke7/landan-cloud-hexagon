@@ -1,4 +1,4 @@
-package middleware_table
+package middlewareHttpTable
 
 import (
 	"runtime"

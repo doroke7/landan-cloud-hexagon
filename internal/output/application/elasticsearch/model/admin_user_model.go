@@ -1,4 +1,4 @@
-package elasticsearch
+package outputApplicationElasticsearchModel
 
 import (
 	"bytes"

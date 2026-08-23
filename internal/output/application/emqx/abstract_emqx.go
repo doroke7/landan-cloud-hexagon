@@ -1,4 +1,4 @@
-package emqx
+package outputApplicationEmqx
 
 import (
 	"context"

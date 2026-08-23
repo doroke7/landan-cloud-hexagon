@@ -1,4 +1,4 @@
-package any
+package usecasePortAnyModel
 
 import (
 	domain "example/internal/domain"

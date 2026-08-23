@@ -1,4 +1,4 @@
-package activemq
+package outputApplicationActivemq
 
 import (
 	"context"

@@ -1,4 +1,4 @@
-package beanstalk
+package outputApplicationBeanstalkModel
 
 import (
 	"encoding/json"

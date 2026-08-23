@@ -1,4 +1,4 @@
-package resource
+package outputApplicationResourceModel
 
 import (
 	"encoding/json"

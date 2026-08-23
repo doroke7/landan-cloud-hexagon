@@ -1,4 +1,4 @@
-package model
+package outputApplicationEtcdModel
 
 import (
 	domain "example/internal/domain"

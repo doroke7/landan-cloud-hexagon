@@ -1,4 +1,4 @@
-package usecase
+package usecaseApplicationAnyTable
 
 import (
 	helper "example/internal/helper"

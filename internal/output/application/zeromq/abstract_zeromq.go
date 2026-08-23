@@ -1,4 +1,4 @@
-package zeromq
+package outputApplicationZeromq
 
 import (
 	"context"

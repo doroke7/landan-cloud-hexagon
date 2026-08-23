@@ -1,4 +1,4 @@
-package gaussdb
+package outputApplicationGaussdbModel
 
 import (
 	"errors"

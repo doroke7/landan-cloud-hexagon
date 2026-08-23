@@ -1,4 +1,4 @@
-package pulsar
+package outputApplicationPulsar
 
 import (
 	"context"

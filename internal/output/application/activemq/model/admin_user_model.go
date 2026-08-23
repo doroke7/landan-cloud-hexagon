@@ -1,4 +1,4 @@
-package activemq
+package outputApplicationActivemqModel
 
 import (
 	"encoding/json"

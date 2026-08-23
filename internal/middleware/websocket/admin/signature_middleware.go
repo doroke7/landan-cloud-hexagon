@@ -1,4 +1,4 @@
-package middleware_admin
+package middlewareWebsocketAdmin
 
 import (
 	"encoding/json"
