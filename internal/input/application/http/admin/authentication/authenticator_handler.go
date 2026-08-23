@@ -59,7 +59,7 @@ func (oSelf *AuthenticatorHandler) SignIn(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "成功登入", struct{}{}, 0, sAuthorization)
+	oSelf.Response.Set(oContext, 200, 1, "AdminUser 成功登入", struct{}{}, 0, sAuthorization)
 
 }
 

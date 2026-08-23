@@ -77,6 +77,23 @@ func httpTableMiddlewares(oContainer *container.HttpContainer) []gin.HandlerFunc
 	}
 }
 
+func httpGameAuthenticationMiddlewares(oContainer *container.HttpContainer) []gin.HandlerFunc {
+	return []gin.HandlerFunc{
+		// ALL middleware
+		oContainer.HttpGameLoggerMiddleware.Handle(),
+
+		// Before Middleware
+		oContainer.HttpGameErrorMiddleware.Handle(),
+		oContainer.HttpGameSignatureMiddleware.Handle(),
+		oContainer.HttpGameDecryptionMiddleware.Handle(),
+		oContainer.HttpGameRequestMiddleware.Handle(),
+
+		// After Middleware
+		oContainer.HttpGameResponseMiddleware.Handle(),
+		oContainer.HttpGameEncryptionMiddleware.Handle(),
+	}
+}
+
 func httpGameMiddlewares(oContainer *container.HttpContainer) []gin.HandlerFunc {
 	return []gin.HandlerFunc{
 		// ALL middleware
@@ -138,6 +155,16 @@ func HttpInit(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine
 			oAdminOption.GET("/GameType/Select", oContainer.HttpAdminOptionGameType.Select)
 		}
 
+	}
+
+	oGame := oGin.Group("/Game")
+	{
+		oGameAuthentication := oGame.Group("/Authentication")
+		oGameAuthentication.Use(httpGameAuthenticationMiddlewares(oContainer)...)
+		{
+			oGameAuthentication.POST("/Authenticator/LogIn", oContainer.HttpGameAuthenticationAuthenticator.LogIn)
+			oGameAuthentication.POST("/Authenticator/Refresh", oContainer.HttpGameAuthenticationAuthenticator.Refresh)
+		}
 	}
 
 	return oGin

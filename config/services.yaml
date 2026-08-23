@@ -141,9 +141,9 @@ http:
   game:
     authentication: true
     signature: true
-    salt: '~9U7g2R8zgW&dZ_u'
+    salt: 'hgd9BDQwJiFY6oPBlf8PsPfJ9aVuod7y'
     jwt:
-      secret: 'Ar*&4C[#s!Eef/~dI{\DgRe-&5'
+      secret: 'UVhyc8BJd2W0F0sKWKF0pmUS852jLU5z'
       key: '1111222233334444'
       iv: '6666777788889999'
     public_key: |
