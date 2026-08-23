@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	"encoding/json"
 	"log"
 	"net/http"
 	"os"
@@ -10,47 +9,13 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/centrifugal/centrifuge"
 	"github.com/spf13/cobra"
 
 	bootstrap "example/bootstrap"
 	container "example/container"
+	register "example/internal/register"
 	pkg "example/pkg"
 )
-
-/*
-   Channel:
-   Type:  rpc /rpc-ack
-   Method: heartbeat
-   Value:
-
-   Channel:
-   Type: rpc / rpc-ack
-   Method: Admin/Authentication/Authenticator/SignIn
-   Value: {}
-
-   Channel:
-   Type: room / room-ack
-   Method: join/leave
-   Value: room-01
-
-
-
-
-
-   Channel: room-01
-   Type: message / message-ack
-   Method: broast
-   Value: {}
-
-   Channel: room-01
-   Type: message / messages-ack
-   Method: send
-   Value: {}
-
-
-
-*/
 
 var oCentrifugeCommand = &cobra.Command{
 	Use:   "centrifuge",
@@ -66,96 +31,11 @@ var oCentrifugeCommand = &cobra.Command{
 		}
 		defer oContainer.Nats.Close()
 
-		oNode, oErr := centrifuge.New(
-			centrifuge.Config{
-				LogLevel: centrifuge.LogLevelDebug,
-			},
-		)
-
-		if oErr != nil {
-			panic(oErr)
-		}
-
-		oNode.SetBroker(oContainer.NatsBroker)
-
-		// Connecting：驗證/接受連線，這個 demo 不做任何驗證，一律接受成匿名連線。
-		// Credentials 一定要給值（UserID 留空即代表匿名），不然 centrifuge 會在
-		// connectCmd 判斷 credentials == nil 直接以 bad request 斷線。
-		oNode.OnConnecting(
-			func(oCtx context.Context, oEvent centrifuge.ConnectEvent) (centrifuge.ConnectReply, error) {
-				return centrifuge.ConnectReply{
-					Credentials: &centrifuge.Credentials{UserID: ""},
-				}, nil
-			},
-		)
-
-		// Connect：連線建立完成後才能拿到 *centrifuge.Client，在這裡掛 client 層級的事件、訂閱 channel。
-		oNode.OnConnect(
-			func(oClient *centrifuge.Client) {
-
-				// 斷線
-				oClient.OnDisconnect(func(oEvent centrifuge.DisconnectEvent) {})
-
-				if oErr := oClient.Subscribe("all"); oErr != nil {
-					log.Println("subscribe error:", oErr)
-				}
-				// if oErr := oClient.Subscribe("room-01"); oErr != nil {
-				// 	log.Println("subscribe error:", oErr)
-				// }
-
-				/*
-				   1. 所有的 client 過來的消息 ， OnPublish 都會handler
-				*/
-				oClient.OnPublish(func(oEvent centrifuge.PublishEvent, fnCallback centrifuge.PublishCallback) {
-					var oPayload struct {
-						Method string          `json:"method"`
-						Value  json.RawMessage `json:"value"`
-					}
-					if oErr := json.Unmarshal(oEvent.Data, &oPayload); oErr != nil {
-						log.Println("publish payload 解析失敗:", oErr)
-					} else {
-						log.Printf(
-							"收到訊息 channel=%s method=%s value=%s\n",
-							oEvent.Channel,
-							oPayload.Method,
-							oPayload.Value,
-						)
-					}
-
-					fnCallback(centrifuge.PublishReply{}, nil)
-				})
-
-				oClient.OnRPC(func(oEvent centrifuge.RPCEvent, fnCallback centrifuge.RPCCallback) {
-					switch oEvent.Method {
-					case "heartbeat":
-						aData, _ := json.Marshal(map[string]string{"type": "rpc-ack", "method": "heartbeat"})
-						fnCallback(centrifuge.RPCReply{Data: aData}, nil)
-					default:
-						fnCallback(centrifuge.RPCReply{}, centrifuge.ErrorMethodNotFound)
-					}
-				})
-			},
-		)
-
-		// 啟動 node
-		if oErr := oNode.Run(); oErr != nil {
-			panic(oErr)
-		}
-
-		fnHandler := centrifuge.NewWebsocketHandler(
-			oNode,
-			centrifuge.WebsocketConfig{
-
-				CheckOrigin: func(oRequest *http.Request) bool { return true },
-			},
-		)
-
-		oMux := http.NewServeMux()
-		oMux.Handle("/connection/websocket", fnHandler)
+		oNode, oHandler := register.CentrifugeInit(oContainer)
 
 		oCentrifugeServer := &http.Server{
 			Addr:    ":" + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT,
-			Handler: oMux,
+			Handler: oHandler,
 		}
 
 		go func() {
@@ -176,9 +56,13 @@ var oCentrifugeCommand = &cobra.Command{
 				case <-ctx.Done():
 					return
 				case <-oTicker10.C:
-
+					if _, oErr := oNode.Publish("all", []byte(`{"message": "Hi!!"}`)); oErr != nil {
+						log.Println("publish error:", oErr)
+					}
 				case <-oTicker5.C:
-
+					if _, oErr := oNode.Publish("room-01", []byte(`{"message": "你好"}`)); oErr != nil {
+						log.Println("publish error:", oErr)
+					}
 				}
 			}
 		}()
