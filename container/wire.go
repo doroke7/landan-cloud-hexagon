@@ -48,6 +48,7 @@ import (
 	usecaseApplicationAnyGameAuthentication "example/internal/usecase/application/any/game/authentication"
 	usecaseApplicationAnyLogic "example/internal/usecase/application/any/logic"
 	usecaseApplicationAnyModel "example/internal/usecase/application/any/model"
+	usecaseApplicationAnyWatcher "example/internal/usecase/application/any/watcher"
 	usecaseApplicationAnyWatcherSource "example/internal/usecase/application/any/watcher/source"
 
 	middlewareHttpAdmin "example/internal/middleware/http/admin"
@@ -474,6 +475,7 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 		// helper
 		helper.NewAbstractHelper,
 		helper.NewAesHelper,
+		helper.NewJwtHelper,
 
 		// output
 		outputApplicationMysql.NewAbstractMysql,
@@ -532,7 +534,6 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 		// usecase
 		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminResource.NewAppUserUsecase,
-		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase,
 
 		// input-cron
@@ -697,7 +698,6 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 		// usecase
 		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminResource.NewAppUserUsecase,
-		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase,
 
 		// command
@@ -840,7 +840,7 @@ func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
 		outputApplicationCacheModel.NewLotteryModel,
 
 		// usecase
-		usecaseApplicationAnyWatcherSource.NewAbstractUsecase,
+		usecaseApplicationAnyWatcher.NewAbstractUsecase,
 		usecaseApplicationAnyWatcherSource.NewAnnouncementLotteryUsecase,
 
 		// input-daemon

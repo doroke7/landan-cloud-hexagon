@@ -7,15 +7,16 @@ import (
 
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	usecaseApplicationAnyWatcher "example/internal/usecase/application/any/watcher"
 	usecasePortAnyWatcherSource "example/internal/usecase/port/any/watcher/source"
 )
 
 type AnnouncementLotteryUsecase struct {
-	*AbstractUsecase
+	*usecaseApplicationAnyWatcher.AbstractUsecase
 	outputPortAnyModel.LotteryModel
 }
 
-func NewAnnouncementLotteryUsecase(oAbstractUsecase *AbstractUsecase, oLotteryRepository outputPortAnyModel.LotteryModel) usecasePortAnyWatcherSource.AnnouncementLotteryUsecase {
+func NewAnnouncementLotteryUsecase(oAbstractUsecase *usecaseApplicationAnyWatcher.AbstractUsecase, oLotteryRepository outputPortAnyModel.LotteryModel) usecasePortAnyWatcherSource.AnnouncementLotteryUsecase {
 	return &AnnouncementLotteryUsecase{
 		AbstractUsecase: oAbstractUsecase,
 		LotteryModel:    oLotteryRepository,

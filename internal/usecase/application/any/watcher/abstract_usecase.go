@@ -1,4 +1,4 @@
-package source
+package usecase
 
 import (
 	helper "example/internal/helper"

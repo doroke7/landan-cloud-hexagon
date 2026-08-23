@@ -68,6 +68,7 @@ import (
 	usecase4 "example/internal/usecase/application/any/game/authentication"
 	usecase6 "example/internal/usecase/application/any/logic"
 	usecase5 "example/internal/usecase/application/any/model"
+	usecase8 "example/internal/usecase/application/any/watcher"
 	"example/internal/usecase/application/any/watcher/source"
 	any2 "example/internal/usecase/port/any/model"
 	"example/pkg"
@@ -97,17 +98,16 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	authenticatorHandler := controller_admin_authentication.NewAuthenticatorHandler(abstractHandler, authenticatorUsecase)
 	gameModel := resource2.NewGameModel(abstractResource)
 	gameLogic := resource3.NewGameLogic(abstractResource)
-	resourceAbstractUsecase := resource4.NewAbstractUsecase(aesHelper)
-	gameUsecase := resource4.NewGameUsecase(gameModel, gameLogic, resourceAbstractUsecase)
+	gameUsecase := resource4.NewGameUsecase(gameModel, gameLogic, abstractUsecase)
 	gameHandler := handler2.NewGameHandler(abstractHandler, gameUsecase)
 	tableModel := resource2.NewTableModel(abstractResource)
 	tableLogic := resource3.NewTableLogic(abstractResource)
-	tableUsecase := resource4.NewTableUsecase(tableModel, tableLogic, resourceAbstractUsecase)
+	tableUsecase := resource4.NewTableUsecase(tableModel, tableLogic, abstractUsecase)
 	tableHandler := handler2.NewTableHandler(abstractHandler, tableUsecase)
-	adminUserUsecase := resource4.NewAdminUserUsecase(adminUserModel, resourceAbstractUsecase)
+	adminUserUsecase := resource4.NewAdminUserUsecase(adminUserModel, abstractUsecase)
 	adminUserHandler := handler2.NewAdminUserHandler(abstractHandler, adminUserUsecase)
 	gameTypeModel := resource2.NewGameTypeModel(abstractResource)
-	gameTypeUsecase := resource4.NewGameTypeUsecase(gameTypeModel, resourceAbstractUsecase)
+	gameTypeUsecase := resource4.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
 	gameTypeHandler := handler2.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
 	anyGameTypeUsecase := option.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
 	handlerGameTypeHandler := handler3.NewGameTypeHandler(abstractHandler, anyGameTypeUsecase)
@@ -368,7 +368,8 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 	aop := pkg.NewAop(ctx, universalClient)
 	abstractMysql := mysql.NewAbstractMysql(ctx, db, aop)
 	appUserModel := mysql2.NewAppUserModel(abstractMysql)
-	abstractUsecase := resource4.NewAbstractUsecase(aesHelper)
+	jwtHelper := helper.NewJwtHelper(abstractHelper)
+	abstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
 	appUserUsecase := resource4.NewAppUserUsecase(appUserModel, abstractUsecase)
 	appUserHandler := rabbitmq4.NewAppUserHandler(appUserUsecase, abstractHandler)
 	rabbitmqContainer := &RabbitmqContainer{
@@ -400,13 +401,12 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 	aop := pkg.NewAop(ctx, universalClient)
 	abstractMysql := mysql.NewAbstractMysql(ctx, db, aop)
 	appUserModel := mysql2.NewAppUserModel(abstractMysql)
-	abstractUsecase := resource4.NewAbstractUsecase(aesHelper)
+	abstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
 	appUserUsecase := resource4.NewAppUserUsecase(appUserModel, abstractUsecase)
 	abstractHandler := cron.NewAbstractHandler(aesHelper)
 	appUserHandler := cron2.NewAppUserHandler(appUserUsecase, abstractHandler)
 	adminUserModel := mysql2.NewAdminUserModel(abstractMysql)
-	usecaseAbstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
-	authenticatorUsecase := usecase2.NewAuthenticatorUsecase(adminUserModel, usecaseAbstractUsecase)
+	authenticatorUsecase := usecase2.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
 	authenticatorHandler := authentication3.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	cronContainer := &CronContainer{
 		Clock:                                clock,
@@ -508,12 +508,11 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 	aop := pkg.NewAop(ctx, universalClient)
 	abstractMysql := mysql.NewAbstractMysql(ctx, db, aop)
 	appUserModel := mysql2.NewAppUserModel(abstractMysql)
-	abstractUsecase := resource4.NewAbstractUsecase(aesHelper)
+	abstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
 	appUserUsecase := resource4.NewAppUserUsecase(appUserModel, abstractUsecase)
 	appUserHandler := command2.NewAppUserHandler(appUserUsecase, abstractHandler)
 	adminUserModel := mysql2.NewAdminUserModel(abstractMysql)
-	usecaseAbstractUsecase := usecase.NewAbstractUsecase(aesHelper, jwtHelper)
-	authenticatorUsecase := usecase2.NewAuthenticatorUsecase(adminUserModel, usecaseAbstractUsecase)
+	authenticatorUsecase := usecase2.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
 	authenticatorHandler := authentication5.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	commandContainer := &CommandContainer{
 		Clock:                            clock,
@@ -589,7 +588,7 @@ func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
 	clientConn := bootstrap.NewSource(ctx)
 	clientAnnouncement := client.NewAnnouncement(clientConn)
 	sourceClient := client.NewSourceClient(clientConn, clientAnnouncement)
-	abstractUsecase := source.NewAbstractUsecase(aesHelper)
+	abstractUsecase := usecase8.NewAbstractUsecase(aesHelper)
 	universalClient, err := bootstrap.NewRedis()
 	if err != nil {
 		return nil, err
