@@ -58,12 +58,12 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 
 // ShowOnesByFiltersWithSortersPagination 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.AdminUser, error) {
-	return nil, errors.New("not supported by resource")
+	return nil, errors.New("not supported by resource 1")
 }
 
 // TotalByFilters 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
 func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
-	return 0, errors.New("not supported by resource")
+	return 0, errors.New("not supported by resource 2")
 }
 
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {

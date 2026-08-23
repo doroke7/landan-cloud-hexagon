@@ -34,16 +34,16 @@ func (oSelf *AppUserLogic) IncreaseBalance(id uint, amount uint) (bool, error) {
 
 // ShowOneByName 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
 func (oSelf *AppUserLogic) ShowOneByName(sName string) (*domain.AppUser, error) {
-	return nil, errors.New("not supported by resource")
+	return nil, errors.New("not supported by resource a")
 }
 
 // ShowOneById 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
 func (oSelf *AppUserLogic) ShowOneById(iId uint) (*domain.AppUser, error) {
-	return nil, errors.New("not supported by resource")
+	return nil, errors.New("not supported by resource b")
 }
 
 // AddOne 目前 Resource gRPC service 的 AddAppUser RPC 只帶 name，沒有 password，
 // 不夠支撐帳號註冊需要的欄位，先不支援。
 func (oSelf *AppUserLogic) AddOne(oAppUser *domain.AppUserValue) (bool, error) {
-	return false, errors.New("not supported by resource")
+	return false, errors.New("not supported by resource c")
 }
