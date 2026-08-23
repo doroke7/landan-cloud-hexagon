@@ -10,6 +10,7 @@ import (
 func NewModel(oClientConn *grpc.ClientConn) *Model {
 	return &Model{
 		AdminUser: pbResourceModel.NewAdminUserModelClient(oClientConn),
+		AppUser:   pbResourceModel.NewAppUserModelClient(oClientConn),
 		Game:      pbResourceModel.NewGameModelClient(oClientConn),
 		Table:     pbResourceModel.NewTableModelClient(oClientConn),
 		GameType:  pbResourceModel.NewGameTypeModelClient(oClientConn),
@@ -25,6 +26,7 @@ func NewLogic(oClientConn *grpc.ClientConn) *Logic {
 
 type Model struct {
 	AdminUser pbResourceModel.AdminUserModelClient
+	AppUser   pbResourceModel.AppUserModelClient
 	Game      pbResourceModel.GameModelClient
 	Table     pbResourceModel.TableModelClient
 	GameType  pbResourceModel.GameTypeModelClient

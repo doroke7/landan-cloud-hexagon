@@ -111,7 +111,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	gameTypeHandler := inputApplicationHttpAdminResource.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
 	usecasePortAnyAdminOptionGameTypeUsecase := usecaseApplicationAnyAdminOption.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
 	inputApplicationHttpAdminOptionGameTypeHandler := inputApplicationHttpAdminOption.NewGameTypeHandler(abstractHandler, usecasePortAnyAdminOptionGameTypeUsecase)
-	appUserModel := outputApplicationResourceLogic.NewAppUserLogic(abstractResource)
+	appUserModel := outputApplicationResourceModel.NewAppUserModel(abstractResource)
 	usecaseApplicationAnyGameAbstractUsecase := usecaseApplicationAnyGame.NewAbstractUsecase(aesHelper, jwtHelper)
 	usecasePortAnyGameAuthenticationAuthenticatorUsecase := usecaseApplicationAnyGameAuthentication.NewAuthenticatorUsecase(appUserModel, usecaseApplicationAnyGameAbstractUsecase)
 	inputApplicationHttpGameAuthenticationAuthenticatorHandler := inputApplicationHttpGameAuthentication.NewAuthenticatorHandler(abstractHandler, usecasePortAnyGameAuthenticationAuthenticatorUsecase)

@@ -189,7 +189,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		outputApplicationResourceModel.NewGameTypeModel,
 		outputApplicationResourceLogic.NewGameLogic,
 		outputApplicationResourceLogic.NewTableLogic,
-		outputApplicationResourceLogic.NewAppUserLogic,
+		outputApplicationResourceModel.NewAppUserModel,
 
 		// usecase
 		usecaseApplicationAnyAdmin.NewAbstractUsecase,
