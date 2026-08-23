@@ -147,6 +147,10 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, err
 			if aRange, bOk := oValue.([]any); bOk && len(aRange) == 2 {
 				aWheres = append(aWheres, map[string]any{"range": map[string]any{sField: map[string]any{"gte": aRange[0], "lte": aRange[1]}}})
 			}
+		case "match":
+			if sValue, bOk := oValue.(string); bOk {
+				aWheres = append(aWheres, map[string]any{"match": map[string]any{sField: sValue}})
+			}
 		default:
 			aWheres = append(aWheres, map[string]any{"term": map[string]any{sField: oValue}})
 		}
@@ -154,7 +158,7 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, err
 
 	oQuery := map[string]any{"match_all": map[string]any{}}
 	if len(aWheres) > 0 {
-		oQuery = map[string]any{"bool": map[string]any{"must": aWheres}}
+		oQuery = map[string]any{"bool": map[string]any{"filter": aWheres}}
 	}
 
 	aBodyBytes, oErr := json.Marshal(map[string]any{"query": oQuery})

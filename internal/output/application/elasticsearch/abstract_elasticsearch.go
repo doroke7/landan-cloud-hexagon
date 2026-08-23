@@ -48,6 +48,7 @@ var oOperatorMap = map[string]bool{
 	"in":          true,
 	"notIn":       true,
 	"between":     true,
+	"match":       true,
 }
 
 // ---- 查詢/寫入的共用底層操作，取代 mysql 版本裡 *gorm.DB 幫忙做的事 ----
@@ -89,8 +90,9 @@ func (oSelf *AbstractElasticsearch) PaginationToSize(oPagination *pkg.Pagination
 	return int(iSize)
 }
 
-func (oSelf *AbstractElasticsearch) FiltersToMust(aFilters []*pkg.Filter) []map[string]any {
-	aMusts := make([]map[string]any, 0, len(aFilters))
+func (oSelf *AbstractElasticsearch) FiltersToMustFilter(aFilters []*pkg.Filter) ([]map[string]any, []map[string]any) {
+	aFilterClauses := make([]map[string]any, 0, len(aFilters))
+	aMustClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil {
@@ -107,39 +109,46 @@ func (oSelf *AbstractElasticsearch) FiltersToMust(aFilters []*pkg.Filter) []map[
 
 		switch sOperator {
 		case "ne":
-			aMusts = append(aMusts, map[string]any{"bool": map[string]any{"must_not": map[string]any{"term": map[string]any{sField: oValue}}}})
+			aFilterClauses = append(aFilterClauses, map[string]any{"bool": map[string]any{"must_not": map[string]any{"term": map[string]any{sField: oValue}}}})
 		case "gt", "gte", "lt", "lte":
-			aMusts = append(aMusts, map[string]any{"range": map[string]any{sField: map[string]any{sOperator: oValue}}})
+			aFilterClauses = append(aFilterClauses, map[string]any{"range": map[string]any{sField: map[string]any{sOperator: oValue}}})
 		case "contains":
 			if sValue, bOk := oValue.(string); bOk {
-				aMusts = append(aMusts, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}})
+				aFilterClauses = append(aFilterClauses, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}})
 			}
 		case "notContains":
 			if sValue, bOk := oValue.(string); bOk {
-				aMusts = append(aMusts, map[string]any{"bool": map[string]any{"must_not": map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}}}})
+				aFilterClauses = append(aFilterClauses, map[string]any{"bool": map[string]any{"must_not": map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}}}})
 			}
 		case "startsWith":
 			if sValue, bOk := oValue.(string); bOk {
-				aMusts = append(aMusts, map[string]any{"prefix": map[string]any{sField: map[string]any{"value": sValue, "case_insensitive": true}}})
+				aFilterClauses = append(aFilterClauses, map[string]any{"prefix": map[string]any{sField: map[string]any{"value": sValue, "case_insensitive": true}}})
 			}
 		case "endsWith":
 			if sValue, bOk := oValue.(string); bOk {
-				aMusts = append(aMusts, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue, "case_insensitive": true}}})
+				// match     = 按照文字意思 搜尋
+				// wildcard  = 按照字串格式 搜尋
+				aFilterClauses = append(aFilterClauses, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue, "case_insensitive": true}}})
 			}
 		case "in":
-			aMusts = append(aMusts, map[string]any{"terms": map[string]any{sField: oValue}})
+			aFilterClauses = append(aFilterClauses, map[string]any{"terms": map[string]any{sField: oValue}})
 		case "notIn":
-			aMusts = append(aMusts, map[string]any{"bool": map[string]any{"must_not": map[string]any{"terms": map[string]any{sField: oValue}}}})
+			aFilterClauses = append(aFilterClauses, map[string]any{"bool": map[string]any{"must_not": map[string]any{"terms": map[string]any{sField: oValue}}}})
 		case "between":
 			if aRange, bOk := oValue.([]any); bOk && len(aRange) == 2 {
-				aMusts = append(aMusts, map[string]any{"range": map[string]any{sField: map[string]any{"gte": aRange[0], "lte": aRange[1]}}})
+				aFilterClauses = append(aFilterClauses, map[string]any{"range": map[string]any{sField: map[string]any{"gte": aRange[0], "lte": aRange[1]}}})
+			}
+		case "match":
+
+			if sValue, bOk := oValue.(string); bOk {
+				aMustClauses = append(aMustClauses, map[string]any{"match": map[string]any{sField: sValue}})
 			}
 		default:
-			aMusts = append(aMusts, map[string]any{"term": map[string]any{sField: oValue}})
+			aFilterClauses = append(aFilterClauses, map[string]any{"term": map[string]any{sField: oValue}})
 		}
 	}
 
-	return aMusts
+	return aMustClauses, aFilterClauses
 }
 
 func (oSelf *AbstractElasticsearch) SortersToSort(aSorters []*pkg.Sorter) []map[string]any {
@@ -163,14 +172,22 @@ func (oSelf *AbstractElasticsearch) SortersToSort(aSorters []*pkg.Sorter) []map[
 
 func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sIndex string, aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]func(*esapi.SearchRequest), error) {
 
-	aMusts := oSelf.FiltersToMust(aFilters)
+	aMustClauses, aFilterClauses := oSelf.FiltersToMustFilter(aFilters)
 	aSorts := oSelf.SortersToSort(aSorters)
 	iFrom := oSelf.PaginationToFrom(oPagination)
 	iSize := oSelf.PaginationToSize(oPagination)
 
+	oBoolQuery := map[string]any{}
+	if len(aFilterClauses) > 0 {
+		oBoolQuery["filter"] = aFilterClauses
+	}
+	if len(aMustClauses) > 0 {
+		oBoolQuery["must"] = aMustClauses
+	}
+
 	oQuery := map[string]any{"match_all": map[string]any{}}
-	if len(aMusts) > 0 {
-		oQuery = map[string]any{"bool": map[string]any{"must": aMusts}}
+	if len(oBoolQuery) > 0 {
+		oQuery = map[string]any{"bool": oBoolQuery}
 	}
 
 	oBody := map[string]any{"query": oQuery}
