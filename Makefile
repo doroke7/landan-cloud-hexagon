@@ -22,14 +22,18 @@ wire:
 
 
 
-.PHONY: watch-http
+.PHONY: http-watch
 http-watch:
 	air -c .air.http.toml
 
-.PHONY: watch-facade
+.PHONY: facade-watch
 facade-watch:
 	air -c .air.facade.toml
 
-.PHONY: watch-resource
+.PHONY: websocket-watch
+websocket-watch:
+	air -c .air.websocket.toml
+
+.PHONY: resource-watch
 resource-watch:
 	air -c .air.resource.toml

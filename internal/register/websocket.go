@@ -23,11 +23,11 @@ func websocketAdminMiddlewares(oContainer *container.WebsocketContainer) []types
 }
 
 func WebsocketInit(oContainer *container.WebsocketContainer) *pkg.WebsocketRouter {
-	oRouter := pkg.NewWebsocketRouter("/ws")
+	oRouter := pkg.NewWebsocketRouter("")
 
-	oAdminGroup := oRouter.Group("Admin.")
+	oAdminGroup := oRouter.Group("/Admin")
 	oAdminGroup.Use(websocketAdminMiddlewares(oContainer))
-	oAdminGroup.HandleFunc("Authentication.Authenticator.SignIn", oContainer.WebsocketAdminAuthenticationAuthenticator.SignIn)
+	oAdminGroup.HandleFunc("/Authentication/Authenticator.SignIn", oContainer.WebsocketAdminAuthenticationAuthenticator.SignIn)
 
 	return oRouter
 }
