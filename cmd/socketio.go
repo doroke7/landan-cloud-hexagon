@@ -3,9 +3,12 @@ package cmd
 import (
 	"log"
 	"net/http"
-	"time"
 
-	socketio "github.com/googollee/go-socket.io"
+	"github.com/spf13/cobra"
+
+	bootstrap "example/bootstrap"
+	register "example/internal/register"
+	pkg "example/pkg"
 )
 
 /*
@@ -18,65 +21,29 @@ import (
 	       server ping (每 5 秒推播一次)                              reply ✅
 */
 
-func fnSocketIOHandler() *socketio.Server {
+var oSocketioCommand = &cobra.Command{
+	Use:   "socketio",
+	Short: "啟動 socketio 服務",
+	Run: func(cmd *cobra.Command, args []string) {
 
-	oServer := socketio.NewServer(nil)
+		oServer, oMux := register.SocketioInit()
 
-	oServer.OnConnect("/", func(oConn socketio.Conn) error {
+		go oServer.Serve()
+		defer oServer.Close()
 
-		oConn.SetContext("")
-		log.Println("connected:", oConn.ID())
+		pkg.Logger(pkg.Default).Info("啟動 SOCKETIO 服務。 port: " + bootstrap.CONFIG.SOCKETIO.PORT)
 
-		return nil
-
-	})
-
-	oServer.OnEvent("/", "message", func(oConn socketio.Conn, sMsg string) string {
-
-		// echo 回去
-		return sMsg
-
-	})
-
-	oServer.OnEvent("/", "broadcast", func(oConn socketio.Conn, sMsg string) {
-
-		oServer.BroadcastToNamespace("/", "broadcast", sMsg)
-
-	})
-
-	oServer.OnError("/", func(oConn socketio.Conn, oErr error) {
-		log.Println("error:", oErr)
-	})
-
-	oServer.OnDisconnect("/", func(oConn socketio.Conn, sReason string) {
-		log.Println("disconnected:", oConn.ID(), sReason)
-	})
-
-	return oServer
-
-}
-
-func fnSocketIOMain() {
-
-	oServer := fnSocketIOHandler()
-
-	go oServer.Serve()
-	defer oServer.Close()
-
-	// server 主動推送
-	go func() {
-
-		oTicker := time.NewTicker(5 * time.Second)
-		defer oTicker.Stop()
-
-		for range oTicker.C {
-			oServer.BroadcastToNamespace("/", "server ping", "server ping")
+		oSocketioServer := &http.Server{
+			Addr:    ":" + bootstrap.CONFIG.SOCKETIO.PORT,
+			Handler: oMux,
 		}
 
-	}()
+		log.Fatal(oSocketioServer.ListenAndServe())
 
-	http.Handle("/socket.io/", oServer)
+	},
+}
 
-	http.ListenAndServe(":8081", nil)
-
+func init() {
+	// 將 server 指令加入到 root 中
+	oRootCommand.AddCommand(oSocketioCommand)
 }

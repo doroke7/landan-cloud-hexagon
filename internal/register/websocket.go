@@ -9,11 +9,13 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// WebsocketInit 只回傳 method -> handler 對照表，不碰 upgrade/ping/dispatch 這些
-// websocket 協定細節，那些是 cmd/websocket.go 用 pkg.WebsocketRouter 組裝的事。
-func WebsocketInit(oContainer *container.WebsocketContainer) http.HandlerFunc {
+// WebsocketInit 組裝 upgrade/echo 這些 websocket 協定細節，回傳掛好 route 的 *http.ServeMux，
+// serve 的事交給 cmd/websocket.go 做，跟 SocketioInit 是同一套慣例。
+func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
-	return func(oWriter http.ResponseWriter, oRequest *http.Request) {
+	oMux := http.NewServeMux()
+
+	oMux.HandleFunc("/ws", func(oWriter http.ResponseWriter, oRequest *http.Request) {
 		var oUpgrader = websocket.Upgrader{
 			CheckOrigin: func(oRequest *http.Request) bool {
 				return true
@@ -55,5 +57,8 @@ func WebsocketInit(oContainer *container.WebsocketContainer) http.HandlerFunc {
 
 		}()
 
-	}
+	})
+
+	return oMux
+
 }

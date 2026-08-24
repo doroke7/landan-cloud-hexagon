@@ -50,11 +50,15 @@ var oWebsocketCommand = &cobra.Command{
 			log.Fatal(err)
 		}
 		// Websocket 才是主要關心的 服務， 所以應該 從 register 取出 websocket 套件
-		fnWebsocketHandler := register.WebsocketInit(oContainer)
-		http.HandleFunc("/ws", fnWebsocketHandler)
+		oMux := register.WebsocketInit(oContainer)
+
+		oWebsocketServer := &http.Server{
+			Addr:    ":" + bootstrap.CONFIG.WEBSOCKET.PORT,
+			Handler: oMux,
+		}
 		pkg.Logger(pkg.Default).Info("啟動 WEBSOCKET 服務。 port: " + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT)
 
-		http.ListenAndServe(":"+bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT, nil)
+		oWebsocketServer.ListenAndServe()
 
 	},
 }
