@@ -376,6 +376,13 @@ websocket:
       -----END RSA PRIVATE KEY-----
 
 
+centrifuge:
+  port: 4021
+  prefix:
+
+socketio:
+  port: 4022
+  prefix:
 
 
 
@@ -394,10 +401,7 @@ tcp:
 udp:
   port: 4008
 
-centrifuge:
-  port: 4021
 
-socketio:
-  port: 4022
+
 
 daemon:
