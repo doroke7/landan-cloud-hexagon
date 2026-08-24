@@ -59,150 +59,149 @@ func CentrifugeInit(oContainer *container.CentrifugeContainer) (*centrifuge.Node
 
 	oNode.SetBroker(oContainer.NatsBroker)
 
-	// Connecting：驗證/接受連線，這個 demo 不做任何驗證，一律接受成匿名連線。
-	// Credentials 一定要給值（UserID 留空即代表匿名），不然 centrifuge 會在
-	// connectCmd 判斷 credentials == nil 直接以 bad request 斷線。
-	oNode.OnConnecting(
-		func(oCtx context.Context, oEvent centrifuge.ConnectEvent) (centrifuge.ConnectReply, error) {
-			return centrifuge.ConnectReply{
-				Credentials: &centrifuge.Credentials{UserID: ""},
-			}, nil
-		},
+	oNode.OnConnecting(func(oCtx context.Context, oEvent centrifuge.ConnectEvent) (centrifuge.ConnectReply, error) {
+		return centrifuge.ConnectReply{
+			Credentials: &centrifuge.Credentials{UserID: ""},
+		}, nil
+	},
 	)
 
 	// Connect：連線建立完成後才能拿到 *centrifuge.Client，在這裡掛 client 層級的事件、訂閱 channel。
-	oNode.OnConnect(
-		func(oClient *centrifuge.Client) {
+	oNode.OnConnect(func(oClient *centrifuge.Client) {
 
-			// 斷線
-			oClient.OnDisconnect(func(oEvent centrifuge.DisconnectEvent) {})
+		// 斷線
+		oClient.OnDisconnect(func(oEvent centrifuge.DisconnectEvent) {
+			log.Printf("client OnDisconnect")
 
-			if oErr := oClient.Subscribe("all"); oErr != nil {
-				log.Println("subscribe error:", oErr)
+		})
+
+		if oErr := oClient.Subscribe("all"); oErr != nil {
+			log.Println("subscribe error:", oErr)
+		}
+
+		// OnPresence ~= 特殊 RPC,  client -> server -> client 一次雙向 返回
+		// 有 ack
+		oClient.OnPresence(func(oEvent centrifuge.PresenceEvent, fnCallback centrifuge.PresenceCallback) {
+			fnCallback(centrifuge.PresenceReply{
+				Result: &centrifuge.PresenceResult{
+					Presence: map[string]*centrifuge.ClientInfo{
+						"fake-client-01": {ClientID: "fake-client-01", UserID: "user-01"},
+						"fake-client-02": {ClientID: "fake-client-02", UserID: "user-02"},
+						"fake-client-03": {ClientID: "fake-client-03", UserID: ""},
+					},
+				},
+			}, nil)
+		})
+
+		// OnPresenceStats ~= 特殊 RPC,  client -> server -> client 一次雙向 返回
+		// 有 ack
+		oClient.OnPresenceStats(func(oEvent centrifuge.PresenceStatsEvent, fnCallback centrifuge.PresenceStatsCallback) {
+			fnCallback(centrifuge.PresenceStatsReply{
+				Result: &centrifuge.PresenceStatsResult{
+					PresenceStats: centrifuge.PresenceStats{NumClients: 101, NumUsers: 101},
+				},
+			}, nil)
+		})
+
+		// OnHistory ~= 特殊 RPC,  client -> server -> client 一次雙向 返回
+		// 有 ack
+		oClient.OnHistory(func(oEvent centrifuge.HistoryEvent, fnCallback centrifuge.HistoryCallback) {
+			aPublications := []*centrifuge.Publication{
+				{Offset: 1, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #1"}`)},
+				{Offset: 2, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #2"}`)},
+				{Offset: 3, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #3"}`)},
+				{Offset: 4, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #4"}`)},
 			}
 
-			// OnPresence ~= 特殊 RPC,  client -> server -> client 一次雙向 返回
-			// 有 ack
-			oClient.OnPresence(func(oEvent centrifuge.PresenceEvent, fnCallback centrifuge.PresenceCallback) {
-				fnCallback(centrifuge.PresenceReply{
-					Result: &centrifuge.PresenceResult{
-						Presence: map[string]*centrifuge.ClientInfo{
-							"fake-client-01": {ClientID: "fake-client-01", UserID: "user-01"},
-							"fake-client-02": {ClientID: "fake-client-02", UserID: "user-02"},
-							"fake-client-03": {ClientID: "fake-client-03", UserID: ""},
-						},
-					},
-				}, nil)
-			})
+			fnCallback(centrifuge.HistoryReply{
+				Result: &centrifuge.HistoryResult{
+					StreamPosition: centrifuge.StreamPosition{Offset: 4, Epoch: "fake"},
+					Publications:   aPublications,
+				},
+			}, nil)
+		})
 
-			// OnPresence ~= 特殊 RPC,  client -> server -> client 一次雙向 返回
-			// 有 ack
-			oClient.OnPresenceStats(func(oEvent centrifuge.PresenceStatsEvent, fnCallback centrifuge.PresenceStatsCallback) {
-				fnCallback(centrifuge.PresenceStatsReply{
-					Result: &centrifuge.PresenceStatsResult{
-						PresenceStats: centrifuge.PresenceStats{NumClients: 101, NumUsers: 101},
-					},
-				}, nil)
-			})
+		// OnMessage： client -> server 單向 不返回
+		// 無 ack
+		oClient.OnMessage(func(oEvent centrifuge.MessageEvent) {
+			log.Printf("client OnMessage data=%s", oEvent.Data)
+		})
 
-			// OnPresence ~= 特殊 RPC,  client -> server -> client 一次雙向 返回
-			// 有 ack
-			oClient.OnHistory(func(oEvent centrifuge.HistoryEvent, fnCallback centrifuge.HistoryCallback) {
-				aPublications := []*centrifuge.Publication{
-					{Offset: 1, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #1"}`)},
-					{Offset: 2, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #2"}`)},
-					{Offset: 3, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #3"}`)},
-					{Offset: 4, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #4"}`)},
-				}
+		//                            -> client
+		// OnPublish client -> server -> broadcast
+		// 同時有 ack
+		oClient.OnPublish(func(oEvent centrifuge.PublishEvent, fnCallback centrifuge.PublishCallback) {
+			log.Printf("client OnPublish data=%s", oEvent.Data)
 
-				fnCallback(centrifuge.HistoryReply{
-					Result: &centrifuge.HistoryResult{
-						StreamPosition: centrifuge.StreamPosition{Offset: 4, Epoch: "fake"},
-						Publications:   aPublications,
-					},
-				}, nil)
-			})
-
-			// OnMessage： client -> server 單向 不返回
-			// 無 ack
-			oClient.OnMessage(func(oEvent centrifuge.MessageEvent) {
-				log.Printf("client OnMessage data=%s", oEvent.Data)
-			})
-
-			//                            -> client
-			// OnPublish client -> server -> broadcast
-			// 同時有 ack
-			oClient.OnPublish(func(oEvent centrifuge.PublishEvent, fnCallback centrifuge.PublishCallback) {
-				log.Printf("client OnPublish data=%s", oEvent.Data)
-
-				var oPayload struct {
-					Method string          `json:"method"`
-					Value  json.RawMessage `json:"value"`
-				}
-				if oErr := json.Unmarshal(oEvent.Data, &oPayload); oErr != nil {
-					log.Println("publish payload 解析失敗:", oErr)
-				} else {
-					log.Printf(
-						"收到訊息 channel=%s method=%s value=%s\n",
-						oEvent.Channel,
-						oPayload.Method,
-						oPayload.Value,
-					)
-				}
-
-				fnCallback(centrifuge.PublishReply{}, nil)
-			})
-
-			// OnRPC client -> server -> client 一次雙向 返回
-			// 有 ack
-			oClient.OnRPC(func(oEvent centrifuge.RPCEvent, fnCallback centrifuge.RPCCallback) {
-				switch oEvent.Method {
-				case "heartbeat":
-					aData, _ := json.Marshal(map[string]string{"type": "rpc-ack", "method": "heartbeat"})
-					fnCallback(centrifuge.RPCReply{Data: aData}, nil)
-				default:
-					fnCallback(centrifuge.RPCReply{}, centrifuge.ErrorMethodNotFound)
-				}
-			})
-
-			// OnRefresh：client-side 連線過期時要不要延長連線。
-			oClient.OnRefresh(func(oEvent centrifuge.RefreshEvent, fnCallback centrifuge.RefreshCallback) {
-				//log.Printf("client OnRefresh")
-
-				fnCallback(centrifuge.RefreshReply{}, centrifuge.ErrorNotAvailable)
-			})
-
-			// client.js Subscribe 後，套件內核會自動呼叫
-			oClient.OnSubRefresh(func(oEvent centrifuge.SubRefreshEvent, fnCallback centrifuge.SubRefreshCallback) {
-				log.Printf("client OnSubRefresh 刷新 channel=%s\n", oEvent.Channel)
-
-				fnCallback(centrifuge.SubRefreshReply{
-					ExpireAt: time.Now().Unix() + int64(subRefreshTTL.Seconds()),
-				}, nil)
-			})
-
-			oClient.OnSubscribe(func(oEvent centrifuge.SubscribeEvent, fnCallback centrifuge.SubscribeCallback) {
-				log.Printf("client OnSubscribe 訂閱 channel=%s\n", oEvent.Channel)
-				fnCallback(centrifuge.SubscribeReply{
-					Options: centrifuge.SubscribeOptions{
-						ExpireAt: time.Now().Unix() + int64(subRefreshTTL.Seconds()),
-					},
-					ClientSideRefresh: true,
-				}, nil)
-			})
-
-			oClient.OnUnsubscribe(func(oEvent centrifuge.UnsubscribeEvent) {
+			var oPayload struct {
+				Method string          `json:"method"`
+				Value  json.RawMessage `json:"value"`
+			}
+			if oErr := json.Unmarshal(oEvent.Data, &oPayload); oErr != nil {
+				log.Println("publish payload 解析失敗:", oErr)
+			} else {
 				log.Printf(
-					"client OnUnsubscribe 取消訂閱 channel=%s code=%d reason=%s serverSide=%v\n",
+					"收到訊息 channel=%s method=%s value=%s\n",
 					oEvent.Channel,
-					oEvent.Unsubscribe.Code,
-					oEvent.Unsubscribe.Reason,
-					oEvent.ServerSide,
+					oPayload.Method,
+					oPayload.Value,
 				)
-			})
+			}
 
-		},
-	)
+			fnCallback(centrifuge.PublishReply{}, nil)
+		})
+
+		// OnSubscribe client.js Subscribe 後呼叫
+		oClient.OnSubscribe(func(oEvent centrifuge.SubscribeEvent, fnCallback centrifuge.SubscribeCallback) {
+			log.Printf("client OnSubscribe 訂閱 channel=%s\n", oEvent.Channel)
+			fnCallback(centrifuge.SubscribeReply{
+				Options: centrifuge.SubscribeOptions{
+					ExpireAt: time.Now().Unix() + int64(subRefreshTTL.Seconds()),
+				},
+				ClientSideRefresh: true,
+			}, nil)
+		})
+
+		// OnRPC client -> server -> client 一次雙向 返回
+		// 有 ack
+		oClient.OnRPC(func(oEvent centrifuge.RPCEvent, fnCallback centrifuge.RPCCallback) {
+			switch oEvent.Method {
+			case "heartbeat":
+				aData, _ := json.Marshal(map[string]string{"type": "rpc-ack", "method": "heartbeat"})
+				fnCallback(centrifuge.RPCReply{Data: aData}, nil)
+			default:
+				fnCallback(centrifuge.RPCReply{}, centrifuge.ErrorMethodNotFound)
+			}
+		})
+
+		// OnRefresh： connect 後自動 ，套件內核會 定時自動呼叫刷新。
+		oClient.OnRefresh(func(oEvent centrifuge.RefreshEvent, fnCallback centrifuge.RefreshCallback) {
+			// log.Printf("client OnRefresh")
+
+			fnCallback(centrifuge.RefreshReply{}, centrifuge.ErrorNotAvailable)
+		})
+
+		// OnSubRefresh client.js Subscribe 一個channel 後，套件內核會 定時自動呼叫刷新。
+		oClient.OnSubRefresh(func(oEvent centrifuge.SubRefreshEvent, fnCallback centrifuge.SubRefreshCallback) {
+			// log.Printf("client OnSubRefresh 刷新 channel=%s\n", oEvent.Channel)
+
+			fnCallback(centrifuge.SubRefreshReply{
+				ExpireAt: time.Now().Unix() + int64(subRefreshTTL.Seconds()),
+			}, nil)
+		})
+
+		// OnUnsubscribe client F5關閉瀏覽器 -> 觸發發生。
+		oClient.OnUnsubscribe(func(oEvent centrifuge.UnsubscribeEvent) {
+			log.Printf(
+				"client OnUnsubscribe 取消訂閱 channel=%s code=%d reason=%s serverSide=%v\n",
+				oEvent.Channel,
+				oEvent.Unsubscribe.Code,
+				oEvent.Unsubscribe.Reason,
+				oEvent.ServerSide,
+			)
+		})
+
+	})
 
 	// 啟動 node
 	if oErr := oNode.Run(); oErr != nil {

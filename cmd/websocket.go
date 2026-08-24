@@ -14,6 +14,25 @@ var oUpgrader = websocket.Upgrader{
 	},
 }
 
+/*
+	type: connect,                                                 reply ✅
+	      disconnect,                                              reply ❌
+	      presence, presence-stats, history,                       reply ✅
+		  message,                                                 reply ❌
+		  publish,                                                 reply ✅ + broadcast ✅
+		  subscribe,                                               reply ✅
+		  rpc,                                                     reply ✅
+		  refresh,                                                 reply ✅
+		  sub-refresh,                                             reply ✅
+		  unsubscribe,                                             reply ❌
+		  heartbeat                                                reply ✅
+
+    method:
+	value:
+
+
+*/
+
 func fnHandler(oWriter http.ResponseWriter, oRequest *http.Request) {
 
 	oConn, oErr := oUpgrader.Upgrade(
