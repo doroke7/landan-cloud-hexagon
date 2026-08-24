@@ -17,15 +17,18 @@ var oUpgrader = websocket.Upgrader{
 /*
 	type: connect,                                                 reply ✅
 	      disconnect,                                              reply ❌
+		  heartbeat                                                reply ✅
+		  subscribe,                                               reply ✅
+
 	      presence, presence-stats, history,                       reply ✅
+		  rpc,                                                     reply ✅
+
 		  message,                                                 reply ❌
 		  publish,                                                 reply ✅ + broadcast ✅
-		  subscribe,                                               reply ✅
-		  rpc,                                                     reply ✅
+
 		  refresh,                                                 reply ✅
 		  sub-refresh,                                             reply ✅
 		  unsubscribe,                                             reply ❌
-		  heartbeat                                                reply ✅
 
     method:
 	value:

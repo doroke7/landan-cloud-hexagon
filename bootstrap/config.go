@@ -17,6 +17,9 @@ type Config struct {
 	WEBSOCKET struct {
 		PORT string `mapstructure:"port"`
 	} `mapstructure:"websocket"`
+	SOCKETIO struct {
+		PORT string `mapstructure:"port"`
+	} `mapstructure:"socketio"`
 	SERVICES struct {
 		HTTP struct {
 			HOST  string `mapstructure:"host"`

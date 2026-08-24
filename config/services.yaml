@@ -397,4 +397,7 @@ udp:
 centrifuge:
   port: 4021
 
+socketio:
+  port: 4022
+
 daemon:
