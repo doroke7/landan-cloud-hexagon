@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
+	"github.com/spf13/cobra"
 )
 
 var oUpgrader = websocket.Upgrader{
@@ -87,10 +88,19 @@ func fnHandler(oWriter http.ResponseWriter, oRequest *http.Request) {
 
 }
 
-func main() {
+var oWebsocketCommand = &cobra.Command{
+	Use:   "websocket",
+	Short: "啟動 Websocket 服務",
+	Run: func(cmd *cobra.Command, args []string) {
 
-	http.HandleFunc("/ws", fnHandler)
+		http.HandleFunc("/ws", fnHandler)
 
-	http.ListenAndServe(":8080", nil)
+		log.Fatal(http.ListenAndServe(":8080", nil))
 
+	},
+}
+
+func init() {
+	// 將 server 指令加入到 root 中
+	oRootCommand.AddCommand(oWebsocketCommand)
 }
