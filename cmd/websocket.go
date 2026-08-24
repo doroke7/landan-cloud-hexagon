@@ -1,19 +1,20 @@
 package cmd
 
 import (
+	"context"
 	"log"
 	"net/http"
-	"time"
+	"os"
+	"os/signal"
+	"syscall"
 
-	"github.com/gorilla/websocket"
 	"github.com/spf13/cobra"
-)
 
-var oUpgrader = websocket.Upgrader{
-	CheckOrigin: func(oRequest *http.Request) bool {
-		return true
-	},
-}
+	bootstrap "example/bootstrap"
+	container "example/container"
+	register "example/internal/register"
+	pkg "example/pkg"
+)
 
 /*
 	type: connect,                                                 reply ✅
@@ -37,65 +38,23 @@ var oUpgrader = websocket.Upgrader{
 
 */
 
-func fnHandler(oWriter http.ResponseWriter, oRequest *http.Request) {
-
-	oConn, oErr := oUpgrader.Upgrade(oWriter, oRequest, nil)
-
-	if oErr != nil {
-		log.Println(oErr)
-		return
-	}
-
-	defer oConn.Close()
-
-	// 讀取 client 訊息
-	go func() {
-
-		for {
-
-			iMessageType, aMsg, oErr := oConn.ReadMessage()
-
-			if oErr != nil {
-				log.Println("read error:", oErr)
-				return
-			}
-
-			// echo 回去
-			oErr = oConn.WriteMessage(iMessageType, aMsg)
-
-			if oErr != nil {
-				return
-			}
-
-		}
-
-	}()
-
-	// server 主動推送
-	oTicker := time.NewTicker(5 * time.Second)
-
-	defer oTicker.Stop()
-
-	for range oTicker.C {
-
-		oErr := oConn.WriteMessage(websocket.TextMessage, []byte("server ping"))
-
-		if oErr != nil {
-			return
-		}
-
-	}
-
-}
-
 var oWebsocketCommand = &cobra.Command{
 	Use:   "websocket",
 	Short: "啟動 Websocket 服務",
 	Run: func(cmd *cobra.Command, args []string) {
+		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		defer stop()
 
-		http.HandleFunc("/ws", fnHandler)
+		oContainer, err := container.InitWebsocketContainer(ctx)
+		if err != nil {
+			log.Fatal(err)
+		}
+		// Websocket 才是主要關心的 服務， 所以應該 從 register 取出 websocket 套件
+		fnWebsocketHandler := register.WebsocketInit(oContainer)
+		http.HandleFunc("/ws", fnWebsocketHandler)
+		pkg.Logger(pkg.Default).Info("啟動 WEBSOCKET 服務。 port: " + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT)
 
-		log.Fatal(http.ListenAndServe(":8080", nil))
+		http.ListenAndServe(":"+bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT, nil)
 
 	},
 }
