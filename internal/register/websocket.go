@@ -2,63 +2,38 @@ package register
 
 import (
 	container "example/container"
-	"fmt"
 	"log"
 	"net/http"
+
+	pkg "example/pkg"
 
 	"github.com/gorilla/websocket"
 )
 
-// WebsocketInit 組裝 upgrade/echo 這些 websocket 協定細節，回傳掛好 route 的 *http.ServeMux，
-// serve 的事交給 cmd/websocket.go 做，跟 SocketioInit 是同一套慣例。
+// WebsocketInit 只負責注入業務邏輯（連線/斷線 log、echo），連線生命週期機制
+// （upgrade、read loop、斷線偵測）交給 pkg.WebsocketRouter，跟 SocketioInit／
+// CentrifugeInit 是同一套「通訊邏輯跟業務邏輯分開」的慣例。
 func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
-	oMux := http.NewServeMux()
-
-	oMux.HandleFunc("/ws", func(oWriter http.ResponseWriter, oRequest *http.Request) {
-		var oUpgrader = websocket.Upgrader{
-			CheckOrigin: func(oRequest *http.Request) bool {
-				return true
-			},
-		}
-
-		oConn, oErr := oUpgrader.Upgrade(oWriter, oRequest, nil)
-
-		if oErr != nil {
-			log.Println(oErr)
-			return
-		}
-
-		defer oConn.Close()
-
-		// 讀取 client 訊息
-		go func() {
-
-			for {
-
-				iMessageType, aMsg, oErr := oConn.ReadMessage()
-
-				if oErr != nil {
-					fmt.Println("iMessageType", iMessageType)
-					fmt.Println("aMsg=", aMsg)
-					fmt.Println("oErr=", oErr)
-
-					return
-				}
-
-				// echo 回去
-				oErr = oConn.WriteMessage(iMessageType, aMsg)
-
-				if oErr != nil {
-					return
-				}
-
-			}
-
-		}()
-
+	oEventer := pkg.NewWebsocketEventer(websocket.Upgrader{
+		CheckOrigin: func(oRequest *http.Request) bool {
+			return true
+		},
 	})
 
-	return oMux
+	oEventer.OnConnect(func(oConn *websocket.Conn) {
+		log.Println("connected:", oConn.RemoteAddr())
+	})
+	oEventer.OnDisconnect(func(oConn *websocket.Conn) {
+		log.Println("disconnected:", oConn.RemoteAddr())
+	})
+	oEventer.OnMessage(func(oConn *websocket.Conn, iMessageType int, aMsg []byte) {
+		// echo 回去
+		oConn.WriteMessage(iMessageType, aMsg)
+	})
 
+	oMux := http.NewServeMux()
+	oMux.Handle("/ws", oEventer)
+
+	return oMux
 }
