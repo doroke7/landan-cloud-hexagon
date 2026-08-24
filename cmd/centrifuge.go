@@ -51,20 +51,6 @@ var oCentrifugeCommand = &cobra.Command{
 			defer oTicker10.Stop()
 			defer oTicker5.Stop()
 
-			for {
-				select {
-				case <-ctx.Done():
-					return
-				case <-oTicker10.C:
-					if _, oErr := oNode.Publish("all", []byte(`{"message": "Hi!!"}`)); oErr != nil {
-						log.Println("publish error:", oErr)
-					}
-				case <-oTicker5.C:
-					if _, oErr := oNode.Publish("room-01", []byte(`{"message": "你好"}`)); oErr != nil {
-						log.Println("publish error:", oErr)
-					}
-				}
-			}
 		}()
 
 		pkg.Logger(pkg.Default).Info("啟動 CENTRIFUGE 服務。 port: " + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT)
