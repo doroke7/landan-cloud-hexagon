@@ -75,6 +75,12 @@ func CentrifugeInit(oContainer *container.CentrifugeContainer) (*centrifuge.Node
 			if oErr := oClient.Subscribe("all"); oErr != nil {
 				log.Println("subscribe error:", oErr)
 			}
+			// "room-09" 對應前端 CentrifugeSubject 的 CHANNEL（sample/centrifuge-1-context/
+			// constants.ts），一樣改用 server-side 直接幫它訂閱，不然 client 端
+			// newSubscription("room-09").subscribe() 會因為沒開 OnSubscribe 權限被拒絕。
+			if oErr := oClient.Subscribe("room-09"); oErr != nil {
+				log.Println("subscribe error:", oErr)
+			}
 
 			oClient.OnPublish(func(oEvent centrifuge.PublishEvent, fnCallback centrifuge.PublishCallback) {
 				var oPayload struct {
@@ -117,31 +123,66 @@ func CentrifugeInit(oContainer *container.CentrifugeContainer) (*centrifuge.Node
 
 			// OnSubRefresh：client-side 訂閱過期時要不要延長訂閱。
 			oClient.OnSubRefresh(func(oEvent centrifuge.SubRefreshEvent, fnCallback centrifuge.SubRefreshCallback) {
+				log.Printf("client OnSubRefresh 刷新 channel=%s\n", oEvent.Channel)
+
 				fnCallback(centrifuge.SubRefreshReply{}, centrifuge.ErrorNotAvailable)
 			})
 
-			// OnSubscribe：client 端主動 subscribe 任意 channel 的權限判斷，"all"/"room-01"
-			// 目前都是上面 server-side 主動 Subscribe，不會走到這個 handler，先占位不開放。
+			// OnSubscribe：client 端主動 subscribe 任意 channel 的權限判斷。"all"/"room-09"
+			// 已經是 server-side 主動 Subscribe，不會走到這裡；這個 handler 是給前端
+			// CentrifugeSubject.subscribe(sChannel) 這種「client 自己點名要加入某個 channel」
+			// 的情境用，這個 demo 一樣不做任何驗證，一律放行。
 			oClient.OnSubscribe(func(oEvent centrifuge.SubscribeEvent, fnCallback centrifuge.SubscribeCallback) {
-				fnCallback(centrifuge.SubscribeReply{}, centrifuge.ErrorNotAvailable)
+				log.Printf("client OnSubscribe 訂閱 channel=%s\n", oEvent.Channel)
+				fnCallback(centrifuge.SubscribeReply{}, nil)
 			})
 
-			// OnUnsubscribe：純通知事件，沒有 callback 可以回。
+			// OnUnsubscribe：純通知事件，沒有 callback 可以回，這裡只是記錄一下
+			// 誰、從哪個 channel、因為什麼原因（code/reason）離開的。
 			oClient.OnUnsubscribe(func(oEvent centrifuge.UnsubscribeEvent) {
-				//
+				log.Printf(
+					"client OnUnsubscribe 取消訂閱 channel=%s code=%d reason=%s serverSide=%v\n",
+					oEvent.Channel,
+					oEvent.Unsubscribe.Code,
+					oEvent.Unsubscribe.Reason,
+					oEvent.ServerSide,
+				)
 			})
 
 			// OnPresence / OnPresenceStats：channel 在線名單／人數查詢。
 			oClient.OnPresence(func(oEvent centrifuge.PresenceEvent, fnCallback centrifuge.PresenceCallback) {
-				fnCallback(centrifuge.PresenceReply{}, centrifuge.ErrorNotAvailable)
+				fnCallback(centrifuge.PresenceReply{
+					Result: &centrifuge.PresenceResult{
+						Presence: map[string]*centrifuge.ClientInfo{
+							"fake-client-01": {ClientID: "fake-client-01", UserID: "user-01"},
+							"fake-client-02": {ClientID: "fake-client-02", UserID: "user-02"},
+							"fake-client-03": {ClientID: "fake-client-03", UserID: ""},
+						},
+					},
+				}, nil)
 			})
 			oClient.OnPresenceStats(func(oEvent centrifuge.PresenceStatsEvent, fnCallback centrifuge.PresenceStatsCallback) {
-				fnCallback(centrifuge.PresenceStatsReply{}, centrifuge.ErrorNotAvailable)
+				fnCallback(centrifuge.PresenceStatsReply{
+					Result: &centrifuge.PresenceStatsResult{
+						PresenceStats: centrifuge.PresenceStats{NumClients: 101, NumUsers: 101},
+					},
+				}, nil)
 			})
 
-			// OnHistory：channel 歷史訊息查詢。
 			oClient.OnHistory(func(oEvent centrifuge.HistoryEvent, fnCallback centrifuge.HistoryCallback) {
-				fnCallback(centrifuge.HistoryReply{}, centrifuge.ErrorNotAvailable)
+				aPublications := []*centrifuge.Publication{
+					{Offset: 1, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #1"}`)},
+					{Offset: 2, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #2"}`)},
+					{Offset: 3, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #3"}`)},
+					{Offset: 4, Data: []byte(`{"method":"chat_message","value":"假歷史訊息 #4"}`)},
+				}
+
+				fnCallback(centrifuge.HistoryReply{
+					Result: &centrifuge.HistoryResult{
+						StreamPosition: centrifuge.StreamPosition{Offset: 4, Epoch: "fake"},
+						Publications:   aPublications,
+					},
+				}, nil)
 			})
 		},
 	)
