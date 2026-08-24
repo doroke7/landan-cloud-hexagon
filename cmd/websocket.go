@@ -53,7 +53,7 @@ var oWebsocketCommand = &cobra.Command{
 		oMux := register.WebsocketInit(oContainer)
 
 		oWebsocketServer := &http.Server{
-			Addr:    ":" + bootstrap.CONFIG.WEBSOCKET.PORT,
+			Addr:    ":" + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT,
 			Handler: oMux,
 		}
 		pkg.Logger(pkg.Default).Info("啟動 WEBSOCKET 服務。 port: " + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT)

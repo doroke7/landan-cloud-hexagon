@@ -31,10 +31,10 @@ var oSocketioCommand = &cobra.Command{
 		go oServer.Serve()
 		defer oServer.Close()
 
-		pkg.Logger(pkg.Default).Info("啟動 SOCKETIO 服務。 port: " + bootstrap.CONFIG.SOCKETIO.PORT)
+		pkg.Logger(pkg.Default).Info("啟動 SOCKETIO 服務。 port: " + bootstrap.CONFIG.SERVICES.SOCKETIO.PORT)
 
 		oSocketioServer := &http.Server{
-			Addr:    ":" + bootstrap.CONFIG.SOCKETIO.PORT,
+			Addr:    ":" + bootstrap.CONFIG.SERVICES.SOCKETIO.PORT,
 			Handler: oMux,
 		}
 

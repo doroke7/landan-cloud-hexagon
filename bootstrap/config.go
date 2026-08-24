@@ -11,16 +11,10 @@ import (
 
 //nolint:stylecheck,revive
 type Config struct {
-	HTTP struct {
-		PORT string `mapstructure:"port"`
-	} `mapstructure:"http"`
-	WEBSOCKET struct {
-		PORT string `mapstructure:"port"`
-	} `mapstructure:"websocket"`
-	SOCKETIO struct {
-		PORT string `mapstructure:"port"`
-	} `mapstructure:"socketio"`
 	SERVICES struct {
+		SOCKETIO struct {
+			PORT string `mapstructure:"port"`
+		} `mapstructure:"socketio"`
 		HTTP struct {
 			HOST  string `mapstructure:"host"`
 			PORT  string `mapstructure:"port"`
