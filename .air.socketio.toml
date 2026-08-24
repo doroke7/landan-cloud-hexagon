@@ -1,0 +1,61 @@
+# [Air] 核心配置文件
+
+# 專案根目錄路徑
+root = "."
+testdata_dir = "testdata"
+# 暫存檔目錄，Air 編譯出來的二進位檔案會放在這，建議加進 .gitignore
+tmp_dir = "tmp"
+
+[build]
+  # 每次偵測到檔案變動時，實際執行的編譯指令 (也可以寫成 make build)
+  cmd = "go build -o ./tmp/main_socketio ./main.go"
+
+  # 編譯成功後，Air 幫你跑起來的執行檔路徑
+  bin = "./tmp/main_socketio"
+
+  # 如果你的程式啟動時需要帶參數或環境變數，寫在這裡
+  args_bin = ["socketio"]
+  
+  # 核心：當你手動按 Ctrl+C 終止時，Air 如何優雅地殺掉你的 Go 進程
+  # 在兩級 RPC 頻繁重啟時，優雅關閉（Graceful Shutdown）非常重要
+  send_interrupt = true
+  kill_delay = "500ms"
+
+  # 監聽哪些副檔名的變化？（加入 toml / yaml 可以讓設定檔改動時也重啟）
+  include_ext = ["go", "tpl", "html", "toml", "yaml", "yml", "env"]
+  
+  # 核心地雷區：一定要忽略這些目錄，否則會陷入「無限循環編譯」！
+  exclude_dir = ["assets", "tmp", "vendor", "testdata", "node_modules", ".git", ".venv", "runtime"]
+  
+  # 監聽時忽略特定檔案
+  exclude_file = []
+  
+  # 監聽特定的子目錄（如果不寫，預設會監聽 root 底下的所有非忽略目錄）
+  include_dir = []
+  
+  # 忽略無意義的暫存檔
+  exclude_regex = ["_test.go"]
+  
+  # 監聽檔案變動的延遲時間（防止你狂按儲存時，Air 瘋狂編譯卡死）
+  delay = 1000 # 毫秒
+
+  # 如果編譯失敗，是否停止舊的 binary 運行？（建議為 true，防止運行著有 bug 的舊版本）
+  stop_on_error = true
+
+  # 日誌檔案路徑
+  log = "air.log"
+
+[log]
+  # 是否顯示時間戳記
+  time = true
+
+[color]
+  # 終端機日誌顏色設定，方便 debug
+  main = "magenta"
+  watcher = "cyan"
+  build = "yellow"
+  runner = "green"
+
+[misc]
+  # 結束時是否清理 tmp 目錄
+  clean_on_exit = true

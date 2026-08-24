@@ -38,11 +38,11 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 				iMessageType, aMsg, oErr := oConn.ReadMessage()
 
-				fmt.Println(iMessageType)
-				fmt.Println(aMsg)
-
 				if oErr != nil {
-					log.Println("read error:", oErr)
+					fmt.Println("iMessageType", iMessageType)
+					fmt.Println("aMsg=", aMsg)
+					fmt.Println("oErr=", oErr)
+
 					return
 				}
 

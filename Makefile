@@ -39,6 +39,10 @@ websocket-watch:
 centrifuge-watch:
 	air -c .air.centrifuge.toml
 
+.PHONY: socketio-watch
+centrifuge-watch:
+	air -c .air.socketio.toml
+
 .PHONY: resource-watch
 resource-watch:
 	air -c .air.resource.toml
