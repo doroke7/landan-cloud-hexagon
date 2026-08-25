@@ -26,8 +26,8 @@ type TcpResponse struct {
 }
 
 type WebsocketRequest struct {
-	Id   int    `json:"id"`
-	Type string `json:"type"` // event: 事件消息（client 發起的呼叫）
+	Id    int    `json:"id"`
+	Event string `json:"event"` // event: 事件消息（client 發起的呼叫）
 
 	Header     json.RawMessage `json:"header"`
 	Code       int             `json:"code"`
@@ -46,8 +46,8 @@ type WebsocketRequest struct {
 // Result 用 json.RawMessage 跟 Param 是同一個道理：每個 method 回傳的資料形狀都不一樣，
 // WebsocketRouter 不管內容長什麼樣，由各自的 handler 自己 json.Marshal 成 RawMessage。
 type WebsocketResponse struct {
-	Id   int    `json:"id"`
-	Type string `json:"type"` // ack：回傳消息，且需要客戶端 ack；normal：回傳消息客戶端不用 ack；none：不會回傳
+	Id    int    `json:"id"`
+	Event string `json:"event"` // ack：回傳消息，且需要客戶端 ack；normal：回傳消息客戶端不用 ack；none：不會回傳
 
 	Header  json.RawMessage `json:"header"`
 	Code    int             `json:"code"`

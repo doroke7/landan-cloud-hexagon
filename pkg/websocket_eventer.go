@@ -2,7 +2,6 @@ package pkg
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
 	"net/http"
 
@@ -77,11 +76,6 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 	for {
 		iMessageType, aMsg, oErr := oConn.ReadMessage()
 
-		fmt.Println("iMessageType=", iMessageType)
-		fmt.Println("aMsg=", string(aMsg))
-		fmt.Println("oErr=", oErr)
-		fmt.Println("=======")
-
 		var oReq types.WebsocketRequest
 
 		if oErr == nil {
@@ -90,7 +84,7 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 				log.Println("json unmarshal error:", jsonErr)
 			}
 
-			if iMessageType == 1 && oSelf.onConnect != nil && oReq.Type == "connect" {
+			if iMessageType == 1 && oSelf.onConnect != nil && oReq.Event == "connect" {
 				oSelf.onConnect(oConn)
 				return
 
