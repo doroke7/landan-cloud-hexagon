@@ -10,6 +10,7 @@ require (
 	github.com/beevik/ntp v1.5.0
 	github.com/centrifugal/centrifuge v0.38.0
 	github.com/charmbracelet/log v1.0.0
+	github.com/cornelk/hashmap v1.0.8
 	github.com/eclipse/paho.mqtt.golang v1.5.1
 	github.com/elastic/go-elasticsearch/v8 v8.19.7
 	github.com/gin-gonic/gin v1.12.0
