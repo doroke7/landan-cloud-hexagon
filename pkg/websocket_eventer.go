@@ -36,7 +36,7 @@ func (oSelf *WebsocketEventer) OnOpen(fnHandler WebsocketOnOpenFunc) *WebsocketE
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) onConnect(fnHandler WebsocketOnConnectFunc) *WebsocketEventer {
+func (oSelf *WebsocketEventer) OnConnect(fnHandler WebsocketOnConnectFunc) *WebsocketEventer {
 	oSelf.onConnect = fnHandler
 	return oSelf
 }
@@ -64,8 +64,8 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 
 	defer oConn.Close()
 
-	if oSelf.onConnect != nil {
-		oSelf.onConnect(oConn)
+	if oSelf.onOpen != nil {
+		oSelf.onOpen(oConn)
 	}
 
 	// 讀取 client 訊息；handler 本身已經是 net/http 每個請求各自的 goroutine，
@@ -77,14 +77,26 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 		fmt.Println("iMessageType=", iMessageType)
 		fmt.Println("aMsg=", string(aMsg))
 		fmt.Println("oErr=", oErr)
+		fmt.Println("=======")
+
+		if oErr == nil {
+
+			if iMessageType == 1 && oSelf.onConnect != nil && string(aMsg) == "connect" {
+				oSelf.onConnect(oConn)
+				return
+
+			}
+
+		}
 
 		if oErr != nil {
 
 			if iMessageType == -1 && oSelf.onDisconnect != nil {
 				oSelf.onDisconnect(oConn)
+				return
+
 			}
 
-			return
 		}
 
 		if oSelf.onMessage != nil {

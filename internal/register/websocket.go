@@ -30,32 +30,46 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 	// oIDByConn 用 fmt.Sprintf("%p", oConn) 把指標位址轉成字串當 key 來繞過這個限制；
 	// OnDisconnect 只拿得到 *websocket.Conn，要靠它反查回 id 才知道斷的是哪一個。
 	var (
-		connectionMap   = hashmap.New[string, *websocket.Conn]()
-		oIdToConnection = hashmap.New[string, string]()
+		uuidToConnection = hashmap.New[string, *websocket.Conn]()
+		pointerToUuid    = hashmap.New[string, string]()
 	)
 
 	oEventer.OnOpen(func(oConn *websocket.Conn) {
 		log.Println("OnOpen:", oConn.RemoteAddr())
 
-		sId := uuid.New().String()
-		sConnKey := fmt.Sprintf("%p", oConn)
+		sUuid := uuid.New().String()
+		sPointer := fmt.Sprintf("%p", oConn)
 
-		if _, bFound := connectionMap.Get(sId); bFound {
-			log.Println("duplicate id, disconnect:", sId, oConn.RemoteAddr())
+		if _, bFound := uuidToConnection.Get(sUuid); bFound {
+			log.Println("duplicate id, disconnect:", sUuid, oConn.RemoteAddr())
 			oConn.Close()
 			return
 		}
 
-		connectionMap.Set(sId, oConn)
-		oIdToConnection.Set(sConnKey, sId)
+		uuidToConnection.Set(sUuid, oConn)
+		pointerToUuid.Set(sPointer, sUuid)
 
 	})
+
+	oEventer.OnConnect(func(oConn *websocket.Conn) {
+		sPointer := fmt.Sprintf("%p", oConn)
+		fmt.Println("sPointer=", sPointer)
+
+		sUuId, _ := pointerToUuid.Get(sPointer)
+
+		aByteUuid := []byte(sUuId)
+
+		fmt.Println("sUuId=", sUuId)
+		oConn.WriteMessage(1, aByteUuid)
+
+	})
+
 	oEventer.OnDisconnect(func(oConn *websocket.Conn) {
 		sConnKey := fmt.Sprintf("%p", oConn)
 
-		sId, _ := oIdToConnection.Get(sConnKey)
-		oIdToConnection.Del(sConnKey)
-		connectionMap.Del(sId)
+		sId, _ := pointerToUuid.Get(sConnKey)
+		pointerToUuid.Del(sConnKey)
+		uuidToConnection.Del(sId)
 
 		log.Println("disconnected:", sId, oConn.RemoteAddr())
 	})
