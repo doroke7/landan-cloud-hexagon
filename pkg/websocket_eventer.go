@@ -13,8 +13,11 @@ import (
 // WebsocketOnConnectFunc / WebsocketOnMessageFunc / WebsocketOnDisconnectFunc 是連線生命週期
 // 三個時機點各自的處理方法簽名，職責跟 TcpRouter 的 method 對照表一樣：eventer 只負責在對的
 // 時機呼叫對的方法，實際要做什麼交給呼叫端注入。
-type WebsocketOnConnectFunc func(oConn *websocket.Conn)
+type WebsocketOnConnectFunc func(oConn *websocket.Conn, oReq *types.WebsocketRequest)
 type WebsocketOnOpenFunc func(oConn *websocket.Conn)
+// WebsocketOnAuthenticateFunc 回傳 bool 表示驗證是否通過：true 讓連線繼續往下讀之後的訊息，
+// false 讓 ServeHTTP 關閉連線——跟 onConnect／onOpen 不同，這裡的結果會影響連線生死。
+type WebsocketOnAuthenticateFunc func(oConn *websocket.Conn, oReq *types.WebsocketRequest) bool
 type WebsocketOnMessageFunc func(oConn *websocket.Conn, iMessageType int, aMsg []byte)
 type WebsocketOnDisconnectFunc func(oConn *websocket.Conn)
 
@@ -22,11 +25,12 @@ type WebsocketOnDisconnectFunc func(oConn *websocket.Conn)
 // （upgrade、read loop、斷線偵測），不管收到訊息／連線／斷線後實際要做什麼——
 // 通訊邏輯（這支檔案）跟業務邏輯（呼叫端注入的三個 callback）完全分開。
 type WebsocketEventer struct {
-	upgrader     websocket.Upgrader
-	onOpen       WebsocketOnOpenFunc
-	onConnect    WebsocketOnConnectFunc
-	onMessage    WebsocketOnMessageFunc
-	onDisconnect WebsocketOnDisconnectFunc
+	upgrader       websocket.Upgrader
+	onOpen         WebsocketOnOpenFunc
+	onConnect      WebsocketOnConnectFunc
+	onAuthenticate WebsocketOnAuthenticateFunc
+	onMessage      WebsocketOnMessageFunc
+	onDisconnect   WebsocketOnDisconnectFunc
 }
 
 func NewWebsocketEventer(oUpgrader websocket.Upgrader) *WebsocketEventer {
@@ -40,6 +44,11 @@ func (oSelf *WebsocketEventer) OnOpen(fnHandler WebsocketOnOpenFunc) *WebsocketE
 
 func (oSelf *WebsocketEventer) OnConnect(fnHandler WebsocketOnConnectFunc) *WebsocketEventer {
 	oSelf.onConnect = fnHandler
+	return oSelf
+}
+
+func (oSelf *WebsocketEventer) OnAuthenticate(fnHandler WebsocketOnAuthenticateFunc) *WebsocketEventer {
+	oSelf.onAuthenticate = fnHandler
 	return oSelf
 }
 
@@ -76,17 +85,26 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 	for {
 		iMessageType, aMsg, oErr := oConn.ReadMessage()
 
-		var oReq types.WebsocketRequest
+		var oWsReq types.WebsocketRequest
 
 		if oErr == nil {
 
-			if jsonErr := json.Unmarshal(aMsg, &oReq); jsonErr != nil {
+			if jsonErr := json.Unmarshal(aMsg, &oWsReq); jsonErr != nil {
 				log.Println("json unmarshal error:", jsonErr)
 			}
 
-			if iMessageType == 1 && oSelf.onConnect != nil && oReq.Event == "connect" {
-				oSelf.onConnect(oConn)
+			if iMessageType == 1 && oSelf.onConnect != nil && oWsReq.Event == "connect" {
+				oSelf.onConnect(oConn, &oWsReq)
 				return
+
+			}
+
+			if iMessageType == 1 && oSelf.onAuthenticate != nil && oWsReq.Event == "authenticate" {
+				if !oSelf.onAuthenticate(oConn, &oWsReq) {
+					return
+				}
+
+				continue
 
 			}
 
