@@ -16,28 +16,6 @@ import (
 	pkg "example/pkg"
 )
 
-/*
-	type: connect,                                                 reply ✅
-	      disconnect,                                              reply ❌
-		  heartbeat                                                reply ✅
-		  subscribe,                                               reply ✅
-
-	      presence, presence-stats, history,                       reply ✅
-		  rpc,                                                     reply ✅
-
-		  message,                                                 reply ❌
-		  publish,                                                 reply ✅ + broadcast ✅
-
-		  refresh,                                                 reply ✅
-		  sub-refresh,                                             reply ✅
-		  unsubscribe,                                             reply ❌
-
-    method:
-	value:
-
-
-*/
-
 var oWebsocketCommand = &cobra.Command{
 	Use:   "websocket",
 	Short: "啟動 Websocket 服務",

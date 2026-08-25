@@ -14,9 +14,34 @@ import (
 	"github.com/gorilla/websocket"
 )
 
-// WebsocketInit 只負責注入業務邏輯（連線註冊、log、echo），連線生命週期機制
-// （upgrade、read loop、斷線偵測）交給 pkg.WebsocketEventer，跟 SocketioInit／
-// CentrifugeInit 是同一套「通訊邏輯跟業務邏輯分開」的慣例。
+/*
+
+          open                                                                        完成
+		  ping        / pong
+
+	event:
+	      connect    / conntected                                  reply ✅           完成
+	      disconnect / disconnected 不需要                          reply ❌           完成
+		  heartbeat  / heartbeated                                 reply ✅
+		  subscribe  / subscribed                                  reply ✅
+
+		  authenticate/ authenticated
+	      presence, presence-stats, history,                       reply ✅           可取消
+		  rpc        / rpc-ack                                     reply ✅
+
+		  message    / messaged 不需要                              reply ❌
+		  broadcast  / broadcasted                                 reply ✅ + broadcast ✅
+
+		  refresh     /refreshed                                  reply ✅
+		  sub-refresh / sub-refreshed                             reply ✅
+		  unsubscribe / unsubscribed 不需要                        reply ❌
+
+    method:
+	value:
+
+
+*/
+
 func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 	oEventer := pkg.NewWebsocketEventer(websocket.Upgrader{
@@ -25,15 +50,16 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		},
 	})
 
-	// 連線註冊表：id 一律由 server 端在 OnConnect 生成，不能信任 client 自己宣稱的 id。
-	// 用 cornelk/hashmap 而不是 map + Mutex／sync.Map——它是真正 lock-free 的實作，
-	// 讀寫都不需要拿鎖。hashmap.Map 的 Key 限制只能是數字／字串（不能是指標），
-	// oIDByConn 用 fmt.Sprintf("%p", oConn) 把指標位址轉成字串當 key 來繞過這個限制；
-	// OnDisconnect 只拿得到 *websocket.Conn，要靠它反查回 id 才知道斷的是哪一個。
 	var (
-		uuidToConnection = hashmap.New[string, *websocket.Conn]()
 		pointerToUuid    = hashmap.New[string, string]()
+		uuidToConnection = hashmap.New[string, *websocket.Conn]()
+
+		uuidToChannels = hashmap.New[string, string]()
+		channelToConns = hashmap.New[string, string]()
 	)
+
+	_ = uuidToChannels
+	_ = channelToConns
 
 	oEventer.OnOpen(func(oConn *websocket.Conn) {
 		log.Println("OnOpen:", oConn.RemoteAddr())
@@ -54,7 +80,6 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 	oEventer.OnConnect(func(oConn *websocket.Conn) {
 		sPointer := fmt.Sprintf("%p", oConn)
-		fmt.Println("sPointer=", sPointer)
 
 		sUuId, _ := pointerToUuid.Get(sPointer)
 
@@ -76,6 +101,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 	})
 
 	oEventer.OnDisconnect(func(oConn *websocket.Conn) {
+		// disconnect 是收不到 uuid 的
 		sConnKey := fmt.Sprintf("%p", oConn)
 
 		sId, _ := pointerToUuid.Get(sConnKey)
