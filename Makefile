@@ -40,7 +40,7 @@ centrifuge-watch:
 	air -c .air.centrifuge.toml
 
 .PHONY: socketio-watch
-centrifuge-watch:
+socketio-watch:
 	air -c .air.socketio.toml
 
 .PHONY: resource-watch

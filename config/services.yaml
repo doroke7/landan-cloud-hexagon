@@ -381,7 +381,7 @@ centrifuge:
   prefix:
 
 socketio:
-  port: 4022
+  port: 4041
   prefix:
 
 

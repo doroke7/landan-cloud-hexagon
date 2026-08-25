@@ -34,14 +34,21 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		oIdToConnection = hashmap.New[string, string]()
 	)
 
-	oEventer.OnConnect(func(oConn *websocket.Conn) {
+	oEventer.OnOpen(func(oConn *websocket.Conn) {
+		log.Println("OnOpen:", oConn.RemoteAddr())
+
 		sId := uuid.New().String()
 		sConnKey := fmt.Sprintf("%p", oConn)
+
+		if _, bFound := connectionMap.Get(sId); bFound {
+			log.Println("duplicate id, disconnect:", sId, oConn.RemoteAddr())
+			oConn.Close()
+			return
+		}
 
 		connectionMap.Set(sId, oConn)
 		oIdToConnection.Set(sConnKey, sId)
 
-		log.Println("connected:", sId, oConn.RemoteAddr())
 	})
 	oEventer.OnDisconnect(func(oConn *websocket.Conn) {
 		sConnKey := fmt.Sprintf("%p", oConn)

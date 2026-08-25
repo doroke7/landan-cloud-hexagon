@@ -1,6 +1,7 @@
 package pkg
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -11,6 +12,7 @@ import (
 // 三個時機點各自的處理方法簽名，職責跟 TcpRouter 的 method 對照表一樣：eventer 只負責在對的
 // 時機呼叫對的方法，實際要做什麼交給呼叫端注入。
 type WebsocketOnConnectFunc func(oConn *websocket.Conn)
+type WebsocketOnOpenFunc func(oConn *websocket.Conn)
 type WebsocketOnMessageFunc func(oConn *websocket.Conn, iMessageType int, aMsg []byte)
 type WebsocketOnDisconnectFunc func(oConn *websocket.Conn)
 
@@ -19,6 +21,7 @@ type WebsocketOnDisconnectFunc func(oConn *websocket.Conn)
 // 通訊邏輯（這支檔案）跟業務邏輯（呼叫端注入的三個 callback）完全分開。
 type WebsocketEventer struct {
 	upgrader     websocket.Upgrader
+	onOpen       WebsocketOnOpenFunc
 	onConnect    WebsocketOnConnectFunc
 	onMessage    WebsocketOnMessageFunc
 	onDisconnect WebsocketOnDisconnectFunc
@@ -28,8 +31,12 @@ func NewWebsocketEventer(oUpgrader websocket.Upgrader) *WebsocketEventer {
 	return &WebsocketEventer{upgrader: oUpgrader}
 }
 
-// OnConnect 註冊連線建立完成時要執行的方法，對應 socket.io 的 .on("connect", cb)。
-func (oSelf *WebsocketEventer) OnConnect(fnHandler WebsocketOnConnectFunc) *WebsocketEventer {
+func (oSelf *WebsocketEventer) OnOpen(fnHandler WebsocketOnOpenFunc) *WebsocketEventer {
+	oSelf.onOpen = fnHandler
+	return oSelf
+}
+
+func (oSelf *WebsocketEventer) onConnect(fnHandler WebsocketOnConnectFunc) *WebsocketEventer {
 	oSelf.onConnect = fnHandler
 	return oSelf
 }
@@ -67,9 +74,12 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 	for {
 		iMessageType, aMsg, oErr := oConn.ReadMessage()
 
+		fmt.Println("iMessageType=", iMessageType)
+		fmt.Println("aMsg=", string(aMsg))
+		fmt.Println("oErr=", oErr)
+
 		if oErr != nil {
-			// gorilla/websocket 讀取出錯時（連線被關閉、網路中斷...）會把 messageType
-			// 設回 noFrame(-1)，用這個當作「真的斷線了」的判斷依據，而不是任何 oErr != nil 就算斷線
+
 			if iMessageType == -1 && oSelf.onDisconnect != nil {
 				oSelf.onDisconnect(oConn)
 			}

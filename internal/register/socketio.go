@@ -4,47 +4,45 @@ import (
 	"log"
 	"net/http"
 
-	socketio "github.com/googollee/go-socket.io"
+	socketio "github.com/doquangtan/socketio/v4"
+	"github.com/rs/cors"
 )
 
-// SocketioInit 組裝 event -> handler 對照表，回傳掛好 route 的 *http.ServeMux，
-// serve/close 這些連線生命週期管理的事交給 cmd/socketio.go 做，跟 WebsocketInit 是同一套慣例。
-func SocketioInit() (*socketio.Server, *http.ServeMux) {
+func SocketioInit() (*socketio.Io, *http.ServeMux) {
 
-	oServer := socketio.NewServer(nil)
-
-	oServer.OnConnect("/", func(oConn socketio.Conn) error {
-
-		oConn.SetContext("")
-		log.Println("connected:", oConn.ID())
-
-		return nil
-
+	oCors := cors.New(cors.Options{
+		AllowOriginFunc:  func(sOrigin string) bool { return true },
+		AllowCredentials: true,
 	})
 
-	oServer.OnEvent("/", "message", func(oConn socketio.Conn, sMsg string) string {
+	oServer := socketio.New()
 
-		// echo 回去
-		return sMsg
+	oServer.OnConnection(func(oSocket *socketio.Socket) {
 
-	})
+		log.Println("connected:", oSocket.Id)
 
-	oServer.OnEvent("/", "broadcast", func(oConn socketio.Conn, sMsg string) {
+		oSocket.On("message", func(oEvent *socketio.EventPayload) {
 
-		oServer.BroadcastToNamespace("/", "broadcast", sMsg)
+			// echo 回去
+			oSocket.Emit("message", oEvent.Data...)
 
-	})
+		})
 
-	oServer.OnError("/", func(oConn socketio.Conn, oErr error) {
-		log.Println("error:", oErr)
-	})
+		oSocket.On("broadcast", func(oEvent *socketio.EventPayload) {
+			log.Println("broadcast:", oEvent.Data)
 
-	oServer.OnDisconnect("/", func(oConn socketio.Conn, sReason string) {
-		log.Println("disconnected:", oConn.ID(), sReason)
+			// oServer.Emit("broadcast", oEvent.Data...)
+
+		})
+
+		oSocket.On("disconnect", func(oEvent *socketio.EventPayload) {
+			log.Println("disconnected:", oSocket.Id)
+		})
+
 	})
 
 	oMux := http.NewServeMux()
-	oMux.Handle("/socket.io/", oServer)
+	oMux.Handle("/socket.io/", oCors.Handler(oServer.HttpHandler()))
 
 	return oServer, oMux
 

@@ -28,7 +28,6 @@ var oSocketioCommand = &cobra.Command{
 
 		oServer, oMux := register.SocketioInit()
 
-		go oServer.Serve()
 		defer oServer.Close()
 
 		pkg.Logger(pkg.Default).Info("啟動 SOCKETIO 服務。 port: " + bootstrap.CONFIG.SERVICES.SOCKETIO.PORT)
