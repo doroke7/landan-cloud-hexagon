@@ -1,6 +1,7 @@
 package register
 
 import (
+	"encoding/json"
 	container "example/container"
 	"fmt"
 	"log"
@@ -57,10 +58,20 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		sUuId, _ := pointerToUuid.Get(sPointer)
 
-		aByteUuid := []byte(sUuId)
+		aByteJson, oErr := json.Marshal(struct {
+			Type   string `json:"type"`
+			Result string `json:"result"`
+		}{
+			Type:   "connect-ack",
+			Result: sUuId,
+		})
 
-		fmt.Println("sUuId=", sUuId)
-		oConn.WriteMessage(1, aByteUuid)
+		if oErr != nil {
+			log.Println("json marshal error:", oErr)
+			return
+		}
+
+		oConn.WriteMessage(websocket.TextMessage, aByteJson)
 
 	})
 

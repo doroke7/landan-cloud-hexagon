@@ -1,11 +1,14 @@
 package pkg
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
 
 	"github.com/gorilla/websocket"
+
+	types "example/types"
 )
 
 // WebsocketOnConnectFunc / WebsocketOnMessageFunc / WebsocketOnDisconnectFunc 是連線生命週期
@@ -79,9 +82,15 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 		fmt.Println("oErr=", oErr)
 		fmt.Println("=======")
 
+		var oReq types.WebsocketRequest
+
 		if oErr == nil {
 
-			if iMessageType == 1 && oSelf.onConnect != nil && string(aMsg) == "connect" {
+			if jsonErr := json.Unmarshal(aMsg, &oReq); jsonErr != nil {
+				log.Println("json unmarshal error:", jsonErr)
+			}
+
+			if iMessageType == 1 && oSelf.onConnect != nil && oReq.Type == "connect" {
 				oSelf.onConnect(oConn)
 				return
 
