@@ -102,7 +102,6 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 
 			if (iType == 1 || iType == 2) && oSelf.onConnect != nil && oWsReq.Event == "connect" {
 				oSelf.onConnect(oConn, iType, &oWsReq)
-				return
 
 			}
 

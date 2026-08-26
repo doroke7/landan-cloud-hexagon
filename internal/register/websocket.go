@@ -119,6 +119,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			Name     string `json:"name"`
 			Password string `json:"password"`
 		}
+		fmt.Println("134 boWsReqOk=", oWsReq)
 
 		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
 			log.Println("json unmarshal error:", oErr)
