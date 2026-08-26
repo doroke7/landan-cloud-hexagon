@@ -1,11 +1,12 @@
 package register
 
 import (
-	"log"
 	"net/http"
 
 	socketio "github.com/doquangtan/socketio/v4"
 	"github.com/rs/cors"
+
+	pkg "example/pkg"
 )
 
 func SocketioInit() (*socketio.Io, *http.ServeMux) {
@@ -19,7 +20,7 @@ func SocketioInit() (*socketio.Io, *http.ServeMux) {
 
 	oServer.OnConnection(func(oSocket *socketio.Socket) {
 
-		log.Println("connected:", oSocket.Id)
+		pkg.Logger(pkg.Socketio).Sugar().Infof("connected: %s", oSocket.Id)
 
 		oSocket.On("message", func(oEvent *socketio.EventPayload) {
 
@@ -29,14 +30,14 @@ func SocketioInit() (*socketio.Io, *http.ServeMux) {
 		})
 
 		oSocket.On("broadcast", func(oEvent *socketio.EventPayload) {
-			log.Println("broadcast:", oEvent.Data)
+			pkg.Logger(pkg.Socketio).Sugar().Infof("broadcast: %v", oEvent.Data)
 
 			// oServer.Emit("broadcast", oEvent.Data...)
 
 		})
 
 		oSocket.On("disconnect", func(oEvent *socketio.EventPayload) {
-			log.Println("disconnected:", oSocket.Id)
+			pkg.Logger(pkg.Socketio).Sugar().Infof("disconnected: %s", oSocket.Id)
 		})
 
 	})

@@ -14,6 +14,7 @@ type Module string
 
 const (
 	Default  Module = "default"
+	Command  Module = "command"
 	Cron     Module = "cron"
 	Consumer Module = "consumer"
 
@@ -34,6 +35,9 @@ const (
 	WebsocketAdminMiddleware Module = "websocket-admin-middleware"
 	WebsocketAppMiddleware   Module = "websocket-app-middleware"
 	WebsocketThirdMiddleware Module = "websocket-third-middleware"
+
+	Socketio   Module = "socketio"
+	Centrifuge Module = "centrifuge"
 
 	FacadeAdmin               Module = "facade-admin"
 	FacadeGame                Module = "facade-game"

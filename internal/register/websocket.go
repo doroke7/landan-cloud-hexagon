@@ -7,12 +7,13 @@ import (
 
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
+	"time"
 
 	bootstrap "example/bootstrap"
 	container "example/container"
 	utility "example/internal/utility"
+	pkg "example/pkg"
 	types "example/types"
 )
 
@@ -38,9 +39,26 @@ type WebsocketOnAuthenticateFunc func(oConn *websocket.Conn, iType int, oReq *ty
 type WebsocketOnMessageFunc func(oConn *websocket.Conn, iType int, aMsg []byte)
 type WebsocketOnDisconnectFunc func(oConn *websocket.Conn, iType int)
 
+// WebsocketOnUnsubscribeFunc 不是 client 主動送的 application event，是 websocket
+// 協定層級的斷線（iType == -1 時）：跟 OnDisconnect 綁在同一個時間點一起觸發，讓
+// 呼叫端在連線真的斷掉那一刻，順便清掉這個連線訂閱的 channel。因為觸發時 read 已經
+// 失敗，沒有解析出有效的 request，簽名跟 OnDisconnect 一樣不帶 oReq。
+type WebsocketOnUnsubscribeFunc func(oConn *websocket.Conn, iType int)
+
+// WebsocketOnHeartbeatFunc / WebsocketOnRpcFunc / WebsocketOnSubscribeFunc /
+// WebsocketOnBroadcastFunc / WebsocketOnRefreshFunc 都是自己定義的 application
+// event：跟 OnConnect 一樣由 client 主動送對應 event（heartbeat/rpc/subscribe/
+// broadcast/refresh）觸發，簽名比照 OnConnect，不像 OnAuthenticate 需要回傳值
+// 決定連線生死，處理完就 continue，不會落到下面的 onMessage。
+type WebsocketOnHeartbeatFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnRpcFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnSubscribeFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnBroadcastFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnRefreshFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
+
 // WebsocketEventer 職責跟 TcpRouter 一樣：只負責「連線生命週期」機制本身
-// （upgrade、read loop、斷線偵測），不管收到訊息／連線／斷線後實際要做什麼——
-// 通訊邏輯（這支檔案）跟業務邏輯（呼叫端注入的三個 callback）完全分開。
+// （upgrade、read loop、斷線偵測、ping/pong keepalive），不管收到訊息／連線／斷線後
+// 實際要做什麼——通訊邏輯（這支檔案）跟業務邏輯（呼叫端注入的三個 callback）完全分開。
 type WebsocketEventer struct {
 	upgrader       websocket.Upgrader
 	onOpen         WebsocketOnOpenFunc
@@ -48,6 +66,12 @@ type WebsocketEventer struct {
 	onAuthenticate WebsocketOnAuthenticateFunc
 	onMessage      WebsocketOnMessageFunc
 	onDisconnect   WebsocketOnDisconnectFunc
+	onUnsubscribe  WebsocketOnUnsubscribeFunc
+	onHeartbeat    WebsocketOnHeartbeatFunc
+	onRpc          WebsocketOnRpcFunc
+	onSubscribe    WebsocketOnSubscribeFunc
+	onBroadcast    WebsocketOnBroadcastFunc
+	onRefresh      WebsocketOnRefreshFunc
 }
 
 func NewWebsocketEventer(oUpgrader websocket.Upgrader) *WebsocketEventer {
@@ -81,41 +105,100 @@ func (oSelf *WebsocketEventer) OnDisconnect(fnHandler WebsocketOnDisconnectFunc)
 	return oSelf
 }
 
+// OnUnsubscribe 註冊 websocket 協定斷線（iType == -1）當下要執行的方法，跟
+// OnDisconnect 同一個時機點觸發。
+func (oSelf *WebsocketEventer) OnUnsubscribe(fnHandler WebsocketOnUnsubscribeFunc) *WebsocketEventer {
+	oSelf.onUnsubscribe = fnHandler
+	return oSelf
+}
+
+// OnHeartbeat / OnRpc / OnSubscribe / OnBroadcast / OnRefresh 註冊各自 event
+// 觸發時要執行的方法，用法跟 OnConnect 一樣。
+func (oSelf *WebsocketEventer) OnHeartbeat(fnHandler WebsocketOnHeartbeatFunc) *WebsocketEventer {
+	oSelf.onHeartbeat = fnHandler
+	return oSelf
+}
+
+func (oSelf *WebsocketEventer) OnRpc(fnHandler WebsocketOnRpcFunc) *WebsocketEventer {
+	oSelf.onRpc = fnHandler
+	return oSelf
+}
+
+func (oSelf *WebsocketEventer) OnSubscribe(fnHandler WebsocketOnSubscribeFunc) *WebsocketEventer {
+	oSelf.onSubscribe = fnHandler
+	return oSelf
+}
+
+func (oSelf *WebsocketEventer) OnBroadcast(fnHandler WebsocketOnBroadcastFunc) *WebsocketEventer {
+	oSelf.onBroadcast = fnHandler
+	return oSelf
+}
+
+func (oSelf *WebsocketEventer) OnRefresh(fnHandler WebsocketOnRefreshFunc) *WebsocketEventer {
+	oSelf.onRefresh = fnHandler
+	return oSelf
+}
+
 // ServeHTTP 讓 WebsocketEventer 可以直接掛進 http.ServeMux，用法跟其他 http.Handler 一樣。
 func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *http.Request) {
 	oConn, oErr := oSelf.upgrader.Upgrade(oWriter, oRequest, nil)
 
 	if oErr != nil {
-		log.Println(oErr)
+		pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("upgrade error: %v", oErr)
 		return
 	}
 
 	defer oConn.Close()
 
+	// PONG_WAIT：連線允許完全靜默多久，超過就直接斷線。收到 Pong 會把它續回滿額——
+	// 定時送出的 Ping（見下面 PING_INTERVAL）就是持續給 client 機會回 Pong，讓一直
+	// 有在回應的連線不會被 PONG_WAIT 誤判斷線。
+	oConn.SetReadDeadline(time.Now().Add(time.Duration(bootstrap.CONFIG.SERVICES.WEBSOCKET.PONG_WAIT) * time.Second))
+	oConn.SetPongHandler(func(string) error {
+		return oConn.SetReadDeadline(time.Now().Add(time.Duration(bootstrap.CONFIG.SERVICES.WEBSOCKET.PONG_WAIT) * time.Second))
+	})
+
 	if oSelf.onOpen != nil {
 		oSelf.onOpen(oConn, 0)
 	}
+
+	// 定時送 Ping，跟下面讀訊息的迴圈各自獨立跑：這裡只負責照 PING_INTERVAL
+	// 送 Ping，ServeHTTP 返回時 defer close(chDone) 會讓它一起停止。
+	chDone := make(chan struct{})
+	defer close(chDone)
+
+	go func() {
+		oTicker := time.NewTicker(time.Duration(bootstrap.CONFIG.SERVICES.WEBSOCKET.PING_INTERVAL) * time.Second)
+		defer oTicker.Stop()
+
+		for {
+			select {
+			case <-oTicker.C:
+
+				oConn.WriteMessage(websocket.PingMessage, nil)
+			case <-chDone:
+				return
+			}
+		}
+	}()
 
 	// 讀取 client 訊息；handler 本身已經是 net/http 每個請求各自的 goroutine，
 	// 不需要再包一層 go func()，不然這裡會直接返回，defer oConn.Close() 馬上執行，
 	// 把還在等訊息的連線關掉。
 	for {
 		iType, aMsg, oErr := oConn.ReadMessage()
-		log.Println("iType:", iType)
-		log.Println("aMsg:", string(aMsg))
-		log.Println("oErr:", oErr)
 
 		var oWsReq types.WebsocketRequest
 
 		if oErr == nil {
 
 			if jsonErr := json.Unmarshal(aMsg, &oWsReq); jsonErr != nil {
-				log.Println("json unmarshal error:", jsonErr)
+				pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("json unmarshal error: %v", jsonErr)
 			}
 
 			if (iType == 1 || iType == 2) && oSelf.onConnect != nil && oWsReq.Event == "connect" {
 				oSelf.onConnect(oConn, iType, &oWsReq)
-
+				continue
 			}
 
 			if (iType == 1 || iType == 2) && oSelf.onAuthenticate != nil && oWsReq.Event == "authenticate" {
@@ -127,28 +210,75 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 
 			}
 
+			if (iType == 1 || iType == 2) && oSelf.onHeartbeat != nil && oWsReq.Event == "heartbeat" {
+				oSelf.onHeartbeat(oConn, iType, &oWsReq)
+
+				continue
+
+			}
+
+			if (iType == 1 || iType == 2) && oSelf.onRpc != nil && oWsReq.Event == "rpc" {
+				oSelf.onRpc(oConn, iType, &oWsReq)
+
+				continue
+
+			}
+
+			if (iType == 1 || iType == 2) && oSelf.onSubscribe != nil && oWsReq.Event == "subscribe" {
+				oSelf.onSubscribe(oConn, iType, &oWsReq)
+
+				continue
+
+			}
+
+			if (iType == 1 || iType == 2) && oSelf.onBroadcast != nil && oWsReq.Event == "broadcast" {
+				oSelf.onBroadcast(oConn, iType, &oWsReq)
+
+				continue
+
+			}
+
+			if (iType == 1 || iType == 2) && oSelf.onRefresh != nil && oWsReq.Event == "refresh" {
+				oSelf.onRefresh(oConn, iType, &oWsReq)
+
+				continue
+
+			}
+
+			if (iType == 1 || iType == 2) && oSelf.onMessage != nil && oWsReq.Event == "message" {
+				oSelf.onMessage(oConn, iType, aMsg)
+
+				continue
+
+			}
+
 		}
 
 		if oErr != nil {
 
-			if iType == -1 && oSelf.onDisconnect != nil {
-				oSelf.onDisconnect(oConn, iType)
+			if iType == -1 {
+
+				if oSelf.onUnsubscribe != nil {
+					oSelf.onUnsubscribe(oConn, iType)
+				}
+
+				if oSelf.onDisconnect != nil {
+					oSelf.onDisconnect(oConn, iType)
+				}
+
 				return
 
 			}
 
 		}
 
-		if oSelf.onMessage != nil {
-			oSelf.onMessage(oConn, iType, aMsg)
-		}
 	}
 }
 
 /*
 
           open                                                                        完成
-		  ping        / pong
+		  ping        / pong                                                         完成
 
 event:
 
@@ -204,13 +334,13 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 	_ = channelToConnections
 
 	oAdminEventer.OnOpen(func(oConn *websocket.Conn, iType int) {
-		log.Println("OnOpen:", oConn.RemoteAddr())
+		pkg.Logger(pkg.WebsocketAdmin).Sugar().Infof("OnOpen: %v", oConn.RemoteAddr())
 
 		sUuid := uuid.New().String()
 		sPointer := fmt.Sprintf("%p", oConn)
 
 		if _, bGotten := uuidToConnection.Get(sUuid); bGotten {
-			log.Println("duplicate id, disconnect:", sUuid, oConn.RemoteAddr())
+			pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("duplicate id, disconnect: %s %v", sUuid, oConn.RemoteAddr())
 			oConn.Close()
 			return
 		}
@@ -228,13 +358,13 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		if oWsReq.K != "" {
 			sKeys, oErr := oContainer.RsaHelper.Decrypt(oWsReq.K, bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN.PRIVATE_KEY)
 			if oErr != nil {
-				log.Println("rsa decrypt error:", oErr)
+				pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("rsa decrypt error: %v", oErr)
 				return
 			}
 
 			oKeys, oErr := utility.JsonDecode[Keys](sKeys)
 			if oErr != nil {
-				log.Println("json unmarshal error:", oErr)
+				pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("json unmarshal error: %v", oErr)
 				return
 			}
 
@@ -254,7 +384,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			log.Println("json marshal error:", oErr)
+			pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("json marshal error: %v", oErr)
 			return
 		}
 
@@ -267,10 +397,9 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			Name     string `json:"name"`
 			Password string `json:"password"`
 		}
-		fmt.Println("134 boWsReqOk=", oWsReq)
 
 		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
-			log.Println("json unmarshal error:", oErr)
+			pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("json unmarshal error: %v", oErr)
 		}
 
 		bOk := oValue.Name == "admin" && oValue.Password == "123456"
@@ -291,7 +420,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			log.Println("json marshal error:", oErr)
+			pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("json marshal error: %v", oErr)
 			return false
 		}
 
@@ -316,13 +445,13 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		uuidToAuthentication.Del(sPointer)
 		uuidToKeys.Del(sPointer)
 
-		log.Println("disconnected:", sUuid, oConn.RemoteAddr())
+		pkg.Logger(pkg.WebsocketAdmin).Sugar().Infof("disconnected: %s %v", sUuid, oConn.RemoteAddr())
 	})
 	oAdminEventer.OnMessage(func(oConn *websocket.Conn, iType int, aMsg []byte) {
 		sPointer := fmt.Sprintf("%p", oConn)
 
 		if bAuthenticated, _ := uuidToAuthentication.Get(sPointer); !bAuthenticated {
-			log.Println("not authenticated, ignore message:", oConn.RemoteAddr())
+			pkg.Logger(pkg.WebsocketAdmin).Sugar().Infof("not authenticated, ignore message: %v", oConn.RemoteAddr())
 			return
 		}
 

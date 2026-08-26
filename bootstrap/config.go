@@ -101,9 +101,11 @@ type Config struct {
 			PASSWORD string `mapstructure:"password"`
 		} `mapstructure:"resource"`
 		WEBSOCKET struct {
-			HOST  string `mapstructure:"host"`
-			PORT  string `mapstructure:"port"`
-			ADMIN struct {
+			HOST          string `mapstructure:"host"`
+			PORT          string `mapstructure:"port"`
+			PONG_WAIT     int    `mapstructure:"pong_wait"`
+			PING_INTERVAL int    `mapstructure:"ping_interval"`
+			ADMIN         struct {
 				PUBLIC_KEY     string `mapstructure:"public_key"`
 				PRIVATE_KEY    string `mapstructure:"private_key"`
 				SIGNATURE      bool   `mapstructure:"signature"`

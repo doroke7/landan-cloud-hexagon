@@ -3,13 +3,13 @@ package register
 import (
 	"context"
 	"encoding/json"
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/centrifugal/centrifuge"
 
 	container "example/container"
+	pkg "example/pkg"
 )
 
 // subRefreshTTL 故意設很短，是為了讓 demo 能在幾秒內就看到 client-side subscription
@@ -71,12 +71,12 @@ func CentrifugeInit(oContainer *container.CentrifugeContainer) (*centrifuge.Node
 
 		// 斷線
 		oClient.OnDisconnect(func(oEvent centrifuge.DisconnectEvent) {
-			log.Printf("client OnDisconnect")
+			pkg.Logger(pkg.Centrifuge).Info("client OnDisconnect")
 
 		})
 
 		if oErr := oClient.Subscribe("all"); oErr != nil {
-			log.Println("subscribe error:", oErr)
+			pkg.Logger(pkg.Centrifuge).Sugar().Errorf("subscribe error: %v", oErr)
 		}
 
 		// OnPresence ~= 特殊 RPC,  client -> server -> client 一次雙向 返回
@@ -124,24 +124,24 @@ func CentrifugeInit(oContainer *container.CentrifugeContainer) (*centrifuge.Node
 		// OnMessage： client -> server 單向 不返回
 		// 無 ack
 		oClient.OnMessage(func(oEvent centrifuge.MessageEvent) {
-			log.Printf("client OnMessage data=%s", oEvent.Data)
+			pkg.Logger(pkg.Centrifuge).Sugar().Infof("client OnMessage data=%s", oEvent.Data)
 		})
 
 		//                            -> client
 		// OnPublish client -> server -> broadcast
 		// 同時有 ack
 		oClient.OnPublish(func(oEvent centrifuge.PublishEvent, fnCallback centrifuge.PublishCallback) {
-			log.Printf("client OnPublish data=%s", oEvent.Data)
+			pkg.Logger(pkg.Centrifuge).Sugar().Infof("client OnPublish data=%s", oEvent.Data)
 
 			var oPayload struct {
 				Method string          `json:"method"`
 				Value  json.RawMessage `json:"value"`
 			}
 			if oErr := json.Unmarshal(oEvent.Data, &oPayload); oErr != nil {
-				log.Println("publish payload 解析失敗:", oErr)
+				pkg.Logger(pkg.Centrifuge).Sugar().Errorf("publish payload 解析失敗: %v", oErr)
 			} else {
-				log.Printf(
-					"收到訊息 channel=%s method=%s value=%s\n",
+				pkg.Logger(pkg.Centrifuge).Sugar().Infof(
+					"收到訊息 channel=%s method=%s value=%s",
 					oEvent.Channel,
 					oPayload.Method,
 					oPayload.Value,
@@ -153,7 +153,7 @@ func CentrifugeInit(oContainer *container.CentrifugeContainer) (*centrifuge.Node
 
 		// OnSubscribe client.js Subscribe 後呼叫
 		oClient.OnSubscribe(func(oEvent centrifuge.SubscribeEvent, fnCallback centrifuge.SubscribeCallback) {
-			log.Printf("client OnSubscribe 訂閱 channel=%s\n", oEvent.Channel)
+			pkg.Logger(pkg.Centrifuge).Sugar().Infof("client OnSubscribe 訂閱 channel=%s", oEvent.Channel)
 			fnCallback(centrifuge.SubscribeReply{
 				Options: centrifuge.SubscribeOptions{
 					ExpireAt: time.Now().Unix() + int64(subRefreshTTL.Seconds()),
@@ -192,8 +192,8 @@ func CentrifugeInit(oContainer *container.CentrifugeContainer) (*centrifuge.Node
 
 		// OnUnsubscribe client F5關閉瀏覽器 -> 觸發發生。
 		oClient.OnUnsubscribe(func(oEvent centrifuge.UnsubscribeEvent) {
-			log.Printf(
-				"client OnUnsubscribe 取消訂閱 channel=%s code=%d reason=%s serverSide=%v\n",
+			pkg.Logger(pkg.Centrifuge).Sugar().Infof(
+				"client OnUnsubscribe 取消訂閱 channel=%s code=%d reason=%s serverSide=%v",
 				oEvent.Channel,
 				oEvent.Unsubscribe.Code,
 				oEvent.Unsubscribe.Reason,
