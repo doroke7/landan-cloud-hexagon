@@ -574,17 +574,12 @@ type WebsocketContainer struct {
 	WebsocketAdminAuthenticationAuthenticator *inputApplicationWebsocketAdminAuthentication.AuthenticatorHandler
 
 	// Websocket server -Middleware
-	WebsocketAdminAbstractMiddleware       *middlewareWebsocketAdmin.AbstractMiddleware
-	WebsocketAdminAdminMiddleware          *middlewareWebsocketAdmin.AdminMiddleware
-	WebsocketAdminAuthenticationMiddleware *middlewareWebsocketAdmin.AuthenticationMiddleware
-	WebsocketAdminDecryptionMiddleware     *middlewareWebsocketAdmin.DecryptionMiddleware
-	WebsocketAdminEncryptionMiddleware     *middlewareWebsocketAdmin.EncryptionMiddleware
-	WebsocketAdminErrorMiddleware          *middlewareWebsocketAdmin.ErrorMiddleware
-	WebsocketAdminLoggerMiddleware         *middlewareWebsocketAdmin.LoggerMiddleware
-	WebsocketAdminNonexistentMiddleware    *middlewareWebsocketAdmin.NonexistentMiddleware
-	WebsocketAdminRequestMiddleware        *middlewareWebsocketAdmin.RequestMiddleware
-	WebsocketAdminResponseMiddleware       *middlewareWebsocketAdmin.ResponseMiddleware
-	WebsocketAdminSignatureMiddleware      *middlewareWebsocketAdmin.SignatureMiddleware
+	WebsocketAdminAbstractMiddleware    *middlewareWebsocketAdmin.AbstractMiddleware
+	WebsocketAdminAdminMiddleware       *middlewareWebsocketAdmin.AdminMiddleware
+	WebsocketAdminErrorMiddleware       *middlewareWebsocketAdmin.ErrorMiddleware
+	WebsocketAdminLoggerMiddleware      *middlewareWebsocketAdmin.LoggerMiddleware
+	WebsocketAdminNonexistentMiddleware *middlewareWebsocketAdmin.NonexistentMiddleware
+	WebsocketAdminRequestMiddleware     *middlewareWebsocketAdmin.RequestMiddleware
 }
 
 func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
@@ -622,15 +617,10 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 		// Middleware 部分
 		middlewareWebsocketAdmin.NewAbstractMiddleware,
 		middlewareWebsocketAdmin.NewAdminMiddleware,
-		middlewareWebsocketAdmin.NewAuthenticationMiddleware,
-		middlewareWebsocketAdmin.NewDecryptionMiddleware,
-		middlewareWebsocketAdmin.NewEncryptionMiddleware,
 		middlewareWebsocketAdmin.NewErrorMiddleware,
 		middlewareWebsocketAdmin.NewLoggerMiddleware,
 		middlewareWebsocketAdmin.NewNonexistentMiddleware,
 		middlewareWebsocketAdmin.NewRequestMiddleware,
-		middlewareWebsocketAdmin.NewResponseMiddleware,
-		middlewareWebsocketAdmin.NewSignatureMiddleware,
 
 		wire.Struct(new(WebsocketContainer), "*"),
 	)

@@ -446,15 +446,10 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 	authenticatorHandler := inputApplicationWebsocketAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	abstractMiddleware := middlewareWebsocketAdmin.NewAbstractMiddleware(clock, rsaHelper, aesHelper, jwtHelper)
 	adminMiddleware := middlewareWebsocketAdmin.NewAdminMiddleware(abstractMiddleware)
-	authenticationMiddleware := middlewareWebsocketAdmin.NewAuthenticationMiddleware(abstractMiddleware)
-	decryptionMiddleware := middlewareWebsocketAdmin.NewDecryptionMiddleware(abstractMiddleware)
-	encryptionMiddleware := middlewareWebsocketAdmin.NewEncryptionMiddleware(abstractMiddleware)
 	errorMiddleware := middlewareWebsocketAdmin.NewErrorMiddleware(abstractMiddleware)
 	loggerMiddleware := middlewareWebsocketAdmin.NewLoggerMiddleware(abstractMiddleware)
 	nonexistentMiddleware := middlewareWebsocketAdmin.NewNonexistentMiddleware(abstractMiddleware)
 	requestMiddleware := middlewareWebsocketAdmin.NewRequestMiddleware(abstractMiddleware)
-	responseMiddleware := middlewareWebsocketAdmin.NewResponseMiddleware(abstractMiddleware)
-	signatureMiddleware := middlewareWebsocketAdmin.NewSignatureMiddleware(abstractMiddleware)
 	websocketContainer := &WebsocketContainer{
 		Clock:           clock,
 		AbstractHelper:  abstractHelper,
@@ -466,15 +461,10 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 		WebsocketAdminAuthenticationAuthenticator: authenticatorHandler,
 		WebsocketAdminAbstractMiddleware:          abstractMiddleware,
 		WebsocketAdminAdminMiddleware:             adminMiddleware,
-		WebsocketAdminAuthenticationMiddleware:    authenticationMiddleware,
-		WebsocketAdminDecryptionMiddleware:        decryptionMiddleware,
-		WebsocketAdminEncryptionMiddleware:        encryptionMiddleware,
 		WebsocketAdminErrorMiddleware:             errorMiddleware,
 		WebsocketAdminLoggerMiddleware:            loggerMiddleware,
 		WebsocketAdminNonexistentMiddleware:       nonexistentMiddleware,
 		WebsocketAdminRequestMiddleware:           requestMiddleware,
-		WebsocketAdminResponseMiddleware:          responseMiddleware,
-		WebsocketAdminSignatureMiddleware:         signatureMiddleware,
 	}
 	return websocketContainer, nil
 }
@@ -835,17 +825,12 @@ type WebsocketContainer struct {
 	WebsocketAdminAuthenticationAuthenticator *inputApplicationWebsocketAdminAuthentication.AuthenticatorHandler
 
 	// Websocket server -Middleware
-	WebsocketAdminAbstractMiddleware       *middlewareWebsocketAdmin.AbstractMiddleware
-	WebsocketAdminAdminMiddleware          *middlewareWebsocketAdmin.AdminMiddleware
-	WebsocketAdminAuthenticationMiddleware *middlewareWebsocketAdmin.AuthenticationMiddleware
-	WebsocketAdminDecryptionMiddleware     *middlewareWebsocketAdmin.DecryptionMiddleware
-	WebsocketAdminEncryptionMiddleware     *middlewareWebsocketAdmin.EncryptionMiddleware
-	WebsocketAdminErrorMiddleware          *middlewareWebsocketAdmin.ErrorMiddleware
-	WebsocketAdminLoggerMiddleware         *middlewareWebsocketAdmin.LoggerMiddleware
-	WebsocketAdminNonexistentMiddleware    *middlewareWebsocketAdmin.NonexistentMiddleware
-	WebsocketAdminRequestMiddleware        *middlewareWebsocketAdmin.RequestMiddleware
-	WebsocketAdminResponseMiddleware       *middlewareWebsocketAdmin.ResponseMiddleware
-	WebsocketAdminSignatureMiddleware      *middlewareWebsocketAdmin.SignatureMiddleware
+	WebsocketAdminAbstractMiddleware    *middlewareWebsocketAdmin.AbstractMiddleware
+	WebsocketAdminAdminMiddleware       *middlewareWebsocketAdmin.AdminMiddleware
+	WebsocketAdminErrorMiddleware       *middlewareWebsocketAdmin.ErrorMiddleware
+	WebsocketAdminLoggerMiddleware      *middlewareWebsocketAdmin.LoggerMiddleware
+	WebsocketAdminNonexistentMiddleware *middlewareWebsocketAdmin.NonexistentMiddleware
+	WebsocketAdminRequestMiddleware     *middlewareWebsocketAdmin.RequestMiddleware
 }
 
 type CentrifugeContainer struct {

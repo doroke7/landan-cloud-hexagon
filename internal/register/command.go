@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
 	container "example/container"
@@ -23,11 +24,11 @@ func CommandInit(oCommandCommand *cobra.Command) *cobra.Command {
 		Run: func(oCmd *cobra.Command, args []string) {
 			oContainer, err := container.InitCommandContainer(context.Background())
 			if err != nil {
-				pkg.Logger(pkg.Command).Sugar().Fatalf("command: failed to init container: %v", err)
+				pkg.Logger(pkg.Command).Fatal("command: failed to init container", zap.Error(err))
 			}
 
 			if err := oContainer.CommandAdminReourceAppUser.IncreaseBalance(iId, iAmount); err != nil {
-				pkg.Logger(pkg.Command).Sugar().Errorf("increase balance failed: %v", err)
+				pkg.Logger(pkg.Command).Error("increase balance failed", zap.Error(err))
 			}
 		},
 	}
@@ -46,17 +47,17 @@ func CommandInit(oCommandCommand *cobra.Command) *cobra.Command {
 		Run: func(oCmd *cobra.Command, args []string) {
 			oContainer, err := container.InitCommandContainer(context.Background())
 			if err != nil {
-				pkg.Logger(pkg.Command).Sugar().Fatalf("command: failed to init container: %v", err)
+				pkg.Logger(pkg.Command).Fatal("command: failed to init container", zap.Error(err))
 			}
 
 			// NOTE: command carrier 目前沒有自己的 services.command.admin.jwt 設定，先借用 http 那組 secret。
 			sAuthorization, err := oContainer.CommandAdminAuthenticationSignIn.SignIn(sName, sPassword, bootstrap.CONFIG.SERVICES.HTTP.ADMIN.JWT.SECRET)
 			if err != nil {
-				pkg.Logger(pkg.Command).Sugar().Errorf("sign in failed: %v", err)
+				pkg.Logger(pkg.Command).Error("sign in failed", zap.Error(err))
 				return
 			}
 
-			pkg.Logger(pkg.Command).Sugar().Infof("sign in succeeded, authorization: %s", sAuthorization)
+			pkg.Logger(pkg.Command).Info("sign in succeeded", zap.String("authorization", sAuthorization))
 		},
 	}
 
