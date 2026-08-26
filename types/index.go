@@ -36,6 +36,7 @@ type WebsocketRequest struct {
 	Filters    json.RawMessage `json:"filters"`
 	Pagination json.RawMessage `json:"pagination"`
 
+	K string `json:"k"`
 	C string `json:"c"`
 	V string `json:"v"`
 	F string `json:"f"`
