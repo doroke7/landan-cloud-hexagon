@@ -69,11 +69,12 @@ event:
 		  rpc        / rpced                                       reply ✅           ⚠️ server 需要寫路由
 
 		  subscribe  / subscribed                                  reply ✅           完成
+		  present                                                  reply ✅           完成
 
 		  message    / messaged 當向訊息-不需要ack                    reply ❌            完成
-		  chat       / chated
-		  broadcast  / broadcasted                                 reply ✅ + broadcast ✅
-		  notify    / notified                                     reply ✅
+		  chat       / chated                                       reply ✅           完成
+		  broadcast  / broadcasted                                 reply ✅ + broadcast ✅  ⚠️ server 需要依 method 寫路由（gift/like）
+		  notify    / notified                                     reply ✅           ⚠️ server 需要依 method 寫路由（add-friend/poke）
 
 		  refresh     /refreshed                                  reply ✅
 		  sub-refresh / sub-refreshed                             reply ✅
@@ -81,6 +82,9 @@ event:
 --------------------------------------需要檢查是否 authenticated -----------------------------------------------
 
 		  unsubscribe / unsubscribed                              reply ❌           完成
+
+--------------------------------------server 不用實作 -----------------------------------------------
+          publish
 
     method:
 	value:
@@ -119,6 +123,7 @@ event:
 	       broadcast:method
              ├── gift
              └── like
+             └── nap
 
            notify:method
              ├── add-friend
@@ -254,6 +259,9 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 	})
 
 	oAdminEventer.OnAuthenticate(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) bool {
+		sPointer := fmt.Sprintf("%p", oConn)
+		sCId, _ := pointerToCid.Get(sPointer)
+
 		var oValue struct {
 			Name     string `json:"name"`
 			Password string `json:"password"`
@@ -273,10 +281,12 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		aByteMessage, oErr := json.Marshal(struct {
 			Event string `json:"event"`
 			Code  int    `json:"code"`
+			CId   string `json:"c_id"`
 			RId   string `json:"r_id"`
 		}{
 			Event: "authenticated",
 			Code:  nCode,
+			CId:   sCId,
 			RId:   oWsReq.RId,
 		})
 
@@ -288,9 +298,6 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		oConn.WriteMessage(iType, aByteMessage)
 
 		if bOk {
-			sPointer := fmt.Sprintf("%p", oConn)
-			sCId, _ := pointerToCid.Get(sPointer)
-
 			if oSession, bGotten := cidToSession.Get(sCId); bGotten {
 				oNew := *oSession.Load()
 				oNew.Authenticated = true
@@ -299,6 +306,10 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 			// TODO: 暫時寫死，之後要換成 SignIn 驗證出來的真正 admin_user_id。
 			auIdToCids.Insert(sCId, sCId)
+
+			// 每個登入的 admin 自動訂閱根頻道 "/"，跟 OnSubscribe 走的是同一份
+			// auIdChannels，OnClose／OnUnsubscribe 斷線時也會一併退訂。
+			auIdChannels.Insert(sCId, "/")
 		}
 
 		return bOk
@@ -346,9 +357,6 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			return
 		}
 
-		// 訂閱記在 admin_user_id 這個層級，不是單一 cid——同一個 admin 開好幾個
-		// 分頁／裝置都算同一份訂閱，真的要廣播時再透過 cidToSession 反查回實際的
-		// 連線。BiMultiMap.Insert 本身有去重、也自己處理並發，不用再額外上鎖。
 		auIdChannels.Insert(sAuId, oValue.Channel)
 
 		aByteMessage, oErr := json.Marshal(struct {
@@ -369,12 +377,288 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		oConn.WriteMessage(iType, aByteMessage)
 	})
 
-	// OnUnsubscribe 有兩種觸發時機：client 主動送 event: "unsubscribe"，或是連線斷線
-	// （iType == -1，跟 OnClose 同一個時間點一起觸發，且會先觸發）。因為沒有帶 oReq，
-	// 沒辦法指定「只離開某一個頻道」，兩種情境都當作「這個 admin（sAuId）離開目前
-	// 訂閱的全部頻道」——訂閱現在是記在 admin_user_id 這個層級，不是單一 cid。
-	// 之後如果要支援「退訂單一頻道」，得替 app event 版本另外設計帶 channel 參數
-	// 的簽名。
+	oAdminEventer.OnChat(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
+		sPointer := fmt.Sprintf("%p", oConn)
+		sCId, _ := pointerToCid.Get(sPointer)
+
+		var oValue struct {
+			Channel string `json:"channel"`
+			Text    string `json:"text"`
+		}
+
+		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			return
+		}
+
+		aByteMessage, oErr := json.Marshal(struct {
+			Event string `json:"event"`
+			CId   string `json:"c_id"`
+			RId   string `json:"r_id"`
+		}{
+			Event: "chated",
+			CId:   sCId,
+			RId:   oWsReq.RId,
+		})
+
+		if oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			return
+		}
+
+		oConn.WriteMessage(iType, aByteMessage)
+
+		aAuIds := auIdChannels.Right(oValue.Channel)
+		if len(aAuIds) == 0 {
+			return
+		}
+
+		aByteChat, oErr := json.Marshal(struct {
+			Event  string `json:"event"`
+			CId    string `json:"c_id"`
+			RId    string `json:"r_id"`
+			Result struct {
+				Channel string `json:"channel"`
+				Text    string `json:"text"`
+			} `json:"result"`
+		}{
+			Event: "chat",
+			CId:   sCId,
+			RId:   oWsReq.RId,
+			Result: struct {
+				Channel string `json:"channel"`
+				Text    string `json:"text"`
+			}{
+				Channel: oValue.Channel,
+				Text:    oValue.Text,
+			},
+		})
+
+		if oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			return
+		}
+		go func() {
+
+			for _, sAuId := range aAuIds {
+				for _, sTargetCId := range auIdToCids.Left(sAuId) {
+					oTargetSession, bGotten := cidToSession.Get(sTargetCId)
+					if !bGotten {
+						continue
+					}
+
+					oTargetSession.Load().Connection.WriteMessage(iType, aByteChat)
+				}
+			}
+		}()
+
+	})
+
+	// OnBroadcast 目前還沒有真的依 Method（gift/like 之類）分派到對應的業務
+	// 邏輯，先把整個 value 原封不動連同 method 一起轉發給頻道成員，讓前端自己
+	// 依 method 處理內容；跟 OnChat 一樣，channel 沒人訂閱就直接忽略。
+	oAdminEventer.OnBroadcast(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
+		sPointer := fmt.Sprintf("%p", oConn)
+		sCId, _ := pointerToCid.Get(sPointer)
+
+		var oValue struct {
+			Channel string `json:"channel"`
+		}
+
+		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			return
+		}
+
+		aByteMessage, oErr := json.Marshal(struct {
+			Event string `json:"event"`
+			CId   string `json:"c_id"`
+			RId   string `json:"r_id"`
+		}{
+			Event: "broadcasted",
+			CId:   sCId,
+			RId:   oWsReq.RId,
+		})
+
+		if oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			return
+		}
+
+		oConn.WriteMessage(iType, aByteMessage)
+
+		aAuIds := auIdChannels.Right(oValue.Channel)
+		if len(aAuIds) == 0 {
+			return
+		}
+
+		aByteBroadcast, oErr := json.Marshal(struct {
+			Event  string          `json:"event"`
+			CId    string          `json:"c_id"`
+			RId    string          `json:"r_id"`
+			Method string          `json:"method"`
+			Value  json.RawMessage `json:"value"`
+		}{
+			Event:  "broadcast",
+			CId:    sCId,
+			RId:    oWsReq.RId,
+			Method: oWsReq.Method,
+			Value:  oWsReq.Value,
+		})
+
+		if oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			return
+		}
+
+		go func() {
+			for _, sAuId := range aAuIds {
+				for _, sTargetCId := range auIdToCids.Left(sAuId) {
+					oTargetSession, bGotten := cidToSession.Get(sTargetCId)
+					if !bGotten {
+						continue
+					}
+
+					oTargetSession.Load().Connection.WriteMessage(iType, aByteBroadcast)
+				}
+			}
+		}()
+	})
+
+	// OnNotify 是 1 對 1 通知，跟 OnBroadcast（channel 1 對多）不同：value 帶的是
+	// 目標 admin_user_id，不是 channel。目標不在線（auIdToCids.Left 查不到任何
+	// cid，包含這個 admin_user_id 根本不存在的情況）就直接忽略；同一個目標開好
+	// 幾個分頁／裝置的話，每一條連線都會收到。跟 OnBroadcast 一樣，method
+	// （add-friend/poke）目前不需要 server 端路由，原封不動連同 value 轉發。
+	oAdminEventer.OnNotify(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
+		sPointer := fmt.Sprintf("%p", oConn)
+		sCId, _ := pointerToCid.Get(sPointer)
+
+		var oValue struct {
+			AdminUserId string `json:"admin_user_id"`
+		}
+
+		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			return
+		}
+
+		aByteMessage, oErr := json.Marshal(struct {
+			Event string `json:"event"`
+			CId   string `json:"c_id"`
+			RId   string `json:"r_id"`
+		}{
+			Event: "notified",
+			CId:   sCId,
+			RId:   oWsReq.RId,
+		})
+
+		if oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			return
+		}
+
+		oConn.WriteMessage(iType, aByteMessage)
+
+		aTargetCIds := auIdToCids.Left(oValue.AdminUserId)
+		if len(aTargetCIds) == 0 {
+			return
+		}
+
+		aByteNotify, oErr := json.Marshal(struct {
+			Event  string          `json:"event"`
+			CId    string          `json:"c_id"`
+			RId    string          `json:"r_id"`
+			Method string          `json:"method"`
+			Value  json.RawMessage `json:"value"`
+		}{
+			Event:  "notify",
+			CId:    sCId,
+			RId:    oWsReq.RId,
+			Method: oWsReq.Method,
+			Value:  oWsReq.Value,
+		})
+
+		if oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			return
+		}
+
+		go func() {
+			for _, sTargetCId := range aTargetCIds {
+				oTargetSession, bGotten := cidToSession.Get(sTargetCId)
+				if !bGotten {
+					continue
+				}
+
+				oTargetSession.Load().Connection.WriteMessage(iType, aByteNotify)
+			}
+		}()
+	})
+
+	// OnPresent 查詢某個 channel 目前在線的訂閱者，Result.Ones 是 admin_user_id
+	// 清單（每個元素目前只有 Id，之後要補其他欄位就直接加）——不是 cid，一個
+	// auid 底下可能有好幾條連線，這裡不展開。純粹是查詢、不改變任何狀態，
+	// 也不需要轉發給別人，直接回給發問的這條連線就好。channel 沒人訂閱就回
+	// 一份空陣列，不是錯誤。
+	oAdminEventer.OnPresent(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
+		sPointer := fmt.Sprintf("%p", oConn)
+		sCId, _ := pointerToCid.Get(sPointer)
+
+		var oValue struct {
+			Channel string `json:"channel"`
+		}
+
+		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			return
+		}
+
+		aAuIds := auIdChannels.Right(oValue.Channel)
+
+		aOnes := make([]struct {
+			Id string `json:"id"`
+		}, 0, len(aAuIds))
+
+		for _, sAuId := range aAuIds {
+			aOnes = append(aOnes, struct {
+				Id string `json:"id"`
+			}{Id: sAuId})
+		}
+
+		aByteMessage, oErr := json.Marshal(struct {
+			Event  string `json:"event"`
+			CId    string `json:"c_id"`
+			RId    string `json:"r_id"`
+			Result struct {
+				Channel string `json:"channel"`
+				Ones    []struct {
+					Id string `json:"id"`
+				} `json:"ones"`
+			} `json:"result"`
+		}{
+			Event: "present",
+			CId:   sCId,
+			RId:   oWsReq.RId,
+			Result: struct {
+				Channel string `json:"channel"`
+				Ones    []struct {
+					Id string `json:"id"`
+				} `json:"ones"`
+			}{
+				Channel: oValue.Channel,
+				Ones:    aOnes,
+			},
+		})
+
+		if oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			return
+		}
+
+		oConn.WriteMessage(iType, aByteMessage)
+	})
+
 	oAdminEventer.OnUnsubscribe(func(oConn *websocket.Conn, iType int) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
@@ -393,21 +677,6 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		auIdChannels.RemoveLeft(sAuId)
 	})
 
-	// OnClose 是收不到 cid 的
-	oAdminEventer.OnClose(func(oConn *websocket.Conn, iType int) {
-		sPointer := fmt.Sprintf("%p", oConn)
-
-		sCId, _ := pointerToCid.Get(sPointer)
-		pointerToCid.Del(sPointer)
-		cidToSession.Del(sCId)
-		auIdToCids.RemoveRight(sCId)
-
-		pkg.Logger(pkg.WebsocketAdmin).Info(
-			"disconnected",
-			zap.String("cid", sCId),
-			zap.Stringer("remoteAddr", oConn.RemoteAddr()),
-		)
-	})
 	oAdminEventer.OnMessage(func(oConn *websocket.Conn, iType int, aMsg []byte) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
@@ -421,11 +690,31 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		// oConn.WriteMessage(iType, aMsg)
 	})
 
-	// 定時任務：每 5 分鐘掃一次全部連線，Session.IdleSince() 超過 2 分鐘（沒收到
-	// heartbeat 也沒收到 pong）就視為連線壞掉，強制關閉。Close() 之後 ReadMessage 會
-	// 出錯、觸發 OnClose，但那是另一個 goroutine 非同步發生的事，這裡不等它，直接把
-	// cidToSession 的資料一併刪掉，確保這條 cid 立刻從所有狀態裡消失，不會被下一輪
-	// Range 又掃到重複關閉一次。
+	// OnClose 是收不到 cid 的
+	oAdminEventer.OnClose(func(oConn *websocket.Conn, iType int) {
+		sPointer := fmt.Sprintf("%p", oConn)
+
+		sCId, _ := pointerToCid.Get(sPointer)
+		pointerToCid.Del(sPointer)
+		cidToSession.Del(sCId)
+
+		// 退訂這條連線的 admin 訂閱的全部頻道（包含 OnAuthenticate 自動訂閱的
+		// "/"）。要在 auIdToCids.RemoveRight 之前查，不然 sCId 對應的 auid 就
+		// 找不到了。OnUnsubscribe 在協定層斷線（iType == -1）時也會先做一次
+		// 一樣的事，這裡重複呼叫是安全的（RemoveLeft 對已經清空的 auid 是
+		// no-op），保留是為了讓 OnClose 不管有沒有經過 OnUnsubscribe 都自己
+		// 清乾淨。
+		for _, sAuId := range auIdToCids.Right(sCId) {
+			auIdChannels.RemoveLeft(sAuId)
+		}
+		auIdToCids.RemoveRight(sCId)
+
+		pkg.Logger(pkg.WebsocketAdmin).Info(
+			"disconnected",
+			zap.String("cid", sCId),
+			zap.Stringer("remoteAddr", oConn.RemoteAddr()),
+		)
+	})
 	go func() {
 		const (
 			checkInterval = 5 * time.Minute
@@ -455,6 +744,10 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 				sPointer := fmt.Sprintf("%p", oConn)
 				pointerToCid.Del(sPointer)
 				cidToSession.Del(sCId)
+
+				for _, sAuId := range auIdToCids.Right(sCId) {
+					auIdChannels.RemoveLeft(sAuId)
+				}
 				auIdToCids.RemoveRight(sCId)
 
 				oConn.Close()

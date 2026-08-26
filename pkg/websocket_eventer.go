@@ -35,10 +35,11 @@ type WebsocketOnCloseFunc func(oConn *websocket.Conn, iType int)
 type WebsocketOnUnsubscribeFunc func(oConn *websocket.Conn, iType int)
 
 // WebsocketOnHeartbeatFunc / WebsocketOnRpcFunc / WebsocketOnSubscribeFunc /
-// WebsocketOnBroadcastFunc / WebsocketOnNotifyFunc / WebsocketOnRefreshFunc 都是
-// 自己定義的 application event：跟 OnConnect 一樣由 client 主動送對應 event
-// （heartbeat/rpc/subscribe/broadcast/notify/refresh）觸發，簽名比照 OnConnect，
-// 不像 OnAuthenticate 需要回傳值決定連線生死，處理完就 continue，不會落到下面的
+// WebsocketOnBroadcastFunc / WebsocketOnNotifyFunc / WebsocketOnRefreshFunc /
+// WebsocketOnChatFunc / WebsocketOnPresentFunc 都是自己定義的 application
+// event：跟 OnConnect 一樣由 client 主動送對應 event（heartbeat/rpc/subscribe/
+// broadcast/notify/refresh/chat/present）觸發，簽名比照 OnConnect，不像
+// OnAuthenticate 需要回傳值決定連線生死，處理完就 continue，不會落到下面的
 // onMessage。
 type WebsocketOnHeartbeatFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
 type WebsocketOnRpcFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
@@ -46,6 +47,8 @@ type WebsocketOnSubscribeFunc func(oConn *websocket.Conn, iType int, oReq *types
 type WebsocketOnBroadcastFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
 type WebsocketOnNotifyFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
 type WebsocketOnRefreshFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnChatFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnPresentFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
 
 // WebsocketOnPongFunc 是 websocket 協定層級的 Pong（client 回應 ServeHTTP 定時送出的
 // Ping）：觸發時機在 gorilla 的 SetPongHandler 裡，沒有 frame type、也沒有解析出
@@ -70,6 +73,8 @@ type WebsocketEventer struct {
 	onNotify       WebsocketOnNotifyFunc
 	onRefresh      WebsocketOnRefreshFunc
 	onPong         WebsocketOnPongFunc
+	onChat         WebsocketOnChatFunc
+	onPresent      WebsocketOnPresentFunc
 }
 
 func NewWebsocketEventer(oUpgrader websocket.Upgrader) *WebsocketEventer {
@@ -138,6 +143,16 @@ func (oSelf *WebsocketEventer) OnRefresh(fnHandler WebsocketOnRefreshFunc) *Webs
 
 func (oSelf *WebsocketEventer) OnPong(fnHandler WebsocketOnPongFunc) *WebsocketEventer {
 	oSelf.onPong = fnHandler
+	return oSelf
+}
+
+func (oSelf *WebsocketEventer) OnChat(fnHandler WebsocketOnChatFunc) *WebsocketEventer {
+	oSelf.onChat = fnHandler
+	return oSelf
+}
+
+func (oSelf *WebsocketEventer) OnPresent(fnHandler WebsocketOnPresentFunc) *WebsocketEventer {
+	oSelf.onPresent = fnHandler
 	return oSelf
 }
 
@@ -253,6 +268,20 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 
 			if (iType == 1 || iType == 2) && oSelf.onRefresh != nil && oWsReq.Event == "refresh" {
 				oSelf.onRefresh(oConn, iType, &oWsReq)
+
+				continue
+
+			}
+
+			if (iType == 1 || iType == 2) && oSelf.onChat != nil && oWsReq.Event == "chat" {
+				oSelf.onChat(oConn, iType, &oWsReq)
+
+				continue
+
+			}
+
+			if (iType == 1 || iType == 2) && oSelf.onPresent != nil && oWsReq.Event == "present" {
+				oSelf.onPresent(oConn, iType, &oWsReq)
 
 				continue
 
