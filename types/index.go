@@ -29,7 +29,6 @@ type WebsocketRequest struct {
 	RId   string `json:"r_id"`
 	Event string `json:"event"` // event: 事件消息（client 發起的呼叫）
 
-	Header     json.RawMessage `json:"header"`
 	Code       int             `json:"code"`
 	Method     string          `json:"method"`
 	Value      json.RawMessage `json:"value"`
@@ -47,7 +46,6 @@ type WebsocketResponse struct {
 	RId   string `json:"r_id"`
 	Event string `json:"event"`
 
-	Header  json.RawMessage `json:"header"`
 	Code    int             `json:"code"`
 	Message string          `json:"message"`
 	Result  json.RawMessage `json:"result"`

@@ -4,6 +4,7 @@ import (
 	"github.com/cornelk/hashmap"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
+	"go.uber.org/zap"
 
 	"encoding/json"
 	"fmt"
@@ -144,7 +145,7 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 	oConn, oErr := oSelf.upgrader.Upgrade(oWriter, oRequest, nil)
 
 	if oErr != nil {
-		pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("upgrade error: %v", oErr)
+		pkg.Logger(pkg.WebsocketAdmin).Error("upgrade error", zap.Error(oErr))
 		return
 	}
 
@@ -193,7 +194,7 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 		if oErr == nil {
 
 			if jsonErr := json.Unmarshal(aMsg, &oWsReq); jsonErr != nil {
-				pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("json unmarshal error: %v", jsonErr)
+				pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(jsonErr))
 			}
 
 			if (iType == 1 || iType == 2) && oSelf.onConnect != nil && oWsReq.Event == "connect" {
@@ -334,13 +335,17 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 	_ = channelToConnections
 
 	oAdminEventer.OnOpen(func(oConn *websocket.Conn, iType int) {
-		pkg.Logger(pkg.WebsocketAdmin).Sugar().Infof("OnOpen: %v", oConn.RemoteAddr())
+		pkg.Logger(pkg.WebsocketAdmin).Info("OnOpen", zap.Stringer("remoteAddr", oConn.RemoteAddr()))
 
 		sUuid := uuid.New().String()
 		sPointer := fmt.Sprintf("%p", oConn)
 
 		if _, bGotten := uuidToConnection.Get(sUuid); bGotten {
-			pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("duplicate id, disconnect: %s %v", sUuid, oConn.RemoteAddr())
+			pkg.Logger(pkg.WebsocketAdmin).Error(
+				"duplicate id, disconnect",
+				zap.String("uuid", sUuid),
+				zap.Stringer("remoteAddr", oConn.RemoteAddr()),
+			)
 			oConn.Close()
 			return
 		}
@@ -358,13 +363,13 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		if oWsReq.K != "" {
 			sKeys, oErr := oContainer.RsaHelper.Decrypt(oWsReq.K, bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN.PRIVATE_KEY)
 			if oErr != nil {
-				pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("rsa decrypt error: %v", oErr)
+				pkg.Logger(pkg.WebsocketAdmin).Error("rsa decrypt error", zap.Error(oErr))
 				return
 			}
 
 			oKeys, oErr := utility.JsonDecode[Keys](sKeys)
 			if oErr != nil {
-				pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("json unmarshal error: %v", oErr)
+				pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
 				return
 			}
 
@@ -384,7 +389,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("json marshal error: %v", oErr)
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 
@@ -399,7 +404,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("json unmarshal error: %v", oErr)
+			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
 		}
 
 		bOk := oValue.Name == "admin" && oValue.Password == "123456"
@@ -420,7 +425,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Sugar().Errorf("json marshal error: %v", oErr)
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return false
 		}
 
@@ -445,13 +450,17 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		uuidToAuthentication.Del(sPointer)
 		uuidToKeys.Del(sPointer)
 
-		pkg.Logger(pkg.WebsocketAdmin).Sugar().Infof("disconnected: %s %v", sUuid, oConn.RemoteAddr())
+		pkg.Logger(pkg.WebsocketAdmin).Info(
+			"disconnected",
+			zap.String("uuid", sUuid),
+			zap.Stringer("remoteAddr", oConn.RemoteAddr()),
+		)
 	})
 	oAdminEventer.OnMessage(func(oConn *websocket.Conn, iType int, aMsg []byte) {
 		sPointer := fmt.Sprintf("%p", oConn)
 
 		if bAuthenticated, _ := uuidToAuthentication.Get(sPointer); !bAuthenticated {
-			pkg.Logger(pkg.WebsocketAdmin).Sugar().Infof("not authenticated, ignore message: %v", oConn.RemoteAddr())
+			pkg.Logger(pkg.WebsocketAdmin).Info("not authenticated, ignore message", zap.Stringer("remoteAddr", oConn.RemoteAddr()))
 			return
 		}
 

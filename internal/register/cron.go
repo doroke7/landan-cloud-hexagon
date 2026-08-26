@@ -2,6 +2,7 @@ package register
 
 import (
 	"github.com/robfig/cron/v3"
+	"go.uber.org/zap"
 
 	container "example/container"
 	pkg "example/pkg"
@@ -12,11 +13,11 @@ func CronInit(oContainer *container.CronContainer) *cron.Cron {
 
 	// 這裡 oContainer.CronAdminResourceAppUser.IncreaseBalance 是，閉包，還沒執行，所以啟動不會連 mysql
 	if _, err := oCron.AddFunc("* * * * *", oContainer.CronAdminResourceAppUser.IncreaseBalance); err != nil {
-		pkg.Logger(pkg.Cron).Sugar().Fatalf("cron: failed to register CronAppUser.IncreaseBalance job: %v", err)
+		pkg.Logger(pkg.Cron).Fatal("cron: failed to register CronAppUser.IncreaseBalance job", zap.Error(err))
 	}
 
 	if _, err := oCron.AddFunc("* * * * *", oContainer.CronAdminAuthenticationAuthenticator.SignIn); err != nil {
-		pkg.Logger(pkg.Cron).Sugar().Fatalf("cron: failed to register CronAdminAuthenticationAuthenticator.SignIn job: %v", err)
+		pkg.Logger(pkg.Cron).Fatal("cron: failed to register CronAdminAuthenticationAuthenticator.SignIn job", zap.Error(err))
 	}
 
 	return oCron
