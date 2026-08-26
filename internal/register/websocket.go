@@ -72,7 +72,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 	_ = uuidToChannels
 	_ = channelToConns
 
-	oAdminEventer.OnOpen(func(oConn *websocket.Conn) {
+	oAdminEventer.OnOpen(func(oConn *websocket.Conn, iType int) {
 		log.Println("OnOpen:", oConn.RemoteAddr())
 
 		sUuid := uuid.New().String()
@@ -90,7 +90,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 	})
 
 	// TODO 增加 加密 keys 數據
-	oAdminEventer.OnConnect(func(oConn *websocket.Conn, oWsReq *types.WebsocketRequest) {
+	oAdminEventer.OnConnect(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sPointer := fmt.Sprintf("%p", oConn)
 
 		sUuId, _ := pointerToUuid.Get(sPointer)
@@ -110,11 +110,11 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			return
 		}
 
-		oConn.WriteMessage(websocket.TextMessage, aByteMessage)
+		oConn.WriteMessage(iType, aByteMessage)
 
 	})
 
-	oAdminEventer.OnAuthenticate(func(oConn *websocket.Conn, oWsReq *types.WebsocketRequest) bool {
+	oAdminEventer.OnAuthenticate(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) bool {
 		var oValue struct {
 			Name     string `json:"name"`
 			Password string `json:"password"`
@@ -146,7 +146,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			return false
 		}
 
-		oConn.WriteMessage(websocket.TextMessage, aByteMessage)
+		oConn.WriteMessage(iType, aByteMessage)
 
 		if bOk {
 			sPointer := fmt.Sprintf("%p", oConn)
@@ -158,7 +158,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 	// disconnect 是收不到 uuid 的
 
-	oAdminEventer.OnDisconnect(func(oConn *websocket.Conn) {
+	oAdminEventer.OnDisconnect(func(oConn *websocket.Conn, iType int) {
 		sConnKey := fmt.Sprintf("%p", oConn)
 
 		sId, _ := pointerToUuid.Get(sConnKey)
@@ -168,7 +168,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		log.Println("disconnected:", sId, oConn.RemoteAddr())
 	})
-	oAdminEventer.OnMessage(func(oConn *websocket.Conn, iMessageType int, aMsg []byte) {
+	oAdminEventer.OnMessage(func(oConn *websocket.Conn, iType int, aMsg []byte) {
 		sPointer := fmt.Sprintf("%p", oConn)
 
 		if bAuthenticated, _ := pointerToAuthentication.Get(sPointer); !bAuthenticated {
@@ -177,7 +177,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		// echo 回去
-		oConn.WriteMessage(iMessageType, aMsg)
+		oConn.WriteMessage(iType, aMsg)
 	})
 
 	oMux := http.NewServeMux()
