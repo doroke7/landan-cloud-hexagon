@@ -66,13 +66,13 @@ event:
 
 
 	      presence, presence-stats, history,                       reply ✅           可取消
-		  rpc        / rpced                                       reply ✅
+		  rpc        / rpced                                       reply ✅           ⚠️ server 需要寫路由
 
 		  subscribe  / subscribed                                  reply ✅           完成
 
+		  message    / messaged 當向訊息-不需要ack                    reply ❌            完成
 		  chat       / chated
 		  broadcast  / broadcasted                                 reply ✅ + broadcast ✅
-		  message    / messaged 不需要                              reply ❌
 		  notify    / notified                                     reply ✅
 
 		  refresh     /refreshed                                  reply ✅
@@ -304,6 +304,28 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		return bOk
 	})
 
+	// OnRpc 先把 Method 取出來，但目前還沒有真的依它分派到對應的業務邏輯
+	// （resource/AppUser/ShowOne 之類的 Action Route），只回 rpced 確認收到。
+	oAdminEventer.OnRpc(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
+		sMethod := oWsReq.Method
+		pkg.Logger(pkg.WebsocketAdmin).Info("OnRpc", zap.String("method", sMethod))
+
+		aByteMessage, oErr := json.Marshal(struct {
+			Event string `json:"event"`
+			RId   string `json:"r_id"`
+		}{
+			Event: "rpced",
+			RId:   oWsReq.RId,
+		})
+
+		if oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			return
+		}
+
+		oConn.WriteMessage(iType, aByteMessage)
+	})
+
 	oAdminEventer.OnSubscribe(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
@@ -396,7 +418,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			return
 		}
 
-		oConn.WriteMessage(iType, aMsg)
+		// oConn.WriteMessage(iType, aMsg)
 	})
 
 	// 定時任務：每 5 分鐘掃一次全部連線，Session.IdleSince() 超過 2 分鐘（沒收到
