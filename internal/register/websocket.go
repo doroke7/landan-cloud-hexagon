@@ -1,6 +1,9 @@
 package register
 
 import (
+	"sync/atomic"
+	"time"
+
 	"github.com/cornelk/hashmap"
 	"github.com/google/uuid"
 	"github.com/gorilla/websocket"
@@ -9,7 +12,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 
 	bootstrap "example/bootstrap"
 	container "example/container"
@@ -18,277 +20,39 @@ import (
 	types "example/types"
 )
 
-// websocketKeys 是 Header.K 用 RSA 私鑰解開後的內容，跟 http／facade 版本
-// DecryptionMiddleware／DecryptionInterceptor 解出來的 {key, iv} 是同一套格式。
-type Keys struct {
-	Key string `json:"key"`
-	Iv  string `json:"iv"`
+// Session 是一條連線目前已知的所有狀態，取代原本四個各自獨立、卻都用同一個
+// cid 當 key 的 hashmap.Map（cidToConnection／cidToAuthentication／cidToKeys／
+// cidToActivedAt）。Session 本身整個是不可變的值，包含 Connection 在內——
+// 不嵌套任何內層 struct，也沒有自己的鎖或原子欄位。cidToSession 存的是
+// *atomic.Pointer[Session] 這個「格子」：格子的位置固定不變，格子裡指向
+// 哪一份 Session 快照才會變。要更新哪個欄位，就整份複製、改掉那個欄位、
+// 透過 atomic.Pointer 把格子整個換成新快照，讀的一方 Load() 拿到的永遠是
+// 同一個時間點、完整一致的快照。
+//
+// 這條連線自己的 read loop（OnPong／OnHeartbeat／OnAuthenticate／
+// OnConnect）跟另一個獨立跑的定時逾時掃描 goroutine 都會讀這個格子，
+// 但只有前者會寫；各個 handler 裡都是直接「Load 舊快照、複製、改欄位、
+// 整個 Store 換新」，這種寫法只在單一寫入者時才安全——如果之後有其他
+// goroutine 也要寫，得改成 CompareAndSwap 迴圈才不會遺失更新。
+type Session struct {
+	Connection    *websocket.Conn
+	ActivedAt     time.Time
+	Authenticated bool
+	Key           string
+	Iv            string
 }
 
-// WebsocketOnConnectFunc / WebsocketOnMessageFunc / WebsocketOnCloseFunc 是連線生命週期
-// 三個時機點各自的處理方法簽名，職責跟 TcpRouter 的 method 對照表一樣：eventer 只負責在對的
-// 時機呼叫對的方法，實際要做什麼交給呼叫端注入。
-type WebsocketOnConnectFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
-
-// WebsocketOnOpenFunc 的 iType 在 upgrade 剛完成、還沒讀過任何一個 frame 時呼叫，
-// 沒有真正的 frame type 可以帶，ServeHTTP 固定傳 0，純粹是為了跟其他四個 callback 簽名一致。
-type WebsocketOnOpenFunc func(oConn *websocket.Conn, iType int)
-
-// WebsocketOnAuthenticateFunc 回傳 bool 表示驗證是否通過：true 讓連線繼續往下讀之後的訊息，
-// false 讓 ServeHTTP 關閉連線——跟 onConnect／onOpen 不同，這裡的結果會影響連線生死。
-type WebsocketOnAuthenticateFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest) bool
-type WebsocketOnMessageFunc func(oConn *websocket.Conn, iType int, aMsg []byte)
-type WebsocketOnCloseFunc func(oConn *websocket.Conn, iType int)
-
-// WebsocketOnUnsubscribeFunc 不是 client 主動送的 application event，是 websocket
-// 協定層級的斷線（iType == -1 時）：跟 OnClose 綁在同一個時間點一起觸發，讓
-// 呼叫端在連線真的斷掉那一刻，順便清掉這個連線訂閱的 channel。因為觸發時 read 已經
-// 失敗，沒有解析出有效的 request，簽名跟 OnClose 一樣不帶 oReq。
-type WebsocketOnUnsubscribeFunc func(oConn *websocket.Conn, iType int)
-
-// WebsocketOnHeartbeatFunc / WebsocketOnRpcFunc / WebsocketOnSubscribeFunc /
-// WebsocketOnBroadcastFunc / WebsocketOnNotifyFunc / WebsocketOnRefreshFunc 都是
-// 自己定義的 application event：跟 OnConnect 一樣由 client 主動送對應 event
-// （heartbeat/rpc/subscribe/broadcast/notify/refresh）觸發，簽名比照 OnConnect，
-// 不像 OnAuthenticate 需要回傳值決定連線生死，處理完就 continue，不會落到下面的
-// onMessage。
-type WebsocketOnHeartbeatFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnRpcFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnSubscribeFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnBroadcastFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnNotifyFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnRefreshFunc func(oConn *websocket.Conn, iType int, oReq *types.WebsocketRequest)
-
-// WebsocketEventer 職責跟 TcpRouter 一樣：只負責「連線生命週期」機制本身
-// （upgrade、read loop、斷線偵測、ping/pong keepalive），不管收到訊息／連線／斷線後
-// 實際要做什麼——通訊邏輯（這支檔案）跟業務邏輯（呼叫端注入的三個 callback）完全分開。
-type WebsocketEventer struct {
-	upgrader       websocket.Upgrader
-	onOpen         WebsocketOnOpenFunc
-	onConnect      WebsocketOnConnectFunc
-	onAuthenticate WebsocketOnAuthenticateFunc
-	onMessage      WebsocketOnMessageFunc
-	onClose        WebsocketOnCloseFunc
-	onUnsubscribe  WebsocketOnUnsubscribeFunc
-	onHeartbeat    WebsocketOnHeartbeatFunc
-	onRpc          WebsocketOnRpcFunc
-	onSubscribe    WebsocketOnSubscribeFunc
-	onBroadcast    WebsocketOnBroadcastFunc
-	onNotify       WebsocketOnNotifyFunc
-	onRefresh      WebsocketOnRefreshFunc
-}
-
-func NewWebsocketEventer(oUpgrader websocket.Upgrader) *WebsocketEventer {
-	return &WebsocketEventer{upgrader: oUpgrader}
-}
-
-func (oSelf *WebsocketEventer) OnOpen(fnHandler WebsocketOnOpenFunc) *WebsocketEventer {
-	oSelf.onOpen = fnHandler
-	return oSelf
-}
-
-func (oSelf *WebsocketEventer) OnConnect(fnHandler WebsocketOnConnectFunc) *WebsocketEventer {
-	oSelf.onConnect = fnHandler
-	return oSelf
-}
-
-func (oSelf *WebsocketEventer) OnAuthenticate(fnHandler WebsocketOnAuthenticateFunc) *WebsocketEventer {
-	oSelf.onAuthenticate = fnHandler
-	return oSelf
-}
-
-func (oSelf *WebsocketEventer) OnClose(fnHandler WebsocketOnCloseFunc) *WebsocketEventer {
-	oSelf.onClose = fnHandler
-	return oSelf
-}
-
-func (oSelf *WebsocketEventer) OnUnsubscribe(fnHandler WebsocketOnUnsubscribeFunc) *WebsocketEventer {
-	oSelf.onUnsubscribe = fnHandler
-	return oSelf
-}
-
-func (oSelf *WebsocketEventer) OnHeartbeat(fnHandler WebsocketOnHeartbeatFunc) *WebsocketEventer {
-	oSelf.onHeartbeat = fnHandler
-	return oSelf
-}
-
-func (oSelf *WebsocketEventer) OnRpc(fnHandler WebsocketOnRpcFunc) *WebsocketEventer {
-	oSelf.onRpc = fnHandler
-	return oSelf
-}
-
-func (oSelf *WebsocketEventer) OnSubscribe(fnHandler WebsocketOnSubscribeFunc) *WebsocketEventer {
-	oSelf.onSubscribe = fnHandler
-	return oSelf
-}
-
-func (oSelf *WebsocketEventer) OnBroadcast(fnHandler WebsocketOnBroadcastFunc) *WebsocketEventer {
-	oSelf.onBroadcast = fnHandler
-	return oSelf
-}
-
-func (oSelf *WebsocketEventer) OnNotify(fnHandler WebsocketOnNotifyFunc) *WebsocketEventer {
-	oSelf.onNotify = fnHandler
-	return oSelf
-}
-
-func (oSelf *WebsocketEventer) OnMessage(fnHandler WebsocketOnMessageFunc) *WebsocketEventer {
-	oSelf.onMessage = fnHandler
-	return oSelf
-}
-
-func (oSelf *WebsocketEventer) OnRefresh(fnHandler WebsocketOnRefreshFunc) *WebsocketEventer {
-	oSelf.onRefresh = fnHandler
-	return oSelf
-}
-
-// ServeHTTP 讓 WebsocketEventer 可以直接掛進 http.ServeMux，用法跟其他 http.Handler 一樣。
-func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *http.Request) {
-	oConn, oErr := oSelf.upgrader.Upgrade(oWriter, oRequest, nil)
-
-	if oErr != nil {
-		pkg.Logger(pkg.WebsocketAdmin).Error("upgrade error", zap.Error(oErr))
-		return
-	}
-
-	defer oConn.Close()
-
-	// PONG_WAIT：連線允許完全靜默多久，超過就直接斷線。收到 Pong 會把它續回滿額——
-	// 定時送出的 Ping（見下面 PING_INTERVAL）就是持續給 client 機會回 Pong，讓一直
-	// 有在回應的連線不會被 PONG_WAIT 誤判斷線。
-	oConn.SetReadDeadline(time.Now().Add(time.Duration(bootstrap.CONFIG.SERVICES.WEBSOCKET.PONG_WAIT) * time.Second))
-	oConn.SetPongHandler(func(string) error {
-		return oConn.SetReadDeadline(time.Now().Add(time.Duration(bootstrap.CONFIG.SERVICES.WEBSOCKET.PONG_WAIT) * time.Second))
-	})
-
-	if oSelf.onOpen != nil {
-		oSelf.onOpen(oConn, 0)
-	}
-
-	// 定時送 Ping，跟下面讀訊息的迴圈各自獨立跑：這裡只負責照 PING_INTERVAL
-	// 送 Ping，ServeHTTP 返回時 defer close(chDone) 會讓它一起停止。
-	chDone := make(chan struct{})
-	defer close(chDone)
-
-	go func() {
-		oTicker := time.NewTicker(time.Duration(bootstrap.CONFIG.SERVICES.WEBSOCKET.PING_INTERVAL) * time.Second)
-		defer oTicker.Stop()
-
-		for {
-			select {
-			case <-oTicker.C:
-
-				oConn.WriteMessage(websocket.PingMessage, nil)
-			case <-chDone:
-				return
-			}
-		}
-	}()
-
-	// 讀取 client 訊息；handler 本身已經是 net/http 每個請求各自的 goroutine，
-	// 不需要再包一層 go func()，不然這裡會直接返回，defer oConn.Close() 馬上執行，
-	// 把還在等訊息的連線關掉。
-	for {
-		iType, aMsg, oErr := oConn.ReadMessage()
-
-		var oWsReq types.WebsocketRequest
-
-		if oErr == nil {
-
-			if jsonErr := json.Unmarshal(aMsg, &oWsReq); jsonErr != nil {
-				pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(jsonErr))
-			}
-
-			if (iType == 1 || iType == 2) && oSelf.onConnect != nil && oWsReq.Event == "connect" {
-				oSelf.onConnect(oConn, iType, &oWsReq)
-				continue
-			}
-
-			if (iType == 1 || iType == 2) && oSelf.onAuthenticate != nil && oWsReq.Event == "authenticate" {
-				if !oSelf.onAuthenticate(oConn, iType, &oWsReq) {
-					return
-				}
-
-				continue
-
-			}
-
-			if (iType == 1 || iType == 2) && oSelf.onHeartbeat != nil && oWsReq.Event == "heartbeat" {
-				oSelf.onHeartbeat(oConn, iType, &oWsReq)
-
-				continue
-
-			}
-
-			if (iType == 1 || iType == 2) && oSelf.onRpc != nil && oWsReq.Event == "rpc" {
-				oSelf.onRpc(oConn, iType, &oWsReq)
-
-				continue
-
-			}
-
-			if (iType == 1 || iType == 2) && oSelf.onSubscribe != nil && oWsReq.Event == "subscribe" {
-				oSelf.onSubscribe(oConn, iType, &oWsReq)
-
-				continue
-
-			}
-
-			if (iType == 1 || iType == 2) && oSelf.onBroadcast != nil && oWsReq.Event == "broadcast" {
-				oSelf.onBroadcast(oConn, iType, &oWsReq)
-
-				continue
-
-			}
-
-			if (iType == 1 || iType == 2) && oSelf.onNotify != nil && oWsReq.Event == "notify" {
-				oSelf.onNotify(oConn, iType, &oWsReq)
-
-				continue
-
-			}
-
-			if (iType == 1 || iType == 2) && oSelf.onRefresh != nil && oWsReq.Event == "refresh" {
-				oSelf.onRefresh(oConn, iType, &oWsReq)
-
-				continue
-
-			}
-
-			if (iType == 1 || iType == 2) && oSelf.onMessage != nil && oWsReq.Event == "message" {
-				oSelf.onMessage(oConn, iType, aMsg)
-
-				continue
-
-			}
-
-		}
-
-		if oErr != nil {
-
-			if iType == -1 {
-
-				if oSelf.onUnsubscribe != nil {
-					oSelf.onUnsubscribe(oConn, iType)
-				}
-
-				if oSelf.onClose != nil {
-					oSelf.onClose(oConn, iType)
-				}
-
-				return
-
-			}
-
-		}
-
-	}
+func NewSession(oConn *websocket.Conn) *atomic.Pointer[Session] {
+	oSession := new(atomic.Pointer[Session])
+	oSession.Store(&Session{Connection: oConn, ActivedAt: time.Now()})
+
+	return oSession
 }
 
 /*
 
           open
-		  close                                                                  完成
+		  close                                                                      完成
 		  ping        / pong                                                         完成
 
 event:
@@ -296,7 +60,7 @@ event:
 	      connect    / conntected                                  reply ✅           完成
 		  heartbeat  / heartbeated                                 reply ✅           完成
 
-		  authenticate/ authenticated                              reply ✅
+		  authenticate/ authenticated                              reply ✅           完成
 
 --------------------------------------需要檢查是否 authenticated -----------------------------------------------
 
@@ -304,7 +68,7 @@ event:
 	      presence, presence-stats, history,                       reply ✅           可取消
 		  rpc        / rpced                                       reply ✅
 
-		  subscribe  / subscribed                                  reply ✅
+		  subscribe  / subscribed                                  reply ✅           完成
 
 		  chat       / chated
 		  broadcast  / broadcasted                                 reply ✅ + broadcast ✅
@@ -316,7 +80,7 @@ event:
 
 --------------------------------------需要檢查是否 authenticated -----------------------------------------------
 
-		  unsubscribe / unsubscribed 不需要                        reply ❌
+		  unsubscribe / unsubscribed                              reply ❌           完成
 
     method:
 	value:
@@ -368,50 +132,56 @@ event:
 
 func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
-	oAdminEventer := NewWebsocketEventer(websocket.Upgrader{
+	oAdminEventer := pkg.NewWebsocketEventer(websocket.Upgrader{
 		CheckOrigin: func(oRequest *http.Request) bool {
 			return true
 		},
 	})
 
 	var (
-		pointerToUuid        = hashmap.New[string, string]()
-		uuidToConnection     = hashmap.New[string, *websocket.Conn]()
-		uuidToAuthentication = hashmap.New[string, bool]()
-		uuidToKeys           = hashmap.New[string, Keys]()
+		pointerToCid = hashmap.New[string, string]()
+		cidToSession = hashmap.New[string, *atomic.Pointer[Session]]()
 
-		uuidToChannels       = hashmap.New[string, string]()
-		channelToConnections = hashmap.New[string, string]()
+		auIdToCids   = pkg.NewBiMultiMap[string, string]()
+		auIdChannels = pkg.NewBiMultiMap[string, string]()
 	)
-
-	_ = uuidToChannels
-	_ = channelToConnections
 
 	oAdminEventer.OnOpen(func(oConn *websocket.Conn, iType int) {
 		pkg.Logger(pkg.WebsocketAdmin).Info("OnOpen", zap.Stringer("remoteAddr", oConn.RemoteAddr()))
 
-		sUuid := uuid.New().String()
+		sCId := uuid.New().String()
 		sPointer := fmt.Sprintf("%p", oConn)
 
-		if _, bGotten := uuidToConnection.Get(sUuid); bGotten {
+		if _, bGotten := cidToSession.Get(sCId); bGotten {
 			pkg.Logger(pkg.WebsocketAdmin).Error(
 				"duplicate id, disconnect",
-				zap.String("uuid", sUuid),
+				zap.String("cid", sCId),
 				zap.Stringer("remoteAddr", oConn.RemoteAddr()),
 			)
 			oConn.Close()
 			return
 		}
 
-		uuidToConnection.Set(sUuid, oConn)
-		pointerToUuid.Set(sPointer, sUuid)
+		cidToSession.Set(sCId, NewSession(oConn))
+		pointerToCid.Set(sPointer, sCId)
 
+	})
+
+	oAdminEventer.OnPong(func(oConn *websocket.Conn) {
+		sPointer := fmt.Sprintf("%p", oConn)
+		sCId, _ := pointerToCid.Get(sPointer)
+
+		if oSession, bGotten := cidToSession.Get(sCId); bGotten {
+			oNew := *oSession.Load()
+			oNew.ActivedAt = time.Now()
+			oSession.Store(&oNew)
+		}
 	})
 
 	oAdminEventer.OnConnect(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sPointer := fmt.Sprintf("%p", oConn)
 
-		sUuid, _ := pointerToUuid.Get(sPointer)
+		sCId, _ := pointerToCid.Get(sPointer)
 
 		if oWsReq.K != "" {
 			sKeys, oErr := oContainer.RsaHelper.Decrypt(oWsReq.K, bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN.PRIVATE_KEY)
@@ -420,13 +190,21 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 				return
 			}
 
-			oKeys, oErr := utility.JsonDecode[Keys](sKeys)
+			oKeys, oErr := utility.JsonDecode[struct {
+				Key string `json:"key"`
+				Iv  string `json:"iv"`
+			}](sKeys)
 			if oErr != nil {
 				pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
 				return
 			}
 
-			uuidToKeys.Set(sUuid, oKeys)
+			if oSession, bGotten := cidToSession.Get(sCId); bGotten {
+				oNew := *oSession.Load()
+				oNew.Key = oKeys.Key
+				oNew.Iv = oKeys.Iv
+				oSession.Store(&oNew)
+			}
 		}
 
 		aByteMessage, oErr := json.Marshal(struct {
@@ -438,7 +216,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			Event:  "connected",
 			Result: "",
 			RId:    oWsReq.RId,
-			CId:    sUuid,
+			CId:    sCId,
 		})
 
 		if oErr != nil {
@@ -451,6 +229,15 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 	})
 
 	oAdminEventer.OnHeartbeat(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
+		sPointer := fmt.Sprintf("%p", oConn)
+		sCId, _ := pointerToCid.Get(sPointer)
+
+		if oSession, bGotten := cidToSession.Get(sCId); bGotten {
+			oNew := *oSession.Load()
+			oNew.ActivedAt = time.Now()
+			oSession.Store(&oNew)
+		}
+
 		// 不用 request-id， 採用完全異步策略
 		aByteMessage, oErr := json.Marshal(struct {
 			Event string `json:"event"`
@@ -502,39 +289,158 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		if bOk {
 			sPointer := fmt.Sprintf("%p", oConn)
-			uuidToAuthentication.Set(sPointer, true)
+			sCId, _ := pointerToCid.Get(sPointer)
+
+			if oSession, bGotten := cidToSession.Get(sCId); bGotten {
+				oNew := *oSession.Load()
+				oNew.Authenticated = true
+				oSession.Store(&oNew)
+			}
+
+			// TODO: 暫時寫死，之後要換成 SignIn 驗證出來的真正 admin_user_id。
+			auIdToCids.Insert(sCId, sCId)
 		}
 
 		return bOk
 	})
 
-	// disconnect 是收不到 uuid 的
+	oAdminEventer.OnSubscribe(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
+		sPointer := fmt.Sprintf("%p", oConn)
+		sCId, _ := pointerToCid.Get(sPointer)
 
+		aAuIds := auIdToCids.Right(sCId)
+		if len(aAuIds) == 0 {
+			pkg.Logger(pkg.WebsocketAdmin).Info("not authenticated, ignore subscribe", zap.String("cid", sCId))
+			return
+		}
+		sAuId := aAuIds[0]
+
+		var oValue struct {
+			Channel string `json:"channel"`
+		}
+
+		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			return
+		}
+
+		// 訂閱記在 admin_user_id 這個層級，不是單一 cid——同一個 admin 開好幾個
+		// 分頁／裝置都算同一份訂閱，真的要廣播時再透過 cidToSession 反查回實際的
+		// 連線。BiMultiMap.Insert 本身有去重、也自己處理並發，不用再額外上鎖。
+		auIdChannels.Insert(sAuId, oValue.Channel)
+
+		aByteMessage, oErr := json.Marshal(struct {
+			Event   string `json:"event"`
+			Channel string `json:"channel"`
+			RId     string `json:"r_id"`
+		}{
+			Event:   "subscribed",
+			Channel: oValue.Channel,
+			RId:     oWsReq.RId,
+		})
+
+		if oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			return
+		}
+
+		oConn.WriteMessage(iType, aByteMessage)
+	})
+
+	// OnUnsubscribe 有兩種觸發時機：client 主動送 event: "unsubscribe"，或是連線斷線
+	// （iType == -1，跟 OnClose 同一個時間點一起觸發，且會先觸發）。因為沒有帶 oReq，
+	// 沒辦法指定「只離開某一個頻道」，兩種情境都當作「這個 admin（sAuId）離開目前
+	// 訂閱的全部頻道」——訂閱現在是記在 admin_user_id 這個層級，不是單一 cid。
+	// 之後如果要支援「退訂單一頻道」，得替 app event 版本另外設計帶 channel 參數
+	// 的簽名。
+	oAdminEventer.OnUnsubscribe(func(oConn *websocket.Conn, iType int) {
+		sPointer := fmt.Sprintf("%p", oConn)
+		sCId, _ := pointerToCid.Get(sPointer)
+
+		aAuIds := auIdToCids.Right(sCId)
+		if len(aAuIds) == 0 {
+			return
+		}
+		sAuId := aAuIds[0]
+
+		// 注意：這裡是整個 auid 一次清掉，沒有做「這個 admin 是不是還有其他 cid
+		// 訂閱同一個 channel」的計數——如果同一個 admin 開兩個分頁都訂閱了同一個
+		// channel，其中一個分頁退訂／斷線，會連帶把另一個分頁其實還在訂閱的
+		// channel 也清掉。之後如果要正確處理多連線共用同一個 auid 的情境，這裡
+		// 得改成參照計數。
+		auIdChannels.RemoveLeft(sAuId)
+	})
+
+	// OnClose 是收不到 cid 的
 	oAdminEventer.OnClose(func(oConn *websocket.Conn, iType int) {
 		sPointer := fmt.Sprintf("%p", oConn)
 
-		sUuid, _ := pointerToUuid.Get(sPointer)
-		pointerToUuid.Del(sPointer)
-		uuidToConnection.Del(sUuid)
-		uuidToAuthentication.Del(sPointer)
-		uuidToKeys.Del(sPointer)
+		sCId, _ := pointerToCid.Get(sPointer)
+		pointerToCid.Del(sPointer)
+		cidToSession.Del(sCId)
+		auIdToCids.RemoveRight(sCId)
 
 		pkg.Logger(pkg.WebsocketAdmin).Info(
 			"disconnected",
-			zap.String("uuid", sUuid),
+			zap.String("cid", sCId),
 			zap.Stringer("remoteAddr", oConn.RemoteAddr()),
 		)
 	})
 	oAdminEventer.OnMessage(func(oConn *websocket.Conn, iType int, aMsg []byte) {
 		sPointer := fmt.Sprintf("%p", oConn)
+		sCId, _ := pointerToCid.Get(sPointer)
 
-		if bAuthenticated, _ := uuidToAuthentication.Get(sPointer); !bAuthenticated {
+		oSession, bGotten := cidToSession.Get(sCId)
+		if !bGotten || !oSession.Load().Authenticated {
 			pkg.Logger(pkg.WebsocketAdmin).Info("not authenticated, ignore message", zap.Stringer("remoteAddr", oConn.RemoteAddr()))
 			return
 		}
 
 		oConn.WriteMessage(iType, aMsg)
 	})
+
+	// 定時任務：每 5 分鐘掃一次全部連線，Session.IdleSince() 超過 2 分鐘（沒收到
+	// heartbeat 也沒收到 pong）就視為連線壞掉，強制關閉。Close() 之後 ReadMessage 會
+	// 出錯、觸發 OnClose，但那是另一個 goroutine 非同步發生的事，這裡不等它，直接把
+	// cidToSession 的資料一併刪掉，確保這條 cid 立刻從所有狀態裡消失，不會被下一輪
+	// Range 又掃到重複關閉一次。
+	go func() {
+		const (
+			checkInterval = 5 * time.Minute
+			activeTimeout = 2 * time.Minute
+		)
+
+		oTicker := time.NewTicker(checkInterval)
+		defer oTicker.Stop()
+
+		for range oTicker.C {
+			cidToSession.Range(func(sCId string, oSession *atomic.Pointer[Session]) bool {
+				oThisSession := oSession.Load()
+
+				oIdle := time.Since(oThisSession.ActivedAt)
+				if oIdle <= activeTimeout {
+					return true
+				}
+
+				oConn := oThisSession.Connection
+
+				pkg.Logger(pkg.WebsocketAdmin).Info(
+					"actived timeout, force close",
+					zap.String("cid", sCId),
+					zap.Duration("idle", oIdle),
+				)
+
+				sPointer := fmt.Sprintf("%p", oConn)
+				pointerToCid.Del(sPointer)
+				cidToSession.Del(sCId)
+				auIdToCids.RemoveRight(sCId)
+
+				oConn.Close()
+
+				return true
+			})
+		}
+	}()
 
 	oMux := http.NewServeMux()
 	oMux.Handle("/Admin", oAdminEventer)
