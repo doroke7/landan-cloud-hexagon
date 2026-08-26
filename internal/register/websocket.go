@@ -176,7 +176,6 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			return
 		}
 
-		// echo 回去
 		oConn.WriteMessage(iType, aMsg)
 	})
 
