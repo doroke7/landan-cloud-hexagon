@@ -1,126 +1,39 @@
-package pkg
+package registerWebsocket
 
 import (
 	"encoding/json"
-	"net"
 	"net/http"
-	"sync"
 	"time"
 
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
+	pkg "example/pkg"
 	types "example/types"
 )
-
-// outboundMessage 是塞進 Conn 寫入 channel 裡的一筆待寫資料，iType 對應
-// websocket.TextMessage/BinaryMessage/PingMessage 這些 frame type。
-type outboundMessage struct {
-	iType int
-	aData []byte
-}
-
-// Conn 把 *websocket.Conn 包成一個「單一 writer goroutine + channel」的
-// actor，取代直接暴露裸的 *websocket.Conn 給業務層。gorilla/websocket 規定同一
-// 條連線最多只能有一個 goroutine 同時呼叫 WriteMessage，但這裡至少有三種寫入
-// 來源會落在不同 goroutine 上：ServeHTTP 自己的 read loop（處理各種 event 的
-// reply）、ServeHTTP 內部定時送 Ping 的 ticker goroutine、以及業務層 fan-out
-// 訊息給其他連線時（在另一個連線的 goroutine 裡直接對這條連線的 Conn 呼叫
-// WriteMessage）。不用 mutex 排隊搶鎖，而是這三種來源都只把訊息丟進
-// Outbox，真正呼叫 Conn.WriteMessage 的永遠只有 runWriter 這一個
-// goroutine，天生不會有並發寫入的問題。Outbox 滿了就直接丟棄該筆訊息並
-// 記 log，不讓任何一個呼叫端因為對方是慢連線而被卡住。
-type Conn struct {
-	Conn      *websocket.Conn
-	Outbox    chan outboundMessage
-	Done      chan struct{}
-	CloseOnce sync.Once
-}
-
-const connOutboxSize = 32
-
-func NewConn(oConn *websocket.Conn) *Conn {
-	oSelf := &Conn{
-		Conn:   oConn,
-		Outbox: make(chan outboundMessage, connOutboxSize),
-		Done:   make(chan struct{}),
-	}
-
-	go oSelf.runWriter()
-
-	return oSelf
-}
-
-func (oSelf *Conn) runWriter() {
-	for {
-		select {
-		case oMsg := <-oSelf.Outbox:
-			if oErr := oSelf.Conn.WriteMessage(oMsg.iType, oMsg.aData); oErr != nil {
-				Logger(WebsocketAdmin).Error("write error", zap.Error(oErr))
-				return
-			}
-		case <-oSelf.Done:
-			return
-		}
-	}
-}
-
-// WriteMessage 不回傳 error：實際寫入是非同步的，呼叫當下還不知道會不會成功，
-// 現有呼叫端本來也都沒在檢查回傳值。
-func (oSelf *Conn) WriteMessage(iType int, aData []byte) {
-	select {
-	case oSelf.Outbox <- outboundMessage{iType: iType, aData: aData}:
-	default:
-		Logger(WebsocketAdmin).Info("outbox full, drop message", zap.Int("type", iType))
-	}
-}
-
-func (oSelf *Conn) ReadMessage() (int, []byte, error) {
-	return oSelf.Conn.ReadMessage()
-}
-
-func (oSelf *Conn) Close() error {
-	oSelf.CloseOnce.Do(func() {
-		close(oSelf.Done)
-	})
-
-	return oSelf.Conn.Close()
-}
-
-func (oSelf *Conn) RemoteAddr() net.Addr {
-	return oSelf.Conn.RemoteAddr()
-}
-
-func (oSelf *Conn) SetReadDeadline(oTime time.Time) error {
-	return oSelf.Conn.SetReadDeadline(oTime)
-}
-
-func (oSelf *Conn) SetPongHandler(fnHandler func(string) error) {
-	oSelf.Conn.SetPongHandler(fnHandler)
-}
 
 // WebsocketOnConnectFunc / WebsocketOnMessageFunc / WebsocketOnCloseFunc 是連線生命週期
 // 三個時機點各自的處理方法簽名，職責跟 TcpRouter 的 method 對照表一樣：eventer 只負責在對的
 // 時機呼叫對的方法，實際要做什麼交給呼叫端注入。
-type WebsocketOnConnectFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnConnectFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
 
 // WebsocketOnOpenFunc 的 iType 在 upgrade 剛完成、還沒讀過任何一個 frame 時呼叫，
 // 沒有真正的 frame type 可以帶，ServeHTTP 固定傳 0，純粹是為了跟其他四個 callback 簽名一致。
-type WebsocketOnOpenFunc func(oConn *Conn, iType int)
+type WebsocketOnOpenFunc func(oConn *WebsocketConn, iType int)
 
 // WebsocketOnAuthenticateFunc 回傳 bool 表示驗證是否通過：true 讓連線繼續往下讀之後的訊息，
 // false 讓 ServeHTTP 關閉連線——跟 onConnect／onOpen 不同，這裡的結果會影響連線生死。
-type WebsocketOnAuthenticateFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest) bool
-type WebsocketOnMessageFunc func(oConn *Conn, iType int, aMsg []byte)
-type WebsocketOnCloseFunc func(oConn *Conn, iType int)
+type WebsocketOnAuthenticateFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest) bool
+type WebsocketOnMessageFunc func(oConn *WebsocketConn, iType int, aMsg []byte)
+type WebsocketOnCloseFunc func(oConn *WebsocketConn, iType int)
 
 // WebsocketOnUnsubscribeFunc 有兩種觸發時機：一是 client 主動送 event: "unsubscribe"；
 // 二是 websocket 協定層級的斷線（iType == -1 時），這種情況跟 OnClose 綁在同一個時間點
 // 一起觸發，讓呼叫端在連線真的斷掉那一刻，順便清掉這個連線訂閱的 channel。兩種情境都
 // 不需要 reply、也不需要新的 request 資料（清的是已經記錄住的訂閱狀態），所以共用同一個
 // 簽名，不帶 oReq。
-type WebsocketOnUnsubscribeFunc func(oConn *Conn, iType int)
+type WebsocketOnUnsubscribeFunc func(oConn *WebsocketConn, iType int)
 
 // WebsocketOnHeartbeatFunc / WebsocketOnRpcFunc / WebsocketOnSubscribeFunc /
 // WebsocketOnBroadcastFunc / WebsocketOnNotifyFunc / WebsocketOnRefreshFunc /
@@ -129,19 +42,19 @@ type WebsocketOnUnsubscribeFunc func(oConn *Conn, iType int)
 // broadcast/notify/refresh/chat/present）觸發，簽名比照 OnConnect，不像
 // OnAuthenticate 需要回傳值決定連線生死，處理完就 continue，不會落到下面的
 // onMessage。
-type WebsocketOnHeartbeatFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnRpcFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnSubscribeFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnBroadcastFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnNotifyFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnRefreshFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnChatFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnPresentFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnHeartbeatFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnRpcFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnSubscribeFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnBroadcastFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnNotifyFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnRefreshFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnChatFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnPresentFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
 
 // WebsocketOnPongFunc 是 websocket 協定層級的 Pong（client 回應 ServeHTTP 定時送出的
 // Ping）：觸發時機在 gorilla 的 SetPongHandler 裡，沒有 frame type、也沒有解析出
 // request，簽名只帶 oConn，讓呼叫端可以用它更新連線的最後活躍時間。
-type WebsocketOnPongFunc func(oConn *Conn)
+type WebsocketOnPongFunc func(oConn *WebsocketConn)
 
 // WebsocketEventer 職責跟 TcpRouter 一樣：只負責「連線生命週期」機制本身
 // （upgrade、read loop、斷線偵測、ping/pong keepalive），不管收到訊息／連線／斷線後
@@ -249,7 +162,7 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 	oRawConn, oErr := oSelf.upgrader.Upgrade(oWriter, oRequest, nil)
 
 	if oErr != nil {
-		Logger(WebsocketAdmin).Error("upgrade error", zap.Error(oErr))
+		pkg.Logger(pkg.WebsocketAdmin).Error("upgrade error", zap.Error(oErr))
 		return
 	}
 
@@ -304,7 +217,7 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 		if oErr == nil {
 
 			if jsonErr := json.Unmarshal(aMsg, &oWsReq); jsonErr != nil {
-				Logger(WebsocketAdmin).Error("json unmarshal error", zap.Error(jsonErr))
+				pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(jsonErr))
 			}
 
 			if (iType == 1 || iType == 2) && oSelf.onConnect != nil && oWsReq.Event == "connect" {
