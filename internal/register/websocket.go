@@ -151,6 +151,20 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		cIdsChannels = pkg.NewBiMultiMap[string, string]()
 	)
 
+	// emit 把 aByteMessage 丟給 sChannel 目前所有訂閱的 cid（session 已不在表上
+	// 的就跳過）。OnSubscribe／OnChat／OnBroadcast 都是先各自組好自己的 payload，
+	// 再交給這裡統一走「查訂閱者 → 逐一 WriteMessage」這段重複邏輯。
+	emit := func(sChannel string, iType int, aByteMessage []byte) {
+		for _, sTargetCId := range cIdsChannels.Right(sChannel) {
+			oTargetSession, bGotten := cidToSession.Get(sTargetCId)
+			if !bGotten {
+				continue
+			}
+
+			oTargetSession.Load().Connection.WriteMessage(iType, aByteMessage)
+		}
+	}
+
 	oAdminEventer.OnOpen(func(oConn *pkg.Conn, iType int) {
 		pkg.Logger(pkg.WebsocketAdmin).Info("OnOpen", zap.Stringer("remoteAddr", oConn.RemoteAddr()))
 
@@ -385,14 +399,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		// 知道有新成員加入；跟 OnChat 一樣直接重複用同一份 aByteMessage，不用
 		// 另外組一份不同的 payload。
 		go func() {
-			for _, sTargetCId := range cIdsChannels.Right(oValue.Channel) {
-				oTargetSession, bGotten := cidToSession.Get(sTargetCId)
-				if !bGotten {
-					continue
-				}
-
-				oTargetSession.Load().Connection.WriteMessage(iType, aByteMessage)
-			}
+			emit(oValue.Channel, iType, aByteMessage)
 		}()
 	})
 
@@ -525,14 +532,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			return
 		}
 		go func() {
-			for _, sTargetCId := range aTargetCIds {
-				oTargetSession, bGotten := cidToSession.Get(sTargetCId)
-				if !bGotten {
-					continue
-				}
-
-				oTargetSession.Load().Connection.WriteMessage(iType, aByteChat)
-			}
+			emit(oValue.Channel, iType, aByteChat)
 		}()
 
 	})
@@ -554,13 +554,23 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		aByteMessage, oErr := json.Marshal(struct {
-			Event string `json:"event"`
-			CId   string `json:"c_id"`
-			RId   string `json:"r_id"`
+			Event  string `json:"event"`
+			Method string `json:"method"`
+			CId    string `json:"c_id"`
+			RId    string `json:"r_id"`
+			Value  struct {
+				Channel string `json:"channel"`
+			} `json:"value"`
 		}{
-			Event: "broadcasted",
-			CId:   sCId,
-			RId:   oWsReq.RId,
+			Event:  "broadcasted",
+			Method: oWsReq.Method,
+			CId:    sCId,
+			RId:    oWsReq.RId,
+			Value: struct {
+				Channel string `json:"channel"`
+			}{
+				Channel: oValue.Channel,
+			},
 		})
 
 		if oErr != nil {
@@ -571,21 +581,22 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		oConn.WriteMessage(iType, aByteMessage)
 
 		aTargetCIds := cIdsChannels.Right(oValue.Channel)
+		fmt.Println("584 aTargetCIds=", aTargetCIds)
 		if len(aTargetCIds) == 0 {
 			return
 		}
 
 		aByteBroadcast, oErr := json.Marshal(struct {
 			Event  string          `json:"event"`
+			Method string          `json:"method"`
 			CId    string          `json:"c_id"`
 			RId    string          `json:"r_id"`
-			Method string          `json:"method"`
 			Value  json.RawMessage `json:"value"`
 		}{
 			Event:  "broadcast",
+			Method: oWsReq.Method,
 			CId:    sCId,
 			RId:    oWsReq.RId,
-			Method: oWsReq.Method,
 			Value:  oWsReq.Value,
 		})
 
@@ -595,14 +606,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		go func() {
-			for _, sTargetCId := range aTargetCIds {
-				oTargetSession, bGotten := cidToSession.Get(sTargetCId)
-				if !bGotten {
-					continue
-				}
-
-				oTargetSession.Load().Connection.WriteMessage(iType, aByteBroadcast)
-			}
+			emit(oValue.Channel, iType, aByteBroadcast)
 		}()
 	})
 
