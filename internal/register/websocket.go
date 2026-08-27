@@ -304,11 +304,8 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 				oSession.Store(&oNew)
 			}
 
-			// TODO: 暫時寫死，之後要換成 SignIn 驗證出來的真正 admin_user_id。
 			auIdCIds.Insert(sCId, sCId)
 
-			// 每個登入的 admin 自動訂閱根頻道 "/"，跟 OnSubscribe 走的是同一份
-			// auIdsChannels，OnClose／OnUnsubscribe 斷線時也會一併退訂。
 			auIdsChannels.Insert(sCId, "/")
 		}
 
@@ -358,8 +355,6 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		auIdsChannels.Insert(sAuId, oValue.Channel)
-		fmt.Println("361 sAuId=", sAuId)
-		fmt.Println("361 oValue.Channel=", oValue.Channel)
 
 		aByteMessage, oErr := json.Marshal(struct {
 			Event string `json:"event"`
@@ -419,8 +414,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		time.Sleep(4 * time.Second)
 		aAuIds := auIdsChannels.Right(oValue.Channel)
-		fmt.Println("420 oValue.Channel=", oValue.Channel)
-		fmt.Println("420 aAuIds=", aAuIds)
+
 		aOnes := make([]struct {
 			Id string `json:"id"`
 		}, 0, len(aAuIds))
