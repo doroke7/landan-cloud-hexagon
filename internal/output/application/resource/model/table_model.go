@@ -9,7 +9,7 @@ import (
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pbResourceModel "example/pb/resource/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type TableModel struct {
@@ -108,7 +108,7 @@ func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
 	return oResponse.GetStatus(), nil
 }
 
-func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, error) {
+func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
 
 	oRequest := &pbResourceModel.TableShowOnesByFiltersWithSortersPaginationInput{
 		Filters:    oSelf.ToFilters(aFilters),
@@ -144,7 +144,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
 	oRequest := &pbResourceModel.TableTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),

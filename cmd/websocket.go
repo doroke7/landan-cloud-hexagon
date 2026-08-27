@@ -13,7 +13,7 @@ import (
 	bootstrap "example/bootstrap"
 	container "example/container"
 	registerWebsocket "example/internal/register/websocket"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 var oWebsocketCommand = &cobra.Command{
@@ -34,7 +34,7 @@ var oWebsocketCommand = &cobra.Command{
 			Addr:    ":" + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT,
 			Handler: oMux,
 		}
-		pkg.Logger(pkg.Default).Info("啟動 WEBSOCKET 服務。 port: " + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT)
+		pkgUtility.Logger(pkgUtility.Default).Info("啟動 WEBSOCKET 服務。 port: " + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT)
 
 		oWebsocketServer.ListenAndServe()
 

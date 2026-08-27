@@ -5,7 +5,7 @@ import (
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pbResourceModel "example/pb/resource/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameModel struct {
@@ -102,7 +102,7 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 	}, nil
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 
 	oRequest := &pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationInput{
 		Filters:    oSelf.ToFilters(aFilters),
@@ -134,7 +134,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Fi
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
 	oRequest := &pbResourceModel.GameTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),

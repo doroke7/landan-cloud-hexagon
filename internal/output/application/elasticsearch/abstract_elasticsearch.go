@@ -12,7 +12,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 
 	bootstrap "example/bootstrap"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 // Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
@@ -63,7 +63,7 @@ type ElasticsearchSearchResult struct {
 	Hits  []ElasticsearchHit
 }
 
-func (oSelf *AbstractElasticsearch) PaginationToFrom(oPagination *pkg.Pagination) int {
+func (oSelf *AbstractElasticsearch) PaginationToFrom(oPagination *pkgInput.Pagination) int {
 	iSize := uint(10)
 	iPage := uint(1)
 
@@ -80,7 +80,7 @@ func (oSelf *AbstractElasticsearch) PaginationToFrom(oPagination *pkg.Pagination
 	return iFrom
 }
 
-func (oSelf *AbstractElasticsearch) PaginationToSize(oPagination *pkg.Pagination) int {
+func (oSelf *AbstractElasticsearch) PaginationToSize(oPagination *pkgInput.Pagination) int {
 	iSize := uint(10)
 
 	if oPagination != nil && oPagination.Size != nil && *oPagination.Size != 0 {
@@ -90,7 +90,7 @@ func (oSelf *AbstractElasticsearch) PaginationToSize(oPagination *pkg.Pagination
 	return int(iSize)
 }
 
-func (oSelf *AbstractElasticsearch) FiltersToMustFilter(aFilters []*pkg.Filter) ([]map[string]any, []map[string]any) {
+func (oSelf *AbstractElasticsearch) FiltersToMustFilter(aFilters []*pkgInput.Filter) ([]map[string]any, []map[string]any) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 	aMustClauses := make([]map[string]any, 0, len(aFilters))
 
@@ -151,7 +151,7 @@ func (oSelf *AbstractElasticsearch) FiltersToMustFilter(aFilters []*pkg.Filter) 
 	return aMustClauses, aFilterClauses
 }
 
-func (oSelf *AbstractElasticsearch) SortersToSort(aSorters []*pkg.Sorter) []map[string]any {
+func (oSelf *AbstractElasticsearch) SortersToSort(aSorters []*pkgInput.Sorter) []map[string]any {
 	aOrders := make([]map[string]any, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
@@ -170,7 +170,7 @@ func (oSelf *AbstractElasticsearch) SortersToSort(aSorters []*pkg.Sorter) []map[
 	return aOrders
 }
 
-func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sIndex string, aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]func(*esapi.SearchRequest), error) {
+func (oSelf *AbstractElasticsearch) IndexFiltersSortersPaginationToOptions(sIndex string, aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]func(*esapi.SearchRequest), error) {
 
 	aMustClauses, aFilterClauses := oSelf.FiltersToMustFilter(aFilters)
 	aSorts := oSelf.SortersToSort(aSorters)

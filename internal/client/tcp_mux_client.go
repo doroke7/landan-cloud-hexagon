@@ -8,7 +8,7 @@ import (
 	"sync/atomic"
 
 	"example/bootstrap"
-	pkg "example/pkg"
+	pkgTcp "example/pkg/tcp"
 	types "example/types"
 )
 
@@ -24,7 +24,7 @@ type tcpMuxResult struct {
 type TcpMuxClient struct {
 	conn   net.Conn
 	reader *bufio.Reader
-	codec  *pkg.TcpRouter // 只借用它的 EncodeFrame/DecodeFrame，不會拿去 Serve
+	codec  *pkgTcp.TcpRouter // 只借用它的 EncodeFrame/DecodeFrame，不會拿去 Serve
 
 	writeMu sync.Mutex // 保護「寫一個完整 frame」，多個 goroutine 不能同時寫同一個 socket
 	nextId  atomic.Uint64
@@ -43,7 +43,7 @@ func NewTcpMuxClient() *TcpMuxClient {
 	oSelf := &TcpMuxClient{
 		conn:    oConn,
 		reader:  bufio.NewReader(oConn),
-		codec:   pkg.NewTcpRouter(),
+		codec:   pkgTcp.NewTcpRouter(),
 		pending: make(map[string]chan tcpMuxResult),
 	}
 

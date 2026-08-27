@@ -8,7 +8,7 @@ import (
 	"github.com/gorilla/websocket"
 	"go.uber.org/zap"
 
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 // outboundMessage 是塞進 Conn 寫入 channel 裡的一筆待寫資料，iType 對應
@@ -44,7 +44,7 @@ func (oSelf *WebsocketConn) runWriter() {
 		select {
 		case oMsg := <-oSelf.Outbox:
 			if oErr := oSelf.Conn.WriteMessage(oMsg.iType, oMsg.aData); oErr != nil {
-				pkg.Logger(pkg.WebsocketAdmin).Error("write error", zap.Error(oErr))
+				pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("write error", zap.Error(oErr))
 				return
 			}
 		case <-oSelf.Done:
@@ -59,7 +59,7 @@ func (oSelf *WebsocketConn) WriteMessage(iType int, aData []byte) {
 	select {
 	case oSelf.Outbox <- outboundMessage{iType: iType, aData: aData}:
 	default:
-		pkg.Logger(pkg.WebsocketAdmin).Info("outbox full, drop message", zap.Int("type", iType))
+		pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info("outbox full, drop message", zap.Int("type", iType))
 	}
 }
 

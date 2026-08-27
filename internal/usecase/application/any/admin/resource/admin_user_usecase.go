@@ -5,7 +5,7 @@ import (
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type AdminUserUsecase struct {
@@ -20,7 +20,7 @@ func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAbs
 	}
 }
 
-func (oSelf *AdminUserUsecase) ShowOnes(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.AdminUser, uint64, error) {
+func (oSelf *AdminUserUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
 
 	aAdminUsers, oErr := oSelf.AdminUserModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {

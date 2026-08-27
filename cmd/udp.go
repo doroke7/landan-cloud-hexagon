@@ -8,7 +8,7 @@ import (
 	"github.com/spf13/cobra"
 
 	bootstrap "example/bootstrap"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 var oUdpCommand = &cobra.Command{
@@ -27,7 +27,7 @@ var oUdpCommand = &cobra.Command{
 		}
 		defer conn.Close()
 
-		pkg.Logger(pkg.Default).Info("啟動 UDP 服務。 port: " + bootstrap.CONFIG.SERVICES.UDP.PORT)
+		pkgUtility.Logger(pkgUtility.Default).Info("啟動 UDP 服務。 port: " + bootstrap.CONFIG.SERVICES.UDP.PORT)
 
 		buf := make([]byte, 1024)
 

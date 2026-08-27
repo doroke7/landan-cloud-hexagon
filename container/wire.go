@@ -16,7 +16,10 @@ import (
 	"github.com/nats-io/nats.go"
 
 	bootstrap "example/bootstrap"
-	pkg "example/pkg"
+	pkgCache "example/pkg/cache"
+	pkgGin "example/pkg/gin"
+	pkgNats "example/pkg/nats"
+	pkgUtility "example/pkg/utility"
 
 	client "example/internal/client"
 
@@ -106,8 +109,8 @@ import (
 type HttpContainer struct {
 
 	// pkg
-	*pkg.Response
-	Clock *pkg.Clock
+	*pkgGin.Response
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -170,8 +173,8 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	wire.Build(
 
 		// pkg
-		pkg.NewResponse,
-		pkg.NewClock,
+		pkgGin.NewResponse,
+		pkgUtility.NewClock,
 
 		// bootstrap
 		bootstrap.NewResource,
@@ -264,7 +267,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 type FacadeContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -298,7 +301,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 	wire.Build(
 
 		// pkg
-		pkg.NewClock,
+		pkgUtility.NewClock,
 
 		// bootstrap
 		bootstrap.NewResource,
@@ -352,7 +355,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 type ResourceContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -395,8 +398,8 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		bootstrap.NewMysql,
 		bootstrap.NewAmqp,
 		bootstrap.NewRedis,
-		pkg.NewAop,
-		pkg.NewClock,
+		pkgCache.NewAop,
+		pkgUtility.NewClock,
 
 		// helper
 		helper.NewAbstractHelper,
@@ -457,7 +460,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 type RabbitmqContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -475,8 +478,8 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 		bootstrap.NewMysql,
 		bootstrap.NewAmqp,
 		bootstrap.NewRedis,
-		pkg.NewAop,
-		pkg.NewClock,
+		pkgCache.NewAop,
+		pkgUtility.NewClock,
 
 		// helper
 		helper.NewAbstractHelper,
@@ -506,7 +509,7 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 type CronContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -524,8 +527,8 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 		// bootstrap
 		bootstrap.NewMysql,
 		bootstrap.NewRedis,
-		pkg.NewAop,
-		pkg.NewClock,
+		pkgCache.NewAop,
+		pkgUtility.NewClock,
 
 		// helper
 		helper.NewAbstractHelper,
@@ -558,7 +561,7 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 type WebsocketContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -586,7 +589,7 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 	wire.Build(
 
 		// pkg
-		pkg.NewClock,
+		pkgUtility.NewClock,
 
 		// bootstrap
 		bootstrap.NewResource,
@@ -630,7 +633,7 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 type CentrifugeContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -643,14 +646,14 @@ type CentrifugeContainer struct {
 
 	// NATS
 	Nats       *nats.Conn
-	NatsBroker *pkg.NATSBroker
+	NatsBroker *pkgNats.NATSBroker
 }
 
 func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) {
 	wire.Build(
 
 		// pkg
-		pkg.NewClock,
+		pkgUtility.NewClock,
 
 		// bootstrap
 		bootstrap.NewResource,
@@ -668,7 +671,7 @@ func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) 
 		client.NewResourceClient,
 
 		// centrifuge
-		pkg.NewNATSBroker,
+		pkgNats.NewNATSBroker,
 
 		wire.Struct(new(CentrifugeContainer), "*"),
 	)
@@ -681,7 +684,7 @@ func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) 
 type ClientContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -692,7 +695,7 @@ func InitClientContainer(ctx context.Context) (*ClientContainer, error) {
 	wire.Build(
 
 		// pkg
-		pkg.NewClock,
+		pkgUtility.NewClock,
 
 		// helper 部份
 		helper.NewAbstractHelper,
@@ -707,7 +710,7 @@ func InitClientContainer(ctx context.Context) (*ClientContainer, error) {
 type CommandContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -726,8 +729,8 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 		// bootstrap
 		bootstrap.NewMysql,
 		bootstrap.NewRedis,
-		pkg.NewAop,
-		pkg.NewClock,
+		pkgCache.NewAop,
+		pkgUtility.NewClock,
 
 		// helper
 		helper.NewAbstractHelper,
@@ -757,7 +760,7 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 type TcpContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -776,7 +779,7 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 	wire.Build(
 
 		// pkg
-		pkg.NewClock,
+		pkgUtility.NewClock,
 
 		// bootstrap
 		bootstrap.NewResource,
@@ -811,7 +814,7 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 type SourceContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -824,7 +827,7 @@ func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 	wire.Build(
 
 		// pkg
-		pkg.NewClock,
+		pkgUtility.NewClock,
 
 		// bootstrap
 
@@ -848,7 +851,7 @@ func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 type DaemonContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -864,7 +867,7 @@ func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
 	wire.Build(
 
 		// pkg
-		pkg.NewClock,
+		pkgUtility.NewClock,
 
 		// bootstrap
 		bootstrap.NewSource,

@@ -11,7 +11,8 @@ import (
 	domain "example/internal/domain"
 	elasticsearchBase "example/internal/output/application/elasticsearch"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 // oDeletedAtZero 跟 mysql/mongodb adapter 用同一個「未刪除」標記值，
@@ -45,10 +46,10 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 	return &oGame, nil
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 	sDeletedAtField := "deleted_at"
 
-	aFilters = append(aFilters, &pkg.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
+	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
 
 	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, aSorters, oPagination)
 	if oErr != nil {
@@ -72,7 +73,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Fi
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -182,7 +183,7 @@ func (oSelf *GameModel) AddOne(oValue *domain.GameValue) (bool, error) {
 }
 
 func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) (bool, error) {
-	oColumns, oErr := pkg.StructToMap(oValue)
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return false, oErr
 	}

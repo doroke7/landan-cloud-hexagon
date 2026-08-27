@@ -7,7 +7,7 @@ import (
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pbResourceLogic "example/pb/resource/logic"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type TableLogic struct {
@@ -20,7 +20,7 @@ func NewTableLogic(oAbstractLogic *resourceBase.AbstractResource) outputPortAnyL
 	}
 }
 
-func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, int64, error) {
+func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, int64, error) {
 
 	oRequest := &pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationInput{
 		Filters: oSelf.ToFilters(aFilters),

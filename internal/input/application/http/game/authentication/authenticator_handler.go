@@ -3,7 +3,8 @@ package inputApplicationHttpGameAuthentication
 import (
 	"github.com/gin-gonic/gin"
 
-	pkg "example/pkg"
+	pkgGin "example/pkg/gin"
+	pkgUtility "example/pkg/utility"
 
 	bootstrap "example/bootstrap"
 	inputApplicationHttp "example/internal/input/application/http"
@@ -24,7 +25,7 @@ func NewAuthenticatorHandler(oAbstractHandler *inputApplicationHttp.AbstractHand
 
 func (oSelf *AuthenticatorHandler) LogIn(oContext *gin.Context) {
 
-	oRequest := &pkg.Request{Context: oContext}
+	oRequest := &pkgGin.Request{Context: oContext}
 
 	oValue := &struct {
 		Name     *string `json:"name,omitempty"`
@@ -44,7 +45,7 @@ func (oSelf *AuthenticatorHandler) LogIn(oContext *gin.Context) {
 
 	if oErr != nil {
 
-		if oDefaultError, bOk := oErr.(*pkg.DefaultError); bOk {
+		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Message, struct{}{}, 0, "")
 			return
 		}
@@ -68,7 +69,7 @@ func (oSelf *AuthenticatorHandler) Refresh(oContext *gin.Context) {
 
 	if oErr != nil {
 
-		if oDefaultError, bOk := oErr.(*pkg.DefaultError); bOk {
+		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Message, struct{}{}, 0, "")
 			return
 		}

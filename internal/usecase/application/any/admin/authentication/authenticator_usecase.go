@@ -6,7 +6,7 @@ import (
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminAuthentication "example/internal/usecase/port/any/admin/authentication"
 	utility "example/internal/utility"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 	"fmt"
 )
 
@@ -25,12 +25,12 @@ func NewAuthenticatorUsecase(oAminUserRepository outputPortAnyModel.AdminUserMod
 func (oSelf *AuthenticatorUsecase) SignIn(sName string, sPassword string, sSecret string) (string, error) {
 
 	if sName == "" {
-		return "", pkg.NewDefaultError("name 不能為空", -1, 200)
+		return "", pkgUtility.NewDefaultError("name 不能為空", -1, 200)
 
 	}
 
 	if sPassword == "" {
-		return "", pkg.NewDefaultError("password 不能為空", -1, 200)
+		return "", pkgUtility.NewDefaultError("password 不能為空", -1, 200)
 	}
 
 	oAdminUser, err := oSelf.AdminUserModel.ShowOneByName(sName)
@@ -39,17 +39,17 @@ func (oSelf *AuthenticatorUsecase) SignIn(sName string, sPassword string, sSecre
 		return "", err
 	}
 	if oAdminUser == nil {
-		return "", pkg.NewDefaultError(sName+" 不存在", -2, 200)
+		return "", pkgUtility.NewDefaultError(sName+" 不存在", -2, 200)
 	}
 
 	sMd5 := utility.Md5(sPassword + bootstrap.CONFIG.TABLE.ADMIN_USER.PASSWORD)
 	if oAdminUser.Password != sMd5 {
-		return "", pkg.NewDefaultError("密碼錯誤", -2, 200)
+		return "", pkgUtility.NewDefaultError("密碼錯誤", -2, 200)
 	}
 
 	sAuthorization, err := oSelf.JwtHelper.Generate(int64(oAdminUser.Id), 0, map[string]any{}, sSecret)
 	if err != nil {
-		return "", pkg.NewDefaultError("JWT 產生失敗", -2, 200)
+		return "", pkgUtility.NewDefaultError("JWT 產生失敗", -2, 200)
 	}
 
 	return sAuthorization, nil
@@ -58,14 +58,14 @@ func (oSelf *AuthenticatorUsecase) SignIn(sName string, sPassword string, sSecre
 func (oSelf *AuthenticatorUsecase) Refresh(sJwt string, sSecret string) (string, error) {
 
 	if sJwt == "" {
-		return "", pkg.NewDefaultError("JWT 不能為空", -1, 200)
+		return "", pkgUtility.NewDefaultError("JWT 不能為空", -1, 200)
 	}
 
 	fmt.Println("sJwt=", sJwt)
 
 	oClaims, err := oSelf.JwtHelper.Parse(sJwt)
 	if err != nil {
-		return "", pkg.NewDefaultError("JWT 無效", -2, 200)
+		return "", pkgUtility.NewDefaultError("JWT 無效", -2, 200)
 	}
 
 	iId := uint(oClaims.AdminUserId)
@@ -76,12 +76,12 @@ func (oSelf *AuthenticatorUsecase) Refresh(sJwt string, sSecret string) (string,
 		return "", err
 	}
 	if oAdminUser == nil {
-		return "", pkg.NewDefaultError("AdminUser 不存在", -2, 200)
+		return "", pkgUtility.NewDefaultError("AdminUser 不存在", -2, 200)
 	}
 
 	sAuthorization, err := oSelf.JwtHelper.Generate(oClaims.AdminUserId, oClaims.AppUserId, oClaims.Payload, sSecret)
 	if err != nil {
-		return "", pkg.NewDefaultError("JWT 產生失敗", -2, 200)
+		return "", pkgUtility.NewDefaultError("JWT 產生失敗", -2, 200)
 	}
 
 	return sAuthorization, nil

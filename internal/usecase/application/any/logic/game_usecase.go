@@ -4,7 +4,7 @@ import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameUsecase struct {
@@ -19,7 +19,7 @@ func NewGameUsecase(oAbstractUsecase *AbstractUsecase, oGameLogic outputPortAnyL
 	}
 }
 
-func (oSelf *GameUsecase) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, int64, error) {
+func (oSelf *GameUsecase) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, int64, error) {
 
 	aGames, iTotal, oErr := oSelf.GameLogic.ShowGamesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 

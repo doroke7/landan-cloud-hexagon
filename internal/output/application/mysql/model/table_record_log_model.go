@@ -9,7 +9,8 @@ import (
 	domain "example/internal/domain"
 	mysqlBase "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type TableRecordLogModel struct {
@@ -39,7 +40,7 @@ func (oSelf *TableRecordLogModel) ShowOneById(iId uint) (*domain.TableRecordLog,
 	return domain.TableRecordLogRowToTableRecordLog(&oTableRecordLogRow), nil
 }
 
-func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.TableRecordLog, error) {
+func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.TableRecordLog, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractMysql.PaginationToLimit(oPagination)
@@ -85,7 +86,7 @@ func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilter
 	return aTableRecordLogs, nil
 }
 
-func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -111,7 +112,7 @@ func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkg.Filter) (uint64
 func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogValue) (bool, error) {
 	var oTableRecordLogRow domain.TableRecordLogRow
 
-	oColumns, oErr := pkg.StructToMap(oTableRecordLog)
+	oColumns, oErr := pkgUtility.StructToMap(oTableRecordLog)
 	if oErr != nil {
 		return false, oErr
 	}

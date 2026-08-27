@@ -8,7 +8,7 @@ import (
 
 	bootstrap "example/bootstrap"
 	container "example/container"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 // Init 只組裝子命令的「形狀」（名字、flag），不在這裡連任何基礎設施；
@@ -24,11 +24,11 @@ func Init(oCommandCommand *cobra.Command) *cobra.Command {
 		Run: func(oCmd *cobra.Command, args []string) {
 			oContainer, err := container.InitCommandContainer(context.Background())
 			if err != nil {
-				pkg.Logger(pkg.Command).Fatal("command: failed to init container", zap.Error(err))
+				pkgUtility.Logger(pkgUtility.Command).Fatal("command: failed to init container", zap.Error(err))
 			}
 
 			if err := oContainer.CommandAdminReourceAppUser.IncreaseBalance(iId, iAmount); err != nil {
-				pkg.Logger(pkg.Command).Error("increase balance failed", zap.Error(err))
+				pkgUtility.Logger(pkgUtility.Command).Error("increase balance failed", zap.Error(err))
 			}
 		},
 	}
@@ -47,17 +47,17 @@ func Init(oCommandCommand *cobra.Command) *cobra.Command {
 		Run: func(oCmd *cobra.Command, args []string) {
 			oContainer, err := container.InitCommandContainer(context.Background())
 			if err != nil {
-				pkg.Logger(pkg.Command).Fatal("command: failed to init container", zap.Error(err))
+				pkgUtility.Logger(pkgUtility.Command).Fatal("command: failed to init container", zap.Error(err))
 			}
 
 			// NOTE: command carrier 目前沒有自己的 services.command.admin.jwt 設定，先借用 http 那組 secret。
 			sAuthorization, err := oContainer.CommandAdminAuthenticationSignIn.SignIn(sName, sPassword, bootstrap.CONFIG.SERVICES.HTTP.ADMIN.JWT.SECRET)
 			if err != nil {
-				pkg.Logger(pkg.Command).Error("sign in failed", zap.Error(err))
+				pkgUtility.Logger(pkgUtility.Command).Error("sign in failed", zap.Error(err))
 				return
 			}
 
-			pkg.Logger(pkg.Command).Info("sign in succeeded", zap.String("authorization", sAuthorization))
+			pkgUtility.Logger(pkgUtility.Command).Info("sign in succeeded", zap.String("authorization", sAuthorization))
 		},
 	}
 

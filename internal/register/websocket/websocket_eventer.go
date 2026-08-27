@@ -9,7 +9,7 @@ import (
 	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 	types "example/types"
 )
 
@@ -162,7 +162,7 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 	oRawConn, oErr := oSelf.upgrader.Upgrade(oWriter, oRequest, nil)
 
 	if oErr != nil {
-		pkg.Logger(pkg.WebsocketAdmin).Error("upgrade error", zap.Error(oErr))
+		pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("upgrade error", zap.Error(oErr))
 		return
 	}
 
@@ -217,7 +217,7 @@ func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *
 		if oErr == nil {
 
 			if jsonErr := json.Unmarshal(aMsg, &oWsReq); jsonErr != nil {
-				pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(jsonErr))
+				pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json unmarshal error", zap.Error(jsonErr))
 			}
 
 			if (iType == 1 || iType == 2) && oSelf.onConnect != nil && oWsReq.Event == "connect" {

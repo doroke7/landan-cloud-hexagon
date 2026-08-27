@@ -3,7 +3,7 @@ package usecaseApplicationAnyWatcherSource
 import (
 	"go.uber.org/zap"
 
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
@@ -41,7 +41,7 @@ func (oSelf *AnnouncementLotteryUsecase) Watch(oValue *domain.LotteryValue) erro
 	}
 
 	if _, err := oSelf.LotteryModel.EditOneByKey(oValue, oLottery.Round); err != nil {
-		pkg.Logger(pkg.Client).Error("儲存開獎資料失敗",
+		pkgUtility.Logger(pkgUtility.Client).Error("儲存開獎資料失敗",
 			zap.Uint("id", oLottery.Id),
 			zap.String("round", oLottery.Round),
 			zap.Error(err),
@@ -49,7 +49,7 @@ func (oSelf *AnnouncementLotteryUsecase) Watch(oValue *domain.LotteryValue) erro
 		return err
 	}
 
-	pkg.Logger(pkg.Client).Info("收到開獎資料",
+	pkgUtility.Logger(pkgUtility.Client).Info("收到開獎資料",
 		zap.Uint("id", oLottery.Id),
 		zap.String("round", oLottery.Round),
 		zap.String("numbers", oLottery.Numbers),

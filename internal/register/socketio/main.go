@@ -7,7 +7,7 @@ import (
 	"github.com/rs/cors"
 	"go.uber.org/zap"
 
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 func Init() (*socketio.Io, *http.ServeMux) {
@@ -21,7 +21,7 @@ func Init() (*socketio.Io, *http.ServeMux) {
 
 	oServer.OnConnection(func(oSocket *socketio.Socket) {
 
-		pkg.Logger(pkg.Socketio).Info("connected", zap.String("id", oSocket.Id))
+		pkgUtility.Logger(pkgUtility.Socketio).Info("connected", zap.String("id", oSocket.Id))
 
 		oSocket.On("message", func(oEvent *socketio.EventPayload) {
 
@@ -31,14 +31,14 @@ func Init() (*socketio.Io, *http.ServeMux) {
 		})
 
 		oSocket.On("broadcast", func(oEvent *socketio.EventPayload) {
-			pkg.Logger(pkg.Socketio).Info("broadcast", zap.Any("data", oEvent.Data))
+			pkgUtility.Logger(pkgUtility.Socketio).Info("broadcast", zap.Any("data", oEvent.Data))
 
 			// oServer.Emit("broadcast", oEvent.Data...)
 
 		})
 
 		oSocket.On("disconnect", func(oEvent *socketio.EventPayload) {
-			pkg.Logger(pkg.Socketio).Info("disconnected", zap.String("id", oSocket.Id))
+			pkgUtility.Logger(pkgUtility.Socketio).Info("disconnected", zap.String("id", oSocket.Id))
 		})
 
 	})

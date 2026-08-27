@@ -10,7 +10,8 @@ import (
 	domain "example/internal/domain"
 	clickhouseBase "example/internal/output/application/clickhouse"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type GameTypeModel struct {
@@ -40,7 +41,7 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 	return domain.GameTypeRowToGameType(&oGameTypeRow), nil
 }
 
-func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, error) {
+func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error) {
 	aWheres := oSelf.AbstractClickhouse.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractClickhouse.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractClickhouse.PaginationToLimit(oPagination)
@@ -89,7 +90,7 @@ func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*p
 func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) (bool, error) {
 	var oGameTypeRow domain.GameTypeRow
 
-	oGameType, _ := pkg.StructToMap(oValue)
+	oGameType, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&oGameTypeRow).
@@ -111,7 +112,7 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) (bool, error) {
 func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) (bool, error) {
 	var oGameTypeRow domain.GameTypeRow
 
-	oGameType, _ := pkg.StructToMap(oValue)
+	oGameType, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&oGameTypeRow).
@@ -143,7 +144,7 @@ func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
 	return true, nil
 }
 
-func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractClickhouse.FiltersToWheres(aFilters)
 
 	var iTotal int64

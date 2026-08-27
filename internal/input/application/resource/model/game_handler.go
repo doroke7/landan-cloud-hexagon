@@ -12,7 +12,7 @@ import (
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameHandler struct {
@@ -125,7 +125,7 @@ func (oSelf *GameHandler) ShowOneById(oContext context.Context, oReq *pbResource
 
 func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context.Context, oReq *pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationInput) (*pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationOutput, error) {
 
-	aFilters := make([]*pkg.Filter, 0, len(oReq.GetFilters()))
+	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
 	for _, oOne := range oReq.GetFilters() {
 		if oOne == nil {
 			continue
@@ -133,14 +133,14 @@ func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aFilters = append(aFilters, &pkg.Filter{
+		aFilters = append(aFilters, &pkgInput.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oOne.GetValue().AsInterface(),
 		})
 	}
 
-	aSorters := make([]*pkg.Sorter, 0, len(oReq.GetSorters()))
+	aSorters := make([]*pkgInput.Sorter, 0, len(oReq.GetSorters()))
 	for _, oOne := range oReq.GetSorters() {
 		if oOne == nil {
 			continue
@@ -148,7 +148,7 @@ func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context
 
 		sField := oOne.GetField()
 		sOrder := oOne.GetOrder()
-		aSorters = append(aSorters, &pkg.Sorter{
+		aSorters = append(aSorters, &pkgInput.Sorter{
 			Field: &sField,
 			Order: &sOrder,
 		})
@@ -156,7 +156,7 @@ func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context
 
 	iSize := uint(oReq.GetPagination().GetSize())
 	iPage := uint(oReq.GetPagination().GetPage())
-	oPagination := &pkg.Pagination{
+	oPagination := &pkgInput.Pagination{
 		Size: &iSize,
 		Page: &iPage,
 	}
@@ -215,7 +215,7 @@ func (oSelf *GameHandler) RemoveOneById(oContext context.Context, oReq *pbResour
 
 func (oSelf *GameHandler) TotalByFilters(oContext context.Context, oReq *pbResourceModel.GameTotalByFiltersInput) (*pbResourceModel.GameTotalByFiltersOutput, error) {
 
-	aFilters := make([]*pkg.Filter, 0, len(oReq.GetFilters()))
+	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
 	for _, oOne := range oReq.GetFilters() {
 		if oOne == nil {
 			continue
@@ -223,7 +223,7 @@ func (oSelf *GameHandler) TotalByFilters(oContext context.Context, oReq *pbResou
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aFilters = append(aFilters, &pkg.Filter{
+		aFilters = append(aFilters, &pkgInput.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oOne.GetValue().AsInterface(),

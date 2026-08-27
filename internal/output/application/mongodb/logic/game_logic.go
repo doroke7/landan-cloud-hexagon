@@ -9,7 +9,7 @@ import (
 	domain "example/internal/domain"
 	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 // oDeletedAtZero 跟 mongodb/model adapter 用同一個「未刪除」標記值，
@@ -28,7 +28,7 @@ func NewGameLogic(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) ou
 	}
 }
 
-func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, int64, error) {
+func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, int64, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 

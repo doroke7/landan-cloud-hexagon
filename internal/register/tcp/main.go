@@ -1,13 +1,13 @@
 package registerTcp
 
 import (
-	pkg "example/pkg"
+	pkgTcp "example/pkg/tcp"
 
 	container "example/container"
 )
 
-func Init(oContainer *container.TcpContainer) *pkg.TcpRouter {
-	oTcpRouter := pkg.NewTcpRouter()
+func Init(oContainer *container.TcpContainer) *pkgTcp.TcpRouter {
+	oTcpRouter := pkgTcp.NewTcpRouter()
 	oTcpRouter.HandleFunc("Admin.Authentication.Authenticator.SignIn", oContainer.TcpAdminAuthenticationSignIn.SignIn)
 
 	return oTcpRouter

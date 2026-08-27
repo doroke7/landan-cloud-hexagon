@@ -5,7 +5,7 @@ import (
 
 	"go.uber.org/zap"
 
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 	types "example/types"
 )
 
@@ -25,7 +25,7 @@ func (oSelf *LoggerMiddleware) Handle() types.WebsocketMiddlewareFunc {
 	return func(oConn types.WebsocketConn, oReq types.WebsocketRequest, fnNext types.WebsocketNextFunc) types.WebsocketResponse {
 		oStart := time.Now()
 
-		pkg.Logger(pkg.WebsocketAdminMiddleware).Info(
+		pkgUtility.Logger(pkgUtility.WebsocketAdminMiddleware).Info(
 			"進入 websocket",
 			zap.String("method", oReq.Method),
 			zap.ByteString("value", oReq.Value),
@@ -33,7 +33,7 @@ func (oSelf *LoggerMiddleware) Handle() types.WebsocketMiddlewareFunc {
 
 		oResp := fnNext(oConn, oReq)
 
-		pkg.Logger(pkg.WebsocketAdminMiddleware).Info(
+		pkgUtility.Logger(pkgUtility.WebsocketAdminMiddleware).Info(
 			"結束 websocket",
 			zap.String("method", oReq.Method),
 			zap.Duration("經過時間", time.Since(oStart)),

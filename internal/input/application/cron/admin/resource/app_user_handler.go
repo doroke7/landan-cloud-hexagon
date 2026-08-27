@@ -3,7 +3,7 @@ package inputApplicationCronAdminResource
 import (
 	"go.uber.org/zap"
 
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 
 	inputApplicationCron "example/internal/input/application/cron"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
@@ -24,13 +24,13 @@ func NewAppUserHandler(oAppUserUsecase usecasePortAnyAdminResource.AppUserUsecas
 func (oSelf *AppUserHandler) IncreaseBalance() {
 	bResult, err := oSelf.appUserUsecase.IncreaseBalance(1, 10)
 	if err != nil {
-		pkg.Logger(pkg.Cron).Error("IncreaseBalance 失敗",
+		pkgUtility.Logger(pkgUtility.Cron).Error("IncreaseBalance 失敗",
 			zap.Error(err),
 		)
 		return
 	}
 
-	pkg.Logger(pkg.Cron).Info("IncreaseBalance 成功",
+	pkgUtility.Logger(pkgUtility.Cron).Info("IncreaseBalance 成功",
 		zap.Bool("status", bResult),
 	)
 }

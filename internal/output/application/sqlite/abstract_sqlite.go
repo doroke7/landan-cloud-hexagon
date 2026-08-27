@@ -4,7 +4,9 @@ import (
 	"context"
 	"strings"
 
-	pkg "example/pkg"
+	pkgCache "example/pkg/cache"
+	pkgInput "example/pkg/input"
+	pkgSqlite "example/pkg/sqlite"
 
 	"gorm.io/gorm"
 )
@@ -25,15 +27,15 @@ var oOperatorMap = map[string]string{
 	"between":     "BETWEEN",
 }
 
-// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
+// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkgCache.Aop、cache/memory 的
 // AbstractRepository 做法一致。
 type AbstractSqlite struct {
 	DB      *gorm.DB
 	Context context.Context
-	*pkg.Aop
+	*pkgCache.Aop
 }
 
-func NewAbstractSqlite(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *AbstractSqlite {
+func NewAbstractSqlite(oContext context.Context, oDb *gorm.DB, oAop *pkgCache.Aop) *AbstractSqlite {
 
 	return &AbstractSqlite{
 		DB:      oDb,
@@ -42,8 +44,8 @@ func NewAbstractSqlite(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *A
 	}
 }
 
-func (oSelf *AbstractSqlite) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.SqliteWhere {
-	aWheres := make([]*pkg.SqliteWhere, 0, len(aFilters))
+func (oSelf *AbstractSqlite) FiltersToWheres(aFilters []*pkgInput.Filter) []*pkgSqlite.SqliteWhere {
+	aWheres := make([]*pkgSqlite.SqliteWhere, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil {
@@ -72,7 +74,7 @@ func (oSelf *AbstractSqlite) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.Sqli
 
 		// SQLite 的識別字用雙引號，跟 postgres 一樣是 ANSI 標準寫法。
 		sField := `"` + *oFilter.Field + `"`
-		aWheres = append(aWheres, &pkg.SqliteWhere{
+		aWheres = append(aWheres, &pkgSqlite.SqliteWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,
@@ -82,8 +84,8 @@ func (oSelf *AbstractSqlite) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.Sqli
 	return aWheres
 }
 
-func (oSelf *AbstractSqlite) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.SqliteOrder {
-	aOrders := make([]*pkg.SqliteOrder, 0, len(aSorters))
+func (oSelf *AbstractSqlite) SortersToOrders(aSorters []*pkgInput.Sorter) []*pkgSqlite.SqliteOrder {
+	aOrders := make([]*pkgSqlite.SqliteOrder, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
 		if oSorter == nil || oSorter.Field == nil {
@@ -96,7 +98,7 @@ func (oSelf *AbstractSqlite) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.Sqli
 		}
 
 		sField := `"` + *oSorter.Field + `"`
-		aOrders = append(aOrders, &pkg.SqliteOrder{
+		aOrders = append(aOrders, &pkgSqlite.SqliteOrder{
 			Field: &sField,
 			Value: &sDirection,
 		})
@@ -105,7 +107,7 @@ func (oSelf *AbstractSqlite) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.Sqli
 	return aOrders
 }
 
-func (oSelf *AbstractSqlite) PaginationToLimit(oPagination *pkg.Pagination) *pkg.SqliteLimit {
+func (oSelf *AbstractSqlite) PaginationToLimit(oPagination *pkgInput.Pagination) *pkgSqlite.SqliteLimit {
 	iSize := uint(10)
 	iPage := uint(1)
 
@@ -119,7 +121,7 @@ func (oSelf *AbstractSqlite) PaginationToLimit(oPagination *pkg.Pagination) *pkg
 
 	iOffset := (iPage - 1) * iSize
 
-	return &pkg.SqliteLimit{
+	return &pkgSqlite.SqliteLimit{
 		Offset: &iOffset,
 		Count:  &iSize,
 	}

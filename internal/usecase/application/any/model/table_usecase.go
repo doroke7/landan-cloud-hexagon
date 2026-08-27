@@ -4,7 +4,7 @@ import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type TableUsecase struct {
@@ -17,12 +17,12 @@ func NewTableUsecase(oTableModel outputPortAnyModel.TableModel) usecasePortAnyMo
 	}
 }
 
-func (oSelf *TableUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, error) {
+func (oSelf *TableUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
 
 	return oSelf.TableModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 }
 
-func (oSelf *TableUsecase) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *TableUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
 	return oSelf.TableModel.TotalByFilters(aFilters)
 }

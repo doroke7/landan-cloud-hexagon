@@ -11,7 +11,7 @@ import (
 
 	bootstrap "example/bootstrap"
 
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 
 	utility "example/internal/utility"
 )
@@ -53,8 +53,8 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 				iLen := runtime.Stack(aByteStack, false)
 
 				switch oErrorType := oError.(type) {
-				case *pkg.DefaultError: // 需要用 *指標， 因為 controller 是用 指標
-					pkg.Logger(pkg.HttpGameMiddleware).Warn(
+				case *pkgUtility.DefaultError: // 需要用 *指標， 因為 controller 是用 指標
+					pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Warn(
 						"業務異常",
 						zap.Any("error", oError),
 						zap.Any("stack", aByteStack[:iLen]),
@@ -66,7 +66,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 					// Logger.Fatal 會再觸發 panic
 					fmt.Println("進入 recover oError=", oError)
 
-					pkg.Logger(pkg.HttpGameMiddleware).Error(
+					pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Error(
 						"前級系統錯誤2",
 						zap.Any("error", oError),
 						zap.Any("stack", aByteStack[:iLen]),
@@ -90,9 +90,9 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 				iLen := runtime.Stack(aByteStack, false)
 
 				switch oErrorType := oLastErr.Err.(type) {
-				case *pkg.DefaultError:
+				case *pkgUtility.DefaultError:
 
-					pkg.Logger(pkg.HttpGameMiddleware).Warn(
+					pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Warn(
 						"業務異常",
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
@@ -102,7 +102,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 				default:
 					// Logger.Fatal 會再觸發 panic
 
-					pkg.Logger(pkg.HttpGameMiddleware).Error(
+					pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Error(
 						"前級系統錯誤3",
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),

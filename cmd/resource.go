@@ -10,7 +10,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 
 	bootstrap "example/bootstrap"
 	container "example/container"
@@ -36,7 +36,7 @@ var oResourceCommand = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		pkg.Logger(pkg.Default).Info("啟動 RESOURCE 服務。 port: " + bootstrap.CONFIG.SERVICES.RESOURCE.PORT)
+		pkgUtility.Logger(pkgUtility.Default).Info("啟動 RESOURCE 服務。 port: " + bootstrap.CONFIG.SERVICES.RESOURCE.PORT)
 
 		// 收到中斷/終止訊號時 ctx 會被取消，主動 GracefulStop，讓 gRPC 停止 accept 新連線、
 		// 關掉 listener，Serve() 才會正常返回並釋放 port，

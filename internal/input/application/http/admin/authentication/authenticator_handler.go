@@ -6,7 +6,8 @@ import (
 	bootstrap "example/bootstrap"
 	inputApplicationHttp "example/internal/input/application/http"
 	usecasePortAnyAdminAuthentication "example/internal/usecase/port/any/admin/authentication"
-	pkg "example/pkg"
+	pkgGin "example/pkg/gin"
+	pkgUtility "example/pkg/utility"
 )
 
 type AuthenticatorHandler struct {
@@ -29,7 +30,7 @@ func (oSelf *AuthenticatorHandler) SignIn(oContext *gin.Context) {
 	// 模擬 遠程長時間 ，方便前端做效果
 	// time.Sleep(2 * time.Second)
 
-	oRequest := &pkg.Request{Context: oContext}
+	oRequest := &pkgGin.Request{Context: oContext}
 
 	oValue := &struct {
 		Name     *string `json:"name,omitempty"`
@@ -49,7 +50,7 @@ func (oSelf *AuthenticatorHandler) SignIn(oContext *gin.Context) {
 
 	if oErr != nil {
 
-		if oDefaultError, bOk := oErr.(*pkg.DefaultError); bOk {
+		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
 			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Message, struct{}{}, 0, "")
 			return
@@ -78,7 +79,7 @@ func (oSelf *AuthenticatorHandler) Refresh(oContext *gin.Context) {
 
 	if oErr != nil {
 
-		if oDefaultError, bOk := oErr.(*pkg.DefaultError); bOk {
+		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
 			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Message, struct{}{}, 0, "")
 			return

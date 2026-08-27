@@ -10,7 +10,8 @@ import (
 	domain "example/internal/domain"
 	clickhouseBase "example/internal/output/application/clickhouse"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type TableRecordModel struct {
@@ -45,7 +46,7 @@ func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error
 func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue, iId uint) (bool, error) {
 	var oTableRecordRow domain.TableRecordRow
 
-	oColumns, oErr := pkg.StructToMap(oTableRecord)
+	oColumns, oErr := pkgUtility.StructToMap(oTableRecord)
 	if oErr != nil {
 		return false, oErr
 	}
@@ -80,7 +81,7 @@ func (oSelf *TableRecordModel) RemoveOneById(iId uint) (bool, error) {
 	return true, nil
 }
 
-func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.TableRecord, error) {
+func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.TableRecord, error) {
 	aWheres := oSelf.AbstractClickhouse.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractClickhouse.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractClickhouse.PaginationToLimit(oPagination)
@@ -126,7 +127,7 @@ func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters [
 	return aTableRecords, nil
 }
 
-func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractClickhouse.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -152,7 +153,7 @@ func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, e
 func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) (bool, error) {
 	var oTableRecordRow domain.TableRecordRow
 
-	oColumns, oErr := pkg.StructToMap(oTableRecord)
+	oColumns, oErr := pkgUtility.StructToMap(oTableRecord)
 	if oErr != nil {
 		return false, oErr
 	}

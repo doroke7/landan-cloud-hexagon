@@ -2,7 +2,7 @@ package usecasePortAnyModel
 
 import (
 	domain "example/internal/domain"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type TableUsecase interface {
@@ -10,6 +10,6 @@ type TableUsecase interface {
 	ShowOneById(iId uint) (*domain.Table, error)
 	EditOneById(oValue *domain.TableValue, iId uint) (bool, error)
 	RemoveOneById(iId uint) (bool, error)
-	TotalByFilters(aFilters []*pkg.Filter) (uint64, error)
-	ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, error)
+	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
+	ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error)
 }

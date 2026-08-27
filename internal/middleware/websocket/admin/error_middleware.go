@@ -1,7 +1,7 @@
 package middlewareWebsocketAdmin
 
 import (
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 	types "example/types"
 )
 
@@ -16,7 +16,7 @@ func NewErrorMiddleware(oAbstractMiddleware *AbstractMiddleware) *ErrorMiddlewar
 }
 
 // Handle 職責跟 http 版本的 ErrorMiddleware 一樣：放在鏈最前面，統一攔截下游 panic
-// （包含 *pkg.DefaultError 這種業務錯誤），轉成統一格式的 types.WebsocketResponse，
+// （包含 *pkgUtility.DefaultError 這種業務錯誤），轉成統一格式的 types.WebsocketResponse，
 // 個別 handler 就不用每個自己寫 recover；不同的是 http 版本要寫 gin.Context 的
 // header/JSON，這裡直接把結果當函式回傳值交出去就好，不用額外的 Writer。
 func (oSelf *ErrorMiddleware) Handle() types.WebsocketMiddlewareFunc {
@@ -28,10 +28,10 @@ func (oSelf *ErrorMiddleware) Handle() types.WebsocketMiddlewareFunc {
 			}
 
 			switch oErrorType := oError.(type) {
-			case *pkg.DefaultError:
+			case *pkgUtility.DefaultError:
 				oResp = types.WebsocketResponse{Code: int(oErrorType.Code), Message: oErrorType.Message}
 			default:
-				pkg.Logger(pkg.WebsocketMiddleware).Sugar().Errorf("panic: %v", oError)
+				pkgUtility.Logger(pkgUtility.WebsocketMiddleware).Sugar().Errorf("panic: %v", oError)
 				oResp = types.WebsocketResponse{Code: -4, Message: "系統錯誤"}
 			}
 		}()

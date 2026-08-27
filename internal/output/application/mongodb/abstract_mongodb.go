@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
 	bootstrap "example/bootstrap"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 // Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
@@ -44,7 +44,7 @@ var oFilterOperatorMap = map[string]string{
 	"notIn": "$nin",
 }
 
-func (oSelf *AbstractMongodb) FiltersToFilter(aFilters []*pkg.Filter) bson.M {
+func (oSelf *AbstractMongodb) FiltersToFilter(aFilters []*pkgInput.Filter) bson.M {
 	oFilter := bson.M{}
 
 	for _, oFilter1 := range aFilters {
@@ -92,7 +92,7 @@ func (oSelf *AbstractMongodb) FiltersToFilter(aFilters []*pkg.Filter) bson.M {
 	return oFilter
 }
 
-func (oSelf *AbstractMongodb) SortersToFindOptions(aSorters []*pkg.Sorter) *options.FindOptionsBuilder {
+func (oSelf *AbstractMongodb) SortersToFindOptions(aSorters []*pkgInput.Sorter) *options.FindOptionsBuilder {
 	oSort := bson.D{}
 	oFindOptions := options.Find()
 
@@ -116,7 +116,7 @@ func (oSelf *AbstractMongodb) SortersToFindOptions(aSorters []*pkg.Sorter) *opti
 	return oFindOptions
 }
 
-func (oSelf *AbstractMongodb) SortersPaginationToFindOptions(aSorters []*pkg.Sorter, oPagination *pkg.Pagination) *options.FindOptionsBuilder {
+func (oSelf *AbstractMongodb) SortersPaginationToFindOptions(aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) *options.FindOptionsBuilder {
 	oSort := bson.D{}
 	oFindOptions := options.Find()
 

@@ -12,7 +12,7 @@ import (
 
 	container "example/container"
 	registerTcp "example/internal/register/tcp"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 var oTcpCommand = &cobra.Command{
@@ -31,7 +31,7 @@ var oTcpCommand = &cobra.Command{
 
 		oTcpRouter := registerTcp.Init(oContainer)
 
-		pkg.Logger(pkg.Default).Info("啟動 TCP 服務。 port: " + bootstrap.CONFIG.SERVICES.TCP.PORT)
+		pkgUtility.Logger(pkgUtility.Default).Info("啟動 TCP 服務。 port: " + bootstrap.CONFIG.SERVICES.TCP.PORT)
 
 		if err := oTcpRouter.Serve(ctx, ":"+bootstrap.CONFIG.SERVICES.TCP.PORT); err != nil {
 			log.Fatal(err)

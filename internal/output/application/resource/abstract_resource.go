@@ -5,7 +5,7 @@ import (
 
 	client "example/internal/client"
 	pbResource "example/pb/resource"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 
 	"google.golang.org/protobuf/types/known/structpb"
 )
@@ -26,7 +26,7 @@ func NewAbstractResource(oContext context.Context, oResourceClient *client.Resou
 	}
 }
 
-func (oSelf *AbstractResource) ToFilters(aFilters []*pkg.Filter) []*pbResource.Filter {
+func (oSelf *AbstractResource) ToFilters(aFilters []*pkgInput.Filter) []*pbResource.Filter {
 	aPbFilters := make([]*pbResource.Filter, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -53,7 +53,7 @@ func (oSelf *AbstractResource) ToFilters(aFilters []*pkg.Filter) []*pbResource.F
 	return aPbFilters
 }
 
-func (oSelf *AbstractResource) ToSorters(aSorters []*pkg.Sorter) []*pbResource.Sorter {
+func (oSelf *AbstractResource) ToSorters(aSorters []*pkgInput.Sorter) []*pbResource.Sorter {
 	aPbSorters := make([]*pbResource.Sorter, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
@@ -70,7 +70,7 @@ func (oSelf *AbstractResource) ToSorters(aSorters []*pkg.Sorter) []*pbResource.S
 	return aPbSorters
 }
 
-func (oSelf *AbstractResource) ToPagination(oPagination *pkg.Pagination) *pbResource.Pagination {
+func (oSelf *AbstractResource) ToPagination(oPagination *pkgInput.Pagination) *pbResource.Pagination {
 	if oPagination == nil {
 		return nil
 	}

@@ -8,7 +8,7 @@ import (
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
 	pbResourceLogic "example/pb/resource/logic"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type TableHandler struct {
@@ -28,12 +28,12 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 
 	iSize := uint(oReq.GetPagination().GetSize())
 	iPage := uint(oReq.GetPagination().GetPage())
-	oPagination := &pkg.Pagination{
+	oPagination := &pkgInput.Pagination{
 		Size: &iSize,
 		Page: &iPage,
 	}
 
-	aFilters := make([]*pkg.Filter, 0, len(oReq.GetFilters()))
+	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
 	for _, oOne := range oReq.GetFilters() {
 		if oOne == nil {
 			continue
@@ -41,14 +41,14 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aFilters = append(aFilters, &pkg.Filter{
+		aFilters = append(aFilters, &pkgInput.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oOne.GetValue().AsInterface(),
 		})
 	}
 
-	aSorters := make([]*pkg.Sorter, 0, len(oReq.GetSorters()))
+	aSorters := make([]*pkgInput.Sorter, 0, len(oReq.GetSorters()))
 	for _, oOne := range oReq.GetSorters() {
 		if oOne == nil {
 			continue
@@ -56,7 +56,7 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 
 		sField := oOne.GetField()
 		sOrder := oOne.GetOrder()
-		aSorters = append(aSorters, &pkg.Sorter{
+		aSorters = append(aSorters, &pkgInput.Sorter{
 			Field: &sField,
 			Order: &sOrder,
 		})

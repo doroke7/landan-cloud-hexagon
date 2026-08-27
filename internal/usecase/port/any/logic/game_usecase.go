@@ -2,9 +2,9 @@ package usecasePortAnyLogic
 
 import (
 	domain "example/internal/domain"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameUsecase interface {
-	ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, int64, error)
+	ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, int64, error)
 }

@@ -11,7 +11,8 @@ import (
 	domain "example/internal/domain"
 	elasticsearchBase "example/internal/output/application/elasticsearch"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type TableRecordModel struct {
@@ -41,9 +42,9 @@ func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error
 	return &oTableRecord, nil
 }
 
-func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.TableRecord, error) {
+func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.TableRecord, error) {
 	sDeletedAtField := "deleted_at"
-	aFilters = append(aFilters, &pkg.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
+	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
 
 	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, aSorters, oPagination)
 	if oErr != nil {
@@ -67,7 +68,7 @@ func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters [
 	return aTableRecords, nil
 }
 
-func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -192,7 +193,7 @@ func (oSelf *TableRecordModel) AddOne(oValue *domain.TableRecordValue) (bool, er
 }
 
 func (oSelf *TableRecordModel) EditOneById(oValue *domain.TableRecordValue, iId uint) (bool, error) {
-	oColumns, oErr := pkg.StructToMap(oValue)
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return false, oErr
 	}

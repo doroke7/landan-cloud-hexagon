@@ -4,7 +4,9 @@ import (
 	"context"
 	"strings"
 
-	pkg "example/pkg"
+	pkgCache "example/pkg/cache"
+	pkgGaussdb "example/pkg/gaussdb"
+	pkgInput "example/pkg/input"
 
 	"gorm.io/gorm"
 )
@@ -25,15 +27,15 @@ var oOperatorMap = map[string]string{
 	"between":     "BETWEEN",
 }
 
-// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
+// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkgCache.Aop、cache/memory 的
 // AbstractRepository 做法一致。
 type AbstractGaussdb struct {
 	DB      *gorm.DB
 	Context context.Context
-	*pkg.Aop
+	*pkgCache.Aop
 }
 
-func NewAbstractGaussdb(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *AbstractGaussdb {
+func NewAbstractGaussdb(oContext context.Context, oDb *gorm.DB, oAop *pkgCache.Aop) *AbstractGaussdb {
 
 	return &AbstractGaussdb{
 		DB:      oDb,
@@ -42,8 +44,8 @@ func NewAbstractGaussdb(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *
 	}
 }
 
-func (oSelf *AbstractGaussdb) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.GaussdbWhere {
-	aWheres := make([]*pkg.GaussdbWhere, 0, len(aFilters))
+func (oSelf *AbstractGaussdb) FiltersToWheres(aFilters []*pkgInput.Filter) []*pkgGaussdb.GaussdbWhere {
+	aWheres := make([]*pkgGaussdb.GaussdbWhere, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil {
@@ -72,7 +74,7 @@ func (oSelf *AbstractGaussdb) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.Gau
 
 		// GaussDB 源自 PostgreSQL，識別字一樣用雙引號。
 		sField := `"` + *oFilter.Field + `"`
-		aWheres = append(aWheres, &pkg.GaussdbWhere{
+		aWheres = append(aWheres, &pkgGaussdb.GaussdbWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,
@@ -82,8 +84,8 @@ func (oSelf *AbstractGaussdb) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.Gau
 	return aWheres
 }
 
-func (oSelf *AbstractGaussdb) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.GaussdbOrder {
-	aOrders := make([]*pkg.GaussdbOrder, 0, len(aSorters))
+func (oSelf *AbstractGaussdb) SortersToOrders(aSorters []*pkgInput.Sorter) []*pkgGaussdb.GaussdbOrder {
+	aOrders := make([]*pkgGaussdb.GaussdbOrder, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
 		if oSorter == nil || oSorter.Field == nil {
@@ -96,7 +98,7 @@ func (oSelf *AbstractGaussdb) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.Gau
 		}
 
 		sField := `"` + *oSorter.Field + `"`
-		aOrders = append(aOrders, &pkg.GaussdbOrder{
+		aOrders = append(aOrders, &pkgGaussdb.GaussdbOrder{
 			Field: &sField,
 			Value: &sDirection,
 		})
@@ -105,7 +107,7 @@ func (oSelf *AbstractGaussdb) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.Gau
 	return aOrders
 }
 
-func (oSelf *AbstractGaussdb) PaginationToLimit(oPagination *pkg.Pagination) *pkg.GaussdbLimit {
+func (oSelf *AbstractGaussdb) PaginationToLimit(oPagination *pkgInput.Pagination) *pkgGaussdb.GaussdbLimit {
 	iSize := uint(10)
 	iPage := uint(1)
 
@@ -119,7 +121,7 @@ func (oSelf *AbstractGaussdb) PaginationToLimit(oPagination *pkg.Pagination) *pk
 
 	iOffset := (iPage - 1) * iSize
 
-	return &pkg.GaussdbLimit{
+	return &pkgGaussdb.GaussdbLimit{
 		Offset: &iOffset,
 		Count:  &iSize,
 	}

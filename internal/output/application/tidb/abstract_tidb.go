@@ -4,7 +4,9 @@ import (
 	"context"
 	"strings"
 
-	pkg "example/pkg"
+	pkgCache "example/pkg/cache"
+	pkgInput "example/pkg/input"
+	pkgTidb "example/pkg/tidb"
 
 	"gorm.io/gorm"
 )
@@ -25,15 +27,15 @@ var oOperatorMap = map[string]string{
 	"between":     "BETWEEN",
 }
 
-// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
+// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkgCache.Aop、cache/memory 的
 // AbstractRepository 做法一致。
 type AbstractTidb struct {
 	DB      *gorm.DB
 	Context context.Context
-	*pkg.Aop
+	*pkgCache.Aop
 }
 
-func NewAbstractTidb(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *AbstractTidb {
+func NewAbstractTidb(oContext context.Context, oDb *gorm.DB, oAop *pkgCache.Aop) *AbstractTidb {
 
 	return &AbstractTidb{
 		DB:      oDb,
@@ -42,8 +44,8 @@ func NewAbstractTidb(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *Abs
 	}
 }
 
-func (oSelf *AbstractTidb) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.TidbWhere {
-	aWheres := make([]*pkg.TidbWhere, 0, len(aFilters))
+func (oSelf *AbstractTidb) FiltersToWheres(aFilters []*pkgInput.Filter) []*pkgTidb.TidbWhere {
+	aWheres := make([]*pkgTidb.TidbWhere, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil {
@@ -72,7 +74,7 @@ func (oSelf *AbstractTidb) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.TidbWh
 
 		// TiDB 跟 mysql 走同一套 wire protocol，識別字一樣用反引號。
 		sField := "`" + *oFilter.Field + "`"
-		aWheres = append(aWheres, &pkg.TidbWhere{
+		aWheres = append(aWheres, &pkgTidb.TidbWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,
@@ -82,8 +84,8 @@ func (oSelf *AbstractTidb) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.TidbWh
 	return aWheres
 }
 
-func (oSelf *AbstractTidb) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.TidbOrder {
-	aOrders := make([]*pkg.TidbOrder, 0, len(aSorters))
+func (oSelf *AbstractTidb) SortersToOrders(aSorters []*pkgInput.Sorter) []*pkgTidb.TidbOrder {
+	aOrders := make([]*pkgTidb.TidbOrder, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
 		if oSorter == nil || oSorter.Field == nil {
@@ -96,7 +98,7 @@ func (oSelf *AbstractTidb) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.TidbOr
 		}
 
 		sField := "`" + *oSorter.Field + "`"
-		aOrders = append(aOrders, &pkg.TidbOrder{
+		aOrders = append(aOrders, &pkgTidb.TidbOrder{
 			Field: &sField,
 			Value: &sDirection,
 		})
@@ -105,7 +107,7 @@ func (oSelf *AbstractTidb) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.TidbOr
 	return aOrders
 }
 
-func (oSelf *AbstractTidb) PaginationToLimit(oPagination *pkg.Pagination) *pkg.TidbLimit {
+func (oSelf *AbstractTidb) PaginationToLimit(oPagination *pkgInput.Pagination) *pkgTidb.TidbLimit {
 	iSize := uint(10)
 	iPage := uint(1)
 
@@ -119,7 +121,7 @@ func (oSelf *AbstractTidb) PaginationToLimit(oPagination *pkg.Pagination) *pkg.T
 
 	iOffset := (iPage - 1) * iSize
 
-	return &pkg.TidbLimit{
+	return &pkgTidb.TidbLimit{
 		Offset: &iOffset,
 		Count:  &iSize,
 	}

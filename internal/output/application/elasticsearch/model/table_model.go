@@ -8,7 +8,8 @@ import (
 
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 
 	domain "example/internal/domain"
 	elasticsearchBase "example/internal/output/application/elasticsearch"
@@ -42,9 +43,9 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 	return &oTable, nil
 }
 
-func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, error) {
+func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
 	sDeletedAtField := "deleted_at"
-	aFilters = append(aFilters, &pkg.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
+	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
 
 	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, aSorters, oPagination)
 	if oErr != nil {
@@ -68,7 +69,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -190,7 +191,7 @@ func (oSelf *TableModel) AddOne(oValue *domain.TableValue) (bool, error) {
 }
 
 func (oSelf *TableModel) EditOneById(oValue *domain.TableValue, iId uint) (bool, error) {
-	oColumns, oErr := pkg.StructToMap(oValue)
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return false, oErr
 	}

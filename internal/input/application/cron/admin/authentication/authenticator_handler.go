@@ -4,7 +4,7 @@ import (
 	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 
 	inputApplicationCron "example/internal/input/application/cron"
 	usecasePortAnyAdminAuthentication "example/internal/usecase/port/any/admin/authentication"
@@ -26,13 +26,13 @@ func (oSelf *AuthenticatorHandler) SignIn() {
 	// NOTE: cron carrier 目前沒有自己的 services.cron.admin.jwt 設定，先借用 http 那組 secret。
 	sAuthorization, err := oSelf.AuthenticatorUsecase.SignIn("tom", "secret", bootstrap.CONFIG.SERVICES.HTTP.ADMIN.JWT.SECRET)
 	if err != nil {
-		pkg.Logger(pkg.Cron).Error("SignIn 失敗",
+		pkgUtility.Logger(pkgUtility.Cron).Error("SignIn 失敗",
 			zap.Error(err),
 		)
 		return
 	}
 
-	pkg.Logger(pkg.Cron).Info("SignIn 成功",
+	pkgUtility.Logger(pkgUtility.Cron).Info("SignIn 成功",
 		zap.String("authorization", sAuthorization),
 	)
 }

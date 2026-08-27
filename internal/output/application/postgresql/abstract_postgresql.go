@@ -4,7 +4,9 @@ import (
 	"context"
 	"strings"
 
-	pkg "example/pkg"
+	pkgCache "example/pkg/cache"
+	pkgInput "example/pkg/input"
+	pkgPostgresql "example/pkg/postgresql"
 
 	"gorm.io/gorm"
 )
@@ -25,15 +27,15 @@ var oOperatorMap = map[string]string{
 	"between":     "BETWEEN",
 }
 
-// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
+// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkgCache.Aop、cache/memory 的
 // AbstractRepository 做法一致。
 type AbstractPostgresql struct {
 	DB      *gorm.DB
 	Context context.Context
-	*pkg.Aop
+	*pkgCache.Aop
 }
 
-func NewAbstractPostgresql(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *AbstractPostgresql {
+func NewAbstractPostgresql(oContext context.Context, oDb *gorm.DB, oAop *pkgCache.Aop) *AbstractPostgresql {
 
 	return &AbstractPostgresql{
 		DB:      oDb,
@@ -42,8 +44,8 @@ func NewAbstractPostgresql(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop
 	}
 }
 
-func (oSelf *AbstractPostgresql) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.PostgresqlWhere {
-	aWheres := make([]*pkg.PostgresqlWhere, 0, len(aFilters))
+func (oSelf *AbstractPostgresql) FiltersToWheres(aFilters []*pkgInput.Filter) []*pkgPostgresql.PostgresqlWhere {
+	aWheres := make([]*pkgPostgresql.PostgresqlWhere, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil {
@@ -72,7 +74,7 @@ func (oSelf *AbstractPostgresql) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.
 
 		// Postgres 的識別字用雙引號，跟 mysql 的反引號不同。
 		sField := `"` + *oFilter.Field + `"`
-		aWheres = append(aWheres, &pkg.PostgresqlWhere{
+		aWheres = append(aWheres, &pkgPostgresql.PostgresqlWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,
@@ -82,8 +84,8 @@ func (oSelf *AbstractPostgresql) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.
 	return aWheres
 }
 
-func (oSelf *AbstractPostgresql) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.PostgresqlOrder {
-	aOrders := make([]*pkg.PostgresqlOrder, 0, len(aSorters))
+func (oSelf *AbstractPostgresql) SortersToOrders(aSorters []*pkgInput.Sorter) []*pkgPostgresql.PostgresqlOrder {
+	aOrders := make([]*pkgPostgresql.PostgresqlOrder, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
 		if oSorter == nil || oSorter.Field == nil {
@@ -96,7 +98,7 @@ func (oSelf *AbstractPostgresql) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.
 		}
 
 		sField := `"` + *oSorter.Field + `"`
-		aOrders = append(aOrders, &pkg.PostgresqlOrder{
+		aOrders = append(aOrders, &pkgPostgresql.PostgresqlOrder{
 			Field: &sField,
 			Value: &sDirection,
 		})
@@ -105,7 +107,7 @@ func (oSelf *AbstractPostgresql) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.
 	return aOrders
 }
 
-func (oSelf *AbstractPostgresql) PaginationToLimit(oPagination *pkg.Pagination) *pkg.PostgresqlLimit {
+func (oSelf *AbstractPostgresql) PaginationToLimit(oPagination *pkgInput.Pagination) *pkgPostgresql.PostgresqlLimit {
 	iSize := uint(10)
 	iPage := uint(1)
 
@@ -119,7 +121,7 @@ func (oSelf *AbstractPostgresql) PaginationToLimit(oPagination *pkg.Pagination) 
 
 	iOffset := (iPage - 1) * iSize
 
-	return &pkg.PostgresqlLimit{
+	return &pkgPostgresql.PostgresqlLimit{
 		Offset: &iOffset,
 		Count:  &iSize,
 	}

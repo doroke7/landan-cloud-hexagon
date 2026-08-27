@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 
-	pkg "example/pkg"
+	pkgGrpc "example/pkg/grpc"
 
 	container "example/container"
 
@@ -34,7 +34,7 @@ func facadeInterceptors(oContainer *container.FacadeContainer) grpc.UnaryServerI
 		oContainer.FacadeAdminEncryptionInterceptor.Handle(),
 	}
 
-	oRouter := pkg.NewGrpcRouter()
+	oRouter := pkgGrpc.NewGrpcRouter()
 
 	oRouter.Group("/pb.facade.game.", aGameInterceptors...)
 	oRouter.Group("/pb.facade.game.authentication.")

@@ -9,7 +9,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 type ErrorInterceptor struct {
@@ -35,7 +35,7 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 
 				// Logger.Fatal 會再觸發 panic
 
-				pkg.Logger(pkg.ResourceModelInterceptor).Error(
+				pkgUtility.Logger(pkgUtility.ResourceModelInterceptor).Error(
 					"resource內部錯誤",
 					zap.Any("panic", oPanic),
 					zap.String("method", oServerInfo.FullMethod),
@@ -55,7 +55,7 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 
 			// 如果是 gRPC error 就打印 並且回傳 error 到前級 Http或Facade
 			if bOk {
-				pkg.Logger(pkg.ResourceModelInterceptor).Error(
+				pkgUtility.Logger(pkgUtility.ResourceModelInterceptor).Error(
 					"業務錯誤",
 					zap.String("method", oServerInfo.FullMethod),
 					zap.String("message", oStatus.Message()),
@@ -67,7 +67,7 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 			// 如果非 gRPC error 就打印 並且回傳 “內部錯誤” 到前級 Http或Facade
 			// 例如 MYSQL 錯誤。Redis 錯誤
 			if !bOk {
-				pkg.Logger(pkg.ResourceModelInterceptor).Error(
+				pkgUtility.Logger(pkgUtility.ResourceModelInterceptor).Error(
 					"resource暫不可用",
 					zap.String("method", oServerInfo.FullMethod),
 					zap.Error(oErr),

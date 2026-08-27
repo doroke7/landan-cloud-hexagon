@@ -7,7 +7,7 @@ import (
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pbResourceModel "example/pb/resource/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type AdminUserModel struct {
@@ -57,12 +57,12 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 }
 
 // ShowOnesByFiltersWithSortersPagination 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
-func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.AdminUser, error) {
+func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {
 	return nil, errors.New("not supported by resource 1")
 }
 
 // TotalByFilters 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
-func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	return 0, errors.New("not supported by resource 2")
 }
 

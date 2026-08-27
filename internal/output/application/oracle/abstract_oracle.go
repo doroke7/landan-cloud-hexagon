@@ -4,7 +4,9 @@ import (
 	"context"
 	"strings"
 
-	pkg "example/pkg"
+	pkgCache "example/pkg/cache"
+	pkgInput "example/pkg/input"
+	pkgOracle "example/pkg/oracle"
 
 	"gorm.io/gorm"
 )
@@ -25,15 +27,15 @@ var oOperatorMap = map[string]string{
 	"between":     "BETWEEN",
 }
 
-// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
+// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkgCache.Aop、cache/memory 的
 // AbstractRepository 做法一致。
 type AbstractOracle struct {
 	DB      *gorm.DB
 	Context context.Context
-	*pkg.Aop
+	*pkgCache.Aop
 }
 
-func NewAbstractOracle(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *AbstractOracle {
+func NewAbstractOracle(oContext context.Context, oDb *gorm.DB, oAop *pkgCache.Aop) *AbstractOracle {
 
 	return &AbstractOracle{
 		DB:      oDb,
@@ -42,8 +44,8 @@ func NewAbstractOracle(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *A
 	}
 }
 
-func (oSelf *AbstractOracle) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.OracleWhere {
-	aWheres := make([]*pkg.OracleWhere, 0, len(aFilters))
+func (oSelf *AbstractOracle) FiltersToWheres(aFilters []*pkgInput.Filter) []*pkgOracle.OracleWhere {
+	aWheres := make([]*pkgOracle.OracleWhere, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil {
@@ -72,7 +74,7 @@ func (oSelf *AbstractOracle) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.Orac
 
 		// Oracle 的識別字用雙引號，跟 postgres 一樣是 ANSI 標準寫法。
 		sField := `"` + *oFilter.Field + `"`
-		aWheres = append(aWheres, &pkg.OracleWhere{
+		aWheres = append(aWheres, &pkgOracle.OracleWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,
@@ -82,8 +84,8 @@ func (oSelf *AbstractOracle) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.Orac
 	return aWheres
 }
 
-func (oSelf *AbstractOracle) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.OracleOrder {
-	aOrders := make([]*pkg.OracleOrder, 0, len(aSorters))
+func (oSelf *AbstractOracle) SortersToOrders(aSorters []*pkgInput.Sorter) []*pkgOracle.OracleOrder {
+	aOrders := make([]*pkgOracle.OracleOrder, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
 		if oSorter == nil || oSorter.Field == nil {
@@ -96,7 +98,7 @@ func (oSelf *AbstractOracle) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.Orac
 		}
 
 		sField := `"` + *oSorter.Field + `"`
-		aOrders = append(aOrders, &pkg.OracleOrder{
+		aOrders = append(aOrders, &pkgOracle.OracleOrder{
 			Field: &sField,
 			Value: &sDirection,
 		})
@@ -105,7 +107,7 @@ func (oSelf *AbstractOracle) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.Orac
 	return aOrders
 }
 
-func (oSelf *AbstractOracle) PaginationToLimit(oPagination *pkg.Pagination) *pkg.OracleLimit {
+func (oSelf *AbstractOracle) PaginationToLimit(oPagination *pkgInput.Pagination) *pkgOracle.OracleLimit {
 	iSize := uint(10)
 	iPage := uint(1)
 
@@ -119,7 +121,7 @@ func (oSelf *AbstractOracle) PaginationToLimit(oPagination *pkg.Pagination) *pkg
 
 	iOffset := (iPage - 1) * iSize
 
-	return &pkg.OracleLimit{
+	return &pkgOracle.OracleLimit{
 		Offset: &iOffset,
 		Count:  &iSize,
 	}

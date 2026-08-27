@@ -71,15 +71,18 @@ import (
 	"example/internal/usecase/application/any/watcher"
 	"example/internal/usecase/application/any/watcher/source"
 	"example/internal/usecase/port/any/model"
-	"example/pkg"
+	pkgCache "example/pkg/cache"
+	pkgGin "example/pkg/gin"
+	pkgNats "example/pkg/nats"
+	pkgUtility "example/pkg/utility"
 	"github.com/nats-io/nats.go"
 )
 
 // Injectors from wire.go:
 
 func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
-	response := pkg.NewResponse()
-	clock, err := pkg.NewClock(ctx)
+	response := pkgGin.NewResponse()
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -202,7 +205,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 }
 
 func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
-	clock, err := pkg.NewClock(ctx)
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -260,7 +263,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 }
 
 func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
-	clock, err := pkg.NewClock(ctx)
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -276,7 +279,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	if err != nil {
 		return nil, err
 	}
-	aop := pkg.NewAop(ctx, universalClient)
+	aop := pkgCache.NewAop(ctx, universalClient)
 	abstractMysql := outputApplicationMysql.NewAbstractMysql(ctx, db, aop)
 	adminUserModel := outputApplicationMysqlModel.NewAdminUserModel(abstractMysql)
 	adminUserUsecase := usecaseApplicationAnyModel.NewAdminUserUsecase(adminUserModel, abstractUsecase)
@@ -352,7 +355,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 }
 
 func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
-	clock, err := pkg.NewClock(ctx)
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -371,7 +374,7 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 	if err != nil {
 		return nil, err
 	}
-	aop := pkg.NewAop(ctx, universalClient)
+	aop := pkgCache.NewAop(ctx, universalClient)
 	abstractMysql := outputApplicationMysql.NewAbstractMysql(ctx, db, aop)
 	appUserModel := outputApplicationMysqlModel.NewAppUserModel(abstractMysql)
 	jwtHelper := helper.NewJwtHelper(abstractHelper)
@@ -389,7 +392,7 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 }
 
 func InitCronContainer(ctx context.Context) (*CronContainer, error) {
-	clock, err := pkg.NewClock(ctx)
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -404,7 +407,7 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 	if err != nil {
 		return nil, err
 	}
-	aop := pkg.NewAop(ctx, universalClient)
+	aop := pkgCache.NewAop(ctx, universalClient)
 	abstractMysql := outputApplicationMysql.NewAbstractMysql(ctx, db, aop)
 	appUserModel := outputApplicationMysqlModel.NewAppUserModel(abstractMysql)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper)
@@ -426,7 +429,7 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 }
 
 func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
-	clock, err := pkg.NewClock(ctx)
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -470,7 +473,7 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 }
 
 func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) {
-	clock, err := pkg.NewClock(ctx)
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -486,7 +489,7 @@ func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) 
 	if err != nil {
 		return nil, err
 	}
-	natsBroker := pkg.NewNATSBroker(conn)
+	natsBroker := pkgNats.NewNATSBroker(conn)
 	centrifugeContainer := &CentrifugeContainer{
 		Clock:          clock,
 		AbstractHelper: abstractHelper,
@@ -501,7 +504,7 @@ func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) 
 }
 
 func InitClientContainer(ctx context.Context) (*ClientContainer, error) {
-	clock, err := pkg.NewClock(ctx)
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -516,7 +519,7 @@ func InitClientContainer(ctx context.Context) (*ClientContainer, error) {
 }
 
 func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
-	clock, err := pkg.NewClock(ctx)
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -532,7 +535,7 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 	if err != nil {
 		return nil, err
 	}
-	aop := pkg.NewAop(ctx, universalClient)
+	aop := pkgCache.NewAop(ctx, universalClient)
 	abstractMysql := outputApplicationMysql.NewAbstractMysql(ctx, db, aop)
 	appUserModel := outputApplicationMysqlModel.NewAppUserModel(abstractMysql)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper)
@@ -554,7 +557,7 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 }
 
 func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
-	clock, err := pkg.NewClock(ctx)
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -584,7 +587,7 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 }
 
 func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
-	clock, err := pkg.NewClock(ctx)
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -606,7 +609,7 @@ func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 }
 
 func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
-	clock, err := pkg.NewClock(ctx)
+	clock, err := pkgUtility.NewClock(ctx)
 	if err != nil {
 		return nil, err
 	}
@@ -642,8 +645,8 @@ func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
 type HttpContainer struct {
 
 	// pkg
-	*pkg.Response
-	Clock *pkg.Clock
+	*pkgGin.Response
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -705,7 +708,7 @@ type HttpContainer struct {
 type FacadeContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -738,7 +741,7 @@ type FacadeContainer struct {
 type ResourceContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -778,7 +781,7 @@ type ResourceContainer struct {
 type RabbitmqContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -793,7 +796,7 @@ type RabbitmqContainer struct {
 type CronContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -809,7 +812,7 @@ type CronContainer struct {
 type WebsocketContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -836,7 +839,7 @@ type WebsocketContainer struct {
 type CentrifugeContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -849,14 +852,14 @@ type CentrifugeContainer struct {
 
 	// NATS
 	Nats       *nats.Conn
-	NatsBroker *pkg.NATSBroker
+	NatsBroker *pkgNats.NATSBroker
 }
 
 // ClientContainer 只給 `client` （訂閱外部 gRPC stream）服務使用。
 type ClientContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -867,7 +870,7 @@ type ClientContainer struct {
 type CommandContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -883,7 +886,7 @@ type CommandContainer struct {
 type TcpContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -901,7 +904,7 @@ type TcpContainer struct {
 type SourceContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper
@@ -913,7 +916,7 @@ type SourceContainer struct {
 type DaemonContainer struct {
 
 	// pkg
-	Clock *pkg.Clock
+	Clock *pkgUtility.Clock
 
 	// Helper
 	*helper.AbstractHelper

@@ -10,12 +10,12 @@ import (
 	pbResourceModel "example/pb/resource/model"
 
 	container "example/container"
-	pkg "example/pkg"
+	pkgGrpc "example/pkg/grpc"
 )
 
 func resourceInterceptors(oContainer *container.ResourceContainer) grpc.UnaryServerInterceptor {
 
-	oRouter := pkg.NewGrpcRouter()
+	oRouter := pkgGrpc.NewGrpcRouter()
 
 	// pb.resource.model.* / pb.resource.logic.* 兩個 gRPC 服務各自獨立的
 	// error + logger + Basic Auth 攔截器，互不共用；error 放外層才能包住其他攔截器一起處理。

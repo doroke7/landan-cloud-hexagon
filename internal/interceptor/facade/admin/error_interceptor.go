@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 type ErrorInterceptor struct {
@@ -39,7 +39,7 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 				iLen := runtime.Stack(oByteStack, false)
 
 				// Logger.Fatal 會再觸發 panic
-				pkg.Logger(pkg.FacadeAdminInterceptor).Error(
+				pkgUtility.Logger(pkgUtility.FacadeAdminInterceptor).Error(
 					"前級系統錯誤1",
 					zap.Any("panic", oPanic),
 					zap.String("method", oServerIno.FullMethod),

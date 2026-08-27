@@ -6,7 +6,8 @@ import (
 	"strings"
 	"time"
 
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 
 	"gorm.io/gorm"
 
@@ -71,7 +72,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return domain.AdminUserRowToAdminUser(&oAdminUserRow), err
 }
 
-func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.AdminUser, error) {
+func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractSqlite.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractSqlite.PaginationToLimit(oPagination)
@@ -113,7 +114,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	return aAdminUsers, nil
 }
 
-func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -135,7 +136,7 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, err
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
 	var oAdminUserRow domain.AdminUserRow
 
-	oColumns, oErr := pkg.StructToMap(oAdminUser)
+	oColumns, oErr := pkgUtility.StructToMap(oAdminUser)
 	if oErr != nil {
 		return false, oErr
 	}

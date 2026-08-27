@@ -5,7 +5,7 @@ import (
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pbResourceLogic "example/pb/resource/logic"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameLogic struct {
@@ -51,7 +51,7 @@ func gameFromPb(oPbGame *pbResourceLogic.Game) domain.Game {
 	}
 }
 
-func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, int64, error) {
+func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, int64, error) {
 
 	oRequest := &pbResourceLogic.GameShowGamesTotalByFiltersWithSortersPaginationInput{
 		Filters: oSelf.ToFilters(aFilters),

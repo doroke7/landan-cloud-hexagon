@@ -10,7 +10,7 @@ import (
 	"go.uber.org/zap"
 
 	container "example/container"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 // subRefreshTTL 故意設很短，是為了讓 demo 能在幾秒內就看到 client-side subscription
@@ -72,12 +72,12 @@ func Init(oContainer *container.CentrifugeContainer) (*centrifuge.Node, http.Han
 
 		// 斷線
 		oClient.OnDisconnect(func(oEvent centrifuge.DisconnectEvent) {
-			pkg.Logger(pkg.Centrifuge).Info("client OnDisconnect")
+			pkgUtility.Logger(pkgUtility.Centrifuge).Info("client OnDisconnect")
 
 		})
 
 		if oErr := oClient.Subscribe("all"); oErr != nil {
-			pkg.Logger(pkg.Centrifuge).Error("subscribe error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.Centrifuge).Error("subscribe error", zap.Error(oErr))
 		}
 
 		// OnPresence ~= 特殊 RPC,  client -> server -> client 一次雙向 返回
@@ -125,23 +125,23 @@ func Init(oContainer *container.CentrifugeContainer) (*centrifuge.Node, http.Han
 		// OnMessage： client -> server 單向 不返回
 		// 無 ack
 		oClient.OnMessage(func(oEvent centrifuge.MessageEvent) {
-			pkg.Logger(pkg.Centrifuge).Info("client OnMessage", zap.ByteString("data", oEvent.Data))
+			pkgUtility.Logger(pkgUtility.Centrifuge).Info("client OnMessage", zap.ByteString("data", oEvent.Data))
 		})
 
 		//                            -> client
 		// OnPublish client -> server -> broadcast
 		// 同時有 ack
 		oClient.OnPublish(func(oEvent centrifuge.PublishEvent, fnCallback centrifuge.PublishCallback) {
-			pkg.Logger(pkg.Centrifuge).Info("client OnPublish", zap.ByteString("data", oEvent.Data))
+			pkgUtility.Logger(pkgUtility.Centrifuge).Info("client OnPublish", zap.ByteString("data", oEvent.Data))
 
 			var oPayload struct {
 				Method string          `json:"method"`
 				Value  json.RawMessage `json:"value"`
 			}
 			if oErr := json.Unmarshal(oEvent.Data, &oPayload); oErr != nil {
-				pkg.Logger(pkg.Centrifuge).Error("publish payload 解析失敗", zap.Error(oErr))
+				pkgUtility.Logger(pkgUtility.Centrifuge).Error("publish payload 解析失敗", zap.Error(oErr))
 			} else {
-				pkg.Logger(pkg.Centrifuge).Info(
+				pkgUtility.Logger(pkgUtility.Centrifuge).Info(
 					"收到訊息",
 					zap.String("channel", oEvent.Channel),
 					zap.String("method", oPayload.Method),
@@ -154,7 +154,7 @@ func Init(oContainer *container.CentrifugeContainer) (*centrifuge.Node, http.Han
 
 		// OnSubscribe client.js Subscribe 後呼叫
 		oClient.OnSubscribe(func(oEvent centrifuge.SubscribeEvent, fnCallback centrifuge.SubscribeCallback) {
-			pkg.Logger(pkg.Centrifuge).Info("client OnSubscribe 訂閱", zap.String("channel", oEvent.Channel))
+			pkgUtility.Logger(pkgUtility.Centrifuge).Info("client OnSubscribe 訂閱", zap.String("channel", oEvent.Channel))
 			fnCallback(centrifuge.SubscribeReply{
 				Options: centrifuge.SubscribeOptions{
 					ExpireAt: time.Now().Unix() + int64(subRefreshTTL.Seconds()),
@@ -193,7 +193,7 @@ func Init(oContainer *container.CentrifugeContainer) (*centrifuge.Node, http.Han
 
 		// OnUnsubscribe client F5關閉瀏覽器 -> 觸發發生。
 		oClient.OnUnsubscribe(func(oEvent centrifuge.UnsubscribeEvent) {
-			pkg.Logger(pkg.Centrifuge).Info(
+			pkgUtility.Logger(pkgUtility.Centrifuge).Info(
 				"client OnUnsubscribe 取消訂閱",
 				zap.String("channel", oEvent.Channel),
 				zap.Uint32("code", oEvent.Unsubscribe.Code),

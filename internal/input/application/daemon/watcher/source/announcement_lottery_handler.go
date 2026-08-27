@@ -13,7 +13,7 @@ import (
 	inputApplicationDaemon "example/internal/input/application/daemon"
 	usecasePortAnyWatcherSource "example/internal/usecase/port/any/watcher/source"
 	pbSourceAnnouncement "example/pb/source/announcement"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 type AnnouncementLotteryHandler struct {
@@ -32,7 +32,7 @@ func NewAnnouncementLotteryHandler(oLotteryUsecase usecasePortAnyWatcherSource.A
 // 這裡完全不知道 gRPC client 怎麼建立的——但開 stream 當下的錯誤，一樣由這裡統一判斷。
 func (oSelf *AnnouncementLotteryHandler) Watch(oStream grpc.ServerStreamingClient[pbSourceAnnouncement.LotteryWatchResponse], err error) error {
 	if err != nil {
-		pkg.Logger(pkg.DeamonWatcher).Error("開啟 lottery stream 失敗", zap.Error(err))
+		pkgUtility.Logger(pkgUtility.DeamonWatcher).Error("開啟 lottery stream 失敗", zap.Error(err))
 		return err
 	}
 
@@ -42,7 +42,7 @@ func (oSelf *AnnouncementLotteryHandler) Watch(oStream grpc.ServerStreamingClien
 			return nil
 		}
 		if err != nil {
-			pkg.Logger(pkg.Client).Error("讀取 lottery stream 失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Client).Error("讀取 lottery stream 失敗", zap.Error(err))
 			return err
 		}
 
@@ -62,7 +62,7 @@ func (oSelf *AnnouncementLotteryHandler) Watch(oStream grpc.ServerStreamingClien
 		}
 
 		if err := oSelf.lotteryUsecase.Watch(oLotteryValue); err != nil {
-			pkg.Logger(pkg.DeamonWatcher).Error("處理開獎資料失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.DeamonWatcher).Error("處理開獎資料失敗", zap.Error(err))
 			continue
 		}
 	}

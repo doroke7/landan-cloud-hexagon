@@ -8,7 +8,7 @@ import (
 
 	bootstrap "example/bootstrap"
 	utility "example/internal/utility"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 	types "example/types"
 )
 
@@ -60,7 +60,7 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkg.NewDefaultError("金鑰解密失敗", -1, 400))
+			_ = oContext.Error(pkgUtility.NewDefaultError("金鑰解密失敗", -1, 400))
 			oContext.Abort()
 			return
 		}
@@ -89,7 +89,7 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkg.NewDefaultError("pagination 解密失敗", -1, 400))
+			_ = oContext.Error(pkgUtility.NewDefaultError("pagination 解密失敗", -1, 400))
 			oContext.Abort()
 
 			return
@@ -111,7 +111,7 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkg.NewDefaultError("sorter 解密失敗", -1, 400))
+			_ = oContext.Error(pkgUtility.NewDefaultError("sorter 解密失敗", -1, 400))
 			oContext.Abort()
 
 			return
@@ -133,7 +133,7 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkg.NewDefaultError("filter 解密失敗", -1, 400))
+			_ = oContext.Error(pkgUtility.NewDefaultError("filter 解密失敗", -1, 400))
 			oContext.Abort()
 
 			return
@@ -155,7 +155,7 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkg.NewDefaultError("value 解密失敗", -1, 400))
+			_ = oContext.Error(pkgUtility.NewDefaultError("value 解密失敗", -1, 400))
 			oContext.Abort()
 
 			return
@@ -178,7 +178,7 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
 
-			_ = oContext.Error(pkg.NewDefaultError("Authorization 解密失敗", -1, 400))
+			_ = oContext.Error(pkgUtility.NewDefaultError("Authorization 解密失敗", -1, 400))
 			oContext.Abort()
 
 			return

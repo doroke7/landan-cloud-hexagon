@@ -13,7 +13,7 @@ import (
 	bootstrap "example/bootstrap"
 	container "example/container"
 	registerFacade "example/internal/register/facade"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 var oFacadeCommand = &cobra.Command{
@@ -33,7 +33,7 @@ var oFacadeCommand = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		pkg.Logger(pkg.Default).Info("啟動 FACADE 服務。 port: " + bootstrap.CONFIG.SERVICES.FACADE.PORT)
+		pkgUtility.Logger(pkgUtility.Default).Info("啟動 FACADE 服務。 port: " + bootstrap.CONFIG.SERVICES.FACADE.PORT)
 
 		go func() {
 			<-ctx.Done()

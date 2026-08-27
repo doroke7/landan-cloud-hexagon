@@ -3,7 +3,9 @@ package inputApplicationHttpAdminOption
 import (
 	"github.com/gin-gonic/gin"
 
-	pkg "example/pkg"
+	pkgGin "example/pkg/gin"
+	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 
 	inputApplicationHttp "example/internal/input/application/http"
 	usecasePortAnyAdminOption "example/internal/usecase/port/any/admin/option"
@@ -23,9 +25,9 @@ func NewGameTypeHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, 
 
 func (oSelf *GameTypeHandler) Select(oContext *gin.Context) {
 
-	oRequest := &pkg.Request{Context: oContext}
+	oRequest := &pkgGin.Request{Context: oContext}
 
-	oPagination := &pkg.Pagination{}
+	oPagination := &pkgInput.Pagination{}
 	if oErr := oRequest.Bind("pagination", oPagination); oErr != nil {
 		oSelf.Response.Set(oContext, 200, -1, "pagination 格式錯誤", struct{}{}, 0, "")
 		return
@@ -39,13 +41,13 @@ func (oSelf *GameTypeHandler) Select(oContext *gin.Context) {
 		oPagination.Page = &iPage
 	}
 
-	var aFilters []*pkg.Filter
+	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
 		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "")
 		return
 	}
 
-	var aSorters []*pkg.Sorter
+	var aSorters []*pkgInput.Sorter
 	if oErr := oRequest.Bind("sorters", &aSorters); oErr != nil {
 		oSelf.Response.Set(oContext, 200, -1, "sorters 格式錯誤", struct{}{}, 0, "")
 		return
@@ -55,7 +57,7 @@ func (oSelf *GameTypeHandler) Select(oContext *gin.Context) {
 
 	if oErr != nil {
 
-		if oDefaultError, bOk := oErr.(*pkg.DefaultError); bOk {
+		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
 			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Message, struct{}{}, 0, "")
 			return
@@ -64,7 +66,7 @@ func (oSelf *GameTypeHandler) Select(oContext *gin.Context) {
 		return
 	}
 
-	oResult := pkg.NewResultOnes(aGameTypes)
+	oResult := pkgGin.NewResultOnes(aGameTypes)
 
 	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
 

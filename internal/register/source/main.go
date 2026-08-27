@@ -9,7 +9,7 @@ import (
 	pbSourceAnnouncement "example/pb/source/announcement"
 
 	container "example/container"
-	pkg "example/pkg"
+	pkgGrpc "example/pkg/grpc"
 )
 
 func sourceInterceptors(_ *container.SourceContainer) grpc.UnaryServerInterceptor {
@@ -20,7 +20,7 @@ func sourceInterceptors(_ *container.SourceContainer) grpc.UnaryServerIntercepto
 		// oContainer.ResourceModelAuthenticationInterceptor.Handle(),
 	}
 
-	oRouter := pkg.NewGrpcRouter()
+	oRouter := pkgGrpc.NewGrpcRouter()
 
 	oRouter.Group("", aBase...)
 	// database 群組目前只需要全局驗證；未來個別 resource 服務需要額外攔截器

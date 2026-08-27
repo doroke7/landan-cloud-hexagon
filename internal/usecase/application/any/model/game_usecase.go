@@ -4,7 +4,7 @@ import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameUsecase struct {
@@ -37,7 +37,7 @@ func (oSelf *GameUsecase) ShowOneById(iId uint) (*domain.Game, error) {
 	return oGame, oErr
 }
 
-func (oSelf *GameUsecase) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
+func (oSelf *GameUsecase) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 
 	aGames, oErr := oSelf.GameModel.ShowOnesByFiltersWithOrdersPagination(aFilters, aSorters, oPagination)
 
@@ -66,7 +66,7 @@ func (oSelf *GameUsecase) RemoveOneById(iId uint) (bool, error) {
 	return true, nil
 }
 
-func (oSelf *GameUsecase) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *GameUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
 	iTotal, oErr := oSelf.GameModel.TotalByFilters(aFilters)
 

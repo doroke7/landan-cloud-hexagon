@@ -8,7 +8,7 @@ import (
 
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameUsecase struct {
@@ -65,7 +65,7 @@ func (oSelf *GameUsecase) ShowOne(iId uint) (*domain.Game, error) {
 	return oGame, oErr
 }
 
-func (oSelf *GameUsecase) ShowOnes(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, uint64, error) {
+func (oSelf *GameUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error) {
 
 	aGames, iTotal, oErr := oSelf.GameLogic.ShowGamesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 

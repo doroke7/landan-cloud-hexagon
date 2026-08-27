@@ -4,7 +4,9 @@ import (
 	"context"
 	"strings"
 
-	pkg "example/pkg"
+	pkgCache "example/pkg/cache"
+	pkgClickhouse "example/pkg/clickhouse"
+	pkgInput "example/pkg/input"
 
 	"gorm.io/gorm"
 )
@@ -25,15 +27,15 @@ var oOperatorMap = map[string]string{
 	"between":     "BETWEEN",
 }
 
-// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
+// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkgCache.Aop、cache/memory 的
 // AbstractRepository 做法一致。
 type AbstractClickhouse struct {
 	DB      *gorm.DB
 	Context context.Context
-	*pkg.Aop
+	*pkgCache.Aop
 }
 
-func NewAbstractClickhouse(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *AbstractClickhouse {
+func NewAbstractClickhouse(oContext context.Context, oDb *gorm.DB, oAop *pkgCache.Aop) *AbstractClickhouse {
 
 	return &AbstractClickhouse{
 		DB:      oDb,
@@ -42,8 +44,8 @@ func NewAbstractClickhouse(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop
 	}
 }
 
-func (oSelf *AbstractClickhouse) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.ClickhouseWhere {
-	aWheres := make([]*pkg.ClickhouseWhere, 0, len(aFilters))
+func (oSelf *AbstractClickhouse) FiltersToWheres(aFilters []*pkgInput.Filter) []*pkgClickhouse.ClickhouseWhere {
+	aWheres := make([]*pkgClickhouse.ClickhouseWhere, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil {
@@ -72,7 +74,7 @@ func (oSelf *AbstractClickhouse) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.
 
 		// ClickHouse 的識別字用反引號，跟 mysql 一樣。
 		sField := "`" + *oFilter.Field + "`"
-		aWheres = append(aWheres, &pkg.ClickhouseWhere{
+		aWheres = append(aWheres, &pkgClickhouse.ClickhouseWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,
@@ -82,8 +84,8 @@ func (oSelf *AbstractClickhouse) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.
 	return aWheres
 }
 
-func (oSelf *AbstractClickhouse) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.ClickhouseOrder {
-	aOrders := make([]*pkg.ClickhouseOrder, 0, len(aSorters))
+func (oSelf *AbstractClickhouse) SortersToOrders(aSorters []*pkgInput.Sorter) []*pkgClickhouse.ClickhouseOrder {
+	aOrders := make([]*pkgClickhouse.ClickhouseOrder, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
 		if oSorter == nil || oSorter.Field == nil {
@@ -96,7 +98,7 @@ func (oSelf *AbstractClickhouse) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.
 		}
 
 		sField := "`" + *oSorter.Field + "`"
-		aOrders = append(aOrders, &pkg.ClickhouseOrder{
+		aOrders = append(aOrders, &pkgClickhouse.ClickhouseOrder{
 			Field: &sField,
 			Value: &sDirection,
 		})
@@ -105,7 +107,7 @@ func (oSelf *AbstractClickhouse) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.
 	return aOrders
 }
 
-func (oSelf *AbstractClickhouse) PaginationToLimit(oPagination *pkg.Pagination) *pkg.ClickhouseLimit {
+func (oSelf *AbstractClickhouse) PaginationToLimit(oPagination *pkgInput.Pagination) *pkgClickhouse.ClickhouseLimit {
 	iSize := uint(10)
 	iPage := uint(1)
 
@@ -119,7 +121,7 @@ func (oSelf *AbstractClickhouse) PaginationToLimit(oPagination *pkg.Pagination) 
 
 	iOffset := (iPage - 1) * iSize
 
-	return &pkg.ClickhouseLimit{
+	return &pkgClickhouse.ClickhouseLimit{
 		Offset: &iOffset,
 		Count:  &iSize,
 	}

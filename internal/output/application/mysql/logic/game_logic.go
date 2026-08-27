@@ -7,7 +7,7 @@ import (
 	domain "example/internal/domain"
 	mysqlBase "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameLogic struct {
@@ -20,7 +20,7 @@ func NewGameLogic(oAbstractLogic *mysqlBase.AbstractMysql) outputPortAnyLogic.Ga
 	}
 }
 
-func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, int64, error) {
+func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, int64, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)

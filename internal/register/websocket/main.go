@@ -15,7 +15,7 @@ import (
 	bootstrap "example/bootstrap"
 	container "example/container"
 	utility "example/internal/utility"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 	types "example/types"
 )
 
@@ -146,8 +146,8 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		pointerToCid = hashmap.New[string, string]()
 		cidToSession = hashmap.New[string, *atomic.Pointer[Session]]()
 
-		auIdCIds     = pkg.NewBiMultiMap[string, string]()
-		cIdsChannels = pkg.NewBiMultiMap[string, string]()
+		auIdCIds     = pkgUtility.NewBiMultiMap[string, string]()
+		cIdsChannels = pkgUtility.NewBiMultiMap[string, string]()
 	)
 
 	// emit 把 aByteMessage 丟給 sChannel 目前所有訂閱的 cid（session 已不在表上
@@ -165,13 +165,13 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 	}
 
 	oAdminEventer.OnOpen(func(oConn *WebsocketConn, iType int) {
-		pkg.Logger(pkg.WebsocketAdmin).Info("OnOpen", zap.Stringer("remoteAddr", oConn.RemoteAddr()))
+		pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info("OnOpen", zap.Stringer("remoteAddr", oConn.RemoteAddr()))
 
 		sCId := uuid.New().String()
 		sPointer := fmt.Sprintf("%p", oConn)
 
 		if _, bGotten := cidToSession.Get(sCId); bGotten {
-			pkg.Logger(pkg.WebsocketAdmin).Error(
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error(
 				"duplicate id, disconnect",
 				zap.String("cid", sCId),
 				zap.Stringer("remoteAddr", oConn.RemoteAddr()),
@@ -204,7 +204,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		if oWsReq.K != "" {
 			sKeys, oErr := oContainer.RsaHelper.Decrypt(oWsReq.K, bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN.PRIVATE_KEY)
 			if oErr != nil {
-				pkg.Logger(pkg.WebsocketAdmin).Error("rsa decrypt error", zap.Error(oErr))
+				pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("rsa decrypt error", zap.Error(oErr))
 				return
 			}
 
@@ -213,7 +213,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 				Iv  string `json:"iv"`
 			}](sKeys)
 			if oErr != nil {
-				pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+				pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
 				return
 			}
 
@@ -238,7 +238,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 
@@ -264,7 +264,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 
@@ -281,7 +281,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
 		}
 
 		bOk := oValue.Name == "admin" && oValue.Password == "123456"
@@ -304,7 +304,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return false
 		}
 
@@ -329,7 +329,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 	// （resource/AppUser/ShowOne 之類的 Action Route），只回 rpced 確認收到。
 	oAdminEventer.OnRpc(func(oConn *WebsocketConn, iType int, oWsReq *types.WebsocketRequest) {
 		sMethod := oWsReq.Method
-		pkg.Logger(pkg.WebsocketAdmin).Info("OnRpc", zap.String("method", sMethod))
+		pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info("OnRpc", zap.String("method", sMethod))
 
 		aByteMessage, oErr := json.Marshal(struct {
 			Event string `json:"event"`
@@ -340,7 +340,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 
@@ -352,7 +352,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		sCId, _ := pointerToCid.Get(sPointer)
 
 		if len(auIdCIds.Right(sCId)) == 0 {
-			pkg.Logger(pkg.WebsocketAdmin).Info("not authenticated, ignore subscribe", zap.String("cid", sCId))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info("not authenticated, ignore subscribe", zap.String("cid", sCId))
 			return
 		}
 
@@ -361,7 +361,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
 			return
 		}
 
@@ -388,7 +388,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 
@@ -411,7 +411,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
 			return
 		}
 		aTargetCIds := cIdsChannels.Right(oValue.Channel)
@@ -462,7 +462,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 
@@ -479,7 +479,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
 			return
 		}
 
@@ -494,7 +494,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 
@@ -527,7 +527,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 		go func() {
@@ -548,7 +548,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
 			return
 		}
 
@@ -573,7 +573,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 
@@ -600,7 +600,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 
@@ -618,7 +618,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
 			return
 		}
 
@@ -633,7 +633,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 
@@ -659,7 +659,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		})
 
 		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
 			return
 		}
 
@@ -690,7 +690,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		oSession, bGotten := cidToSession.Get(sCId)
 		if !bGotten || !oSession.Load().Authenticated {
-			pkg.Logger(pkg.WebsocketAdmin).Info("not authenticated, ignore message", zap.Stringer("remoteAddr", oConn.RemoteAddr()))
+			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info("not authenticated, ignore message", zap.Stringer("remoteAddr", oConn.RemoteAddr()))
 			return
 		}
 
@@ -709,7 +709,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		cIdsChannels.RemoveLeft(sCId)
 		auIdCIds.RemoveRight(sCId)
 
-		pkg.Logger(pkg.WebsocketAdmin).Info(
+		pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info(
 			"disconnected",
 			zap.String("cid", sCId),
 			zap.Stringer("remoteAddr", oConn.RemoteAddr()),
@@ -735,7 +735,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 				oConn := oThisSession.Connection
 
-				pkg.Logger(pkg.WebsocketAdmin).Info(
+				pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info(
 					"actived timeout, force close",
 					zap.String("cid", sCId),
 					zap.Duration("idle", oIdle),

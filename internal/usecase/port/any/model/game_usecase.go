@@ -2,7 +2,7 @@ package usecasePortAnyModel
 
 import (
 	domain "example/internal/domain"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameUsecase interface {
@@ -10,6 +10,6 @@ type GameUsecase interface {
 	ShowOneById(iId uint) (*domain.Game, error)
 	EditOneById(oValue *domain.GameValue, iId uint64) (bool, error)
 	RemoveOneById(iId uint) (bool, error)
-	TotalByFilters(aFilters []*pkg.Filter) (uint64, error)
-	ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error)
+	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
+	ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error)
 }

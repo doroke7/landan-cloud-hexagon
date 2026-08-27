@@ -4,7 +4,7 @@ import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type TableUsecase struct {
@@ -19,7 +19,7 @@ func NewTableUsecase(oAbstractUsecase *AbstractUsecase, oTableLogic outputPortAn
 	}
 }
 
-func (oSelf *TableUsecase) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, int64, error) {
+func (oSelf *TableUsecase) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, int64, error) {
 
 	aTables, iTotal, oErr := oSelf.TableLogic.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 

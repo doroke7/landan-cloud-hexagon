@@ -6,7 +6,7 @@ import (
 
 	bootstrap "example/bootstrap"
 	utility "example/internal/utility"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 type LoggerMiddleware struct {
@@ -31,7 +31,7 @@ func (oSelf *LoggerMiddleware) Handle() gin.HandlerFunc {
 		sRawQuery := oContext.Request.URL.RawQuery
 		oMapHeaders := oContext.Request.Header
 		if bootstrap.CONFIG.LOGGERS.MIDDLEWARE.STATUS {
-			pkg.Logger(pkg.HttpAdminMiddleware).Info(
+			pkgUtility.Logger(pkgUtility.HttpAdminMiddleware).Info(
 				"進入 http",
 				zap.String("path", sPath),
 				zap.String("query", sRawQuery),
@@ -43,7 +43,7 @@ func (oSelf *LoggerMiddleware) Handle() gin.HandlerFunc {
 		iTime2 := utility.Time[int](true)
 
 		if bootstrap.CONFIG.LOGGERS.MIDDLEWARE.STATUS {
-			pkg.Logger(pkg.HttpAdminMiddleware).Info(
+			pkgUtility.Logger(pkgUtility.HttpAdminMiddleware).Info(
 				"結束 http",
 				zap.String("path", sPath),
 				zap.String("query", sRawQuery),

@@ -11,7 +11,7 @@ import (
 
 	container "example/container"
 	registerRabbitmq "example/internal/register/rabbitmq"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 var oRabbitmqCommand = &cobra.Command{
@@ -32,7 +32,7 @@ var oRabbitmqCommand = &cobra.Command{
 		// 不是靠 process 被系統強制殺掉才停止消費。
 		defer stop()
 
-		pkg.Logger(pkg.Default).Info("啟動 RABBITMQ 服務。")
+		pkgUtility.Logger(pkgUtility.Default).Info("啟動 RABBITMQ 服務。")
 
 		if err := oRabbitmqRouter.Serve(ctx); err != nil {
 			log.Printf("rabbitmq stopped: %v", err)

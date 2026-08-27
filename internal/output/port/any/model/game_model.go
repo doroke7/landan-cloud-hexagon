@@ -2,7 +2,7 @@ package outputPortAnyModel
 
 import (
 	domain "example/internal/domain"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameModel interface {
@@ -11,6 +11,6 @@ type GameModel interface {
 	EditOneById(oGame *domain.GameValue, iId uint) (bool, error)
 	RemoveOneById(iId uint) (bool, error)
 
-	ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error)
-	TotalByFilters(aFilters []*pkg.Filter) (uint64, error)
+	ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error)
+	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
 }

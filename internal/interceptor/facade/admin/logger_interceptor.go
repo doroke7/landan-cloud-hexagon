@@ -8,7 +8,7 @@ import (
 
 	bootstrap "example/bootstrap"
 	utility "example/internal/utility"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 type LoggerInterceptor struct {
@@ -31,7 +31,7 @@ func (oSelf *LoggerInterceptor) Handle() grpc.UnaryServerInterceptor {
 		iTime1 := utility.Time[int](true)
 
 		if bootstrap.CONFIG.LOGGERS.INTERCEPTOR.STATUS {
-			pkg.Logger(pkg.FacadeAdminInterceptor).Info(
+			pkgUtility.Logger(pkgUtility.FacadeAdminInterceptor).Info(
 				"進入 grpc",
 				zap.String("method", info.FullMethod),
 				zap.Any("request", req),
@@ -42,7 +42,7 @@ func (oSelf *LoggerInterceptor) Handle() grpc.UnaryServerInterceptor {
 		iTime2 := utility.Time[int](true)
 
 		if bootstrap.CONFIG.LOGGERS.INTERCEPTOR.STATUS {
-			pkg.Logger(pkg.FacadeAdminInterceptor).Info(
+			pkgUtility.Logger(pkgUtility.FacadeAdminInterceptor).Info(
 				"結束 grpc",
 				zap.String("method", info.FullMethod),
 				zap.Any("response", oResponse),

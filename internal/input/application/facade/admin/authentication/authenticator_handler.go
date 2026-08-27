@@ -10,7 +10,7 @@ import (
 	inputApplicationFacade "example/internal/input/application/facade"
 	usecasePortAnyAdminAuthentication "example/internal/usecase/port/any/admin/authentication"
 	pbFacadeAdminAuthentication "example/pb/facade/admin/authentication"
-	"example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 type AuthenticatorHandler struct {
@@ -31,7 +31,7 @@ func (oSelf *AuthenticatorHandler) SignIn(oContext context.Context, oRequest *pb
 	sAuthorization, oErr := oSelf.AuthenticatorUsecase.SignIn(oRequest.Name, oRequest.Password, bootstrap.CONFIG.SERVICES.FACADE.ADMIN.JWT.SECRET)
 
 	if oErr != nil {
-		if oDefaultError, bOk := oErr.(*pkg.DefaultError); bOk {
+		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 			return nil, status.Error(codes.Aborted, oDefaultError.Error())
 		}
 

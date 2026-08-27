@@ -6,7 +6,7 @@ import (
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type TableUsecase struct {
@@ -61,7 +61,7 @@ func (oSelf *TableUsecase) RemoveOne(iId uint) (bool, error) {
 	return true, nil
 }
 
-func (oSelf *TableUsecase) ShowOnes(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, uint64, error) {
+func (oSelf *TableUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {
 
 	aTables, iTotal, oErr := oSelf.TableLogic.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 

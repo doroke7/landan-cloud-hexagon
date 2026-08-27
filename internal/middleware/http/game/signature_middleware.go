@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 	types "example/types"
 
 	bootstrap "example/bootstrap"
@@ -71,7 +71,7 @@ func (oSelf *SignatureMiddleware) Handle() gin.HandlerFunc {
 					   3-1. 這個會 Abort + Error + 寫入 http-status
 					   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 				*/
-				_ = oContext.Error(pkg.NewDefaultError("簽名失敗", -3, 406))
+				_ = oContext.Error(pkgUtility.NewDefaultError("簽名失敗", -3, 406))
 				oContext.Abort()
 				return
 			}

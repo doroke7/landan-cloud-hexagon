@@ -8,7 +8,7 @@ import (
 	"go.uber.org/zap/zapcore"
 
 	bootstrap "example/bootstrap"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 type ResponseMiddleware struct {
@@ -67,7 +67,7 @@ func (oSelf *ResponseMiddleware) Handle() gin.HandlerFunc {
 			}
 			aByteStack := make([]byte, 4096)
 			iLen := runtime.Stack(aByteStack, false)
-			pkg.Logger(pkg.HttpTableMiddleware).Log(
+			pkgUtility.Logger(pkgUtility.HttpTableMiddleware).Log(
 				iLevel,
 				"前級系統錯誤4",
 				zap.Any("message", sMessage),

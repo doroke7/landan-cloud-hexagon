@@ -9,7 +9,7 @@ import (
 
 	bootstrap "example/bootstrap"
 	utility "example/internal/utility"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 type EncryptionMiddleware struct {
@@ -67,7 +67,7 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkg.NewDefaultError("加密失敗", -4, 500))
+			_ = oContext.Error(pkgUtility.NewDefaultError("加密失敗", -4, 500))
 			oContext.Abort()
 
 			return
@@ -88,7 +88,7 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkg.NewDefaultError("加密失敗", -4, 500))
+			_ = oContext.Error(pkgUtility.NewDefaultError("加密失敗", -4, 500))
 			oContext.Abort()
 
 			return
@@ -109,7 +109,7 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkg.NewDefaultError("加密失敗", -4, 500))
+			_ = oContext.Error(pkgUtility.NewDefaultError("加密失敗", -4, 500))
 			oContext.Abort()
 
 			return
@@ -130,7 +130,7 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkg.NewDefaultError("加密失敗", -4, 500))
+			_ = oContext.Error(pkgUtility.NewDefaultError("加密失敗", -4, 500))
 			oContext.Abort()
 
 			return
@@ -154,7 +154,7 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 					   3-1. 這個會 Abort + Error + 寫入 http-status
 					   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 				*/
-				_ = oContext.Error(pkg.NewDefaultError("加密失敗", -4, 500))
+				_ = oContext.Error(pkgUtility.NewDefaultError("加密失敗", -4, 500))
 				oContext.Abort()
 
 				return

@@ -2,7 +2,7 @@ package usecasePortAnyAdminResource
 
 import (
 	domain "example/internal/domain"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type TableUsecase interface {
@@ -10,5 +10,5 @@ type TableUsecase interface {
 	ShowOne(iId uint) (*domain.Table, error)
 	EditOne(oValue *domain.TableValue, iId uint) (bool, error)
 	RemoveOne(iId uint) (bool, error)
-	ShowOnes(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, uint64, error)
+	ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error)
 }

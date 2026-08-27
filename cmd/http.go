@@ -15,7 +15,7 @@ import (
 	bootstrap "example/bootstrap"
 	container "example/container"
 	registerHttp "example/internal/register/http"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 var oHttpCommand = &cobra.Command{
@@ -46,7 +46,7 @@ var oHttpCommand = &cobra.Command{
 			oHttpServer.Shutdown(context.Background())
 		}()
 
-		pkg.Logger(pkg.Default).Info("啟動 HTTP 服務。 port: " + bootstrap.CONFIG.SERVICES.HTTP.PORT)
+		pkgUtility.Logger(pkgUtility.Default).Info("啟動 HTTP 服務。 port: " + bootstrap.CONFIG.SERVICES.HTTP.PORT)
 
 		if err := oHttpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatal(err)

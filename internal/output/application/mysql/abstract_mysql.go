@@ -4,7 +4,9 @@ import (
 	"context"
 	"strings"
 
-	pkg "example/pkg"
+	pkgCache "example/pkg/cache"
+	pkgInput "example/pkg/input"
+	pkgMysql "example/pkg/mysql"
 
 	"gorm.io/gorm"
 )
@@ -25,15 +27,15 @@ var oOperatorMap = map[string]string{
 	"between":     "BETWEEN",
 }
 
-// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
+// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkgCache.Aop、cache/memory 的
 // AbstractRepository 做法一致。
 type AbstractMysql struct {
 	DB      *gorm.DB
 	Context context.Context
-	*pkg.Aop
+	*pkgCache.Aop
 }
 
-func NewAbstractMysql(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *AbstractMysql {
+func NewAbstractMysql(oContext context.Context, oDb *gorm.DB, oAop *pkgCache.Aop) *AbstractMysql {
 
 	return &AbstractMysql{
 		DB:      oDb,
@@ -42,8 +44,8 @@ func NewAbstractMysql(oContext context.Context, oDb *gorm.DB, oAop *pkg.Aop) *Ab
 	}
 }
 
-func (oSelf *AbstractMysql) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.MysqlWhere {
-	aWheres := make([]*pkg.MysqlWhere, 0, len(aFilters))
+func (oSelf *AbstractMysql) FiltersToWheres(aFilters []*pkgInput.Filter) []*pkgMysql.MysqlWhere {
+	aWheres := make([]*pkgMysql.MysqlWhere, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil {
@@ -71,7 +73,7 @@ func (oSelf *AbstractMysql) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.Mysql
 		}
 
 		sField := "`" + *oFilter.Field + "`"
-		aWheres = append(aWheres, &pkg.MysqlWhere{
+		aWheres = append(aWheres, &pkgMysql.MysqlWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,
@@ -81,8 +83,8 @@ func (oSelf *AbstractMysql) FiltersToWheres(aFilters []*pkg.Filter) []*pkg.Mysql
 	return aWheres
 }
 
-func (oSelf *AbstractMysql) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.MysqlOrder {
-	aOrders := make([]*pkg.MysqlOrder, 0, len(aSorters))
+func (oSelf *AbstractMysql) SortersToOrders(aSorters []*pkgInput.Sorter) []*pkgMysql.MysqlOrder {
+	aOrders := make([]*pkgMysql.MysqlOrder, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
 		if oSorter == nil || oSorter.Field == nil {
@@ -95,7 +97,7 @@ func (oSelf *AbstractMysql) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.Mysql
 		}
 
 		sField := "`" + *oSorter.Field + "`"
-		aOrders = append(aOrders, &pkg.MysqlOrder{
+		aOrders = append(aOrders, &pkgMysql.MysqlOrder{
 			Field: &sField,
 			Value: &sDirection,
 		})
@@ -104,7 +106,7 @@ func (oSelf *AbstractMysql) SortersToOrders(aSorters []*pkg.Sorter) []*pkg.Mysql
 	return aOrders
 }
 
-func (oSelf *AbstractMysql) PaginationToLimit(oPagination *pkg.Pagination) *pkg.MysqlLimit {
+func (oSelf *AbstractMysql) PaginationToLimit(oPagination *pkgInput.Pagination) *pkgMysql.MysqlLimit {
 	iSize := uint(10)
 	iPage := uint(1)
 
@@ -118,7 +120,7 @@ func (oSelf *AbstractMysql) PaginationToLimit(oPagination *pkg.Pagination) *pkg.
 
 	iOffset := (iPage - 1) * iSize
 
-	return &pkg.MysqlLimit{
+	return &pkgMysql.MysqlLimit{
 		Offset: &iOffset,
 		Count:  &iSize,
 	}

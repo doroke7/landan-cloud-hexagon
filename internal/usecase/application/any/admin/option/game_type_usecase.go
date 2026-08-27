@@ -5,7 +5,7 @@ import (
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminOption "example/internal/usecase/port/any/admin/option"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameTypeUsecase struct {
@@ -20,7 +20,7 @@ func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oAbstra
 	}
 }
 
-func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, uint64, error) {
+func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
 
 	aGameTypes, oErr := oSelf.GameTypeModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {

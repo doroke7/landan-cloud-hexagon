@@ -7,7 +7,7 @@ import (
 
 	amqp "github.com/rabbitmq/amqp091-go"
 
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 
 	inputApplicationRabbitmq "example/internal/input/application/rabbitmq"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
@@ -33,7 +33,7 @@ func NewAppUserHandler(oAppUserUsecase usecasePortAnyAdminResource.AppUserUsecas
 func (oSelf *AppUserHandler) IncreaseBalance(msg amqp.Delivery) {
 	var payload increaseBalanceMessage
 	if err := json.Unmarshal(msg.Body, &payload); err != nil {
-		pkg.Logger(pkg.Consumer).Error("IncreaseBalance 訊息格式錯誤",
+		pkgUtility.Logger(pkgUtility.Consumer).Error("IncreaseBalance 訊息格式錯誤",
 			zap.Error(err),
 		)
 		msg.Nack(false, false)
@@ -42,7 +42,7 @@ func (oSelf *AppUserHandler) IncreaseBalance(msg amqp.Delivery) {
 
 	bResult, err := oSelf.appUserUsecase.IncreaseBalance(payload.Id, payload.Amount)
 	if err != nil {
-		pkg.Logger(pkg.Consumer).Error("IncreaseBalance 失敗",
+		pkgUtility.Logger(pkgUtility.Consumer).Error("IncreaseBalance 失敗",
 			zap.Uint("id", payload.Id),
 			zap.Error(err),
 		)
@@ -50,7 +50,7 @@ func (oSelf *AppUserHandler) IncreaseBalance(msg amqp.Delivery) {
 		return
 	}
 
-	pkg.Logger(pkg.Consumer).Info("IncreaseBalance 成功",
+	pkgUtility.Logger(pkgUtility.Consumer).Info("IncreaseBalance 成功",
 		zap.Uint("id", payload.Id),
 		zap.Bool("status", bResult),
 	)

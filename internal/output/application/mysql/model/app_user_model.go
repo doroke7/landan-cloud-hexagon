@@ -8,7 +8,7 @@ import (
 	domain "example/internal/domain"
 	mysqlBase "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pkg "example/pkg"
+	pkgUtility "example/pkg/utility"
 )
 
 type AppUserModel struct {
@@ -66,7 +66,7 @@ func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) (bool, error) {
 	var oAppUserRow domain.AppUserRow
 
-	oColumns, oErr := pkg.StructToMap(oValue)
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return false, oErr
 	}

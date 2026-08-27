@@ -10,7 +10,8 @@ import (
 	domain "example/internal/domain"
 	clickhouseBase "example/internal/output/application/clickhouse"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type TableModel struct {
@@ -47,7 +48,7 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool, error) {
 	var oTableRow domain.TableRow
 
-	oColumns, oErr := pkg.StructToMap(oTable)
+	oColumns, oErr := pkgUtility.StructToMap(oTable)
 	if oErr != nil {
 		return false, oErr
 	}
@@ -82,7 +83,7 @@ func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
 	return true, nil
 }
 
-func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Table, error) {
+func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
 	aWheres := oSelf.AbstractClickhouse.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractClickhouse.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractClickhouse.PaginationToLimit(oPagination)
@@ -130,7 +131,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkg.
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractClickhouse.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -156,7 +157,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) 
 func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
 	var oTableRow domain.TableRow
 
-	oColumns, oErr := pkg.StructToMap(oTable)
+	oColumns, oErr := pkgUtility.StructToMap(oTable)
 	if oErr != nil {
 		return false, oErr
 	}

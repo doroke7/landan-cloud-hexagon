@@ -2,7 +2,7 @@ package usecasePortAnyAdminResource
 
 import (
 	domain "example/internal/domain"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
 )
 
 type GameTypeUsecase interface {
@@ -10,5 +10,5 @@ type GameTypeUsecase interface {
 	ShowOne(iId uint) (*domain.GameType, error)
 	EditOne(oValue *domain.GameTypeValue, iId uint) (bool, error)
 	RemoveOne(iId uint) (bool, error)
-	ShowOnes(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.GameType, uint64, error)
+	ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error)
 }

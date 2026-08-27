@@ -10,7 +10,8 @@ import (
 	domain "example/internal/domain"
 	sqliteBase "example/internal/output/application/sqlite"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pkg "example/pkg"
+	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type GameModel struct {
@@ -41,7 +42,7 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 	return domain.GameRowToGame(&oGameRow), nil
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Filter, aSorters []*pkg.Sorter, oPagination *pkg.Pagination) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractSqlite.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractSqlite.PaginationToLimit(oPagination)
@@ -88,7 +89,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkg.Fi
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -114,7 +115,7 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkg.Filter) (uint64, error) {
 func (oSelf *GameModel) AddOne(oValue *domain.GameValue) (bool, error) {
 	var oGameRow domain.GameRow
 
-	oGame, _ := pkg.StructToMap(oValue)
+	oGame, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&oGameRow).
@@ -134,7 +135,7 @@ func (oSelf *GameModel) AddOne(oValue *domain.GameValue) (bool, error) {
 func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) (bool, error) {
 	var oGameRow domain.GameRow
 
-	oGame, _ := pkg.StructToMap(oValue)
+	oGame, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&oGameRow).
