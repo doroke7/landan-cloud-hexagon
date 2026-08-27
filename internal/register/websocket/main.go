@@ -15,6 +15,7 @@ import (
 	bootstrap "example/bootstrap"
 	container "example/container"
 	pkgUtility "example/pkg/utility"
+	pkgWebsocket "example/pkg/websocket"
 	types "example/types"
 )
 
@@ -33,14 +34,14 @@ import (
 // 整個 Store 換新」，這種寫法只在單一寫入者時才安全——如果之後有其他
 // goroutine 也要寫，得改成 CompareAndSwap 迴圈才不會遺失更新。
 type Session struct {
-	Connection    *WebsocketConn
+	Connection    *pkgWebsocket.Conn
 	ActivedAt     time.Time
 	Authenticated bool
 	Key           string
 	Iv            string
 }
 
-func NewSession(oConn *WebsocketConn) *atomic.Pointer[Session] {
+func NewSession(oConn *pkgWebsocket.Conn) *atomic.Pointer[Session] {
 	oSession := new(atomic.Pointer[Session])
 	oSession.Store(&Session{Connection: oConn, ActivedAt: time.Now()})
 
@@ -135,7 +136,7 @@ event:
 
 func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 
-	oAdminEventer := NewWebsocketEventer(websocket.Upgrader{
+	oAdminEventer := pkgWebsocket.NewEventer(websocket.Upgrader{
 		CheckOrigin: func(oRequest *http.Request) bool {
 			return true
 		},
@@ -163,7 +164,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 	}
 
-	oAdminEventer.OnOpen(func(oConn *WebsocketConn, iType int) {
+	oAdminEventer.OnOpen(func(oConn *pkgWebsocket.Conn, iType int) {
 		pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info("OnOpen", zap.Stringer("remoteAddr", oConn.RemoteAddr()))
 
 		sCId := uuid.New().String()
@@ -184,7 +185,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 	})
 
-	oAdminEventer.OnPong(func(oConn *WebsocketConn) {
+	oAdminEventer.OnPong(func(oConn *pkgWebsocket.Conn) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
@@ -195,7 +196,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 	})
 
-	oAdminEventer.OnConnect(func(oConn *WebsocketConn, iType int, oWsReq *types.WebsocketRequest) {
+	oAdminEventer.OnConnect(func(oConn *pkgWebsocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sPointer := fmt.Sprintf("%p", oConn)
 
 		sCId, _ := pointerToCid.Get(sPointer)
@@ -245,7 +246,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 	})
 
-	oAdminEventer.OnHeartbeat(func(oConn *WebsocketConn, iType int, oWsReq *types.WebsocketRequest) {
+	oAdminEventer.OnHeartbeat(func(oConn *pkgWebsocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
@@ -270,7 +271,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		oConn.WriteMessage(iType, aByteMessage)
 	})
 
-	oAdminEventer.OnAuthenticate(func(oConn *WebsocketConn, iType int, oWsReq *types.WebsocketRequest) bool {
+	oAdminEventer.OnAuthenticate(func(oConn *pkgWebsocket.Conn, iType int, oWsReq *types.WebsocketRequest) bool {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
@@ -326,7 +327,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 	// OnRpc 先把 Method 取出來，但目前還沒有真的依它分派到對應的業務邏輯
 	// （resource/AppUser/ShowOne 之類的 Action Route），只回 rpced 確認收到。
-	oAdminEventer.OnRpc(func(oConn *WebsocketConn, iType int, oWsReq *types.WebsocketRequest) {
+	oAdminEventer.OnRpc(func(oConn *pkgWebsocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sMethod := oWsReq.Method
 		pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info("OnRpc", zap.String("method", sMethod))
 
@@ -346,7 +347,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		oConn.WriteMessage(iType, aByteMessage)
 	})
 
-	oAdminEventer.OnSubscribe(func(oConn *WebsocketConn, iType int, oWsReq *types.WebsocketRequest) {
+	oAdminEventer.OnSubscribe(func(oConn *pkgWebsocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
@@ -401,7 +402,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}()
 	})
 
-	oAdminEventer.OnPresent(func(oConn *WebsocketConn, iType int, oWsReq *types.WebsocketRequest) {
+	oAdminEventer.OnPresent(func(oConn *pkgWebsocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
@@ -468,7 +469,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		oConn.WriteMessage(iType, aByteMessage)
 	})
 
-	oAdminEventer.OnChat(func(oConn *WebsocketConn, iType int, oWsReq *types.WebsocketRequest) {
+	oAdminEventer.OnChat(func(oConn *pkgWebsocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
@@ -538,7 +539,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 	// OnBroadcast 目前還沒有真的依 Method（gift/like 之類）分派到對應的業務
 	// 邏輯，先把整個 value 原封不動連同 method 一起轉發給頻道成員，讓前端自己
 	// 依 method 處理內容；跟 OnChat 一樣，channel 沒人訂閱就直接忽略。
-	oAdminEventer.OnBroadcast(func(oConn *WebsocketConn, iType int, oWsReq *types.WebsocketRequest) {
+	oAdminEventer.OnBroadcast(func(oConn *pkgWebsocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
@@ -608,7 +609,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}()
 	})
 
-	oAdminEventer.OnNotify(func(oConn *WebsocketConn, iType int, oWsReq *types.WebsocketRequest) {
+	oAdminEventer.OnNotify(func(oConn *pkgWebsocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
@@ -674,7 +675,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}()
 	})
 
-	oAdminEventer.OnUnsubscribe(func(oConn *WebsocketConn, iType int) {
+	oAdminEventer.OnUnsubscribe(func(oConn *pkgWebsocket.Conn, iType int) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
@@ -683,7 +684,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		cIdsChannels.RemoveLeft(sCId)
 	})
 
-	oAdminEventer.OnMessage(func(oConn *WebsocketConn, iType int, aMsg []byte) {
+	oAdminEventer.OnMessage(func(oConn *pkgWebsocket.Conn, iType int, aMsg []byte) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
@@ -697,7 +698,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 	})
 
 	// OnClose 是收不到 cid 的
-	oAdminEventer.OnClose(func(oConn *WebsocketConn, iType int) {
+	oAdminEventer.OnClose(func(oConn *pkgWebsocket.Conn, iType int) {
 		sPointer := fmt.Sprintf("%p", oConn)
 
 		sCId, _ := pointerToCid.Get(sPointer)

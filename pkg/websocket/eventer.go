@@ -1,4 +1,4 @@
-package registerWebsocket
+package pkgWebsocket
 
 import (
 	"encoding/json"
@@ -16,24 +16,24 @@ import (
 // WebsocketOnConnectFunc / WebsocketOnMessageFunc / WebsocketOnCloseFunc 是連線生命週期
 // 三個時機點各自的處理方法簽名，職責跟 TcpRouter 的 method 對照表一樣：eventer 只負責在對的
 // 時機呼叫對的方法，實際要做什麼交給呼叫端注入。
-type WebsocketOnConnectFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnConnectFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
 
 // WebsocketOnOpenFunc 的 iType 在 upgrade 剛完成、還沒讀過任何一個 frame 時呼叫，
 // 沒有真正的 frame type 可以帶，ServeHTTP 固定傳 0，純粹是為了跟其他四個 callback 簽名一致。
-type WebsocketOnOpenFunc func(oConn *WebsocketConn, iType int)
+type WebsocketOnOpenFunc func(oConn *Conn, iType int)
 
 // WebsocketOnAuthenticateFunc 回傳 bool 表示驗證是否通過：true 讓連線繼續往下讀之後的訊息，
 // false 讓 ServeHTTP 關閉連線——跟 onConnect／onOpen 不同，這裡的結果會影響連線生死。
-type WebsocketOnAuthenticateFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest) bool
-type WebsocketOnMessageFunc func(oConn *WebsocketConn, iType int, aMsg []byte)
-type WebsocketOnCloseFunc func(oConn *WebsocketConn, iType int)
+type WebsocketOnAuthenticateFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest) bool
+type WebsocketOnMessageFunc func(oConn *Conn, iType int, aMsg []byte)
+type WebsocketOnCloseFunc func(oConn *Conn, iType int)
 
 // WebsocketOnUnsubscribeFunc 有兩種觸發時機：一是 client 主動送 event: "unsubscribe"；
 // 二是 websocket 協定層級的斷線（iType == -1 時），這種情況跟 OnClose 綁在同一個時間點
 // 一起觸發，讓呼叫端在連線真的斷掉那一刻，順便清掉這個連線訂閱的 channel。兩種情境都
 // 不需要 reply、也不需要新的 request 資料（清的是已經記錄住的訂閱狀態），所以共用同一個
 // 簽名，不帶 oReq。
-type WebsocketOnUnsubscribeFunc func(oConn *WebsocketConn, iType int)
+type WebsocketOnUnsubscribeFunc func(oConn *Conn, iType int)
 
 // WebsocketOnHeartbeatFunc / WebsocketOnRpcFunc / WebsocketOnSubscribeFunc /
 // WebsocketOnBroadcastFunc / WebsocketOnNotifyFunc / WebsocketOnRefreshFunc /
@@ -42,24 +42,24 @@ type WebsocketOnUnsubscribeFunc func(oConn *WebsocketConn, iType int)
 // broadcast/notify/refresh/chat/present）觸發，簽名比照 OnConnect，不像
 // OnAuthenticate 需要回傳值決定連線生死，處理完就 continue，不會落到下面的
 // onMessage。
-type WebsocketOnHeartbeatFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnRpcFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnSubscribeFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnBroadcastFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnNotifyFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnRefreshFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnChatFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnPresentFunc func(oConn *WebsocketConn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnHeartbeatFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnRpcFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnSubscribeFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnBroadcastFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnNotifyFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnRefreshFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnChatFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type WebsocketOnPresentFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
 
 // WebsocketOnPongFunc 是 websocket 協定層級的 Pong（client 回應 ServeHTTP 定時送出的
 // Ping）：觸發時機在 gorilla 的 SetPongHandler 裡，沒有 frame type、也沒有解析出
 // request，簽名只帶 oConn，讓呼叫端可以用它更新連線的最後活躍時間。
-type WebsocketOnPongFunc func(oConn *WebsocketConn)
+type WebsocketOnPongFunc func(oConn *Conn)
 
-// WebsocketEventer 職責跟 TcpRouter 一樣：只負責「連線生命週期」機制本身
+// Eventer 職責跟 TcpRouter 一樣：只負責「連線生命週期」機制本身
 // （upgrade、read loop、斷線偵測、ping/pong keepalive），不管收到訊息／連線／斷線後
 // 實際要做什麼——通訊邏輯（這支檔案）跟業務邏輯（呼叫端注入的三個 callback）完全分開。
-type WebsocketEventer struct {
+type Eventer struct {
 	upgrader       websocket.Upgrader
 	onOpen         WebsocketOnOpenFunc
 	onConnect      WebsocketOnConnectFunc
@@ -78,87 +78,87 @@ type WebsocketEventer struct {
 	onPresent      WebsocketOnPresentFunc
 }
 
-func NewWebsocketEventer(oUpgrader websocket.Upgrader) *WebsocketEventer {
-	return &WebsocketEventer{upgrader: oUpgrader}
+func NewEventer(oUpgrader websocket.Upgrader) *Eventer {
+	return &Eventer{upgrader: oUpgrader}
 }
 
-func (oSelf *WebsocketEventer) OnOpen(fnHandler WebsocketOnOpenFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnOpen(fnHandler WebsocketOnOpenFunc) *Eventer {
 	oSelf.onOpen = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnConnect(fnHandler WebsocketOnConnectFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnConnect(fnHandler WebsocketOnConnectFunc) *Eventer {
 	oSelf.onConnect = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnAuthenticate(fnHandler WebsocketOnAuthenticateFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnAuthenticate(fnHandler WebsocketOnAuthenticateFunc) *Eventer {
 	oSelf.onAuthenticate = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnClose(fnHandler WebsocketOnCloseFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnClose(fnHandler WebsocketOnCloseFunc) *Eventer {
 	oSelf.onClose = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnUnsubscribe(fnHandler WebsocketOnUnsubscribeFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnUnsubscribe(fnHandler WebsocketOnUnsubscribeFunc) *Eventer {
 	oSelf.onUnsubscribe = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnHeartbeat(fnHandler WebsocketOnHeartbeatFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnHeartbeat(fnHandler WebsocketOnHeartbeatFunc) *Eventer {
 	oSelf.onHeartbeat = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnRpc(fnHandler WebsocketOnRpcFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnRpc(fnHandler WebsocketOnRpcFunc) *Eventer {
 	oSelf.onRpc = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnSubscribe(fnHandler WebsocketOnSubscribeFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnSubscribe(fnHandler WebsocketOnSubscribeFunc) *Eventer {
 	oSelf.onSubscribe = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnBroadcast(fnHandler WebsocketOnBroadcastFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnBroadcast(fnHandler WebsocketOnBroadcastFunc) *Eventer {
 	oSelf.onBroadcast = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnNotify(fnHandler WebsocketOnNotifyFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnNotify(fnHandler WebsocketOnNotifyFunc) *Eventer {
 	oSelf.onNotify = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnMessage(fnHandler WebsocketOnMessageFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnMessage(fnHandler WebsocketOnMessageFunc) *Eventer {
 	oSelf.onMessage = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnRefresh(fnHandler WebsocketOnRefreshFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnRefresh(fnHandler WebsocketOnRefreshFunc) *Eventer {
 	oSelf.onRefresh = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnPong(fnHandler WebsocketOnPongFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnPong(fnHandler WebsocketOnPongFunc) *Eventer {
 	oSelf.onPong = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnChat(fnHandler WebsocketOnChatFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnChat(fnHandler WebsocketOnChatFunc) *Eventer {
 	oSelf.onChat = fnHandler
 	return oSelf
 }
 
-func (oSelf *WebsocketEventer) OnPresent(fnHandler WebsocketOnPresentFunc) *WebsocketEventer {
+func (oSelf *Eventer) OnPresent(fnHandler WebsocketOnPresentFunc) *Eventer {
 	oSelf.onPresent = fnHandler
 	return oSelf
 }
 
-// ServeHTTP 讓 WebsocketEventer 可以直接掛進 http.ServeMux，用法跟其他 http.Handler 一樣。
-func (oSelf *WebsocketEventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *http.Request) {
+// ServeHTTP 讓 Eventer 可以直接掛進 http.ServeMux，用法跟其他 http.Handler 一樣。
+func (oSelf *Eventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *http.Request) {
 	oRawConn, oErr := oSelf.upgrader.Upgrade(oWriter, oRequest, nil)
 
 	if oErr != nil {

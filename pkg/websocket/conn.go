@@ -1,4 +1,4 @@
-package registerWebsocket
+package pkgWebsocket
 
 import (
 	"net"
@@ -18,7 +18,7 @@ type outboundMessage struct {
 	aData []byte
 }
 
-type WebsocketConn struct {
+type Conn struct {
 	Conn      *websocket.Conn
 	Outbox    chan outboundMessage
 	Done      chan struct{}
@@ -27,8 +27,8 @@ type WebsocketConn struct {
 
 const connOutboxSize = 32
 
-func NewConn(oConn *websocket.Conn) *WebsocketConn {
-	oSelf := &WebsocketConn{
+func NewConn(oConn *websocket.Conn) *Conn {
+	oSelf := &Conn{
 		Conn:   oConn,
 		Outbox: make(chan outboundMessage, connOutboxSize),
 		Done:   make(chan struct{}),
@@ -39,7 +39,7 @@ func NewConn(oConn *websocket.Conn) *WebsocketConn {
 	return oSelf
 }
 
-func (oSelf *WebsocketConn) runWriter() {
+func (oSelf *Conn) runWriter() {
 	for {
 		select {
 		case oMsg := <-oSelf.Outbox:
@@ -55,7 +55,7 @@ func (oSelf *WebsocketConn) runWriter() {
 
 // WriteMessage 不回傳 error：實際寫入是非同步的，呼叫當下還不知道會不會成功，
 // 現有呼叫端本來也都沒在檢查回傳值。
-func (oSelf *WebsocketConn) WriteMessage(iType int, aData []byte) {
+func (oSelf *Conn) WriteMessage(iType int, aData []byte) {
 	select {
 	case oSelf.Outbox <- outboundMessage{iType: iType, aData: aData}:
 	default:
@@ -63,11 +63,11 @@ func (oSelf *WebsocketConn) WriteMessage(iType int, aData []byte) {
 	}
 }
 
-func (oSelf *WebsocketConn) ReadMessage() (int, []byte, error) {
+func (oSelf *Conn) ReadMessage() (int, []byte, error) {
 	return oSelf.Conn.ReadMessage()
 }
 
-func (oSelf *WebsocketConn) Close() error {
+func (oSelf *Conn) Close() error {
 	oSelf.CloseOnce.Do(func() {
 		close(oSelf.Done)
 	})
@@ -75,14 +75,14 @@ func (oSelf *WebsocketConn) Close() error {
 	return oSelf.Conn.Close()
 }
 
-func (oSelf *WebsocketConn) RemoteAddr() net.Addr {
+func (oSelf *Conn) RemoteAddr() net.Addr {
 	return oSelf.Conn.RemoteAddr()
 }
 
-func (oSelf *WebsocketConn) SetReadDeadline(oTime time.Time) error {
+func (oSelf *Conn) SetReadDeadline(oTime time.Time) error {
 	return oSelf.Conn.SetReadDeadline(oTime)
 }
 
-func (oSelf *WebsocketConn) SetPongHandler(fnHandler func(string) error) {
+func (oSelf *Conn) SetPongHandler(fnHandler func(string) error) {
 	oSelf.Conn.SetPongHandler(fnHandler)
 }
