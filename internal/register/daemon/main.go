@@ -1,4 +1,4 @@
-package register
+package registerDaemon
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	pbSourceAnnouncement "example/pb/source/announcement"
 )
 
-func DaemonInit(oContainer *container.DaemonContainer) *pkg.ClientRouter {
+func Init(oContainer *container.DaemonContainer) *pkg.ClientRouter {
 	oRouter := pkg.NewClientRouter()
 
 	oRouter.Handle(func(ctx context.Context) error {

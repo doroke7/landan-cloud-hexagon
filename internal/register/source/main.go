@@ -1,4 +1,4 @@
-package register
+package registerSource
 
 import (
 	"time"
@@ -29,7 +29,7 @@ func sourceInterceptors(_ *container.SourceContainer) grpc.UnaryServerIntercepto
 	return oRouter.Build()
 }
 
-func SourceInit(oContainer *container.SourceContainer) *grpc.Server {
+func Init(oContainer *container.SourceContainer) *grpc.Server {
 
 	oGrpcServer := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(sourceInterceptors(oContainer)),

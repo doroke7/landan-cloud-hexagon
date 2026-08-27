@@ -1,4 +1,4 @@
-package register
+package registerSocketio
 
 import (
 	"net/http"
@@ -10,7 +10,7 @@ import (
 	pkg "example/pkg"
 )
 
-func SocketioInit() (*socketio.Io, *http.ServeMux) {
+func Init() (*socketio.Io, *http.ServeMux) {
 
 	oCors := cors.New(cors.Options{
 		AllowOriginFunc:  func(sOrigin string) bool { return true },

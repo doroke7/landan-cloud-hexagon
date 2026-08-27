@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	register "example/internal/register"
+	registerCommand "example/internal/register/command"
 )
 
 var CommandCommand = &cobra.Command{
@@ -17,6 +17,6 @@ var CommandCommand = &cobra.Command{
 }
 
 func init() {
-	CommandCommand = register.CommandInit(CommandCommand)
+	CommandCommand = registerCommand.Init(CommandCommand)
 	oRootCommand.AddCommand(CommandCommand)
 }

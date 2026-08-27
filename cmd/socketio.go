@@ -7,7 +7,7 @@ import (
 	"github.com/spf13/cobra"
 
 	bootstrap "example/bootstrap"
-	register "example/internal/register"
+	registerSocketio "example/internal/register/socketio"
 	pkg "example/pkg"
 )
 
@@ -26,7 +26,7 @@ var oSocketioCommand = &cobra.Command{
 	Short: "啟動 socketio 服務",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		oServer, oMux := register.SocketioInit()
+		oServer, oMux := registerSocketio.Init()
 
 		defer oServer.Close()
 

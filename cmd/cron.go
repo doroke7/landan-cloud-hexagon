@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	container "example/container"
-	register "example/internal/register"
+	registerCron "example/internal/register/cron"
 	pkg "example/pkg"
 )
 
@@ -22,7 +22,7 @@ var oCronCommand = &cobra.Command{
 
 		oContainer, _ := container.InitCronContainer(ctx)
 
-		oCron := register.CronInit(oContainer)
+		oCron := registerCron.Init(oContainer)
 
 		pkg.Logger(pkg.Default).Info("啟動 CRON 服務。")
 

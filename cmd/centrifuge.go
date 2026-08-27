@@ -13,7 +13,7 @@ import (
 
 	bootstrap "example/bootstrap"
 	container "example/container"
-	register "example/internal/register"
+	registerCentrifuge "example/internal/register/centrifuge"
 	pkg "example/pkg"
 )
 
@@ -31,7 +31,7 @@ var oCentrifugeCommand = &cobra.Command{
 		}
 		defer oContainer.Nats.Close()
 
-		oNode, oHandler := register.CentrifugeInit(oContainer)
+		oNode, oHandler := registerCentrifuge.Init(oContainer)
 
 		oCentrifugeServer := &http.Server{
 			Addr:    ":" + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT,

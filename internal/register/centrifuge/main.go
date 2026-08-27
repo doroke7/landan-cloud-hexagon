@@ -1,4 +1,4 @@
-package register
+package registerCentrifuge
 
 import (
 	"context"
@@ -45,9 +45,9 @@ const subRefreshTTL = 8 * time.Second
 
 */
 
-// CentrifugeInit 組裝 centrifuge.Node 跟它的 websocket handler，回傳 oNode 是因為
+// Init 組裝 centrifuge.Node 跟它的 websocket handler，回傳 oNode 是因為
 // cmd 那邊還需要用它做 Shutdown、以及背景 ticker 呼叫 oNode.Publish(...) 廣播。
-func CentrifugeInit(oContainer *container.CentrifugeContainer) (*centrifuge.Node, http.Handler) {
+func Init(oContainer *container.CentrifugeContainer) (*centrifuge.Node, http.Handler) {
 
 	oNode, oErr := centrifuge.New(
 		centrifuge.Config{

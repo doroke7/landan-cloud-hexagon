@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	container "example/container"
-	register "example/internal/register"
+	registerDaemon "example/internal/register/daemon"
 	pkg "example/pkg"
 )
 
@@ -22,7 +22,7 @@ var oDaemonCommand = &cobra.Command{
 
 		oContainer, _ := container.InitDaemonContainer(ctx)
 
-		oDaemonRouter := register.DaemonInit(oContainer)
+		oDaemonRouter := registerDaemon.Init(oContainer)
 
 		pkg.Logger(pkg.Default).Info("啟動 DAEMON 服務。")
 

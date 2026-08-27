@@ -1,4 +1,4 @@
-package register
+package registerRabbitmq
 
 import (
 	pkg "example/pkg"
@@ -6,7 +6,7 @@ import (
 	container "example/container"
 )
 
-func RabbitmqInit(oContainer *container.RabbitmqContainer) *pkg.RabbitmqRouter {
+func Init(oContainer *container.RabbitmqContainer) *pkg.RabbitmqRouter {
 	oRouter := pkg.NewRabbitmqRouter(oContainer.Conn)
 	oRouter.HandleFunc("Admin.Resource.AppUser.IncreaseBalance", oContainer.ConsumerAdminResourceAppUser.IncreaseBalance)
 

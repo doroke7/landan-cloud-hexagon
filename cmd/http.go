@@ -14,7 +14,7 @@ import (
 
 	bootstrap "example/bootstrap"
 	container "example/container"
-	register "example/internal/register"
+	registerHttp "example/internal/register/http"
 	pkg "example/pkg"
 )
 
@@ -31,7 +31,7 @@ var oHttpCommand = &cobra.Command{
 		}
 		oGin := gin.Default()
 
-		oEngine := register.HttpInit(oGin, oContainer)
+		oEngine := registerHttp.Init(oGin, oContainer)
 
 		// gin.Engine.Run() 內部自己建立 http.Server、拿不到參考做 Shutdown，
 		// 改成自己組 http.Server，收到中斷/終止訊號時主動 Shutdown，

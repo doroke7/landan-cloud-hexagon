@@ -1,4 +1,4 @@
-package register
+package registerFacade
 
 import (
 	"time"
@@ -45,7 +45,7 @@ func facadeInterceptors(oContainer *container.FacadeContainer) grpc.UnaryServerI
 	return oRouter.Build()
 }
 
-func FacadeInit(oContainer *container.FacadeContainer) *grpc.Server {
+func Init(oContainer *container.FacadeContainer) *grpc.Server {
 
 	oGrpcServer := grpc.NewServer(
 		grpc.ChainUnaryInterceptor(facadeInterceptors(oContainer)),

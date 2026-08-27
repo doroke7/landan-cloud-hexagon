@@ -1,4 +1,4 @@
-package register
+package registerCommand
 
 import (
 	"context"
@@ -11,10 +11,10 @@ import (
 	pkg "example/pkg"
 )
 
-// CommandInit 只組裝子命令的「形狀」（名字、flag），不在這裡連任何基礎設施；
+// Init 只組裝子命令的「形狀」（名字、flag），不在這裡連任何基礎設施；
 // container.InitCommandContainer() 延後到 Run: 真正執行時才呼叫，
 // 這樣註冊子命令樹（init() 階段）就不需要先連上 MySQL。
-func CommandInit(oCommandCommand *cobra.Command) *cobra.Command {
+func Init(oCommandCommand *cobra.Command) *cobra.Command {
 	var iId uint
 	var iAmount uint
 

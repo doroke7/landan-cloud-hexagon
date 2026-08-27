@@ -14,7 +14,7 @@ import (
 
 	bootstrap "example/bootstrap"
 	container "example/container"
-	register "example/internal/register"
+	registerResource "example/internal/register/resource"
 )
 
 var oResourceCommand = &cobra.Command{
@@ -30,7 +30,7 @@ var oResourceCommand = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		oResourceServer := register.ResourceInit(oContainer)
+		oResourceServer := registerResource.Init(oContainer)
 
 		oListener, err := net.Listen("tcp", ":"+bootstrap.CONFIG.SERVICES.RESOURCE.PORT)
 		if err != nil {

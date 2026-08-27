@@ -12,7 +12,7 @@ import (
 
 	bootstrap "example/bootstrap"
 	container "example/container"
-	register "example/internal/register"
+	registerWebsocket "example/internal/register/websocket"
 	pkg "example/pkg"
 )
 
@@ -28,7 +28,7 @@ var oWebsocketCommand = &cobra.Command{
 			log.Fatal(err)
 		}
 		// Websocket 才是主要關心的 服務， 所以應該 從 register 取出 websocket 套件
-		oMux := register.WebsocketInit(oContainer)
+		oMux := registerWebsocket.Init(oContainer)
 
 		oWebsocketServer := &http.Server{
 			Addr:    ":" + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT,

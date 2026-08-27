@@ -12,7 +12,7 @@ import (
 
 	bootstrap "example/bootstrap"
 	container "example/container"
-	register "example/internal/register"
+	registerFacade "example/internal/register/facade"
 	pkg "example/pkg"
 )
 
@@ -27,7 +27,7 @@ var oFacadeCommand = &cobra.Command{
 		if err != nil {
 			log.Fatal(err)
 		}
-		oFacadeServer := register.FacadeInit(oContainer)
+		oFacadeServer := registerFacade.Init(oContainer)
 
 		oListener, err := net.Listen("tcp", ":"+bootstrap.CONFIG.SERVICES.FACADE.PORT)
 		if err != nil {

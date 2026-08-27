@@ -11,7 +11,7 @@ import (
 	"github.com/spf13/cobra"
 
 	container "example/container"
-	register "example/internal/register"
+	registerTcp "example/internal/register/tcp"
 	pkg "example/pkg"
 )
 
@@ -29,7 +29,7 @@ var oTcpCommand = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		oTcpRouter := register.TcpInit(oContainer)
+		oTcpRouter := registerTcp.Init(oContainer)
 
 		pkg.Logger(pkg.Default).Info("啟動 TCP 服務。 port: " + bootstrap.CONFIG.SERVICES.TCP.PORT)
 

@@ -10,7 +10,7 @@ import (
 	"github.com/spf13/cobra"
 
 	container "example/container"
-	register "example/internal/register"
+	registerRabbitmq "example/internal/register/rabbitmq"
 	pkg "example/pkg"
 )
 
@@ -26,7 +26,7 @@ var oRabbitmqCommand = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		oRabbitmqRouter := register.RabbitmqInit(oContainer)
+		oRabbitmqRouter := registerRabbitmq.Init(oContainer)
 
 		// 收到中斷/終止訊號時 ctx 會被取消，ConsumerRouter.Serve 監聽 ctx.Done() 後返回，
 		// 不是靠 process 被系統強制殺掉才停止消費。

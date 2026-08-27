@@ -1,4 +1,4 @@
-package register
+package registerWebsocket
 
 import (
 	"sync/atomic"
@@ -135,7 +135,7 @@ event:
              └── resource/AppUser/AddOne
 */
 
-func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
+func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 	oAdminEventer := pkg.NewWebsocketEventer(websocket.Upgrader{
 		CheckOrigin: func(oRequest *http.Request) bool {

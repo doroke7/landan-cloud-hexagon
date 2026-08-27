@@ -1,4 +1,4 @@
-package register
+package registerHttp
 
 import (
 	"github.com/gin-gonic/gin"
@@ -112,7 +112,7 @@ func httpGameMiddlewares(oContainer *container.HttpContainer) []gin.HandlerFunc 
 	}
 }
 
-func HttpInit(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
+func Init(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 
 	oAdmin := oGin.Group("/Admin")
 	{
