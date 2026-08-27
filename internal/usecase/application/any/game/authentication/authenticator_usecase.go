@@ -5,7 +5,6 @@ import (
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecaseApplicationAnyGame "example/internal/usecase/application/any/game"
 	usecasePortAnyGameAuthentication "example/internal/usecase/port/any/game/authentication"
-	utility "example/internal/utility"
 	pkgUtility "example/pkg/utility"
 	"fmt"
 )
@@ -40,7 +39,7 @@ func (oSelf *AuthenticatorUsecase) LogIn(sName string, sPassword string, sSecret
 		return "", pkgUtility.NewDefaultError(sName+" 不存在", -2, 200)
 	}
 
-	sMd5 := utility.Md5(sPassword + bootstrap.CONFIG.TABLE.APP_USER.PASSWORD)
+	sMd5 := pkgUtility.Md5(sPassword + bootstrap.CONFIG.TABLE.APP_USER.PASSWORD)
 	fmt.Println("sMd5=", sMd5)
 	if oAppUser.Password != sMd5 {
 		return "", pkgUtility.NewDefaultError("密碼錯誤", -2, 200)

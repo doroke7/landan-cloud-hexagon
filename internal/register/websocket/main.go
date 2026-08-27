@@ -14,7 +14,6 @@ import (
 
 	bootstrap "example/bootstrap"
 	container "example/container"
-	utility "example/internal/utility"
 	pkgUtility "example/pkg/utility"
 	types "example/types"
 )
@@ -208,7 +207,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 				return
 			}
 
-			oKeys, oErr := utility.JsonDecode[struct {
+			oKeys, oErr := pkgUtility.JsonDecode[struct {
 				Key string `json:"key"`
 				Iv  string `json:"iv"`
 			}](sKeys)

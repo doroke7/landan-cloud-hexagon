@@ -11,7 +11,7 @@ import (
 	"google.golang.org/grpc/status"
 
 	bootstrap "example/bootstrap"
-	utility "example/internal/utility"
+	pkgUtility "example/pkg/utility"
 )
 
 type SignatureInterceptor struct {
@@ -59,7 +59,7 @@ func (oSelf *SignatureInterceptor) Handle() grpc.UnaryServerInterceptor {
 
 		fmt.Println(sStrings)
 
-		sMd5Signature := utility.Md5(sStrings)
+		sMd5Signature := pkgUtility.Md5(sStrings)
 
 		if bootstrap.CONFIG.SERVICES.FACADE.ADMIN.SIGNATURE && sMd5Signature != sHeaderSignature {
 			return nil, status.Error(codes.Unauthenticated, "簽名失敗")

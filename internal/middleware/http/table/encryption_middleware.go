@@ -8,7 +8,6 @@ import (
 	"github.com/gin-gonic/gin"
 
 	bootstrap "example/bootstrap"
-	utility "example/internal/utility"
 	pkgUtility "example/pkg/utility"
 )
 
@@ -49,7 +48,7 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 		sMessage := mMessage.(string)
 
 		sTime := strconv.FormatInt(oSelf.clock.Now().Unix(), 10)
-		sResult, _ := utility.JsonEncode(mResult)
+		sResult, _ := pkgUtility.JsonEncode(mResult)
 
 		sR, oErr := oSelf.aesHelper.Encrypt(sResult, sKey, sIv)
 		if oErr != nil {
@@ -166,7 +165,7 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 
 		sString := strings.Join(aStrings, ",")
 
-		sHeaderSignature := utility.Md5(sString)
+		sHeaderSignature := pkgUtility.Md5(sString)
 
 		oContext.Writer.Header().Set("Time", sTime)
 		oContext.Writer.Header().Set("Signature", sHeaderSignature)

@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin/binding"
 
 	bootstrap "example/bootstrap"
-	utility "example/internal/utility"
 	pkgUtility "example/pkg/utility"
 	types "example/types"
 )
@@ -65,7 +64,7 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 			return
 		}
 
-		oKeys, _ := utility.JsonDecode[struct {
+		oKeys, _ := pkgUtility.JsonDecode[struct {
 			Key string `json:"key"`
 			Iv  string `json:"iv"`
 		}](sKeys)

@@ -14,7 +14,7 @@ import (
 	"google.golang.org/protobuf/types/descriptorpb"
 
 	bootstrap "example/bootstrap"
-	utility "example/internal/utility"
+	pkgUtility "example/pkg/utility"
 )
 
 type DecryptionInterceptor struct {
@@ -67,7 +67,7 @@ func (oSelf *DecryptionInterceptor) Handle() grpc.UnaryServerInterceptor {
 			return nil, status.Error(codes.InvalidArgument, "金鑰解密失敗")
 		}
 
-		oKeys, oErr := utility.JsonDecode[struct {
+		oKeys, oErr := pkgUtility.JsonDecode[struct {
 			Key string `json:"key"`
 			Iv  string `json:"iv"`
 		}](sKeys)

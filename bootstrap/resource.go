@@ -16,7 +16,7 @@ import (
 	"google.golang.org/grpc/resolver"
 	"google.golang.org/grpc/resolver/manual"
 
-	utility "example/internal/utility"
+	pkgUtility "example/pkg/utility"
 )
 
 func NewResource(oContext context.Context) *grpc.ClientConn {
@@ -51,7 +51,7 @@ func NewResource(oContext context.Context) *grpc.ClientConn {
 		sUser := CONFIG.CLIENTS.RESOURCE.USER
 		sPassword := CONFIG.CLIENTS.RESOURCE.PASSWORD
 
-		sAuthorization := "Basic " + utility.Base64Encode(
+		sAuthorization := "Basic " + pkgUtility.Base64Encode(
 			sUser+":"+sPassword,
 		)
 		ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("authorization", sAuthorization))

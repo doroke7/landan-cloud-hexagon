@@ -1,9 +1,9 @@
-package utility
+package pkgUtility
 
 import "encoding/base64"
 
-func Base64Decode(encodedStr string) (string, error) {
-	decodedBytes, err := base64.StdEncoding.DecodeString(encodedStr)
+func Base64UrlDecode(encodedStr string) (string, error) {
+	decodedBytes, err := base64.URLEncoding.DecodeString(encodedStr)
 	if err != nil {
 		return "", err // 解碼失敗，回傳錯誤
 	}

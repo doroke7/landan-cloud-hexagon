@@ -10,7 +10,6 @@ import (
 	types "example/types"
 
 	bootstrap "example/bootstrap"
-	utility "example/internal/utility"
 )
 
 type SignatureMiddleware struct {
@@ -52,7 +51,7 @@ func (oSelf *SignatureMiddleware) Handle() gin.HandlerFunc {
 		// NOTE: 不要把 未加密的 search, option, param, 都加下去簽名，多次一舉
 		aStrings := []string{sVer, sVersion, sK, sTime, sF, sS, sP, sV, bootstrap.CONFIG.SERVICES.HTTP.TABLE.SALT}
 		sStrings := strings.Join(aStrings, "|")
-		sMd5Signature := utility.Md5(sStrings)
+		sMd5Signature := pkgUtility.Md5(sStrings)
 
 		if bootstrap.CONFIG.SERVICES.HTTP.TABLE.SIGNATURE == true {
 			if sMd5Signature != sHeaderSignature {

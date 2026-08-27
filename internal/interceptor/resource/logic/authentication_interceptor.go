@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	bootstrap "example/bootstrap"
-	utility "example/internal/utility"
+	pkgUtility "example/pkg/utility"
 
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -35,7 +35,7 @@ func (oSelf *AuthenticationInterceptor) Handle() grpc.UnaryServerInterceptor {
 			sUser := bootstrap.CONFIG.SERVICES.RESOURCE.USER
 			sPassword := bootstrap.CONFIG.SERVICES.RESOURCE.PASSWORD
 
-			sAuthotization := "Basic " + utility.Base64Encode(sUser+":"+sPassword)
+			sAuthotization := "Basic " + pkgUtility.Base64Encode(sUser+":"+sPassword)
 
 			if sAuthotizations != sAuthotization {
 				return nil, status.Error(codes.PermissionDenied, "resource 密碼錯誤")

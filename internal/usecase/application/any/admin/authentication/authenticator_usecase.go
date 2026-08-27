@@ -5,7 +5,6 @@ import (
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminAuthentication "example/internal/usecase/port/any/admin/authentication"
-	utility "example/internal/utility"
 	pkgUtility "example/pkg/utility"
 	"fmt"
 )
@@ -42,7 +41,7 @@ func (oSelf *AuthenticatorUsecase) SignIn(sName string, sPassword string, sSecre
 		return "", pkgUtility.NewDefaultError(sName+" 不存在", -2, 200)
 	}
 
-	sMd5 := utility.Md5(sPassword + bootstrap.CONFIG.TABLE.ADMIN_USER.PASSWORD)
+	sMd5 := pkgUtility.Md5(sPassword + bootstrap.CONFIG.TABLE.ADMIN_USER.PASSWORD)
 	if oAdminUser.Password != sMd5 {
 		return "", pkgUtility.NewDefaultError("密碼錯誤", -2, 200)
 	}

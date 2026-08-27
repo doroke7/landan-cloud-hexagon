@@ -1,4 +1,4 @@
-package utility
+package pkgUtility
 
 import "encoding/json"
 

@@ -12,8 +12,6 @@ import (
 	bootstrap "example/bootstrap"
 
 	pkgUtility "example/pkg/utility"
-
-	utility "example/internal/utility"
 )
 
 type ErrorMiddleware struct {
@@ -129,11 +127,11 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 			sIv, _ := mIv.(string)
 
 			if sKey == "" {
-				sKey = utility.RandString(16)
+				sKey = pkgUtility.RandString(16)
 			}
 
 			if sIv == "" {
-				sIv = utility.RandString(16)
+				sIv = pkgUtility.RandString(16)
 			}
 
 			sCode := fmt.Sprintf("%d", mCode)
@@ -144,10 +142,10 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 				"key": sKey,
 				"iv":  sIv,
 			}
-			sKeys, _ := utility.JsonEncode(oKeys)
+			sKeys, _ := pkgUtility.JsonEncode(oKeys)
 
 			sTime := strconv.FormatInt(oSelf.clock.Now().Unix(), 10)
-			sResultJson, _ := utility.JsonEncode(mResult)
+			sResultJson, _ := pkgUtility.JsonEncode(mResult)
 
 			sR, _ := oSelf.aesHelper.Encrypt(sResultJson, sKey, sIv)
 			sC, _ := oSelf.aesHelper.Encrypt(sCode, sKey, sIv)
@@ -155,7 +153,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 			sT, _ := oSelf.aesHelper.Encrypt("0", sKey, sIv)
 
 			aStrings := []string{sKeys, sTime, sC, sM, sR, bootstrap.CONFIG.SERVICES.HTTP.GAME.SALT}
-			sHeaderSignature := utility.Md5(strings.Join(aStrings, ","))
+			sHeaderSignature := pkgUtility.Md5(strings.Join(aStrings, ","))
 
 			oJson := gin.H{
 				"c": sC,
