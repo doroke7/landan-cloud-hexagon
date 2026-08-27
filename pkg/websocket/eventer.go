@@ -13,146 +13,146 @@ import (
 	types "example/types"
 )
 
-// WebsocketOnConnectFunc / WebsocketOnMessageFunc / WebsocketOnCloseFunc 是連線生命週期
+// OnConnectFunc / OnMessageFunc / OnCloseFunc 是連線生命週期
 // 三個時機點各自的處理方法簽名，職責跟 TcpRouter 的 method 對照表一樣：eventer 只負責在對的
 // 時機呼叫對的方法，實際要做什麼交給呼叫端注入。
-type WebsocketOnConnectFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type OnConnectFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
 
-// WebsocketOnOpenFunc 的 iType 在 upgrade 剛完成、還沒讀過任何一個 frame 時呼叫，
+// OnOpenFunc 的 iType 在 upgrade 剛完成、還沒讀過任何一個 frame 時呼叫，
 // 沒有真正的 frame type 可以帶，ServeHTTP 固定傳 0，純粹是為了跟其他四個 callback 簽名一致。
-type WebsocketOnOpenFunc func(oConn *Conn, iType int)
+type OnOpenFunc func(oConn *Conn, iType int)
 
-// WebsocketOnAuthenticateFunc 回傳 bool 表示驗證是否通過：true 讓連線繼續往下讀之後的訊息，
+// OnAuthenticateFunc 回傳 bool 表示驗證是否通過：true 讓連線繼續往下讀之後的訊息，
 // false 讓 ServeHTTP 關閉連線——跟 onConnect／onOpen 不同，這裡的結果會影響連線生死。
-type WebsocketOnAuthenticateFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest) bool
-type WebsocketOnMessageFunc func(oConn *Conn, iType int, aMsg []byte)
-type WebsocketOnCloseFunc func(oConn *Conn, iType int)
+type OnAuthenticateFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest) bool
+type OnMessageFunc func(oConn *Conn, iType int, aMsg []byte)
+type OnCloseFunc func(oConn *Conn, iType int)
 
-// WebsocketOnUnsubscribeFunc 有兩種觸發時機：一是 client 主動送 event: "unsubscribe"；
+// OnUnsubscribeFunc 有兩種觸發時機：一是 client 主動送 event: "unsubscribe"；
 // 二是 websocket 協定層級的斷線（iType == -1 時），這種情況跟 OnClose 綁在同一個時間點
 // 一起觸發，讓呼叫端在連線真的斷掉那一刻，順便清掉這個連線訂閱的 channel。兩種情境都
 // 不需要 reply、也不需要新的 request 資料（清的是已經記錄住的訂閱狀態），所以共用同一個
 // 簽名，不帶 oReq。
-type WebsocketOnUnsubscribeFunc func(oConn *Conn, iType int)
+type OnUnsubscribeFunc func(oConn *Conn, iType int)
 
-// WebsocketOnHeartbeatFunc / WebsocketOnRpcFunc / WebsocketOnSubscribeFunc /
-// WebsocketOnBroadcastFunc / WebsocketOnNotifyFunc / WebsocketOnRefreshFunc /
-// WebsocketOnChatFunc / WebsocketOnPresentFunc 都是自己定義的 application
+// OnHeartbeatFunc / OnRpcFunc / OnSubscribeFunc /
+// OnBroadcastFunc / OnNotifyFunc / OnRefreshFunc /
+// OnChatFunc / OnPresentFunc 都是自己定義的 application
 // event：跟 OnConnect 一樣由 client 主動送對應 event（heartbeat/rpc/subscribe/
 // broadcast/notify/refresh/chat/present）觸發，簽名比照 OnConnect，不像
 // OnAuthenticate 需要回傳值決定連線生死，處理完就 continue，不會落到下面的
 // onMessage。
-type WebsocketOnHeartbeatFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnRpcFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnSubscribeFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnBroadcastFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnNotifyFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnRefreshFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnChatFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
-type WebsocketOnPresentFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type OnHeartbeatFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type OnRpcFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type OnSubscribeFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type OnBroadcastFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type OnNotifyFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type OnRefreshFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type OnChatFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
+type OnPresentFunc func(oConn *Conn, iType int, oReq *types.WebsocketRequest)
 
-// WebsocketOnPongFunc 是 websocket 協定層級的 Pong（client 回應 ServeHTTP 定時送出的
+// OnPongFunc 是 websocket 協定層級的 Pong（client 回應 ServeHTTP 定時送出的
 // Ping）：觸發時機在 gorilla 的 SetPongHandler 裡，沒有 frame type、也沒有解析出
 // request，簽名只帶 oConn，讓呼叫端可以用它更新連線的最後活躍時間。
-type WebsocketOnPongFunc func(oConn *Conn)
+type OnPongFunc func(oConn *Conn)
 
 // Eventer 職責跟 TcpRouter 一樣：只負責「連線生命週期」機制本身
 // （upgrade、read loop、斷線偵測、ping/pong keepalive），不管收到訊息／連線／斷線後
 // 實際要做什麼——通訊邏輯（這支檔案）跟業務邏輯（呼叫端注入的三個 callback）完全分開。
 type Eventer struct {
 	upgrader       websocket.Upgrader
-	onOpen         WebsocketOnOpenFunc
-	onConnect      WebsocketOnConnectFunc
-	onAuthenticate WebsocketOnAuthenticateFunc
-	onMessage      WebsocketOnMessageFunc
-	onClose        WebsocketOnCloseFunc
-	onUnsubscribe  WebsocketOnUnsubscribeFunc
-	onHeartbeat    WebsocketOnHeartbeatFunc
-	onRpc          WebsocketOnRpcFunc
-	onSubscribe    WebsocketOnSubscribeFunc
-	onBroadcast    WebsocketOnBroadcastFunc
-	onNotify       WebsocketOnNotifyFunc
-	onRefresh      WebsocketOnRefreshFunc
-	onPong         WebsocketOnPongFunc
-	onChat         WebsocketOnChatFunc
-	onPresent      WebsocketOnPresentFunc
+	onOpen         OnOpenFunc
+	onConnect      OnConnectFunc
+	onAuthenticate OnAuthenticateFunc
+	onMessage      OnMessageFunc
+	onClose        OnCloseFunc
+	onUnsubscribe  OnUnsubscribeFunc
+	onHeartbeat    OnHeartbeatFunc
+	onRpc          OnRpcFunc
+	onSubscribe    OnSubscribeFunc
+	onBroadcast    OnBroadcastFunc
+	onNotify       OnNotifyFunc
+	onRefresh      OnRefreshFunc
+	onPong         OnPongFunc
+	onChat         OnChatFunc
+	onPresent      OnPresentFunc
 }
 
 func NewEventer(oUpgrader websocket.Upgrader) *Eventer {
 	return &Eventer{upgrader: oUpgrader}
 }
 
-func (oSelf *Eventer) OnOpen(fnHandler WebsocketOnOpenFunc) *Eventer {
+func (oSelf *Eventer) OnOpen(fnHandler OnOpenFunc) *Eventer {
 	oSelf.onOpen = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnConnect(fnHandler WebsocketOnConnectFunc) *Eventer {
+func (oSelf *Eventer) OnConnect(fnHandler OnConnectFunc) *Eventer {
 	oSelf.onConnect = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnAuthenticate(fnHandler WebsocketOnAuthenticateFunc) *Eventer {
+func (oSelf *Eventer) OnAuthenticate(fnHandler OnAuthenticateFunc) *Eventer {
 	oSelf.onAuthenticate = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnClose(fnHandler WebsocketOnCloseFunc) *Eventer {
+func (oSelf *Eventer) OnClose(fnHandler OnCloseFunc) *Eventer {
 	oSelf.onClose = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnUnsubscribe(fnHandler WebsocketOnUnsubscribeFunc) *Eventer {
+func (oSelf *Eventer) OnUnsubscribe(fnHandler OnUnsubscribeFunc) *Eventer {
 	oSelf.onUnsubscribe = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnHeartbeat(fnHandler WebsocketOnHeartbeatFunc) *Eventer {
+func (oSelf *Eventer) OnHeartbeat(fnHandler OnHeartbeatFunc) *Eventer {
 	oSelf.onHeartbeat = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnRpc(fnHandler WebsocketOnRpcFunc) *Eventer {
+func (oSelf *Eventer) OnRpc(fnHandler OnRpcFunc) *Eventer {
 	oSelf.onRpc = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnSubscribe(fnHandler WebsocketOnSubscribeFunc) *Eventer {
+func (oSelf *Eventer) OnSubscribe(fnHandler OnSubscribeFunc) *Eventer {
 	oSelf.onSubscribe = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnBroadcast(fnHandler WebsocketOnBroadcastFunc) *Eventer {
+func (oSelf *Eventer) OnBroadcast(fnHandler OnBroadcastFunc) *Eventer {
 	oSelf.onBroadcast = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnNotify(fnHandler WebsocketOnNotifyFunc) *Eventer {
+func (oSelf *Eventer) OnNotify(fnHandler OnNotifyFunc) *Eventer {
 	oSelf.onNotify = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnMessage(fnHandler WebsocketOnMessageFunc) *Eventer {
+func (oSelf *Eventer) OnMessage(fnHandler OnMessageFunc) *Eventer {
 	oSelf.onMessage = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnRefresh(fnHandler WebsocketOnRefreshFunc) *Eventer {
+func (oSelf *Eventer) OnRefresh(fnHandler OnRefreshFunc) *Eventer {
 	oSelf.onRefresh = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnPong(fnHandler WebsocketOnPongFunc) *Eventer {
+func (oSelf *Eventer) OnPong(fnHandler OnPongFunc) *Eventer {
 	oSelf.onPong = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnChat(fnHandler WebsocketOnChatFunc) *Eventer {
+func (oSelf *Eventer) OnChat(fnHandler OnChatFunc) *Eventer {
 	oSelf.onChat = fnHandler
 	return oSelf
 }
 
-func (oSelf *Eventer) OnPresent(fnHandler WebsocketOnPresentFunc) *Eventer {
+func (oSelf *Eventer) OnPresent(fnHandler OnPresentFunc) *Eventer {
 	oSelf.onPresent = fnHandler
 	return oSelf
 }
