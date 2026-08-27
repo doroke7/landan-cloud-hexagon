@@ -147,8 +147,8 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		pointerToCid = hashmap.New[string, string]()
 		cidToSession = hashmap.New[string, *atomic.Pointer[Session]]()
 
-		auIdCIds      = pkg.NewBiMultiMap[string, string]()
-		auIdsChannels = pkg.NewBiMultiMap[string, string]()
+		auIdCIds     = pkg.NewBiMultiMap[string, string]()
+		cIdsChannels = pkg.NewBiMultiMap[string, string]()
 	)
 
 	oAdminEventer.OnOpen(func(oConn *websocket.Conn, iType int) {
@@ -306,7 +306,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 			auIdCIds.Insert(sCId, sCId)
 
-			auIdsChannels.Insert(sCId, "/")
+			cIdsChannels.Insert(sCId, "/")
 		}
 
 		return bOk
@@ -338,12 +338,10 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
-		aAuIds := auIdCIds.Right(sCId)
-		if len(aAuIds) == 0 {
+		if len(auIdCIds.Right(sCId)) == 0 {
 			pkg.Logger(pkg.WebsocketAdmin).Info("not authenticated, ignore subscribe", zap.String("cid", sCId))
 			return
 		}
-		sAuId := aAuIds[0]
 
 		var oValue struct {
 			Channel string `json:"channel"`
@@ -354,7 +352,9 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			return
 		}
 
-		auIdsChannels.Insert(sAuId, oValue.Channel)
+		cIdsChannels.Insert(sCId, oValue.Channel)
+		fmt.Println("356 sCId=", sCId)
+		fmt.Println("356 oValue.Channel=", oValue.Channel)
 
 		aByteMessage, oErr := json.Marshal(struct {
 			Event string `json:"event"`
@@ -381,19 +381,17 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		oConn.WriteMessage(iType, aByteMessage)
 
-		// 廣播給這個 channel 目前所有訂閱者（含剛加入的這個 sAuId 自己），讓大家
+		// 廣播給這個 channel 目前所有訂閱的 cid（含剛加入的這條連線自己），讓大家
 		// 知道有新成員加入；跟 OnChat 一樣直接重複用同一份 aByteMessage，不用
 		// 另外組一份不同的 payload。
 		go func() {
-			for _, sTargetAuId := range auIdsChannels.Right(oValue.Channel) {
-				for _, sTargetCId := range auIdCIds.Left(sTargetAuId) {
-					oTargetSession, bGotten := cidToSession.Get(sTargetCId)
-					if !bGotten {
-						continue
-					}
-
-					oTargetSession.Load().Connection.WriteMessage(iType, aByteMessage)
+			for _, sTargetCId := range cIdsChannels.Right(oValue.Channel) {
+				oTargetSession, bGotten := cidToSession.Get(sTargetCId)
+				if !bGotten {
+					continue
 				}
+
+				oTargetSession.Load().Connection.WriteMessage(iType, aByteMessage)
 			}
 		}()
 	})
@@ -410,19 +408,26 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
 			return
 		}
-		fmt.Println("420 休息 4s")
+		aTargetCIds := cIdsChannels.Right(oValue.Channel)
 
-		time.Sleep(4 * time.Second)
-		aAuIds := auIdsChannels.Right(oValue.Channel)
+		fmt.Println("411 aTargetCIds=", aTargetCIds)
 
+		oSeenAuIds := make(map[string]struct{}, len(aTargetCIds))
 		aOnes := make([]struct {
 			Id string `json:"id"`
-		}, 0, len(aAuIds))
+		}, 0, len(aTargetCIds))
 
-		for _, sAuId := range aAuIds {
-			aOnes = append(aOnes, struct {
-				Id string `json:"id"`
-			}{Id: sAuId})
+		for _, sTargetCId := range aTargetCIds {
+			for _, sTargetAuId := range auIdCIds.Right(sTargetCId) {
+				if _, bSeen := oSeenAuIds[sTargetAuId]; bSeen {
+					continue
+				}
+				oSeenAuIds[sTargetAuId] = struct{}{}
+
+				aOnes = append(aOnes, struct {
+					Id string `json:"id"`
+				}{Id: sTargetAuId})
+			}
 		}
 
 		aByteMessage, oErr := json.Marshal(struct {
@@ -489,8 +494,8 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		oConn.WriteMessage(iType, aByteMessage)
 
-		aAuIds := auIdsChannels.Right(oValue.Channel)
-		if len(aAuIds) == 0 {
+		aTargetCIds := cIdsChannels.Right(oValue.Channel)
+		if len(aTargetCIds) == 0 {
 			return
 		}
 
@@ -520,16 +525,13 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			return
 		}
 		go func() {
-
-			for _, sAuId := range aAuIds {
-				for _, sTargetCId := range auIdCIds.Left(sAuId) {
-					oTargetSession, bGotten := cidToSession.Get(sTargetCId)
-					if !bGotten {
-						continue
-					}
-
-					oTargetSession.Load().Connection.WriteMessage(iType, aByteChat)
+			for _, sTargetCId := range aTargetCIds {
+				oTargetSession, bGotten := cidToSession.Get(sTargetCId)
+				if !bGotten {
+					continue
 				}
+
+				oTargetSession.Load().Connection.WriteMessage(iType, aByteChat)
 			}
 		}()
 
@@ -568,8 +570,8 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		oConn.WriteMessage(iType, aByteMessage)
 
-		aAuIds := auIdsChannels.Right(oValue.Channel)
-		if len(aAuIds) == 0 {
+		aTargetCIds := cIdsChannels.Right(oValue.Channel)
+		if len(aTargetCIds) == 0 {
 			return
 		}
 
@@ -593,15 +595,13 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}
 
 		go func() {
-			for _, sAuId := range aAuIds {
-				for _, sTargetCId := range auIdCIds.Left(sAuId) {
-					oTargetSession, bGotten := cidToSession.Get(sTargetCId)
-					if !bGotten {
-						continue
-					}
-
-					oTargetSession.Load().Connection.WriteMessage(iType, aByteBroadcast)
+			for _, sTargetCId := range aTargetCIds {
+				oTargetSession, bGotten := cidToSession.Get(sTargetCId)
+				if !bGotten {
+					continue
 				}
+
+				oTargetSession.Load().Connection.WriteMessage(iType, aByteBroadcast)
 			}
 		}()
 	})
@@ -676,13 +676,9 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
-		aAuIds := auIdCIds.Right(sCId)
-		if len(aAuIds) == 0 {
-			return
-		}
-		sAuId := aAuIds[0]
+		fmt.Println("679 我 OnUnsubscribe了, sCId=", sCId)
 
-		auIdsChannels.RemoveLeft(sAuId)
+		cIdsChannels.RemoveLeft(sCId)
 	})
 
 	oAdminEventer.OnMessage(func(oConn *websocket.Conn, iType int, aMsg []byte) {
@@ -705,16 +701,9 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		sCId, _ := pointerToCid.Get(sPointer)
 		pointerToCid.Del(sPointer)
 		cidToSession.Del(sCId)
+		fmt.Println("704 我 OnClose, sCId=", sCId)
 
-		// 退訂這條連線的 admin 訂閱的全部頻道（包含 OnAuthenticate 自動訂閱的
-		// "/"）。要在 auIdCIds.RemoveRight 之前查，不然 sCId 對應的 auid 就
-		// 找不到了。OnUnsubscribe 在協定層斷線（iType == -1）時也會先做一次
-		// 一樣的事，這裡重複呼叫是安全的（RemoveLeft 對已經清空的 auid 是
-		// no-op），保留是為了讓 OnClose 不管有沒有經過 OnUnsubscribe 都自己
-		// 清乾淨。
-		for _, sAuId := range auIdCIds.Right(sCId) {
-			auIdsChannels.RemoveLeft(sAuId)
-		}
+		cIdsChannels.RemoveLeft(sCId)
 		auIdCIds.RemoveRight(sCId)
 
 		pkg.Logger(pkg.WebsocketAdmin).Info(
@@ -753,9 +742,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 				pointerToCid.Del(sPointer)
 				cidToSession.Del(sCId)
 
-				for _, sAuId := range auIdCIds.Right(sCId) {
-					auIdsChannels.RemoveLeft(sAuId)
-				}
+				cIdsChannels.RemoveLeft(sCId)
 				auIdCIds.RemoveRight(sCId)
 
 				oConn.Close()
