@@ -147,8 +147,8 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		pointerToCid = hashmap.New[string, string]()
 		cidToSession = hashmap.New[string, *atomic.Pointer[Session]]()
 
-		auIdToCids   = pkg.NewBiMultiMap[string, string]()
-		auIdChannels = pkg.NewBiMultiMap[string, string]()
+		auIdCIds      = pkg.NewBiMultiMap[string, string]()
+		auIdsChannels = pkg.NewBiMultiMap[string, string]()
 	)
 
 	oAdminEventer.OnOpen(func(oConn *websocket.Conn, iType int) {
@@ -305,11 +305,11 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			}
 
 			// TODO: 暫時寫死，之後要換成 SignIn 驗證出來的真正 admin_user_id。
-			auIdToCids.Insert(sCId, sCId)
+			auIdCIds.Insert(sCId, sCId)
 
 			// 每個登入的 admin 自動訂閱根頻道 "/"，跟 OnSubscribe 走的是同一份
-			// auIdChannels，OnClose／OnUnsubscribe 斷線時也會一併退訂。
-			auIdChannels.Insert(sCId, "/")
+			// auIdsChannels，OnClose／OnUnsubscribe 斷線時也會一併退訂。
+			auIdsChannels.Insert(sCId, "/")
 		}
 
 		return bOk
@@ -341,7 +341,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
-		aAuIds := auIdToCids.Right(sCId)
+		aAuIds := auIdCIds.Right(sCId)
 		if len(aAuIds) == 0 {
 			pkg.Logger(pkg.WebsocketAdmin).Info("not authenticated, ignore subscribe", zap.String("cid", sCId))
 			return
@@ -357,16 +357,103 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			return
 		}
 
-		auIdChannels.Insert(sAuId, oValue.Channel)
+		auIdsChannels.Insert(sAuId, oValue.Channel)
+		fmt.Println("361 sAuId=", sAuId)
+		fmt.Println("361 oValue.Channel=", oValue.Channel)
 
 		aByteMessage, oErr := json.Marshal(struct {
-			Event   string `json:"event"`
-			Channel string `json:"channel"`
-			RId     string `json:"r_id"`
+			Event string `json:"event"`
+			CId   string `json:"c_id"`
+			RId   string `json:"r_id"`
+			Value struct {
+				Channel string `json:"channel"`
+			} `json:"value"`
 		}{
-			Event:   "subscribed",
-			Channel: oValue.Channel,
-			RId:     oWsReq.RId,
+			Event: "subscribed",
+			CId:   sCId,
+			RId:   oWsReq.RId,
+			Value: struct {
+				Channel string `json:"channel"`
+			}{
+				Channel: oValue.Channel,
+			},
+		})
+
+		if oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
+			return
+		}
+
+		oConn.WriteMessage(iType, aByteMessage)
+
+		// 廣播給這個 channel 目前所有訂閱者（含剛加入的這個 sAuId 自己），讓大家
+		// 知道有新成員加入；跟 OnChat 一樣直接重複用同一份 aByteMessage，不用
+		// 另外組一份不同的 payload。
+		go func() {
+			for _, sTargetAuId := range auIdsChannels.Right(oValue.Channel) {
+				for _, sTargetCId := range auIdCIds.Left(sTargetAuId) {
+					oTargetSession, bGotten := cidToSession.Get(sTargetCId)
+					if !bGotten {
+						continue
+					}
+
+					oTargetSession.Load().Connection.WriteMessage(iType, aByteMessage)
+				}
+			}
+		}()
+	})
+
+	oAdminEventer.OnPresent(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
+		sPointer := fmt.Sprintf("%p", oConn)
+		sCId, _ := pointerToCid.Get(sPointer)
+
+		var oValue struct {
+			Channel string `json:"channel"`
+		}
+
+		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
+			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
+			return
+		}
+		fmt.Println("420 休息 4s")
+
+		time.Sleep(4 * time.Second)
+		aAuIds := auIdsChannels.Right(oValue.Channel)
+		fmt.Println("420 oValue.Channel=", oValue.Channel)
+		fmt.Println("420 aAuIds=", aAuIds)
+		aOnes := make([]struct {
+			Id string `json:"id"`
+		}, 0, len(aAuIds))
+
+		for _, sAuId := range aAuIds {
+			aOnes = append(aOnes, struct {
+				Id string `json:"id"`
+			}{Id: sAuId})
+		}
+
+		aByteMessage, oErr := json.Marshal(struct {
+			Event  string `json:"event"`
+			CId    string `json:"c_id"`
+			RId    string `json:"r_id"`
+			Result struct {
+				Channel string `json:"channel"`
+				Ones    []struct {
+					Id string `json:"id"`
+				} `json:"ones"`
+			} `json:"result"`
+		}{
+			Event: "presented",
+			CId:   sCId,
+			RId:   oWsReq.RId,
+			Result: struct {
+				Channel string `json:"channel"`
+				Ones    []struct {
+					Id string `json:"id"`
+				} `json:"ones"`
+			}{
+				Channel: oValue.Channel,
+				Ones:    aOnes,
+			},
 		})
 
 		if oErr != nil {
@@ -408,7 +495,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		oConn.WriteMessage(iType, aByteMessage)
 
-		aAuIds := auIdChannels.Right(oValue.Channel)
+		aAuIds := auIdsChannels.Right(oValue.Channel)
 		if len(aAuIds) == 0 {
 			return
 		}
@@ -441,7 +528,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		go func() {
 
 			for _, sAuId := range aAuIds {
-				for _, sTargetCId := range auIdToCids.Left(sAuId) {
+				for _, sTargetCId := range auIdCIds.Left(sAuId) {
 					oTargetSession, bGotten := cidToSession.Get(sTargetCId)
 					if !bGotten {
 						continue
@@ -487,7 +574,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		oConn.WriteMessage(iType, aByteMessage)
 
-		aAuIds := auIdChannels.Right(oValue.Channel)
+		aAuIds := auIdsChannels.Right(oValue.Channel)
 		if len(aAuIds) == 0 {
 			return
 		}
@@ -513,7 +600,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		go func() {
 			for _, sAuId := range aAuIds {
-				for _, sTargetCId := range auIdToCids.Left(sAuId) {
+				for _, sTargetCId := range auIdCIds.Left(sAuId) {
 					oTargetSession, bGotten := cidToSession.Get(sTargetCId)
 					if !bGotten {
 						continue
@@ -525,11 +612,6 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}()
 	})
 
-	// OnNotify 是 1 對 1 通知，跟 OnBroadcast（channel 1 對多）不同：value 帶的是
-	// 目標 admin_user_id，不是 channel。目標不在線（auIdToCids.Left 查不到任何
-	// cid，包含這個 admin_user_id 根本不存在的情況）就直接忽略；同一個目標開好
-	// 幾個分頁／裝置的話，每一條連線都會收到。跟 OnBroadcast 一樣，method
-	// （add-friend/poke）目前不需要 server 端路由，原封不動連同 value 轉發。
 	oAdminEventer.OnNotify(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
@@ -560,7 +642,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 		oConn.WriteMessage(iType, aByteMessage)
 
-		aTargetCIds := auIdToCids.Left(oValue.AdminUserId)
+		aTargetCIds := auIdCIds.Left(oValue.AdminUserId)
 		if len(aTargetCIds) == 0 {
 			return
 		}
@@ -596,85 +678,17 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		}()
 	})
 
-	// OnPresent 查詢某個 channel 目前在線的訂閱者，Result.Ones 是 admin_user_id
-	// 清單（每個元素目前只有 Id，之後要補其他欄位就直接加）——不是 cid，一個
-	// auid 底下可能有好幾條連線，這裡不展開。純粹是查詢、不改變任何狀態，
-	// 也不需要轉發給別人，直接回給發問的這條連線就好。channel 沒人訂閱就回
-	// 一份空陣列，不是錯誤。
-	oAdminEventer.OnPresent(func(oConn *websocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
-		sPointer := fmt.Sprintf("%p", oConn)
-		sCId, _ := pointerToCid.Get(sPointer)
-
-		var oValue struct {
-			Channel string `json:"channel"`
-		}
-
-		if oErr := json.Unmarshal(oWsReq.Value, &oValue); oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json unmarshal error", zap.Error(oErr))
-			return
-		}
-
-		aAuIds := auIdChannels.Right(oValue.Channel)
-
-		aOnes := make([]struct {
-			Id string `json:"id"`
-		}, 0, len(aAuIds))
-
-		for _, sAuId := range aAuIds {
-			aOnes = append(aOnes, struct {
-				Id string `json:"id"`
-			}{Id: sAuId})
-		}
-
-		aByteMessage, oErr := json.Marshal(struct {
-			Event  string `json:"event"`
-			CId    string `json:"c_id"`
-			RId    string `json:"r_id"`
-			Result struct {
-				Channel string `json:"channel"`
-				Ones    []struct {
-					Id string `json:"id"`
-				} `json:"ones"`
-			} `json:"result"`
-		}{
-			Event: "present",
-			CId:   sCId,
-			RId:   oWsReq.RId,
-			Result: struct {
-				Channel string `json:"channel"`
-				Ones    []struct {
-					Id string `json:"id"`
-				} `json:"ones"`
-			}{
-				Channel: oValue.Channel,
-				Ones:    aOnes,
-			},
-		})
-
-		if oErr != nil {
-			pkg.Logger(pkg.WebsocketAdmin).Error("json marshal error", zap.Error(oErr))
-			return
-		}
-
-		oConn.WriteMessage(iType, aByteMessage)
-	})
-
 	oAdminEventer.OnUnsubscribe(func(oConn *websocket.Conn, iType int) {
 		sPointer := fmt.Sprintf("%p", oConn)
 		sCId, _ := pointerToCid.Get(sPointer)
 
-		aAuIds := auIdToCids.Right(sCId)
+		aAuIds := auIdCIds.Right(sCId)
 		if len(aAuIds) == 0 {
 			return
 		}
 		sAuId := aAuIds[0]
 
-		// 注意：這裡是整個 auid 一次清掉，沒有做「這個 admin 是不是還有其他 cid
-		// 訂閱同一個 channel」的計數——如果同一個 admin 開兩個分頁都訂閱了同一個
-		// channel，其中一個分頁退訂／斷線，會連帶把另一個分頁其實還在訂閱的
-		// channel 也清掉。之後如果要正確處理多連線共用同一個 auid 的情境，這裡
-		// 得改成參照計數。
-		auIdChannels.RemoveLeft(sAuId)
+		auIdsChannels.RemoveLeft(sAuId)
 	})
 
 	oAdminEventer.OnMessage(func(oConn *websocket.Conn, iType int, aMsg []byte) {
@@ -687,7 +701,7 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 			return
 		}
 
-		// oConn.WriteMessage(iType, aMsg)
+		// DO NOTHING ，不回傳 ack
 	})
 
 	// OnClose 是收不到 cid 的
@@ -699,15 +713,15 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 		cidToSession.Del(sCId)
 
 		// 退訂這條連線的 admin 訂閱的全部頻道（包含 OnAuthenticate 自動訂閱的
-		// "/"）。要在 auIdToCids.RemoveRight 之前查，不然 sCId 對應的 auid 就
+		// "/"）。要在 auIdCIds.RemoveRight 之前查，不然 sCId 對應的 auid 就
 		// 找不到了。OnUnsubscribe 在協定層斷線（iType == -1）時也會先做一次
 		// 一樣的事，這裡重複呼叫是安全的（RemoveLeft 對已經清空的 auid 是
 		// no-op），保留是為了讓 OnClose 不管有沒有經過 OnUnsubscribe 都自己
 		// 清乾淨。
-		for _, sAuId := range auIdToCids.Right(sCId) {
-			auIdChannels.RemoveLeft(sAuId)
+		for _, sAuId := range auIdCIds.Right(sCId) {
+			auIdsChannels.RemoveLeft(sAuId)
 		}
-		auIdToCids.RemoveRight(sCId)
+		auIdCIds.RemoveRight(sCId)
 
 		pkg.Logger(pkg.WebsocketAdmin).Info(
 			"disconnected",
@@ -745,10 +759,10 @@ func WebsocketInit(oContainer *container.WebsocketContainer) *http.ServeMux {
 				pointerToCid.Del(sPointer)
 				cidToSession.Del(sCId)
 
-				for _, sAuId := range auIdToCids.Right(sCId) {
-					auIdChannels.RemoveLeft(sAuId)
+				for _, sAuId := range auIdCIds.Right(sCId) {
+					auIdsChannels.RemoveLeft(sAuId)
 				}
-				auIdToCids.RemoveRight(sCId)
+				auIdCIds.RemoveRight(sCId)
 
 				oConn.Close()
 
