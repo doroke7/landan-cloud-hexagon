@@ -251,7 +251,7 @@ func (oSelf *Hub) PublishToConnectionIds(aConnectionIds []string, iType int, aBy
 		return
 	}
 
-	chWork := make(chan string)
+	chanWork := make(chan string)
 	var oWait sync.WaitGroup
 
 	oWait.Add(bootstrap.CONFIG.SERVICES.WEBSOCKET.WORKER)
@@ -259,16 +259,16 @@ func (oSelf *Hub) PublishToConnectionIds(aConnectionIds []string, iType int, aBy
 		go func() {
 			defer oWait.Done()
 
-			for sConnectionId := range chWork {
+			for sConnectionId := range chanWork {
 				oSelf.PublishToConnectionId(sConnectionId, iType, aByteMessage)
 			}
 		}()
 	}
 
 	for _, sConnectionId := range aConnectionIds {
-		chWork <- sConnectionId
+		chanWork <- sConnectionId
 	}
-	close(chWork)
+	close(chanWork)
 
 	oWait.Wait()
 }
