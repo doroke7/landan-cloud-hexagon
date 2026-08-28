@@ -2,6 +2,7 @@ package pkgWebsocket
 
 import (
 	"fmt"
+	"sync"
 	"sync/atomic"
 	"time"
 
@@ -9,6 +10,7 @@ import (
 	"github.com/google/uuid"
 	"go.uber.org/zap"
 
+	"example/bootstrap"
 	pkgUtility "example/pkg/utility"
 )
 
@@ -242,9 +244,33 @@ func (oSelf *Hub) PublishToAdminUserId(sAdminUserId string, iType int, aByteMess
 }
 
 func (oSelf *Hub) PublishToConnectionIds(aConnectionIds []string, iType int, aByteMessage []byte) {
-	for _, sConnectionId := range aConnectionIds {
-		oSelf.PublishToConnectionId(sConnectionId, iType, aByteMessage)
+	if len(aConnectionIds) <= bootstrap.CONFIG.SERVICES.WEBSOCKET.WORKER {
+		for _, sConnectionId := range aConnectionIds {
+			oSelf.PublishToConnectionId(sConnectionId, iType, aByteMessage)
+		}
+		return
 	}
+
+	chWork := make(chan string)
+	var oWait sync.WaitGroup
+
+	oWait.Add(bootstrap.CONFIG.SERVICES.WEBSOCKET.WORKER)
+	for range bootstrap.CONFIG.SERVICES.WEBSOCKET.WORKER {
+		go func() {
+			defer oWait.Done()
+
+			for sConnectionId := range chWork {
+				oSelf.PublishToConnectionId(sConnectionId, iType, aByteMessage)
+			}
+		}()
+	}
+
+	for _, sConnectionId := range aConnectionIds {
+		chWork <- sConnectionId
+	}
+	close(chWork)
+
+	oWait.Wait()
 }
 
 // Count 回傳目前在線的連線數。

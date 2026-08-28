@@ -284,6 +284,7 @@ websocket:
   port: 4031
   pong_wait: 60
   ping_interval: 20
+  worker: 16
   admin:
     authentication: true
     signature: true
