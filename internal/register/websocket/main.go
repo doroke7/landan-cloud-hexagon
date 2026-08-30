@@ -62,8 +62,6 @@ event:
 1. WebSocket 需要實現3層的 包： 協議層，應用層，動作層
 (基本上就是透過 傳過來的 包 做 拆包 後 3類型路由分發)
 
-2. 需要考慮多台 websocket server， 利用 redis PUB/SUB
-
 
 │
 ├── A. Protocol Layer
