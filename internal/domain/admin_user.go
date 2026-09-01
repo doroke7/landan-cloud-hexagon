@@ -10,8 +10,6 @@ package domain
 
 import (
 	"time"
-
-	bootstrap "example/bootstrap"
 )
 
 type AdminUser struct {
@@ -21,10 +19,6 @@ type AdminUser struct {
 	CreatedAt time.Time `json:"created_at" bson:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
 	DeletedAt time.Time `json:"deleted_at" bson:"deleted_at"`
-}
-
-func (AdminUser) TableName() string {
-	return bootstrap.CONFIG.DATABASE.PREFIX + "admin_users"
 }
 
 type AdminUserValue struct {

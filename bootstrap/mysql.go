@@ -2,11 +2,9 @@ package bootstrap
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"time"
 
-	clog "github.com/charmbracelet/log"
+	log "github.com/charmbracelet/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -44,9 +42,8 @@ func NewMysql() (*gorm.DB, error) {
 	}
 
 	oMysqlConnectionPool, err := gorm.Open(mysql.Open(sDSN), &gorm.Config{
-		// TranslateError: true, // 把 MySQL 原生 error（例如 1062 重複 key）轉成 gorm.ErrDuplicatedKey 等標準化 error，全專案統一判斷
 		Logger: logger.New(
-			log.New(os.Stdout, "\r\n", log.LstdFlags), // 輸出到標準輸出
+			gormWriter{}, // 輸出到標準輸出（見 gorm_writer.go）
 			logger.Config{
 				SlowThreshold:             time.Second, // 慢查詢閾值
 				LogLevel:                  oLogLevel,   // 日誌級別：Silent, Error, Warn, Info
@@ -56,7 +53,7 @@ func NewMysql() (*gorm.DB, error) {
 			},
 		),
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix: "",
+			TablePrefix: CONFIG.DATABASE.PREFIX,
 		},
 	})
 	if err != nil {
@@ -69,7 +66,7 @@ func NewMysql() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.DATABASE.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] MYSQL 連線完成.", "addr", sHost+":"+sPort)
+	log.Info("[INFO] MYSQL 連線完成.", "addr", sHost+":"+sPort)
 
 	return oMysqlConnectionPool, nil
 }

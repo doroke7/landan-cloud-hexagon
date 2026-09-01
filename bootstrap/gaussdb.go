@@ -2,8 +2,6 @@ package bootstrap
 
 import (
 	"fmt"
-	"log"
-	"os"
 	"time"
 
 	clog "github.com/charmbracelet/log"
@@ -33,7 +31,7 @@ func NewGaussdb() (*gorm.DB, error) {
 
 	oGaussdbConnectionPool, err := gorm.Open(postgres.Open(sDSN), &gorm.Config{
 		Logger: logger.New(
-			log.New(os.Stdout, "\r\n", log.LstdFlags), // 輸出到標準輸出
+			gormWriter{}, // 輸出到標準輸出（見 gorm_writer.go）
 			logger.Config{
 				SlowThreshold:             time.Second, // 慢查詢閾值
 				LogLevel:                  oLogLevel,   // 日誌級別：Silent, Error, Warn, Info

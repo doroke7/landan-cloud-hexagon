@@ -1,7 +1,6 @@
 package bootstrap
 
 import (
-	"log"
 	"os"
 	"path/filepath"
 	"time"
@@ -27,7 +26,7 @@ func NewSqlite() (*gorm.DB, error) {
 
 	oSqliteConnectionPool, err := gorm.Open(sqlite.Open(CONFIG.SQLITE.PATH), &gorm.Config{
 		Logger: logger.New(
-			log.New(os.Stdout, "\r\n", log.LstdFlags), // 輸出到標準輸出
+			gormWriter{}, // 輸出到標準輸出（見 gorm_writer.go）
 			logger.Config{
 				SlowThreshold:             time.Second, // 慢查詢閾值
 				LogLevel:                  oLogLevel,   // 日誌級別：Silent, Error, Warn, Info
