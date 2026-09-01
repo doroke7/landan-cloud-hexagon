@@ -214,6 +214,13 @@ func (oSelf *Eventer) ServeHTTP(oWriter http.ResponseWriter, oRequest *http.Requ
 
 		var oWsReq types.WebsocketRequest
 
+		pkgUtility.Logger(pkgUtility.Websocket).Info(
+			"1",
+			zap.Int("iType", iType),
+			zap.ByteString("aMsg", aMsg),
+			zap.Error(oErr),
+		)
+
 		if oErr == nil {
 
 			if jsonErr := json.Unmarshal(aMsg, &oWsReq); jsonErr != nil {

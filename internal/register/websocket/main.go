@@ -265,6 +265,12 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 	oAdminEventer.OnSubscribe(func(oConn *pkgWebsocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sConnectionId, _ := oHub.ConnectionId(oConn)
 
+		pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info(
+			"OnSubscribe",
+			zap.String("cid", sConnectionId),
+			zap.Stringer("remoteAddr", oConn.RemoteAddr()),
+		)
+
 		if !oHub.Authenticated(sConnectionId) {
 			pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info("not authenticated, ignore subscribe", zap.String("cid", sConnectionId))
 			return
@@ -370,6 +376,12 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 
 	oAdminEventer.OnChat(func(oConn *pkgWebsocket.Conn, iType int, oWsReq *types.WebsocketRequest) {
 		sConnectionId, _ := oHub.ConnectionId(oConn)
+
+		pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info(
+			"OnChat",
+			zap.String("cid", sConnectionId),
+			zap.Stringer("remoteAddr", oConn.RemoteAddr()),
+		)
 
 		var oValue struct {
 			Channel string `json:"channel"`
@@ -574,7 +586,7 @@ func Init(oContainer *container.WebsocketContainer) *http.ServeMux {
 		sConnectionId := oHub.Remove(oConn)
 
 		pkgUtility.Logger(pkgUtility.WebsocketAdmin).Info(
-			"disconnected",
+			"OnClose",
 			zap.String("cid", sConnectionId),
 			zap.Stringer("remoteAddr", oConn.RemoteAddr()),
 		)
