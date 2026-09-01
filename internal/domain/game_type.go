@@ -12,22 +12,21 @@ import (
 	"time"
 )
 
-// domain 直接兼作各 adapter 的儲存結構，不再另外開 GameTypeRow（gorm）/
-// GameTypeDocument（mongo）兩個欄位完全一樣的鏡像 struct：
-//   - gorm：欄位無 tag，靠 NamingStrategy 轉 snake_case；主鍵 Id -> id
-//   - mongo：bson tag 指定，_id 對到 Id（counters 累加的 uint，不是 ObjectID）
 type GameType struct {
-	Id        uint      `json:"id" bson:"_id"`
-	Key       string    `json:"key" bson:"key"`
-	Name      string    `json:"name" bson:"name"`
-	CreatedAt time.Time `json:"created_at" bson:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
-	DeletedAt time.Time `json:"deleted_at" bson:"deleted_at"`
+	Id        uint       `json:"id" bson:"_id"`
+	ParentId  uint       `json:"parent_id" bson:"parent_id"`
+	Key       string     `json:"key" bson:"key"`
+	Name      string     `json:"name" bson:"name"`
+	CreatedAt time.Time  `json:"created_at" bson:"created_at"`
+	UpdatedAt time.Time  `json:"updated_at" bson:"updated_at"`
+	DeletedAt time.Time  `json:"deleted_at" bson:"deleted_at"`
+	Children  []GameType `gorm:"foreignKey:ParentId"`
 }
 
 type GameTypeValue struct {
-	Key  *string `json:"key,omitempty"`
-	Name *string `json:"name,omitempty"`
+	Key      *string `json:"key,omitempty"`
+	ParentId *uint   `json:"parent_id,omitempty"`
+	Name     *string `json:"name,omitempty"`
 	// CreatedAt *time.Time `json:"created_at"`
 	// UpdatedAt *time.Time `json:"updated_at"`
 	// DeletedAt *time.Time `json:"deleted_at"`

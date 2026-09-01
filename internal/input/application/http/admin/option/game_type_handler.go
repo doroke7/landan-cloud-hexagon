@@ -71,3 +71,7 @@ func (oSelf *GameTypeHandler) Select(oContext *gin.Context) {
 	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
 
 }
+
+func (oSelf *GameTypeHandler) Tree(oContext *gin.Context) {
+
+}
