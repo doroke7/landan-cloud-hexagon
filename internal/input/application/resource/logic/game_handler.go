@@ -92,7 +92,7 @@ func (oSelf *GameHandler) ShowGamesTotalByFiltersWithSortersPagination(oContext 
 	}
 
 	return &pbResourceLogic.GameShowGamesTotalByFiltersWithSortersPaginationOutput{
-		Total: uint64(iTotal),
+		Total: iTotal,
 		Games: aPbGames,
 	}, oErr
 }

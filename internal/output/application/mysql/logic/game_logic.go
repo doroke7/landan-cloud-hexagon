@@ -20,7 +20,7 @@ func NewGameLogic(oAbstractLogic *mysqlBase.AbstractMysql) outputPortAnyLogic.Ga
 	}
 }
 
-func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, int64, error) {
+func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
@@ -87,5 +87,5 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 		return aGames, 0, oCountErr
 	}
 
-	return aGames, iTotal, nil
+	return aGames, uint64(iTotal), nil
 }

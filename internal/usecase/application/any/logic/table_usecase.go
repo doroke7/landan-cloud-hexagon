@@ -19,7 +19,7 @@ func NewTableUsecase(oAbstractUsecase *AbstractUsecase, oTableLogic outputPortAn
 	}
 }
 
-func (oSelf *TableUsecase) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, int64, error) {
+func (oSelf *TableUsecase) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {
 
 	aTables, iTotal, oErr := oSelf.TableLogic.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 

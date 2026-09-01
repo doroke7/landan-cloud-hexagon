@@ -84,7 +84,7 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 	}
 
 	return &pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationOutput{
-		Total:  uint64(iTotal),
+		Total:  iTotal,
 		Tables: aPbTables,
 	}, oErr
 }

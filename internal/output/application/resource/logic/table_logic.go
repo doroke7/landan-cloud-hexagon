@@ -18,7 +18,7 @@ func NewTableLogic(oAbstractLogic *resourceBase.AbstractResource) outputPortAnyL
 	}
 }
 
-func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, int64, error) {
+func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {
 
 	oRequest := &pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -51,5 +51,5 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 	}
 
 	iTotal := oResponse.GetTotal()
-	return aTables, int64(iTotal), oErr
+	return aTables, iTotal, oErr
 }

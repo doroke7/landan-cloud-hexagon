@@ -19,7 +19,7 @@ func NewGameUsecase(oAbstractUsecase *AbstractUsecase, oGameLogic outputPortAnyL
 	}
 }
 
-func (oSelf *GameUsecase) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, int64, error) {
+func (oSelf *GameUsecase) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error) {
 
 	aGames, iTotal, oErr := oSelf.GameLogic.ShowGamesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 

@@ -51,7 +51,7 @@ func gameFromPb(oPbGame *pbResourceLogic.Game) domain.Game {
 	}
 }
 
-func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, int64, error) {
+func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error) {
 
 	oRequest := &pbResourceLogic.GameShowGamesTotalByFiltersWithSortersPaginationInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -80,5 +80,5 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 	}
 
 	iTotal := oResponse.GetTotal()
-	return aGames, int64(iTotal), oErr
+	return aGames, iTotal, oErr
 }
