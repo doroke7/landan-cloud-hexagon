@@ -1,3 +1,4 @@
 path: "./runtime/sqlite/resource.db"
+prefix: "tx-"
 max_idle_connections: 12
 timeout: 10000
