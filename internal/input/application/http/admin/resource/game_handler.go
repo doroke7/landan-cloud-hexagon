@@ -176,7 +176,7 @@ func (oSelf *GameHandler) ShowOne(oContext *gin.Context) {
 		return
 	}
 
-	oResult := pkgGin.NewResultOne(oGame)
+	oResult := pkgGin.NewResult(oGame, nil, nil)
 
 	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "")
 
@@ -225,7 +225,7 @@ func (oSelf *GameHandler) ShowOnes(oContext *gin.Context) {
 		return
 	}
 
-	oResult := pkgGin.NewResultOnes(aGames)
+	oResult := pkgGin.NewResult(nil, aGames, nil)
 
 	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
 

@@ -88,7 +88,7 @@ func (oSelf *TableHandler) ShowOne(oContext *gin.Context) {
 		return
 	}
 
-	oResult := pkgGin.NewResultOne(oTable)
+	oResult := pkgGin.NewResult(oTable, nil, nil)
 
 	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "")
 
@@ -225,7 +225,7 @@ func (oSelf *TableHandler) ShowOnes(oContext *gin.Context) {
 		return
 	}
 
-	oResult := pkgGin.NewResultOnes(aTables)
+	oResult := pkgGin.NewResult(nil, aTables, nil)
 
 	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
 

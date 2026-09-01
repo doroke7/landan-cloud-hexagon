@@ -52,9 +52,9 @@
 
     以不同協議但是相同業務邏輯實現 登入取得 token 這個業務。
 2. output 不同輸入 adaptor 相同的路徑應該是相同的設備方法, 譬如. 
-- (Mysql 實現後台用戶數據邏輯)：internal/output/application/mysql/model/admin_user_repository.go,  
-- (amqp 實現後台用戶數據邏輯)：internal/output/application/rabbitmq/model/admin_user_repository.go,  
-- (gRPC reourse client 實現後台用戶數據邏輯)：internal/output/application/resource/model/admin_user_repository.go,  
+- (Mysql 實現後台用戶簡單數據)：internal/output/application/mysql/model/admin_user_model.go,  
+- (rabbitmq 實現後台用戶事件輸出)：internal/output/application/rabbitmq/event/admin_user_event.go,  
+- (gRPC resource client 實現後台用戶簡單數據)：internal/output/application/resource/model/admin_user_model.go,  
       
 
 3. usecase *一套代碼*實現所有domain業務邏輯。

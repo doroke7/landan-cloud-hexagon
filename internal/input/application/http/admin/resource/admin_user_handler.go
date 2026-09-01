@@ -95,7 +95,7 @@ func (oSelf *AdminUserHandler) ShowOnes(oContext *gin.Context) {
 		return
 	}
 
-	oResult := pkgGin.NewResultOnes(aAdminUsers)
+	oResult := pkgGin.NewResult(nil, aAdminUsers, nil)
 
 	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
 

@@ -2,6 +2,7 @@ package usecaseApplicationAnyAdminOption
 
 import (
 	domain "example/internal/domain"
+	outputPortAnyLogic "example/internal/output/port/any/logic"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminOption "example/internal/usecase/port/any/admin/option"
@@ -11,12 +12,14 @@ import (
 type GameTypeUsecase struct {
 	*usecaseApplicationAnyAdmin.AbstractUsecase
 	GameTypeModel outputPortAnyModel.GameTypeModel
+	GameTypeLogic outputPortAnyLogic.GameTypeLogic
 }
 
-func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminOption.GameTypeUsecase {
+func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oGameTypeLogic outputPortAnyLogic.GameTypeLogic, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminOption.GameTypeUsecase {
 	return &GameTypeUsecase{
 		AbstractUsecase: oAbstractUsecase,
 		GameTypeModel:   oGameTypeModel,
+		GameTypeLogic:   oGameTypeLogic,
 	}
 }
 
@@ -30,4 +33,10 @@ func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*
 	iTotal, oErr := oSelf.GameTypeModel.TotalByFilters(aFilters)
 
 	return aGameTypes, iTotal, oErr
+}
+
+func (oSelf *GameTypeUsecase) ShowTree() ([]*domain.GameType, error) {
+	aTree, oErr := oSelf.GameTypeLogic.ShowTree()
+
+	return aTree, oErr
 }

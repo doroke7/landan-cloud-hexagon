@@ -2,15 +2,15 @@ package outputApplicationPostgresqlLogic
 
 import (
 	domain "example/internal/domain"
-	postgresqlBase "example/internal/output/application/postgresql"
+	postgresql "example/internal/output/application/postgresql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 )
 
 type GameTypeLogic struct {
-	*postgresqlBase.AbstractPostgresql
+	*postgresql.AbstractPostgresql
 }
 
-func NewGameTypeLogic(oAbstractLogic *postgresqlBase.AbstractPostgresql) outputPortAnyLogic.GameTypeLogic {
+func NewGameTypeLogic(oAbstractLogic *postgresql.AbstractPostgresql) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
 		AbstractPostgresql: oAbstractLogic,
 	}

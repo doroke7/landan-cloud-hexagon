@@ -23,7 +23,7 @@ func NewGameTypeHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, 
 	}
 }
 
-func (oSelf *GameTypeHandler) Select(oContext *gin.Context) {
+func (oSelf *GameTypeHandler) SelectOnes(oContext *gin.Context) {
 
 	oRequest := &pkgGin.Request{Context: oContext}
 
@@ -66,12 +66,29 @@ func (oSelf *GameTypeHandler) Select(oContext *gin.Context) {
 		return
 	}
 
-	oResult := pkgGin.NewResultOnes(aGameTypes)
+	oResult := pkgGin.NewResult(nil, aGameTypes, nil)
 
 	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
 
 }
 
-func (oSelf *GameTypeHandler) Tree(oContext *gin.Context) {
+func (oSelf *GameTypeHandler) SelectTree(oContext *gin.Context) {
+
+	aTree, oErr := oSelf.GameTypeUsecase.ShowTree()
+
+	if oErr != nil {
+
+		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
+
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Message, struct{}{}, 0, "")
+			return
+		}
+		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "")
+		return
+	}
+
+	oResult := pkgGin.NewResult(nil, nil, aTree)
+
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, len(aTree), "")
 
 }

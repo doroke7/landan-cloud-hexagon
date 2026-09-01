@@ -152,7 +152,8 @@ func Init(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 		oAdminOption := oAdmin.Group("/Option")
 		oAdminOption.Use(httpAdminOptionMiddlewares(oContainer)...)
 		{
-			oAdminOption.GET("/GameType/Select", oContainer.HttpAdminOptionGameType.Select)
+			oAdminOption.GET("/GameType/SelectOnes", oContainer.HttpAdminOptionGameType.SelectOnes)
+			oAdminOption.GET("/GameType/SelectTree", oContainer.HttpAdminOptionGameType.SelectTree)
 		}
 
 	}
