@@ -10,17 +10,8 @@ package domain
 
 import (
 	"time"
-
-	bootstrap "example/bootstrap"
 )
 
-// domain 直接兼作各 adapter 的儲存結構，不再另外開 TableRow（gorm）/
-// TableDocument（mongo）兩個欄位完全一樣的鏡像 struct：
-//   - gorm：欄位無 tag，靠 NamingStrategy 轉 snake_case；Game 用 gorm association Preload
-//   - mongo：bson tag 指定，_id 對到 Id（counters 累加的 uint）；Game 用 bson:"-" 略過
-//     （Mongo 沒有 join，這個欄位在 mongo 路徑下固定是零值）
-//
-// Result 是純字串（不是 json.RawMessage），mongo 直接存字串、不拆成巢狀 bson 文件。
 type Table struct {
 	Id          uint      `json:"id" bson:"_id"`
 	No          string    `json:"no" bson:"no"`
@@ -35,13 +26,6 @@ type Table struct {
 	UpdatedAt   time.Time `json:"updated_at" bson:"updated_at"`
 	DeletedAt   time.Time `json:"deleted_at" bson:"deleted_at"`
 	Game        Game      `json:"game" gorm:"foreignKey:GameId;references:Id" bson:"-"`
-}
-
-// TableName 顯式指定表名 tables，但 gorm 的 TableName() 是直接取用的原始字串，
-// 不會再套用 bootstrap/mysql.go NamingStrategy 設的 TablePrefix，
-// 所以這裡自己把 CONFIG.MYSQL.PREFIX 接回去，維持跟 tx-tables 一致。
-func (Table) TableName() string {
-	return bootstrap.CONFIG.MYSQL.PREFIX + "tables"
 }
 
 type TableValue struct {

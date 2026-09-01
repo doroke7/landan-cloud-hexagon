@@ -10,8 +10,6 @@ package domain
 
 import (
 	"time"
-
-	bootstrap "example/bootstrap"
 )
 
 type TableRecord struct {
@@ -28,10 +26,6 @@ type TableRecord struct {
 	CreatedAt time.Time `json:"created_at" bson:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
 	DeletedAt time.Time `json:"deleted_at" bson:"deleted_at"`
-}
-
-func (TableRecord) TableName() string {
-	return bootstrap.CONFIG.MYSQL.PREFIX + "table_records"
 }
 
 type TableRecordValue struct {

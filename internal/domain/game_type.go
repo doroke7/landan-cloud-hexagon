@@ -10,8 +10,6 @@ package domain
 
 import (
 	"time"
-
-	bootstrap "example/bootstrap"
 )
 
 // domain 直接兼作各 adapter 的儲存結構，不再另外開 GameTypeRow（gorm）/
@@ -25,10 +23,6 @@ type GameType struct {
 	CreatedAt time.Time `json:"created_at" bson:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
 	DeletedAt time.Time `json:"deleted_at" bson:"deleted_at"`
-}
-
-func (GameType) TableName() string {
-	return bootstrap.CONFIG.MYSQL.PREFIX + "game_types"
 }
 
 type GameTypeValue struct {

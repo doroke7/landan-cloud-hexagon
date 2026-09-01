@@ -10,8 +10,6 @@ package domain
 
 import (
 	"time"
-
-	bootstrap "example/bootstrap"
 )
 
 type Game struct {
@@ -24,10 +22,6 @@ type Game struct {
 	UpdatedAt   time.Time `json:"updated_at" bson:"updated_at"`
 	DeletedAt   time.Time `json:"deleted_at" gorm:"default:2038-01-19 03:14:07" bson:"deleted_at"`
 	GameType    GameType  `json:"game_type" gorm:"foreignKey:GameTypeId;references:Id" bson:"-"`
-}
-
-func (Game) TableName() string {
-	return bootstrap.CONFIG.MYSQL.PREFIX + "games"
 }
 
 type GameValue struct {

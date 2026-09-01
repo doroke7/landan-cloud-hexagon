@@ -8,19 +8,11 @@ package domain
 
 */
 
-import (
-	bootstrap "example/bootstrap"
-)
-
 type AppUser struct {
 	Id       uint   `json:"id"`
 	Name     string `json:"name"`
 	Password string `json:"password"`
 	Balance  uint   `json:"balance"`
-}
-
-func (AppUser) TableName() string {
-	return bootstrap.CONFIG.MYSQL.PREFIX + "app_users"
 }
 
 type AppUserValue struct {
