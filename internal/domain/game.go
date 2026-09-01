@@ -27,7 +27,7 @@ type Game struct {
 }
 
 func (Game) TableName() string {
-	return bootstrap.CONFIG.DATABASE.PREFIX + "games"
+	return bootstrap.CONFIG.MYSQL.PREFIX + "games"
 }
 
 type GameValue struct {

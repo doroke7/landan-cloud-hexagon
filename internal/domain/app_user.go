@@ -20,7 +20,7 @@ type AppUser struct {
 }
 
 func (AppUser) TableName() string {
-	return bootstrap.CONFIG.DATABASE.PREFIX + "app_users"
+	return bootstrap.CONFIG.MYSQL.PREFIX + "app_users"
 }
 
 type AppUserValue struct {

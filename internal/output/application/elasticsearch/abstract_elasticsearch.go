@@ -29,9 +29,9 @@ func NewAbstractElasticsearch(oContext context.Context, oClient *elasticsearch.C
 	}
 }
 
-// IndexName 沿用 CONFIG.DATABASE.PREFIX，跟 mysql table 前綴一致。
+// IndexName 用 CONFIG.ELASTICSEARCH.PREFIX 當 index 前綴，跟各 SQL adapter 的 TablePrefix 一樣各自獨立設定。
 func (oSelf *AbstractElasticsearch) IndexName(sName string) string {
-	return bootstrap.CONFIG.DATABASE.PREFIX + sName
+	return bootstrap.CONFIG.ELASTICSEARCH.PREFIX + sName
 }
 
 var oOperatorMap = map[string]bool{

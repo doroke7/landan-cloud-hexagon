@@ -31,7 +31,7 @@ type TableRecord struct {
 }
 
 func (TableRecord) TableName() string {
-	return bootstrap.CONFIG.DATABASE.PREFIX + "table_records"
+	return bootstrap.CONFIG.MYSQL.PREFIX + "table_records"
 }
 
 type TableRecordValue struct {

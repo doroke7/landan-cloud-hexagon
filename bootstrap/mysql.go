@@ -20,21 +20,21 @@ import (
 func NewMysql() (*gorm.DB, error) {
 
 	var sHost, sPort string
-	if len(CONFIG.DATABASE.WRITE.HOSTS) > 0 {
-		sHost = CONFIG.DATABASE.WRITE.HOSTS[0]
+	if len(CONFIG.MYSQL.WRITE.HOSTS) > 0 {
+		sHost = CONFIG.MYSQL.WRITE.HOSTS[0]
 	}
-	if len(CONFIG.DATABASE.WRITE.PORTS) > 0 {
-		sPort = CONFIG.DATABASE.WRITE.PORTS[0]
+	if len(CONFIG.MYSQL.WRITE.PORTS) > 0 {
+		sPort = CONFIG.MYSQL.WRITE.PORTS[0]
 	}
 
 	sDSN := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
-		CONFIG.DATABASE.USER,
-		CONFIG.DATABASE.PASSWORD,
+		CONFIG.MYSQL.USER,
+		CONFIG.MYSQL.PASSWORD,
 		sHost,
 		sPort,
-		CONFIG.DATABASE.NAME,
-		CONFIG.DATABASE.CHARSET,
+		CONFIG.MYSQL.NAME,
+		CONFIG.MYSQL.CHARSET,
 	)
 	var oLogLevel logger.LogLevel = logger.Error
 	if CONFIG.DEFAULT.DEBUG {
@@ -53,7 +53,7 @@ func NewMysql() (*gorm.DB, error) {
 			},
 		),
 		NamingStrategy: schema.NamingStrategy{
-			TablePrefix: CONFIG.DATABASE.PREFIX,
+			TablePrefix: CONFIG.MYSQL.PREFIX,
 		},
 	})
 	if err != nil {
@@ -64,7 +64,7 @@ func NewMysql() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
-	oSqlDB.SetMaxIdleConns(CONFIG.DATABASE.MAX_IDLE_CONNECTIONS)
+	oSqlDB.SetMaxIdleConns(CONFIG.MYSQL.MAX_IDLE_CONNECTIONS)
 
 	log.Info("[INFO] MYSQL 連線完成.", "addr", sHost+":"+sPort)
 

@@ -39,9 +39,9 @@ type Table struct {
 
 // TableName 顯式指定表名 tables，但 gorm 的 TableName() 是直接取用的原始字串，
 // 不會再套用 bootstrap/mysql.go NamingStrategy 設的 TablePrefix，
-// 所以這裡自己把 CONFIG.DATABASE.PREFIX 接回去，維持跟 tx-tables 一致。
+// 所以這裡自己把 CONFIG.MYSQL.PREFIX 接回去，維持跟 tx-tables 一致。
 func (Table) TableName() string {
-	return bootstrap.CONFIG.DATABASE.PREFIX + "tables"
+	return bootstrap.CONFIG.MYSQL.PREFIX + "tables"
 }
 
 type TableValue struct {

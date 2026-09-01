@@ -30,7 +30,7 @@ func NewAdminUserModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyMod
 func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, error) {
 	oCurrentContext, cCancel := context.WithTimeout(
 		oSelf.Context,
-		time.Duration(bootstrap.CONFIG.DATABASE.TIMEOUT)*time.Millisecond,
+		time.Duration(bootstrap.CONFIG.MYSQL.TIMEOUT)*time.Millisecond,
 	)
 	defer cCancel()
 
@@ -55,7 +55,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	err := oSelf.Aop.Cacheable(sKey, iTtl, &oAdminUser, func() (interface{}, error) {
 		oThisContext, cCancel := context.WithTimeout(
 			oSelf.Context,
-			time.Duration(bootstrap.CONFIG.DATABASE.TIMEOUT)*time.Millisecond,
+			time.Duration(bootstrap.CONFIG.MYSQL.TIMEOUT)*time.Millisecond,
 		)
 		defer cCancel()
 

@@ -27,7 +27,7 @@ type TableRecordLog struct {
 }
 
 func (TableRecordLog) TableName() string {
-	return bootstrap.CONFIG.DATABASE.PREFIX + "table_record_logs"
+	return bootstrap.CONFIG.MYSQL.PREFIX + "table_record_logs"
 }
 
 type TableRecordLogValue struct {

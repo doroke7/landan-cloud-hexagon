@@ -174,7 +174,7 @@ type Config struct {
 			POOL    int      `mapstructure:"pool"`
 		} `mapstructure:"tcp"`
 	} `mapstructure:"clients"`
-	DATABASE struct {
+	MYSQL struct {
 		USER                 string `mapstructure:"user"`
 		PASSWORD             string `mapstructure:"password"`
 		PREFIX               string `mapstructure:"prefix"`
@@ -190,7 +190,7 @@ type Config struct {
 			HOSTS []string `mapstructure:"hosts"`
 			PORTS []string `mapstructure:"ports"`
 		} `mapstructure:"write"`
-	} `mapstructure:"database"`
+	} `mapstructure:"mysql"`
 	DB struct {
 		HOST string `mapstructure:"host"` // 映射键名：它告诉解码器，配置文件（或 Map）里的键名如果是 "host"，就对应填入结构体的 HOST 字段
 		USER string `mapstructure:"user"`
@@ -340,9 +340,10 @@ type Config struct {
 		TIMEOUT int      `mapstructure:"timeout"`
 	} `mapstructure:"etcd"`
 	ELASTICSEARCH struct {
-		HOSTS []string `mapstructure:"hosts"`
-		USER  string   `mapstructure:"user"`
-		PASS  string   `mapstructure:"pass"`
+		HOSTS  []string `mapstructure:"hosts"`
+		USER   string   `mapstructure:"user"`
+		PASS   string   `mapstructure:"pass"`
+		PREFIX string   `mapstructure:"prefix"`
 	} `mapstructure:"elasticsearch"`
 	MOSQUITTO struct {
 		HOST    string `mapstructure:"host"`
