@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"context"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	container "example/container"
 	registerCron "example/internal/register/cron"
@@ -23,7 +23,7 @@ var oCronCommand = &cobra.Command{
 
 		oContainer, err := container.InitCronContainer(ctx)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 cron container 失敗", zap.Error(err))
 		}
 
 		oCron := registerCron.Init(oContainer)

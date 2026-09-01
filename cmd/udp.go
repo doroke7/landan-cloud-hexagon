@@ -2,14 +2,13 @@ package cmd
 
 import (
 	"context"
-	"fmt"
-	"log"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
 	pkgUtility "example/pkg/utility"
@@ -24,12 +23,12 @@ var oUdpCommand = &cobra.Command{
 
 		oAddr, err := net.ResolveUDPAddr("udp", ":"+bootstrap.CONFIG.SERVICES.UDP.PORT)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("解析 UDP 位址失敗", zap.Error(err))
 		}
 
 		oConn, err := net.ListenUDP("udp", oAddr)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("監聽 UDP 失敗", zap.Error(err))
 		}
 		defer oConn.Close()
 
@@ -52,11 +51,14 @@ var oUdpCommand = &cobra.Command{
 				case <-ctx.Done():
 					return
 				default:
-					log.Fatal(err)
+					pkgUtility.Logger(pkgUtility.Default).Fatal("讀取 UDP 失敗", zap.Error(err))
 				}
 			}
 
-			fmt.Println("Receive:", string(aBuf[:iCount]))
+			pkgUtility.Logger(pkgUtility.Default).Info("收到 UDP 封包",
+				zap.String("remote", oRemoteAddr.String()),
+				zap.String("data", string(aBuf[:iCount])),
+			)
 
 			oConn.WriteToUDP([]byte("OK"), oRemoteAddr)
 		}

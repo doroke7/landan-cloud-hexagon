@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"context"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	container "example/container"
 	registerRabbitmq "example/internal/register/rabbitmq"
@@ -26,7 +26,7 @@ var oRabbitmqCommand = &cobra.Command{
 
 		oContainer, err := container.InitRabbitmqContainer(ctx)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 rabbitmq container 失敗", zap.Error(err))
 		}
 
 		oRabbitmqRouter := registerRabbitmq.Init(oContainer)
@@ -34,9 +34,8 @@ var oRabbitmqCommand = &cobra.Command{
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 RABBITMQ 服務。")
 
 		if err := oRabbitmqRouter.Serve(ctx); err != nil {
-			log.Printf("rabbitmq stopped: %v", err)
+			pkgUtility.Logger(pkgUtility.Default).Error("RABBITMQ 服務已停止", zap.Error(err))
 		}
-
 	},
 }
 

@@ -2,19 +2,18 @@ package cmd
 
 import (
 	"context"
-	"log"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/spf13/cobra"
-
-	pkgUtility "example/pkg/utility"
+	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
 	container "example/container"
 	registerResource "example/internal/register/resource"
+	pkgUtility "example/pkg/utility"
 )
 
 var oResourceCommand = &cobra.Command{
@@ -27,14 +26,14 @@ var oResourceCommand = &cobra.Command{
 
 		oContainer, err := container.InitResourceContainer(ctx)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 resource container 失敗", zap.Error(err))
 		}
 
 		oResourceServer := registerResource.Init(oContainer)
 
 		oListener, err := net.Listen("tcp", ":"+bootstrap.CONFIG.SERVICES.RESOURCE.PORT)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("監聽 RESOURCE port 失敗", zap.Error(err))
 		}
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 RESOURCE 服務。 port: " + bootstrap.CONFIG.SERVICES.RESOURCE.PORT)
 
@@ -47,7 +46,7 @@ var oResourceCommand = &cobra.Command{
 		}()
 
 		if err := oResourceServer.Serve(oListener); err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("RESOURCE server 異常結束", zap.Error(err))
 		}
 	},
 }

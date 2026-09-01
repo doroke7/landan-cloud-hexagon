@@ -18,6 +18,7 @@ const (
 	Cron     Module = "cron"
 	Consumer Module = "consumer"
 
+	Http                Module = "http"
 	HttpAdmin           Module = "http-admin"
 	HttpApp             Module = "http-app"
 	HttpThird           Module = "http-third"
@@ -37,8 +38,10 @@ const (
 	WebsocketThirdMiddleware Module = "websocket-third-middleware"
 
 	Socketio   Module = "socketio"
+	Socket     Module = "socket"
 	Centrifuge Module = "centrifuge"
 
+	Facade                    Module = "facade"
 	FacadeAdmin               Module = "facade-admin"
 	FacadeGame                Module = "facade-game"
 	FacadeTable               Module = "facade-table"
@@ -48,6 +51,7 @@ const (
 	FacadeTableInterceptor    Module = "facade-table-interceptor"
 	FacadeRegisterInterceptor Module = "facade-register-interceptor"
 
+	Resource                 Module = "resource"
 	ResourceLogic            Module = "resource-logic"
 	ResourceModel            Module = "resource-model"
 	ResourceLogicInterceptor Module = "resource-logic-interceptor"

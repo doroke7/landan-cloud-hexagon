@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
 	container "example/container"
@@ -25,7 +25,7 @@ var oWebsocketCommand = &cobra.Command{
 
 		oContainer, err := container.InitWebsocketContainer(ctx)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 websocket container 失敗", zap.Error(err))
 		}
 		// Websocket 才是主要關心的 服務， 所以應該 從 register 取出 websocket 套件
 		oMux := registerWebsocket.Init(oContainer)
@@ -42,7 +42,7 @@ var oWebsocketCommand = &cobra.Command{
 		}()
 
 		if err := oWebsocketServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("WEBSOCKET server 異常結束", zap.Error(err))
 		}
 
 	},

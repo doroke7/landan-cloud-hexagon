@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"context"
-	"log"
 	"net"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
 	container "example/container"
@@ -25,13 +25,13 @@ var oFacadeCommand = &cobra.Command{
 
 		oContainer, err := container.InitFacadeContainer(ctx)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 facade container 失敗", zap.Error(err))
 		}
 		oFacadeServer := registerFacade.Init(oContainer)
 
 		oListener, err := net.Listen("tcp", ":"+bootstrap.CONFIG.SERVICES.FACADE.PORT)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("監聽 FACADE port 失敗", zap.Error(err))
 		}
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 FACADE 服務。 port: " + bootstrap.CONFIG.SERVICES.FACADE.PORT)
 
@@ -41,7 +41,7 @@ var oFacadeCommand = &cobra.Command{
 		}()
 
 		if err := oFacadeServer.Serve(oListener); err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("FACADE server 異常結束", zap.Error(err))
 		}
 	},
 }

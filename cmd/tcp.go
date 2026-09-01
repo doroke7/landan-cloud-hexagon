@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"context"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
 	container "example/container"
@@ -26,7 +26,7 @@ var oTcpCommand = &cobra.Command{
 
 		oContainer, err := container.InitTcpContainer(ctx)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 tcp container 失敗", zap.Error(err))
 		}
 
 		oTcpRouter := registerTcp.Init(oContainer)
@@ -34,7 +34,7 @@ var oTcpCommand = &cobra.Command{
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 TCP 服務。 port: " + bootstrap.CONFIG.SERVICES.TCP.PORT)
 
 		if err := oTcpRouter.Serve(ctx, ":"+bootstrap.CONFIG.SERVICES.TCP.PORT); err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("TCP server 異常結束", zap.Error(err))
 		}
 	},
 }

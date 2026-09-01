@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
 	registerSocketio "example/internal/register/socketio"
@@ -49,7 +49,7 @@ var oSocketioCommand = &cobra.Command{
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 SOCKETIO 服務。 port: " + bootstrap.CONFIG.SERVICES.SOCKETIO.PORT)
 
 		if err := oSocketioServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("SOCKETIO server 異常結束", zap.Error(err))
 		}
 	},
 }

@@ -2,13 +2,13 @@ package cmd
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
 	container "example/container"
@@ -26,7 +26,7 @@ var oCentrifugeCommand = &cobra.Command{
 
 		oContainer, oErr := container.InitCentrifugeContainer(ctx)
 		if oErr != nil {
-			log.Fatal(oErr)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 centrifuge container 失敗", zap.Error(oErr))
 		}
 		defer oContainer.Nats.Close()
 
@@ -46,7 +46,7 @@ var oCentrifugeCommand = &cobra.Command{
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 CENTRIFUGE 服務。 port: " + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT)
 
 		if oErr := oCentrifugeServer.ListenAndServe(); oErr != nil && oErr != http.ErrServerClosed {
-			log.Fatal(oErr)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("CENTRIFUGE server 異常結束", zap.Error(oErr))
 		}
 	},
 }

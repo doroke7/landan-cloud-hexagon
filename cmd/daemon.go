@@ -2,12 +2,12 @@ package cmd
 
 import (
 	"context"
-	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	container "example/container"
 	registerDaemon "example/internal/register/daemon"
@@ -23,7 +23,7 @@ var oDaemonCommand = &cobra.Command{
 
 		oContainer, err := container.InitDaemonContainer(ctx)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 daemon container 失敗", zap.Error(err))
 		}
 
 		oDaemonRouter := registerDaemon.Init(oContainer)
@@ -31,7 +31,7 @@ var oDaemonCommand = &cobra.Command{
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 DAEMON 服務。")
 
 		if err := oDaemonRouter.Serve(ctx); err != nil {
-			log.Printf("daemon stopped: %v", err)
+			pkgUtility.Logger(pkgUtility.Default).Error("DAEMON 服務已停止", zap.Error(err))
 		}
 	},
 }

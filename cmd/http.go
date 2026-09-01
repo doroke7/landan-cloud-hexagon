@@ -2,15 +2,14 @@ package cmd
 
 import (
 	"context"
-	"log"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/gin-gonic/gin"
-
 	"github.com/spf13/cobra"
+	"go.uber.org/zap"
 
 	bootstrap "example/bootstrap"
 	container "example/container"
@@ -27,7 +26,7 @@ var oHttpCommand = &cobra.Command{
 
 		oContainer, err := container.InitHttpContainer(ctx)
 		if err != nil {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 http container 失敗", zap.Error(err))
 		}
 		oGin := gin.Default()
 
@@ -49,7 +48,7 @@ var oHttpCommand = &cobra.Command{
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 HTTP 服務。 port: " + bootstrap.CONFIG.SERVICES.HTTP.PORT)
 
 		if err := oHttpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			log.Fatal(err)
+			pkgUtility.Logger(pkgUtility.Default).Fatal("HTTP server 異常結束", zap.Error(err))
 		}
 	},
 }
