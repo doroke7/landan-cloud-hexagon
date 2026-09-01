@@ -1,8 +1,7 @@
-package outputApplicationPulsarModel
+package outputApplicationPulsarEvent
 
 import (
 	"encoding/json"
-	"errors"
 
 	"github.com/apache/pulsar-client-go/pulsar"
 
@@ -10,12 +9,12 @@ import (
 	outputApplicationPulsar "example/internal/output/application/pulsar"
 )
 
-type AdminUserModel struct {
+type AdminUserEvent struct {
 	*outputApplicationPulsar.AbstractPulsar
 	Producer pulsar.Producer
 }
 
-func NewAdminUserModel(oAbstractPulsar *outputApplicationPulsar.AbstractPulsar) (*AdminUserModel, error) {
+func NewAdminUserEvent(oAbstractPulsar *outputApplicationPulsar.AbstractPulsar) (*AdminUserEvent, error) {
 	oProducer, err := oAbstractPulsar.Client.CreateProducer(pulsar.ProducerOptions{
 		Topic: "/Queue/AdminUser.AddOne",
 	})
@@ -23,13 +22,13 @@ func NewAdminUserModel(oAbstractPulsar *outputApplicationPulsar.AbstractPulsar) 
 		return nil, err
 	}
 
-	return &AdminUserModel{
+	return &AdminUserEvent{
 		AbstractPulsar: oAbstractPulsar,
 		Producer:       oProducer,
 	}, nil
 }
 
-func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
+func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 	aByteBody, err := json.Marshal(oAdminUser)
 	if err != nil {
 		return err
@@ -42,14 +41,7 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
 	return err
 }
 
-func (oSelf *AdminUserModel) ShowOneById(id uint) (*domain.AdminUser, error) {
-	return nil, errors.New("not supported by pulsar")
-}
-
-// Close 這裡不是空實作：Producer 是這個 model 自己在建構時針對
-// "AdminUser.AddOne" topic 開的，跟 rabbitmq/redpanda 那種掛在
-// AbstractXxx 上的共用資源不同，沒有其他人共用，生命週期歸這裡管。
-func (oSelf *AdminUserModel) Close() error {
+func (oSelf *AdminUserEvent) Close() error {
 	oSelf.Producer.Close()
 	return nil
 }

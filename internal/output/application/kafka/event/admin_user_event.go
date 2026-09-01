@@ -1,8 +1,7 @@
-package outputApplicationKafkaModel
+package outputApplicationKafkaEvent
 
 import (
 	"encoding/json"
-	"errors"
 
 	"github.com/IBM/sarama"
 
@@ -10,17 +9,17 @@ import (
 	outputApplicationKafka "example/internal/output/application/kafka"
 )
 
-type AdminUserModel struct {
+type AdminUserEvent struct {
 	*outputApplicationKafka.AbstractKafka
 }
 
-func NewAdminUserModel(oAbstractKafka *outputApplicationKafka.AbstractKafka) (*AdminUserModel, error) {
-	return &AdminUserModel{
+func NewAdminUserEvent(oAbstractKafka *outputApplicationKafka.AbstractKafka) (*AdminUserEvent, error) {
+	return &AdminUserEvent{
 		AbstractKafka: oAbstractKafka,
 	}, nil
 }
 
-func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
+func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 	aByteBody, err := json.Marshal(oAdminUser)
 	if err != nil {
 		return err
@@ -34,12 +33,8 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
 	return err
 }
 
-func (oSelf *AdminUserModel) ShowOneById(id uint) (*domain.AdminUser, error) {
-	return nil, errors.New("not supported by kafka")
-}
-
 // Close 是空實作：Client/Producer 現在都是從 AbstractKafka 注入的共用資源，
 // 生命週期不屬於這個 repository，不該由這裡關閉。
-func (oSelf *AdminUserModel) Close() error {
+func (oSelf *AdminUserEvent) Close() error {
 	return nil
 }

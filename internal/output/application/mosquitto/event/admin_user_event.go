@@ -1,24 +1,23 @@
-package outputApplicationMosquittoModel
+package outputApplicationMosquittoEvent
 
 import (
 	"encoding/json"
-	"errors"
 
 	domain "example/internal/domain"
 	outputApplicationMosquitto "example/internal/output/application/mosquitto"
 )
 
-type AdminUserModel struct {
+type AdminUserEvent struct {
 	*outputApplicationMosquitto.AbstractMosquitto
 }
 
-func NewAdminUserModel(oAbstractMosquitto *outputApplicationMosquitto.AbstractMosquitto) (*AdminUserModel, error) {
-	return &AdminUserModel{
+func NewAdminUserEvent(oAbstractMosquitto *outputApplicationMosquitto.AbstractMosquitto) (*AdminUserEvent, error) {
+	return &AdminUserEvent{
 		AbstractMosquitto: oAbstractMosquitto,
 	}, nil
 }
 
-func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
+func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 	aByteBody, err := json.Marshal(oAdminUser)
 	if err != nil {
 		return err
@@ -32,12 +31,8 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
 	return oErr
 }
 
-func (oSelf *AdminUserModel) ShowOneById(id uint) (*domain.AdminUser, error) {
-	return nil, errors.New("not supported by mosquitto")
-}
-
 // Close 是空實作：Client 現在是從 AbstractMosquitto 注入的共用資源，
 // 生命週期不屬於這個 repository，不該由這裡關閉。
-func (oSelf *AdminUserModel) Close() error {
+func (oSelf *AdminUserEvent) Close() error {
 	return nil
 }

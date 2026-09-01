@@ -36,7 +36,7 @@ import (
 	outputApplicationMysqlModel "example/internal/output/application/mysql/model"
 
 	outputApplicationRabbitmq "example/internal/output/application/rabbitmq"
-	outputApplicationRabbitmqModel "example/internal/output/application/rabbitmq/model"
+	outputApplicationRabbitmqEvent "example/internal/output/application/rabbitmq/event"
 	outputApplicationResource "example/internal/output/application/resource"
 	outputApplicationResourceLogic "example/internal/output/application/resource/logic"
 	outputApplicationResourceModel "example/internal/output/application/resource/model"
@@ -389,7 +389,7 @@ type ResourceContainer struct {
 	ResourceModelLoggerInterceptor         *interceptorResourceModel.LoggerInterceptor
 
 	// MQ 生產者
-	ResourceRabbitmqAdminUser *outputApplicationRabbitmqModel.AdminUserModel
+	ResourceRabbitmqAdminUser *outputApplicationRabbitmqEvent.AdminUserEvent
 }
 
 func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
@@ -418,7 +418,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		outputApplicationMysqlLogic.NewTableLogic,
 		outputApplicationMysqlLogic.NewGameTypeLogic,
 		outputApplicationRabbitmq.NewAbstractRabbitmq,
-		outputApplicationRabbitmqModel.NewAdminUserModel,
+		outputApplicationRabbitmqEvent.NewAdminUserEvent,
 
 		// usecase
 		usecaseApplicationAnyModel.NewAbstractUsecase,

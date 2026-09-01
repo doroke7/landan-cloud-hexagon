@@ -55,7 +55,7 @@ import (
 	"example/internal/output/application/mysql/logic"
 	"example/internal/output/application/mysql/model"
 	"example/internal/output/application/rabbitmq"
-	"example/internal/output/application/rabbitmq/model"
+	"example/internal/output/application/rabbitmq/event"
 	"example/internal/output/application/resource"
 	"example/internal/output/application/resource/logic"
 	"example/internal/output/application/resource/model"
@@ -323,7 +323,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	if err != nil {
 		return nil, err
 	}
-	outputApplicationRabbitmqModelAdminUserModel, err := outputApplicationRabbitmqModel.NewAdminUserModel(abstractRabbitmq)
+	adminUserEvent, err := outputApplicationRabbitmqEvent.NewAdminUserEvent(abstractRabbitmq)
 	if err != nil {
 		return nil, err
 	}
@@ -353,7 +353,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		ResourceModelAuthenticationInterceptor: interceptorResourceModelAuthenticationInterceptor,
 		ResourceModelErrorInterceptor:          interceptorResourceModelErrorInterceptor,
 		ResourceModelLoggerInterceptor:         interceptorResourceModelLoggerInterceptor,
-		ResourceRabbitmqAdminUser:              outputApplicationRabbitmqModelAdminUserModel,
+		ResourceRabbitmqAdminUser:              adminUserEvent,
 	}
 	return resourceContainer, nil
 }
@@ -779,7 +779,7 @@ type ResourceContainer struct {
 	ResourceModelLoggerInterceptor         *interceptorResourceModel.LoggerInterceptor
 
 	// MQ 生產者
-	ResourceRabbitmqAdminUser *outputApplicationRabbitmqModel.AdminUserModel
+	ResourceRabbitmqAdminUser *outputApplicationRabbitmqEvent.AdminUserEvent
 }
 
 // RabbitmqContainer 只給 `rabbitmq` MQ 消費者服務使用。

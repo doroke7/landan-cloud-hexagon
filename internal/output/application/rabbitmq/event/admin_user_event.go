@@ -1,8 +1,7 @@
-package outputApplicationRabbitmqModel
+package outputApplicationRabbitmqEvent
 
 import (
 	"encoding/json"
-	"errors"
 
 	amqp "github.com/rabbitmq/amqp091-go"
 
@@ -10,22 +9,22 @@ import (
 	outputApplicationRabbitmq "example/internal/output/application/rabbitmq"
 )
 
-type AdminUserModel struct {
+type AdminUserEvent struct {
 	*outputApplicationRabbitmq.AbstractRabbitmq
 }
 
-func NewAdminUserModel(oAbstractRabbitmq *outputApplicationRabbitmq.AbstractRabbitmq) (*AdminUserModel, error) {
+func NewAdminUserEvent(oAbstractRabbitmq *outputApplicationRabbitmq.AbstractRabbitmq) (*AdminUserEvent, error) {
 	_, err := oAbstractRabbitmq.Channel.QueueDeclare("AdminUser.AddOne", true, false, false, false, nil)
 	if err != nil {
 		return nil, err
 	}
 
-	return &AdminUserModel{
+	return &AdminUserEvent{
 		AbstractRabbitmq: oAbstractRabbitmq,
 	}, nil
 }
 
-func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
+func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 	aByteBody, err := json.Marshal(oAdminUser)
 	if err != nil {
 		return err
@@ -43,12 +42,6 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUser) error {
 	)
 }
 
-func (oSelf *AdminUserModel) ShowOneById(id uint) (*domain.AdminUser, error) {
-	return nil, errors.New("not supported by rabbitmq")
-}
-
-// Close 是空實作：Conn／Channel 現在都是從 AbstractRepository 注入的共用資源，
-// 生命週期不屬於這個 repository，不該由這裡關閉。
-func (oSelf *AdminUserModel) Close() error {
+func (oSelf *AdminUserEvent) Close() error {
 	return nil
 }
