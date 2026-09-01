@@ -3,6 +3,7 @@ package client
 import (
 	"google.golang.org/grpc"
 
+	pbResourceEvent "example/pb/resource/event"
 	pbResourceLogic "example/pb/resource/logic"
 	pbResourceModel "example/pb/resource/model"
 )
@@ -25,6 +26,12 @@ func NewLogic(oClientConn *grpc.ClientConn) *Logic {
 	}
 }
 
+func NewEvent(oClientConn *grpc.ClientConn) *Event {
+	return &Event{
+		AdminUser: pbResourceEvent.NewAdminUserEventClient(oClientConn),
+	}
+}
+
 type Model struct {
 	AdminUser pbResourceModel.AdminUserModelClient
 	AppUser   pbResourceModel.AppUserModelClient
@@ -37,6 +44,10 @@ type Logic struct {
 	Game     pbResourceLogic.GameLogicClient
 	Table    pbResourceLogic.TableLogicClient
 	GameType pbResourceLogic.GameTypeLogicClient
+}
+
+type Event struct {
+	AdminUser pbResourceEvent.AdminUserEventClient
 }
 
 /*
@@ -52,12 +63,13 @@ type Logic struct {
 
 ////////////////////////////////////////////////////////////////////////////
 
-func NewResourceClient(oClientConn *grpc.ClientConn, oModel *Model, oLogic *Logic) *ResourceClient {
+func NewResourceClient(oClientConn *grpc.ClientConn, oModel *Model, oLogic *Logic, oEvent *Event) *ResourceClient {
 
 	return &ResourceClient{
 		conn:  oClientConn,
 		Model: oModel,
 		Logic: oLogic,
+		Event: oEvent,
 	}
 }
 
@@ -65,6 +77,7 @@ type ResourceClient struct {
 	conn  *grpc.ClientConn
 	Model *Model // 這樣不厭其煩的命名 【嵌套結構】，是為了與 server 【命名空間一致性】，增加可讀性。
 	Logic *Logic
+	Event *Event
 }
 
 func (oClient *ResourceClient) Close() error {

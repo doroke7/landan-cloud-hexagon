@@ -5,13 +5,14 @@ import (
 
 	domain "example/internal/domain"
 	outputApplicationEmqx "example/internal/output/application/emqx"
+	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
 	*outputApplicationEmqx.AbstractEmqx
 }
 
-func NewAdminUserEvent(oAbstractEmqx *outputApplicationEmqx.AbstractEmqx) (*AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractEmqx *outputApplicationEmqx.AbstractEmqx) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
 		AbstractEmqx: oAbstractEmqx,
 	}, nil

@@ -7,6 +7,7 @@ import (
 
 	domain "example/internal/domain"
 	outputApplicationPulsar "example/internal/output/application/pulsar"
+	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
@@ -14,7 +15,7 @@ type AdminUserEvent struct {
 	Producer pulsar.Producer
 }
 
-func NewAdminUserEvent(oAbstractPulsar *outputApplicationPulsar.AbstractPulsar) (*AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractPulsar *outputApplicationPulsar.AbstractPulsar) (outputPortAnyEvent.AdminUserEvent, error) {
 	oProducer, err := oAbstractPulsar.Client.CreateProducer(pulsar.ProducerOptions{
 		Topic: "/Queue/AdminUser.AddOne",
 	})

@@ -7,13 +7,14 @@ import (
 
 	domain "example/internal/domain"
 	outputApplicationRedpanda "example/internal/output/application/redpanda"
+	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
 	*outputApplicationRedpanda.AbstractRedpanda
 }
 
-func NewAdminUserEvent(oAbstractRedpanda *outputApplicationRedpanda.AbstractRedpanda) (*AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractRedpanda *outputApplicationRedpanda.AbstractRedpanda) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
 		AbstractRedpanda: oAbstractRedpanda,
 	}, nil

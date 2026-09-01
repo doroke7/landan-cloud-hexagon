@@ -7,13 +7,14 @@ import (
 
 	domain "example/internal/domain"
 	outputApplicationKafka "example/internal/output/application/kafka"
+	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
 	*outputApplicationKafka.AbstractKafka
 }
 
-func NewAdminUserEvent(oAbstractKafka *outputApplicationKafka.AbstractKafka) (*AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractKafka *outputApplicationKafka.AbstractKafka) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
 		AbstractKafka: oAbstractKafka,
 	}, nil

@@ -16,6 +16,7 @@ type AbstractResource struct {
 	Context             context.Context
 	ResourceLogicClient *client.Logic
 	ResourceModelClient *client.Model
+	ResourceEventClient *client.Event
 }
 
 func NewAbstractResource(oContext context.Context, oResourceClient *client.ResourceClient) *AbstractResource {
@@ -23,6 +24,7 @@ func NewAbstractResource(oContext context.Context, oResourceClient *client.Resou
 		Context:             oContext,
 		ResourceLogicClient: oResourceClient.Logic,
 		ResourceModelClient: oResourceClient.Model,
+		ResourceEventClient: oResourceClient.Event,
 	}
 }
 

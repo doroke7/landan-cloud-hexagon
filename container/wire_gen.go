@@ -31,6 +31,7 @@ import (
 	"example/internal/input/application/rabbitmq"
 	"example/internal/input/application/rabbitmq/admin/resource"
 	"example/internal/input/application/resource"
+	"example/internal/input/application/resource/event"
 	"example/internal/input/application/resource/logic"
 	"example/internal/input/application/resource/model"
 	"example/internal/input/application/source"
@@ -59,11 +60,13 @@ import (
 	"example/internal/output/application/resource"
 	"example/internal/output/application/resource/logic"
 	"example/internal/output/application/resource/model"
+	"example/internal/output/port/any/event"
 	"example/internal/usecase/application/any/admin"
 	"example/internal/usecase/application/any/admin/authentication"
 	"example/internal/usecase/application/any/admin/option"
 	"example/internal/usecase/application/any/admin/resource"
 	"example/internal/usecase/application/any/annoucement"
+	"example/internal/usecase/application/any/event"
 	"example/internal/usecase/application/any/game"
 	"example/internal/usecase/application/any/game/authentication"
 	"example/internal/usecase/application/any/logic"
@@ -93,7 +96,8 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	clientConn := bootstrap.NewResource(ctx)
 	model := client.NewModel(clientConn)
 	logic := client.NewLogic(clientConn)
-	resourceClient := client.NewResourceClient(clientConn, model, logic)
+	event := client.NewEvent(clientConn)
+	resourceClient := client.NewResourceClient(clientConn, model, logic, event)
 	abstractHandler := inputApplicationHttp.NewAbstractHandler(response, aesHelper, jwtHelper)
 	abstractResource := outputApplicationResource.NewAbstractResource(ctx, resourceClient)
 	adminUserModel := outputApplicationResourceModel.NewAdminUserModel(abstractResource)
@@ -216,7 +220,8 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 	clientConn := bootstrap.NewResource(ctx)
 	model := client.NewModel(clientConn)
 	logic := client.NewLogic(clientConn)
-	resourceClient := client.NewResourceClient(clientConn, model, logic)
+	event := client.NewEvent(clientConn)
+	resourceClient := client.NewResourceClient(clientConn, model, logic, event)
 	abstractHandler := inputApplicationFacade.NewAbstractHandler(aesHelper)
 	scannerHandler := inputApplicationFacadeTable.NewScannerHandler(abstractHandler)
 	authenticatorHandler := inputApplicationFacadeRegister.NewAuthenticatorHandler(abstractHandler)
@@ -304,17 +309,9 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	tableLogic := outputApplicationMysqlLogic.NewTableLogic(abstractMysql)
 	usecasePortAnyLogicTableUsecase := usecaseApplicationAnyLogic.NewTableUsecase(usecaseApplicationAnyLogicAbstractUsecase, tableLogic)
 	inputApplicationResourceLogicTableHandler := inputApplicationResourceLogic.NewTableHandler(abstractHandler, usecasePortAnyLogicTableUsecase)
-	gameType := outputApplicationMysqlLogic.NewGameTypeLogic(abstractMysql)
-	usecasePortAnyLogicGameTypeUsecase := usecaseApplicationAnyLogic.NewGameTypeUsecase(usecaseApplicationAnyLogicAbstractUsecase, gameType)
+	gameTypeLogic := outputApplicationMysqlLogic.NewGameTypeLogic(abstractMysql)
+	usecasePortAnyLogicGameTypeUsecase := usecaseApplicationAnyLogic.NewGameTypeUsecase(usecaseApplicationAnyLogicAbstractUsecase, gameTypeLogic)
 	inputApplicationResourceLogicGameTypeHandler := inputApplicationResourceLogic.NewGameTypeHandler(abstractHandler, usecasePortAnyLogicGameTypeUsecase)
-	abstractInterceptor := interceptorResourceLogic.NewAbstractInterceptor()
-	authenticationInterceptor := interceptorResourceLogic.NewAuthenticationInterceptor(abstractInterceptor)
-	errorInterceptor := interceptorResourceLogic.NewErrorInterceptor(abstractInterceptor)
-	loggerInterceptor := interceptorResourceLogic.NewLoggerInterceptor(abstractInterceptor)
-	interceptorResourceModelAbstractInterceptor := interceptorResourceModel.NewAbstractInterceptor()
-	interceptorResourceModelAuthenticationInterceptor := interceptorResourceModel.NewAuthenticationInterceptor(interceptorResourceModelAbstractInterceptor)
-	interceptorResourceModelErrorInterceptor := interceptorResourceModel.NewErrorInterceptor(interceptorResourceModelAbstractInterceptor)
-	interceptorResourceModelLoggerInterceptor := interceptorResourceModel.NewLoggerInterceptor(interceptorResourceModelAbstractInterceptor)
 	connection, err := bootstrap.NewAmqp()
 	if err != nil {
 		return nil, err
@@ -327,6 +324,16 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	if err != nil {
 		return nil, err
 	}
+	usecasePortAnyEventAdminUserUsecase := usecaseApplicationAnyEvent.NewAdminUserUsecase(adminUserEvent)
+	inputApplicationResourceEventAdminUserHandler := inputApplicationResourceEvent.NewAdminUserHandler(abstractHandler, usecasePortAnyEventAdminUserUsecase)
+	abstractInterceptor := interceptorResourceLogic.NewAbstractInterceptor()
+	authenticationInterceptor := interceptorResourceLogic.NewAuthenticationInterceptor(abstractInterceptor)
+	errorInterceptor := interceptorResourceLogic.NewErrorInterceptor(abstractInterceptor)
+	loggerInterceptor := interceptorResourceLogic.NewLoggerInterceptor(abstractInterceptor)
+	interceptorResourceModelAbstractInterceptor := interceptorResourceModel.NewAbstractInterceptor()
+	interceptorResourceModelAuthenticationInterceptor := interceptorResourceModel.NewAuthenticationInterceptor(interceptorResourceModelAbstractInterceptor)
+	interceptorResourceModelErrorInterceptor := interceptorResourceModel.NewErrorInterceptor(interceptorResourceModelAbstractInterceptor)
+	interceptorResourceModelLoggerInterceptor := interceptorResourceModel.NewLoggerInterceptor(interceptorResourceModelAbstractInterceptor)
 	resourceContainer := &ResourceContainer{
 		Clock:                                  clock,
 		AbstractHelper:                         abstractHelper,
@@ -347,13 +354,14 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		ResourceLogicGame:                      inputApplicationResourceLogicGameHandler,
 		ResourceLogicTable:                     inputApplicationResourceLogicTableHandler,
 		ResourceLogicGameType:                  inputApplicationResourceLogicGameTypeHandler,
+		ResourceEventAdminUser:                 inputApplicationResourceEventAdminUserHandler,
 		ResourceLogicAuthenticationInterceptor: authenticationInterceptor,
 		ResourceLogicErrorInterceptor:          errorInterceptor,
 		ResourceLogicLoggerInterceptor:         loggerInterceptor,
 		ResourceModelAuthenticationInterceptor: interceptorResourceModelAuthenticationInterceptor,
 		ResourceModelErrorInterceptor:          interceptorResourceModelErrorInterceptor,
 		ResourceModelLoggerInterceptor:         interceptorResourceModelLoggerInterceptor,
-		ResourceRabbitmqAdminUser:              adminUserEvent,
+		ResourceRabbitmqAdminUserEvent:         adminUserEvent,
 	}
 	return resourceContainer, nil
 }
@@ -444,7 +452,8 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 	clientConn := bootstrap.NewResource(ctx)
 	model := client.NewModel(clientConn)
 	logic := client.NewLogic(clientConn)
-	resourceClient := client.NewResourceClient(clientConn, model, logic)
+	event := client.NewEvent(clientConn)
+	resourceClient := client.NewResourceClient(clientConn, model, logic, event)
 	abstractHandler := inputApplicationWebsocket.NewAbstractHandler(aesHelper)
 	abstractResource := outputApplicationResource.NewAbstractResource(ctx, resourceClient)
 	adminUserModel := outputApplicationResourceModel.NewAdminUserModel(abstractResource)
@@ -488,7 +497,8 @@ func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) 
 	clientConn := bootstrap.NewResource(ctx)
 	model := client.NewModel(clientConn)
 	logic := client.NewLogic(clientConn)
-	resourceClient := client.NewResourceClient(clientConn, model, logic)
+	event := client.NewEvent(clientConn)
+	resourceClient := client.NewResourceClient(clientConn, model, logic, event)
 	conn, err := bootstrap.NewNats()
 	if err != nil {
 		return nil, err
@@ -571,7 +581,8 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 	clientConn := bootstrap.NewResource(ctx)
 	model := client.NewModel(clientConn)
 	logic := client.NewLogic(clientConn)
-	resourceClient := client.NewResourceClient(clientConn, model, logic)
+	event := client.NewEvent(clientConn)
+	resourceClient := client.NewResourceClient(clientConn, model, logic, event)
 	abstractHandler := inputApplicationTcp.NewAbstractHandler(aesHelper)
 	abstractResource := outputApplicationResource.NewAbstractResource(ctx, resourceClient)
 	adminUserModel := outputApplicationResourceModel.NewAdminUserModel(abstractResource)
@@ -769,6 +780,7 @@ type ResourceContainer struct {
 	ResourceLogicGame      *inputApplicationResourceLogic.GameHandler
 	ResourceLogicTable     *inputApplicationResourceLogic.TableHandler
 	ResourceLogicGameType  *inputApplicationResourceLogic.GameTypeHandler
+	ResourceEventAdminUser *inputApplicationResourceEvent.AdminUserHandler
 
 	// gRPC Resource Interceptor
 	ResourceLogicAuthenticationInterceptor *interceptorResourceLogic.AuthenticationInterceptor
@@ -779,7 +791,7 @@ type ResourceContainer struct {
 	ResourceModelLoggerInterceptor         *interceptorResourceModel.LoggerInterceptor
 
 	// MQ 生產者
-	ResourceRabbitmqAdminUser *outputApplicationRabbitmqEvent.AdminUserEvent
+	ResourceRabbitmqAdminUserEvent outputPortAnyEvent.AdminUserEvent
 }
 
 // RabbitmqContainer 只給 `rabbitmq` MQ 消費者服務使用。

@@ -1,0 +1,29 @@
+package outputApplicationResourceEvent
+
+import (
+	domain "example/internal/domain"
+	resourceBase "example/internal/output/application/resource"
+	outputPortAnyEvent "example/internal/output/port/any/event"
+	pbResourceEvent "example/pb/resource/event"
+)
+
+type AdminUserEvent struct {
+	*resourceBase.AbstractResource
+}
+
+func NewAdminUserEvent(oAbstractEvent *resourceBase.AbstractResource) (outputPortAnyEvent.AdminUserEvent, error) {
+	return &AdminUserEvent{
+		AbstractResource: oAbstractEvent,
+	}, nil
+}
+
+// AddOne 打 resource gRPC 的 AdminUserEvent.AddOne；event port 只回 error。
+func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
+	_, oErr := oSelf.ResourceEventClient.AdminUser.AddOne(oSelf.Context, &pbResourceEvent.AdminUserEventAddOneInput{
+		Id:       uint32(oAdminUser.Id),
+		Name:     oAdminUser.Name,
+		Password: oAdminUser.Password,
+	})
+
+	return oErr
+}

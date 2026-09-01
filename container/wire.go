@@ -40,6 +40,7 @@ import (
 	outputApplicationResource "example/internal/output/application/resource"
 	outputApplicationResourceLogic "example/internal/output/application/resource/logic"
 	outputApplicationResourceModel "example/internal/output/application/resource/model"
+	outputPortAnyEvent "example/internal/output/port/any/event"
 
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
 
@@ -48,6 +49,7 @@ import (
 	usecaseApplicationAnyAdminOption "example/internal/usecase/application/any/admin/option"
 	usecaseApplicationAnyAdminResource "example/internal/usecase/application/any/admin/resource"
 	usecaseApplicationAnyAnnouncement "example/internal/usecase/application/any/annoucement"
+	usecaseApplicationAnyEvent "example/internal/usecase/application/any/event"
 	usecaseApplicationAnyGame "example/internal/usecase/application/any/game"
 	usecaseApplicationAnyGameAuthentication "example/internal/usecase/application/any/game/authentication"
 	usecaseApplicationAnyLogic "example/internal/usecase/application/any/logic"
@@ -82,6 +84,7 @@ import (
 	inputApplicationDaemonWatcherSource "example/internal/input/application/daemon/watcher/source"
 
 	inputApplicationResource "example/internal/input/application/resource"
+	inputApplicationResourceEvent "example/internal/input/application/resource/event"
 	inputApplicationResourceLogic "example/internal/input/application/resource/logic"
 	inputApplicationResourceModel "example/internal/input/application/resource/model"
 
@@ -208,6 +211,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 
 		// client
 		client.NewModel,
+		client.NewEvent,
 		client.NewLogic,
 		client.NewResourceClient,
 
@@ -322,6 +326,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 
 		// client
 		client.NewModel,
+		client.NewEvent,
 		client.NewLogic,
 		client.NewResourceClient,
 
@@ -379,6 +384,7 @@ type ResourceContainer struct {
 	ResourceLogicGame      *inputApplicationResourceLogic.GameHandler
 	ResourceLogicTable     *inputApplicationResourceLogic.TableHandler
 	ResourceLogicGameType  *inputApplicationResourceLogic.GameTypeHandler
+	ResourceEventAdminUser *inputApplicationResourceEvent.AdminUserHandler
 
 	// gRPC Resource Interceptor
 	ResourceLogicAuthenticationInterceptor *interceptorResourceLogic.AuthenticationInterceptor
@@ -389,7 +395,7 @@ type ResourceContainer struct {
 	ResourceModelLoggerInterceptor         *interceptorResourceModel.LoggerInterceptor
 
 	// MQ 生產者
-	ResourceRabbitmqAdminUser *outputApplicationRabbitmqEvent.AdminUserEvent
+	ResourceRabbitmqAdminUserEvent outputPortAnyEvent.AdminUserEvent
 }
 
 func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
@@ -431,6 +437,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		usecaseApplicationAnyLogic.NewGameUsecase,
 		usecaseApplicationAnyLogic.NewTableUsecase,
 		usecaseApplicationAnyLogic.NewGameTypeUsecase,
+		usecaseApplicationAnyEvent.NewAdminUserUsecase,
 
 		// input-resource
 		inputApplicationResource.NewAbstractHandler,
@@ -442,6 +449,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		inputApplicationResourceLogic.NewGameHandler,
 		inputApplicationResourceLogic.NewTableHandler,
 		inputApplicationResourceLogic.NewGameTypeHandler,
+		inputApplicationResourceEvent.NewAdminUserHandler,
 
 		// interceptor-resource
 		interceptorResourceLogic.NewAbstractInterceptor,
@@ -614,6 +622,7 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 
 		// client
 		client.NewModel,
+		client.NewEvent,
 		client.NewLogic,
 		client.NewResourceClient,
 
@@ -671,6 +680,7 @@ func InitCentrifugeContainer(ctx context.Context) (*CentrifugeContainer, error) 
 
 		// client
 		client.NewModel,
+		client.NewEvent,
 		client.NewLogic,
 		client.NewResourceClient,
 
@@ -803,6 +813,7 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 
 		// client
 		client.NewModel,
+		client.NewEvent,
 		client.NewLogic,
 		client.NewResourceClient,
 

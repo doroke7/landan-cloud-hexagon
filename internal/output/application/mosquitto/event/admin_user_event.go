@@ -5,13 +5,14 @@ import (
 
 	domain "example/internal/domain"
 	outputApplicationMosquitto "example/internal/output/application/mosquitto"
+	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
 	*outputApplicationMosquitto.AbstractMosquitto
 }
 
-func NewAdminUserEvent(oAbstractMosquitto *outputApplicationMosquitto.AbstractMosquitto) (*AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractMosquitto *outputApplicationMosquitto.AbstractMosquitto) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
 		AbstractMosquitto: oAbstractMosquitto,
 	}, nil

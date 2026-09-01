@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/keepalive"
 
+	pbResourceEvent "example/pb/resource/event"
 	pbResourceLogic "example/pb/resource/logic"
 	pbResourceModel "example/pb/resource/model"
 
@@ -28,6 +29,12 @@ func resourceInterceptors(oContainer *container.ResourceContainer) grpc.UnarySer
 		oContainer.ResourceLogicErrorInterceptor.Handle(),
 		oContainer.ResourceLogicLoggerInterceptor.Handle(),
 		oContainer.ResourceLogicAuthenticationInterceptor.Handle(),
+	)
+
+	oRouter.Group("pb.resource.event",
+		oContainer.ResourceModelErrorInterceptor.Handle(),
+		oContainer.ResourceModelLoggerInterceptor.Handle(),
+		oContainer.ResourceModelAuthenticationInterceptor.Handle(),
 	)
 
 	return oRouter.Build()
@@ -59,6 +66,7 @@ func Init(oContainer *container.ResourceContainer) *grpc.Server {
 	pbResourceLogic.RegisterGameLogicServer(oGrpcServer, oContainer.ResourceLogicGame)
 	pbResourceLogic.RegisterTableLogicServer(oGrpcServer, oContainer.ResourceLogicTable)
 	pbResourceLogic.RegisterGameTypeLogicServer(oGrpcServer, oContainer.ResourceLogicGameType)
+	pbResourceEvent.RegisterAdminUserEventServer(oGrpcServer, oContainer.ResourceEventAdminUser)
 
 	return oGrpcServer
 }

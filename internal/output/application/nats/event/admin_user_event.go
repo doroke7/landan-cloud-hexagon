@@ -5,13 +5,14 @@ import (
 
 	domain "example/internal/domain"
 	outputApplicationNats "example/internal/output/application/nats"
+	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
 	*outputApplicationNats.AbstractNats
 }
 
-func NewAdminUserEvent(oAbstractNats *outputApplicationNats.AbstractNats) (*AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractNats *outputApplicationNats.AbstractNats) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
 		AbstractNats: oAbstractNats,
 	}, nil
