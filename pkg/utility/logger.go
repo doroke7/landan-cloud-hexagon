@@ -18,6 +18,9 @@ const (
 	Cron     Module = "cron"
 	Consumer Module = "consumer"
 
+	Tcp Module = "tcp"
+	Udp Module = "udp"
+
 	Http                Module = "http"
 	HttpAdmin           Module = "http-admin"
 	HttpApp             Module = "http-app"
@@ -56,6 +59,8 @@ const (
 	ResourceModel            Module = "resource-model"
 	ResourceLogicInterceptor Module = "resource-logic-interceptor"
 	ResourceModelInterceptor Module = "resource-model-interceptor"
+
+	Source Module = "source"
 
 	Client        Module = "client"
 	Deamon        Module = "deamon"

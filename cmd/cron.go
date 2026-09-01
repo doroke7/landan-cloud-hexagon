@@ -23,12 +23,12 @@ var oCronCommand = &cobra.Command{
 
 		oContainer, err := container.InitCronContainer(ctx)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 cron container 失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Cron).Fatal("初始化 cron container 失敗", zap.Error(err))
 		}
 
 		oCron := registerCron.Init(oContainer)
 
-		pkgUtility.Logger(pkgUtility.Default).Info("啟動 CRON 服務。")
+		pkgUtility.Logger(pkgUtility.Cron).Info("啟動 CRON 服務。")
 
 		oCron.Start()
 

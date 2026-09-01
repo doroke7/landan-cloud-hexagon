@@ -26,7 +26,7 @@ var oHttpCommand = &cobra.Command{
 
 		oContainer, err := container.InitHttpContainer(ctx)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 http container 失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Http).Fatal("初始化 http container 失敗", zap.Error(err))
 		}
 		oGin := gin.Default()
 
@@ -45,10 +45,10 @@ var oHttpCommand = &cobra.Command{
 			oHttpServer.Shutdown(context.Background())
 		}()
 
-		pkgUtility.Logger(pkgUtility.Default).Info("啟動 HTTP 服務。 port: " + bootstrap.CONFIG.SERVICES.HTTP.PORT)
+		pkgUtility.Logger(pkgUtility.Http).Info("啟動 HTTP 服務。 port: " + bootstrap.CONFIG.SERVICES.HTTP.PORT)
 
 		if err := oHttpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("HTTP server 異常結束", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Http).Fatal("HTTP server 異常結束", zap.Error(err))
 		}
 	},
 }

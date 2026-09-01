@@ -26,15 +26,15 @@ var oRabbitmqCommand = &cobra.Command{
 
 		oContainer, err := container.InitRabbitmqContainer(ctx)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 rabbitmq container 失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Consumer).Fatal("初始化 rabbitmq container 失敗", zap.Error(err))
 		}
 
 		oRabbitmqRouter := registerRabbitmq.Init(oContainer)
 
-		pkgUtility.Logger(pkgUtility.Default).Info("啟動 RABBITMQ 服務。")
+		pkgUtility.Logger(pkgUtility.Consumer).Info("啟動 RABBITMQ 服務。")
 
 		if err := oRabbitmqRouter.Serve(ctx); err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Error("RABBITMQ 服務已停止", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Consumer).Error("RABBITMQ 服務已停止", zap.Error(err))
 		}
 	},
 }

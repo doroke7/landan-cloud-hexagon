@@ -26,7 +26,7 @@ var oCentrifugeCommand = &cobra.Command{
 
 		oContainer, oErr := container.InitCentrifugeContainer(ctx)
 		if oErr != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 centrifuge container 失敗", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.Centrifuge).Fatal("初始化 centrifuge container 失敗", zap.Error(oErr))
 		}
 		defer oContainer.Nats.Close()
 
@@ -43,10 +43,10 @@ var oCentrifugeCommand = &cobra.Command{
 			oCentrifugeServer.Shutdown(context.Background())
 		}()
 
-		pkgUtility.Logger(pkgUtility.Default).Info("啟動 CENTRIFUGE 服務。 port: " + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT)
+		pkgUtility.Logger(pkgUtility.Centrifuge).Info("啟動 CENTRIFUGE 服務。 port: " + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT)
 
 		if oErr := oCentrifugeServer.ListenAndServe(); oErr != nil && oErr != http.ErrServerClosed {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("CENTRIFUGE server 異常結束", zap.Error(oErr))
+			pkgUtility.Logger(pkgUtility.Centrifuge).Fatal("CENTRIFUGE server 異常結束", zap.Error(oErr))
 		}
 	},
 }

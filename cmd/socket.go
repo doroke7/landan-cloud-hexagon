@@ -11,7 +11,7 @@ var oSocketCommand = &cobra.Command{
 	Short: "啟動 socket 服務",
 	Run: func(cmd *cobra.Command, args []string) {
 		// 尚未實作：直接 Fatal 讓 exit code 非 0，不要靜默 exit 0。
-		pkgUtility.Logger(pkgUtility.Default).Fatal("socket 服務尚未實作")
+		pkgUtility.Logger(pkgUtility.Socket).Fatal("socket 服務尚未實作")
 	},
 }
 

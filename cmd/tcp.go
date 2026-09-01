@@ -26,15 +26,15 @@ var oTcpCommand = &cobra.Command{
 
 		oContainer, err := container.InitTcpContainer(ctx)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 tcp container 失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Tcp).Fatal("初始化 tcp container 失敗", zap.Error(err))
 		}
 
 		oTcpRouter := registerTcp.Init(oContainer)
 
-		pkgUtility.Logger(pkgUtility.Default).Info("啟動 TCP 服務。 port: " + bootstrap.CONFIG.SERVICES.TCP.PORT)
+		pkgUtility.Logger(pkgUtility.Tcp).Info("啟動 TCP 服務。 port: " + bootstrap.CONFIG.SERVICES.TCP.PORT)
 
 		if err := oTcpRouter.Serve(ctx, ":"+bootstrap.CONFIG.SERVICES.TCP.PORT); err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("TCP server 異常結束", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Tcp).Fatal("TCP server 異常結束", zap.Error(err))
 		}
 	},
 }

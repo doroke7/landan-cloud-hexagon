@@ -23,15 +23,15 @@ var oDaemonCommand = &cobra.Command{
 
 		oContainer, err := container.InitDaemonContainer(ctx)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 daemon container 失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Deamon).Fatal("初始化 daemon container 失敗", zap.Error(err))
 		}
 
 		oDaemonRouter := registerDaemon.Init(oContainer)
 
-		pkgUtility.Logger(pkgUtility.Default).Info("啟動 DAEMON 服務。")
+		pkgUtility.Logger(pkgUtility.Deamon).Info("啟動 DAEMON 服務。")
 
 		if err := oDaemonRouter.Serve(ctx); err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Error("DAEMON 服務已停止", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Deamon).Error("DAEMON 服務已停止", zap.Error(err))
 		}
 	},
 }

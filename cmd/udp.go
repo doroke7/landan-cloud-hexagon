@@ -23,12 +23,12 @@ var oUdpCommand = &cobra.Command{
 
 		oAddr, err := net.ResolveUDPAddr("udp", ":"+bootstrap.CONFIG.SERVICES.UDP.PORT)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("解析 UDP 位址失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Udp).Fatal("解析 UDP 位址失敗", zap.Error(err))
 		}
 
 		oConn, err := net.ListenUDP("udp", oAddr)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("監聽 UDP 失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Udp).Fatal("監聽 UDP 失敗", zap.Error(err))
 		}
 		defer oConn.Close()
 
@@ -39,7 +39,7 @@ var oUdpCommand = &cobra.Command{
 			oConn.Close()
 		}()
 
-		pkgUtility.Logger(pkgUtility.Default).Info("啟動 UDP 服務。 port: " + bootstrap.CONFIG.SERVICES.UDP.PORT)
+		pkgUtility.Logger(pkgUtility.Udp).Info("啟動 UDP 服務。 port: " + bootstrap.CONFIG.SERVICES.UDP.PORT)
 
 		aBuf := make([]byte, 1024)
 
@@ -51,11 +51,11 @@ var oUdpCommand = &cobra.Command{
 				case <-ctx.Done():
 					return
 				default:
-					pkgUtility.Logger(pkgUtility.Default).Fatal("讀取 UDP 失敗", zap.Error(err))
+					pkgUtility.Logger(pkgUtility.Udp).Fatal("讀取 UDP 失敗", zap.Error(err))
 				}
 			}
 
-			pkgUtility.Logger(pkgUtility.Default).Info("收到 UDP 封包",
+			pkgUtility.Logger(pkgUtility.Udp).Info("收到 UDP 封包",
 				zap.String("remote", oRemoteAddr.String()),
 				zap.String("data", string(aBuf[:iCount])),
 			)

@@ -46,10 +46,10 @@ var oSocketioCommand = &cobra.Command{
 			oSocketioServer.Shutdown(context.Background())
 		}()
 
-		pkgUtility.Logger(pkgUtility.Default).Info("啟動 SOCKETIO 服務。 port: " + bootstrap.CONFIG.SERVICES.SOCKETIO.PORT)
+		pkgUtility.Logger(pkgUtility.Socketio).Info("啟動 SOCKETIO 服務。 port: " + bootstrap.CONFIG.SERVICES.SOCKETIO.PORT)
 
 		if err := oSocketioServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("SOCKETIO server 異常結束", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Socketio).Fatal("SOCKETIO server 異常結束", zap.Error(err))
 		}
 	},
 }

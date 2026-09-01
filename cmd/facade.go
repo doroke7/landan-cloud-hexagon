@@ -25,15 +25,15 @@ var oFacadeCommand = &cobra.Command{
 
 		oContainer, err := container.InitFacadeContainer(ctx)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 facade container 失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Facade).Fatal("初始化 facade container 失敗", zap.Error(err))
 		}
 		oFacadeServer := registerFacade.Init(oContainer)
 
 		oListener, err := net.Listen("tcp", ":"+bootstrap.CONFIG.SERVICES.FACADE.PORT)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("監聽 FACADE port 失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Facade).Fatal("監聽 FACADE port 失敗", zap.Error(err))
 		}
-		pkgUtility.Logger(pkgUtility.Default).Info("啟動 FACADE 服務。 port: " + bootstrap.CONFIG.SERVICES.FACADE.PORT)
+		pkgUtility.Logger(pkgUtility.Facade).Info("啟動 FACADE 服務。 port: " + bootstrap.CONFIG.SERVICES.FACADE.PORT)
 
 		go func() {
 			<-ctx.Done()
@@ -41,7 +41,7 @@ var oFacadeCommand = &cobra.Command{
 		}()
 
 		if err := oFacadeServer.Serve(oListener); err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("FACADE server 異常結束", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Facade).Fatal("FACADE server 異常結束", zap.Error(err))
 		}
 	},
 }

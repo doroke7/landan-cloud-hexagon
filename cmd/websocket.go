@@ -25,7 +25,7 @@ var oWebsocketCommand = &cobra.Command{
 
 		oContainer, err := container.InitWebsocketContainer(ctx)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("初始化 websocket container 失敗", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Websocket).Fatal("初始化 websocket container 失敗", zap.Error(err))
 		}
 		// Websocket 才是主要關心的 服務， 所以應該 從 register 取出 websocket 套件
 		oMux := registerWebsocket.Init(oContainer)
@@ -34,7 +34,7 @@ var oWebsocketCommand = &cobra.Command{
 			Addr:    ":" + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT,
 			Handler: oMux,
 		}
-		pkgUtility.Logger(pkgUtility.Default).Info("啟動 WEBSOCKET 服務。 port: " + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT)
+		pkgUtility.Logger(pkgUtility.Websocket).Info("啟動 WEBSOCKET 服務。 port: " + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT)
 
 		go func() {
 			<-ctx.Done()
@@ -42,7 +42,7 @@ var oWebsocketCommand = &cobra.Command{
 		}()
 
 		if err := oWebsocketServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			pkgUtility.Logger(pkgUtility.Default).Fatal("WEBSOCKET server 異常結束", zap.Error(err))
+			pkgUtility.Logger(pkgUtility.Websocket).Fatal("WEBSOCKET server 異常結束", zap.Error(err))
 		}
 
 	},
