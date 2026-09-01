@@ -378,6 +378,7 @@ type ResourceContainer struct {
 	ResourceModelGameType  *inputApplicationResourceModel.GameTypeHandler
 	ResourceLogicGame      *inputApplicationResourceLogic.GameHandler
 	ResourceLogicTable     *inputApplicationResourceLogic.TableHandler
+	ResourceLogicGameType  *inputApplicationResourceLogic.GameTypeHandler
 
 	// gRPC Resource Interceptor
 	ResourceLogicAuthenticationInterceptor *interceptorResourceLogic.AuthenticationInterceptor
@@ -415,6 +416,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		outputApplicationMysqlModel.NewGameTypeModel,
 		outputApplicationMysqlLogic.NewGameLogic,
 		outputApplicationMysqlLogic.NewTableLogic,
+		outputApplicationMysqlLogic.NewGameTypeLogic,
 		outputApplicationRabbitmq.NewAbstractRabbitmq,
 		outputApplicationRabbitmqModel.NewAdminUserModel,
 
@@ -428,6 +430,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		usecaseApplicationAnyLogic.NewAbstractUsecase,
 		usecaseApplicationAnyLogic.NewGameUsecase,
 		usecaseApplicationAnyLogic.NewTableUsecase,
+		usecaseApplicationAnyLogic.NewGameTypeUsecase,
 
 		// input-resource
 		inputApplicationResource.NewAbstractHandler,
@@ -438,6 +441,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		inputApplicationResourceModel.NewGameTypeHandler,
 		inputApplicationResourceLogic.NewGameHandler,
 		inputApplicationResourceLogic.NewTableHandler,
+		inputApplicationResourceLogic.NewGameTypeHandler,
 
 		// interceptor-resource
 		interceptorResourceLogic.NewAbstractInterceptor,

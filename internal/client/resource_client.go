@@ -19,8 +19,9 @@ func NewModel(oClientConn *grpc.ClientConn) *Model {
 
 func NewLogic(oClientConn *grpc.ClientConn) *Logic {
 	return &Logic{
-		Game:  pbResourceLogic.NewGameLogicClient(oClientConn),
-		Table: pbResourceLogic.NewTableLogicClient(oClientConn),
+		Game:     pbResourceLogic.NewGameLogicClient(oClientConn),
+		Table:    pbResourceLogic.NewTableLogicClient(oClientConn),
+		GameType: pbResourceLogic.NewGameTypeLogicClient(oClientConn),
 	}
 }
 
@@ -33,8 +34,9 @@ type Model struct {
 }
 
 type Logic struct {
-	Game  pbResourceLogic.GameLogicClient
-	Table pbResourceLogic.TableLogicClient
+	Game     pbResourceLogic.GameLogicClient
+	Table    pbResourceLogic.TableLogicClient
+	GameType pbResourceLogic.GameTypeLogicClient
 }
 
 /*

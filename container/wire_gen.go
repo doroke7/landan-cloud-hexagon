@@ -71,10 +71,10 @@ import (
 	"example/internal/usecase/application/any/watcher"
 	"example/internal/usecase/application/any/watcher/source"
 	"example/internal/usecase/port/any/model"
-	pkgCache "example/pkg/cache"
-	pkgGin "example/pkg/gin"
-	pkgNats "example/pkg/nats"
-	pkgUtility "example/pkg/utility"
+	"example/pkg/cache"
+	"example/pkg/gin"
+	"example/pkg/nats"
+	"example/pkg/utility"
 	"github.com/nats-io/nats.go"
 )
 
@@ -304,6 +304,9 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	tableLogic := outputApplicationMysqlLogic.NewTableLogic(abstractMysql)
 	usecasePortAnyLogicTableUsecase := usecaseApplicationAnyLogic.NewTableUsecase(usecaseApplicationAnyLogicAbstractUsecase, tableLogic)
 	inputApplicationResourceLogicTableHandler := inputApplicationResourceLogic.NewTableHandler(abstractHandler, usecasePortAnyLogicTableUsecase)
+	gameType := outputApplicationMysqlLogic.NewGameTypeLogic(abstractMysql)
+	usecasePortAnyLogicGameTypeUsecase := usecaseApplicationAnyLogic.NewGameTypeUsecase(usecaseApplicationAnyLogicAbstractUsecase, gameType)
+	inputApplicationResourceLogicGameTypeHandler := inputApplicationResourceLogic.NewGameTypeHandler(abstractHandler, usecasePortAnyLogicGameTypeUsecase)
 	abstractInterceptor := interceptorResourceLogic.NewAbstractInterceptor()
 	authenticationInterceptor := interceptorResourceLogic.NewAuthenticationInterceptor(abstractInterceptor)
 	errorInterceptor := interceptorResourceLogic.NewErrorInterceptor(abstractInterceptor)
@@ -343,6 +346,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		ResourceModelGameType:                  gameTypeHandler,
 		ResourceLogicGame:                      inputApplicationResourceLogicGameHandler,
 		ResourceLogicTable:                     inputApplicationResourceLogicTableHandler,
+		ResourceLogicGameType:                  inputApplicationResourceLogicGameTypeHandler,
 		ResourceLogicAuthenticationInterceptor: authenticationInterceptor,
 		ResourceLogicErrorInterceptor:          errorInterceptor,
 		ResourceLogicLoggerInterceptor:         loggerInterceptor,
@@ -764,6 +768,7 @@ type ResourceContainer struct {
 	ResourceModelGameType  *inputApplicationResourceModel.GameTypeHandler
 	ResourceLogicGame      *inputApplicationResourceLogic.GameHandler
 	ResourceLogicTable     *inputApplicationResourceLogic.TableHandler
+	ResourceLogicGameType  *inputApplicationResourceLogic.GameTypeHandler
 
 	// gRPC Resource Interceptor
 	ResourceLogicAuthenticationInterceptor *interceptorResourceLogic.AuthenticationInterceptor
