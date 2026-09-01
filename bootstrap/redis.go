@@ -40,7 +40,7 @@ func NewRedis() (redis.UniversalClient, error) {
 		return nil, err
 	}
 
-	log.Info("[INFO] REDIS 連線完成. ", sAddrs)
+	log.Info("[INFO] REDIS 連線完成.", "addr", sAddrs)
 
 	return oRedisConnectionPool, nil
 }

@@ -18,7 +18,7 @@ func NewAmqp() (*amqp.Connection, error) {
 
 	oConnection, oErr := amqp.Dial(sDSN)
 
-	log.Info("[INFO] AMQP 連線完成. ", CONFIG.AMQP.HOST+":"+CONFIG.AMQP.PORT)
+	log.Info("[INFO] AMQP 連線完成.", "addr", CONFIG.AMQP.HOST+":"+CONFIG.AMQP.PORT)
 
 	return oConnection, oErr
 }

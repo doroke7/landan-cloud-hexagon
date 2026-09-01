@@ -33,8 +33,6 @@ func NewResource(oContext context.Context) *grpc.ClientConn {
 		aAddrs[iIndex] = resolver.Address{Addr: net.JoinHostPort(sHost, sPort)}
 	}
 
-	// manual.Resolver 直接把固定位址塞給 grpc.WithResolvers，只作用於這個 client，
-	// 不用再手寫 resolver.Builder / resolver.Resolver，也不需要 resolver.Register 佔用全域 scheme。
 	oResolverBuilder := manual.NewBuilderWithScheme("resource-static")
 	oResolverBuilder.InitialState(resolver.State{Addresses: aAddrs})
 
@@ -80,9 +78,6 @@ func NewResource(oContext context.Context) *grpc.ClientConn {
 
 	oConnection.Connect()
 
-	// 在背景啟動常駐任務，檢查連線；oContext 取消（優雅關機）就跟著退出，
-	// 不然這個 goroutine 會活到 process 被強制殺掉才釋放，跟 pkg.TcpRouter/
-	// WebsocketRouter 那些長駐 goroutine 用 ctx 做優雅關機是同一套慣例。
 	go func() {
 		defer ticker.Stop()
 
@@ -110,7 +105,7 @@ func NewResource(oContext context.Context) *grpc.ClientConn {
 	for iIndex, oAddr := range aAddrs {
 		aAddrStrings[iIndex] = oAddr.Addr
 	}
-	log.Info("[INFO] RESOURCE 連線完成. ", strings.Join(aAddrStrings, ","))
+	log.Info("[INFO] RESOURCE 連線完成.", "addr", strings.Join(aAddrStrings, ","))
 
 	return oConnection
 }

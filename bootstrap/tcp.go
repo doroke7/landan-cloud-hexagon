@@ -25,7 +25,7 @@ func NewTcp() (net.Conn, error) {
 
 		var oConn net.Conn
 		if oConn, err = oDialer.Dial("tcp", net.JoinHostPort(sHost, sPort)); err == nil {
-			log.Info("[INFO] TCP 連線完成. ", sHost+":"+sPort)
+			log.Info("[INFO] TCP 連線完成.", "addr", sHost+":"+sPort)
 			return oConn, nil
 		}
 	}

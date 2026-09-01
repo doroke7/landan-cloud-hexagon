@@ -57,7 +57,7 @@ func NewOracle() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.ORACLE.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] ORACLE 連線完成. ", CONFIG.ORACLE.HOST+":"+CONFIG.ORACLE.PORT)
+	clog.Info("[INFO] ORACLE 連線完成.", "addr", CONFIG.ORACLE.HOST+":"+CONFIG.ORACLE.PORT)
 
 	return oOracleConnectionPool, nil
 }

@@ -52,7 +52,7 @@ func NewClickhouse() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.CLICKHOUSE.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] CLICKHOUSE 連線完成. ", CONFIG.CLICKHOUSE.HOST+":"+CONFIG.CLICKHOUSE.PORT)
+	clog.Info("[INFO] CLICKHOUSE 連線完成.", "addr", CONFIG.CLICKHOUSE.HOST+":"+CONFIG.CLICKHOUSE.PORT)
 
 	return oClickhouseConnectionPool, nil
 }

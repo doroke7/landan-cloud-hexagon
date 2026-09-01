@@ -16,7 +16,7 @@ func NewPulsar() (pulsar.Client, error) {
 		ConnectionTimeout: time.Duration(CONFIG.PULSAR.TIMEOUT) * time.Millisecond,
 	})
 
-	log.Info("[INFO] PULSAR 連線完成. ", sURL)
+	log.Info("[INFO] PULSAR 連線完成.", "addr", sURL)
 
 	return oClient, oErr
 }

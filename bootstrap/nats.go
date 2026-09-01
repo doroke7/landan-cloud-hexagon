@@ -21,7 +21,7 @@ func NewNats() (*nats.Conn, error) {
 
 	oConn, oErr := nats.Connect(sURL, aOptions...)
 
-	log.Info("[INFO] NATS 連線完成. ", CONFIG.NATS.HOST+":"+CONFIG.NATS.PORT)
+	log.Info("[INFO] NATS 連線完成.", "addr", CONFIG.NATS.HOST+":"+CONFIG.NATS.PORT)
 
 	return oConn, oErr
 }

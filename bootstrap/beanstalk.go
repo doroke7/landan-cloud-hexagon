@@ -13,7 +13,7 @@ func NewBeanstalk() (*beanstalk.Conn, error) {
 
 	oConn, oErr := beanstalk.DialTimeout("tcp", sAddr, time.Duration(CONFIG.BEANSTALK.TIMEOUT)*time.Millisecond)
 
-	log.Info("[INFO] BEANSTALK 連線完成. ", sAddr)
+	log.Info("[INFO] BEANSTALK 連線完成.", "addr", sAddr)
 
 	return oConn, oErr
 }

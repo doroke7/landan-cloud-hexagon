@@ -32,7 +32,7 @@ func NewRedpanda() (sarama.Client, error) {
 
 	oClient, oErr := sarama.NewClient(CONFIG.REDPANDA.BROKERS, oConfig)
 
-	log.Info("[INFO] REDPANDA 連線完成. ", strings.Join(CONFIG.REDPANDA.BROKERS, ","))
+	log.Info("[INFO] REDPANDA 連線完成.", "addr", strings.Join(CONFIG.REDPANDA.BROKERS, ","))
 
 	return oClient, oErr
 }

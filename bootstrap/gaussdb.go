@@ -53,7 +53,7 @@ func NewGaussdb() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.GAUSSDB.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] GAUSSDB 連線完成. ", CONFIG.GAUSSDB.HOST+":"+CONFIG.GAUSSDB.PORT)
+	clog.Info("[INFO] GAUSSDB 連線完成.", "addr", CONFIG.GAUSSDB.HOST+":"+CONFIG.GAUSSDB.PORT)
 
 	return oGaussdbConnectionPool, nil
 }

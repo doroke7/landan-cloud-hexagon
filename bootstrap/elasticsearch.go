@@ -14,7 +14,7 @@ func NewElasticsearch() (*elasticsearch.Client, error) {
 		Password:  CONFIG.ELASTICSEARCH.PASS,
 	})
 
-	log.Info("[INFO] ELASTICSEARCH 連線完成. ", strings.Join(CONFIG.ELASTICSEARCH.HOSTS, ","))
+	log.Info("[INFO] ELASTICSEARCH 連線完成.", "addr", strings.Join(CONFIG.ELASTICSEARCH.HOSTS, ","))
 
 	return oClient, oErr
 }

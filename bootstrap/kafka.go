@@ -30,7 +30,7 @@ func NewKafka() (sarama.Client, error) {
 
 	oClient, oErr := sarama.NewClient(CONFIG.KAFKA.BROKERS, oConfig)
 
-	log.Info("[INFO] KAFKA 連線完成. ", strings.Join(CONFIG.KAFKA.BROKERS, ","))
+	log.Info("[INFO] KAFKA 連線完成.", "addr", strings.Join(CONFIG.KAFKA.BROKERS, ","))
 
 	return oClient, oErr
 }

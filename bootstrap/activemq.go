@@ -20,7 +20,7 @@ func NewActivemq() (*stomp.Conn, error) {
 		),
 	)
 
-	log.Info("[INFO] ACTIVEMQ 連線完成. ", sAddr)
+	log.Info("[INFO] ACTIVEMQ 連線完成.", "addr", sAddr)
 
 	return oConn, oErr
 }

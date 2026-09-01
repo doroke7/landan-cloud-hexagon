@@ -47,7 +47,7 @@ func NewSqlite() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.SQLITE.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] SQLITE 連線完成. ", CONFIG.SQLITE.PATH)
+	clog.Info("[INFO] SQLITE 連線完成.", "addr", CONFIG.SQLITE.PATH)
 
 	return oSqliteConnectionPool, nil
 }

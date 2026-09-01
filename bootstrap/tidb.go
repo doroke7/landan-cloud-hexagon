@@ -64,7 +64,7 @@ func NewTidb() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.TIDB.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] TIDB 連線完成. ", sHost+":"+sPort)
+	clog.Info("[INFO] TIDB 連線完成.", "addr", sHost+":"+sPort)
 
 	return oTidbConnectionPool, nil
 }

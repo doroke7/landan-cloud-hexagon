@@ -20,7 +20,7 @@ func NewZeromq() (zmq4.Socket, error) {
 		return nil, err
 	}
 
-	log.Info("[INFO] ZEROMQ 連線完成. ", sEndpoint)
+	log.Info("[INFO] ZEROMQ 連線完成.", "addr", sEndpoint)
 
 	return oSocket, nil
 }

@@ -34,7 +34,7 @@ func NewRocketmq() (rocketmq.Producer, error) {
 		return nil, oErr
 	}
 
-	log.Info("[INFO] ROCKETMQ 連線完成. ", strings.Join(CONFIG.ROCKETMQ.NAME_SERVERS, ","))
+	log.Info("[INFO] ROCKETMQ 連線完成.", "addr", strings.Join(CONFIG.ROCKETMQ.NAME_SERVERS, ","))
 
 	return oProducer, nil
 }

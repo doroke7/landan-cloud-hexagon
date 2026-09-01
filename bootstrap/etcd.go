@@ -22,7 +22,7 @@ func NewEtcd() (*clientv3.Client, error) {
 		Password:    CONFIG.ETCD.PASS,
 	})
 
-	log.Info("[INFO] ETCD 連線完成. ", strings.Join(aEndpoints, ","))
+	log.Info("[INFO] ETCD 連線完成.", "addr", strings.Join(aEndpoints, ","))
 
 	return oClient, oErr
 }

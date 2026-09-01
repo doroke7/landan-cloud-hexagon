@@ -69,7 +69,7 @@ func NewMysql() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.DATABASE.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] MYSQL 連線完成. ", sHost+":"+sPort)
+	clog.Info("[INFO] MYSQL 連線完成.", "addr", sHost+":"+sPort)
 
 	return oMysqlConnectionPool, nil
 }

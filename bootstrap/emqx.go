@@ -28,7 +28,7 @@ func NewEmqx() (mqtt.Client, error) {
 		return nil, oToken.Error()
 	}
 
-	log.Info("[INFO] EMQX 連線完成. ", sBroker)
+	log.Info("[INFO] EMQX 連線完成.", "addr", sBroker)
 
 	return oClient, nil
 }

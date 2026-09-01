@@ -51,7 +51,7 @@ func NewPostgresql() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.POSTGRESQL.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] POSTGRESQL 連線完成. ", CONFIG.POSTGRESQL.HOST+":"+CONFIG.POSTGRESQL.PORT)
+	clog.Info("[INFO] POSTGRESQL 連線完成.", "addr", CONFIG.POSTGRESQL.HOST+":"+CONFIG.POSTGRESQL.PORT)
 
 	return oPostgresqlConnectionPool, nil
 }

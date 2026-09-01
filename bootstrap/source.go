@@ -231,7 +231,7 @@ func NewSource(oContext context.Context) *grpc.ClientConn {
 	for iIndex, oAddr := range aAddrs {
 		aAddrStrings[iIndex] = oAddr.Addr
 	}
-	clog.Info("[INFO] SOURCE 連線完成. ", strings.Join(aAddrStrings, ","))
+	clog.Info("[INFO] SOURCE 連線完成.", "addr", strings.Join(aAddrStrings, ","))
 
 	return conn
 }

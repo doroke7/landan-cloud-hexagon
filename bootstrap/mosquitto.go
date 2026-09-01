@@ -27,7 +27,7 @@ func NewMosquitto() (mqtt.Client, error) {
 		return nil, oToken.Error()
 	}
 
-	log.Info("[INFO] MOSQUITTO 連線完成. ", sBroker)
+	log.Info("[INFO] MOSQUITTO 連線完成.", "addr", sBroker)
 
 	return oClient, nil
 }
