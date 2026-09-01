@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	clog "github.com/charmbracelet/log"
+	"github.com/charmbracelet/log"
 	"gorm.io/driver/clickhouse"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -50,7 +50,7 @@ func NewClickhouse() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.CLICKHOUSE.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] CLICKHOUSE 連線完成.", "addr", CONFIG.CLICKHOUSE.HOST+":"+CONFIG.CLICKHOUSE.PORT)
+	log.Info("[INFO] CLICKHOUSE 連線完成.", "addr", CONFIG.CLICKHOUSE.HOST+":"+CONFIG.CLICKHOUSE.PORT)
 
 	return oClickhouseConnectionPool, nil
 }

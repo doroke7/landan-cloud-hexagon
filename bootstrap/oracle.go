@@ -4,7 +4,7 @@ import (
 	"strconv"
 	"time"
 
-	clog "github.com/charmbracelet/log"
+	"github.com/charmbracelet/log"
 	"github.com/godoes/gorm-oracle"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -55,7 +55,7 @@ func NewOracle() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.ORACLE.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] ORACLE 連線完成.", "addr", CONFIG.ORACLE.HOST+":"+CONFIG.ORACLE.PORT)
+	log.Info("[INFO] ORACLE 連線完成.", "addr", CONFIG.ORACLE.HOST+":"+CONFIG.ORACLE.PORT)
 
 	return oOracleConnectionPool, nil
 }

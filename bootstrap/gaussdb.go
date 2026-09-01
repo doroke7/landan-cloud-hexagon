@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	clog "github.com/charmbracelet/log"
+	"github.com/charmbracelet/log"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -51,7 +51,7 @@ func NewGaussdb() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.GAUSSDB.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] GAUSSDB 連線完成.", "addr", CONFIG.GAUSSDB.HOST+":"+CONFIG.GAUSSDB.PORT)
+	log.Info("[INFO] GAUSSDB 連線完成.", "addr", CONFIG.GAUSSDB.HOST+":"+CONFIG.GAUSSDB.PORT)
 
 	return oGaussdbConnectionPool, nil
 }

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	log "github.com/charmbracelet/log"
+	"github.com/charmbracelet/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"

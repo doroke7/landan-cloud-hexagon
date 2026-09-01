@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	clog "github.com/charmbracelet/log"
+	"github.com/charmbracelet/log"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -62,7 +62,7 @@ func NewTidb() (*gorm.DB, error) {
 	}
 	oSqlDB.SetMaxIdleConns(CONFIG.TIDB.MAX_IDLE_CONNECTIONS)
 
-	clog.Info("[INFO] TIDB 連線完成.", "addr", sHost+":"+sPort)
+	log.Info("[INFO] TIDB 連線完成.", "addr", sHost+":"+sPort)
 
 	return oTidbConnectionPool, nil
 }

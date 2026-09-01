@@ -3,7 +3,6 @@ package bootstrap
 import (
 	"context"
 	"fmt"
-	"log"
 	"math/rand"
 	"net"
 	"sort"
@@ -11,7 +10,7 @@ import (
 	"sync"
 	"time"
 
-	clog "github.com/charmbracelet/log"
+	"github.com/charmbracelet/log"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/attributes"
 	"google.golang.org/grpc/backoff"
@@ -117,7 +116,7 @@ func (oSelf *sourceWeightedPicker) failover(oFailed *sourceWeightedSubConn, oErr
 	defer oSelf.mu.Unlock()
 
 	if len(oSelf.subConns) <= 1 {
-		log.Printf("[bootstrap.source] conn 失敗 addr=%s err=%v，但沒有其他台可以換", oFailed.addr, oErr)
+		log.Warn("[bootstrap.source] conn 失敗，但沒有其他台可以換", "addr", oFailed.addr, "err", oErr)
 		return
 	}
 
@@ -128,7 +127,7 @@ func (oSelf *sourceWeightedPicker) failover(oFailed *sourceWeightedSubConn, oErr
 	}
 	oSelf.current = iNext
 
-	log.Printf("[bootstrap.source] conn 失敗 addr=%s err=%v，換 conn -> addr=%s", oFailed.addr, oErr, oSelf.subConns[iNext].addr)
+	log.Warn("[bootstrap.source] conn 失敗，換 conn", "addr", oFailed.addr, "err", oErr, "next", oSelf.subConns[iNext].addr)
 }
 
 func NewSource(oContext context.Context) *grpc.ClientConn {
@@ -231,7 +230,7 @@ func NewSource(oContext context.Context) *grpc.ClientConn {
 	for iIndex, oAddr := range aAddrs {
 		aAddrStrings[iIndex] = oAddr.Addr
 	}
-	clog.Info("[INFO] SOURCE 連線完成.", "addr", strings.Join(aAddrStrings, ","))
+	log.Info("[INFO] SOURCE 連線完成.", "addr", strings.Join(aAddrStrings, ","))
 
 	return conn
 }
