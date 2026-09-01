@@ -22,34 +22,41 @@ func NewBiMultiMap[L, R Hashable]() *BiMultiMap[L, R] {
 	}
 }
 
-// innerOf 取出 key 對應的內層 map，沒有就原子地建一張再放進去。
-// 先 Get 一次是為了讓「key 已存在」的常見路徑不用白配一張新 map。
-func innerOf[K Hashable, IK Hashable](oOuter *hashmap.Map[K, *hashmap.Map[IK, struct{}]], key K) *hashmap.Map[IK, struct{}] {
-	oInner, bGotten := oOuter.Get(key)
-	if bGotten {
-		return oInner
-	}
+/*
 
-	oInner, _ = oOuter.GetOrInsert(key, hashmap.New[IK, struct{}]())
-	return oInner
+{
+	"conn-1": {
+		"#room-1": true,
+		"#room-2": false,
+	},
+	"conn-2": {
+		"#room-1": {},
+		"#room-5": {},
+	}
 }
 
-// Insert 建立 l/r 的雙向關聯，重複呼叫同一組 l/r 不會有副作用。
-func (oSelf *BiMultiMap[L, R]) Insert(l L, r R) {
-	innerOf(oSelf.leftToRights, l).Set(r, struct{}{})
-	innerOf(oSelf.rightToLefts, r).Set(l, struct{}{})
+
+*/
+
+// Insert 建立 oLeft/oRight 的雙向關聯，重複呼叫同一組 oLeft/oRight 不會有副作用。
+func (oSelf *BiMultiMap[L, R]) Insert(oLeft L, oRight R) {
+	oRights, _ := oSelf.leftToRights.GetOrInsert(oLeft, hashmap.New[R, struct{}]())
+	oRights.Set(oRight, struct{}{})
+
+	oLefts, _ := oSelf.rightToLefts.GetOrInsert(oRight, hashmap.New[L, struct{}]())
+	oLefts.Set(oLeft, struct{}{})
 }
 
 // Left 回傳這個 left 目前關聯到的所有 right。
-func (oSelf *BiMultiMap[L, R]) Left(l L) []R {
-	oRights, bGotten := oSelf.leftToRights.Get(l)
+func (oSelf *BiMultiMap[L, R]) Left(oLeft L) []R {
+	oRights, bGotten := oSelf.leftToRights.Get(oLeft)
 	if !bGotten {
 		return nil
 	}
 
 	aResult := make([]R, 0, oRights.Len())
-	oRights.Range(func(r R, _ struct{}) bool {
-		aResult = append(aResult, r)
+	oRights.Range(func(oRight R, _ struct{}) bool {
+		aResult = append(aResult, oRight)
 		return true
 	})
 
@@ -57,74 +64,74 @@ func (oSelf *BiMultiMap[L, R]) Left(l L) []R {
 }
 
 // Right 回傳這個 right 目前關聯到的所有 left。
-func (oSelf *BiMultiMap[L, R]) Right(r R) []L {
-	oLefts, bGotten := oSelf.rightToLefts.Get(r)
+func (oSelf *BiMultiMap[L, R]) Right(oRight R) []L {
+	oLefts, bGotten := oSelf.rightToLefts.Get(oRight)
 	if !bGotten {
 		return nil
 	}
 
 	aResult := make([]L, 0, oLefts.Len())
-	oLefts.Range(func(l L, _ struct{}) bool {
-		aResult = append(aResult, l)
+	oLefts.Range(func(oLeft L, _ struct{}) bool {
+		aResult = append(aResult, oLeft)
 		return true
 	})
 
 	return aResult
 }
 
-// Remove 拆掉單一一組 l/r 的關聯，其他跟 l 或 r 相關的關聯不受影響。
-func (oSelf *BiMultiMap[L, R]) Remove(l L, r R) {
-	if oRights, bGotten := oSelf.leftToRights.Get(l); bGotten {
-		oRights.Del(r)
+// Remove 拆掉單一一組 oLeft/oRight 的關聯，其他跟 oLeft 或 oRight 相關的關聯不受影響。
+func (oSelf *BiMultiMap[L, R]) Remove(oLeft L, oRight R) {
+	if oRights, bGotten := oSelf.leftToRights.Get(oLeft); bGotten {
+		oRights.Del(oRight)
 		if oRights.Len() == 0 {
-			oSelf.leftToRights.Del(l)
+			oSelf.leftToRights.Del(oLeft)
 		}
 	}
 
-	if oLefts, bGotten := oSelf.rightToLefts.Get(r); bGotten {
-		oLefts.Del(l)
+	if oLefts, bGotten := oSelf.rightToLefts.Get(oRight); bGotten {
+		oLefts.Del(oLeft)
 		if oLefts.Len() == 0 {
-			oSelf.rightToLefts.Del(r)
+			oSelf.rightToLefts.Del(oRight)
 		}
 	}
 }
 
 // RemoveLeft 拆掉這個 left 的全部關聯，連帶清掉對面每個 right 記著這個 left 的紀錄。
-func (oSelf *BiMultiMap[L, R]) RemoveLeft(l L) {
-	oRights, bGotten := oSelf.leftToRights.Get(l)
+func (oSelf *BiMultiMap[L, R]) RemoveLeft(oLeft L) {
+	oRights, bGotten := oSelf.leftToRights.Get(oLeft)
 	if !bGotten {
 		return
 	}
 
-	oRights.Range(func(r R, _ struct{}) bool {
-		if oLefts, bLefts := oSelf.rightToLefts.Get(r); bLefts {
-			oLefts.Del(l)
+	oRights.Range(func(oRight R, _ struct{}) bool {
+		if oLefts, bLefts := oSelf.rightToLefts.Get(oRight); bLefts {
+			oLefts.Del(oLeft)
 			if oLefts.Len() == 0 {
-				oSelf.rightToLefts.Del(r)
+				oSelf.rightToLefts.Del(oRight)
 			}
 		}
 		return true
 	})
 
-	oSelf.leftToRights.Del(l)
+	oSelf.leftToRights.Del(oLeft)
 }
 
 // RemoveRight 拆掉這個 right 的全部關聯，連帶清掉對面每個 left 記著這個 right 的紀錄。
-func (oSelf *BiMultiMap[L, R]) RemoveRight(r R) {
-	oLefts, bGotten := oSelf.rightToLefts.Get(r)
+func (oSelf *BiMultiMap[L, R]) RemoveRight(oRight R) {
+	oLefts, bGotten := oSelf.rightToLefts.Get(oRight)
 	if !bGotten {
 		return
 	}
 
-	oLefts.Range(func(l L, _ struct{}) bool {
-		if oRights, bRights := oSelf.leftToRights.Get(l); bRights {
-			oRights.Del(r)
+	oLefts.Range(func(oLeft L, _ struct{}) bool {
+		if oRights, bRights := oSelf.leftToRights.Get(oLeft); bRights {
+			oRights.Del(oRight)
 			if oRights.Len() == 0 {
-				oSelf.leftToRights.Del(l)
+				oSelf.leftToRights.Del(oLeft)
 			}
 		}
 		return true
 	})
 
-	oSelf.rightToLefts.Del(r)
+	oSelf.rightToLefts.Del(oRight)
 }
