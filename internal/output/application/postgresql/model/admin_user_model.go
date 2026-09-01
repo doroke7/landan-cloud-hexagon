@@ -34,42 +34,42 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 	)
 	defer cCancel()
 
-	var oAdminUserRow domain.AdminUserRow
+	var oAdminUser domain.AdminUser
 
-	if err := oSelf.DB.WithContext(oCurrentContext).Where("name = ?", sName).First(&oAdminUserRow).Error; err != nil {
+	if err := oSelf.DB.WithContext(oCurrentContext).Where("name = ?", sName).First(&oAdminUser).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("資料不存在")
 		}
 		return nil, err
 	}
 
-	return domain.AdminUserRowToAdminUser(&oAdminUserRow), nil
+	return &oAdminUser, nil
 }
 
 func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 
-	var oAdminUserRow domain.AdminUserRow
+	var oAdminUser domain.AdminUser
 	sKey := oSelf.Aop.Key("AdminUser.SObI", iId)
 	iTtl := oSelf.Aop.Ttl(30 * time.Minute)
 
-	err := oSelf.Aop.Cacheable(sKey, iTtl, &oAdminUserRow, func() (interface{}, error) {
+	err := oSelf.Aop.Cacheable(sKey, iTtl, &oAdminUser, func() (interface{}, error) {
 		oThisContext, cCancel := context.WithTimeout(
 			oSelf.Context,
 			time.Duration(bootstrap.CONFIG.POSTGRESQL.TIMEOUT)*time.Millisecond,
 		)
 		defer cCancel()
 
-		var oAdminUserRow domain.AdminUserRow
-		if err := oSelf.DB.WithContext(oThisContext).First(&oAdminUserRow, iId).Error; err != nil {
+		var oAdminUser domain.AdminUser
+		if err := oSelf.DB.WithContext(oThisContext).First(&oAdminUser, iId).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, errors.New("資料不存在")
 			}
 			return nil, err
 		}
-		return oAdminUserRow, nil
+		return oAdminUser, nil
 	})
 
-	return domain.AdminUserRowToAdminUser(&oAdminUserRow), err
+	return &oAdminUser, err
 }
 
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {
@@ -77,10 +77,10 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	aOrders := oSelf.AbstractPostgresql.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractPostgresql.PaginationToLimit(oPagination)
 
-	var aAdminUserRows []*domain.AdminUserRow
-	var oAdminUserRow domain.AdminUserRow
+	var aAdminUsers []*domain.AdminUser
+	var oAdminUser domain.AdminUser
 
-	oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oAdminUserRow)
+	oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oAdminUser)
 
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
@@ -102,13 +102,8 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	if oErr := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aAdminUserRows).Error; oErr != nil {
+		Find(&aAdminUsers).Error; oErr != nil {
 		return nil, oErr
-	}
-
-	aAdminUsers := make([]*domain.AdminUser, len(aAdminUserRows))
-	for i, oAdminUserRow := range aAdminUserRows {
-		aAdminUsers[i] = domain.AdminUserRowToAdminUser(oAdminUserRow)
 	}
 
 	return aAdminUsers, nil
@@ -118,9 +113,9 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 	aWheres := oSelf.AbstractPostgresql.FiltersToWheres(aFilters)
 
 	var iTotal int64
-	var oAdminUserRow domain.AdminUserRow
+	var oAdminUser domain.AdminUser
 
-	oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oAdminUserRow)
+	oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oAdminUser)
 
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
@@ -134,15 +129,13 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 }
 
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
-	var oAdminUserRow domain.AdminUserRow
-
 	oColumns, oErr := pkgUtility.StructToMap(oAdminUser)
 	if oErr != nil {
 		return false, oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oAdminUserRow).
+		Model(&domain.AdminUser{}).
 		Create(oColumns)
 
 	if oResult.Error != nil {

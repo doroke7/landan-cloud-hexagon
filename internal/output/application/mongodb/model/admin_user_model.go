@@ -70,9 +70,9 @@ func (oSelf *AdminUserModel) nextId() (uint, error) {
 }
 
 func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, error) {
-	var oDoc domain.AdminUserDocument
+	var oAdminUser domain.AdminUser
 
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{"name": sName}).Decode(&oDoc)
+	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{"name": sName}).Decode(&oAdminUser)
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
 			return nil, errors.New("資料不存在")
@@ -80,13 +80,13 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 		return nil, oErr
 	}
 
-	return domain.AdminUserDocumentToAdminUser(&oDoc), nil
+	return &oAdminUser, nil
 }
 
 func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
-	var oDoc domain.AdminUserDocument
+	var oAdminUser domain.AdminUser
 
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{"_id": iId}).Decode(&oDoc)
+	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{"_id": iId}).Decode(&oAdminUser)
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
 			return nil, errors.New("資料不存在")
@@ -94,7 +94,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 		return nil, oErr
 	}
 
-	return domain.AdminUserDocumentToAdminUser(&oDoc), nil
+	return &oAdminUser, nil
 }
 
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {
@@ -109,14 +109,9 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	}
 	defer oCursor.Close(oSelf.Context)
 
-	var aDocs []*domain.AdminUserDocument
-	if oErr := oCursor.All(oSelf.Context, &aDocs); oErr != nil {
+	var aAdminUsers []*domain.AdminUser
+	if oErr := oCursor.All(oSelf.Context, &aAdminUsers); oErr != nil {
 		return nil, oErr
-	}
-
-	aAdminUsers := make([]*domain.AdminUser, len(aDocs))
-	for i, oDoc := range aDocs {
-		aAdminUsers[i] = domain.AdminUserDocumentToAdminUser(oDoc)
 	}
 
 	return aAdminUsers, nil
@@ -141,7 +136,7 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, er
 	}
 
 	oNow := time.Now()
-	oDoc := &domain.AdminUserDocument{
+	oNew := &domain.AdminUser{
 		Id:        iId,
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
@@ -149,13 +144,13 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, er
 	}
 
 	if oAdminUser.Name != nil {
-		oDoc.Name = *oAdminUser.Name
+		oNew.Name = *oAdminUser.Name
 	}
 	if oAdminUser.Password != nil {
-		oDoc.Password = *oAdminUser.Password
+		oNew.Password = *oAdminUser.Password
 	}
 
-	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oDoc); oErr != nil {
+	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
 		return false, oErr
 	}
 

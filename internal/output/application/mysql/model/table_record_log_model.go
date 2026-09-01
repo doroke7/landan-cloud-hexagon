@@ -24,12 +24,12 @@ func NewTableRecordLogModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortA
 }
 
 func (oSelf *TableRecordLogModel) ShowOneById(iId uint) (*domain.TableRecordLog, error) {
-	var oTableRecordLogRow domain.TableRecordLogRow
+	var oTableRecordLog domain.TableRecordLog
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oTableRecordLogRow).
+		Model(&oTableRecordLog).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oTableRecordLogRow, iId).Error; oErr != nil {
+		First(&oTableRecordLog, iId).Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
@@ -37,7 +37,7 @@ func (oSelf *TableRecordLogModel) ShowOneById(iId uint) (*domain.TableRecordLog,
 		return nil, oErr
 	}
 
-	return domain.TableRecordLogRowToTableRecordLog(&oTableRecordLogRow), nil
+	return &oTableRecordLog, nil
 }
 
 func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.TableRecordLog, error) {
@@ -45,13 +45,12 @@ func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilter
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractMysql.PaginationToLimit(oPagination)
 
-	var aTableRecordLogRows []*domain.TableRecordLogRow
-	var oTableRecordLogRow domain.TableRecordLogRow
+	var aTableRecordLogs []*domain.TableRecordLog
 
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
-		Model(&oTableRecordLogRow).
+		Model(&domain.TableRecordLog{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07")
 
 	for _, oWhere := range aWheres {
@@ -74,13 +73,8 @@ func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilter
 	if oErr := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aTableRecordLogRows).Error; oErr != nil {
+		Find(&aTableRecordLogs).Error; oErr != nil {
 		return nil, oErr
-	}
-
-	aTableRecordLogs := make([]*domain.TableRecordLog, len(aTableRecordLogRows))
-	for i, oTableRecordLogRow := range aTableRecordLogRows {
-		aTableRecordLogs[i] = domain.TableRecordLogRowToTableRecordLog(oTableRecordLogRow)
 	}
 
 	return aTableRecordLogs, nil
@@ -90,12 +84,10 @@ func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (u
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
-	var oTableRecordLogRow domain.TableRecordLogRow
-
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
-		Model(&oTableRecordLogRow)
+		Model(&domain.TableRecordLog{})
 
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
@@ -110,15 +102,13 @@ func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (u
 }
 
 func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogValue) (bool, error) {
-	var oTableRecordLogRow domain.TableRecordLogRow
-
 	oColumns, oErr := pkgUtility.StructToMap(oTableRecordLog)
 	if oErr != nil {
 		return false, oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oTableRecordLogRow).
+		Model(&domain.TableRecordLog{}).
 		Create(oColumns)
 
 	if oResult.Error != nil {

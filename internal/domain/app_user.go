@@ -8,8 +8,12 @@ package domain
 
 */
 
-import bootstrap "example/bootstrap"
+import (
+	bootstrap "example/bootstrap"
+)
 
+// domain 直接兼作 gorm 的儲存結構，不再另外開欄位完全一樣的 AppUserRow：
+// 欄位無 tag，靠 NamingStrategy 轉 snake_case；主鍵 Id -> id。
 type AppUser struct {
 	Id       uint   `json:"id"`
 	Name     string `json:"name"`
@@ -17,28 +21,12 @@ type AppUser struct {
 	Balance  uint   `json:"balance"`
 }
 
-func (AppUserRow) TableName() string {
+func (AppUser) TableName() string {
 	return bootstrap.CONFIG.DATABASE.PREFIX + "app_users"
-}
-
-type AppUserRow struct {
-	Id       uint   `json:"id"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
-	Balance  uint   `json:"balance"`
 }
 
 type AppUserValue struct {
 	Name     *string `json:"name,omitempty"`
 	Password *string `json:"password,omitempty"`
 	Balance  *uint   `json:"balance,omitempty"`
-}
-
-func AppUserRowToAppUser(oRow *AppUserRow) *AppUser {
-	return &AppUser{
-		Id:       oRow.Id,
-		Name:     oRow.Name,
-		Password: oRow.Password,
-		Balance:  oRow.Balance,
-	}
 }

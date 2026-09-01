@@ -15,6 +15,13 @@ import (
 	bootstrap "example/bootstrap"
 )
 
+// domain 直接兼作 gorm 的儲存結構，不再另外開欄位完全一樣的 TableRecordLogRow：
+// 欄位無 tag，靠 NamingStrategy 轉 snake_case。
+//
+// mongo 那邊還是走獨立的 TableRecordLogDocument：Text/Image 是 json.RawMessage
+// （[]byte），給 mongo-driver 會被編成 BSON binary 而不是 JSON 文字，
+// 所以 Document 把它們存成 string、自己控制編解碼，沒辦法跟這裡共用同一個 struct
+// （理由跟 TableDocument.Result 一樣）。
 type TableRecordLog struct {
 	Id            uint            `json:"id"`
 	GameId        uint            `json:"game_id"`
@@ -27,34 +34,8 @@ type TableRecordLog struct {
 	DeletedAt     time.Time       `json:"deleted_at"`
 }
 
-func (TableRecordLogRow) TableName() string {
+func (TableRecordLog) TableName() string {
 	return bootstrap.CONFIG.DATABASE.PREFIX + "table_record_logs"
-}
-
-type TableRecordLogRow struct {
-	Id            uint            `json:"id"`
-	GameId        uint            `json:"game_id"`
-	TableRecordId uint            `json:"table_record_id"`
-	State         uint8           `json:"state"`
-	Text          json.RawMessage `json:"text"`
-	Image         json.RawMessage `json:"image"`
-	CreatedAt     time.Time       `json:"created_at"`
-	UpdatedAt     time.Time       `json:"updated_at"`
-	DeletedAt     time.Time       `json:"deleted_at"`
-}
-
-func TableRecordLogRowToTableRecordLog(oRow *TableRecordLogRow) *TableRecordLog {
-	return &TableRecordLog{
-		Id:            oRow.Id,
-		GameId:        oRow.GameId,
-		TableRecordId: oRow.TableRecordId,
-		State:         oRow.State,
-		Text:          oRow.Text,
-		Image:         oRow.Image,
-		CreatedAt:     oRow.CreatedAt,
-		UpdatedAt:     oRow.UpdatedAt,
-		DeletedAt:     oRow.DeletedAt,
-	}
 }
 
 // TableRecordLogDocument 是 table_record_log 這個 collection 在 Mongo 裡的儲存結構。

@@ -25,8 +25,7 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
 
-	var aGameRows []*domain.GameRow
-	var oGameRow domain.GameRow
+	var aGames []*domain.Game
 	var iTotal int64
 	var oFindErr error
 	var oCountErr error
@@ -41,7 +40,7 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 			DB.
 			WithContext(oSelf.Context).
 			Preload("GameType").
-			Model(&oGameRow).
+			Model(&domain.Game{}).
 			Where("deleted_at = ?", "2038-01-19 03:14:07")
 		for _, oWhere := range aWheres {
 
@@ -64,13 +63,13 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 		oFindErr = oQuery.
 			Limit(int(*oLimit.Count)).
 			Offset(int(*oLimit.Offset)).
-			Find(&aGameRows).Error
+			Find(&aGames).Error
 	}()
 
 	go func() {
 		defer oWaitGroup.Done()
 
-		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oGameRow).Where("deleted_at = ?", "2038-01-19 03:14:07")
+		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&domain.Game{}).Where("deleted_at = ?", "2038-01-19 03:14:07")
 		for _, oWhere := range aWheres {
 			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 		}
@@ -79,11 +78,6 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 	}()
 
 	oWaitGroup.Wait()
-
-	aGames := make([]*domain.Game, len(aGameRows))
-	for i, oRow := range aGameRows {
-		aGames[i] = domain.GameRowToGame(oRow)
-	}
 
 	if oFindErr != nil {
 		return aGames, 0, oFindErr

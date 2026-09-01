@@ -14,35 +14,28 @@ import (
 	bootstrap "example/bootstrap"
 )
 
+// domain 直接兼作各 adapter 的儲存結構，不再另外開 GameRow（gorm）/
+// GameDocument（mongo）兩個欄位完全一樣的鏡像 struct：
+//   - gorm：欄位無 tag，靠 NamingStrategy 轉 snake_case；GameType 用 gorm association Preload
+//   - mongo：bson tag 指定，_id 對到 Id（counters 累加的 uint）；GameType 用 bson:"-" 略過
+//     （Mongo 沒有 join，這個欄位在 mongo 路徑下固定是零值）
 type Game struct {
-	Id          uint      `json:"id"`
-	GameTypeId  uint      `json:"game_type_id"`
-	Key         string    `json:"key"`
-	Name        string    `json:"name"`
-	Description string    `json:"description" gorm:"default:''"`
-	CreatedAt   time.Time `json:"created_at"`
-	UpdatedAt   time.Time `json:"updated_at"`
-	DeletedAt   time.Time `json:"deleted_at" gorm:"default:2038-01-19 03:14:07"`
-	GameType    GameType  `json:"game_type" gorm:"foreignKey:GameTypeId;references:Id"`
+	Id          uint      `json:"id" bson:"_id"`
+	GameTypeId  uint      `json:"game_type_id" bson:"game_type_id"`
+	Key         string    `json:"key" bson:"key"`
+	Name        string    `json:"name" bson:"name"`
+	Description string    `json:"description" gorm:"default:''" bson:"description"`
+	CreatedAt   time.Time `json:"created_at" bson:"created_at"`
+	UpdatedAt   time.Time `json:"updated_at" bson:"updated_at"`
+	DeletedAt   time.Time `json:"deleted_at" gorm:"default:2038-01-19 03:14:07" bson:"deleted_at"`
+	GameType    GameType  `json:"game_type" gorm:"foreignKey:GameTypeId;references:Id" bson:"-"`
 }
 
 // TableName 顯式指定表名 games，但 gorm 的 TableName() 是直接取用的原始字串，
 // 不會再套用 bootstrap/mysql.go NamingStrategy 設的 TablePrefix，
 // 所以這裡自己把 CONFIG.DATABASE.PREFIX 接回去，維持跟 tx-games 一致。
-func (GameRow) TableName() string {
+func (Game) TableName() string {
 	return bootstrap.CONFIG.DATABASE.PREFIX + "games"
-}
-
-type GameRow struct {
-	Id          uint        `json:"id"`
-	GameTypeId  uint        `json:"game_type_id"`
-	Key         string      `json:"key"`
-	Name        string      `json:"name"`
-	Description string      `json:"description" gorm:"default:''"`
-	CreatedAt   time.Time   `json:"created_at"`
-	UpdatedAt   time.Time   `json:"updated_at"`
-	DeletedAt   time.Time   `json:"deleted_at" gorm:"default:2038-01-19 03:14:07"`
-	GameType    GameTypeRow `json:"game_type" gorm:"foreignKey:GameTypeId;references:Id"`
 }
 
 type GameValue struct {
@@ -53,48 +46,6 @@ type GameValue struct {
 	// CreatedAt   *time.Time `json:"created_at"`
 	// UpdatedAt   *time.Time `json:"updated_at"`
 	// DeletedAt   *time.Time `json:"deleted_at" gorm:"default:2038-01-19 03:14:07"`
-}
-
-func GameRowToGame(oRow *GameRow) *Game {
-	return &Game{
-		Id:          oRow.Id,
-		GameTypeId:  oRow.GameTypeId,
-		Key:         oRow.Key,
-		Name:        oRow.Name,
-		Description: oRow.Description,
-		CreatedAt:   oRow.CreatedAt,
-		UpdatedAt:   oRow.UpdatedAt,
-		DeletedAt:   oRow.DeletedAt,
-		GameType:    *GameTypeRowToGameType(&oRow.GameType),
-	}
-}
-
-// GameDocument 是 game 這個 collection 在 Mongo 裡的儲存結構。
-// Mongo 沒有像 SQL 那樣的自增主鍵，_id 改用 counters collection 累加出來的數字，
-// 讓 Game.Id 維持跟其他 adapter 一樣是 uint。
-// GameType 沒有做關聯查詢（Mongo 沒有 join），GameDocumentToGame 轉出來的 GameType 固定是零值。
-type GameDocument struct {
-	Id          uint      `bson:"_id"`
-	GameTypeId  uint      `bson:"game_type_id"`
-	Key         string    `bson:"key"`
-	Name        string    `bson:"name"`
-	Description string    `bson:"description"`
-	CreatedAt   time.Time `bson:"created_at"`
-	UpdatedAt   time.Time `bson:"updated_at"`
-	DeletedAt   time.Time `bson:"deleted_at"`
-}
-
-func GameDocumentToGame(oDoc *GameDocument) *Game {
-	return &Game{
-		Id:          oDoc.Id,
-		GameTypeId:  oDoc.GameTypeId,
-		Key:         oDoc.Key,
-		Name:        oDoc.Name,
-		Description: oDoc.Description,
-		CreatedAt:   oDoc.CreatedAt,
-		UpdatedAt:   oDoc.UpdatedAt,
-		DeletedAt:   oDoc.DeletedAt,
-	}
 }
 
 type GameFilter struct {

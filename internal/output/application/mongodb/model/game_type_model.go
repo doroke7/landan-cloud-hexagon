@@ -67,12 +67,12 @@ func (oSelf *GameTypeModel) nextId() (uint, error) {
 }
 
 func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
-	var oDoc domain.GameTypeDocument
+	var oGameType domain.GameType
 
 	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oDoc)
+	}).Decode(&oGameType)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
@@ -81,7 +81,7 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 		return nil, oErr
 	}
 
-	return domain.GameTypeDocumentToGameType(&oDoc), nil
+	return &oGameType, nil
 }
 
 func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error) {
@@ -96,14 +96,9 @@ func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*p
 	}
 	defer oCursor.Close(oSelf.Context)
 
-	var aDocs []*domain.GameTypeDocument
-	if oErr := oCursor.All(oSelf.Context, &aDocs); oErr != nil {
+	var aGameTypes []*domain.GameType
+	if oErr := oCursor.All(oSelf.Context, &aGameTypes); oErr != nil {
 		return nil, oErr
-	}
-
-	aGameTypes := make([]*domain.GameType, len(aDocs))
-	for i, oDoc := range aDocs {
-		aGameTypes[i] = domain.GameTypeDocumentToGameType(oDoc)
 	}
 
 	return aGameTypes, nil
@@ -128,7 +123,7 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) (bool, error) {
 	}
 
 	oNow := time.Now()
-	oDoc := &domain.GameTypeDocument{
+	oNew := &domain.GameType{
 		Id:        iId,
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
@@ -136,13 +131,13 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) (bool, error) {
 	}
 
 	if oValue.Key != nil {
-		oDoc.Key = *oValue.Key
+		oNew.Key = *oValue.Key
 	}
 	if oValue.Name != nil {
-		oDoc.Name = *oValue.Name
+		oNew.Name = *oValue.Name
 	}
 
-	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oDoc); oErr != nil {
+	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
 		return false, oErr
 	}
 

@@ -22,9 +22,7 @@ func NewAppUserModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyModel
 }
 
 func (oSelf *AppUserModel) IncreaseBalance(id uint, amount uint) (bool, error) {
-	var oAppUserRow domain.AppUserRow
-
-	if err := oSelf.DB.WithContext(oSelf.Context).Model(&oAppUserRow).
+	if err := oSelf.DB.WithContext(oSelf.Context).Model(&domain.AppUser{}).
 		Where("id = ?", id).
 		UpdateColumn("balance", gorm.Expr("balance + ?", amount)).Error; err != nil {
 		return false, err
@@ -34,44 +32,38 @@ func (oSelf *AppUserModel) IncreaseBalance(id uint, amount uint) (bool, error) {
 }
 
 func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) {
-	var oAppUserRow domain.AppUserRow
+	var oAppUser domain.AppUser
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).Where("name = ?", sName).First(&oAppUserRow).Error; oErr != nil {
+	if oErr := oSelf.DB.WithContext(oSelf.Context).Where("name = ?", sName).First(&oAppUser).Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, errors.New("資料不存在")
 		}
 		return nil, oErr
 	}
 
-	oAppUser := domain.AppUserRowToAppUser(&oAppUserRow)
-
-	return oAppUser, nil
+	return &oAppUser, nil
 }
 
 func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
-	var oAppUserRow domain.AppUserRow
+	var oAppUser domain.AppUser
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).First(&oAppUserRow, iId).Error; oErr != nil {
+	if oErr := oSelf.DB.WithContext(oSelf.Context).First(&oAppUser, iId).Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, errors.New("資料不存在")
 		}
 		return nil, oErr
 	}
 
-	oAppUser := domain.AppUserRowToAppUser(&oAppUserRow)
-
-	return oAppUser, nil
+	return &oAppUser, nil
 }
 
 func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) (bool, error) {
-	var oAppUserRow domain.AppUserRow
-
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return false, oErr
 	}
 
-	oResult := oSelf.DB.WithContext(oSelf.Context).Model(&oAppUserRow).Create(oColumns)
+	oResult := oSelf.DB.WithContext(oSelf.Context).Model(&domain.AppUser{}).Create(oColumns)
 	if oResult.Error != nil {
 		return false, oResult.Error
 	}

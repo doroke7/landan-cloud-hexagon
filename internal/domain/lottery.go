@@ -8,20 +8,9 @@ package domain
 
 */
 
-import bootstrap "example/bootstrap"
-
+// Lottery 只透過 etcd / cache / memory adapter 讀寫（JSON 序列化），
+// 沒有 gorm / mongo adapter，所以不需要 XxxRow 鏡像結構，也不需要 TableName()。
 type Lottery struct {
-	Id      uint   `json:"id"`
-	Round   string `json:"round"`
-	Time    int64  `json:"time"`
-	Numbers string `json:"numbers"`
-}
-
-func (LotteryRow) TableName() string {
-	return bootstrap.CONFIG.DATABASE.PREFIX + "lotteries"
-}
-
-type LotteryRow struct {
 	Id      uint   `json:"id"`
 	Round   string `json:"round"`
 	Time    int64  `json:"time"`

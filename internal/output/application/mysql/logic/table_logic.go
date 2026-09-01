@@ -25,8 +25,7 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
 
-	var aTableRows []*domain.TableRow
-	var oTableRow domain.TableRow
+	var aTables []*domain.Table
 	var iTotal int64
 	var oFindErr error
 	var oCountErr error
@@ -37,7 +36,7 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 	go func() {
 		defer oWaitGroup.Done()
 
-		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oTableRow).Where("deleted_at = ?", "2038-01-19 03:14:07")
+		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&domain.Table{}).Where("deleted_at = ?", "2038-01-19 03:14:07")
 		for _, oWhere := range aWheres {
 			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 		}
@@ -58,13 +57,13 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 		oFindErr = oQuery.
 			Limit(int(*oLimit.Count)).
 			Offset(int(*oLimit.Offset)).
-			Find(&aTableRows).Error
+			Find(&aTables).Error
 	}()
 
 	go func() {
 		defer oWaitGroup.Done()
 
-		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&oTableRow).Where("deleted_at = ?", "2038-01-19 03:14:07")
+		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&domain.Table{}).Where("deleted_at = ?", "2038-01-19 03:14:07")
 		for _, oWhere := range aWheres {
 			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 		}
@@ -73,11 +72,6 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 	}()
 
 	oWaitGroup.Wait()
-
-	aTables := make([]*domain.Table, len(aTableRows))
-	for i, oRow := range aTableRows {
-		aTables[i] = domain.TableRowToTable(oRow)
-	}
 
 	if oFindErr != nil {
 		return aTables, 0, oFindErr

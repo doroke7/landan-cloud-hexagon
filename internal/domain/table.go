@@ -15,6 +15,12 @@ import (
 	bootstrap "example/bootstrap"
 )
 
+// domain 直接兼作 gorm 的儲存結構，不再另外開欄位完全一樣的 TableRow：
+// 欄位無 tag，靠 NamingStrategy 轉 snake_case；Game 用 gorm association Preload。
+//
+// mongo 那邊還是走獨立的 TableDocument：Result 在 mysql 是 json 欄位，
+// json.RawMessage（[]byte）給 mongo-driver 會被編成 BSON binary 而不是 JSON 文字，
+// 所以 TableDocument 把它存成 string、自己控制編解碼，沒辦法跟這裡共用同一個 struct。
 type Table struct {
 	Id          uint            `json:"id"`
 	No          string          `json:"no"`
@@ -34,24 +40,8 @@ type Table struct {
 // TableName 顯式指定表名 tables，但 gorm 的 TableName() 是直接取用的原始字串，
 // 不會再套用 bootstrap/mysql.go NamingStrategy 設的 TablePrefix，
 // 所以這裡自己把 CONFIG.DATABASE.PREFIX 接回去，維持跟 tx-tables 一致。
-func (TableRow) TableName() string {
+func (Table) TableName() string {
 	return bootstrap.CONFIG.DATABASE.PREFIX + "tables"
-}
-
-type TableRow struct {
-	Id          uint            `json:"id"`
-	No          string          `json:"no"`
-	GameId      uint            `json:"game_id"`
-	Key         string          `json:"key"`
-	State       uint8           `json:"state"`
-	Description string          `json:"description"`
-	Result      json.RawMessage `json:"result"`
-	StartedAt   time.Time       `json:"started_at"`
-	EndedAt     time.Time       `json:"ended_at"`
-	CreatedAt   time.Time       `json:"created_at"`
-	UpdatedAt   time.Time       `json:"updated_at"`
-	DeletedAt   time.Time       `json:"deleted_at"`
-	Game        Game            `json:"game" gorm:"foreignKey:GameId;references:Id"`
 }
 
 type TableValue struct {
@@ -66,24 +56,6 @@ type TableValue struct {
 	// CreatedAt   *time.Time       `json:"created_at"`
 	// UpdatedAt   *time.Time       `json:"updated_at"`
 	// DeletedAt   *time.Time       `json:"deleted_at"`
-}
-
-func TableRowToTable(oRow *TableRow) *Table {
-	return &Table{
-		Id:          oRow.Id,
-		No:          oRow.No,
-		GameId:      oRow.GameId,
-		Key:         oRow.Key,
-		State:       oRow.State,
-		Description: oRow.Description,
-		Result:      oRow.Result,
-		StartedAt:   oRow.StartedAt,
-		EndedAt:     oRow.EndedAt,
-		CreatedAt:   oRow.CreatedAt,
-		UpdatedAt:   oRow.UpdatedAt,
-		DeletedAt:   oRow.DeletedAt,
-		Game:        oRow.Game,
-	}
 }
 
 // TableDocument 是 mongo 版 TableModel 實際存進去的 schema：Result 在 mysql

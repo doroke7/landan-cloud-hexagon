@@ -25,14 +25,14 @@ func NewTableModel(oAbstractModel *oracleBase.AbstractOracle) outputPortAnyModel
 }
 
 func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
-	var oTableRow domain.TableRow
+	var oTable domain.Table
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
 		Preload("Game").
 		Preload("Game.GameType").
-		Model(&oTableRow).
+		Model(&oTable).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oTableRow, iId).Error; oErr != nil {
+		First(&oTable, iId).Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
@@ -40,19 +40,17 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 		return nil, oErr
 	}
 
-	return domain.TableRowToTable(&oTableRow), nil
+	return &oTable, nil
 }
 
 func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool, error) {
-	var oTableRow domain.TableRow
-
 	oColumns, oErr := pkgUtility.StructToMap(oTable)
 	if oErr != nil {
 		return false, oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oTableRow).
+		Model(&domain.Table{}).
 		Where("id = ?", iId).
 		UpdateColumns(oColumns)
 
@@ -68,10 +66,8 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool,
 }
 
 func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
-	var oTableRow domain.TableRow
-
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oTableRow).
+		Model(&domain.Table{}).
 		Where("id = ?", iId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		UpdateColumn("deleted_at", time.Now())
@@ -92,15 +88,14 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 	aOrders := oSelf.AbstractOracle.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractOracle.PaginationToLimit(oPagination)
 
-	var aTableRows []*domain.TableRow
-	var oTableRow domain.TableRow
+	var aTables []*domain.Table
 
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
 		Preload("Game").
 		Preload("Game.GameType").
-		Model(&oTableRow).
+		Model(&domain.Table{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07")
 
 	for _, oWhere := range aWheres {
@@ -123,13 +118,8 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 	if oErr := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aTableRows).Error; oErr != nil {
+		Find(&aTables).Error; oErr != nil {
 		return nil, oErr
-	}
-
-	aTables := make([]*domain.Table, len(aTableRows))
-	for i, oTableRow := range aTableRows {
-		aTables[i] = domain.TableRowToTable(oTableRow)
 	}
 
 	return aTables, nil
@@ -139,12 +129,10 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 	aWheres := oSelf.AbstractOracle.FiltersToWheres(aFilters)
 
 	var iTotal int64
-	var oTableRow domain.TableRow
-
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
-		Model(&oTableRow)
+		Model(&domain.Table{})
 
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
@@ -159,15 +147,13 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 }
 
 func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
-	var oTableRow domain.TableRow
-
 	oColumns, oErr := pkgUtility.StructToMap(oTable)
 	if oErr != nil {
 		return false, oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oTableRow).
+		Model(&domain.Table{}).
 		Create(oColumns)
 
 	if oResult.Error != nil {

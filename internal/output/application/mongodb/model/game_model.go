@@ -81,7 +81,7 @@ func (oSelf *GameModel) AddOne(oGame *domain.GameValue) (bool, error) {
 	}
 
 	oNow := time.Now()
-	oDoc := &domain.GameDocument{
+	oNew := &domain.Game{
 		Id:        iId,
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
@@ -89,19 +89,19 @@ func (oSelf *GameModel) AddOne(oGame *domain.GameValue) (bool, error) {
 	}
 
 	if oGame.GameTypeId != nil {
-		oDoc.GameTypeId = *oGame.GameTypeId
+		oNew.GameTypeId = *oGame.GameTypeId
 	}
 	if oGame.Key != nil {
-		oDoc.Key = *oGame.Key
+		oNew.Key = *oGame.Key
 	}
 	if oGame.Name != nil {
-		oDoc.Name = *oGame.Name
+		oNew.Name = *oGame.Name
 	}
 	if oGame.Description != nil {
-		oDoc.Description = *oGame.Description
+		oNew.Description = *oGame.Description
 	}
 
-	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oDoc); oErr != nil {
+	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
 		return false, oErr
 	}
 
@@ -109,12 +109,12 @@ func (oSelf *GameModel) AddOne(oGame *domain.GameValue) (bool, error) {
 }
 
 func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
-	var oDoc domain.GameDocument
+	var oGame domain.Game
 
 	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oDoc)
+	}).Decode(&oGame)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
@@ -123,7 +123,7 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 		return nil, oErr
 	}
 
-	return domain.GameDocumentToGame(&oDoc), nil
+	return &oGame, nil
 }
 
 func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) (bool, error) {
@@ -179,14 +179,9 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 	}
 	defer oCursor.Close(oSelf.Context)
 
-	var aDocs []*domain.GameDocument
-	if oErr := oCursor.All(oSelf.Context, &aDocs); oErr != nil {
+	var aGames []*domain.Game
+	if oErr := oCursor.All(oSelf.Context, &aGames); oErr != nil {
 		return nil, oErr
-	}
-
-	aGames := make([]*domain.Game, len(aDocs))
-	for i, oDoc := range aDocs {
-		aGames[i] = domain.GameDocumentToGame(oDoc)
 	}
 
 	return aGames, nil

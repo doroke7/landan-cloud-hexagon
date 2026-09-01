@@ -34,7 +34,7 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 
 	oFindOptions := oSelf.SortersPaginationToFindOptions(aSorters, oPagination)
 
-	var aDocs []*domain.GameDocument
+	var aGames []*domain.Game
 	var iTotal int64
 	var oFindErr error
 	var oCountErr error
@@ -52,7 +52,7 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 		}
 		defer oCursor.Close(oSelf.Context)
 
-		oFindErr = oCursor.All(oSelf.Context, &aDocs)
+		oFindErr = oCursor.All(oSelf.Context, &aGames)
 	}()
 
 	go func() {
@@ -62,11 +62,6 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 	}()
 
 	oWaitGroup.Wait()
-
-	aGames := make([]*domain.Game, len(aDocs))
-	for i, oDoc := range aDocs {
-		aGames[i] = domain.GameDocumentToGame(oDoc)
-	}
 
 	if oFindErr != nil {
 		return aGames, 0, oFindErr
