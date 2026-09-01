@@ -212,6 +212,7 @@ type Config struct {
 		PORT                 string `mapstructure:"port"`
 		USER                 string `mapstructure:"user"`
 		PASSWORD             string `mapstructure:"password"`
+		PREFIX               string `mapstructure:"prefix"`
 		NAME                 string `mapstructure:"name"`
 		SSLMODE              string `mapstructure:"sslmode"`
 		MAX_IDLE_CONNECTIONS int    `mapstructure:"max_idle_connections"`
@@ -219,6 +220,7 @@ type Config struct {
 	} `mapstructure:"postgresql"`
 	SQLITE struct {
 		PATH                 string `mapstructure:"path"`
+		PREFIX               string `mapstructure:"prefix"`
 		MAX_IDLE_CONNECTIONS int    `mapstructure:"max_idle_connections"`
 		TIMEOUT              int    `mapstructure:"timeout"`
 	} `mapstructure:"sqlite"`
@@ -238,6 +240,7 @@ type Config struct {
 		PORT                 string `mapstructure:"port"`
 		USER                 string `mapstructure:"user"`
 		PASSWORD             string `mapstructure:"password"`
+		PREFIX               string `mapstructure:"prefix"`
 		NAME                 string `mapstructure:"name"`
 		SSLMODE              string `mapstructure:"sslmode"`
 		MAX_IDLE_CONNECTIONS int    `mapstructure:"max_idle_connections"`
@@ -248,6 +251,7 @@ type Config struct {
 		PORT                 string `mapstructure:"port"`
 		USER                 string `mapstructure:"user"`
 		PASSWORD             string `mapstructure:"password"`
+		PREFIX               string `mapstructure:"prefix"`
 		SERVICE              string `mapstructure:"service"`
 		MAX_IDLE_CONNECTIONS int    `mapstructure:"max_idle_connections"`
 		TIMEOUT              int    `mapstructure:"timeout"`
@@ -257,6 +261,7 @@ type Config struct {
 		PORT                 string `mapstructure:"port"`
 		USER                 string `mapstructure:"user"`
 		PASSWORD             string `mapstructure:"password"`
+		PREFIX               string `mapstructure:"prefix"`
 		NAME                 string `mapstructure:"name"`
 		DIAL_TIMEOUT         string `mapstructure:"dial_timeout"`
 		READ_TIMEOUT         string `mapstructure:"read_timeout"`

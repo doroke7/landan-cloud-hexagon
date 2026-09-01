@@ -8,6 +8,7 @@ import (
 	"github.com/godoes/gorm-oracle"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 // Oracle 沒有 MySQL/PostgreSQL 那樣的 wire protocol 相容性，
@@ -44,6 +45,9 @@ func NewOracle() (*gorm.DB, error) {
 				Colorful:                  true,        // 是否啟用彩色字體
 			},
 		),
+		NamingStrategy: schema.NamingStrategy{
+			TablePrefix: CONFIG.ORACLE.PREFIX,
+		},
 	})
 	if err != nil {
 		return nil, err

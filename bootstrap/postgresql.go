@@ -8,6 +8,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 func NewPostgresql() (*gorm.DB, error) {
@@ -38,6 +39,9 @@ func NewPostgresql() (*gorm.DB, error) {
 				Colorful:                  true,        // 是否啟用彩色字體
 			},
 		),
+		NamingStrategy: schema.NamingStrategy{
+			TablePrefix: CONFIG.POSTGRESQL.PREFIX,
+		},
 	})
 	if err != nil {
 		return nil, err

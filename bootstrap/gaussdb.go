@@ -8,6 +8,7 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 // GaussDB 源自 PostgreSQL，走同一套 wire protocol，所以直接沿用 gorm.io/driver/postgres，
@@ -40,6 +41,9 @@ func NewGaussdb() (*gorm.DB, error) {
 				Colorful:                  true,        // 是否啟用彩色字體
 			},
 		),
+		NamingStrategy: schema.NamingStrategy{
+			TablePrefix: CONFIG.GAUSSDB.PREFIX,
+		},
 	})
 	if err != nil {
 		return nil, err

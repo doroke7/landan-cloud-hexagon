@@ -9,6 +9,7 @@ import (
 	"gorm.io/driver/sqlite"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 func NewSqlite() (*gorm.DB, error) {
@@ -35,6 +36,9 @@ func NewSqlite() (*gorm.DB, error) {
 				Colorful:                  true,        // 是否啟用彩色字體
 			},
 		),
+		NamingStrategy: schema.NamingStrategy{
+			TablePrefix: CONFIG.SQLITE.PREFIX,
+		},
 	})
 	if err != nil {
 		return nil, err

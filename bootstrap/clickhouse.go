@@ -8,6 +8,7 @@ import (
 	"gorm.io/driver/clickhouse"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"gorm.io/gorm/schema"
 )
 
 func NewClickhouse() (*gorm.DB, error) {
@@ -39,6 +40,9 @@ func NewClickhouse() (*gorm.DB, error) {
 				Colorful:                  true,        // 是否啟用彩色字體
 			},
 		),
+		NamingStrategy: schema.NamingStrategy{
+			TablePrefix: CONFIG.CLICKHOUSE.PREFIX,
+		},
 	})
 	if err != nil {
 		return nil, err
