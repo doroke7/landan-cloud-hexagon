@@ -41,6 +41,19 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 	return &oGameType, nil
 }
 
+func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
+	var aGameTypes []*domain.GameType
+
+	if oErr := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.GameType{}).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		Find(&aGameTypes).Error; oErr != nil {
+		return nil, oErr
+	}
+
+	return aGameTypes, nil
+}
+
 func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error) {
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractSqlite.SortersToOrders(aSorters)

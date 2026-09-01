@@ -84,6 +84,21 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 	return &oGameType, nil
 }
 
+func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
+	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{"deleted_at": oDeletedAtZero})
+	if oErr != nil {
+		return nil, oErr
+	}
+	defer oCursor.Close(oSelf.Context)
+
+	var aGameTypes []*domain.GameType
+	if oErr := oCursor.All(oSelf.Context, &aGameTypes); oErr != nil {
+		return nil, oErr
+	}
+
+	return aGameTypes, nil
+}
+
 func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero

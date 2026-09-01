@@ -42,6 +42,12 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 	return &oGameType, nil
 }
 
+func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
+	iSize := uint(10000)
+	iPage := uint(1)
+	return oSelf.ShowOnesByFiltersWithSortersPagination(nil, nil, &pkgInput.Pagination{Size: &iSize, Page: &iPage})
+}
+
 func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error) {
 	sDeletedAtField := "deleted_at"
 	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
