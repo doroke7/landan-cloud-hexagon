@@ -10,7 +10,7 @@ type GameTypeLogic struct {
 	*tidbBase.AbstractTidb
 }
 
-func NewGameTypeLogic(oAbstractLogic *tidbBase.AbstractTidb) outputPortAnyLogic.GameType {
+func NewGameTypeLogic(oAbstractLogic *tidbBase.AbstractTidb) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
 		AbstractTidb: oAbstractLogic,
 	}

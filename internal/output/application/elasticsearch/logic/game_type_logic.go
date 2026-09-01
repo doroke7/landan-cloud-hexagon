@@ -14,7 +14,7 @@ type GameTypeLogic struct {
 	Index string
 }
 
-func NewGameTypeLogic(oAbstractLogic *elasticsearchBase.AbstractElasticsearch) outputPortAnyLogic.GameType {
+func NewGameTypeLogic(oAbstractLogic *elasticsearchBase.AbstractElasticsearch) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
 		AbstractElasticsearch: oAbstractLogic,
 		Index:                 oAbstractLogic.IndexName("game_types"),

@@ -8,16 +8,16 @@ import (
 
 type GameTypeUsecase struct {
 	*AbstractUsecase
-	outputPortAnyLogic.GameType
+	outputPortAnyLogic.GameTypeLogic
 }
 
-func NewGameTypeUsecase(oAbstractUsecase *AbstractUsecase, oGameTypeLogic outputPortAnyLogic.GameType) usecasePortAnyLogic.GameTypeUsecase {
+func NewGameTypeUsecase(oAbstractUsecase *AbstractUsecase, oGameTypeLogic outputPortAnyLogic.GameTypeLogic) usecasePortAnyLogic.GameTypeUsecase {
 	return &GameTypeUsecase{
 		AbstractUsecase: oAbstractUsecase,
-		GameType:        oGameTypeLogic,
+		GameTypeLogic:   oGameTypeLogic,
 	}
 }
 
 func (oSelf *GameTypeUsecase) ShowTree() ([]*domain.GameType, error) {
-	return oSelf.GameType.ShowTree()
+	return oSelf.GameTypeLogic.ShowTree()
 }

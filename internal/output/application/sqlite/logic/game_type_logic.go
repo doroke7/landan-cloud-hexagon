@@ -10,7 +10,7 @@ type GameTypeLogic struct {
 	*sqliteBase.AbstractSqlite
 }
 
-func NewGameTypeLogic(oAbstractLogic *sqliteBase.AbstractSqlite) outputPortAnyLogic.GameType {
+func NewGameTypeLogic(oAbstractLogic *sqliteBase.AbstractSqlite) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
 		AbstractSqlite: oAbstractLogic,
 	}

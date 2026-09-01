@@ -10,7 +10,7 @@ type GameTypeLogic struct {
 	*gaussdbBase.AbstractGaussdb
 }
 
-func NewGameTypeLogic(oAbstractLogic *gaussdbBase.AbstractGaussdb) outputPortAnyLogic.GameType {
+func NewGameTypeLogic(oAbstractLogic *gaussdbBase.AbstractGaussdb) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
 		AbstractGaussdb: oAbstractLogic,
 	}

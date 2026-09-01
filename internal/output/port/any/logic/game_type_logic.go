@@ -4,6 +4,6 @@ import (
 	domain "example/internal/domain"
 )
 
-type GameType interface {
+type GameTypeLogic interface {
 	ShowTree() ([]*domain.GameType, error)
 }

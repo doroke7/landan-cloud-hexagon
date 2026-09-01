@@ -10,7 +10,7 @@ type GameTypeLogic struct {
 	*postgresqlBase.AbstractPostgresql
 }
 
-func NewGameTypeLogic(oAbstractLogic *postgresqlBase.AbstractPostgresql) outputPortAnyLogic.GameType {
+func NewGameTypeLogic(oAbstractLogic *postgresqlBase.AbstractPostgresql) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
 		AbstractPostgresql: oAbstractLogic,
 	}

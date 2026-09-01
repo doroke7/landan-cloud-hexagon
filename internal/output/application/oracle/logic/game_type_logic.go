@@ -10,7 +10,7 @@ type GameTypeLogic struct {
 	*oracleBase.AbstractOracle
 }
 
-func NewGameTypeLogic(oAbstractLogic *oracleBase.AbstractOracle) outputPortAnyLogic.GameType {
+func NewGameTypeLogic(oAbstractLogic *oracleBase.AbstractOracle) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
 		AbstractOracle: oAbstractLogic,
 	}

@@ -10,7 +10,7 @@ type GameTypeLogic struct {
 	*clickhouseBase.AbstractClickhouse
 }
 
-func NewGameTypeLogic(oAbstractLogic *clickhouseBase.AbstractClickhouse) outputPortAnyLogic.GameType {
+func NewGameTypeLogic(oAbstractLogic *clickhouseBase.AbstractClickhouse) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
 		AbstractClickhouse: oAbstractLogic,
 	}

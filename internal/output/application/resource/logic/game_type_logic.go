@@ -11,7 +11,7 @@ type GameTypeLogic struct {
 	*resourceBase.AbstractResource
 }
 
-func NewGameTypeLogic(oAbstractLogic *resourceBase.AbstractResource) outputPortAnyLogic.GameType {
+func NewGameTypeLogic(oAbstractLogic *resourceBase.AbstractResource) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
 		AbstractResource: oAbstractLogic,
 	}

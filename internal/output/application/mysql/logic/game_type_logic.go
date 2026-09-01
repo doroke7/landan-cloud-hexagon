@@ -10,7 +10,7 @@ type GameTypeLogic struct {
 	*mysqlBase.AbstractMysql
 }
 
-func NewGameTypeLogic(oAbstractLogic *mysqlBase.AbstractMysql) outputPortAnyLogic.GameType {
+func NewGameTypeLogic(oAbstractLogic *mysqlBase.AbstractMysql) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
 		AbstractMysql: oAbstractLogic,
 	}

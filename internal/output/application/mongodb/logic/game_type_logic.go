@@ -14,7 +14,7 @@ type GameTypeLogic struct {
 	Collection *mongo.Collection
 }
 
-func NewGameTypeLogic(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyLogic.GameType {
+func NewGameTypeLogic(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
 		AbstractMongodb: oAbstractMongodb,
 		Collection:      oAbstractMongodb.Database.Collection("game_types"),
