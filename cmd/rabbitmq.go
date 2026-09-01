@@ -19,7 +19,10 @@ var oRabbitmqCommand = &cobra.Command{
 	Short: "啟動 rabbitmq 服務",
 	Run: func(cmd *cobra.Command, args []string) {
 
+		// 收到中斷/終止訊號時 ctx 會被取消，ConsumerRouter.Serve 監聽 ctx.Done() 後返回，
+		// 不是靠 process 被系統強制殺掉才停止消費。
 		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		defer stop()
 
 		oContainer, err := container.InitRabbitmqContainer(ctx)
 		if err != nil {
@@ -27,10 +30,6 @@ var oRabbitmqCommand = &cobra.Command{
 		}
 
 		oRabbitmqRouter := registerRabbitmq.Init(oContainer)
-
-		// 收到中斷/終止訊號時 ctx 會被取消，ConsumerRouter.Serve 監聽 ctx.Done() 後返回，
-		// 不是靠 process 被系統強制殺掉才停止消費。
-		defer stop()
 
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 RABBITMQ 服務。")
 

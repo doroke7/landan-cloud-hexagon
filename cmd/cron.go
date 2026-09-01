@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -20,7 +21,10 @@ var oCronCommand = &cobra.Command{
 		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
-		oContainer, _ := container.InitCronContainer(ctx)
+		oContainer, err := container.InitCronContainer(ctx)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		oCron := registerCron.Init(oContainer)
 

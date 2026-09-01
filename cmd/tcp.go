@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"context"
-	bootstrap "example/bootstrap"
 	"log"
 	"os"
 	"os/signal"
@@ -10,6 +9,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	bootstrap "example/bootstrap"
 	container "example/container"
 	registerTcp "example/internal/register/tcp"
 	pkgUtility "example/pkg/utility"

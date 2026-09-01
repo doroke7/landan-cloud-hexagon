@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"log"
+
 	"github.com/spf13/cobra"
 )
 
@@ -8,7 +10,8 @@ var oSocketCommand = &cobra.Command{
 	Use:   "socket",
 	Short: "啟動 socket 服務",
 	Run: func(cmd *cobra.Command, args []string) {
-
+		// 尚未實作：直接 log.Fatal 讓 exit code 非 0，不要靜默 exit 0。
+		log.Fatal("socket 服務尚未實作")
 	},
 }
 

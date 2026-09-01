@@ -1,8 +1,12 @@
 package cmd
 
 import (
+	"context"
 	"log"
 	"net/http"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/spf13/cobra"
 
@@ -25,20 +29,28 @@ var oSocketioCommand = &cobra.Command{
 	Use:   "socketio",
 	Short: "啟動 socketio 服務",
 	Run: func(cmd *cobra.Command, args []string) {
+		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		defer stop()
 
 		oServer, oMux := registerSocketio.Init()
 
 		defer oServer.Close()
-
-		pkgUtility.Logger(pkgUtility.Default).Info("啟動 SOCKETIO 服務。 port: " + bootstrap.CONFIG.SERVICES.SOCKETIO.PORT)
 
 		oSocketioServer := &http.Server{
 			Addr:    ":" + bootstrap.CONFIG.SERVICES.SOCKETIO.PORT,
 			Handler: oMux,
 		}
 
-		log.Fatal(oSocketioServer.ListenAndServe())
+		go func() {
+			<-ctx.Done()
+			oSocketioServer.Shutdown(context.Background())
+		}()
 
+		pkgUtility.Logger(pkgUtility.Default).Info("啟動 SOCKETIO 服務。 port: " + bootstrap.CONFIG.SERVICES.SOCKETIO.PORT)
+
+		if err := oSocketioServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatal(err)
+		}
 	},
 }
 

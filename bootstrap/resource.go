@@ -37,7 +37,7 @@ func NewResource(oContext context.Context) *grpc.ClientConn {
 	oResolverBuilder.InitialState(resolver.State{Addresses: aAddrs})
 
 	// gRPC 本身支持 多路復用， 不建議做連結池
-	oConnection, err := grpc.NewClient(oResolverBuilder.Scheme()+":///resource", grpc.WithResolvers(oResolverBuilder), grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`), grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithChainUnaryInterceptor(func(
+	oConnection, oErr := grpc.NewClient(oResolverBuilder.Scheme()+":///resource", grpc.WithResolvers(oResolverBuilder), grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`), grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithChainUnaryInterceptor(func(
 		ctx context.Context,
 		method string,
 		req, reply any,
@@ -70,7 +70,7 @@ func NewResource(oContext context.Context) *grpc.ClientConn {
 			PermitWithoutStream: true,             // 關鍵：就算現在業務沒請求、沒有 Stream，也要送 PING
 		}),
 	)
-	if err != nil {
+	if oErr != nil {
 		return nil
 	}
 

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"context"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
@@ -20,13 +21,18 @@ var oDaemonCommand = &cobra.Command{
 		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
-		oContainer, _ := container.InitDaemonContainer(ctx)
+		oContainer, err := container.InitDaemonContainer(ctx)
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		oDaemonRouter := registerDaemon.Init(oContainer)
 
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 DAEMON 服務。")
 
-		oDaemonRouter.Serve(ctx)
+		if err := oDaemonRouter.Serve(ctx); err != nil {
+			log.Printf("daemon stopped: %v", err)
+		}
 	},
 }
 

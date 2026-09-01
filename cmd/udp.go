@@ -1,9 +1,13 @@
 package cmd
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net"
+	"os"
+	"os/signal"
+	"syscall"
 
 	"github.com/spf13/cobra"
 
@@ -15,39 +19,46 @@ var oUdpCommand = &cobra.Command{
 	Use:   "udp",
 	Short: "啟動 UDP 服務",
 	Run: func(cmd *cobra.Command, args []string) {
+		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		defer stop()
 
-		addr, err := net.ResolveUDPAddr("udp", ":"+bootstrap.CONFIG.SERVICES.UDP.PORT)
+		oAddr, err := net.ResolveUDPAddr("udp", ":"+bootstrap.CONFIG.SERVICES.UDP.PORT)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		conn, err := net.ListenUDP("udp", addr)
+		oConn, err := net.ListenUDP("udp", oAddr)
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer conn.Close()
+		defer oConn.Close()
+
+		// 收到中斷/終止訊號時 ctx 會被取消，主動關掉 conn 讓 ReadFromUDP 中斷返回，
+		// 不是靠 process 被系統強制殺掉才釋放 port。
+		go func() {
+			<-ctx.Done()
+			oConn.Close()
+		}()
 
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 UDP 服務。 port: " + bootstrap.CONFIG.SERVICES.UDP.PORT)
 
-		buf := make([]byte, 1024)
+		aBuf := make([]byte, 1024)
 
-		/*
-		   這邊的 for 不會一直空轉
-		   跟 go channel 很接近
-
-		*/
 		for {
-
-			// 這裡會 很像 event 的機制， 一直讀取，直到沒有資料了就 sleep（阻塞）， 直到 有消息時候會喚醒程式碼
-
-			n, remoteAddr, err := conn.ReadFromUDP(buf) // 會 （阻塞）
+			iCount, oRemoteAddr, err := oConn.ReadFromUDP(aBuf)
 			if err != nil {
-				continue
+				// ctx 取消（優雅關機）就正常退出，否則是真的讀取錯誤，直接結束。
+				select {
+				case <-ctx.Done():
+					return
+				default:
+					log.Fatal(err)
+				}
 			}
 
-			fmt.Println("Receive:", string(buf[:n]))
+			fmt.Println("Receive:", string(aBuf[:iCount]))
 
-			conn.WriteToUDP([]byte("OK"), remoteAddr)
+			oConn.WriteToUDP([]byte("OK"), oRemoteAddr)
 		}
 	},
 }

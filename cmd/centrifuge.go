@@ -7,7 +7,6 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/spf13/cobra"
 
@@ -42,15 +41,6 @@ var oCentrifugeCommand = &cobra.Command{
 			<-ctx.Done()
 			oNode.Shutdown(context.Background())
 			oCentrifugeServer.Shutdown(context.Background())
-		}()
-
-		go func() {
-			oTicker10 := time.NewTicker(time.Second * 10)
-			oTicker5 := time.NewTicker(time.Second * 5)
-
-			defer oTicker10.Stop()
-			defer oTicker5.Stop()
-
 		}()
 
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 CENTRIFUGE 服務。 port: " + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT)

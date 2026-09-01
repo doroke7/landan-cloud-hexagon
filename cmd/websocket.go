@@ -36,7 +36,14 @@ var oWebsocketCommand = &cobra.Command{
 		}
 		pkgUtility.Logger(pkgUtility.Default).Info("啟動 WEBSOCKET 服務。 port: " + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT)
 
-		oWebsocketServer.ListenAndServe()
+		go func() {
+			<-ctx.Done()
+			oWebsocketServer.Shutdown(context.Background())
+		}()
+
+		if err := oWebsocketServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
+			log.Fatal(err)
+		}
 
 	},
 }
