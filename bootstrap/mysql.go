@@ -29,7 +29,7 @@ func NewMysql() (*gorm.DB, error) {
 
 	sDSN := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
-		CONFIG.MYSQL.USER,
+		CONFIG.MYSQL.USERNAME,
 		CONFIG.MYSQL.PASSWORD,
 		sHost,
 		sPort,

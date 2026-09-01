@@ -25,7 +25,7 @@ func NewTidb() (*gorm.DB, error) {
 
 	sDSN := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=%s&parseTime=true",
-		CONFIG.TIDB.USER,
+		CONFIG.TIDB.USERNAME,
 		CONFIG.TIDB.PASSWORD,
 		sHost,
 		sPort,

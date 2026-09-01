@@ -46,7 +46,7 @@ func NewResource(oContext context.Context) *grpc.ClientConn {
 		opts ...grpc.CallOption,
 	) error {
 
-		sUser := CONFIG.CLIENTS.RESOURCE.USER
+		sUser := CONFIG.CLIENTS.RESOURCE.USERNAME
 		sPassword := CONFIG.CLIENTS.RESOURCE.PASSWORD
 
 		sAuthorization := "Basic " + pkgUtility.Base64Encode(

@@ -17,7 +17,7 @@ func NewPostgresql() (*gorm.DB, error) {
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		CONFIG.POSTGRESQL.HOST,
 		CONFIG.POSTGRESQL.PORT,
-		CONFIG.POSTGRESQL.USER,
+		CONFIG.POSTGRESQL.USERNAME,
 		CONFIG.POSTGRESQL.PASSWORD,
 		CONFIG.POSTGRESQL.NAME,
 		CONFIG.POSTGRESQL.SSLMODE,

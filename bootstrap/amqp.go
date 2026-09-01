@@ -10,8 +10,8 @@ import (
 func NewAmqp() (*amqp.Connection, error) {
 	sDSN := fmt.Sprintf(
 		"amqp://%s:%s@%s:%s/",
-		CONFIG.AMQP.USER,
-		CONFIG.AMQP.PASS,
+		CONFIG.AMQP.USERNAME,
+		CONFIG.AMQP.PASSWORD,
 		CONFIG.AMQP.HOST,
 		CONFIG.AMQP.PORT,
 	)

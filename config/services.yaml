@@ -391,7 +391,7 @@ socketio:
 
 resource:
   port: 5001
-  user: 'resource'
+  username: 'resource'
   password: '!Scg]4"?VYY`mzFOV(Nu247ou6O5E@jB'
 
 

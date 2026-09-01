@@ -15,7 +15,7 @@ func NewClickhouse() (*gorm.DB, error) {
 
 	sDSN := fmt.Sprintf(
 		"clickhouse://%s:%s@%s:%s/%s?dial_timeout=%s&read_timeout=%s",
-		CONFIG.CLICKHOUSE.USER,
+		CONFIG.CLICKHOUSE.USERNAME,
 		CONFIG.CLICKHOUSE.PASSWORD,
 		CONFIG.CLICKHOUSE.HOST,
 		CONFIG.CLICKHOUSE.PORT,

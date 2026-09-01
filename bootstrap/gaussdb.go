@@ -19,7 +19,7 @@ func NewGaussdb() (*gorm.DB, error) {
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=%s",
 		CONFIG.GAUSSDB.HOST,
 		CONFIG.GAUSSDB.PORT,
-		CONFIG.GAUSSDB.USER,
+		CONFIG.GAUSSDB.USERNAME,
 		CONFIG.GAUSSDB.PASSWORD,
 		CONFIG.GAUSSDB.NAME,
 		CONFIG.GAUSSDB.SSLMODE,

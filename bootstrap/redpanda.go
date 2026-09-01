@@ -20,10 +20,10 @@ func NewRedpanda() (sarama.Client, error) {
 		oConfig.Version = oVersion
 	}
 
-	if CONFIG.REDPANDA.USER != "" {
+	if CONFIG.REDPANDA.USERNAME != "" {
 		oConfig.Net.SASL.Enable = true
-		oConfig.Net.SASL.User = CONFIG.REDPANDA.USER
-		oConfig.Net.SASL.Password = CONFIG.REDPANDA.PASS
+		oConfig.Net.SASL.User = CONFIG.REDPANDA.USERNAME
+		oConfig.Net.SASL.Password = CONFIG.REDPANDA.PASSWORD
 	}
 
 	// sarama.NewSyncProducerFromClient 要求 Producer.Return.Successes 是 true，

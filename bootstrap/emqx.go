@@ -17,9 +17,9 @@ func NewEmqx() (mqtt.Client, error) {
 		AddBroker(sBroker).
 		SetConnectTimeout(time.Duration(CONFIG.EMQX.TIMEOUT) * time.Millisecond)
 
-	if CONFIG.EMQX.USER != "" {
-		oOptions.SetUsername(CONFIG.EMQX.USER)
-		oOptions.SetPassword(CONFIG.EMQX.PASS)
+	if CONFIG.EMQX.USERNAME != "" {
+		oOptions.SetUsername(CONFIG.EMQX.USERNAME)
+		oOptions.SetPassword(CONFIG.EMQX.PASSWORD)
 	}
 
 	oClient := mqtt.NewClient(oOptions)

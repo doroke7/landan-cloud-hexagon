@@ -16,7 +16,7 @@ func NewMongo() (*mongo.Client, error) {
 	sURI := fmt.Sprintf(
 		"%s://%s:%s@%s:%s/%s?authSource=%s",
 		CONFIG.MONGODB.PROTOCOL,
-		CONFIG.MONGODB.USER,
+		CONFIG.MONGODB.USERNAME,
 		CONFIG.MONGODB.PASSWORD,
 		CONFIG.MONGODB.HOST,
 		CONFIG.MONGODB.PORT,

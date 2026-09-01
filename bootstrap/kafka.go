@@ -18,10 +18,10 @@ func NewKafka() (sarama.Client, error) {
 		oConfig.Version = oVersion
 	}
 
-	if CONFIG.KAFKA.USER != "" {
+	if CONFIG.KAFKA.USERNAME != "" {
 		oConfig.Net.SASL.Enable = true
-		oConfig.Net.SASL.User = CONFIG.KAFKA.USER
-		oConfig.Net.SASL.Password = CONFIG.KAFKA.PASS
+		oConfig.Net.SASL.User = CONFIG.KAFKA.USERNAME
+		oConfig.Net.SASL.Password = CONFIG.KAFKA.PASSWORD
 	}
 
 	// sarama.NewSyncProducerFromClient 要求 Producer.Return.Successes 是 true，

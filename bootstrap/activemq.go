@@ -13,7 +13,7 @@ func NewActivemq() (*stomp.Conn, error) {
 	sAddr := fmt.Sprintf("%s:%s", CONFIG.ACTIVEMQ.HOST, CONFIG.ACTIVEMQ.PORT)
 
 	oConn, oErr := stomp.Dial("tcp", sAddr,
-		stomp.ConnOpt.Login(CONFIG.ACTIVEMQ.USER, CONFIG.ACTIVEMQ.PASS),
+		stomp.ConnOpt.Login(CONFIG.ACTIVEMQ.USERNAME, CONFIG.ACTIVEMQ.PASSWORD),
 		stomp.ConnOpt.HeartBeat(
 			time.Duration(CONFIG.ACTIVEMQ.TIMEOUT)*time.Millisecond,
 			time.Duration(CONFIG.ACTIVEMQ.TIMEOUT)*time.Millisecond,

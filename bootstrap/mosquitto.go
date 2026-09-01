@@ -16,9 +16,9 @@ func NewMosquitto() (mqtt.Client, error) {
 		AddBroker(sBroker).
 		SetConnectTimeout(time.Duration(CONFIG.MOSQUITTO.TIMEOUT) * time.Millisecond)
 
-	if CONFIG.MOSQUITTO.USER != "" {
-		oOptions.SetUsername(CONFIG.MOSQUITTO.USER)
-		oOptions.SetPassword(CONFIG.MOSQUITTO.PASS)
+	if CONFIG.MOSQUITTO.USERNAME != "" {
+		oOptions.SetUsername(CONFIG.MOSQUITTO.USERNAME)
+		oOptions.SetPassword(CONFIG.MOSQUITTO.PASSWORD)
 	}
 
 	oClient := mqtt.NewClient(oOptions)

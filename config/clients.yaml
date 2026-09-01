@@ -6,7 +6,7 @@ facade:        # 面門 服務
 resource:        # 數據服務
   hosts: ["127.0.0.1", "127.0.0.1", "127.0.0.1", "127.0.0.1"]
   ports: ["7002", "7002", "7002", "7002"]
-  user: 'resource'
+  username: 'resource'
   password: '!Scg]4"?VYY`mzFOV(Nu247ou6O5E@jB'
   timeout: 10000
 

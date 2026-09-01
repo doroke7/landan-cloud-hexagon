@@ -1,5 +1,5 @@
 host: "127.0.0.1"
 port: "4222"
-user: ""
-pass: ""
+username: ""
+password: ""
 timeout: 10000

@@ -32,7 +32,7 @@ func (oSelf *AuthenticationInterceptor) Handle() grpc.UnaryServerInterceptor {
 			aAuthotizations := oMetadata.Get("authorization")
 			sAuthotizations := strings.Join(aAuthotizations, "")
 
-			sUser := bootstrap.CONFIG.SERVICES.RESOURCE.USER
+			sUser := bootstrap.CONFIG.SERVICES.RESOURCE.USERNAME
 			sPassword := bootstrap.CONFIG.SERVICES.RESOURCE.PASSWORD
 
 			sAuthotization := "Basic " + pkgUtility.Base64Encode(sUser+":"+sPassword)

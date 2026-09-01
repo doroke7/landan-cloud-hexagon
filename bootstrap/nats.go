@@ -15,8 +15,8 @@ func NewNats() (*nats.Conn, error) {
 		nats.Timeout(time.Duration(CONFIG.NATS.TIMEOUT) * time.Millisecond),
 	}
 
-	if CONFIG.NATS.USER != "" {
-		aOptions = append(aOptions, nats.UserInfo(CONFIG.NATS.USER, CONFIG.NATS.PASS))
+	if CONFIG.NATS.USERNAME != "" {
+		aOptions = append(aOptions, nats.UserInfo(CONFIG.NATS.USERNAME, CONFIG.NATS.PASSWORD))
 	}
 
 	oConn, oErr := nats.Connect(sURL, aOptions...)

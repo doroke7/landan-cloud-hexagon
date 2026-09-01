@@ -18,8 +18,8 @@ func NewEtcd() (*clientv3.Client, error) {
 	oClient, oErr := clientv3.New(clientv3.Config{
 		Endpoints:   aEndpoints,
 		DialTimeout: time.Duration(CONFIG.ETCD.TIMEOUT) * time.Millisecond,
-		Username:    CONFIG.ETCD.USER,
-		Password:    CONFIG.ETCD.PASS,
+		Username:    CONFIG.ETCD.USERNAME,
+		Password:    CONFIG.ETCD.PASSWORD,
 	})
 
 	log.Info("[INFO] ETCD 連線完成.", "addr", strings.Join(aEndpoints, ","))

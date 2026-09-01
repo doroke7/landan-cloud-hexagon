@@ -1,6 +1,6 @@
 host: "127.0.0.1"
 port: "1521"
-user: "oracle"
+username: "oracle"
 password: "oracle_pass_backend"
 prefix: "tx-"
 service: "orclpdb1"

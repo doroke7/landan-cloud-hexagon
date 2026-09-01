@@ -1,4 +1,4 @@
-user: "root"
+username: "root"
 password: "tidb_pass_backend"
 name: "resource"
 prefix: "tx-"

@@ -1,4 +1,4 @@
-user: "root"
+username: "root"
 password: "mysql_pass_cli"
 name: "resource"
 prefix: "tx-"

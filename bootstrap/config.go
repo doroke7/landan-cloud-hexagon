@@ -97,7 +97,7 @@ type Config struct {
 		RESOURCE struct {
 			HOST     string `mapstructure:"host"`
 			PORT     string `mapstructure:"port"`
-			USER     string `mapstructure:"user"`
+			USERNAME string `mapstructure:"username"`
 			PASSWORD string `mapstructure:"password"`
 		} `mapstructure:"resource"`
 		WEBSOCKET struct {
@@ -157,7 +157,7 @@ type Config struct {
 		RESOURCE struct {
 			HOSTS    []string `mapstructure:"hosts"`
 			PORTS    []string `mapstructure:"ports"`
-			USER     string   `mapstructure:"user"`
+			USERNAME string   `mapstructure:"username"`
 			PASSWORD string   `mapstructure:"password"`
 			TIMEOUT  int      `mapstructure:"timeout"`
 		} `mapstructure:"resource"`
@@ -175,7 +175,7 @@ type Config struct {
 		} `mapstructure:"tcp"`
 	} `mapstructure:"clients"`
 	MYSQL struct {
-		USER                 string `mapstructure:"user"`
+		USERNAME             string `mapstructure:"username"`
 		PASSWORD             string `mapstructure:"password"`
 		PREFIX               string `mapstructure:"prefix"`
 		CHARSET              string `mapstructure:"charset"`
@@ -192,16 +192,16 @@ type Config struct {
 		} `mapstructure:"write"`
 	} `mapstructure:"mysql"`
 	DB struct {
-		HOST string `mapstructure:"host"` // 映射键名：它告诉解码器，配置文件（或 Map）里的键名如果是 "host"，就对应填入结构体的 HOST 字段
-		USER string `mapstructure:"user"`
-		PASS string `mapstructure:"pass"` //
+		HOST     string `mapstructure:"host"` // 映射键名：它告诉解码器，配置文件（或 Map）里的键名如果是 "host"，就对应填入结构体的 HOST 字段
+		USERNAME string `mapstructure:"username"`
+		PASSWORD string `mapstructure:"password"` //
 	} `mapstructure:"db"`
 	MONGODB struct {
 		PROTOCOL      string `mapstructure:"protocol"`
 		HOST          string `mapstructure:"host"`
 		PORT          string `mapstructure:"port"`
 		NAME          string `mapstructure:"name"`
-		USER          string `mapstructure:"user"`
+		USERNAME      string `mapstructure:"username"`
 		PASSWORD      string `mapstructure:"password"`
 		AUTH_SOURCE   string `mapstructure:"auth_source"`
 		MAX_POOL_SIZE uint64 `mapstructure:"max_pool_size"`
@@ -210,7 +210,7 @@ type Config struct {
 	POSTGRESQL struct {
 		HOST                 string `mapstructure:"host"`
 		PORT                 string `mapstructure:"port"`
-		USER                 string `mapstructure:"user"`
+		USERNAME             string `mapstructure:"username"`
 		PASSWORD             string `mapstructure:"password"`
 		PREFIX               string `mapstructure:"prefix"`
 		NAME                 string `mapstructure:"name"`
@@ -225,7 +225,7 @@ type Config struct {
 		TIMEOUT              int    `mapstructure:"timeout"`
 	} `mapstructure:"sqlite"`
 	TIDB struct {
-		USER                 string   `mapstructure:"user"`
+		USERNAME             string   `mapstructure:"username"`
 		PASSWORD             string   `mapstructure:"password"`
 		PREFIX               string   `mapstructure:"prefix"`
 		CHARSET              string   `mapstructure:"charset"`
@@ -238,7 +238,7 @@ type Config struct {
 	GAUSSDB struct {
 		HOST                 string `mapstructure:"host"`
 		PORT                 string `mapstructure:"port"`
-		USER                 string `mapstructure:"user"`
+		USERNAME             string `mapstructure:"username"`
 		PASSWORD             string `mapstructure:"password"`
 		PREFIX               string `mapstructure:"prefix"`
 		NAME                 string `mapstructure:"name"`
@@ -249,7 +249,7 @@ type Config struct {
 	ORACLE struct {
 		HOST                 string `mapstructure:"host"`
 		PORT                 string `mapstructure:"port"`
-		USER                 string `mapstructure:"user"`
+		USERNAME             string `mapstructure:"username"`
 		PASSWORD             string `mapstructure:"password"`
 		PREFIX               string `mapstructure:"prefix"`
 		SERVICE              string `mapstructure:"service"`
@@ -259,7 +259,7 @@ type Config struct {
 	CLICKHOUSE struct {
 		HOST                 string `mapstructure:"host"`
 		PORT                 string `mapstructure:"port"`
-		USER                 string `mapstructure:"user"`
+		USERNAME             string `mapstructure:"username"`
 		PASSWORD             string `mapstructure:"password"`
 		PREFIX               string `mapstructure:"prefix"`
 		NAME                 string `mapstructure:"name"`
@@ -280,16 +280,16 @@ type Config struct {
 		TIMEOUT  int      `mapstructure:"timeout"`
 	} `mapstructure:"redis"`
 	AMQP struct {
-		HOST string `mapstructure:"host"`
-		PORT string `mapstructure:"port"`
-		USER string `mapstructure:"user"`
-		PASS string `mapstructure:"pass"` //
+		HOST     string `mapstructure:"host"`
+		PORT     string `mapstructure:"port"`
+		USERNAME string `mapstructure:"username"`
+		PASSWORD string `mapstructure:"password"` //
 	} `mapstructure:"amqp"`
 	KAFKA struct {
-		BROKERS []string `mapstructure:"brokers"`
-		USER    string   `mapstructure:"user"`
-		PASS    string   `mapstructure:"pass"`
-		VERSION string   `mapstructure:"version"`
+		BROKERS  []string `mapstructure:"brokers"`
+		USERNAME string   `mapstructure:"username"`
+		PASSWORD string   `mapstructure:"password"`
+		VERSION  string   `mapstructure:"version"`
 	} `mapstructure:"kafka"`
 	ROCKETMQ struct {
 		NAME_SERVERS []string `mapstructure:"name_servers"`
@@ -303,18 +303,18 @@ type Config struct {
 		TIMEOUT int    `mapstructure:"timeout"`
 	} `mapstructure:"beanstalk"`
 	NATS struct {
-		HOST    string `mapstructure:"host"`
-		PORT    string `mapstructure:"port"`
-		USER    string `mapstructure:"user"`
-		PASS    string `mapstructure:"pass"`
-		TIMEOUT int    `mapstructure:"timeout"`
+		HOST     string `mapstructure:"host"`
+		PORT     string `mapstructure:"port"`
+		USERNAME string `mapstructure:"username"`
+		PASSWORD string `mapstructure:"password"`
+		TIMEOUT  int    `mapstructure:"timeout"`
 	} `mapstructure:"nats"`
 	ACTIVEMQ struct {
-		HOST    string `mapstructure:"host"`
-		PORT    string `mapstructure:"port"`
-		USER    string `mapstructure:"user"`
-		PASS    string `mapstructure:"pass"`
-		TIMEOUT int    `mapstructure:"timeout"`
+		HOST     string `mapstructure:"host"`
+		PORT     string `mapstructure:"port"`
+		USERNAME string `mapstructure:"username"`
+		PASSWORD string `mapstructure:"password"`
+		TIMEOUT  int    `mapstructure:"timeout"`
 	} `mapstructure:"activemq"`
 	ZEROMQ struct {
 		HOST    string `mapstructure:"host"`
@@ -327,37 +327,37 @@ type Config struct {
 		TIMEOUT int    `mapstructure:"timeout"`
 	} `mapstructure:"pulsar"`
 	REDPANDA struct {
-		BROKERS []string `mapstructure:"brokers"`
-		USER    string   `mapstructure:"user"`
-		PASS    string   `mapstructure:"pass"`
-		VERSION string   `mapstructure:"version"`
+		BROKERS  []string `mapstructure:"brokers"`
+		USERNAME string   `mapstructure:"username"`
+		PASSWORD string   `mapstructure:"password"`
+		VERSION  string   `mapstructure:"version"`
 	} `mapstructure:"redpanda"`
 	ETCD struct {
-		HOSTS   []string `mapstructure:"hosts"`
-		PORTS   []string `mapstructure:"ports"`
-		USER    string   `mapstructure:"user"`
-		PASS    string   `mapstructure:"pass"`
-		TIMEOUT int      `mapstructure:"timeout"`
+		HOSTS    []string `mapstructure:"hosts"`
+		PORTS    []string `mapstructure:"ports"`
+		USERNAME string   `mapstructure:"username"`
+		PASSWORD string   `mapstructure:"password"`
+		TIMEOUT  int      `mapstructure:"timeout"`
 	} `mapstructure:"etcd"`
 	ELASTICSEARCH struct {
-		HOSTS  []string `mapstructure:"hosts"`
-		USER   string   `mapstructure:"user"`
-		PASS   string   `mapstructure:"pass"`
-		PREFIX string   `mapstructure:"prefix"`
+		HOSTS    []string `mapstructure:"hosts"`
+		USERNAME string   `mapstructure:"username"`
+		PASSWORD string   `mapstructure:"password"`
+		PREFIX   string   `mapstructure:"prefix"`
 	} `mapstructure:"elasticsearch"`
 	MOSQUITTO struct {
-		HOST    string `mapstructure:"host"`
-		PORT    string `mapstructure:"port"`
-		USER    string `mapstructure:"user"`
-		PASS    string `mapstructure:"pass"`
-		TIMEOUT int    `mapstructure:"timeout"`
+		HOST     string `mapstructure:"host"`
+		PORT     string `mapstructure:"port"`
+		USERNAME string `mapstructure:"username"`
+		PASSWORD string `mapstructure:"password"`
+		TIMEOUT  int    `mapstructure:"timeout"`
 	} `mapstructure:"mosquitto"`
 	EMQX struct {
-		HOST    string `mapstructure:"host"`
-		PORT    string `mapstructure:"port"`
-		USER    string `mapstructure:"user"`
-		PASS    string `mapstructure:"pass"`
-		TIMEOUT int    `mapstructure:"timeout"`
+		HOST     string `mapstructure:"host"`
+		PORT     string `mapstructure:"port"`
+		USERNAME string `mapstructure:"username"`
+		PASSWORD string `mapstructure:"password"`
+		TIMEOUT  int    `mapstructure:"timeout"`
 	} `mapstructure:"emqx"`
 	DEFAULT struct {
 		DEBUG bool `mapstructure:"debug"`

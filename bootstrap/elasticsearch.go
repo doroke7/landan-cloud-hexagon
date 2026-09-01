@@ -10,8 +10,8 @@ import (
 func NewElasticsearch() (*elasticsearch.Client, error) {
 	oClient, oErr := elasticsearch.NewClient(elasticsearch.Config{
 		Addresses: CONFIG.ELASTICSEARCH.HOSTS,
-		Username:  CONFIG.ELASTICSEARCH.USER,
-		Password:  CONFIG.ELASTICSEARCH.PASS,
+		Username:  CONFIG.ELASTICSEARCH.USERNAME,
+		Password:  CONFIG.ELASTICSEARCH.PASSWORD,
 	})
 
 	log.Info("[INFO] ELASTICSEARCH 連線完成.", "addr", strings.Join(CONFIG.ELASTICSEARCH.HOSTS, ","))
