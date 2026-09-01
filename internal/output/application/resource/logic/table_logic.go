@@ -1,8 +1,6 @@
 package outputApplicationResourceLogic
 
 import (
-	"encoding/json"
-
 	domain "example/internal/domain"
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
@@ -42,7 +40,7 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 			Key:         oOne.GetKey(),
 			State:       uint8(oOne.GetState()),
 			Description: oOne.GetDescription(),
-			Result:      json.RawMessage(oOne.GetResult()),
+			Result:      oOne.GetResult(),
 			StartedAt:   oOne.GetStartedAt().AsTime(),
 			EndedAt:     oOne.GetEndedAt().AsTime(),
 			CreatedAt:   oOne.GetCreatedAt().AsTime(),

@@ -1,8 +1,6 @@
 package outputApplicationResourceModel
 
 import (
-	"encoding/json"
-
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	domain "example/internal/domain"
@@ -44,7 +42,7 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 		Key:         oResponse.GetKey(),
 		State:       uint8(oResponse.GetState()),
 		Description: oResponse.GetDescription(),
-		Result:      json.RawMessage(oResponse.GetResult()),
+		Result:      oResponse.GetResult(),
 		StartedAt:   oResponse.GetStartedAt().AsTime(),
 		EndedAt:     oResponse.GetEndedAt().AsTime(),
 		CreatedAt:   oResponse.GetCreatedAt().AsTime(),
@@ -73,7 +71,7 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool,
 	}
 
 	if oTable.Result != nil {
-		sResult := string(*oTable.Result)
+		sResult := *oTable.Result
 		oRequest.Result = &sResult
 	}
 
@@ -131,7 +129,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 			Key:         oOne.GetKey(),
 			State:       uint8(oOne.GetState()),
 			Description: oOne.GetDescription(),
-			Result:      json.RawMessage(oOne.GetResult()),
+			Result:      oOne.GetResult(),
 			StartedAt:   oOne.GetStartedAt().AsTime(),
 			EndedAt:     oOne.GetEndedAt().AsTime(),
 			CreatedAt:   oOne.GetCreatedAt().AsTime(),
@@ -176,7 +174,7 @@ func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
 	}
 
 	if oTable.Result != nil {
-		sResult := string(*oTable.Result)
+		sResult := *oTable.Result
 		oRequest.Result = &sResult
 	}
 

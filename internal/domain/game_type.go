@@ -27,9 +27,6 @@ type GameType struct {
 	DeletedAt time.Time `json:"deleted_at" bson:"deleted_at"`
 }
 
-// TableName 顯式指定表名 game_types，但 gorm 的 TableName() 是直接取用的原始字串，
-// 不會再套用 bootstrap/mysql.go NamingStrategy 設的 TablePrefix，
-// 所以這裡自己把 CONFIG.DATABASE.PREFIX 接回去，維持跟 tx-game_types 一致。
 func (GameType) TableName() string {
 	return bootstrap.CONFIG.DATABASE.PREFIX + "game_types"
 }

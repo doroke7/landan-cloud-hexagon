@@ -73,7 +73,7 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 			Key:         oTable.Key,
 			State:       uint32(oTable.State),
 			Description: oTable.Description,
-			Result:      string(oTable.Result),
+			Result:      oTable.Result,
 			StartedAt:   timestamppb.New(oTable.StartedAt),
 			EndedAt:     timestamppb.New(oTable.EndedAt),
 			CreatedAt:   timestamppb.New(oTable.CreatedAt),

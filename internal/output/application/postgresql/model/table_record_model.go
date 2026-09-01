@@ -25,12 +25,12 @@ func NewTableRecordModel(oAbstractModel *postgresqlBase.AbstractPostgresql) outp
 }
 
 func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error) {
-	var oTableRecordRow domain.TableRecordRow
+	var oTableRecord domain.TableRecord
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oTableRecordRow).
+		Model(&oTableRecord).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oTableRecordRow, iId).Error; oErr != nil {
+		First(&oTableRecord, iId).Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
@@ -38,19 +38,17 @@ func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error
 		return nil, oErr
 	}
 
-	return domain.TableRecordRowToTableRecord(&oTableRecordRow), nil
+	return &oTableRecord, nil
 }
 
 func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue, iId uint) (bool, error) {
-	var oTableRecordRow domain.TableRecordRow
-
 	oColumns, oErr := pkgUtility.StructToMap(oTableRecord)
 	if oErr != nil {
 		return false, oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oTableRecordRow).
+		Model(&domain.TableRecord{}).
 		Where("id = ?", iId).
 		UpdateColumns(oColumns)
 
@@ -66,10 +64,8 @@ func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue
 }
 
 func (oSelf *TableRecordModel) RemoveOneById(iId uint) (bool, error) {
-	var oTableRecordRow domain.TableRecordRow
-
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oTableRecordRow).
+		Model(&domain.TableRecord{}).
 		Where("id = ?", iId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		UpdateColumn("deleted_at", time.Now())
@@ -90,13 +86,12 @@ func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters [
 	aOrders := oSelf.AbstractPostgresql.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractPostgresql.PaginationToLimit(oPagination)
 
-	var aTableRecordRows []*domain.TableRecordRow
-	var oTableRecordRow domain.TableRecordRow
+	var aTableRecords []*domain.TableRecord
 
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
-		Model(&oTableRecordRow).
+		Model(&domain.TableRecord{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07")
 
 	for _, oWhere := range aWheres {
@@ -119,13 +114,8 @@ func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters [
 	if oErr := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aTableRecordRows).Error; oErr != nil {
+		Find(&aTableRecords).Error; oErr != nil {
 		return nil, oErr
-	}
-
-	aTableRecords := make([]*domain.TableRecord, len(aTableRecordRows))
-	for i, oTableRecordRow := range aTableRecordRows {
-		aTableRecords[i] = domain.TableRecordRowToTableRecord(oTableRecordRow)
 	}
 
 	return aTableRecords, nil
@@ -135,12 +125,10 @@ func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint
 	aWheres := oSelf.AbstractPostgresql.FiltersToWheres(aFilters)
 
 	var iTotal int64
-	var oTableRecordRow domain.TableRecordRow
-
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
-		Model(&oTableRecordRow)
+		Model(&domain.TableRecord{})
 
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
@@ -155,15 +143,13 @@ func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint
 }
 
 func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) (bool, error) {
-	var oTableRecordRow domain.TableRecordRow
-
 	oColumns, oErr := pkgUtility.StructToMap(oTableRecord)
 	if oErr != nil {
 		return false, oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oTableRecordRow).
+		Model(&domain.TableRecord{}).
 		Create(oColumns)
 
 	if oResult.Error != nil {

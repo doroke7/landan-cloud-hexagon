@@ -14,12 +14,6 @@ import (
 	bootstrap "example/bootstrap"
 )
 
-// domain 直接兼作各 adapter 的儲存結構，不再另外開 TableRecordLogRow（gorm）/
-// TableRecordLogDocument（mongo）兩個欄位完全一樣的鏡像 struct：
-//   - gorm：欄位無 tag，靠 NamingStrategy 轉 snake_case
-//   - mongo：bson tag 指定，_id 對到 Id（counters 累加的 uint，不是 ObjectID）
-//
-// Text/Image 是純字串（不是 json.RawMessage），mongo 直接存字串、不拆成巢狀 bson 文件。
 type TableRecordLog struct {
 	Id            uint      `json:"id" bson:"_id"`
 	GameId        uint      `json:"game_id" bson:"game_id"`

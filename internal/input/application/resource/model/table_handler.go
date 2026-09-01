@@ -2,7 +2,6 @@ package inputApplicationResourceModel
 
 import (
 	"context"
-	"encoding/json"
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
@@ -47,7 +46,7 @@ func (oSelf *TableHandler) ShowOneById(oContext context.Context, oReq *pbResourc
 		Key:         oTable.Key,
 		State:       uint32(oTable.State),
 		Description: oTable.Description,
-		Result:      string(oTable.Result),
+		Result:      oTable.Result,
 		StartedAt:   timestamppb.New(oTable.StartedAt),
 		EndedAt:     timestamppb.New(oTable.EndedAt),
 		CreatedAt:   timestamppb.New(oTable.CreatedAt),
@@ -76,8 +75,8 @@ func (oSelf *TableHandler) AddOne(oContext context.Context, oReq *pbResourceMode
 	}
 
 	if oReq.Result != nil {
-		oRawMessage := json.RawMessage(*oReq.Result)
-		oTableValue.Result = &oRawMessage
+		sResult := *oReq.Result
+		oTableValue.Result = &sResult
 	}
 
 	if oReq.StartedAt != nil {
@@ -120,8 +119,8 @@ func (oSelf *TableHandler) EditOneById(oContext context.Context, oReq *pbResourc
 	}
 
 	if oReq.Result != nil {
-		oRawMessage := json.RawMessage(*oReq.Result)
-		oTableValue.Result = &oRawMessage
+		sResult := *oReq.Result
+		oTableValue.Result = &sResult
 	}
 
 	if oReq.StartedAt != nil {
@@ -211,7 +210,7 @@ func (oSelf *TableHandler) ShowOnesByFiltersWithSortersPagination(oContext conte
 			Key:         oTable.Key,
 			State:       uint32(oTable.State),
 			Description: oTable.Description,
-			Result:      string(oTable.Result),
+			Result:      oTable.Result,
 			StartedAt:   timestamppb.New(oTable.StartedAt),
 			EndedAt:     timestamppb.New(oTable.EndedAt),
 			CreatedAt:   timestamppb.New(oTable.CreatedAt),

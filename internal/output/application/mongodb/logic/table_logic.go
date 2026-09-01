@@ -29,7 +29,7 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 
 	oFindOptions := oSelf.SortersPaginationToFindOptions(aSorters, oPagination)
 
-	var aDocs []*domain.TableDocument
+	var aTables []*domain.Table
 	var iTotal int64
 	var oFindErr error
 	var oCountErr error
@@ -47,7 +47,7 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 		}
 		defer oCursor.Close(oSelf.Context)
 
-		oFindErr = oCursor.All(oSelf.Context, &aDocs)
+		oFindErr = oCursor.All(oSelf.Context, &aTables)
 	}()
 
 	go func() {
@@ -57,11 +57,6 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 	}()
 
 	oWaitGroup.Wait()
-
-	aTables := make([]*domain.Table, len(aDocs))
-	for i, oDoc := range aDocs {
-		aTables[i] = domain.TableDocumentToTable(oDoc)
-	}
 
 	if oFindErr != nil {
 		return aTables, 0, oFindErr

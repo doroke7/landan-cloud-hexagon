@@ -72,7 +72,7 @@ func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
 	}
 
 	oNow := time.Now()
-	oDoc := &domain.TableDocument{
+	oNew := &domain.Table{
 		Id:        iId,
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
@@ -80,31 +80,31 @@ func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
 	}
 
 	if oTable.No != nil {
-		oDoc.No = *oTable.No
+		oNew.No = *oTable.No
 	}
 	if oTable.GameId != nil {
-		oDoc.GameId = *oTable.GameId
+		oNew.GameId = *oTable.GameId
 	}
 	if oTable.Key != nil {
-		oDoc.Key = *oTable.Key
+		oNew.Key = *oTable.Key
 	}
 	if oTable.State != nil {
-		oDoc.State = *oTable.State
+		oNew.State = *oTable.State
 	}
 	if oTable.Description != nil {
-		oDoc.Description = *oTable.Description
+		oNew.Description = *oTable.Description
 	}
 	if oTable.Result != nil {
-		oDoc.Result = string(*oTable.Result)
+		oNew.Result = *oTable.Result
 	}
 	if oTable.StartedAt != nil {
-		oDoc.StartedAt = *oTable.StartedAt
+		oNew.StartedAt = *oTable.StartedAt
 	}
 	if oTable.EndedAt != nil {
-		oDoc.EndedAt = *oTable.EndedAt
+		oNew.EndedAt = *oTable.EndedAt
 	}
 
-	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oDoc); oErr != nil {
+	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
 		return false, oErr
 	}
 
@@ -112,12 +112,12 @@ func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
 }
 
 func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
-	var oDoc domain.TableDocument
+	var oTable domain.Table
 
 	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oDoc)
+	}).Decode(&oTable)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
@@ -126,7 +126,7 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 		return nil, oErr
 	}
 
-	return domain.TableDocumentToTable(&oDoc), nil
+	return &oTable, nil
 }
 
 func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool, error) {
@@ -148,7 +148,7 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool,
 		oSet["description"] = *oTable.Description
 	}
 	if oTable.Result != nil {
-		oSet["result"] = string(*oTable.Result)
+		oSet["result"] = *oTable.Result
 	}
 	if oTable.StartedAt != nil {
 		oSet["started_at"] = *oTable.StartedAt
@@ -194,14 +194,9 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 	}
 	defer oCursor.Close(oSelf.Context)
 
-	var aDocs []*domain.TableDocument
-	if oErr := oCursor.All(oSelf.Context, &aDocs); oErr != nil {
+	var aTables []*domain.Table
+	if oErr := oCursor.All(oSelf.Context, &aTables); oErr != nil {
 		return nil, oErr
-	}
-
-	aTables := make([]*domain.Table, len(aDocs))
-	for i, oDoc := range aDocs {
-		aTables[i] = domain.TableDocumentToTable(oDoc)
 	}
 
 	return aTables, nil

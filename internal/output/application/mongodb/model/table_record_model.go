@@ -73,7 +73,7 @@ func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) (bo
 	}
 
 	oNow := time.Now()
-	oDoc := &domain.TableRecordDocument{
+	oNew := &domain.TableRecord{
 		Id:        iId,
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
@@ -81,34 +81,34 @@ func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) (bo
 	}
 
 	if oTableRecord.No != nil {
-		oDoc.No = *oTableRecord.No
+		oNew.No = *oTableRecord.No
 	}
 	if oTableRecord.GameId != nil {
-		oDoc.GameId = *oTableRecord.GameId
+		oNew.GameId = *oTableRecord.GameId
 	}
 	if oTableRecord.TableId != nil {
-		oDoc.TableId = *oTableRecord.TableId
+		oNew.TableId = *oTableRecord.TableId
 	}
 	if oTableRecord.State != nil {
-		oDoc.State = *oTableRecord.State
+		oNew.State = *oTableRecord.State
 	}
 	if oTableRecord.Text != nil {
-		oDoc.Text = string(*oTableRecord.Text)
+		oNew.Text = *oTableRecord.Text
 	}
 	if oTableRecord.Image != nil {
-		oDoc.Image = string(*oTableRecord.Image)
+		oNew.Image = *oTableRecord.Image
 	}
 	if oTableRecord.Result != nil {
-		oDoc.Result = string(*oTableRecord.Result)
+		oNew.Result = *oTableRecord.Result
 	}
 	if oTableRecord.StartedAt != nil {
-		oDoc.StartedAt = *oTableRecord.StartedAt
+		oNew.StartedAt = *oTableRecord.StartedAt
 	}
 	if oTableRecord.EndedAt != nil {
-		oDoc.EndedAt = *oTableRecord.EndedAt
+		oNew.EndedAt = *oTableRecord.EndedAt
 	}
 
-	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oDoc); oErr != nil {
+	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
 		return false, oErr
 	}
 
@@ -116,12 +116,12 @@ func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) (bo
 }
 
 func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error) {
-	var oDoc domain.TableRecordDocument
+	var oTableRecord domain.TableRecord
 
 	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oDoc)
+	}).Decode(&oTableRecord)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
@@ -130,7 +130,7 @@ func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error
 		return nil, oErr
 	}
 
-	return domain.TableRecordDocumentToTableRecord(&oDoc), nil
+	return &oTableRecord, nil
 }
 
 func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue, iId uint) (bool, error) {
@@ -149,13 +149,13 @@ func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue
 		oSet["state"] = *oTableRecord.State
 	}
 	if oTableRecord.Text != nil {
-		oSet["text"] = string(*oTableRecord.Text)
+		oSet["text"] = *oTableRecord.Text
 	}
 	if oTableRecord.Image != nil {
-		oSet["image"] = string(*oTableRecord.Image)
+		oSet["image"] = *oTableRecord.Image
 	}
 	if oTableRecord.Result != nil {
-		oSet["result"] = string(*oTableRecord.Result)
+		oSet["result"] = *oTableRecord.Result
 	}
 	if oTableRecord.StartedAt != nil {
 		oSet["started_at"] = *oTableRecord.StartedAt
@@ -201,14 +201,9 @@ func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters [
 	}
 	defer oCursor.Close(oSelf.Context)
 
-	var aDocs []*domain.TableRecordDocument
-	if oErr := oCursor.All(oSelf.Context, &aDocs); oErr != nil {
+	var aTableRecords []*domain.TableRecord
+	if oErr := oCursor.All(oSelf.Context, &aTableRecords); oErr != nil {
 		return nil, oErr
-	}
-
-	aTableRecords := make([]*domain.TableRecord, len(aDocs))
-	for i, oDoc := range aDocs {
-		aTableRecords[i] = domain.TableRecordDocumentToTableRecord(oDoc)
 	}
 
 	return aTableRecords, nil

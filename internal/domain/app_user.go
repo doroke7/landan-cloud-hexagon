@@ -12,8 +12,6 @@ import (
 	bootstrap "example/bootstrap"
 )
 
-// domain 直接兼作 gorm 的儲存結構，不再另外開欄位完全一樣的 AppUserRow：
-// 欄位無 tag，靠 NamingStrategy 轉 snake_case；主鍵 Id -> id。
 type AppUser struct {
 	Id       uint   `json:"id"`
 	Name     string `json:"name"`

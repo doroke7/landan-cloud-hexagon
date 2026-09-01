@@ -14,10 +14,6 @@ import (
 	bootstrap "example/bootstrap"
 )
 
-// domain 直接兼作各 adapter 的儲存結構，不再另外開 AdminUserRow（gorm）/
-// AdminUserDocument（mongo）兩個欄位完全一樣的鏡像 struct：
-//   - gorm：欄位無 tag，靠 NamingStrategy 轉 snake_case；主鍵 Id -> id
-//   - mongo：bson tag 指定，_id 對到 Id（counters 累加的 uint，不是 ObjectID）
 type AdminUser struct {
 	Id        uint      `json:"id" bson:"_id"`
 	Name      string    `json:"name" bson:"name"`
@@ -27,9 +23,6 @@ type AdminUser struct {
 	DeletedAt time.Time `json:"deleted_at" bson:"deleted_at"`
 }
 
-// TableName 顯式指定表名 admin_users，但 gorm 的 TableName() 是直接取用的原始字串，
-// 不會再套用 bootstrap/mysql.go NamingStrategy 設的 TablePrefix，
-// 所以這裡自己把 CONFIG.DATABASE.PREFIX 接回去，維持跟 tx-admin_users 一致。
 func (AdminUser) TableName() string {
 	return bootstrap.CONFIG.DATABASE.PREFIX + "admin_users"
 }

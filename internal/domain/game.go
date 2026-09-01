@@ -14,11 +14,6 @@ import (
 	bootstrap "example/bootstrap"
 )
 
-// domain 直接兼作各 adapter 的儲存結構，不再另外開 GameRow（gorm）/
-// GameDocument（mongo）兩個欄位完全一樣的鏡像 struct：
-//   - gorm：欄位無 tag，靠 NamingStrategy 轉 snake_case；GameType 用 gorm association Preload
-//   - mongo：bson tag 指定，_id 對到 Id（counters 累加的 uint）；GameType 用 bson:"-" 略過
-//     （Mongo 沒有 join，這個欄位在 mongo 路徑下固定是零值）
 type Game struct {
 	Id          uint      `json:"id" bson:"_id"`
 	GameTypeId  uint      `json:"game_type_id" bson:"game_type_id"`
@@ -31,9 +26,6 @@ type Game struct {
 	GameType    GameType  `json:"game_type" gorm:"foreignKey:GameTypeId;references:Id" bson:"-"`
 }
 
-// TableName 顯式指定表名 games，但 gorm 的 TableName() 是直接取用的原始字串，
-// 不會再套用 bootstrap/mysql.go NamingStrategy 設的 TablePrefix，
-// 所以這裡自己把 CONFIG.DATABASE.PREFIX 接回去，維持跟 tx-games 一致。
 func (Game) TableName() string {
 	return bootstrap.CONFIG.DATABASE.PREFIX + "games"
 }
