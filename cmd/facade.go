@@ -20,10 +20,10 @@ var oFacadeCommand = &cobra.Command{
 	Use:   "facade",
 	Short: "啟動 Facade 服務",
 	Run: func(cmd *cobra.Command, args []string) {
-		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
-		oContainer, err := container.InitFacadeContainer(ctx)
+		oContainer, err := container.InitFacadeContainer(oCtx)
 		if err != nil {
 			pkgUtility.Logger(pkgUtility.Facade).Fatal("初始化 facade container 失敗", zap.Error(err))
 		}
@@ -36,7 +36,7 @@ var oFacadeCommand = &cobra.Command{
 		pkgUtility.Logger(pkgUtility.Facade).Info("啟動 FACADE 服務。 port: " + bootstrap.CONFIG.SERVICES.FACADE.PORT)
 
 		go func() {
-			<-ctx.Done()
+			<-oCtx.Done()
 			oFacadeServer.GracefulStop()
 		}()
 

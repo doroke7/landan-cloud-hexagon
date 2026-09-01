@@ -18,10 +18,10 @@ var oDaemonCommand = &cobra.Command{
 	Use:   "daemon",
 	Short: "啟動 daemon 服務",
 	Run: func(cmd *cobra.Command, args []string) {
-		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
-		oContainer, err := container.InitDaemonContainer(ctx)
+		oContainer, err := container.InitDaemonContainer(oCtx)
 		if err != nil {
 			pkgUtility.Logger(pkgUtility.Deamon).Fatal("初始化 daemon container 失敗", zap.Error(err))
 		}
@@ -30,7 +30,7 @@ var oDaemonCommand = &cobra.Command{
 
 		pkgUtility.Logger(pkgUtility.Deamon).Info("啟動 DAEMON 服務。")
 
-		if err := oDaemonRouter.Serve(ctx); err != nil {
+		if err := oDaemonRouter.Serve(oCtx); err != nil {
 			pkgUtility.Logger(pkgUtility.Deamon).Error("DAEMON 服務已停止", zap.Error(err))
 		}
 	},

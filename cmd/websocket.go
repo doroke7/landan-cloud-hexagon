@@ -20,10 +20,10 @@ var oWebsocketCommand = &cobra.Command{
 	Use:   "websocket",
 	Short: "啟動 Websocket 服務",
 	Run: func(cmd *cobra.Command, args []string) {
-		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
-		oContainer, err := container.InitWebsocketContainer(ctx)
+		oContainer, err := container.InitWebsocketContainer(oCtx)
 		if err != nil {
 			pkgUtility.Logger(pkgUtility.Websocket).Fatal("初始化 websocket container 失敗", zap.Error(err))
 		}
@@ -37,7 +37,7 @@ var oWebsocketCommand = &cobra.Command{
 		pkgUtility.Logger(pkgUtility.Websocket).Info("啟動 WEBSOCKET 服務。 port: " + bootstrap.CONFIG.SERVICES.WEBSOCKET.PORT)
 
 		go func() {
-			<-ctx.Done()
+			<-oCtx.Done()
 			oWebsocketServer.Shutdown(context.Background())
 		}()
 

@@ -18,7 +18,7 @@ var oUdpCommand = &cobra.Command{
 	Use:   "udp",
 	Short: "啟動 UDP 服務",
 	Run: func(cmd *cobra.Command, args []string) {
-		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
 		oAddr, err := net.ResolveUDPAddr("udp", ":"+bootstrap.CONFIG.SERVICES.UDP.PORT)
@@ -32,10 +32,10 @@ var oUdpCommand = &cobra.Command{
 		}
 		defer oConn.Close()
 
-		// 收到中斷/終止訊號時 ctx 會被取消，主動關掉 conn 讓 ReadFromUDP 中斷返回，
+		// 收到中斷/終止訊號時 oCtx 會被取消，主動關掉 conn 讓 ReadFromUDP 中斷返回，
 		// 不是靠 process 被系統強制殺掉才釋放 port。
 		go func() {
-			<-ctx.Done()
+			<-oCtx.Done()
 			oConn.Close()
 		}()
 
@@ -46,9 +46,9 @@ var oUdpCommand = &cobra.Command{
 		for {
 			iCount, oRemoteAddr, err := oConn.ReadFromUDP(aBuf)
 			if err != nil {
-				// ctx 取消（優雅關機）就正常退出，否則是真的讀取錯誤，直接結束。
+				// oCtx 取消（優雅關機）就正常退出，否則是真的讀取錯誤，直接結束。
 				select {
-				case <-ctx.Done():
+				case <-oCtx.Done():
 					return
 				default:
 					pkgUtility.Logger(pkgUtility.Udp).Fatal("讀取 UDP 失敗", zap.Error(err))

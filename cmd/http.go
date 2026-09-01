@@ -21,10 +21,10 @@ var oHttpCommand = &cobra.Command{
 	Use:   "http",
 	Short: "啟動 Gin HTTP 服務",
 	Run: func(cmd *cobra.Command, args []string) {
-		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
-		oContainer, err := container.InitHttpContainer(ctx)
+		oContainer, err := container.InitHttpContainer(oCtx)
 		if err != nil {
 			pkgUtility.Logger(pkgUtility.Http).Fatal("初始化 http container 失敗", zap.Error(err))
 		}
@@ -41,7 +41,7 @@ var oHttpCommand = &cobra.Command{
 		}
 
 		go func() {
-			<-ctx.Done()
+			<-oCtx.Done()
 			oHttpServer.Shutdown(context.Background())
 		}()
 

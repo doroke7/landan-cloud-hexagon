@@ -29,7 +29,7 @@ var oSocketioCommand = &cobra.Command{
 	Use:   "socketio",
 	Short: "啟動 socketio 服務",
 	Run: func(cmd *cobra.Command, args []string) {
-		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
 		oServer, oMux := registerSocketio.Init()
@@ -42,7 +42,7 @@ var oSocketioCommand = &cobra.Command{
 		}
 
 		go func() {
-			<-ctx.Done()
+			<-oCtx.Done()
 			oSocketioServer.Shutdown(context.Background())
 		}()
 

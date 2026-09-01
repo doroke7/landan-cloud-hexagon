@@ -21,10 +21,10 @@ var oCentrifugeCommand = &cobra.Command{
 	Short: "啟動 centrifuge 服務",
 	Run: func(cmd *cobra.Command, args []string) {
 
-		ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
+		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
-		oContainer, oErr := container.InitCentrifugeContainer(ctx)
+		oContainer, oErr := container.InitCentrifugeContainer(oCtx)
 		if oErr != nil {
 			pkgUtility.Logger(pkgUtility.Centrifuge).Fatal("初始化 centrifuge container 失敗", zap.Error(oErr))
 		}
@@ -38,7 +38,7 @@ var oCentrifugeCommand = &cobra.Command{
 		}
 
 		go func() {
-			<-ctx.Done()
+			<-oCtx.Done()
 			oNode.Shutdown(context.Background())
 			oCentrifugeServer.Shutdown(context.Background())
 		}()
