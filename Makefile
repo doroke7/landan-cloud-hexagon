@@ -23,28 +23,28 @@ wire:
 
 
 .PHONY: http-watch
-http-watch:
-	air -c .air.http.toml
+http-watch:                             # 用 exec 會直接執行 air 而不是透過 sh
+	exec air -c .air.http.toml       
 
 .PHONY: facade-watch
-facade-watch:
-	air -c .air.facade.toml
+facade-watch:                             # 用 exec 會直接執行 air 而不是透過 sh
+	exec air -c .air.facade.toml
 
 .PHONY: websocket-watch
-websocket-watch:
-	air -c .air.websocket.toml
+websocket-watch:                             # 用 exec 會直接執行 air 而不是透過 sh
+	exec air -c .air.websocket.toml
 
 
 .PHONY: centrifuge-watch
-centrifuge-watch:
-	air -c .air.centrifuge.toml
+centrifuge-watch:                             # 用 exec 會直接執行 air 而不是透過 sh
+	exec air -c .air.centrifuge.toml
 
 .PHONY: socketio-watch
-socketio-watch:
-	air -c .air.socketio.toml
+socketio-watch:                             # 用 exec 會直接執行 air 而不是透過 sh
+	exec air -c .air.socketio.toml
 
 .PHONY: resource-watch
-resource-watch:
-	air -c .air.resource.toml
+resource-watch:                             # 用 exec 會直接執行 air 而不是透過 sh
+	exec air -c .air.resource.toml
 
 
