@@ -68,7 +68,7 @@ func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogV
 	}
 
 	oNow := time.Now()
-	oDoc := &domain.TableRecordLogDocument{
+	oNew := &domain.TableRecordLog{
 		Id:        iId,
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
@@ -76,22 +76,22 @@ func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogV
 	}
 
 	if oTableRecordLog.GameId != nil {
-		oDoc.GameId = *oTableRecordLog.GameId
+		oNew.GameId = *oTableRecordLog.GameId
 	}
 	if oTableRecordLog.TableRecordId != nil {
-		oDoc.TableRecordId = *oTableRecordLog.TableRecordId
+		oNew.TableRecordId = *oTableRecordLog.TableRecordId
 	}
 	if oTableRecordLog.State != nil {
-		oDoc.State = *oTableRecordLog.State
+		oNew.State = *oTableRecordLog.State
 	}
 	if oTableRecordLog.Text != nil {
-		oDoc.Text = string(*oTableRecordLog.Text)
+		oNew.Text = *oTableRecordLog.Text
 	}
 	if oTableRecordLog.Image != nil {
-		oDoc.Image = string(*oTableRecordLog.Image)
+		oNew.Image = *oTableRecordLog.Image
 	}
 
-	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oDoc); oErr != nil {
+	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
 		return false, oErr
 	}
 
@@ -99,12 +99,12 @@ func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogV
 }
 
 func (oSelf *TableRecordLogModel) ShowOneById(iId uint) (*domain.TableRecordLog, error) {
-	var oDoc domain.TableRecordLogDocument
+	var oTableRecordLog domain.TableRecordLog
 
 	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oDoc)
+	}).Decode(&oTableRecordLog)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
@@ -113,7 +113,7 @@ func (oSelf *TableRecordLogModel) ShowOneById(iId uint) (*domain.TableRecordLog,
 		return nil, oErr
 	}
 
-	return domain.TableRecordLogDocumentToTableRecordLog(&oDoc), nil
+	return &oTableRecordLog, nil
 }
 
 func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.TableRecordLog, error) {
@@ -128,14 +128,9 @@ func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilter
 	}
 	defer oCursor.Close(oSelf.Context)
 
-	var aDocs []*domain.TableRecordLogDocument
-	if oErr := oCursor.All(oSelf.Context, &aDocs); oErr != nil {
+	var aTableRecordLogs []*domain.TableRecordLog
+	if oErr := oCursor.All(oSelf.Context, &aTableRecordLogs); oErr != nil {
 		return nil, oErr
-	}
-
-	aTableRecordLogs := make([]*domain.TableRecordLog, len(aDocs))
-	for i, oDoc := range aDocs {
-		aTableRecordLogs[i] = domain.TableRecordLogDocumentToTableRecordLog(oDoc)
 	}
 
 	return aTableRecordLogs, nil

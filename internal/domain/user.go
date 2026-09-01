@@ -8,18 +8,9 @@ package domain
 
 */
 
-import bootstrap "example/bootstrap"
-
+// User 沒有任何 gorm / mongo adapter（outputPortAnyModel.UserModel 也還沒有實作），
+// 所以不需要 UserRow 鏡像結構，也不需要 TableName()。
 type User struct {
-	Id   int    `json:"id"`
-	Name string `json:"name"`
-}
-
-func (UserRow) TableName() string {
-	return bootstrap.CONFIG.DATABASE.PREFIX + "users"
-}
-
-type UserRow struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
 }
