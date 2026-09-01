@@ -139,8 +139,9 @@
   - game：前台遊戲介面邏輯服務，負責所有前台遊戲相關業務邏輯
   - table：前台資料介面邏輯服務，負責所有前台地端上報相關業務邏輯
   - register：前台驗證邏輯服務，負責所有前台身份驗證相關業務邏輯
-  - logic：次級（衍生）資料邏輯服務，處理跨多個資源、需要額外組合運算的資料邏輯
-  - model：次級資料的增刪改查（CRUD）邏輯服務
+  - model：簡單數據——單一資源的增刪改查（CRUD）
+  - logic：複雜數據——跨多個資源、需要額外組合運算的資料邏輯（事務放這邊）
+  - event：事件輸出——fire-and-forget，往 MQ／gRPC 丟事件，不回資料
   - announcement：開獎邏輯服務
   - watcher：採集開獎資料的邏輯服務
 3. 實際運作服務堆疊
@@ -175,8 +176,9 @@
 
 1. input : 只是寫協議的對接 （如 grpc http command），決定這個服務要用在哪一個服務載體
 2. usecase : 業務邏輯，基本上就是 Tp 的 C 去掉了協議的部分。
-3. output/\*\*/model：負責單一數據操作的 數據模型。基本上就是 Tp 的 M-mdoel  
-   output/\*\*/logic：負責複雜數據操作的 數據模型。基本上就是 Tp 的 M-logic (事務放這邊！）
+3. output/\*\*/model：簡單數據（單一資源的 CRUD）。基本上就是 Tp 的 M-model  
+   output/\*\*/logic：複雜數據（跨多資源、需額外組合運算；事務放這邊！）。基本上就是 Tp 的 M-logic  
+   output/\*\*/event：事件輸出（fire-and-forget，往 MQ／gRPC 丟事件，不回資料）
 4. 基本上，就是這四個元件交互
 
 ## 目錄結構
@@ -265,25 +267,29 @@
 │   │               └── source/
 │   │
 │   ├── output/                    # 輸出端（driven adapter）：實作 + 端口介面
-│   │   ├── application/           # 輸出端-實作
-│   │   │   ├── mysql/             # mysql 輸出
-│   │   │   │   ├── model/         # model/logic 底下 struct 命名相同是正確的。 同時有 AppUserModel 處理 單一數據問題；也有 AppUserLogic 處理事務問題
-│   │   │   │   └── logic/       
-│   │   │   ├── resource/          #  resource 服務輸出
-│   │   │   │   ├── model/         
-│   │   │   │   └── logic/        
-│   │   │   ├── cache/             # redis 輸出
-│   │   │   │   ├── model/         
+│   │   ├── application/           # 輸出端-實作。每個 adapter 底下依用途分：
+│   │   │   │                      #   model：簡單數據（單一資源 CRUD）
+│   │   │   │                      #   logic：複雜數據（跨多資源、組合運算、事務）
+│   │   │   │                      #   event：事件輸出（fire-and-forget，往 MQ／gRPC 丟事件）
+│   │   │   ├── mysql/             # mysql 輸出          model/logic 底下 struct 命名相同是正確的：AppUserModel 處理單一數據、AppUserLogic 處理事務
+│   │   │   │   ├── model/
 │   │   │   │   └── logic/
-│   │   │   ├── memory/            # 記憶體輸出
-│   │   │   │   ├── model/         
-│   │   │   │   └── logic/
-│   │   │   └── producer/          # AMQP 輸出
-│   │   │       └── model/         
+│   │   │   ├── resource/          # resource gRPC client 輸出
+│   │   │   │   ├── model/
+│   │   │   │   ├── logic/
+│   │   │   │   └── event/
+│   │   │   ├── cache/             # redis 輸出（目前只有 model）
+│   │   │   │   └── model/
+│   │   │   ├── memory/            # 記憶體輸出（目前只有 model）
+│   │   │   │   └── model/
+│   │   │   ├── elasticsearch/     # ES 輸出（model + logic）
+│   │   │   └── rabbitmq/          # rabbitmq 輸出（event）
+│   │   │       └── event/
 │   │   └── port/                  # 輸出端-介面
-│   │       └── any/               #  
-│   │           ├── model/         # 
-│   │           └── logic/         #  
+│   │       └── any/
+│   │           ├── model/         # 簡單數據 port
+│   │           ├── logic/         # 複雜數據 port
+│   │           └── event/         # 事件輸出 port
 │   │
 │   └── register/                  # 組裝層：把 container 生好的 handler 註冊到對應的 server/router
 │                                    #   （grpc.RegisterXxxServer / gin.Group / cron.AddFunc ...），
