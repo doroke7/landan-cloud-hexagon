@@ -38,10 +38,11 @@ type Session struct {
 //   - adminUserIdToConnectionIds     ：登入使用者 id ↔ cId 的多對多關聯（同一個人可以多開）。
 //   - connectionIdToChannels  ：cId ↔ 頻道（聊天室房間）的訂閱關係，推播就是查這張表。
 //
-// 所有方法都可被多個 goroutine 併發呼叫：底層的 hashmap 與 BiMultiMap 各自帶鎖；
+// 所有方法都可被多個 goroutine 併發呼叫：底層的 hashmap 與 BiMultiMap 都是
+// lock-free（讀不阻塞、寫靠 atomic CAS），沒有 mutex；
 // 單一 Session 的更新沿用「單一寫入者」假設——寫的一方都在該連線自己的 read
 // loop 裡（OnPong／OnHeartbeat／OnConnect／OnAuthenticate），逾時掃描 goroutine
-// 只讀不寫。
+// 只讀不寫。BiMultiMap 的雙向一致也是靠這個「單一連線寫入序列化」假設，不靠鎖。
 type Hub struct {
 	pointerToConnectionId      *hashmap.Map[string, string]
 	connectionIdToSession      *hashmap.Map[string, *atomic.Pointer[Session]]
