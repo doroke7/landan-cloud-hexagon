@@ -57,8 +57,6 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 
 	var fnAttach func(oNode *domain.GameType)
 	fnAttach = func(oNode *domain.GameType) {
-		oNode.Children = []domain.GameType{}
-
 		for _, oChild := range aByParent[oNode.Id] {
 			fnAttach(oChild)
 			oNode.Children = append(oNode.Children, *oChild)

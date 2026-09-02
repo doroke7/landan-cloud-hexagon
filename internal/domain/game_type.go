@@ -9,6 +9,7 @@ package domain
 */
 
 import (
+	"encoding/json"
 	"time"
 )
 
@@ -21,6 +22,21 @@ type GameType struct {
 	UpdatedAt time.Time  `json:"updated_at" bson:"updated_at"`
 	DeletedAt time.Time  `json:"deleted_at" bson:"deleted_at"`
 	Children  []GameType `json:"children" gorm:"foreignKey:ParentId"`
+}
+
+// MarshalJSON 讓 Children 為 nil 時序列化成 []（不是 null）——不管是 gorm Preload、
+// mongo/es decode、還是 tree 的葉節點都適用。用 alias 型別避免遞迴呼叫自己。
+func (oSelf GameType) MarshalJSON() ([]byte, error) {
+	type alias GameType
+
+	oCopy := alias(oSelf)
+	if oCopy.Children == nil {
+		oCopy.Children = []GameType{}
+	}
+
+	aBytes, oErr := json.Marshal(oCopy)
+
+	return aBytes, oErr
 }
 
 type GameTypeValue struct {

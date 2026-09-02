@@ -4,7 +4,6 @@ import (
 	domain "example/internal/domain"
 	outputPortAnylogic "example/internal/output/port/any/logic"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	"fmt"
 
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
@@ -26,9 +25,7 @@ func NewGameUsecase(oGameModel outputPortAnyModel.GameModel, oGameLogic outputPo
 }
 
 func (oSelf *GameUsecase) AddOne(oValue *domain.GameValue) (bool, error) {
-	fmt.Println("25....")
 	_, oErr := oSelf.GameModel.AddOne(oValue)
-	fmt.Println("27....")
 
 	if oErr != nil {
 		return false, oErr
