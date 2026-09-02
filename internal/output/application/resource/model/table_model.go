@@ -48,7 +48,7 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 		CreatedAt:   oResponse.GetCreatedAt().AsTime(),
 		UpdatedAt:   oResponse.GetUpdatedAt().AsTime(),
 		DeletedAt:   oResponse.GetDeletedAt().AsTime(),
-		Game:        gameFromPb(oResponse.GetGame()),
+		Game:        protoGameToDomainGame(oResponse.GetGame()),
 	}, nil
 }
 
@@ -135,7 +135,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 			CreatedAt:   oOne.GetCreatedAt().AsTime(),
 			UpdatedAt:   oOne.GetUpdatedAt().AsTime(),
 			DeletedAt:   oOne.GetDeletedAt().AsTime(),
-			Game:        gameFromPb(oOne.GetGame()),
+			Game:        protoGameToDomainGame(oOne.GetGame()),
 		})
 	}
 

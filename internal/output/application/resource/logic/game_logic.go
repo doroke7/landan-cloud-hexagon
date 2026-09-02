@@ -18,22 +18,34 @@ func NewGameLogic(oAbstractLogic *resourceBase.AbstractResource) outputPortAnyLo
 	}
 }
 
-func gameTypeFromPb(oPbGameType *pbResourceLogic.GameType) domain.GameType {
+func protoGameTypeToDomainGameType(oPbGameType *pbResourceLogic.GameType) domain.GameType {
 	if oPbGameType == nil {
 		return domain.GameType{}
 	}
 
-	return domain.GameType{
+	oGameType := domain.GameType{
 		Id:        uint(oPbGameType.GetId()),
+		ParentId:  uint(oPbGameType.GetParentId()),
 		Key:       oPbGameType.GetKey(),
 		Name:      oPbGameType.GetName(),
 		CreatedAt: oPbGameType.GetCreatedAt().AsTime(),
 		UpdatedAt: oPbGameType.GetUpdatedAt().AsTime(),
 		DeletedAt: oPbGameType.GetDeletedAt().AsTime(),
 	}
+
+	if oParent := oPbGameType.GetParent(); oParent != nil {
+		oParentDomain := protoGameTypeToDomainGameType(oParent)
+		oGameType.Parent = &oParentDomain
+	}
+
+	for _, oChild := range oPbGameType.GetChildren() {
+		oGameType.Children = append(oGameType.Children, protoGameTypeToDomainGameType(oChild))
+	}
+
+	return oGameType
 }
 
-func gameFromPb(oPbGame *pbResourceLogic.Game) domain.Game {
+func protoGameToDomainGame(oPbGame *pbResourceLogic.Game) domain.Game {
 	if oPbGame == nil {
 		return domain.Game{}
 	}
@@ -47,7 +59,7 @@ func gameFromPb(oPbGame *pbResourceLogic.Game) domain.Game {
 		CreatedAt:   oPbGame.GetCreatedAt().AsTime(),
 		UpdatedAt:   oPbGame.GetUpdatedAt().AsTime(),
 		DeletedAt:   oPbGame.GetDeletedAt().AsTime(),
-		GameType:    gameTypeFromPb(oPbGame.GetGameType()),
+		GameType:    protoGameTypeToDomainGameType(oPbGame.GetGameType()),
 	}
 }
 
@@ -75,7 +87,7 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 			CreatedAt:   oOne.GetCreatedAt().AsTime(),
 			UpdatedAt:   oOne.GetUpdatedAt().AsTime(),
 			DeletedAt:   oOne.GetDeletedAt().AsTime(),
-			GameType:    gameTypeFromPb(oOne.GetGameType()),
+			GameType:    protoGameTypeToDomainGameType(oOne.GetGameType()),
 		})
 	}
 

@@ -25,7 +25,31 @@ func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, 
 	}
 }
 
-func gameToPb(oGame *domain.Game) *pbResourceLogic.Game {
+// domainGameTypeToProtoGameType 遞迴帶出 Parent / Children，讓巢狀的 game type 一起過 gRPC。
+func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbResourceLogic.GameType {
+	if oGameType == nil {
+		return nil
+	}
+
+	oPb := &pbResourceLogic.GameType{
+		Id:        uint32(oGameType.Id),
+		ParentId:  uint32(oGameType.ParentId),
+		Key:       oGameType.Key,
+		Name:      oGameType.Name,
+		CreatedAt: timestamppb.New(oGameType.CreatedAt),
+		UpdatedAt: timestamppb.New(oGameType.UpdatedAt),
+		DeletedAt: timestamppb.New(oGameType.DeletedAt),
+		Parent:    domainGameTypeToProtoGameType(oGameType.Parent),
+	}
+
+	for i := range oGameType.Children {
+		oPb.Children = append(oPb.Children, domainGameTypeToProtoGameType(&oGameType.Children[i]))
+	}
+
+	return oPb
+}
+
+func domainGameToProtoGame(oGame *domain.Game) *pbResourceLogic.Game {
 	return &pbResourceLogic.Game{
 		Id:          uint32(oGame.Id),
 		GameTypeId:  uint32(oGame.GameTypeId),
@@ -35,14 +59,7 @@ func gameToPb(oGame *domain.Game) *pbResourceLogic.Game {
 		CreatedAt:   timestamppb.New(oGame.CreatedAt),
 		UpdatedAt:   timestamppb.New(oGame.UpdatedAt),
 		DeletedAt:   timestamppb.New(oGame.DeletedAt),
-		GameType: &pbResourceLogic.GameType{
-			Id:        uint32(oGame.GameType.Id),
-			Key:       oGame.GameType.Key,
-			Name:      oGame.GameType.Name,
-			CreatedAt: timestamppb.New(oGame.GameType.CreatedAt),
-			UpdatedAt: timestamppb.New(oGame.GameType.UpdatedAt),
-			DeletedAt: timestamppb.New(oGame.GameType.DeletedAt),
-		},
+		GameType:    domainGameTypeToProtoGameType(&oGame.GameType),
 	}
 }
 
@@ -88,7 +105,7 @@ func (oSelf *GameHandler) ShowGamesTotalByFiltersWithSortersPagination(oContext 
 
 	aPbGames := make([]*pbResourceLogic.Game, 0, len(aGames))
 	for _, oGame := range aGames {
-		aPbGames = append(aPbGames, gameToPb(oGame))
+		aPbGames = append(aPbGames, domainGameToProtoGame(oGame))
 	}
 
 	return &pbResourceLogic.GameShowGamesTotalByFiltersWithSortersPaginationOutput{

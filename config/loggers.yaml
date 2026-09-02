@@ -18,7 +18,7 @@ interceptor:
   max_backups: 7
   max_age: 30
   compress: true
-  status: true
+  status: false
 controller:
   directory: './runtime/logger/controller'
   max_size: 10000

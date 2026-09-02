@@ -52,7 +52,7 @@ func (oSelf *TableHandler) ShowOneById(oContext context.Context, oReq *pbResourc
 		CreatedAt:   timestamppb.New(oTable.CreatedAt),
 		UpdatedAt:   timestamppb.New(oTable.UpdatedAt),
 		DeletedAt:   timestamppb.New(oTable.DeletedAt),
-		Game:        gameToPb(&oTable.Game),
+		Game:        domainGameToProtoGame(&oTable.Game),
 	}, nil
 }
 
@@ -216,7 +216,7 @@ func (oSelf *TableHandler) ShowOnesByFiltersWithSortersPagination(oContext conte
 			CreatedAt:   timestamppb.New(oTable.CreatedAt),
 			UpdatedAt:   timestamppb.New(oTable.UpdatedAt),
 			DeletedAt:   timestamppb.New(oTable.DeletedAt),
-			Game:        gameToPb(&oTable.Game),
+			Game:        domainGameToProtoGame(&oTable.Game),
 		})
 	}
 

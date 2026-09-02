@@ -31,6 +31,9 @@ type GameType struct {
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
+	ParentId      uint32                 `protobuf:"varint,7,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
+	Parent        *GameType              `protobuf:"bytes,8,opt,name=parent,proto3" json:"parent,omitempty"`
+	Children      []*GameType            `protobuf:"bytes,9,rep,name=children,proto3" json:"children,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -103,6 +106,27 @@ func (x *GameType) GetUpdatedAt() *timestamppb.Timestamp {
 func (x *GameType) GetDeletedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.DeletedAt
+	}
+	return nil
+}
+
+func (x *GameType) GetParentId() uint32 {
+	if x != nil {
+		return x.ParentId
+	}
+	return 0
+}
+
+func (x *GameType) GetParent() *GameType {
+	if x != nil {
+		return x.Parent
+	}
+	return nil
+}
+
+func (x *GameType) GetChildren() []*GameType {
+	if x != nil {
+		return x.Children
 	}
 	return nil
 }
@@ -331,7 +355,7 @@ var File_resource_logic_game_proto protoreflect.FileDescriptor
 
 const file_resource_logic_game_proto_rawDesc = "" +
 	"\n" +
-	"\x19resource/logic/game.proto\x12\x11pb.resource.logic\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17resource/resource.proto\"\xf1\x01\n" +
+	"\x19resource/logic/game.proto\x12\x11pb.resource.logic\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17resource/resource.proto\"\xfc\x02\n" +
 	"\bGameType\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x12\n" +
@@ -341,7 +365,10 @@ const file_resource_logic_game_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
-	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\"\xeb\x02\n" +
+	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1b\n" +
+	"\tparent_id\x18\a \x01(\rR\bparentId\x123\n" +
+	"\x06parent\x18\b \x01(\v2\x1b.pb.resource.logic.GameTypeR\x06parent\x127\n" +
+	"\bchildren\x18\t \x03(\v2\x1b.pb.resource.logic.GameTypeR\bchildren\"\xeb\x02\n" +
 	"\x04Game\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12 \n" +
 	"\fgame_type_id\x18\x02 \x01(\rR\n" +
@@ -395,21 +422,23 @@ var file_resource_logic_game_proto_depIdxs = []int32{
 	4,  // 0: pb.resource.logic.GameType.created_at:type_name -> google.protobuf.Timestamp
 	4,  // 1: pb.resource.logic.GameType.updated_at:type_name -> google.protobuf.Timestamp
 	4,  // 2: pb.resource.logic.GameType.deleted_at:type_name -> google.protobuf.Timestamp
-	4,  // 3: pb.resource.logic.Game.created_at:type_name -> google.protobuf.Timestamp
-	4,  // 4: pb.resource.logic.Game.updated_at:type_name -> google.protobuf.Timestamp
-	4,  // 5: pb.resource.logic.Game.deleted_at:type_name -> google.protobuf.Timestamp
-	0,  // 6: pb.resource.logic.Game.game_type:type_name -> pb.resource.logic.GameType
-	5,  // 7: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	6,  // 8: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	7,  // 9: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	1,  // 10: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput.games:type_name -> pb.resource.logic.Game
-	2,  // 11: pb.resource.logic.GameLogic.ShowGamesTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput
-	3,  // 12: pb.resource.logic.GameLogic.ShowGamesTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput
-	12, // [12:13] is the sub-list for method output_type
-	11, // [11:12] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	0,  // 3: pb.resource.logic.GameType.parent:type_name -> pb.resource.logic.GameType
+	0,  // 4: pb.resource.logic.GameType.children:type_name -> pb.resource.logic.GameType
+	4,  // 5: pb.resource.logic.Game.created_at:type_name -> google.protobuf.Timestamp
+	4,  // 6: pb.resource.logic.Game.updated_at:type_name -> google.protobuf.Timestamp
+	4,  // 7: pb.resource.logic.Game.deleted_at:type_name -> google.protobuf.Timestamp
+	0,  // 8: pb.resource.logic.Game.game_type:type_name -> pb.resource.logic.GameType
+	5,  // 9: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
+	6,  // 10: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	7,  // 11: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
+	1,  // 12: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput.games:type_name -> pb.resource.logic.Game
+	2,  // 13: pb.resource.logic.GameLogic.ShowGamesTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput
+	3,  // 14: pb.resource.logic.GameLogic.ShowGamesTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput
+	14, // [14:15] is the sub-list for method output_type
+	13, // [13:14] is the sub-list for method input_type
+	13, // [13:13] is the sub-list for extension type_name
+	13, // [13:13] is the sub-list for extension extendee
+	0,  // [0:13] is the sub-list for field type_name
 }
 
 func init() { file_resource_logic_game_proto_init() }

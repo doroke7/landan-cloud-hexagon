@@ -18,7 +18,7 @@ func NewGameModel(oAbstractModel *resourceBase.AbstractResource) outputPortAnyMo
 	}
 }
 
-func gameTypeFromPb(oPbGameType *pbResourceModel.GameType) domain.GameType {
+func protoGameTypeToDomainGameType(oPbGameType *pbResourceModel.GameType) domain.GameType {
 	if oPbGameType == nil {
 		return domain.GameType{}
 	}
@@ -33,7 +33,7 @@ func gameTypeFromPb(oPbGameType *pbResourceModel.GameType) domain.GameType {
 	}
 }
 
-func gameFromPb(oPbGame *pbResourceModel.Game) domain.Game {
+func protoGameToDomainGame(oPbGame *pbResourceModel.Game) domain.Game {
 	if oPbGame == nil {
 		return domain.Game{}
 	}
@@ -47,7 +47,7 @@ func gameFromPb(oPbGame *pbResourceModel.Game) domain.Game {
 		CreatedAt:   oPbGame.GetCreatedAt().AsTime(),
 		UpdatedAt:   oPbGame.GetUpdatedAt().AsTime(),
 		DeletedAt:   oPbGame.GetDeletedAt().AsTime(),
-		GameType:    gameTypeFromPb(oPbGame.GetGameType()),
+		GameType:    protoGameTypeToDomainGameType(oPbGame.GetGameType()),
 	}
 }
 
@@ -98,7 +98,7 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 		CreatedAt:   oResponse.GetCreatedAt().AsTime(),
 		UpdatedAt:   oResponse.GetUpdatedAt().AsTime(),
 		DeletedAt:   oResponse.GetDeletedAt().AsTime(),
-		GameType:    gameTypeFromPb(oResponse.GetGameType()),
+		GameType:    protoGameTypeToDomainGameType(oResponse.GetGameType()),
 	}, nil
 }
 
@@ -127,7 +127,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 			CreatedAt:   oOne.GetCreatedAt().AsTime(),
 			UpdatedAt:   oOne.GetUpdatedAt().AsTime(),
 			DeletedAt:   oOne.GetDeletedAt().AsTime(),
-			GameType:    gameTypeFromPb(oOne.GetGameType()),
+			GameType:    protoGameTypeToDomainGameType(oOne.GetGameType()),
 		})
 	}
 

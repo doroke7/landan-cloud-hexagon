@@ -46,7 +46,7 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 			CreatedAt:   oOne.GetCreatedAt().AsTime(),
 			UpdatedAt:   oOne.GetUpdatedAt().AsTime(),
 			DeletedAt:   oOne.GetDeletedAt().AsTime(),
-			Game:        gameFromPb(oOne.GetGame()),
+			Game:        protoGameToDomainGame(oOne.GetGame()),
 		})
 	}
 

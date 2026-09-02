@@ -79,7 +79,7 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 			CreatedAt:   timestamppb.New(oTable.CreatedAt),
 			UpdatedAt:   timestamppb.New(oTable.UpdatedAt),
 			DeletedAt:   timestamppb.New(oTable.DeletedAt),
-			Game:        gameToPb(&oTable.Game),
+			Game:        domainGameToProtoGame(&oTable.Game),
 		})
 	}
 

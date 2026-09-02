@@ -28,7 +28,7 @@ func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, 
 	}
 }
 
-func gameToPb(oGame *domain.Game) *pbResourceModel.Game {
+func domainGameToProtoGame(oGame *domain.Game) *pbResourceModel.Game {
 	return &pbResourceModel.Game{
 		Id:          uint32(oGame.Id),
 		GameTypeId:  uint32(oGame.GameTypeId),
@@ -107,7 +107,7 @@ func (oSelf *GameHandler) ShowOneById(oContext context.Context, oReq *pbResource
 		return nil, nil
 	}
 
-	oPbGame := gameToPb(oGame)
+	oPbGame := domainGameToProtoGame(oGame)
 
 	return &pbResourceModel.GameShowOneByIdOutput{
 		Id:          oPbGame.Id,
@@ -169,7 +169,7 @@ func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context
 
 	aPbGames := make([]*pbResourceModel.Game, 0, len(aGames))
 	for _, oGame := range aGames {
-		aPbGames = append(aPbGames, gameToPb(oGame))
+		aPbGames = append(aPbGames, domainGameToProtoGame(oGame))
 	}
 
 	return &pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationOutput{
