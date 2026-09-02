@@ -37,7 +37,7 @@ type Table struct {
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
-	Game          *Game                  `protobuf:"bytes,13,opt,name=game,proto3" json:"game,omitempty"`
+	Game          *resource.Game         `protobuf:"bytes,13,opt,name=game,proto3" json:"game,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -156,7 +156,7 @@ func (x *Table) GetDeletedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *Table) GetGame() *Game {
+func (x *Table) GetGame() *resource.Game {
 	if x != nil {
 		return x.Game
 	}
@@ -279,7 +279,7 @@ var File_resource_logic_table_proto protoreflect.FileDescriptor
 
 const file_resource_logic_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aresource/logic/table.proto\x12\x11pb.resource.logic\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19resource/logic/game.proto\x1a\x17resource/resource.proto\"\xf2\x03\n" +
+	"\x1aresource/logic/table.proto\x12\x11pb.resource.logic\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17resource/resource.proto\"\xec\x03\n" +
 	"\x05Table\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x0e\n" +
 	"\x02no\x18\x02 \x01(\tR\x02no\x12\x17\n" +
@@ -297,8 +297,8 @@ const file_resource_logic_table_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
-	"deleted_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12+\n" +
-	"\x04game\x18\r \x01(\v2\x17.pb.resource.logic.GameR\x04game\"\xd0\x01\n" +
+	"deleted_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12%\n" +
+	"\x04game\x18\r \x01(\v2\x11.pb.resource.GameR\x04game\"\xd0\x01\n" +
 	"7TableShowTablesTotalByFiltersWithSortersPaginationInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
 	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
@@ -330,7 +330,7 @@ var file_resource_logic_table_proto_goTypes = []any{
 	(*TableShowTablesTotalByFiltersWithSortersPaginationInput)(nil),  // 1: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput
 	(*TableShowTablesTotalByFiltersWithSortersPaginationOutput)(nil), // 2: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutput
 	(*timestamppb.Timestamp)(nil),                                    // 3: google.protobuf.Timestamp
-	(*Game)(nil),                                                     // 4: pb.resource.logic.Game
+	(*resource.Game)(nil),                                            // 4: pb.resource.Game
 	(*resource.Filter)(nil),                                          // 5: pb.resource.Filter
 	(*resource.Sorter)(nil),                                          // 6: pb.resource.Sorter
 	(*resource.Pagination)(nil),                                      // 7: pb.resource.Pagination
@@ -341,7 +341,7 @@ var file_resource_logic_table_proto_depIdxs = []int32{
 	3,  // 2: pb.resource.logic.Table.created_at:type_name -> google.protobuf.Timestamp
 	3,  // 3: pb.resource.logic.Table.updated_at:type_name -> google.protobuf.Timestamp
 	3,  // 4: pb.resource.logic.Table.deleted_at:type_name -> google.protobuf.Timestamp
-	4,  // 5: pb.resource.logic.Table.game:type_name -> pb.resource.logic.Game
+	4,  // 5: pb.resource.logic.Table.game:type_name -> pb.resource.Game
 	5,  // 6: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
 	6,  // 7: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
 	7,  // 8: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
@@ -360,7 +360,6 @@ func file_resource_logic_table_proto_init() {
 	if File_resource_logic_table_proto != nil {
 		return
 	}
-	file_resource_logic_game_proto_init()
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

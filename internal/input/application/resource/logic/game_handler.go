@@ -8,6 +8,7 @@ import (
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
+	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
 )
@@ -26,12 +27,12 @@ func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, 
 }
 
 // domainGameTypeToProtoGameType 遞迴帶出 Parent / Children，讓巢狀的 game type 一起過 gRPC。
-func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbResourceLogic.GameType {
+func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbResource.GameType {
 	if oGameType == nil {
 		return nil
 	}
 
-	oPb := &pbResourceLogic.GameType{
+	oPb := &pbResource.GameType{
 		Id:        uint32(oGameType.Id),
 		ParentId:  uint32(oGameType.ParentId),
 		Key:       oGameType.Key,
@@ -49,8 +50,8 @@ func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbResourceLogic.
 	return oPb
 }
 
-func domainGameToProtoGame(oGame *domain.Game) *pbResourceLogic.Game {
-	return &pbResourceLogic.Game{
+func domainGameToProtoGame(oGame *domain.Game) *pbResource.Game {
+	return &pbResource.Game{
 		Id:          uint32(oGame.Id),
 		GameTypeId:  uint32(oGame.GameTypeId),
 		Key:         oGame.Key,
@@ -103,7 +104,7 @@ func (oSelf *GameHandler) ShowGamesTotalByFiltersWithSortersPagination(oContext 
 
 	aGames, iTotal, oErr := oSelf.GameUsecase.ShowGamesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	aPbGames := make([]*pbResourceLogic.Game, 0, len(aGames))
+	aPbGames := make([]*pbResource.Game, 0, len(aGames))
 	for _, oGame := range aGames {
 		aPbGames = append(aPbGames, domainGameToProtoGame(oGame))
 	}

@@ -5,6 +5,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
@@ -27,12 +28,12 @@ func NewGameTypeHandler(oAbstractHandler *inputApplicationResource.AbstractHandl
 }
 
 // domainGameTypeToProtoGameType 遞迴帶出 Parent / Children，讓巢狀的 game type 一起過 gRPC。
-func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbResourceModel.GameType {
+func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbResource.GameType {
 	if oGameType == nil {
 		return nil
 	}
 
-	oPb := &pbResourceModel.GameType{
+	oPb := &pbResource.GameType{
 		Id:        uint32(oGameType.Id),
 		ParentId:  uint32(oGameType.ParentId),
 		Key:       oGameType.Key,
@@ -90,15 +91,15 @@ func (oSelf *GameTypeHandler) ShowOneById(oContext context.Context, oReq *pbReso
 		return nil, nil
 	}
 
-	oPbGameType := domainGameTypeToProtoGameType(oGameType)
+	oProtoGameType := domainGameTypeToProtoGameType(oGameType)
 
 	return &pbResourceModel.GameTypeShowOneByIdOutput{
-		Id:        oPbGameType.Id,
-		Key:       oPbGameType.Key,
-		Name:      oPbGameType.Name,
-		CreatedAt: oPbGameType.CreatedAt,
-		UpdatedAt: oPbGameType.UpdatedAt,
-		DeletedAt: oPbGameType.DeletedAt,
+		Id:        oProtoGameType.Id,
+		Key:       oProtoGameType.Key,
+		Name:      oProtoGameType.Name,
+		CreatedAt: oProtoGameType.CreatedAt,
+		UpdatedAt: oProtoGameType.UpdatedAt,
+		DeletedAt: oProtoGameType.DeletedAt,
 	}, nil
 }
 
@@ -146,7 +147,7 @@ func (oSelf *GameTypeHandler) ShowOnesByFiltersWithSortersPagination(oContext co
 		return nil, oErr
 	}
 
-	aPbGameTypes := make([]*pbResourceModel.GameType, 0, len(aGameTypes))
+	aPbGameTypes := make([]*pbResource.GameType, 0, len(aGameTypes))
 	for _, oGameType := range aGameTypes {
 		aPbGameTypes = append(aPbGameTypes, domainGameTypeToProtoGameType(oGameType))
 	}

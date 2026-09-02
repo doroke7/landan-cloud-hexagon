@@ -70,3 +70,29 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 
 	return aRoots, nil
 }
+
+func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
+	sDeletedAtField := "deleted_at"
+	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
+
+	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, aSorters, oPagination)
+	if oErr != nil {
+		return nil, 0, oErr
+	}
+
+	oResult, oErr := oSelf.SearchWithOptions(aOptions)
+	if oErr != nil {
+		return nil, 0, oErr
+	}
+
+	aGameTypes := make([]*domain.GameType, 0, len(oResult.Hits))
+	for _, oHit := range oResult.Hits {
+		var oGameType domain.GameType
+		if oErr := json.Unmarshal(oHit.Source, &oGameType); oErr != nil {
+			return nil, 0, oErr
+		}
+		aGameTypes = append(aGameTypes, &oGameType)
+	}
+
+	return aGameTypes, uint64(oResult.Total), nil
+}

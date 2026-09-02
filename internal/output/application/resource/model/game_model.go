@@ -4,6 +4,7 @@ import (
 	domain "example/internal/domain"
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
 )
@@ -18,48 +19,48 @@ func NewGameModel(oAbstractModel *resourceBase.AbstractResource) outputPortAnyMo
 	}
 }
 
-func protoGameTypeToDomainGameType(oPbGameType *pbResourceModel.GameType) domain.GameType {
-	if oPbGameType == nil {
+func protoGameTypeToDomainGameType(oProtoGameType *pbResource.GameType) domain.GameType {
+	if oProtoGameType == nil {
 		return domain.GameType{}
 	}
 
 	oGameType := domain.GameType{
-		Id:        uint(oPbGameType.GetId()),
-		ParentId:  uint(oPbGameType.GetParentId()),
-		Key:       oPbGameType.GetKey(),
-		Name:      oPbGameType.GetName(),
-		CreatedAt: oPbGameType.GetCreatedAt().AsTime(),
-		UpdatedAt: oPbGameType.GetUpdatedAt().AsTime(),
-		DeletedAt: oPbGameType.GetDeletedAt().AsTime(),
+		Id:        uint(oProtoGameType.GetId()),
+		ParentId:  uint(oProtoGameType.GetParentId()),
+		Key:       oProtoGameType.GetKey(),
+		Name:      oProtoGameType.GetName(),
+		CreatedAt: oProtoGameType.GetCreatedAt().AsTime(),
+		UpdatedAt: oProtoGameType.GetUpdatedAt().AsTime(),
+		DeletedAt: oProtoGameType.GetDeletedAt().AsTime(),
 	}
 
-	if oParent := oPbGameType.GetParent(); oParent != nil {
+	if oParent := oProtoGameType.GetParent(); oParent != nil {
 		oParentDomain := protoGameTypeToDomainGameType(oParent)
 		oGameType.Parent = &oParentDomain
 	}
 
-	for _, oChild := range oPbGameType.GetChildren() {
+	for _, oChild := range oProtoGameType.GetChildren() {
 		oGameType.Children = append(oGameType.Children, protoGameTypeToDomainGameType(oChild))
 	}
 
 	return oGameType
 }
 
-func protoGameToDomainGame(oPbGame *pbResourceModel.Game) domain.Game {
-	if oPbGame == nil {
+func protoGameToDomainGame(oProtoGame *pbResource.Game) domain.Game {
+	if oProtoGame == nil {
 		return domain.Game{}
 	}
 
 	return domain.Game{
-		Id:          uint(oPbGame.GetId()),
-		GameTypeId:  uint(oPbGame.GetGameTypeId()),
-		Key:         oPbGame.GetKey(),
-		Name:        oPbGame.GetName(),
-		Description: oPbGame.GetDescription(),
-		CreatedAt:   oPbGame.GetCreatedAt().AsTime(),
-		UpdatedAt:   oPbGame.GetUpdatedAt().AsTime(),
-		DeletedAt:   oPbGame.GetDeletedAt().AsTime(),
-		GameType:    protoGameTypeToDomainGameType(oPbGame.GetGameType()),
+		Id:          uint(oProtoGame.GetId()),
+		GameTypeId:  uint(oProtoGame.GetGameTypeId()),
+		Key:         oProtoGame.GetKey(),
+		Name:        oProtoGame.GetName(),
+		Description: oProtoGame.GetDescription(),
+		CreatedAt:   oProtoGame.GetCreatedAt().AsTime(),
+		UpdatedAt:   oProtoGame.GetUpdatedAt().AsTime(),
+		DeletedAt:   oProtoGame.GetDeletedAt().AsTime(),
+		GameType:    protoGameTypeToDomainGameType(oProtoGame.GetGameType()),
 	}
 }
 

@@ -29,6 +29,8 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
 		Model(&oGameType).
+		Preload("Parent").
+		Preload("Children").
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		First(&oGameType, iId).Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
@@ -46,6 +48,8 @@ func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.GameType{}).
+		Preload("Parent").
+		Preload("Children").
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		Find(&aGameTypes).Error; oErr != nil {
 		return nil, oErr
@@ -74,6 +78,8 @@ func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint) ([]*domain.GameTy
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.GameType{}).
+		Preload("Parent").
+		Preload("Children").
 		Where("parent_id = ?", iParentId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		Find(&aGameTypes).Error; oErr != nil {
@@ -93,6 +99,8 @@ func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*p
 	oQuery := oSelf.
 		DB.
 		WithContext(oSelf.Context).
+		Preload("Parent").
+		Preload("Children").
 		Model(&domain.GameType{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07")
 

@@ -7,6 +7,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
@@ -28,8 +29,8 @@ func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, 
 	}
 }
 
-func domainGameToProtoGame(oGame *domain.Game) *pbResourceModel.Game {
-	return &pbResourceModel.Game{
+func domainGameToProtoGame(oGame *domain.Game) *pbResource.Game {
+	return &pbResource.Game{
 		Id:          uint32(oGame.Id),
 		GameTypeId:  uint32(oGame.GameTypeId),
 		Key:         oGame.Key,
@@ -100,18 +101,18 @@ func (oSelf *GameHandler) ShowOneById(oContext context.Context, oReq *pbResource
 		return nil, nil
 	}
 
-	oPbGame := domainGameToProtoGame(oGame)
+	oProtoGame := domainGameToProtoGame(oGame)
 
 	return &pbResourceModel.GameShowOneByIdOutput{
-		Id:          oPbGame.Id,
-		GameTypeId:  oPbGame.GameTypeId,
-		Key:         oPbGame.Key,
-		Name:        oPbGame.Name,
-		Description: oPbGame.Description,
-		CreatedAt:   oPbGame.CreatedAt,
-		UpdatedAt:   oPbGame.UpdatedAt,
-		DeletedAt:   oPbGame.DeletedAt,
-		GameType:    oPbGame.GameType,
+		Id:          oProtoGame.Id,
+		GameTypeId:  oProtoGame.GameTypeId,
+		Key:         oProtoGame.Key,
+		Name:        oProtoGame.Name,
+		Description: oProtoGame.Description,
+		CreatedAt:   oProtoGame.CreatedAt,
+		UpdatedAt:   oProtoGame.UpdatedAt,
+		DeletedAt:   oProtoGame.DeletedAt,
+		GameType:    oProtoGame.GameType,
 	}, nil
 
 }
@@ -128,18 +129,18 @@ func (oSelf *GameHandler) ShowOneByKey(oContext context.Context, oReq *pbResourc
 		return nil, nil
 	}
 
-	oPbGame := domainGameToProtoGame(oGame)
+	oProtoGame := domainGameToProtoGame(oGame)
 
 	return &pbResourceModel.GameShowOneByKeyOutput{
-		Id:          oPbGame.Id,
-		GameTypeId:  oPbGame.GameTypeId,
-		Key:         oPbGame.Key,
-		Name:        oPbGame.Name,
-		Description: oPbGame.Description,
-		CreatedAt:   oPbGame.CreatedAt,
-		UpdatedAt:   oPbGame.UpdatedAt,
-		DeletedAt:   oPbGame.DeletedAt,
-		GameType:    oPbGame.GameType,
+		Id:          oProtoGame.Id,
+		GameTypeId:  oProtoGame.GameTypeId,
+		Key:         oProtoGame.Key,
+		Name:        oProtoGame.Name,
+		Description: oProtoGame.Description,
+		CreatedAt:   oProtoGame.CreatedAt,
+		UpdatedAt:   oProtoGame.UpdatedAt,
+		DeletedAt:   oProtoGame.DeletedAt,
+		GameType:    oProtoGame.GameType,
 	}, nil
 
 }
@@ -188,7 +189,7 @@ func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context
 		return nil, oErr
 	}
 
-	aPbGames := make([]*pbResourceModel.Game, 0, len(aGames))
+	aPbGames := make([]*pbResource.Game, 0, len(aGames))
 	for _, oGame := range aGames {
 		aPbGames = append(aPbGames, domainGameToProtoGame(oGame))
 	}

@@ -225,7 +225,7 @@ type TableShowOneByIdOutput struct {
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
-	Game          *Game                  `protobuf:"bytes,13,opt,name=game,proto3" json:"game,omitempty"`
+	Game          *resource.Game         `protobuf:"bytes,13,opt,name=game,proto3" json:"game,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -344,7 +344,7 @@ func (x *TableShowOneByIdOutput) GetDeletedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *TableShowOneByIdOutput) GetGame() *Game {
+func (x *TableShowOneByIdOutput) GetGame() *resource.Game {
 	if x != nil {
 		return x.Game
 	}
@@ -787,7 +787,7 @@ var File_resource_model_table_proto protoreflect.FileDescriptor
 
 const file_resource_model_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19resource/model/game.proto\x1a\x17resource/resource.proto\"\xed\x02\n" +
+	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17resource/resource.proto\"\xed\x02\n" +
 	"\x10TableAddOneInput\x12\x13\n" +
 	"\x02no\x18\x01 \x01(\tH\x00R\x02no\x88\x01\x01\x12\x1c\n" +
 	"\agame_id\x18\x02 \x01(\rH\x01R\x06gameId\x88\x01\x01\x12\x15\n" +
@@ -808,7 +808,7 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\x11TableAddOneOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"'\n" +
 	"\x15TableShowOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"\x83\x04\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"\xfd\x03\n" +
 	"\x16TableShowOneByIdOutput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x0e\n" +
 	"\x02no\x18\x02 \x01(\tR\x02no\x12\x17\n" +
@@ -826,8 +826,8 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
-	"deleted_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12+\n" +
-	"\x04game\x18\r \x01(\v2\x17.pb.resource.model.GameR\x04game\"\x82\x03\n" +
+	"deleted_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12%\n" +
+	"\x04game\x18\r \x01(\v2\x11.pb.resource.GameR\x04game\"\x82\x03\n" +
 	"\x15TableEditOneByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x13\n" +
 	"\x02no\x18\x02 \x01(\tH\x00R\x02no\x88\x01\x01\x12\x1c\n" +
@@ -900,7 +900,7 @@ var file_resource_model_table_proto_goTypes = []any{
 	(*TableTotalByFiltersInput)(nil),                          // 10: pb.resource.model.TableTotalByFiltersInput
 	(*TableTotalByFiltersOutput)(nil),                         // 11: pb.resource.model.TableTotalByFiltersOutput
 	(*timestamppb.Timestamp)(nil),                             // 12: google.protobuf.Timestamp
-	(*Game)(nil),                                              // 13: pb.resource.model.Game
+	(*resource.Game)(nil),                                     // 13: pb.resource.Game
 	(*resource.Filter)(nil),                                   // 14: pb.resource.Filter
 	(*resource.Sorter)(nil),                                   // 15: pb.resource.Sorter
 	(*resource.Pagination)(nil),                               // 16: pb.resource.Pagination
@@ -913,7 +913,7 @@ var file_resource_model_table_proto_depIdxs = []int32{
 	12, // 4: pb.resource.model.TableShowOneByIdOutput.created_at:type_name -> google.protobuf.Timestamp
 	12, // 5: pb.resource.model.TableShowOneByIdOutput.updated_at:type_name -> google.protobuf.Timestamp
 	12, // 6: pb.resource.model.TableShowOneByIdOutput.deleted_at:type_name -> google.protobuf.Timestamp
-	13, // 7: pb.resource.model.TableShowOneByIdOutput.game:type_name -> pb.resource.model.Game
+	13, // 7: pb.resource.model.TableShowOneByIdOutput.game:type_name -> pb.resource.Game
 	12, // 8: pb.resource.model.TableEditOneByIdInput.started_at:type_name -> google.protobuf.Timestamp
 	12, // 9: pb.resource.model.TableEditOneByIdInput.ended_at:type_name -> google.protobuf.Timestamp
 	14, // 10: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
@@ -945,7 +945,6 @@ func file_resource_model_table_proto_init() {
 	if File_resource_model_table_proto != nil {
 		return
 	}
-	file_resource_model_game_proto_init()
 	file_resource_model_table_proto_msgTypes[0].OneofWrappers = []any{}
 	file_resource_model_table_proto_msgTypes[4].OneofWrappers = []any{}
 	type x struct{}

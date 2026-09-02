@@ -541,7 +541,7 @@ func (x *GameTypeShowOnesByFiltersWithSortersPaginationInput) GetSorters() []*re
 
 type GameTypeShowOnesByFiltersWithSortersPaginationOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameTypes     []*GameType            `protobuf:"bytes,1,rep,name=game_types,json=gameTypes,proto3" json:"game_types,omitempty"`
+	GameTypes     []*resource.GameType   `protobuf:"bytes,1,rep,name=game_types,json=gameTypes,proto3" json:"game_types,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -576,7 +576,7 @@ func (*GameTypeShowOnesByFiltersWithSortersPaginationOutput) Descriptor() ([]byt
 	return file_resource_model_game_type_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *GameTypeShowOnesByFiltersWithSortersPaginationOutput) GetGameTypes() []*GameType {
+func (x *GameTypeShowOnesByFiltersWithSortersPaginationOutput) GetGameTypes() []*resource.GameType {
 	if x != nil {
 		return x.GameTypes
 	}
@@ -675,7 +675,7 @@ var File_resource_model_game_type_proto protoreflect.FileDescriptor
 
 const file_resource_model_game_type_proto_rawDesc = "" +
 	"\n" +
-	"\x1eresource/model/game_type.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x19resource/model/game.proto\x1a\x17resource/resource.proto\"V\n" +
+	"\x1eresource/model/game_type.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17resource/resource.proto\"V\n" +
 	"\x13GameTypeAddOneInput\x12\x15\n" +
 	"\x03key\x18\x01 \x01(\tH\x00R\x03key\x88\x01\x01\x12\x17\n" +
 	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01B\x06\n" +
@@ -720,10 +720,10 @@ const file_resource_model_game_type_proto_rawDesc = "" +
 	"pagination\x18\x01 \x01(\v2\x17.pb.resource.PaginationR\n" +
 	"pagination\x12-\n" +
 	"\afilters\x18\x02 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
-	"\asorters\x18\x03 \x03(\v2\x13.pb.resource.SorterR\asorters\"r\n" +
-	"4GameTypeShowOnesByFiltersWithSortersPaginationOutput\x12:\n" +
+	"\asorters\x18\x03 \x03(\v2\x13.pb.resource.SorterR\asorters\"l\n" +
+	"4GameTypeShowOnesByFiltersWithSortersPaginationOutput\x124\n" +
 	"\n" +
-	"game_types\x18\x01 \x03(\v2\x1b.pb.resource.model.GameTypeR\tgameTypes\"L\n" +
+	"game_types\x18\x01 \x03(\v2\x15.pb.resource.GameTypeR\tgameTypes\"L\n" +
 	"\x1bGameTypeTotalByFiltersInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\"4\n" +
 	"\x1cGameTypeTotalByFiltersOutput\x12\x14\n" +
@@ -766,7 +766,7 @@ var file_resource_model_game_type_proto_goTypes = []any{
 	(*resource.Pagination)(nil),                                  // 13: pb.resource.Pagination
 	(*resource.Filter)(nil),                                      // 14: pb.resource.Filter
 	(*resource.Sorter)(nil),                                      // 15: pb.resource.Sorter
-	(*GameType)(nil),                                             // 16: pb.resource.model.GameType
+	(*resource.GameType)(nil),                                    // 16: pb.resource.GameType
 }
 var file_resource_model_game_type_proto_depIdxs = []int32{
 	12, // 0: pb.resource.model.GameTypeAddOneOutput.created_at:type_name -> google.protobuf.Timestamp
@@ -778,7 +778,7 @@ var file_resource_model_game_type_proto_depIdxs = []int32{
 	13, // 6: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
 	14, // 7: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
 	15, // 8: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	16, // 9: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationOutput.game_types:type_name -> pb.resource.model.GameType
+	16, // 9: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationOutput.game_types:type_name -> pb.resource.GameType
 	14, // 10: pb.resource.model.GameTypeTotalByFiltersInput.filters:type_name -> pb.resource.Filter
 	0,  // 11: pb.resource.model.GameTypeModel.AddOne:input_type -> pb.resource.model.GameTypeAddOneInput
 	2,  // 12: pb.resource.model.GameTypeModel.ShowOneById:input_type -> pb.resource.model.GameTypeShowOneByIdInput
@@ -804,7 +804,6 @@ func file_resource_model_game_type_proto_init() {
 	if File_resource_model_game_type_proto != nil {
 		return
 	}
-	file_resource_model_game_proto_init()
 	file_resource_model_game_type_proto_msgTypes[0].OneofWrappers = []any{}
 	file_resource_model_game_type_proto_msgTypes[4].OneofWrappers = []any{}
 	type x struct{}

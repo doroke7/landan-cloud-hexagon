@@ -7,9 +7,9 @@
 package pb_resource_logic
 
 import (
+	resource "example/pb/resource"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -22,99 +22,6 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-// GameTypeNode 是「平的」單筆資料；client 端拿到全部之後自己用 parent_id 組成 tree。
-type GameTypeNode struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	ParentId      uint32                 `protobuf:"varint,2,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
-	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
-	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GameTypeNode) Reset() {
-	*x = GameTypeNode{}
-	mi := &file_resource_logic_game_type_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GameTypeNode) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GameTypeNode) ProtoMessage() {}
-
-func (x *GameTypeNode) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_game_type_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GameTypeNode.ProtoReflect.Descriptor instead.
-func (*GameTypeNode) Descriptor() ([]byte, []int) {
-	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *GameTypeNode) GetId() uint32 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-func (x *GameTypeNode) GetParentId() uint32 {
-	if x != nil {
-		return x.ParentId
-	}
-	return 0
-}
-
-func (x *GameTypeNode) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-func (x *GameTypeNode) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *GameTypeNode) GetCreatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
-}
-
-func (x *GameTypeNode) GetUpdatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedAt
-	}
-	return nil
-}
-
-func (x *GameTypeNode) GetDeletedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.DeletedAt
-	}
-	return nil
-}
-
 type GameTypeShowTreeInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	unknownFields protoimpl.UnknownFields
@@ -123,7 +30,7 @@ type GameTypeShowTreeInput struct {
 
 func (x *GameTypeShowTreeInput) Reset() {
 	*x = GameTypeShowTreeInput{}
-	mi := &file_resource_logic_game_type_proto_msgTypes[1]
+	mi := &file_resource_logic_game_type_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -135,7 +42,7 @@ func (x *GameTypeShowTreeInput) String() string {
 func (*GameTypeShowTreeInput) ProtoMessage() {}
 
 func (x *GameTypeShowTreeInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_game_type_proto_msgTypes[1]
+	mi := &file_resource_logic_game_type_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -148,19 +55,19 @@ func (x *GameTypeShowTreeInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameTypeShowTreeInput.ProtoReflect.Descriptor instead.
 func (*GameTypeShowTreeInput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{1}
+	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{0}
 }
 
 type GameTypeShowTreeOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameTypes     []*GameTypeNode        `protobuf:"bytes,1,rep,name=game_types,json=gameTypes,proto3" json:"game_types,omitempty"`
+	GameTypes     []*resource.GameType   `protobuf:"bytes,1,rep,name=game_types,json=gameTypes,proto3" json:"game_types,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GameTypeShowTreeOutput) Reset() {
 	*x = GameTypeShowTreeOutput{}
-	mi := &file_resource_logic_game_type_proto_msgTypes[2]
+	mi := &file_resource_logic_game_type_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -172,7 +79,7 @@ func (x *GameTypeShowTreeOutput) String() string {
 func (*GameTypeShowTreeOutput) ProtoMessage() {}
 
 func (x *GameTypeShowTreeOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_game_type_proto_msgTypes[2]
+	mi := &file_resource_logic_game_type_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -185,38 +92,150 @@ func (x *GameTypeShowTreeOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameTypeShowTreeOutput.ProtoReflect.Descriptor instead.
 func (*GameTypeShowTreeOutput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{2}
+	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GameTypeShowTreeOutput) GetGameTypes() []*GameTypeNode {
+func (x *GameTypeShowTreeOutput) GetGameTypes() []*resource.GameType {
 	if x != nil {
 		return x.GameTypes
 	}
 	return nil
 }
 
+type GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*resource.Sorter     `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *resource.Pagination   `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) Reset() {
+	*x = GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput{}
+	mi := &file_resource_logic_game_type_proto_msgTypes[2]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) ProtoMessage() {}
+
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_game_type_proto_msgTypes[2]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
+func (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
+	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{2}
+}
+
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
+	if x != nil {
+		return x.Filters
+	}
+	return nil
+}
+
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) GetSorters() []*resource.Sorter {
+	if x != nil {
+		return x.Sorters
+	}
+	return nil
+}
+
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+type GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GameTypes     []*resource.GameType   `protobuf:"bytes,1,rep,name=game_types,json=gameTypes,proto3" json:"game_types,omitempty"`
+	Total         uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput) Reset() {
+	*x = GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput{}
+	mi := &file_resource_logic_game_type_proto_msgTypes[3]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput) ProtoMessage() {}
+
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_game_type_proto_msgTypes[3]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
+func (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
+	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput) GetGameTypes() []*resource.GameType {
+	if x != nil {
+		return x.GameTypes
+	}
+	return nil
+}
+
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput) GetTotal() uint64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
 var File_resource_logic_game_type_proto protoreflect.FileDescriptor
 
 const file_resource_logic_game_type_proto_rawDesc = "" +
 	"\n" +
-	"\x1eresource/logic/game_type.proto\x12\x11pb.resource.logic\x1a\x1fgoogle/protobuf/timestamp.proto\"\x92\x02\n" +
-	"\fGameTypeNode\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x1b\n" +
-	"\tparent_id\x18\x02 \x01(\rR\bparentId\x12\x10\n" +
-	"\x03key\x18\x03 \x01(\tR\x03key\x12\x12\n" +
-	"\x04name\x18\x04 \x01(\tR\x04name\x129\n" +
+	"\x1eresource/logic/game_type.proto\x12\x11pb.resource.logic\x1a\x17resource/resource.proto\"\x17\n" +
+	"\x15GameTypeShowTreeInput\"N\n" +
+	"\x16GameTypeShowTreeOutput\x124\n" +
 	"\n" +
-	"created_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"game_types\x18\x01 \x03(\v2\x15.pb.resource.GameTypeR\tgameTypes\"\xd6\x01\n" +
+	"=GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput\x12-\n" +
+	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
+	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
 	"\n" +
-	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
+	"pagination\x18\x03 \x01(\v2\x17.pb.resource.PaginationR\n" +
+	"pagination\"\x8c\x01\n" +
+	">GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput\x124\n" +
 	"\n" +
-	"deleted_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\"\x17\n" +
-	"\x15GameTypeShowTreeInput\"X\n" +
-	"\x16GameTypeShowTreeOutput\x12>\n" +
-	"\n" +
-	"game_types\x18\x01 \x03(\v2\x1f.pb.resource.logic.GameTypeNodeR\tgameTypes2p\n" +
+	"game_types\x18\x01 \x03(\v2\x15.pb.resource.GameTypeR\tgameTypes\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total2\xca\x02\n" +
 	"\rGameTypeLogic\x12_\n" +
-	"\bShowTree\x12(.pb.resource.logic.GameTypeShowTreeInput\x1a).pb.resource.logic.GameTypeShowTreeOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
+	"\bShowTree\x12(.pb.resource.logic.GameTypeShowTreeInput\x1a).pb.resource.logic.GameTypeShowTreeOutput\x12\xd7\x01\n" +
+	"0ShowGameTypesTotalByFiltersWithSortersPagination\x12P.pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput\x1aQ.pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
 
 var (
 	file_resource_logic_game_type_proto_rawDescOnce sync.Once
@@ -230,25 +249,32 @@ func file_resource_logic_game_type_proto_rawDescGZIP() []byte {
 	return file_resource_logic_game_type_proto_rawDescData
 }
 
-var file_resource_logic_game_type_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_resource_logic_game_type_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_resource_logic_game_type_proto_goTypes = []any{
-	(*GameTypeNode)(nil),           // 0: pb.resource.logic.GameTypeNode
-	(*GameTypeShowTreeInput)(nil),  // 1: pb.resource.logic.GameTypeShowTreeInput
-	(*GameTypeShowTreeOutput)(nil), // 2: pb.resource.logic.GameTypeShowTreeOutput
-	(*timestamppb.Timestamp)(nil),  // 3: google.protobuf.Timestamp
+	(*GameTypeShowTreeInput)(nil),                                          // 0: pb.resource.logic.GameTypeShowTreeInput
+	(*GameTypeShowTreeOutput)(nil),                                         // 1: pb.resource.logic.GameTypeShowTreeOutput
+	(*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput)(nil),  // 2: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput
+	(*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput)(nil), // 3: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput
+	(*resource.GameType)(nil),                                              // 4: pb.resource.GameType
+	(*resource.Filter)(nil),                                                // 5: pb.resource.Filter
+	(*resource.Sorter)(nil),                                                // 6: pb.resource.Sorter
+	(*resource.Pagination)(nil),                                            // 7: pb.resource.Pagination
 }
 var file_resource_logic_game_type_proto_depIdxs = []int32{
-	3, // 0: pb.resource.logic.GameTypeNode.created_at:type_name -> google.protobuf.Timestamp
-	3, // 1: pb.resource.logic.GameTypeNode.updated_at:type_name -> google.protobuf.Timestamp
-	3, // 2: pb.resource.logic.GameTypeNode.deleted_at:type_name -> google.protobuf.Timestamp
-	0, // 3: pb.resource.logic.GameTypeShowTreeOutput.game_types:type_name -> pb.resource.logic.GameTypeNode
-	1, // 4: pb.resource.logic.GameTypeLogic.ShowTree:input_type -> pb.resource.logic.GameTypeShowTreeInput
-	2, // 5: pb.resource.logic.GameTypeLogic.ShowTree:output_type -> pb.resource.logic.GameTypeShowTreeOutput
-	5, // [5:6] is the sub-list for method output_type
-	4, // [4:5] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	4, // 0: pb.resource.logic.GameTypeShowTreeOutput.game_types:type_name -> pb.resource.GameType
+	5, // 1: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
+	6, // 2: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	7, // 3: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
+	4, // 4: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput.game_types:type_name -> pb.resource.GameType
+	0, // 5: pb.resource.logic.GameTypeLogic.ShowTree:input_type -> pb.resource.logic.GameTypeShowTreeInput
+	2, // 6: pb.resource.logic.GameTypeLogic.ShowGameTypesTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput
+	1, // 7: pb.resource.logic.GameTypeLogic.ShowTree:output_type -> pb.resource.logic.GameTypeShowTreeOutput
+	3, // 8: pb.resource.logic.GameTypeLogic.ShowGameTypesTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput
+	7, // [7:9] is the sub-list for method output_type
+	5, // [5:7] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_resource_logic_game_type_proto_init() }
@@ -262,7 +288,7 @@ func file_resource_logic_game_type_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_logic_game_type_proto_rawDesc), len(file_resource_logic_game_type_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -5,6 +5,7 @@ import (
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pbResourceLogic "example/pb/resource/logic"
+	pkgInput "example/pkg/input"
 )
 
 type GameTypeLogic struct {
@@ -57,4 +58,37 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 	}
 
 	return aRoots, nil
+}
+
+func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
+
+	oRequest := &pbResourceLogic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput{
+		Filters: oSelf.ToFilters(aFilters),
+		Sorters: oSelf.ToSorters(aSorters),
+	}
+
+	if oPagination != nil {
+		oRequest.Pagination = oSelf.ToPagination(oPagination)
+	}
+
+	oResponse, oErr := oSelf.ResourceLogicClient.GameType.ShowGameTypesTotalByFiltersWithSortersPagination(oSelf.Context, oRequest)
+	if oErr != nil {
+		return nil, 0, oErr
+	}
+
+	aGameTypes := make([]*domain.GameType, 0, len(oResponse.GetGameTypes()))
+	for _, oOne := range oResponse.GetGameTypes() {
+		aGameTypes = append(aGameTypes, &domain.GameType{
+			Id:        uint(oOne.GetId()),
+			ParentId:  uint(oOne.GetParentId()),
+			Key:       oOne.GetKey(),
+			Name:      oOne.GetName(),
+			CreatedAt: oOne.GetCreatedAt().AsTime(),
+			UpdatedAt: oOne.GetUpdatedAt().AsTime(),
+			DeletedAt: oOne.GetDeletedAt().AsTime(),
+		})
+	}
+
+	iTotal := oResponse.GetTotal()
+	return aGameTypes, iTotal, nil
 }

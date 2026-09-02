@@ -19,7 +19,8 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	GameTypeLogic_ShowTree_FullMethodName = "/pb.resource.logic.GameTypeLogic/ShowTree"
+	GameTypeLogic_ShowTree_FullMethodName                                         = "/pb.resource.logic.GameTypeLogic/ShowTree"
+	GameTypeLogic_ShowGameTypesTotalByFiltersWithSortersPagination_FullMethodName = "/pb.resource.logic.GameTypeLogic/ShowGameTypesTotalByFiltersWithSortersPagination"
 )
 
 // GameTypeLogicClient is the client API for GameTypeLogic service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GameTypeLogicClient interface {
 	ShowTree(ctx context.Context, in *GameTypeShowTreeInput, opts ...grpc.CallOption) (*GameTypeShowTreeOutput, error)
+	ShowGameTypesTotalByFiltersWithSortersPagination(ctx context.Context, in *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput, error)
 }
 
 type gameTypeLogicClient struct {
@@ -47,11 +49,22 @@ func (c *gameTypeLogicClient) ShowTree(ctx context.Context, in *GameTypeShowTree
 	return out, nil
 }
 
+func (c *gameTypeLogicClient) ShowGameTypesTotalByFiltersWithSortersPagination(ctx context.Context, in *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput)
+	err := c.cc.Invoke(ctx, GameTypeLogic_ShowGameTypesTotalByFiltersWithSortersPagination_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // GameTypeLogicServer is the server API for GameTypeLogic service.
 // All implementations must embed UnimplementedGameTypeLogicServer
 // for forward compatibility.
 type GameTypeLogicServer interface {
 	ShowTree(context.Context, *GameTypeShowTreeInput) (*GameTypeShowTreeOutput, error)
+	ShowGameTypesTotalByFiltersWithSortersPagination(context.Context, *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput, error)
 	mustEmbedUnimplementedGameTypeLogicServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedGameTypeLogicServer struct{}
 
 func (UnimplementedGameTypeLogicServer) ShowTree(context.Context, *GameTypeShowTreeInput) (*GameTypeShowTreeOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowTree not implemented")
+}
+func (UnimplementedGameTypeLogicServer) ShowGameTypesTotalByFiltersWithSortersPagination(context.Context, *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowGameTypesTotalByFiltersWithSortersPagination not implemented")
 }
 func (UnimplementedGameTypeLogicServer) mustEmbedUnimplementedGameTypeLogicServer() {}
 func (UnimplementedGameTypeLogicServer) testEmbeddedByValue()                       {}
@@ -104,6 +120,24 @@ func _GameTypeLogic_ShowTree_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _GameTypeLogic_ShowGameTypesTotalByFiltersWithSortersPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(GameTypeLogicServer).ShowGameTypesTotalByFiltersWithSortersPagination(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: GameTypeLogic_ShowGameTypesTotalByFiltersWithSortersPagination_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(GameTypeLogicServer).ShowGameTypesTotalByFiltersWithSortersPagination(ctx, req.(*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // GameTypeLogic_ServiceDesc is the grpc.ServiceDesc for GameTypeLogic service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var GameTypeLogic_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ShowTree",
 			Handler:    _GameTypeLogic_ShowTree_Handler,
+		},
+		{
+			MethodName: "ShowGameTypesTotalByFiltersWithSortersPagination",
+			Handler:    _GameTypeLogic_ShowGameTypesTotalByFiltersWithSortersPagination_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
