@@ -65,6 +65,31 @@ func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 	return oSelf.ShowOnesByFiltersWithSortersPagination(nil, nil, &pkgInput.Pagination{Size: &iSize, Page: &iPage})
 }
 
+// ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
+// 走既有的 filters 查詢，實際的 deleted_at 過濾由 gRPC 後端底層的持久化 adapter 負責。
+func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint64, error) {
+	sField := "parent_id"
+	sOperator := "eq"
+	aFilters := []*pkgInput.Filter{
+		{Field: &sField, Operator: &sOperator, Value: iParentId},
+	}
+
+	iTotal, oErr := oSelf.TotalByFilters(aFilters)
+	return iTotal, oErr
+}
+
+func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint) ([]*domain.GameType, error) {
+	sField := "parent_id"
+	sOperator := "eq"
+	aFilters := []*pkgInput.Filter{
+		{Field: &sField, Operator: &sOperator, Value: iParentId},
+	}
+
+	iSize := uint(10000)
+	iPage := uint(1)
+	return oSelf.ShowOnesByFiltersWithSortersPagination(aFilters, nil, &pkgInput.Pagination{Size: &iSize, Page: &iPage})
+}
+
 func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error) {
 
 	oRequest := &pbResourceModel.GameTypeShowOnesByFiltersWithSortersPaginationInput{

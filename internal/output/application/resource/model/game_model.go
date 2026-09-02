@@ -142,6 +142,30 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	}, nil
 }
 
+func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, error) {
+	sField := "game_type_id"
+	sOperator := "eq"
+	aFilters := []*pkgInput.Filter{
+		{Field: &sField, Operator: &sOperator, Value: iGameTypeId},
+	}
+
+	iSize := uint(10000)
+	iPage := uint(1)
+	aGames, oErr := oSelf.ShowOnesByFiltersWithOrdersPagination(aFilters, nil, &pkgInput.Pagination{Size: &iSize, Page: &iPage})
+	return aGames, oErr
+}
+
+func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint64, error) {
+	sField := "game_type_id"
+	sOperator := "eq"
+	aFilters := []*pkgInput.Filter{
+		{Field: &sField, Operator: &sOperator, Value: iGameTypeId},
+	}
+
+	iTotal, oErr := oSelf.TotalByFilters(aFilters)
+	return iTotal, oErr
+}
+
 func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 
 	oRequest := &pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationInput{

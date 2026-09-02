@@ -10,6 +10,9 @@ type GameTypeModel interface {
 	ShowOneById(iId uint) (*domain.GameType, error)
 	EditOneById(oGameType *domain.GameTypeValue, iId uint) (bool, error)
 	RemoveOneById(iId uint) (bool, error)
+	ShowOnesByParentId(iParentId uint) ([]*domain.GameType, error)
+	TotalByParentId(iParentId uint) (uint64, error)
+
 	ShowOnes() ([]*domain.GameType, error)
 
 	ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error)

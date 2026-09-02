@@ -63,6 +63,36 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	return &oGame, nil
 }
 
+func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, error) {
+	var aGames []*domain.Game
+
+	if oErr := oSelf.DB.WithContext(oSelf.Context).
+		Preload("GameType").
+		Preload("GameType.Parent").
+		Model(&domain.Game{}).
+		Where("game_type_id = ?", iGameTypeId).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		Find(&aGames).Error; oErr != nil {
+		return nil, oErr
+	}
+
+	return aGames, nil
+}
+
+func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint64, error) {
+	var iTotal int64
+
+	if oErr := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.Game{}).
+		Where("game_type_id = ?", iGameTypeId).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		Count(&iTotal).Error; oErr != nil {
+		return 0, oErr
+	}
+
+	return uint64(iTotal), nil
+}
+
 func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)

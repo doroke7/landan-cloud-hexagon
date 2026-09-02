@@ -11,6 +11,8 @@ type GameModel interface {
 	ShowOneByKey(sKey string) (*domain.Game, error)
 	EditOneById(oGame *domain.GameValue, iId uint) (bool, error)
 	RemoveOneById(iId uint) (bool, error)
+	ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, error)
+	TotalByGameTypeId(iGameTypeId uint) (uint64, error)
 
 	ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error)
 	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)

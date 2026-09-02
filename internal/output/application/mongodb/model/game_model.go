@@ -185,6 +185,36 @@ func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
 	return oResult.ModifiedCount > 0, nil
 }
 
+func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, error) {
+	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{
+		"game_type_id": iGameTypeId,
+		"deleted_at":   oDeletedAtZero,
+	})
+	if oErr != nil {
+		return nil, oErr
+	}
+	defer oCursor.Close(oSelf.Context)
+
+	var aGames []*domain.Game
+	if oErr := oCursor.All(oSelf.Context, &aGames); oErr != nil {
+		return nil, oErr
+	}
+
+	return aGames, nil
+}
+
+func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint64, error) {
+	iCount, oErr := oSelf.Collection.CountDocuments(oSelf.Context, bson.M{
+		"game_type_id": iGameTypeId,
+		"deleted_at":   oDeletedAtZero,
+	})
+	if oErr != nil {
+		return 0, oErr
+	}
+
+	return uint64(iCount), nil
+}
+
 func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero

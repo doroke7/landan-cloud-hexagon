@@ -99,6 +99,37 @@ func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 	return aGameTypes, nil
 }
 
+// ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
+func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint64, error) {
+	iCount, oErr := oSelf.Collection.CountDocuments(oSelf.Context, bson.M{
+		"parent_id":  iParentId,
+		"deleted_at": oDeletedAtZero,
+	})
+	if oErr != nil {
+		return 0, oErr
+	}
+
+	return uint64(iCount), nil
+}
+
+func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint) ([]*domain.GameType, error) {
+	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{
+		"parent_id":  iParentId,
+		"deleted_at": oDeletedAtZero,
+	})
+	if oErr != nil {
+		return nil, oErr
+	}
+	defer oCursor.Close(oSelf.Context)
+
+	var aGameTypes []*domain.GameType
+	if oErr := oCursor.All(oSelf.Context, &aGameTypes); oErr != nil {
+		return nil, oErr
+	}
+
+	return aGameTypes, nil
+}
+
 func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
