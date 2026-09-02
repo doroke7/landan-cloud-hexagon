@@ -48,3 +48,7 @@ resource-watch:
 	exec air -c .air.resource.toml
 
 
+
+.PHONY: nestat
+nestat:
+	exec netstat -an | grep LISTEN

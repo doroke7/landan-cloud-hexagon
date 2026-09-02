@@ -9,43 +9,6 @@ import (
 	pkgInput "example/pkg/input"
 )
 
-type GameModel struct {
-	*resourceBase.AbstractResource
-}
-
-func NewGameModel(oAbstractModel *resourceBase.AbstractResource) outputPortAnyModel.GameModel {
-	return &GameModel{
-		AbstractResource: oAbstractModel,
-	}
-}
-
-func protoGameTypeToDomainGameType(oProtoGameType *pbResource.GameType) domain.GameType {
-	if oProtoGameType == nil {
-		return domain.GameType{}
-	}
-
-	oGameType := domain.GameType{
-		Id:        uint(oProtoGameType.GetId()),
-		ParentId:  uint(oProtoGameType.GetParentId()),
-		Key:       oProtoGameType.GetKey(),
-		Name:      oProtoGameType.GetName(),
-		CreatedAt: oProtoGameType.GetCreatedAt().AsTime(),
-		UpdatedAt: oProtoGameType.GetUpdatedAt().AsTime(),
-		DeletedAt: oProtoGameType.GetDeletedAt().AsTime(),
-	}
-
-	if oParent := oProtoGameType.GetParent(); oParent != nil {
-		oParentDomain := protoGameTypeToDomainGameType(oParent)
-		oGameType.Parent = &oParentDomain
-	}
-
-	for _, oChild := range oProtoGameType.GetChildren() {
-		oGameType.Children = append(oGameType.Children, protoGameTypeToDomainGameType(oChild))
-	}
-
-	return oGameType
-}
-
 func protoGameToDomainGame(oProtoGame *pbResource.Game) domain.Game {
 	if oProtoGame == nil {
 		return domain.Game{}
@@ -61,6 +24,16 @@ func protoGameToDomainGame(oProtoGame *pbResource.Game) domain.Game {
 		UpdatedAt:   oProtoGame.GetUpdatedAt().AsTime(),
 		DeletedAt:   oProtoGame.GetDeletedAt().AsTime(),
 		GameType:    protoGameTypeToDomainGameType(oProtoGame.GetGameType()),
+	}
+}
+
+type GameModel struct {
+	*resourceBase.AbstractResource
+}
+
+func NewGameModel(oAbstractModel *resourceBase.AbstractResource) outputPortAnyModel.GameModel {
+	return &GameModel{
+		AbstractResource: oAbstractModel,
 	}
 }
 

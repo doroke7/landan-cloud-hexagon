@@ -4,9 +4,37 @@ import (
 	domain "example/internal/domain"
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
 )
+
+func protoGameTypeToDomainGameType(oProtoGameType *pbResource.GameType) domain.GameType {
+	if oProtoGameType == nil {
+		return domain.GameType{}
+	}
+
+	oGameType := domain.GameType{
+		Id:        uint(oProtoGameType.GetId()),
+		ParentId:  uint(oProtoGameType.GetParentId()),
+		Key:       oProtoGameType.GetKey(),
+		Name:      oProtoGameType.GetName(),
+		CreatedAt: oProtoGameType.GetCreatedAt().AsTime(),
+		UpdatedAt: oProtoGameType.GetUpdatedAt().AsTime(),
+		DeletedAt: oProtoGameType.GetDeletedAt().AsTime(),
+	}
+
+	if oParent := oProtoGameType.GetParent(); oParent != nil {
+		oParentDomain := protoGameTypeToDomainGameType(oParent)
+		oGameType.Parent = &oParentDomain
+	}
+
+	for _, oChild := range oProtoGameType.GetChildren() {
+		oGameType.Children = append(oGameType.Children, protoGameTypeToDomainGameType(oChild))
+	}
+
+	return oGameType
+}
 
 type GameTypeModel struct {
 	*resourceBase.AbstractResource
@@ -105,15 +133,10 @@ func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*p
 	}
 
 	aGameTypes := make([]*domain.GameType, 0, len(oResponse.GetGameTypes()))
-	for _, oOne := range oResponse.GetGameTypes() {
-		aGameTypes = append(aGameTypes, &domain.GameType{
-			Id:        uint(oOne.GetId()),
-			Key:       oOne.GetKey(),
-			Name:      oOne.GetName(),
-			CreatedAt: oOne.GetCreatedAt().AsTime(),
-			UpdatedAt: oOne.GetUpdatedAt().AsTime(),
-			DeletedAt: oOne.GetDeletedAt().AsTime(),
-		})
+
+	for _, oProtoGameType := range oResponse.GetGameTypes() {
+		oGameType := protoGameTypeToDomainGameType(oProtoGameType)
+		aGameTypes = append(aGameTypes, &oGameType)
 	}
 
 	return aGameTypes, nil
