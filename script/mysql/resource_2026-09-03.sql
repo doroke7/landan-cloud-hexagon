@@ -7,7 +7,7 @@
 #
 # 主機: 127.0.0.1 (MySQL 8.0.46)
 # 資料庫: resource
-# 產生時間: 2026-09-02 02:06:42 +0000
+# 產生時間: 2026-09-02 22:36:47 +0000
 # ************************************************************
 
 
@@ -18,6 +18,166 @@ SET NAMES utf8mb4;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE='NO_AUTO_VALUE_ON_ZERO', SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+
+# 傾印（Dump）資料表 tx-admin_permissions
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tx-admin_permissions`;
+
+CREATE TABLE `tx-admin_permissions` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `type` tinyint unsigned NOT NULL DEFAULT '3' COMMENT '1=菜單 2=頁面 3=接口',
+  `key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `t-k` (`type`,`key`),
+  KEY `n-da` (`name`,`deleted_at`),
+  KEY `t-da` (`type`,`deleted_at`),
+  KEY `da` (`deleted_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `tx-admin_permissions` WRITE;
+/*!40000 ALTER TABLE `tx-admin_permissions` DISABLE KEYS */;
+
+INSERT INTO `tx-admin_permissions` (`id`, `type`, `key`, `name`, `created_at`, `updated_at`, `deleted_at`)
+VALUES
+	(1,1,'game','MENU-遊戲管理','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(2,1,'table','MENU-桌台管理','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(3,1,'system','MENU-系統管理','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(4,2,'game.detail','PAGE-遊戲-詳情按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(5,2,'game.add','PAGE-遊戲-新增按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(6,2,'game.edit','PAGE-遊戲-編輯按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(7,2,'game.remove','PAGE-遊戲-刪除按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(8,2,'game_type.detail','PAGE-遊戲類型-詳情按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(9,2,'game_type.add','PAGE-遊戲類型-新增按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(10,2,'game_type.edit','PAGE-遊戲類型-編輯按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(11,2,'game_type.remove','PAGE-遊戲類型-刪除按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(12,2,'table.detail','PAGE-桌台-詳情按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(13,2,'table.add','PAGE-桌台-新增按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(14,2,'table.edit','PAGE-桌台-編輯按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(15,2,'table.remove','PAGE-桌台-刪除按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(16,2,'admin_user.detail','PAGE-後台帳號-詳情按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(17,2,'admin_user.add','PAGE-後台帳號-新增按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(18,2,'admin_user.edit','PAGE-後台帳號-編輯按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(19,2,'admin_user.remove','PAGE-後台帳號-刪除按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(20,2,'admin_role.detail','PAGE-角色-詳情按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(21,2,'admin_role.add','PAGE-角色-新增按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(22,2,'admin_role.edit','PAGE-角色-編輯按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(23,2,'admin_role.remove','PAGE-角色-刪除按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(24,2,'admin_permission.detail','PAGE-權限-詳情按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(25,2,'admin_permission.add','PAGE-權限-新增按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(26,2,'admin_permission.edit','PAGE-權限-編輯按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(27,2,'admin_permission.remove','PAGE-權限-刪除按鈕','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(28,3,'game.read','API-遊戲-檢視','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(29,3,'game.write','API-遊戲-新增修改','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(30,3,'game.delete','API-遊戲-刪除','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(31,3,'game_type.read','API-遊戲類型-檢視','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(32,3,'game_type.write','API-遊戲類型-新增修改','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(33,3,'game_type.delete','API-遊戲類型-刪除','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(34,3,'table.read','API-桌台-檢視','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(35,3,'table.write','API-桌台-新增修改','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(36,3,'table.delete','API-桌台-刪除','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(37,3,'admin_user.read','API-後台帳號-檢視','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(38,3,'admin_user.write','API-後台帳號-新增修改','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(39,3,'admin_user.delete','API-後台帳號-刪除','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(40,3,'admin_role.read','API-角色-檢視','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(41,3,'admin_role.write','API-角色-新增修改','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(42,3,'admin_role.delete','API-角色-刪除','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(43,3,'admin_permission.read','API-權限-檢視','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(44,3,'admin_permission.write','API-權限-新增修改','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(45,3,'admin_permission.delete','API-權限-刪除','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07');
+
+/*!40000 ALTER TABLE `tx-admin_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# 傾印（Dump）資料表 tx-admin_roles
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tx-admin_roles`;
+
+CREATE TABLE `tx-admin_roles` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `k` (`key`),
+  KEY `n-da` (`name`,`deleted_at`),
+  KEY `da` (`deleted_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `tx-admin_roles` WRITE;
+/*!40000 ALTER TABLE `tx-admin_roles` DISABLE KEYS */;
+
+INSERT INTO `tx-admin_roles` (`id`, `key`, `name`, `created_at`, `updated_at`, `deleted_at`)
+VALUES
+	(1,'SUPER','超級管理員','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(2,'OPERATOR','營運人員','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(3,'VIEWER','檢視人員','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07');
+
+/*!40000 ALTER TABLE `tx-admin_roles` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# 傾印（Dump）資料表 tx-admin_roles_to_admin_permissions
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tx-admin_roles_to_admin_permissions`;
+
+CREATE TABLE `tx-admin_roles_to_admin_permissions` (
+  `admin_role_id` int unsigned NOT NULL DEFAULT '0',
+  `admin_permission_id` int unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`admin_role_id`,`admin_permission_id`),
+  KEY `api` (`admin_permission_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `tx-admin_roles_to_admin_permissions` WRITE;
+/*!40000 ALTER TABLE `tx-admin_roles_to_admin_permissions` DISABLE KEYS */;
+
+INSERT INTO `tx-admin_roles_to_admin_permissions` (`admin_role_id`, `admin_permission_id`)
+VALUES
+	(2,1),
+	(3,1),
+	(2,2),
+	(3,2),
+	(3,3),
+	(2,4),
+	(3,4),
+	(2,5),
+	(2,6),
+	(2,8),
+	(3,8),
+	(2,9),
+	(2,10),
+	(2,12),
+	(3,12),
+	(2,13),
+	(2,14),
+	(3,16),
+	(3,20),
+	(3,24),
+	(2,28),
+	(3,28),
+	(2,29),
+	(2,31),
+	(3,31),
+	(2,32),
+	(2,34),
+	(3,34),
+	(2,35),
+	(3,37),
+	(3,40),
+	(3,43);
+
+/*!40000 ALTER TABLE `tx-admin_roles_to_admin_permissions` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # 傾印（Dump）資料表 tx-admin_users
@@ -45,6 +205,29 @@ VALUES
 	(1,'admin','55b764578f3e645474b770f25ed9eab0','2026-08-08 01:20:25','2026-08-08 01:20:25','2038-01-19 03:14:07');
 
 /*!40000 ALTER TABLE `tx-admin_users` ENABLE KEYS */;
+UNLOCK TABLES;
+
+
+# 傾印（Dump）資料表 tx-admin_users_to_admin_roles
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `tx-admin_users_to_admin_roles`;
+
+CREATE TABLE `tx-admin_users_to_admin_roles` (
+  `admin_user_id` int unsigned NOT NULL DEFAULT '0',
+  `admin_role_id` int unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`admin_user_id`,`admin_role_id`),
+  KEY `ari` (`admin_role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+LOCK TABLES `tx-admin_users_to_admin_roles` WRITE;
+/*!40000 ALTER TABLE `tx-admin_users_to_admin_roles` DISABLE KEYS */;
+
+INSERT INTO `tx-admin_users_to_admin_roles` (`admin_user_id`, `admin_role_id`)
+VALUES
+	(1,1);
+
+/*!40000 ALTER TABLE `tx-admin_users_to_admin_roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
 
@@ -142,7 +325,10 @@ VALUES
 	(39,7,'TRADITIONAL-FIGHT_LANDLORD','鬥地主','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
 	(40,7,'TRADITIONAL-GRAB_BULL','搶莊牛牛','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
 	(41,7,'TRADITIONAL-MAHJONG','麻將','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
-	(42,7,'TRADITIONAL-TWENTY_EIGHT','二八槓','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07');
+	(42,7,'TRADITIONAL-TWENTY_EIGHT','二八槓','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(43,0,'ABC','jjjjjjj','2026-09-02 17:37:57','2026-09-02 17:38:06','2026-09-02 17:38:07'),
+	(44,0,'ssssss','ssssss','2026-09-02 18:24:00','2026-09-02 18:24:58','2026-09-02 18:24:58'),
+	(45,0,'kkkkkkk','uuioo','2026-09-02 18:25:49','2026-09-02 18:25:49','2038-01-19 03:14:07');
 
 /*!40000 ALTER TABLE `tx-game_types` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -316,7 +502,7 @@ CREATE TABLE `tx-table_record_logs` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
   PRIMARY KEY (`id`),
-  KEY `tri-gi-s` (`table_record_id`,`game_id`,`state`)
+  UNIQUE KEY `tri-s` (`table_record_id`,`state`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 

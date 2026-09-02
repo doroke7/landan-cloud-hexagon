@@ -41,6 +41,18 @@ func (oSelf *LoggerMiddleware) Handle() gin.HandlerFunc {
 		oContext.Next()
 		iTime2 := pkgUtility.Time[int](true)
 
+		// Response.Set 帶進來的 error 會存在 context 的 "error"，有的話就打印出來
+		if oValue, bExist := oContext.Get("error"); bExist {
+			if oErr, bOk := oValue.(error); bOk && oErr != nil {
+				pkgUtility.Logger(pkgUtility.HttpTableMiddleware).Error(
+					"http input 錯誤",
+					zap.String("path", sPath),
+					zap.String("query", sRawQuery),
+					zap.Error(oErr),
+				)
+			}
+		}
+
 		if bootstrap.CONFIG.LOGGERS.MIDDLEWARE.STATUS {
 			pkgUtility.Logger(pkgUtility.HttpTableMiddleware).Info(
 				"結束 http",
