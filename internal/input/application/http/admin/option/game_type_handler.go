@@ -59,7 +59,7 @@ func (oSelf *GameTypeHandler) SelectOnes(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Message, struct{}{}, 0, "")
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
 			return
 		}
 		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "")
@@ -80,7 +80,7 @@ func (oSelf *GameTypeHandler) SelectTree(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Message, struct{}{}, 0, "")
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
 			return
 		}
 		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "")

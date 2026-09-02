@@ -40,7 +40,8 @@ func (oSelf *GameTypeHandler) AddOne(oContext *gin.Context) {
 
 	if oErr != nil {
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), "新增失敗", struct{}{}, 0, "")
+
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
 			return
 		}
 
@@ -87,7 +88,7 @@ func (oSelf *GameTypeHandler) EditOne(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), "修改失敗", struct{}{}, 0, "")
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
 			return
 		}
 
@@ -128,7 +129,7 @@ func (oSelf *GameTypeHandler) RemoveOne(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), "刪除失敗", struct{}{}, 0, "")
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
 			return
 		}
 
@@ -168,7 +169,7 @@ func (oSelf *GameTypeHandler) ShowOne(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), "查詢失敗", struct{}{}, 0, "")
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
 			return
 		}
 
@@ -218,7 +219,7 @@ func (oSelf *GameTypeHandler) ShowOnes(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Message, struct{}{}, 0, "")
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
 			return
 		}
 		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "")

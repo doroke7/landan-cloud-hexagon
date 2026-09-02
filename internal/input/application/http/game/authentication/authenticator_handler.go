@@ -46,7 +46,8 @@ func (oSelf *AuthenticatorHandler) LogIn(oContext *gin.Context) {
 	if oErr != nil {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Message, struct{}{}, 0, "")
+
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
 			return
 		}
 
@@ -70,7 +71,8 @@ func (oSelf *AuthenticatorHandler) Refresh(oContext *gin.Context) {
 	if oErr != nil {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Message, struct{}{}, 0, "")
+
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
 			return
 		}
 

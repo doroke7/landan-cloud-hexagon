@@ -1,6 +1,8 @@
 package usecaseApplicationAnyAdminResource
 
 import (
+	"errors"
+
 	domain "example/internal/domain"
 	outputPortAnylogic "example/internal/output/port/any/logic"
 	outputPortAnyModel "example/internal/output/port/any/model"
@@ -8,6 +10,7 @@ import (
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type GameUsecase struct {
@@ -25,6 +28,19 @@ func NewGameUsecase(oGameModel outputPortAnyModel.GameModel, oGameLogic outputPo
 }
 
 func (oSelf *GameUsecase) AddOne(oValue *domain.GameValue) (bool, error) {
+
+	if oValue.Key != nil {
+		oGameByKey, oErr := oSelf.GameModel.ShowOneByKey(*oValue.Key)
+
+		if oErr != nil {
+			return false, oErr
+		}
+
+		if oGameByKey != nil {
+			return false, errors.New("key 已被其他遊戲使用")
+		}
+	}
+
 	_, oErr := oSelf.GameModel.AddOne(oValue)
 
 	if oErr != nil {
@@ -35,6 +51,18 @@ func (oSelf *GameUsecase) AddOne(oValue *domain.GameValue) (bool, error) {
 }
 
 func (oSelf *GameUsecase) EditOne(oValue *domain.GameValue, iId uint) (bool, error) {
+
+	if oValue.Key != nil {
+		oGameByKey, oErr := oSelf.GameModel.ShowOneByKey(*oValue.Key)
+
+		if oErr != nil {
+			return false, oErr
+		}
+
+		if oGameByKey != nil && oGameByKey.Id != iId {
+			return false, pkgUtility.NewDefaultError("key="+*oValue.Key+" 已經存在", -4, 500)
+		}
+	}
 
 	_, oErr := oSelf.GameModel.EditOneById(oValue, iId)
 
