@@ -29,7 +29,7 @@ func (oSelf *GameTypeHandler) SelectOnes(oContext *gin.Context) {
 
 	oPagination := &pkgInput.Pagination{}
 	if oErr := oRequest.Bind("pagination", oPagination); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "pagination 格式錯誤", struct{}{}, 0, "", nil)
+		oSelf.Response.Set(oContext, 200, -1, "pagination 格式錯誤", struct{}{}, 0, "", oErr)
 		return
 	}
 	if oPagination.Size == nil || *oPagination.Size == 0 {
@@ -43,13 +43,13 @@ func (oSelf *GameTypeHandler) SelectOnes(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "", nil)
+		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "", oErr)
 		return
 	}
 
 	var aSorters []*pkgInput.Sorter
 	if oErr := oRequest.Bind("sorters", &aSorters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "sorters 格式錯誤", struct{}{}, 0, "", nil)
+		oSelf.Response.Set(oContext, 200, -1, "sorters 格式錯誤", struct{}{}, 0, "", oErr)
 		return
 	}
 
@@ -59,10 +59,10 @@ func (oSelf *GameTypeHandler) SelectOnes(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", nil)
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
 			return
 		}
-		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "", nil)
+		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "", oErr)
 		return
 	}
 
@@ -80,10 +80,10 @@ func (oSelf *GameTypeHandler) SelectTree(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", nil)
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
 			return
 		}
-		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "", nil)
+		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "", oErr)
 		return
 	}
 

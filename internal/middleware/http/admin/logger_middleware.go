@@ -29,6 +29,7 @@ func (oSelf *LoggerMiddleware) Handle() gin.HandlerFunc {
 		sPath := oContext.Request.URL.Path
 		sRawQuery := oContext.Request.URL.RawQuery
 		oMapHeaders := oContext.Request.Header
+
 		if bootstrap.CONFIG.LOGGERS.MIDDLEWARE.STATUS {
 			pkgUtility.Logger(pkgUtility.HttpAdminMiddleware).Info(
 				"進入 http",
@@ -40,6 +41,19 @@ func (oSelf *LoggerMiddleware) Handle() gin.HandlerFunc {
 
 		oContext.Next()
 		iTime2 := pkgUtility.Time[int](true)
+
+		// go 喜歡 return value , error 的思維， 所以得在這裡打印 error
+		if oValue, bExist := oContext.Get("error"); bExist {
+			if oErr, bOk := oValue.(error); bOk && oErr != nil {
+				pkgUtility.Logger(pkgUtility.HttpAdminMiddleware).Error(
+					"http input 錯誤",
+					zap.String("path", sPath),
+					zap.String("query", sRawQuery),
+					zap.Any("headers", oMapHeaders),
+					zap.Error(oErr),
+				)
+			}
+		}
 
 		if bootstrap.CONFIG.LOGGERS.MIDDLEWARE.STATUS {
 			pkgUtility.Logger(pkgUtility.HttpAdminMiddleware).Info(
