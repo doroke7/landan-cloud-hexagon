@@ -21,7 +21,8 @@ type GameType struct {
 	CreatedAt time.Time  `json:"created_at" bson:"created_at"`
 	UpdatedAt time.Time  `json:"updated_at" bson:"updated_at"`
 	DeletedAt time.Time  `json:"deleted_at" bson:"deleted_at"`
-	Children  []GameType `json:"children" gorm:"foreignKey:ParentId"`
+	Parent    *GameType  `json:"parent,omitempty" bson:"-" gorm:"foreignKey:ParentId;references:Id"`
+	Children  []GameType `json:"children" bson:"-" gorm:"foreignKey:ParentId"`
 }
 
 // MarshalJSON 讓 Children 為 nil 時序列化成 []（不是 null）——不管是 gorm Preload、

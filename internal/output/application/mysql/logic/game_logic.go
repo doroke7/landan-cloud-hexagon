@@ -40,6 +40,7 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 			DB.
 			WithContext(oSelf.Context).
 			Preload("GameType").
+			Preload("GameType.Parent").
 			Model(&domain.Game{}).
 			Where("deleted_at = ?", "2038-01-19 03:14:07")
 		for _, oWhere := range aWheres {

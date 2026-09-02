@@ -33,12 +33,3 @@ type GameValue struct {
 	// UpdatedAt   *time.Time `json:"updated_at"`
 	// DeletedAt   *time.Time `json:"deleted_at" gorm:"default:2038-01-19 03:14:07"`
 }
-
-type GameFilter struct {
-	Id         *uint `json:"id,omitempty"`
-	GameTypeId *uint `json:"game_type_id,omitempty"`
-}
-
-type GameWhere struct {
-	GameTypeId *uint
-}
