@@ -12,12 +12,14 @@ import (
 type GameTypeUsecase struct {
 	*usecaseApplicationAnyAdmin.AbstractUsecase
 	GameTypeModel outputPortAnyModel.GameTypeModel
+	GameModel     outputPortAnyModel.GameModel
 }
 
-func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminResource.GameTypeUsecase {
+func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oGameModel outputPortAnyModel.GameModel, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminResource.GameTypeUsecase {
 	return &GameTypeUsecase{
 		AbstractUsecase: oAbstractUsecase,
 		GameTypeModel:   oGameTypeModel,
+		GameModel:       oGameModel,
 	}
 }
 
@@ -64,14 +66,25 @@ func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*
 func (oSelf *GameTypeUsecase) RemoveOne(iId uint) (bool, error) {
 
 	// 底下還有未刪除的子類型就不放行，避免刪掉父類型後留下孤兒資料
-	aChildren, oErr := oSelf.GameTypeModel.ShowOnesByParentId(iId)
+	iChildren, oErr := oSelf.GameTypeModel.TotalByParentId(iId)
 
 	if oErr != nil {
 		return false, oErr
 	}
 
-	if len(aChildren) > 0 {
-		return false, pkgUtility.NewDefaultError("此遊戲類型底下還有子類型，請先移除子類型再刪除", -4, 500)
+	if iChildren > 0 {
+		return false, pkgUtility.NewDefaultError("此遊戲類型底下還有子類型，請先移除子類型再刪除", -2, 500)
+	}
+
+	// 底下還有掛在此類型的遊戲也不放行
+	iGames, oErr := oSelf.GameModel.TotalByGameTypeId(iId)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	if iGames > 0 {
+		return false, pkgUtility.NewDefaultError("此遊戲類型底下還有遊戲，請先移除遊戲再刪除", -2, 500)
 	}
 
 	_, oErr = oSelf.GameTypeModel.RemoveOneById(iId)

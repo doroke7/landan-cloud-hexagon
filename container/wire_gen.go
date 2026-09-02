@@ -115,7 +115,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	adminUserUsecase := usecaseApplicationAnyAdminResource.NewAdminUserUsecase(adminUserModel, abstractUsecase)
 	adminUserHandler := inputApplicationHttpAdminResource.NewAdminUserHandler(abstractHandler, adminUserUsecase)
 	gameTypeModel := outputApplicationResourceModel.NewGameTypeModel(abstractResource)
-	gameTypeUsecase := usecaseApplicationAnyAdminResource.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
+	gameTypeUsecase := usecaseApplicationAnyAdminResource.NewGameTypeUsecase(gameTypeModel, gameModel, abstractUsecase)
 	gameTypeHandler := inputApplicationHttpAdminResource.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
 	gameTypeLogic := outputApplicationResourceLogic.NewGameTypeLogic(abstractResource)
 	usecasePortAnyAdminOptionGameTypeUsecase := usecaseApplicationAnyAdminOption.NewGameTypeUsecase(gameTypeModel, gameTypeLogic, abstractUsecase)

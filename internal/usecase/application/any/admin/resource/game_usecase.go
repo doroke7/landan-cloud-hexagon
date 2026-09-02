@@ -60,7 +60,7 @@ func (oSelf *GameUsecase) EditOne(oValue *domain.GameValue, iId uint) (bool, err
 		}
 
 		if oGameByKey != nil && oGameByKey.Id != iId {
-			return false, pkgUtility.NewDefaultError("key="+*oValue.Key+" 已經存在", -4, 500)
+			return false, pkgUtility.NewDefaultError("key="+*oValue.Key+" 已經存在", -2, 500)
 		}
 	}
 
