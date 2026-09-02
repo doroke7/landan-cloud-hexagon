@@ -16,8 +16,8 @@ func (oSelf *Response) Set(oContext *gin.Context, iStatus int, iCode int, sMessa
 	oContext.Set("message", sMessage)
 	oContext.Set("status", iStatus)
 	oContext.Set("result", oResult)
-	oContext.Set("authorization", sAuthorization)
 	oContext.Set("total", iTotal)
+	oContext.Set("authorization", sAuthorization)
 
 	// oErr 可選，不需要時傳 nil；帶進來時存到 context 給 logger / error middleware 取用。
 	if oErr != nil {
