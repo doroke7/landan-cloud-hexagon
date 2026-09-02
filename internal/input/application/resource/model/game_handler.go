@@ -38,14 +38,7 @@ func domainGameToProtoGame(oGame *domain.Game) *pbResourceModel.Game {
 		CreatedAt:   timestamppb.New(oGame.CreatedAt),
 		UpdatedAt:   timestamppb.New(oGame.UpdatedAt),
 		DeletedAt:   timestamppb.New(oGame.DeletedAt),
-		GameType: &pbResourceModel.GameType{
-			Id:        uint32(oGame.GameType.Id),
-			Key:       oGame.GameType.Key,
-			Name:      oGame.GameType.Name,
-			CreatedAt: timestamppb.New(oGame.GameType.CreatedAt),
-			UpdatedAt: timestamppb.New(oGame.GameType.UpdatedAt),
-			DeletedAt: timestamppb.New(oGame.GameType.DeletedAt),
-		},
+		GameType:    domainGameTypeToProtoGameType(&oGame.GameType),
 	}
 }
 

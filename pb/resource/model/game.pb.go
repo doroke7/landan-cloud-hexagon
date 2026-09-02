@@ -31,6 +31,9 @@ type GameType struct {
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
+	ParentId      uint32                 `protobuf:"varint,7,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
+	Parent        *GameType              `protobuf:"bytes,8,opt,name=parent,proto3" json:"parent,omitempty"`
+	Children      []*GameType            `protobuf:"bytes,9,rep,name=children,proto3" json:"children,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -103,6 +106,27 @@ func (x *GameType) GetUpdatedAt() *timestamppb.Timestamp {
 func (x *GameType) GetDeletedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.DeletedAt
+	}
+	return nil
+}
+
+func (x *GameType) GetParentId() uint32 {
+	if x != nil {
+		return x.ParentId
+	}
+	return 0
+}
+
+func (x *GameType) GetParent() *GameType {
+	if x != nil {
+		return x.Parent
+	}
+	return nil
+}
+
+func (x *GameType) GetChildren() []*GameType {
+	if x != nil {
+		return x.Children
 	}
 	return nil
 }
@@ -939,7 +963,7 @@ var File_resource_model_game_proto protoreflect.FileDescriptor
 
 const file_resource_model_game_proto_rawDesc = "" +
 	"\n" +
-	"\x19resource/model/game.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17resource/resource.proto\"\xf1\x01\n" +
+	"\x19resource/model/game.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17resource/resource.proto\"\xfc\x02\n" +
 	"\bGameType\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x12\n" +
@@ -949,7 +973,10 @@ const file_resource_model_game_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
-	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\"\xeb\x02\n" +
+	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1b\n" +
+	"\tparent_id\x18\a \x01(\rR\bparentId\x123\n" +
+	"\x06parent\x18\b \x01(\v2\x1b.pb.resource.model.GameTypeR\x06parent\x127\n" +
+	"\bchildren\x18\t \x03(\v2\x1b.pb.resource.model.GameTypeR\bchildren\"\xeb\x02\n" +
 	"\x04Game\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12 \n" +
 	"\fgame_type_id\x18\x02 \x01(\rR\n" +
@@ -1077,39 +1104,41 @@ var file_resource_model_game_proto_depIdxs = []int32{
 	14, // 0: pb.resource.model.GameType.created_at:type_name -> google.protobuf.Timestamp
 	14, // 1: pb.resource.model.GameType.updated_at:type_name -> google.protobuf.Timestamp
 	14, // 2: pb.resource.model.GameType.deleted_at:type_name -> google.protobuf.Timestamp
-	14, // 3: pb.resource.model.Game.created_at:type_name -> google.protobuf.Timestamp
-	14, // 4: pb.resource.model.Game.updated_at:type_name -> google.protobuf.Timestamp
-	14, // 5: pb.resource.model.Game.deleted_at:type_name -> google.protobuf.Timestamp
-	0,  // 6: pb.resource.model.Game.game_type:type_name -> pb.resource.model.GameType
-	14, // 7: pb.resource.model.GameAddOneOutput.created_at:type_name -> google.protobuf.Timestamp
-	14, // 8: pb.resource.model.GameAddOneOutput.updated_at:type_name -> google.protobuf.Timestamp
-	14, // 9: pb.resource.model.GameAddOneOutput.deleted_at:type_name -> google.protobuf.Timestamp
-	14, // 10: pb.resource.model.GameShowOneByIdOutput.created_at:type_name -> google.protobuf.Timestamp
-	14, // 11: pb.resource.model.GameShowOneByIdOutput.updated_at:type_name -> google.protobuf.Timestamp
-	14, // 12: pb.resource.model.GameShowOneByIdOutput.deleted_at:type_name -> google.protobuf.Timestamp
-	0,  // 13: pb.resource.model.GameShowOneByIdOutput.game_type:type_name -> pb.resource.model.GameType
-	15, // 14: pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationInput.filters:type_name -> pb.resource.Filter
-	16, // 15: pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	17, // 16: pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	1,  // 17: pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationOutput.games:type_name -> pb.resource.model.Game
-	15, // 18: pb.resource.model.GameTotalByFiltersInput.filters:type_name -> pb.resource.Filter
-	2,  // 19: pb.resource.model.GameModel.AddOne:input_type -> pb.resource.model.GameAddOneInput
-	4,  // 20: pb.resource.model.GameModel.ShowOneById:input_type -> pb.resource.model.GameShowOneByIdInput
-	10, // 21: pb.resource.model.GameModel.ShowOnesByFiltersWithOrdersPagination:input_type -> pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationInput
-	6,  // 22: pb.resource.model.GameModel.EditOneById:input_type -> pb.resource.model.GameEditOneByIdInput
-	8,  // 23: pb.resource.model.GameModel.RemoveOneById:input_type -> pb.resource.model.GameRemoveOneByIdInput
-	12, // 24: pb.resource.model.GameModel.TotalByFilters:input_type -> pb.resource.model.GameTotalByFiltersInput
-	3,  // 25: pb.resource.model.GameModel.AddOne:output_type -> pb.resource.model.GameAddOneOutput
-	5,  // 26: pb.resource.model.GameModel.ShowOneById:output_type -> pb.resource.model.GameShowOneByIdOutput
-	11, // 27: pb.resource.model.GameModel.ShowOnesByFiltersWithOrdersPagination:output_type -> pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationOutput
-	7,  // 28: pb.resource.model.GameModel.EditOneById:output_type -> pb.resource.model.GameEditOneByIdOutput
-	9,  // 29: pb.resource.model.GameModel.RemoveOneById:output_type -> pb.resource.model.GameRemoveOneByIdOutput
-	13, // 30: pb.resource.model.GameModel.TotalByFilters:output_type -> pb.resource.model.GameTotalByFiltersOutput
-	25, // [25:31] is the sub-list for method output_type
-	19, // [19:25] is the sub-list for method input_type
-	19, // [19:19] is the sub-list for extension type_name
-	19, // [19:19] is the sub-list for extension extendee
-	0,  // [0:19] is the sub-list for field type_name
+	0,  // 3: pb.resource.model.GameType.parent:type_name -> pb.resource.model.GameType
+	0,  // 4: pb.resource.model.GameType.children:type_name -> pb.resource.model.GameType
+	14, // 5: pb.resource.model.Game.created_at:type_name -> google.protobuf.Timestamp
+	14, // 6: pb.resource.model.Game.updated_at:type_name -> google.protobuf.Timestamp
+	14, // 7: pb.resource.model.Game.deleted_at:type_name -> google.protobuf.Timestamp
+	0,  // 8: pb.resource.model.Game.game_type:type_name -> pb.resource.model.GameType
+	14, // 9: pb.resource.model.GameAddOneOutput.created_at:type_name -> google.protobuf.Timestamp
+	14, // 10: pb.resource.model.GameAddOneOutput.updated_at:type_name -> google.protobuf.Timestamp
+	14, // 11: pb.resource.model.GameAddOneOutput.deleted_at:type_name -> google.protobuf.Timestamp
+	14, // 12: pb.resource.model.GameShowOneByIdOutput.created_at:type_name -> google.protobuf.Timestamp
+	14, // 13: pb.resource.model.GameShowOneByIdOutput.updated_at:type_name -> google.protobuf.Timestamp
+	14, // 14: pb.resource.model.GameShowOneByIdOutput.deleted_at:type_name -> google.protobuf.Timestamp
+	0,  // 15: pb.resource.model.GameShowOneByIdOutput.game_type:type_name -> pb.resource.model.GameType
+	15, // 16: pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationInput.filters:type_name -> pb.resource.Filter
+	16, // 17: pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	17, // 18: pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationInput.pagination:type_name -> pb.resource.Pagination
+	1,  // 19: pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationOutput.games:type_name -> pb.resource.model.Game
+	15, // 20: pb.resource.model.GameTotalByFiltersInput.filters:type_name -> pb.resource.Filter
+	2,  // 21: pb.resource.model.GameModel.AddOne:input_type -> pb.resource.model.GameAddOneInput
+	4,  // 22: pb.resource.model.GameModel.ShowOneById:input_type -> pb.resource.model.GameShowOneByIdInput
+	10, // 23: pb.resource.model.GameModel.ShowOnesByFiltersWithOrdersPagination:input_type -> pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationInput
+	6,  // 24: pb.resource.model.GameModel.EditOneById:input_type -> pb.resource.model.GameEditOneByIdInput
+	8,  // 25: pb.resource.model.GameModel.RemoveOneById:input_type -> pb.resource.model.GameRemoveOneByIdInput
+	12, // 26: pb.resource.model.GameModel.TotalByFilters:input_type -> pb.resource.model.GameTotalByFiltersInput
+	3,  // 27: pb.resource.model.GameModel.AddOne:output_type -> pb.resource.model.GameAddOneOutput
+	5,  // 28: pb.resource.model.GameModel.ShowOneById:output_type -> pb.resource.model.GameShowOneByIdOutput
+	11, // 29: pb.resource.model.GameModel.ShowOnesByFiltersWithOrdersPagination:output_type -> pb.resource.model.GameShowOnesByFiltersWithOrdersPaginationOutput
+	7,  // 30: pb.resource.model.GameModel.EditOneById:output_type -> pb.resource.model.GameEditOneByIdOutput
+	9,  // 31: pb.resource.model.GameModel.RemoveOneById:output_type -> pb.resource.model.GameRemoveOneByIdOutput
+	13, // 32: pb.resource.model.GameModel.TotalByFilters:output_type -> pb.resource.model.GameTotalByFiltersOutput
+	27, // [27:33] is the sub-list for method output_type
+	21, // [21:27] is the sub-list for method input_type
+	21, // [21:21] is the sub-list for extension type_name
+	21, // [21:21] is the sub-list for extension extendee
+	0,  // [0:21] is the sub-list for field type_name
 }
 
 func init() { file_resource_model_game_proto_init() }

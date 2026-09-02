@@ -23,14 +23,26 @@ func protoGameTypeToDomainGameType(oPbGameType *pbResourceModel.GameType) domain
 		return domain.GameType{}
 	}
 
-	return domain.GameType{
+	oGameType := domain.GameType{
 		Id:        uint(oPbGameType.GetId()),
+		ParentId:  uint(oPbGameType.GetParentId()),
 		Key:       oPbGameType.GetKey(),
 		Name:      oPbGameType.GetName(),
 		CreatedAt: oPbGameType.GetCreatedAt().AsTime(),
 		UpdatedAt: oPbGameType.GetUpdatedAt().AsTime(),
 		DeletedAt: oPbGameType.GetDeletedAt().AsTime(),
 	}
+
+	if oParent := oPbGameType.GetParent(); oParent != nil {
+		oParentDomain := protoGameTypeToDomainGameType(oParent)
+		oGameType.Parent = &oParentDomain
+	}
+
+	for _, oChild := range oPbGameType.GetChildren() {
+		oGameType.Children = append(oGameType.Children, protoGameTypeToDomainGameType(oChild))
+	}
+
+	return oGameType
 }
 
 func protoGameToDomainGame(oPbGame *pbResourceModel.Game) domain.Game {

@@ -26,15 +26,28 @@ func NewGameTypeHandler(oAbstractHandler *inputApplicationResource.AbstractHandl
 	}
 }
 
+// domainGameTypeToProtoGameType 遞迴帶出 Parent / Children，讓巢狀的 game type 一起過 gRPC。
 func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbResourceModel.GameType {
-	return &pbResourceModel.GameType{
+	if oGameType == nil {
+		return nil
+	}
+
+	oPb := &pbResourceModel.GameType{
 		Id:        uint32(oGameType.Id),
+		ParentId:  uint32(oGameType.ParentId),
 		Key:       oGameType.Key,
 		Name:      oGameType.Name,
 		CreatedAt: timestamppb.New(oGameType.CreatedAt),
 		UpdatedAt: timestamppb.New(oGameType.UpdatedAt),
 		DeletedAt: timestamppb.New(oGameType.DeletedAt),
+		Parent:    domainGameTypeToProtoGameType(oGameType.Parent),
 	}
+
+	for i := range oGameType.Children {
+		oPb.Children = append(oPb.Children, domainGameTypeToProtoGameType(&oGameType.Children[i]))
+	}
+
+	return oPb
 }
 
 func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceModel.GameTypeAddOneInput) (*pbResourceModel.GameTypeAddOneOutput, error) {

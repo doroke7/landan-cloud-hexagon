@@ -29,6 +29,7 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
 		Preload("GameType").
+		Preload("GameType.Parent").
 		Model(&oGame).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		First(&oGame, iId).Error; oErr != nil {
@@ -53,6 +54,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 		DB.
 		WithContext(oSelf.Context).
 		Preload("GameType").
+		Preload("GameType.Parent").
 		Model(&domain.Game{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07")
 
