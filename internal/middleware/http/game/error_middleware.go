@@ -57,7 +57,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.Any("error", oError),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
-					oSelf.Response.Set(oContext, int(oErrorType.Status), int(oErrorType.Code), oErrorType.Message, struct{}{}, 0, "")
+					oSelf.Response.Set(oContext, int(oErrorType.Status), int(oErrorType.Code), oErrorType.Message, struct{}{}, 0, "", nil)
 
 				default:
 					iLen := runtime.Stack(aByteStack, false)
@@ -70,7 +70,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.Any("stack", aByteStack[:iLen]),
 					)
 
-					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤2", struct{}{}, 0, "")
+					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤2", struct{}{}, 0, "", nil)
 
 				}
 
@@ -95,7 +95,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
-					oSelf.Response.Set(oContext, int(oErrorType.Status), int(oErrorType.Code), oErrorType.Message, struct{}{}, 0, "")
+					oSelf.Response.Set(oContext, int(oErrorType.Status), int(oErrorType.Code), oErrorType.Message, struct{}{}, 0, "", nil)
 
 				default:
 					// Logger.Fatal 會再觸發 panic
@@ -105,7 +105,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
-					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤3", struct{}{}, 0, "")
+					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤3", struct{}{}, 0, "", nil)
 
 				}
 

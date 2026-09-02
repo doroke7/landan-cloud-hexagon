@@ -31,7 +31,7 @@ func (oSelf *GameTypeHandler) AddOne(oContext *gin.Context) {
 
 	oValue := &domain.GameTypeValue{}
 	if oErr := oRequest.Bind("value", oValue); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "request 格式錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "request 格式錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
@@ -41,15 +41,15 @@ func (oSelf *GameTypeHandler) AddOne(oContext *gin.Context) {
 	if oErr != nil {
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", nil)
 			return
 		}
 
-		oSelf.Response.Set(oContext, 200, -3, "新增失敗", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -3, "新增失敗", struct{}{}, 0, "", nil)
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "新增成功", struct{}{}, 0, "")
+	oSelf.Response.Set(oContext, 200, 1, "新增成功", struct{}{}, 0, "", nil)
 
 }
 
@@ -59,24 +59,24 @@ func (oSelf *GameTypeHandler) EditOne(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
 	if aFilters == nil || len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
-		oSelf.Response.Set(oContext, 200, -1, "filter 位置錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "filter 位置錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
 	fId, bOk := aFilters[0].Value.(float64)
 	if !bOk {
-		oSelf.Response.Set(oContext, 200, -1, "filter.id 格式錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "filter.id 格式錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
 	oValue := &domain.GameTypeValue{}
 	if oErr := oRequest.Bind("value", oValue); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "value 格式錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "value 格式錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
@@ -88,15 +88,15 @@ func (oSelf *GameTypeHandler) EditOne(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", nil)
 			return
 		}
 
-		oSelf.Response.Set(oContext, 200, -3, "修改失敗", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -3, "修改失敗", struct{}{}, 0, "", nil)
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "修改成功", struct{}{}, 0, "")
+	oSelf.Response.Set(oContext, 200, 1, "修改成功", struct{}{}, 0, "", nil)
 
 }
 
@@ -106,18 +106,18 @@ func (oSelf *GameTypeHandler) RemoveOne(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
 	if aFilters == nil || len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
-		oSelf.Response.Set(oContext, 200, -1, "filter 位置錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "filter 位置錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
 	fId, bOk := aFilters[0].Value.(float64)
 	if !bOk {
-		oSelf.Response.Set(oContext, 200, -1, "filter.id 格式錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "filter.id 格式錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
@@ -129,15 +129,15 @@ func (oSelf *GameTypeHandler) RemoveOne(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", nil)
 			return
 		}
 
-		oSelf.Response.Set(oContext, 200, -3, "刪除失敗", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -3, "刪除失敗", struct{}{}, 0, "", nil)
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "刪除成功", struct{}{}, 0, "")
+	oSelf.Response.Set(oContext, 200, 1, "刪除成功", struct{}{}, 0, "", nil)
 
 }
 
@@ -147,18 +147,18 @@ func (oSelf *GameTypeHandler) ShowOne(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
 	if aFilters == nil || len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
-		oSelf.Response.Set(oContext, 200, -1, "filter.id 位置錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "filter.id 位置錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
 	fId, bOk := aFilters[0].Value.(float64)
 	if !bOk {
-		oSelf.Response.Set(oContext, 200, -1, "filter.id 格式錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "filter.id 格式錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
@@ -169,17 +169,17 @@ func (oSelf *GameTypeHandler) ShowOne(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", nil)
 			return
 		}
 
-		oSelf.Response.Set(oContext, 200, -3, "查詢失敗", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -3, "查詢失敗", struct{}{}, 0, "", nil)
 		return
 	}
 
 	oResult := pkgGin.NewResult(oGameType, nil, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "")
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "", nil)
 
 }
 
@@ -189,7 +189,7 @@ func (oSelf *GameTypeHandler) ShowOnes(oContext *gin.Context) {
 
 	oPagination := &pkgInput.Pagination{}
 	if oErr := oRequest.Bind("pagination", oPagination); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "pagination 格式錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "pagination 格式錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 	if oPagination.Size == nil || *oPagination.Size == 0 {
@@ -203,13 +203,13 @@ func (oSelf *GameTypeHandler) ShowOnes(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
 	var aSorters []*pkgInput.Sorter
 	if oErr := oRequest.Bind("sorters", &aSorters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "sorters 格式錯誤", struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -1, "sorters 格式錯誤", struct{}{}, 0, "", nil)
 		return
 	}
 
@@ -219,15 +219,15 @@ func (oSelf *GameTypeHandler) ShowOnes(oContext *gin.Context) {
 
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
 
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "")
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", nil)
 			return
 		}
-		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "")
+		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "", nil)
 		return
 	}
 
 	oResult := pkgGin.NewResult(nil, aGameTypes, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "", nil)
 
 }
