@@ -46,6 +46,47 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 	return &oGame, nil
 }
 
+func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
+	oBody := map[string]any{
+		"query": map[string]any{
+			"bool": map[string]any{
+				"filter": []map[string]any{
+					{"term": map[string]any{"key": sKey}},
+					{"term": map[string]any{"deleted_at": oDeletedAtZero}},
+				},
+			},
+		},
+	}
+
+	aBodyBytes, oErr := json.Marshal(oBody)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aOptions := []func(*esapi.SearchRequest){
+		oSelf.Client.Search.WithContext(oSelf.Context),
+		oSelf.Client.Search.WithIndex(oSelf.Index),
+		oSelf.Client.Search.WithBody(bytes.NewReader(aBodyBytes)),
+		oSelf.Client.Search.WithSize(1),
+	}
+
+	oResult, oErr := oSelf.SearchWithOptions(aOptions)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	if len(oResult.Hits) == 0 {
+		return nil, nil
+	}
+
+	var oGame domain.Game
+	if oErr := json.Unmarshal(oResult.Hits[0].Source, &oGame); oErr != nil {
+		return nil, oErr
+	}
+
+	return &oGame, nil
+}
+
 func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 	sDeletedAtField := "deleted_at"
 

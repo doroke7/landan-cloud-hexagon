@@ -126,6 +126,24 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 	return &oGame, nil
 }
 
+func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
+	var oGame domain.Game
+
+	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
+		"key":        sKey,
+		"deleted_at": oDeletedAtZero,
+	}).Decode(&oGame)
+
+	if oErr != nil {
+		if oErr == mongo.ErrNoDocuments {
+			return nil, nil
+		}
+		return nil, oErr
+	}
+
+	return &oGame, nil
+}
+
 func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) (bool, error) {
 	oSet := bson.M{"updated_at": time.Now()}
 

@@ -116,6 +116,34 @@ func (oSelf *GameHandler) ShowOneById(oContext context.Context, oReq *pbResource
 
 }
 
+func (oSelf *GameHandler) ShowOneByKey(oContext context.Context, oReq *pbResourceModel.GameShowOneByKeyInput) (*pbResourceModel.GameShowOneByKeyOutput, error) {
+
+	oGame, oErr := oSelf.GameUsecase.ShowOneByKey(oReq.Key)
+
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	if oGame == nil {
+		return nil, nil
+	}
+
+	oPbGame := domainGameToProtoGame(oGame)
+
+	return &pbResourceModel.GameShowOneByKeyOutput{
+		Id:          oPbGame.Id,
+		GameTypeId:  oPbGame.GameTypeId,
+		Key:         oPbGame.Key,
+		Name:        oPbGame.Name,
+		Description: oPbGame.Description,
+		CreatedAt:   oPbGame.CreatedAt,
+		UpdatedAt:   oPbGame.UpdatedAt,
+		DeletedAt:   oPbGame.DeletedAt,
+		GameType:    oPbGame.GameType,
+	}, nil
+
+}
+
 func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context.Context, oReq *pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationInput) (*pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationOutput, error) {
 
 	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))

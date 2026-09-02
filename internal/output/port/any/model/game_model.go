@@ -8,6 +8,7 @@ import (
 type GameModel interface {
 	AddOne(oGame *domain.GameValue) (bool, error)
 	ShowOneById(iId uint) (*domain.Game, error)
+	ShowOneByKey(sKey string) (*domain.Game, error)
 	EditOneById(oGame *domain.GameValue, iId uint) (bool, error)
 	RemoveOneById(iId uint) (bool, error)
 

@@ -114,6 +114,34 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 	}, nil
 }
 
+func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
+
+	oResponse, oErr := oSelf.ResourceModelClient.Game.ShowOneByKey(
+		oSelf.Context,
+		&pbResourceModel.GameShowOneByKeyInput{Key: sKey},
+	)
+
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	if oResponse.GetId() == 0 {
+		return nil, nil
+	}
+
+	return &domain.Game{
+		Id:          uint(oResponse.GetId()),
+		GameTypeId:  uint(oResponse.GetGameTypeId()),
+		Key:         oResponse.GetKey(),
+		Name:        oResponse.GetName(),
+		Description: oResponse.GetDescription(),
+		CreatedAt:   oResponse.GetCreatedAt().AsTime(),
+		UpdatedAt:   oResponse.GetUpdatedAt().AsTime(),
+		DeletedAt:   oResponse.GetDeletedAt().AsTime(),
+		GameType:    protoGameTypeToDomainGameType(oResponse.GetGameType()),
+	}, nil
+}
+
 func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 
 	oRequest := &pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationInput{
