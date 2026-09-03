@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
@@ -28,16 +29,25 @@ func NewAppUserHandler(oAbstractHandler *inputApplicationResource.AbstractHandle
 
 func (oSelf *AppUserHandler) AddAppUser(oContext context.Context, oReq *pbResourceModel.AppUserAddOneInput) (*pbResourceModel.AppUserAddOneOutput, error) {
 
-	oAppUserValue := domain.AppUserValue{
-		Name: &oReq.Name,
+	oVariable := oReq.GetVariable()
+
+	oAppUserValue := domain.AppUserValue{}
+	if oVariable != nil {
+		oAppUserValue.Name = oVariable.Name
+		oAppUserValue.Password = oVariable.Password
 	}
 
 	if _, oErr := oSelf.AppUserUsecase.AddOne(&oAppUserValue); oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
+	var sName string
+	if oAppUserValue.Name != nil {
+		sName = *oAppUserValue.Name
+	}
+
 	return &pbResourceModel.AppUserAddOneOutput{
-		Name: oReq.Name,
+		Name: sName,
 	}, nil
 }
 
@@ -49,10 +59,12 @@ func (oSelf *AppUserHandler) ShowOneByName(oContext context.Context, oReq *pbRes
 	}
 
 	return &pbResourceModel.AppUserShowOneByNameOutput{
-		Id:       uint32(oAppUser.Id),
-		Name:     oAppUser.Name,
-		Password: oAppUser.Password,
-		Balance:  uint32(oAppUser.Balance),
+		AppUser: &pbResource.AppUser{
+			Id:       uint32(oAppUser.Id),
+			Name:     oAppUser.Name,
+			Password: oAppUser.Password,
+			Balance:  uint32(oAppUser.Balance),
+		},
 	}, nil
 }
 
@@ -64,10 +76,12 @@ func (oSelf *AppUserHandler) ShowOneById(oContext context.Context, oReq *pbResou
 	}
 
 	return &pbResourceModel.AppUserShowOneByIdOutput{
-		Id:       uint32(oAppUser.Id),
-		Name:     oAppUser.Name,
-		Password: oAppUser.Password,
-		Balance:  uint32(oAppUser.Balance),
+		AppUser: &pbResource.AppUser{
+			Id:       uint32(oAppUser.Id),
+			Name:     oAppUser.Name,
+			Password: oAppUser.Password,
+			Balance:  uint32(oAppUser.Balance),
+		},
 	}, nil
 }
 

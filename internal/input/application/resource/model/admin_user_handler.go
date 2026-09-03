@@ -63,12 +63,12 @@ func (oSelf *AdminUserHandler) ShowOneById(oContext context.Context, oReq *pbRes
 
 func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResourceModel.AdminUserAddOneInput) (*pbResourceModel.AdminUserAddOneOutput, error) {
 
-	oVarible := oReq.GetVarible()
+	oVariable := oReq.GetVariable()
 
 	oAdminUserValue := domain.AdminUserValue{}
-	if oVarible != nil {
-		oAdminUserValue.Name = oVarible.Name
-		oAdminUserValue.Password = oVarible.Password
+	if oVariable != nil {
+		oAdminUserValue.Name = oVariable.Name
+		oAdminUserValue.Password = oVariable.Password
 	}
 
 	bResult, oErr := oSelf.AdminUserUsecase.AddOne(&oAdminUserValue)
@@ -84,12 +84,12 @@ func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResource
 
 func (oSelf *AdminUserHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminUserEditOneByIdInput) (*pbResourceModel.AdminUserEditOneByIdOutput, error) {
 
-	oVarible := oReq.GetVarible()
+	oVariable := oReq.GetVariable()
 
 	oAdminUserValue := domain.AdminUserValue{}
-	if oVarible != nil {
-		oAdminUserValue.Name = oVarible.Name
-		oAdminUserValue.Password = oVarible.Password
+	if oVariable != nil {
+		oAdminUserValue.Name = oVariable.Name
+		oAdminUserValue.Password = oVariable.Password
 	}
 
 	bResult, oErr := oSelf.AdminUserUsecase.EditOneById(&oAdminUserValue, uint(oReq.Id))

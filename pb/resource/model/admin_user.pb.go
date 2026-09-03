@@ -22,7 +22,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type AdminUserVarible struct {
+type AdminUserVariable struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Password      *string                `protobuf:"bytes,2,opt,name=password,proto3,oneof" json:"password,omitempty"`
@@ -30,20 +30,20 @@ type AdminUserVarible struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AdminUserVarible) Reset() {
-	*x = AdminUserVarible{}
+func (x *AdminUserVariable) Reset() {
+	*x = AdminUserVariable{}
 	mi := &file_resource_model_admin_user_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AdminUserVarible) String() string {
+func (x *AdminUserVariable) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AdminUserVarible) ProtoMessage() {}
+func (*AdminUserVariable) ProtoMessage() {}
 
-func (x *AdminUserVarible) ProtoReflect() protoreflect.Message {
+func (x *AdminUserVariable) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_admin_user_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -55,19 +55,19 @@ func (x *AdminUserVarible) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AdminUserVarible.ProtoReflect.Descriptor instead.
-func (*AdminUserVarible) Descriptor() ([]byte, []int) {
+// Deprecated: Use AdminUserVariable.ProtoReflect.Descriptor instead.
+func (*AdminUserVariable) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminUserVarible) GetName() string {
+func (x *AdminUserVariable) GetName() string {
 	if x != nil && x.Name != nil {
 		return *x.Name
 	}
 	return ""
 }
 
-func (x *AdminUserVarible) GetPassword() string {
+func (x *AdminUserVariable) GetPassword() string {
 	if x != nil && x.Password != nil {
 		return *x.Password
 	}
@@ -252,7 +252,7 @@ func (x *AdminUserShowOneByIdOutput) GetAdminUser() *resource.AdminUser {
 
 type AdminUserAddOneInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Varible       *AdminUserVarible      `protobuf:"bytes,1,opt,name=varible,proto3" json:"varible,omitempty"`
+	Variable      *AdminUserVariable     `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -287,9 +287,9 @@ func (*AdminUserAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *AdminUserAddOneInput) GetVarible() *AdminUserVarible {
+func (x *AdminUserAddOneInput) GetVariable() *AdminUserVariable {
 	if x != nil {
-		return x.Varible
+		return x.Variable
 	}
 	return nil
 }
@@ -340,7 +340,7 @@ func (x *AdminUserAddOneOutput) GetStatus() bool {
 
 type AdminUserEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Varible       *AdminUserVarible      `protobuf:"bytes,1,opt,name=varible,proto3" json:"varible,omitempty"`
+	Variable      *AdminUserVariable     `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	Id            uint32                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -376,9 +376,9 @@ func (*AdminUserEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *AdminUserEditOneByIdInput) GetVarible() *AdminUserVarible {
+func (x *AdminUserEditOneByIdInput) GetVariable() *AdminUserVariable {
 	if x != nil {
-		return x.Varible
+		return x.Variable
 	}
 	return nil
 }
@@ -438,8 +438,8 @@ var File_resource_model_admin_user_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1fresource/model/admin_user.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"b\n" +
-	"\x10AdminUserVarible\x12\x17\n" +
+	"\x1fresource/model/admin_user.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"c\n" +
+	"\x11AdminUserVariable\x12\x17\n" +
 	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
 	"\bpassword\x18\x02 \x01(\tH\x01R\bpassword\x88\x01\x01B\a\n" +
 	"\x05_nameB\v\n" +
@@ -453,13 +453,13 @@ const file_resource_model_admin_user_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\rR\x02id\"S\n" +
 	"\x1aAdminUserShowOneByIdOutput\x125\n" +
 	"\n" +
-	"admin_user\x18\x01 \x01(\v2\x16.pb.resource.AdminUserR\tadminUser\"U\n" +
-	"\x14AdminUserAddOneInput\x12=\n" +
-	"\avarible\x18\x01 \x01(\v2#.pb.resource.model.AdminUserVaribleR\avarible\"/\n" +
+	"admin_user\x18\x01 \x01(\v2\x16.pb.resource.AdminUserR\tadminUser\"X\n" +
+	"\x14AdminUserAddOneInput\x12@\n" +
+	"\bvariable\x18\x01 \x01(\v2$.pb.resource.model.AdminUserVariableR\bvariable\"/\n" +
 	"\x15AdminUserAddOneOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"j\n" +
-	"\x19AdminUserEditOneByIdInput\x12=\n" +
-	"\avarible\x18\x01 \x01(\v2#.pb.resource.model.AdminUserVaribleR\avarible\x12\x0e\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\"m\n" +
+	"\x19AdminUserEditOneByIdInput\x12@\n" +
+	"\bvariable\x18\x01 \x01(\v2$.pb.resource.model.AdminUserVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\rR\x02id\"4\n" +
 	"\x1aAdminUserEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status2\xb7\x03\n" +
@@ -483,7 +483,7 @@ func file_resource_model_admin_user_proto_rawDescGZIP() []byte {
 
 var file_resource_model_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_resource_model_admin_user_proto_goTypes = []any{
-	(*AdminUserVarible)(nil),             // 0: pb.resource.model.AdminUserVarible
+	(*AdminUserVariable)(nil),            // 0: pb.resource.model.AdminUserVariable
 	(*AdminUserShowOneByNameInput)(nil),  // 1: pb.resource.model.AdminUserShowOneByNameInput
 	(*AdminUserShowOneByNameOutput)(nil), // 2: pb.resource.model.AdminUserShowOneByNameOutput
 	(*AdminUserShowOneByIdInput)(nil),    // 3: pb.resource.model.AdminUserShowOneByIdInput
@@ -497,8 +497,8 @@ var file_resource_model_admin_user_proto_goTypes = []any{
 var file_resource_model_admin_user_proto_depIdxs = []int32{
 	9, // 0: pb.resource.model.AdminUserShowOneByNameOutput.admin_user:type_name -> pb.resource.AdminUser
 	9, // 1: pb.resource.model.AdminUserShowOneByIdOutput.admin_user:type_name -> pb.resource.AdminUser
-	0, // 2: pb.resource.model.AdminUserAddOneInput.varible:type_name -> pb.resource.model.AdminUserVarible
-	0, // 3: pb.resource.model.AdminUserEditOneByIdInput.varible:type_name -> pb.resource.model.AdminUserVarible
+	0, // 2: pb.resource.model.AdminUserAddOneInput.variable:type_name -> pb.resource.model.AdminUserVariable
+	0, // 3: pb.resource.model.AdminUserEditOneByIdInput.variable:type_name -> pb.resource.model.AdminUserVariable
 	1, // 4: pb.resource.model.AdminUserModel.ShowOneByName:input_type -> pb.resource.model.AdminUserShowOneByNameInput
 	3, // 5: pb.resource.model.AdminUserModel.ShowOneById:input_type -> pb.resource.model.AdminUserShowOneByIdInput
 	5, // 6: pb.resource.model.AdminUserModel.AddOne:input_type -> pb.resource.model.AdminUserAddOneInput

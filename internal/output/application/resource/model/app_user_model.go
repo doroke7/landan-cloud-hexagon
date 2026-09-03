@@ -19,10 +19,11 @@ func NewAppUserModel(oAbstractModel *resourceBase.AbstractResource) outputPortAn
 
 func (oSelf *AppUserModel) AddOne(oAppUser *domain.AppUserValue) (bool, error) {
 
-	oRequest := &pbResourceModel.AppUserAddOneInput{}
-
-	if oAppUser.Name != nil {
-		oRequest.Name = *oAppUser.Name
+	oRequest := &pbResourceModel.AppUserAddOneInput{
+		Variable: &pbResourceModel.AppUserVariable{
+			Name:     oAppUser.Name,
+			Password: oAppUser.Password,
+		},
 	}
 
 	if _, oErr := oSelf.ResourceModelClient.AppUser.AddAppUser(oSelf.Context, oRequest); oErr != nil {
@@ -42,11 +43,13 @@ func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) 
 		return nil, oErr
 	}
 
+	oProtoAppUser := oResp.GetAppUser()
+
 	return &domain.AppUser{
-		Id:       uint(oResp.GetId()),
-		Name:     oResp.GetName(),
-		Password: oResp.GetPassword(),
-		Balance:  uint(oResp.GetBalance()),
+		Id:       uint(oProtoAppUser.GetId()),
+		Name:     oProtoAppUser.GetName(),
+		Password: oProtoAppUser.GetPassword(),
+		Balance:  uint(oProtoAppUser.GetBalance()),
 	}, nil
 }
 
@@ -60,11 +63,13 @@ func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 		return nil, oErr
 	}
 
+	oProtoAppUser := oResp.GetAppUser()
+
 	return &domain.AppUser{
-		Id:       uint(oResp.GetId()),
-		Name:     oResp.GetName(),
-		Password: oResp.GetPassword(),
-		Balance:  uint(oResp.GetBalance()),
+		Id:       uint(oProtoAppUser.GetId()),
+		Name:     oProtoAppUser.GetName(),
+		Password: oProtoAppUser.GetPassword(),
+		Balance:  uint(oProtoAppUser.GetBalance()),
 	}, nil
 }
 

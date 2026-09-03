@@ -73,7 +73,7 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
 
 	oRequest := &pbResourceModel.AdminUserAddOneInput{
-		Varible: &pbResourceModel.AdminUserVarible{
+		Variable: &pbResourceModel.AdminUserVariable{
 			Name:     oAdminUser.Name,
 			Password: oAdminUser.Password,
 		},
@@ -92,7 +92,7 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 
 	oRequest := &pbResourceModel.AdminUserEditOneByIdInput{
 		Id: uint32(iId),
-		Varible: &pbResourceModel.AdminUserVarible{
+		Variable: &pbResourceModel.AdminUserVariable{
 			Name:     oAdminUser.Name,
 			Password: oAdminUser.Password,
 		},
