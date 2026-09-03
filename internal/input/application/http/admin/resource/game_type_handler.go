@@ -183,6 +183,28 @@ func (oSelf *GameTypeHandler) ShowOne(oContext *gin.Context) {
 
 }
 
+func (oSelf *GameTypeHandler) ShowTree(oContext *gin.Context) {
+
+	oTree, oErr := oSelf.GameTypeUsecase.ShowTree()
+
+	if oErr != nil {
+
+		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
+
+			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
+			return
+		}
+
+		oSelf.Response.Set(oContext, 200, -3, "查詢失敗", struct{}{}, 0, "", oErr)
+		return
+	}
+
+	oResult := pkgGin.NewResult(nil, nil, oTree)
+
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "", nil)
+
+}
+
 func (oSelf *GameTypeHandler) ShowOnes(oContext *gin.Context) {
 
 	oRequest := &pkgGin.Request{Context: oContext}

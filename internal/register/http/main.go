@@ -147,6 +147,7 @@ func Init(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 			oAdminResource.DELETE("/GameType/RemoveOne", oContainer.HttpAdminResourceGameType.RemoveOne)
 			oAdminResource.GET("/GameType/ShowOne", oContainer.HttpAdminResourceGameType.ShowOne)
 			oAdminResource.GET("/GameType/ShowOnes", oContainer.HttpAdminResourceGameType.ShowOnes)
+			oAdminResource.GET("/GameType/ShowTree", oContainer.HttpAdminResourceGameType.ShowTree)
 		}
 
 		oAdminOption := oAdmin.Group("/Option")

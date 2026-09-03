@@ -54,6 +54,22 @@ func (oSelf *GameTypeUsecase) ShowOne(iId uint) (*domain.GameType, error) {
 	return oGameType, oErr
 }
 
+// ShowTree 回一個虛擬 root，Children 掛所有頂層 game type（整棵樹）。
+func (oSelf *GameTypeUsecase) ShowTree() (*domain.GameType, error) {
+
+	aRoots, oErr := oSelf.GameTypeLogic.ShowTree()
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oRoot := &domain.GameType{}
+	for _, oOne := range aRoots {
+		oRoot.Children = append(oRoot.Children, *oOne)
+	}
+
+	return oRoot, nil
+}
+
 func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
 
 	aGameTypes, iTotal, oErr := oSelf.GameTypeLogic.ShowGameTypesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
