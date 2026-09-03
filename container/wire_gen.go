@@ -21,6 +21,7 @@ import (
 	"example/internal/input/application/daemon/watcher/source"
 	"example/internal/input/application/facade"
 	"example/internal/input/application/facade/admin/authentication"
+	"example/internal/input/application/facade/admin/resource"
 	"example/internal/input/application/facade/register"
 	"example/internal/input/application/facade/table"
 	"example/internal/input/application/http"
@@ -231,6 +232,10 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper)
 	authenticatorUsecase := usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
 	inputApplicationFacadeAdminAuthenticationAuthenticatorHandler := inputApplicationFacadeAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
+	gameModel := outputApplicationResourceModel.NewGameModel(abstractResource)
+	gameLogic := outputApplicationResourceLogic.NewGameLogic(abstractResource)
+	gameUsecase := usecaseApplicationAnyAdminResource.NewGameUsecase(gameModel, gameLogic, abstractUsecase)
+	gameHandler := inputApplicationFacadeAdminResource.NewGameHandler(gameUsecase, abstractHandler)
 	abstractInterceptor := interceptorFacadeGame.NewAbstractInterceptor(jwtHelper, aesHelper, rsaHelper)
 	errorInterceptor := interceptorFacadeGame.NewErrorInterceptor(abstractInterceptor)
 	statusInterceptor := interceptorFacadeGame.NewStatusInterceptor(abstractInterceptor)
@@ -254,6 +259,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 		FacadeTableScanner:                     scannerHandler,
 		FacadeTableAuthenticator:               authenticatorHandler,
 		FacadeAdminAuthenticationAuthenticator: inputApplicationFacadeAdminAuthenticationAuthenticatorHandler,
+		FacadeAdminResourceGame:                gameHandler,
 		FacadeGameErrorInterceptor:             errorInterceptor,
 		FacadeGameStatusInterceptor:            statusInterceptor,
 		FacadeGameLoggerInterceptor:            loggerInterceptor,
@@ -740,6 +746,7 @@ type FacadeContainer struct {
 	FacadeTableScanner                     *inputApplicationFacadeTable.ScannerHandler
 	FacadeTableAuthenticator               *inputApplicationFacadeRegister.AuthenticatorHandler
 	FacadeAdminAuthenticationAuthenticator *inputApplicationFacadeAdminAuthentication.AuthenticatorHandler
+	FacadeAdminResourceGame                *inputApplicationFacadeAdminResource.GameHandler
 
 	// gRPC Facade Interceptor
 	FacadeGameErrorInterceptor          *interceptorFacadeGame.ErrorInterceptor

@@ -787,7 +787,7 @@ var File_resource_model_table_proto protoreflect.FileDescriptor
 
 const file_resource_model_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17resource/resource.proto\"\xed\x02\n" +
+	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15resource/common.proto\"\xed\x02\n" +
 	"\x10TableAddOneInput\x12\x13\n" +
 	"\x02no\x18\x01 \x01(\tH\x00R\x02no\x88\x01\x01\x12\x1c\n" +
 	"\agame_id\x18\x02 \x01(\rH\x01R\x06gameId\x88\x01\x01\x12\x15\n" +

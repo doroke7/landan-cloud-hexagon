@@ -279,7 +279,7 @@ var File_resource_logic_table_proto protoreflect.FileDescriptor
 
 const file_resource_logic_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aresource/logic/table.proto\x12\x11pb.resource.logic\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17resource/resource.proto\"\xec\x03\n" +
+	"\x1aresource/logic/table.proto\x12\x11pb.resource.logic\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15resource/common.proto\"\xec\x03\n" +
 	"\x05Table\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x0e\n" +
 	"\x02no\x18\x02 \x01(\tR\x02no\x12\x17\n" +

@@ -2,7 +2,7 @@
 // versions:
 // 	protoc-gen-go v1.36.11
 // 	protoc        v7.35.1
-// source: resource/resource.proto
+// source: resource/common.proto
 
 package pb_resource
 
@@ -34,7 +34,7 @@ type Filter struct {
 
 func (x *Filter) Reset() {
 	*x = Filter{}
-	mi := &file_resource_resource_proto_msgTypes[0]
+	mi := &file_resource_common_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -46,7 +46,7 @@ func (x *Filter) String() string {
 func (*Filter) ProtoMessage() {}
 
 func (x *Filter) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_resource_proto_msgTypes[0]
+	mi := &file_resource_common_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -59,7 +59,7 @@ func (x *Filter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Filter.ProtoReflect.Descriptor instead.
 func (*Filter) Descriptor() ([]byte, []int) {
-	return file_resource_resource_proto_rawDescGZIP(), []int{0}
+	return file_resource_common_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *Filter) GetField() string {
@@ -93,7 +93,7 @@ type Sorter struct {
 
 func (x *Sorter) Reset() {
 	*x = Sorter{}
-	mi := &file_resource_resource_proto_msgTypes[1]
+	mi := &file_resource_common_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -105,7 +105,7 @@ func (x *Sorter) String() string {
 func (*Sorter) ProtoMessage() {}
 
 func (x *Sorter) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_resource_proto_msgTypes[1]
+	mi := &file_resource_common_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -118,7 +118,7 @@ func (x *Sorter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Sorter.ProtoReflect.Descriptor instead.
 func (*Sorter) Descriptor() ([]byte, []int) {
-	return file_resource_resource_proto_rawDescGZIP(), []int{1}
+	return file_resource_common_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *Sorter) GetField() string {
@@ -145,7 +145,7 @@ type Pagination struct {
 
 func (x *Pagination) Reset() {
 	*x = Pagination{}
-	mi := &file_resource_resource_proto_msgTypes[2]
+	mi := &file_resource_common_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -157,7 +157,7 @@ func (x *Pagination) String() string {
 func (*Pagination) ProtoMessage() {}
 
 func (x *Pagination) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_resource_proto_msgTypes[2]
+	mi := &file_resource_common_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -170,7 +170,7 @@ func (x *Pagination) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Pagination.ProtoReflect.Descriptor instead.
 func (*Pagination) Descriptor() ([]byte, []int) {
-	return file_resource_resource_proto_rawDescGZIP(), []int{2}
+	return file_resource_common_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Pagination) GetSize() uint64 {
@@ -204,7 +204,7 @@ type GameType struct {
 
 func (x *GameType) Reset() {
 	*x = GameType{}
-	mi := &file_resource_resource_proto_msgTypes[3]
+	mi := &file_resource_common_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -216,7 +216,7 @@ func (x *GameType) String() string {
 func (*GameType) ProtoMessage() {}
 
 func (x *GameType) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_resource_proto_msgTypes[3]
+	mi := &file_resource_common_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -229,7 +229,7 @@ func (x *GameType) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameType.ProtoReflect.Descriptor instead.
 func (*GameType) Descriptor() ([]byte, []int) {
-	return file_resource_resource_proto_rawDescGZIP(), []int{3}
+	return file_resource_common_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GameType) GetId() uint32 {
@@ -312,7 +312,7 @@ type Game struct {
 
 func (x *Game) Reset() {
 	*x = Game{}
-	mi := &file_resource_resource_proto_msgTypes[4]
+	mi := &file_resource_common_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -324,7 +324,7 @@ func (x *Game) String() string {
 func (*Game) ProtoMessage() {}
 
 func (x *Game) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_resource_proto_msgTypes[4]
+	mi := &file_resource_common_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -337,7 +337,7 @@ func (x *Game) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Game.ProtoReflect.Descriptor instead.
 func (*Game) Descriptor() ([]byte, []int) {
-	return file_resource_resource_proto_rawDescGZIP(), []int{4}
+	return file_resource_common_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Game) GetId() uint32 {
@@ -403,11 +403,11 @@ func (x *Game) GetGameType() *GameType {
 	return nil
 }
 
-var File_resource_resource_proto protoreflect.FileDescriptor
+var File_resource_common_proto protoreflect.FileDescriptor
 
-const file_resource_resource_proto_rawDesc = "" +
+const file_resource_common_proto_rawDesc = "" +
 	"\n" +
-	"\x17resource/resource.proto\x12\vpb.resource\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"h\n" +
+	"\x15resource/common.proto\x12\vpb.resource\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"h\n" +
 	"\x06Filter\x12\x14\n" +
 	"\x05field\x18\x01 \x01(\tR\x05field\x12\x1a\n" +
 	"\boperator\x18\x02 \x01(\tR\boperator\x12,\n" +
@@ -448,19 +448,19 @@ const file_resource_resource_proto_rawDesc = "" +
 	"\tgame_type\x18\t \x01(\v2\x15.pb.resource.GameTypeR\bgameTypeB!Z\x1fexample/pb/resource;pb_resourceb\x06proto3"
 
 var (
-	file_resource_resource_proto_rawDescOnce sync.Once
-	file_resource_resource_proto_rawDescData []byte
+	file_resource_common_proto_rawDescOnce sync.Once
+	file_resource_common_proto_rawDescData []byte
 )
 
-func file_resource_resource_proto_rawDescGZIP() []byte {
-	file_resource_resource_proto_rawDescOnce.Do(func() {
-		file_resource_resource_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_resource_resource_proto_rawDesc), len(file_resource_resource_proto_rawDesc)))
+func file_resource_common_proto_rawDescGZIP() []byte {
+	file_resource_common_proto_rawDescOnce.Do(func() {
+		file_resource_common_proto_rawDescData = protoimpl.X.CompressGZIP(unsafe.Slice(unsafe.StringData(file_resource_common_proto_rawDesc), len(file_resource_common_proto_rawDesc)))
 	})
-	return file_resource_resource_proto_rawDescData
+	return file_resource_common_proto_rawDescData
 }
 
-var file_resource_resource_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
-var file_resource_resource_proto_goTypes = []any{
+var file_resource_common_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_resource_common_proto_goTypes = []any{
 	(*Filter)(nil),                // 0: pb.resource.Filter
 	(*Sorter)(nil),                // 1: pb.resource.Sorter
 	(*Pagination)(nil),            // 2: pb.resource.Pagination
@@ -469,7 +469,7 @@ var file_resource_resource_proto_goTypes = []any{
 	(*structpb.Value)(nil),        // 5: google.protobuf.Value
 	(*timestamppb.Timestamp)(nil), // 6: google.protobuf.Timestamp
 }
-var file_resource_resource_proto_depIdxs = []int32{
+var file_resource_common_proto_depIdxs = []int32{
 	5,  // 0: pb.resource.Filter.value:type_name -> google.protobuf.Value
 	6,  // 1: pb.resource.GameType.created_at:type_name -> google.protobuf.Timestamp
 	6,  // 2: pb.resource.GameType.updated_at:type_name -> google.protobuf.Timestamp
@@ -487,26 +487,26 @@ var file_resource_resource_proto_depIdxs = []int32{
 	0,  // [0:10] is the sub-list for field type_name
 }
 
-func init() { file_resource_resource_proto_init() }
-func file_resource_resource_proto_init() {
-	if File_resource_resource_proto != nil {
+func init() { file_resource_common_proto_init() }
+func file_resource_common_proto_init() {
+	if File_resource_common_proto != nil {
 		return
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
-			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_resource_proto_rawDesc), len(file_resource_resource_proto_rawDesc)),
+			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_common_proto_rawDesc), len(file_resource_common_proto_rawDesc)),
 			NumEnums:      0,
 			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
-		GoTypes:           file_resource_resource_proto_goTypes,
-		DependencyIndexes: file_resource_resource_proto_depIdxs,
-		MessageInfos:      file_resource_resource_proto_msgTypes,
+		GoTypes:           file_resource_common_proto_goTypes,
+		DependencyIndexes: file_resource_common_proto_depIdxs,
+		MessageInfos:      file_resource_common_proto_msgTypes,
 	}.Build()
-	File_resource_resource_proto = out.File
-	file_resource_resource_proto_goTypes = nil
-	file_resource_resource_proto_depIdxs = nil
+	File_resource_common_proto = out.File
+	file_resource_common_proto_goTypes = nil
+	file_resource_common_proto_depIdxs = nil
 }

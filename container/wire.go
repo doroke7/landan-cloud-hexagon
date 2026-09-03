@@ -90,6 +90,7 @@ import (
 
 	inputApplicationFacade "example/internal/input/application/facade"
 	inputApplicationFacadeAdminAuthentication "example/internal/input/application/facade/admin/authentication"
+	inputApplicationFacadeAdminResource "example/internal/input/application/facade/admin/resource"
 	inputApplicationFacadeRegister "example/internal/input/application/facade/register"
 	inputApplicationFacadeTable "example/internal/input/application/facade/table"
 
@@ -288,6 +289,7 @@ type FacadeContainer struct {
 	FacadeTableScanner                     *inputApplicationFacadeTable.ScannerHandler
 	FacadeTableAuthenticator               *inputApplicationFacadeRegister.AuthenticatorHandler
 	FacadeAdminAuthenticationAuthenticator *inputApplicationFacadeAdminAuthentication.AuthenticatorHandler
+	FacadeAdminResourceGame                *inputApplicationFacadeAdminResource.GameHandler
 
 	// gRPC Facade Interceptor
 	FacadeGameErrorInterceptor          *interceptorFacadeGame.ErrorInterceptor
@@ -320,10 +322,13 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 		// output
 		outputApplicationResource.NewAbstractResource,
 		outputApplicationResourceModel.NewAdminUserModel,
+		outputApplicationResourceModel.NewGameModel,
+		outputApplicationResourceLogic.NewGameLogic,
 
 		// usecase
 		usecaseApplicationAnyAdmin.NewAbstractUsecase,
 		usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase,
+		usecaseApplicationAnyAdminResource.NewGameUsecase,
 
 		// client
 		client.NewModel,
@@ -336,6 +341,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 		inputApplicationFacadeTable.NewScannerHandler,
 		inputApplicationFacadeRegister.NewAuthenticatorHandler,
 		inputApplicationFacadeAdminAuthentication.NewAuthenticatorHandler,
+		inputApplicationFacadeAdminResource.NewGameHandler,
 
 		// interceptor-facade
 		interceptorFacadeGame.NewAbstractInterceptor,

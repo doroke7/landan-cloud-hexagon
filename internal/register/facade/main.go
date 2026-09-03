@@ -11,6 +11,7 @@ import (
 	container "example/container"
 
 	pbFacadeAdminAuthentication "example/pb/facade/admin/authentication"
+	pbFacadeAdminResource "example/pb/facade/admin/resource"
 	pbFacadeRegister "example/pb/facade/register"
 	pbFacadeTable "example/pb/facade/table"
 )
@@ -65,6 +66,7 @@ func Init(oContainer *container.FacadeContainer) *grpc.Server {
 	pbFacadeTable.RegisterScannerControllerServer(oGrpcServer, oContainer.FacadeTableScanner)
 	pbFacadeRegister.RegisterAuthenticatorControllerServer(oGrpcServer, oContainer.FacadeTableAuthenticator)
 	pbFacadeAdminAuthentication.RegisterAuthenticatorControllerServer(oGrpcServer, oContainer.FacadeAdminAuthenticationAuthenticator)
+	pbFacadeAdminResource.RegisterGameControllerServer(oGrpcServer, oContainer.FacadeAdminResourceGame)
 
 	return oGrpcServer
 }

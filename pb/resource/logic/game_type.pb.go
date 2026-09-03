@@ -218,7 +218,7 @@ var File_resource_logic_game_type_proto protoreflect.FileDescriptor
 
 const file_resource_logic_game_type_proto_rawDesc = "" +
 	"\n" +
-	"\x1eresource/logic/game_type.proto\x12\x11pb.resource.logic\x1a\x17resource/resource.proto\"\x17\n" +
+	"\x1eresource/logic/game_type.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"\x17\n" +
 	"\x15GameTypeShowTreeInput\"N\n" +
 	"\x16GameTypeShowTreeOutput\x124\n" +
 	"\n" +

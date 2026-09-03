@@ -899,7 +899,7 @@ var File_resource_model_game_proto protoreflect.FileDescriptor
 
 const file_resource_model_game_proto_rawDesc = "" +
 	"\n" +
-	"\x19resource/model/game.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x17resource/resource.proto\"\xc1\x01\n" +
+	"\x19resource/model/game.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15resource/common.proto\"\xc1\x01\n" +
 	"\x0fGameAddOneInput\x12%\n" +
 	"\fgame_type_id\x18\x01 \x01(\rH\x00R\n" +
 	"gameTypeId\x88\x01\x01\x12\x15\n" +
