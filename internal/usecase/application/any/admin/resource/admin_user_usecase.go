@@ -31,6 +31,17 @@ func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId ui
 	return true, nil
 }
 
+func (oSelf *AdminUserUsecase) RemoveOne(iId uint) (bool, error) {
+
+	_, oErr := oSelf.AdminUserModel.RemoveOneById(iId)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return true, nil
+}
+
 func (oSelf *AdminUserUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
 
 	aAdminUsers, oErr := oSelf.AdminUserModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)

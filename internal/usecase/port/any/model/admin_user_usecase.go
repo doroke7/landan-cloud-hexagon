@@ -9,4 +9,5 @@ type AdminUserUsecase interface {
 	ShowOneById(iId uint) (*domain.AdminUser, error)
 	AddOne(oAdminUser *domain.AdminUserValue) (bool, error)
 	EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error)
+	RemoveOneById(iId uint) (bool, error)
 }

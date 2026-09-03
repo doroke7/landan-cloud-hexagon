@@ -23,6 +23,7 @@ const (
 	AdminUserModel_ShowOneById_FullMethodName   = "/pb.resource.model.AdminUserModel/ShowOneById"
 	AdminUserModel_AddOne_FullMethodName        = "/pb.resource.model.AdminUserModel/AddOne"
 	AdminUserModel_EditOneById_FullMethodName   = "/pb.resource.model.AdminUserModel/EditOneById"
+	AdminUserModel_RemoveOneById_FullMethodName = "/pb.resource.model.AdminUserModel/RemoveOneById"
 )
 
 // AdminUserModelClient is the client API for AdminUserModel service.
@@ -33,6 +34,7 @@ type AdminUserModelClient interface {
 	ShowOneById(ctx context.Context, in *AdminUserShowOneByIdInput, opts ...grpc.CallOption) (*AdminUserShowOneByIdOutput, error)
 	AddOne(ctx context.Context, in *AdminUserAddOneInput, opts ...grpc.CallOption) (*AdminUserAddOneOutput, error)
 	EditOneById(ctx context.Context, in *AdminUserEditOneByIdInput, opts ...grpc.CallOption) (*AdminUserEditOneByIdOutput, error)
+	RemoveOneById(ctx context.Context, in *AdminUserRemoveOneByIdInput, opts ...grpc.CallOption) (*AdminUserRemoveOneByIdOutput, error)
 }
 
 type adminUserModelClient struct {
@@ -83,6 +85,16 @@ func (c *adminUserModelClient) EditOneById(ctx context.Context, in *AdminUserEdi
 	return out, nil
 }
 
+func (c *adminUserModelClient) RemoveOneById(ctx context.Context, in *AdminUserRemoveOneByIdInput, opts ...grpc.CallOption) (*AdminUserRemoveOneByIdOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdminUserRemoveOneByIdOutput)
+	err := c.cc.Invoke(ctx, AdminUserModel_RemoveOneById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminUserModelServer is the server API for AdminUserModel service.
 // All implementations must embed UnimplementedAdminUserModelServer
 // for forward compatibility.
@@ -91,6 +103,7 @@ type AdminUserModelServer interface {
 	ShowOneById(context.Context, *AdminUserShowOneByIdInput) (*AdminUserShowOneByIdOutput, error)
 	AddOne(context.Context, *AdminUserAddOneInput) (*AdminUserAddOneOutput, error)
 	EditOneById(context.Context, *AdminUserEditOneByIdInput) (*AdminUserEditOneByIdOutput, error)
+	RemoveOneById(context.Context, *AdminUserRemoveOneByIdInput) (*AdminUserRemoveOneByIdOutput, error)
 	mustEmbedUnimplementedAdminUserModelServer()
 }
 
@@ -112,6 +125,9 @@ func (UnimplementedAdminUserModelServer) AddOne(context.Context, *AdminUserAddOn
 }
 func (UnimplementedAdminUserModelServer) EditOneById(context.Context, *AdminUserEditOneByIdInput) (*AdminUserEditOneByIdOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method EditOneById not implemented")
+}
+func (UnimplementedAdminUserModelServer) RemoveOneById(context.Context, *AdminUserRemoveOneByIdInput) (*AdminUserRemoveOneByIdOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method RemoveOneById not implemented")
 }
 func (UnimplementedAdminUserModelServer) mustEmbedUnimplementedAdminUserModelServer() {}
 func (UnimplementedAdminUserModelServer) testEmbeddedByValue()                        {}
@@ -206,6 +222,24 @@ func _AdminUserModel_EditOneById_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminUserModel_RemoveOneById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminUserRemoveOneByIdInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminUserModelServer).RemoveOneById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminUserModel_RemoveOneById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminUserModelServer).RemoveOneById(ctx, req.(*AdminUserRemoveOneByIdInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminUserModel_ServiceDesc is the grpc.ServiceDesc for AdminUserModel service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -228,6 +262,10 @@ var AdminUserModel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "EditOneById",
 			Handler:    _AdminUserModel_EditOneById_Handler,
+		},
+		{
+			MethodName: "RemoveOneById",
+			Handler:    _AdminUserModel_RemoveOneById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

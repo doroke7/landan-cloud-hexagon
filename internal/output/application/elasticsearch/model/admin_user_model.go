@@ -80,6 +80,15 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return &oAdminUser, nil
 }
 
+func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
+	sId := strconv.FormatUint(uint64(iId), 10)
+	oPartial := map[string]any{"deleted_at": time.Now()}
+
+	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oPartial)
+
+	return bOk, oErr
+}
+
 func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminUser)
 	if oErr != nil {

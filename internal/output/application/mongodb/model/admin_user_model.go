@@ -97,6 +97,19 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return &oAdminUser, nil
 }
 
+func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
+	oResult, oErr := oSelf.Collection.UpdateOne(
+		oSelf.Context,
+		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
+		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
+	)
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return oResult.ModifiedCount > 0, nil
+}
+
 func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
 	oSet := bson.M{"updated_at": time.Now()}
 

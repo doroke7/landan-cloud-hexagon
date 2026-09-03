@@ -436,6 +436,94 @@ func (x *AdminUserEditOneByIdOutput) GetStatus() bool {
 	return false
 }
 
+type AdminUserRemoveOneByIdInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserRemoveOneByIdInput) Reset() {
+	*x = AdminUserRemoveOneByIdInput{}
+	mi := &file_resource_model_admin_user_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserRemoveOneByIdInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserRemoveOneByIdInput) ProtoMessage() {}
+
+func (x *AdminUserRemoveOneByIdInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_admin_user_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserRemoveOneByIdInput.ProtoReflect.Descriptor instead.
+func (*AdminUserRemoveOneByIdInput) Descriptor() ([]byte, []int) {
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *AdminUserRemoveOneByIdInput) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type AdminUserRemoveOneByIdOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserRemoveOneByIdOutput) Reset() {
+	*x = AdminUserRemoveOneByIdOutput{}
+	mi := &file_resource_model_admin_user_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserRemoveOneByIdOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserRemoveOneByIdOutput) ProtoMessage() {}
+
+func (x *AdminUserRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_admin_user_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
+func (*AdminUserRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *AdminUserRemoveOneByIdOutput) GetStatus() bool {
+	if x != nil {
+		return x.Status
+	}
+	return false
+}
+
 var File_resource_model_admin_user_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_user_proto_rawDesc = "" +
@@ -464,12 +552,17 @@ const file_resource_model_admin_user_proto_rawDesc = "" +
 	"\bvariable\x18\x01 \x01(\v2$.pb.resource.model.AdminUserVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\rR\x02id\"4\n" +
 	"\x1aAdminUserEditOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status2\xb7\x03\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\"-\n" +
+	"\x1bAdminUserRemoveOneByIdInput\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"6\n" +
+	"\x1cAdminUserRemoveOneByIdOutput\x12\x16\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status2\xa9\x04\n" +
 	"\x0eAdminUserModel\x12p\n" +
 	"\rShowOneByName\x12..pb.resource.model.AdminUserShowOneByNameInput\x1a/.pb.resource.model.AdminUserShowOneByNameOutput\x12j\n" +
 	"\vShowOneById\x12,.pb.resource.model.AdminUserShowOneByIdInput\x1a-.pb.resource.model.AdminUserShowOneByIdOutput\x12[\n" +
 	"\x06AddOne\x12'.pb.resource.model.AdminUserAddOneInput\x1a(.pb.resource.model.AdminUserAddOneOutput\x12j\n" +
-	"\vEditOneById\x12,.pb.resource.model.AdminUserEditOneByIdInput\x1a-.pb.resource.model.AdminUserEditOneByIdOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
+	"\vEditOneById\x12,.pb.resource.model.AdminUserEditOneByIdInput\x1a-.pb.resource.model.AdminUserEditOneByIdOutput\x12p\n" +
+	"\rRemoveOneById\x12..pb.resource.model.AdminUserRemoveOneByIdInput\x1a/.pb.resource.model.AdminUserRemoveOneByIdOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
 
 var (
 	file_resource_model_admin_user_proto_rawDescOnce sync.Once
@@ -483,7 +576,7 @@ func file_resource_model_admin_user_proto_rawDescGZIP() []byte {
 	return file_resource_model_admin_user_proto_rawDescData
 }
 
-var file_resource_model_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_resource_model_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_resource_model_admin_user_proto_goTypes = []any{
 	(*AdminUserVariable)(nil),            // 0: pb.resource.model.AdminUserVariable
 	(*AdminUserShowOneByNameInput)(nil),  // 1: pb.resource.model.AdminUserShowOneByNameInput
@@ -494,26 +587,30 @@ var file_resource_model_admin_user_proto_goTypes = []any{
 	(*AdminUserAddOneOutput)(nil),        // 6: pb.resource.model.AdminUserAddOneOutput
 	(*AdminUserEditOneByIdInput)(nil),    // 7: pb.resource.model.AdminUserEditOneByIdInput
 	(*AdminUserEditOneByIdOutput)(nil),   // 8: pb.resource.model.AdminUserEditOneByIdOutput
-	(*resource.AdminUser)(nil),           // 9: pb.resource.AdminUser
+	(*AdminUserRemoveOneByIdInput)(nil),  // 9: pb.resource.model.AdminUserRemoveOneByIdInput
+	(*AdminUserRemoveOneByIdOutput)(nil), // 10: pb.resource.model.AdminUserRemoveOneByIdOutput
+	(*resource.AdminUser)(nil),           // 11: pb.resource.AdminUser
 }
 var file_resource_model_admin_user_proto_depIdxs = []int32{
-	9, // 0: pb.resource.model.AdminUserShowOneByNameOutput.admin_user:type_name -> pb.resource.AdminUser
-	9, // 1: pb.resource.model.AdminUserShowOneByIdOutput.admin_user:type_name -> pb.resource.AdminUser
-	0, // 2: pb.resource.model.AdminUserAddOneInput.variable:type_name -> pb.resource.model.AdminUserVariable
-	0, // 3: pb.resource.model.AdminUserEditOneByIdInput.variable:type_name -> pb.resource.model.AdminUserVariable
-	1, // 4: pb.resource.model.AdminUserModel.ShowOneByName:input_type -> pb.resource.model.AdminUserShowOneByNameInput
-	3, // 5: pb.resource.model.AdminUserModel.ShowOneById:input_type -> pb.resource.model.AdminUserShowOneByIdInput
-	5, // 6: pb.resource.model.AdminUserModel.AddOne:input_type -> pb.resource.model.AdminUserAddOneInput
-	7, // 7: pb.resource.model.AdminUserModel.EditOneById:input_type -> pb.resource.model.AdminUserEditOneByIdInput
-	2, // 8: pb.resource.model.AdminUserModel.ShowOneByName:output_type -> pb.resource.model.AdminUserShowOneByNameOutput
-	4, // 9: pb.resource.model.AdminUserModel.ShowOneById:output_type -> pb.resource.model.AdminUserShowOneByIdOutput
-	6, // 10: pb.resource.model.AdminUserModel.AddOne:output_type -> pb.resource.model.AdminUserAddOneOutput
-	8, // 11: pb.resource.model.AdminUserModel.EditOneById:output_type -> pb.resource.model.AdminUserEditOneByIdOutput
-	8, // [8:12] is the sub-list for method output_type
-	4, // [4:8] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	11, // 0: pb.resource.model.AdminUserShowOneByNameOutput.admin_user:type_name -> pb.resource.AdminUser
+	11, // 1: pb.resource.model.AdminUserShowOneByIdOutput.admin_user:type_name -> pb.resource.AdminUser
+	0,  // 2: pb.resource.model.AdminUserAddOneInput.variable:type_name -> pb.resource.model.AdminUserVariable
+	0,  // 3: pb.resource.model.AdminUserEditOneByIdInput.variable:type_name -> pb.resource.model.AdminUserVariable
+	1,  // 4: pb.resource.model.AdminUserModel.ShowOneByName:input_type -> pb.resource.model.AdminUserShowOneByNameInput
+	3,  // 5: pb.resource.model.AdminUserModel.ShowOneById:input_type -> pb.resource.model.AdminUserShowOneByIdInput
+	5,  // 6: pb.resource.model.AdminUserModel.AddOne:input_type -> pb.resource.model.AdminUserAddOneInput
+	7,  // 7: pb.resource.model.AdminUserModel.EditOneById:input_type -> pb.resource.model.AdminUserEditOneByIdInput
+	9,  // 8: pb.resource.model.AdminUserModel.RemoveOneById:input_type -> pb.resource.model.AdminUserRemoveOneByIdInput
+	2,  // 9: pb.resource.model.AdminUserModel.ShowOneByName:output_type -> pb.resource.model.AdminUserShowOneByNameOutput
+	4,  // 10: pb.resource.model.AdminUserModel.ShowOneById:output_type -> pb.resource.model.AdminUserShowOneByIdOutput
+	6,  // 11: pb.resource.model.AdminUserModel.AddOne:output_type -> pb.resource.model.AdminUserAddOneOutput
+	8,  // 12: pb.resource.model.AdminUserModel.EditOneById:output_type -> pb.resource.model.AdminUserEditOneByIdOutput
+	10, // 13: pb.resource.model.AdminUserModel.RemoveOneById:output_type -> pb.resource.model.AdminUserRemoveOneByIdOutput
+	9,  // [9:14] is the sub-list for method output_type
+	4,  // [4:9] is the sub-list for method input_type
+	4,  // [4:4] is the sub-list for extension type_name
+	4,  // [4:4] is the sub-list for extension extendee
+	0,  // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_resource_model_admin_user_proto_init() }
@@ -528,7 +625,7 @@ func file_resource_model_admin_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_model_admin_user_proto_rawDesc), len(file_resource_model_admin_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -72,6 +72,24 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return &oAdminUser, err
 }
 
+func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
+	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.AdminUser{}).
+		Where("id = ?", iId).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		UpdateColumn("deleted_at", time.Now())
+
+	if oResult.Error != nil {
+		return false, oResult.Error
+	}
+
+	if oResult.RowsAffected == 0 {
+		return false, errors.New("刪除0筆")
+	}
+
+	return true, nil
+}
+
 func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminUser)
 	if oErr != nil {

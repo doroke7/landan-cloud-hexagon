@@ -102,3 +102,16 @@ func (oSelf *AdminUserHandler) EditOneById(oContext context.Context, oReq *pbRes
 		Status: bResult,
 	}, nil
 }
+
+func (oSelf *AdminUserHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminUserRemoveOneByIdInput) (*pbResourceModel.AdminUserRemoveOneByIdOutput, error) {
+
+	bResult, oErr := oSelf.AdminUserUsecase.RemoveOneById(uint(oReq.Id))
+
+	if oErr != nil {
+		return nil, status.Error(codes.Aborted, oErr.Error())
+	}
+
+	return &pbResourceModel.AdminUserRemoveOneByIdOutput{
+		Status: bResult,
+	}, nil
+}

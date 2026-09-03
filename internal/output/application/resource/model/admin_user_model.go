@@ -106,3 +106,17 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 
 	return oResponse.GetStatus(), nil
 }
+
+func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
+
+	oResponse, oErr := oSelf.ResourceModelClient.AdminUser.RemoveOneById(
+		oSelf.Context,
+		&pbResourceModel.AdminUserRemoveOneByIdInput{Id: uint32(iId)},
+	)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return oResponse.GetStatus(), nil
+}
