@@ -10,6 +10,7 @@ import (
 	domain "example/internal/domain"
 	inputApplicationFacade "example/internal/input/application/facade"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
+	pbFacade "example/pb/facade"
 	pbFacadeAdminResource "example/pb/facade/admin/resource"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
@@ -39,12 +40,12 @@ func toStatusError(oErr error) error {
 	return status.Error(codes.Internal, oErr.Error())
 }
 
-func domainGameToProtoGame(oGame *domain.Game) *pbFacadeAdminResource.Game {
+func domainGameToProtoGame(oGame *domain.Game) *pbFacade.Game {
 	if oGame == nil {
 		return nil
 	}
 
-	return &pbFacadeAdminResource.Game{
+	return &pbFacade.Game{
 		Id:          uint32(oGame.Id),
 		GameTypeId:  uint32(oGame.GameTypeId),
 		Key:         oGame.Key,
@@ -54,6 +55,20 @@ func domainGameToProtoGame(oGame *domain.Game) *pbFacadeAdminResource.Game {
 		UpdatedAt:   timestamppb.New(oGame.UpdatedAt),
 		DeletedAt:   timestamppb.New(oGame.DeletedAt),
 	}
+}
+
+// idFromFilters 從 filters[0]（field 必須是 "id"）取出 id，比照 http admin resource handler 的做法。
+func idFromFilters(aFilters []*pbFacade.Filter) (uint, error) {
+	if len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].GetField() != "id" {
+		return 0, status.Error(codes.InvalidArgument, "filter 位置錯誤")
+	}
+
+	fId, bOk := aFilters[0].GetValue().AsInterface().(float64)
+	if !bOk {
+		return 0, status.Error(codes.InvalidArgument, "filter.id 格式錯誤")
+	}
+
+	return uint(fId), nil
 }
 
 func protoGameValueToDomainGameValue(oValue *pbFacadeAdminResource.GameValue) *domain.GameValue {
@@ -88,9 +103,14 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oRequest *pbFacadeAdm
 
 func (oSelf *GameHandler) EditOne(oContext context.Context, oRequest *pbFacadeAdminResource.GameEditOneRequest) (*pbFacadeAdminResource.GameEditOneResponse, error) {
 
+	iId, oErr := idFromFilters(oRequest.GetFilters())
+	if oErr != nil {
+		return nil, oErr
+	}
+
 	oValue := protoGameValueToDomainGameValue(oRequest.GetValue())
 
-	if _, oErr := oSelf.GameUsecase.EditOne(oValue, uint(oRequest.GetId())); oErr != nil {
+	if _, oErr := oSelf.GameUsecase.EditOne(oValue, iId); oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr
 	}
@@ -100,7 +120,12 @@ func (oSelf *GameHandler) EditOne(oContext context.Context, oRequest *pbFacadeAd
 
 func (oSelf *GameHandler) RemoveOne(oContext context.Context, oRequest *pbFacadeAdminResource.GameRemoveOneRequest) (*pbFacadeAdminResource.GameRemoveOneResponse, error) {
 
-	if _, oErr := oSelf.GameUsecase.RemoveOne(uint(oRequest.GetId())); oErr != nil {
+	iId, oErr := idFromFilters(oRequest.GetFilters())
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	if _, oErr := oSelf.GameUsecase.RemoveOne(iId); oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr
 	}
@@ -110,7 +135,12 @@ func (oSelf *GameHandler) RemoveOne(oContext context.Context, oRequest *pbFacade
 
 func (oSelf *GameHandler) ShowOne(oContext context.Context, oRequest *pbFacadeAdminResource.GameShowOneRequest) (*pbFacadeAdminResource.GameShowOneResponse, error) {
 
-	oGame, oErr := oSelf.GameUsecase.ShowOne(uint(oRequest.GetId()))
+	iId, oErr := idFromFilters(oRequest.GetFilters())
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oGame, oErr := oSelf.GameUsecase.ShowOne(iId)
 	if oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr
@@ -119,7 +149,7 @@ func (oSelf *GameHandler) ShowOne(oContext context.Context, oRequest *pbFacadeAd
 	oProtoGame := domainGameToProtoGame(oGame)
 
 	return &pbFacadeAdminResource.GameShowOneResponse{
-		Game: oProtoGame,
+		One: oProtoGame,
 	}, nil
 }
 
@@ -167,13 +197,13 @@ func (oSelf *GameHandler) ShowOnes(oContext context.Context, oRequest *pbFacadeA
 		return nil, oStatusErr
 	}
 
-	aProtoGames := make([]*pbFacadeAdminResource.Game, 0, len(aGames))
+	aProtoGames := make([]*pbFacade.Game, 0, len(aGames))
 	for _, oGame := range aGames {
 		aProtoGames = append(aProtoGames, domainGameToProtoGame(oGame))
 	}
 
 	return &pbFacadeAdminResource.GameShowOnesResponse{
-		Games: aProtoGames,
+		Ones:  aProtoGames,
 		Total: iTotal,
 	}, nil
 }

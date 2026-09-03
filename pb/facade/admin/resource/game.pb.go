@@ -7,10 +7,9 @@
 package pb_facade_admin_resource
 
 import (
+	facade "example/pb/facade"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
-	structpb "google.golang.org/protobuf/types/known/structpb"
-	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
 	sync "sync"
 	unsafe "unsafe"
@@ -22,270 +21,6 @@ const (
 	// Verify that runtime/protoimpl is sufficiently up-to-date.
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
-
-type Filter struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Field         string                 `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
-	Operator      string                 `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"`
-	Value         *structpb.Value        `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Filter) Reset() {
-	*x = Filter{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Filter) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Filter) ProtoMessage() {}
-
-func (x *Filter) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Filter.ProtoReflect.Descriptor instead.
-func (*Filter) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *Filter) GetField() string {
-	if x != nil {
-		return x.Field
-	}
-	return ""
-}
-
-func (x *Filter) GetOperator() string {
-	if x != nil {
-		return x.Operator
-	}
-	return ""
-}
-
-func (x *Filter) GetValue() *structpb.Value {
-	if x != nil {
-		return x.Value
-	}
-	return nil
-}
-
-type Sorter struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Field         string                 `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
-	Order         string                 `protobuf:"bytes,2,opt,name=order,proto3" json:"order,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Sorter) Reset() {
-	*x = Sorter{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[1]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Sorter) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Sorter) ProtoMessage() {}
-
-func (x *Sorter) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[1]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Sorter.ProtoReflect.Descriptor instead.
-func (*Sorter) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *Sorter) GetField() string {
-	if x != nil {
-		return x.Field
-	}
-	return ""
-}
-
-func (x *Sorter) GetOrder() string {
-	if x != nil {
-		return x.Order
-	}
-	return ""
-}
-
-type Pagination struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Size          uint64                 `protobuf:"varint,1,opt,name=size,proto3" json:"size,omitempty"`
-	Page          uint64                 `protobuf:"varint,2,opt,name=page,proto3" json:"page,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Pagination) Reset() {
-	*x = Pagination{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[2]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Pagination) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Pagination) ProtoMessage() {}
-
-func (x *Pagination) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[2]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Pagination.ProtoReflect.Descriptor instead.
-func (*Pagination) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{2}
-}
-
-func (x *Pagination) GetSize() uint64 {
-	if x != nil {
-		return x.Size
-	}
-	return 0
-}
-
-func (x *Pagination) GetPage() uint64 {
-	if x != nil {
-		return x.Page
-	}
-	return 0
-}
-
-type Game struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	GameTypeId    uint32                 `protobuf:"varint,2,opt,name=game_type_id,json=gameTypeId,proto3" json:"game_type_id,omitempty"`
-	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
-	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	Description   string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *Game) Reset() {
-	*x = Game{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *Game) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*Game) ProtoMessage() {}
-
-func (x *Game) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use Game.ProtoReflect.Descriptor instead.
-func (*Game) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *Game) GetId() uint32 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-func (x *Game) GetGameTypeId() uint32 {
-	if x != nil {
-		return x.GameTypeId
-	}
-	return 0
-}
-
-func (x *Game) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-func (x *Game) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *Game) GetDescription() string {
-	if x != nil {
-		return x.Description
-	}
-	return ""
-}
-
-func (x *Game) GetCreatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
-}
-
-func (x *Game) GetUpdatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedAt
-	}
-	return nil
-}
-
-func (x *Game) GetDeletedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.DeletedAt
-	}
-	return nil
-}
 
 type GameValue struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
@@ -299,7 +34,7 @@ type GameValue struct {
 
 func (x *GameValue) Reset() {
 	*x = GameValue{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[4]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -311,7 +46,7 @@ func (x *GameValue) String() string {
 func (*GameValue) ProtoMessage() {}
 
 func (x *GameValue) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[4]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -324,7 +59,7 @@ func (x *GameValue) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameValue.ProtoReflect.Descriptor instead.
 func (*GameValue) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{4}
+	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{0}
 }
 
 func (x *GameValue) GetGameTypeId() uint32 {
@@ -364,7 +99,7 @@ type GameAddOneRequest struct {
 
 func (x *GameAddOneRequest) Reset() {
 	*x = GameAddOneRequest{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[5]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -376,7 +111,7 @@ func (x *GameAddOneRequest) String() string {
 func (*GameAddOneRequest) ProtoMessage() {}
 
 func (x *GameAddOneRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[5]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -389,7 +124,7 @@ func (x *GameAddOneRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameAddOneRequest.ProtoReflect.Descriptor instead.
 func (*GameAddOneRequest) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{5}
+	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *GameAddOneRequest) GetValue() *GameValue {
@@ -407,7 +142,7 @@ type GameAddOneResponse struct {
 
 func (x *GameAddOneResponse) Reset() {
 	*x = GameAddOneResponse{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[6]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -419,7 +154,7 @@ func (x *GameAddOneResponse) String() string {
 func (*GameAddOneResponse) ProtoMessage() {}
 
 func (x *GameAddOneResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[6]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -432,12 +167,12 @@ func (x *GameAddOneResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameAddOneResponse.ProtoReflect.Descriptor instead.
 func (*GameAddOneResponse) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{6}
+	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{2}
 }
 
 type GameEditOneRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Filters       []*facade.Filter       `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
 	Value         *GameValue             `protobuf:"bytes,2,opt,name=value,proto3" json:"value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -445,7 +180,7 @@ type GameEditOneRequest struct {
 
 func (x *GameEditOneRequest) Reset() {
 	*x = GameEditOneRequest{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[7]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -457,7 +192,7 @@ func (x *GameEditOneRequest) String() string {
 func (*GameEditOneRequest) ProtoMessage() {}
 
 func (x *GameEditOneRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[7]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -470,14 +205,14 @@ func (x *GameEditOneRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameEditOneRequest.ProtoReflect.Descriptor instead.
 func (*GameEditOneRequest) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{7}
+	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GameEditOneRequest) GetId() uint32 {
+func (x *GameEditOneRequest) GetFilters() []*facade.Filter {
 	if x != nil {
-		return x.Id
+		return x.Filters
 	}
-	return 0
+	return nil
 }
 
 func (x *GameEditOneRequest) GetValue() *GameValue {
@@ -495,7 +230,7 @@ type GameEditOneResponse struct {
 
 func (x *GameEditOneResponse) Reset() {
 	*x = GameEditOneResponse{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[8]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -507,7 +242,7 @@ func (x *GameEditOneResponse) String() string {
 func (*GameEditOneResponse) ProtoMessage() {}
 
 func (x *GameEditOneResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[8]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -520,19 +255,19 @@ func (x *GameEditOneResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameEditOneResponse.ProtoReflect.Descriptor instead.
 func (*GameEditOneResponse) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{8}
+	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{4}
 }
 
 type GameRemoveOneRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Filters       []*facade.Filter       `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GameRemoveOneRequest) Reset() {
 	*x = GameRemoveOneRequest{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[9]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -544,7 +279,7 @@ func (x *GameRemoveOneRequest) String() string {
 func (*GameRemoveOneRequest) ProtoMessage() {}
 
 func (x *GameRemoveOneRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[9]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -557,14 +292,14 @@ func (x *GameRemoveOneRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameRemoveOneRequest.ProtoReflect.Descriptor instead.
 func (*GameRemoveOneRequest) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{9}
+	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *GameRemoveOneRequest) GetId() uint32 {
+func (x *GameRemoveOneRequest) GetFilters() []*facade.Filter {
 	if x != nil {
-		return x.Id
+		return x.Filters
 	}
-	return 0
+	return nil
 }
 
 type GameRemoveOneResponse struct {
@@ -575,7 +310,7 @@ type GameRemoveOneResponse struct {
 
 func (x *GameRemoveOneResponse) Reset() {
 	*x = GameRemoveOneResponse{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[10]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -587,7 +322,7 @@ func (x *GameRemoveOneResponse) String() string {
 func (*GameRemoveOneResponse) ProtoMessage() {}
 
 func (x *GameRemoveOneResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[10]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -600,19 +335,19 @@ func (x *GameRemoveOneResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameRemoveOneResponse.ProtoReflect.Descriptor instead.
 func (*GameRemoveOneResponse) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{10}
+	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{6}
 }
 
 type GameShowOneRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Filters       []*facade.Filter       `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GameShowOneRequest) Reset() {
 	*x = GameShowOneRequest{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[11]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -624,7 +359,7 @@ func (x *GameShowOneRequest) String() string {
 func (*GameShowOneRequest) ProtoMessage() {}
 
 func (x *GameShowOneRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[11]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -637,26 +372,26 @@ func (x *GameShowOneRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameShowOneRequest.ProtoReflect.Descriptor instead.
 func (*GameShowOneRequest) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{11}
+	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *GameShowOneRequest) GetId() uint32 {
+func (x *GameShowOneRequest) GetFilters() []*facade.Filter {
 	if x != nil {
-		return x.Id
+		return x.Filters
 	}
-	return 0
+	return nil
 }
 
 type GameShowOneResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Game          *Game                  `protobuf:"bytes,1,opt,name=game,proto3" json:"game,omitempty"`
+	One           *facade.Game           `protobuf:"bytes,1,opt,name=One,proto3" json:"One,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GameShowOneResponse) Reset() {
 	*x = GameShowOneResponse{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[12]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -668,7 +403,7 @@ func (x *GameShowOneResponse) String() string {
 func (*GameShowOneResponse) ProtoMessage() {}
 
 func (x *GameShowOneResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[12]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -681,28 +416,28 @@ func (x *GameShowOneResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameShowOneResponse.ProtoReflect.Descriptor instead.
 func (*GameShowOneResponse) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{12}
+	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *GameShowOneResponse) GetGame() *Game {
+func (x *GameShowOneResponse) GetOne() *facade.Game {
 	if x != nil {
-		return x.Game
+		return x.One
 	}
 	return nil
 }
 
 type GameShowOnesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*Filter              `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
-	Sorters       []*Sorter              `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
-	Pagination    *Pagination            `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Filters       []*facade.Filter       `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*facade.Sorter       `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *facade.Pagination     `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *GameShowOnesRequest) Reset() {
 	*x = GameShowOnesRequest{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[13]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -714,7 +449,7 @@ func (x *GameShowOnesRequest) String() string {
 func (*GameShowOnesRequest) ProtoMessage() {}
 
 func (x *GameShowOnesRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[13]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -727,24 +462,24 @@ func (x *GameShowOnesRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameShowOnesRequest.ProtoReflect.Descriptor instead.
 func (*GameShowOnesRequest) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{13}
+	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *GameShowOnesRequest) GetFilters() []*Filter {
+func (x *GameShowOnesRequest) GetFilters() []*facade.Filter {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *GameShowOnesRequest) GetSorters() []*Sorter {
+func (x *GameShowOnesRequest) GetSorters() []*facade.Sorter {
 	if x != nil {
 		return x.Sorters
 	}
 	return nil
 }
 
-func (x *GameShowOnesRequest) GetPagination() *Pagination {
+func (x *GameShowOnesRequest) GetPagination() *facade.Pagination {
 	if x != nil {
 		return x.Pagination
 	}
@@ -753,7 +488,7 @@ func (x *GameShowOnesRequest) GetPagination() *Pagination {
 
 type GameShowOnesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Games         []*Game                `protobuf:"bytes,1,rep,name=games,proto3" json:"games,omitempty"`
+	Ones          []*facade.Game         `protobuf:"bytes,1,rep,name=Ones,proto3" json:"Ones,omitempty"`
 	Total         uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -761,7 +496,7 @@ type GameShowOnesResponse struct {
 
 func (x *GameShowOnesResponse) Reset() {
 	*x = GameShowOnesResponse{}
-	mi := &file_facade_admin_resource_game_proto_msgTypes[14]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -773,7 +508,7 @@ func (x *GameShowOnesResponse) String() string {
 func (*GameShowOnesResponse) ProtoMessage() {}
 
 func (x *GameShowOnesResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_resource_game_proto_msgTypes[14]
+	mi := &file_facade_admin_resource_game_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -786,12 +521,12 @@ func (x *GameShowOnesResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameShowOnesResponse.ProtoReflect.Descriptor instead.
 func (*GameShowOnesResponse) Descriptor() ([]byte, []int) {
-	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{14}
+	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *GameShowOnesResponse) GetGames() []*Game {
+func (x *GameShowOnesResponse) GetOnes() []*facade.Game {
 	if x != nil {
-		return x.Games
+		return x.Ones
 	}
 	return nil
 }
@@ -807,31 +542,7 @@ var File_facade_admin_resource_game_proto protoreflect.FileDescriptor
 
 const file_facade_admin_resource_game_proto_rawDesc = "" +
 	"\n" +
-	" facade/admin/resource/game.proto\x12\x18pb.facade.admin.resource\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"h\n" +
-	"\x06Filter\x12\x14\n" +
-	"\x05field\x18\x01 \x01(\tR\x05field\x12\x1a\n" +
-	"\boperator\x18\x02 \x01(\tR\boperator\x12,\n" +
-	"\x05value\x18\x03 \x01(\v2\x16.google.protobuf.ValueR\x05value\"4\n" +
-	"\x06Sorter\x12\x14\n" +
-	"\x05field\x18\x01 \x01(\tR\x05field\x12\x14\n" +
-	"\x05order\x18\x02 \x01(\tR\x05order\"4\n" +
-	"\n" +
-	"Pagination\x12\x12\n" +
-	"\x04size\x18\x01 \x01(\x04R\x04size\x12\x12\n" +
-	"\x04page\x18\x02 \x01(\x04R\x04page\"\xb1\x02\n" +
-	"\x04Game\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12 \n" +
-	"\fgame_type_id\x18\x02 \x01(\rR\n" +
-	"gameTypeId\x12\x10\n" +
-	"\x03key\x18\x03 \x01(\tR\x03key\x12\x12\n" +
-	"\x04name\x18\x04 \x01(\tR\x04name\x12 \n" +
-	"\vdescription\x18\x05 \x01(\tR\vdescription\x129\n" +
-	"\n" +
-	"created_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
-	"\n" +
-	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
-	"\n" +
-	"deleted_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\"\xbb\x01\n" +
+	" facade/admin/resource/game.proto\x12\x18pb.facade.admin.resource\x1a\x13facade/common.proto\"\xbb\x01\n" +
 	"\tGameValue\x12%\n" +
 	"\fgame_type_id\x18\x01 \x01(\rH\x00R\n" +
 	"gameTypeId\x88\x01\x01\x12\x15\n" +
@@ -844,26 +555,26 @@ const file_facade_admin_resource_game_proto_rawDesc = "" +
 	"\f_description\"N\n" +
 	"\x11GameAddOneRequest\x129\n" +
 	"\x05value\x18\x01 \x01(\v2#.pb.facade.admin.resource.GameValueR\x05value\"\x14\n" +
-	"\x12GameAddOneResponse\"_\n" +
-	"\x12GameEditOneRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x129\n" +
+	"\x12GameAddOneResponse\"|\n" +
+	"\x12GameEditOneRequest\x12+\n" +
+	"\afilters\x18\x01 \x03(\v2\x11.pb.facade.FilterR\afilters\x129\n" +
 	"\x05value\x18\x02 \x01(\v2#.pb.facade.admin.resource.GameValueR\x05value\"\x15\n" +
-	"\x13GameEditOneResponse\"&\n" +
-	"\x14GameRemoveOneRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"\x17\n" +
-	"\x15GameRemoveOneResponse\"$\n" +
-	"\x12GameShowOneRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"I\n" +
-	"\x13GameShowOneResponse\x122\n" +
-	"\x04game\x18\x01 \x01(\v2\x1e.pb.facade.admin.resource.GameR\x04game\"\xd3\x01\n" +
-	"\x13GameShowOnesRequest\x12:\n" +
-	"\afilters\x18\x01 \x03(\v2 .pb.facade.admin.resource.FilterR\afilters\x12:\n" +
-	"\asorters\x18\x02 \x03(\v2 .pb.facade.admin.resource.SorterR\asorters\x12D\n" +
+	"\x13GameEditOneResponse\"C\n" +
+	"\x14GameRemoveOneRequest\x12+\n" +
+	"\afilters\x18\x01 \x03(\v2\x11.pb.facade.FilterR\afilters\"\x17\n" +
+	"\x15GameRemoveOneResponse\"A\n" +
+	"\x12GameShowOneRequest\x12+\n" +
+	"\afilters\x18\x01 \x03(\v2\x11.pb.facade.FilterR\afilters\"8\n" +
+	"\x13GameShowOneResponse\x12!\n" +
+	"\x03One\x18\x01 \x01(\v2\x0f.pb.facade.GameR\x03One\"\xa6\x01\n" +
+	"\x13GameShowOnesRequest\x12+\n" +
+	"\afilters\x18\x01 \x03(\v2\x11.pb.facade.FilterR\afilters\x12+\n" +
+	"\asorters\x18\x02 \x03(\v2\x11.pb.facade.SorterR\asorters\x125\n" +
 	"\n" +
-	"pagination\x18\x03 \x01(\v2$.pb.facade.admin.resource.PaginationR\n" +
-	"pagination\"b\n" +
-	"\x14GameShowOnesResponse\x124\n" +
-	"\x05games\x18\x01 \x03(\v2\x1e.pb.facade.admin.resource.GameR\x05games\x12\x14\n" +
+	"pagination\x18\x03 \x01(\v2\x15.pb.facade.PaginationR\n" +
+	"pagination\"Q\n" +
+	"\x14GameShowOnesResponse\x12#\n" +
+	"\x04Ones\x18\x01 \x03(\v2\x0f.pb.facade.GameR\x04Ones\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x04R\x05total2\x9e\x04\n" +
 	"\x0eGameController\x12c\n" +
 	"\x06AddOne\x12+.pb.facade.admin.resource.GameAddOneRequest\x1a,.pb.facade.admin.resource.GameAddOneResponse\x12f\n" +
@@ -884,53 +595,50 @@ func file_facade_admin_resource_game_proto_rawDescGZIP() []byte {
 	return file_facade_admin_resource_game_proto_rawDescData
 }
 
-var file_facade_admin_resource_game_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
+var file_facade_admin_resource_game_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_facade_admin_resource_game_proto_goTypes = []any{
-	(*Filter)(nil),                // 0: pb.facade.admin.resource.Filter
-	(*Sorter)(nil),                // 1: pb.facade.admin.resource.Sorter
-	(*Pagination)(nil),            // 2: pb.facade.admin.resource.Pagination
-	(*Game)(nil),                  // 3: pb.facade.admin.resource.Game
-	(*GameValue)(nil),             // 4: pb.facade.admin.resource.GameValue
-	(*GameAddOneRequest)(nil),     // 5: pb.facade.admin.resource.GameAddOneRequest
-	(*GameAddOneResponse)(nil),    // 6: pb.facade.admin.resource.GameAddOneResponse
-	(*GameEditOneRequest)(nil),    // 7: pb.facade.admin.resource.GameEditOneRequest
-	(*GameEditOneResponse)(nil),   // 8: pb.facade.admin.resource.GameEditOneResponse
-	(*GameRemoveOneRequest)(nil),  // 9: pb.facade.admin.resource.GameRemoveOneRequest
-	(*GameRemoveOneResponse)(nil), // 10: pb.facade.admin.resource.GameRemoveOneResponse
-	(*GameShowOneRequest)(nil),    // 11: pb.facade.admin.resource.GameShowOneRequest
-	(*GameShowOneResponse)(nil),   // 12: pb.facade.admin.resource.GameShowOneResponse
-	(*GameShowOnesRequest)(nil),   // 13: pb.facade.admin.resource.GameShowOnesRequest
-	(*GameShowOnesResponse)(nil),  // 14: pb.facade.admin.resource.GameShowOnesResponse
-	(*structpb.Value)(nil),        // 15: google.protobuf.Value
-	(*timestamppb.Timestamp)(nil), // 16: google.protobuf.Timestamp
+	(*GameValue)(nil),             // 0: pb.facade.admin.resource.GameValue
+	(*GameAddOneRequest)(nil),     // 1: pb.facade.admin.resource.GameAddOneRequest
+	(*GameAddOneResponse)(nil),    // 2: pb.facade.admin.resource.GameAddOneResponse
+	(*GameEditOneRequest)(nil),    // 3: pb.facade.admin.resource.GameEditOneRequest
+	(*GameEditOneResponse)(nil),   // 4: pb.facade.admin.resource.GameEditOneResponse
+	(*GameRemoveOneRequest)(nil),  // 5: pb.facade.admin.resource.GameRemoveOneRequest
+	(*GameRemoveOneResponse)(nil), // 6: pb.facade.admin.resource.GameRemoveOneResponse
+	(*GameShowOneRequest)(nil),    // 7: pb.facade.admin.resource.GameShowOneRequest
+	(*GameShowOneResponse)(nil),   // 8: pb.facade.admin.resource.GameShowOneResponse
+	(*GameShowOnesRequest)(nil),   // 9: pb.facade.admin.resource.GameShowOnesRequest
+	(*GameShowOnesResponse)(nil),  // 10: pb.facade.admin.resource.GameShowOnesResponse
+	(*facade.Filter)(nil),         // 11: pb.facade.Filter
+	(*facade.Game)(nil),           // 12: pb.facade.Game
+	(*facade.Sorter)(nil),         // 13: pb.facade.Sorter
+	(*facade.Pagination)(nil),     // 14: pb.facade.Pagination
 }
 var file_facade_admin_resource_game_proto_depIdxs = []int32{
-	15, // 0: pb.facade.admin.resource.Filter.value:type_name -> google.protobuf.Value
-	16, // 1: pb.facade.admin.resource.Game.created_at:type_name -> google.protobuf.Timestamp
-	16, // 2: pb.facade.admin.resource.Game.updated_at:type_name -> google.protobuf.Timestamp
-	16, // 3: pb.facade.admin.resource.Game.deleted_at:type_name -> google.protobuf.Timestamp
-	4,  // 4: pb.facade.admin.resource.GameAddOneRequest.value:type_name -> pb.facade.admin.resource.GameValue
-	4,  // 5: pb.facade.admin.resource.GameEditOneRequest.value:type_name -> pb.facade.admin.resource.GameValue
-	3,  // 6: pb.facade.admin.resource.GameShowOneResponse.game:type_name -> pb.facade.admin.resource.Game
-	0,  // 7: pb.facade.admin.resource.GameShowOnesRequest.filters:type_name -> pb.facade.admin.resource.Filter
-	1,  // 8: pb.facade.admin.resource.GameShowOnesRequest.sorters:type_name -> pb.facade.admin.resource.Sorter
-	2,  // 9: pb.facade.admin.resource.GameShowOnesRequest.pagination:type_name -> pb.facade.admin.resource.Pagination
-	3,  // 10: pb.facade.admin.resource.GameShowOnesResponse.games:type_name -> pb.facade.admin.resource.Game
-	5,  // 11: pb.facade.admin.resource.GameController.AddOne:input_type -> pb.facade.admin.resource.GameAddOneRequest
-	7,  // 12: pb.facade.admin.resource.GameController.EditOne:input_type -> pb.facade.admin.resource.GameEditOneRequest
-	9,  // 13: pb.facade.admin.resource.GameController.RemoveOne:input_type -> pb.facade.admin.resource.GameRemoveOneRequest
-	11, // 14: pb.facade.admin.resource.GameController.ShowOne:input_type -> pb.facade.admin.resource.GameShowOneRequest
-	13, // 15: pb.facade.admin.resource.GameController.ShowOnes:input_type -> pb.facade.admin.resource.GameShowOnesRequest
-	6,  // 16: pb.facade.admin.resource.GameController.AddOne:output_type -> pb.facade.admin.resource.GameAddOneResponse
-	8,  // 17: pb.facade.admin.resource.GameController.EditOne:output_type -> pb.facade.admin.resource.GameEditOneResponse
-	10, // 18: pb.facade.admin.resource.GameController.RemoveOne:output_type -> pb.facade.admin.resource.GameRemoveOneResponse
-	12, // 19: pb.facade.admin.resource.GameController.ShowOne:output_type -> pb.facade.admin.resource.GameShowOneResponse
-	14, // 20: pb.facade.admin.resource.GameController.ShowOnes:output_type -> pb.facade.admin.resource.GameShowOnesResponse
-	16, // [16:21] is the sub-list for method output_type
-	11, // [11:16] is the sub-list for method input_type
-	11, // [11:11] is the sub-list for extension type_name
-	11, // [11:11] is the sub-list for extension extendee
-	0,  // [0:11] is the sub-list for field type_name
+	0,  // 0: pb.facade.admin.resource.GameAddOneRequest.value:type_name -> pb.facade.admin.resource.GameValue
+	11, // 1: pb.facade.admin.resource.GameEditOneRequest.filters:type_name -> pb.facade.Filter
+	0,  // 2: pb.facade.admin.resource.GameEditOneRequest.value:type_name -> pb.facade.admin.resource.GameValue
+	11, // 3: pb.facade.admin.resource.GameRemoveOneRequest.filters:type_name -> pb.facade.Filter
+	11, // 4: pb.facade.admin.resource.GameShowOneRequest.filters:type_name -> pb.facade.Filter
+	12, // 5: pb.facade.admin.resource.GameShowOneResponse.One:type_name -> pb.facade.Game
+	11, // 6: pb.facade.admin.resource.GameShowOnesRequest.filters:type_name -> pb.facade.Filter
+	13, // 7: pb.facade.admin.resource.GameShowOnesRequest.sorters:type_name -> pb.facade.Sorter
+	14, // 8: pb.facade.admin.resource.GameShowOnesRequest.pagination:type_name -> pb.facade.Pagination
+	12, // 9: pb.facade.admin.resource.GameShowOnesResponse.Ones:type_name -> pb.facade.Game
+	1,  // 10: pb.facade.admin.resource.GameController.AddOne:input_type -> pb.facade.admin.resource.GameAddOneRequest
+	3,  // 11: pb.facade.admin.resource.GameController.EditOne:input_type -> pb.facade.admin.resource.GameEditOneRequest
+	5,  // 12: pb.facade.admin.resource.GameController.RemoveOne:input_type -> pb.facade.admin.resource.GameRemoveOneRequest
+	7,  // 13: pb.facade.admin.resource.GameController.ShowOne:input_type -> pb.facade.admin.resource.GameShowOneRequest
+	9,  // 14: pb.facade.admin.resource.GameController.ShowOnes:input_type -> pb.facade.admin.resource.GameShowOnesRequest
+	2,  // 15: pb.facade.admin.resource.GameController.AddOne:output_type -> pb.facade.admin.resource.GameAddOneResponse
+	4,  // 16: pb.facade.admin.resource.GameController.EditOne:output_type -> pb.facade.admin.resource.GameEditOneResponse
+	6,  // 17: pb.facade.admin.resource.GameController.RemoveOne:output_type -> pb.facade.admin.resource.GameRemoveOneResponse
+	8,  // 18: pb.facade.admin.resource.GameController.ShowOne:output_type -> pb.facade.admin.resource.GameShowOneResponse
+	10, // 19: pb.facade.admin.resource.GameController.ShowOnes:output_type -> pb.facade.admin.resource.GameShowOnesResponse
+	15, // [15:20] is the sub-list for method output_type
+	10, // [10:15] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_facade_admin_resource_game_proto_init() }
@@ -938,14 +646,14 @@ func file_facade_admin_resource_game_proto_init() {
 	if File_facade_admin_resource_game_proto != nil {
 		return
 	}
-	file_facade_admin_resource_game_proto_msgTypes[4].OneofWrappers = []any{}
+	file_facade_admin_resource_game_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_facade_admin_resource_game_proto_rawDesc), len(file_facade_admin_resource_game_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   15,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
