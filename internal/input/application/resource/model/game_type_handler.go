@@ -53,10 +53,13 @@ func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbResource.GameT
 
 func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceModel.GameTypeAddOneInput) (*pbResourceModel.GameTypeAddOneOutput, error) {
 
-	var oGameTypeValue domain.GameTypeValue
+	oVariable := oReq.GetVariable()
 
-	oGameTypeValue.Key = oReq.Key
-	oGameTypeValue.Name = oReq.Name
+	var oGameTypeValue domain.GameTypeValue
+	if oVariable != nil {
+		oGameTypeValue.Key = oVariable.Key
+		oGameTypeValue.Name = oVariable.Name
+	}
 
 	_, oErr := oSelf.GameTypeUsecase.AddOne(&oGameTypeValue)
 
@@ -74,8 +77,10 @@ func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceM
 	}
 
 	return &pbResourceModel.GameTypeAddOneOutput{
-		Key:  sKey,
-		Name: sName,
+		GameType: &pbResource.GameType{
+			Key:  sKey,
+			Name: sName,
+		},
 	}, nil
 }
 
@@ -94,12 +99,7 @@ func (oSelf *GameTypeHandler) ShowOneById(oContext context.Context, oReq *pbReso
 	oProtoGameType := domainGameTypeToProtoGameType(oGameType)
 
 	return &pbResourceModel.GameTypeShowOneByIdOutput{
-		Id:        oProtoGameType.Id,
-		Key:       oProtoGameType.Key,
-		Name:      oProtoGameType.Name,
-		CreatedAt: oProtoGameType.CreatedAt,
-		UpdatedAt: oProtoGameType.UpdatedAt,
-		DeletedAt: oProtoGameType.DeletedAt,
+		GameType: oProtoGameType,
 	}, nil
 }
 
@@ -159,10 +159,13 @@ func (oSelf *GameTypeHandler) ShowOnesByFiltersWithSortersPagination(oContext co
 
 func (oSelf *GameTypeHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.GameTypeEditOneByIdInput) (*pbResourceModel.GameTypeEditOneByIdOutput, error) {
 
-	var oGameTypeValue domain.GameTypeValue
+	oVariable := oReq.GetVariable()
 
-	oGameTypeValue.Key = oReq.Key
-	oGameTypeValue.Name = oReq.Name
+	var oGameTypeValue domain.GameTypeValue
+	if oVariable != nil {
+		oGameTypeValue.Key = oVariable.Key
+		oGameTypeValue.Name = oVariable.Name
+	}
 
 	_, oErr := oSelf.GameTypeUsecase.EditOneById(&oGameTypeValue, uint64(oReq.Id))
 	if oErr != nil {

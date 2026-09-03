@@ -7,6 +7,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
@@ -28,18 +29,12 @@ func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler,
 	}
 }
 
-func (oSelf *TableHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.TableShowOneByIdInput) (*pbResourceModel.TableShowOneByIdOutput, error) {
-
-	oTable, oErr := oSelf.TableUsecase.ShowOneById(uint(oReq.Id))
-	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
-	}
-
+func domainTableToProtoTable(oTable *domain.Table) *pbResource.Table {
 	if oTable == nil {
-		return nil, nil
+		return nil
 	}
 
-	return &pbResourceModel.TableShowOneByIdOutput{
+	return &pbResource.Table{
 		Id:          uint32(oTable.Id),
 		No:          oTable.No,
 		GameId:      uint32(oTable.GameId),
@@ -53,41 +48,67 @@ func (oSelf *TableHandler) ShowOneById(oContext context.Context, oReq *pbResourc
 		UpdatedAt:   timestamppb.New(oTable.UpdatedAt),
 		DeletedAt:   timestamppb.New(oTable.DeletedAt),
 		Game:        domainGameToProtoGame(&oTable.Game),
+	}
+}
+
+// protoTableVariableToDomainTableValue 把 gRPC 帶進來的 variable 攤成 domain.TableValue（指標欄位可選）。
+func protoTableVariableToDomainTableValue(oVariable *pbResourceModel.TableVariable) domain.TableValue {
+	var oValue domain.TableValue
+	if oVariable == nil {
+		return oValue
+	}
+
+	oValue.No = oVariable.No
+	oValue.Key = oVariable.Key
+	oValue.Description = oVariable.Description
+
+	if oVariable.GameId != nil {
+		iGameId := uint(*oVariable.GameId)
+		oValue.GameId = &iGameId
+	}
+
+	if oVariable.State != nil {
+		iState := uint8(*oVariable.State)
+		oValue.State = &iState
+	}
+
+	if oVariable.Result != nil {
+		sResult := *oVariable.Result
+		oValue.Result = &sResult
+	}
+
+	if oVariable.StartedAt != nil {
+		oStartedAt := oVariable.StartedAt.AsTime()
+		oValue.StartedAt = &oStartedAt
+	}
+
+	if oVariable.EndedAt != nil {
+		oEndedAt := oVariable.EndedAt.AsTime()
+		oValue.EndedAt = &oEndedAt
+	}
+
+	return oValue
+}
+
+func (oSelf *TableHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.TableShowOneByIdInput) (*pbResourceModel.TableShowOneByIdOutput, error) {
+
+	oTable, oErr := oSelf.TableUsecase.ShowOneById(uint(oReq.Id))
+	if oErr != nil {
+		return nil, status.Error(codes.NotFound, oErr.Error())
+	}
+
+	if oTable == nil {
+		return nil, nil
+	}
+
+	return &pbResourceModel.TableShowOneByIdOutput{
+		Table: domainTableToProtoTable(oTable),
 	}, nil
 }
 
 func (oSelf *TableHandler) AddOne(oContext context.Context, oReq *pbResourceModel.TableAddOneInput) (*pbResourceModel.TableAddOneOutput, error) {
 
-	var oTableValue domain.TableValue
-
-	oTableValue.No = oReq.No
-	oTableValue.Key = oReq.Key
-	oTableValue.Description = oReq.Description
-
-	if oReq.GameId != nil {
-		iGameId := uint(*oReq.GameId)
-		oTableValue.GameId = &iGameId
-	}
-
-	if oReq.State != nil {
-		iState := uint8(*oReq.State)
-		oTableValue.State = &iState
-	}
-
-	if oReq.Result != nil {
-		sResult := *oReq.Result
-		oTableValue.Result = &sResult
-	}
-
-	if oReq.StartedAt != nil {
-		oStartedAt := oReq.StartedAt.AsTime()
-		oTableValue.StartedAt = &oStartedAt
-	}
-
-	if oReq.EndedAt != nil {
-		oEndedAt := oReq.EndedAt.AsTime()
-		oTableValue.EndedAt = &oEndedAt
-	}
+	oTableValue := protoTableVariableToDomainTableValue(oReq.GetVariable())
 
 	bResult, oErr := oSelf.TableUsecase.AddOne(&oTableValue)
 
@@ -102,36 +123,7 @@ func (oSelf *TableHandler) AddOne(oContext context.Context, oReq *pbResourceMode
 
 func (oSelf *TableHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.TableEditOneByIdInput) (*pbResourceModel.TableEditOneByIdOutput, error) {
 
-	var oTableValue domain.TableValue
-
-	oTableValue.No = oReq.No
-	oTableValue.Key = oReq.Key
-	oTableValue.Description = oReq.Description
-
-	if oReq.GameId != nil {
-		iGameId := uint(*oReq.GameId)
-		oTableValue.GameId = &iGameId
-	}
-
-	if oReq.State != nil {
-		iState := uint8(*oReq.State)
-		oTableValue.State = &iState
-	}
-
-	if oReq.Result != nil {
-		sResult := *oReq.Result
-		oTableValue.Result = &sResult
-	}
-
-	if oReq.StartedAt != nil {
-		oStartedAt := oReq.StartedAt.AsTime()
-		oTableValue.StartedAt = &oStartedAt
-	}
-
-	if oReq.EndedAt != nil {
-		oEndedAt := oReq.EndedAt.AsTime()
-		oTableValue.EndedAt = &oEndedAt
-	}
+	oTableValue := protoTableVariableToDomainTableValue(oReq.GetVariable())
 
 	bResult, oErr := oSelf.TableUsecase.EditOneById(&oTableValue, uint(oReq.Id))
 
@@ -201,27 +193,13 @@ func (oSelf *TableHandler) ShowOnesByFiltersWithSortersPagination(oContext conte
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
 
-	aPbTables := make([]*pbResourceModel.TableShowOneByIdOutput, 0, len(aTables))
+	aProtoTables := make([]*pbResource.Table, 0, len(aTables))
 	for _, oTable := range aTables {
-		aPbTables = append(aPbTables, &pbResourceModel.TableShowOneByIdOutput{
-			Id:          uint32(oTable.Id),
-			No:          oTable.No,
-			GameId:      uint32(oTable.GameId),
-			Key:         oTable.Key,
-			State:       uint32(oTable.State),
-			Description: oTable.Description,
-			Result:      oTable.Result,
-			StartedAt:   timestamppb.New(oTable.StartedAt),
-			EndedAt:     timestamppb.New(oTable.EndedAt),
-			CreatedAt:   timestamppb.New(oTable.CreatedAt),
-			UpdatedAt:   timestamppb.New(oTable.UpdatedAt),
-			DeletedAt:   timestamppb.New(oTable.DeletedAt),
-			Game:        domainGameToProtoGame(&oTable.Game),
-		})
+		aProtoTables = append(aProtoTables, domainTableToProtoTable(oTable))
 	}
 
 	return &pbResourceModel.TableShowOnesByFiltersWithSortersPaginationOutput{
-		Tables: aPbTables,
+		Tables: aProtoTables,
 	}, nil
 }
 

@@ -23,7 +23,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type TableAddOneInput struct {
+type TableVariable struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	No            *string                `protobuf:"bytes,1,opt,name=no,proto3,oneof" json:"no,omitempty"`
 	GameId        *uint32                `protobuf:"varint,2,opt,name=game_id,json=gameId,proto3,oneof" json:"game_id,omitempty"`
@@ -37,9 +37,102 @@ type TableAddOneInput struct {
 	sizeCache     protoimpl.SizeCache
 }
 
+func (x *TableVariable) Reset() {
+	*x = TableVariable{}
+	mi := &file_resource_model_table_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TableVariable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TableVariable) ProtoMessage() {}
+
+func (x *TableVariable) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_table_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TableVariable.ProtoReflect.Descriptor instead.
+func (*TableVariable) Descriptor() ([]byte, []int) {
+	return file_resource_model_table_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *TableVariable) GetNo() string {
+	if x != nil && x.No != nil {
+		return *x.No
+	}
+	return ""
+}
+
+func (x *TableVariable) GetGameId() uint32 {
+	if x != nil && x.GameId != nil {
+		return *x.GameId
+	}
+	return 0
+}
+
+func (x *TableVariable) GetKey() string {
+	if x != nil && x.Key != nil {
+		return *x.Key
+	}
+	return ""
+}
+
+func (x *TableVariable) GetState() uint32 {
+	if x != nil && x.State != nil {
+		return *x.State
+	}
+	return 0
+}
+
+func (x *TableVariable) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
+}
+
+func (x *TableVariable) GetResult() string {
+	if x != nil && x.Result != nil {
+		return *x.Result
+	}
+	return ""
+}
+
+func (x *TableVariable) GetStartedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.StartedAt
+	}
+	return nil
+}
+
+func (x *TableVariable) GetEndedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EndedAt
+	}
+	return nil
+}
+
+type TableAddOneInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *TableVariable         `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
 func (x *TableAddOneInput) Reset() {
 	*x = TableAddOneInput{}
-	mi := &file_resource_model_table_proto_msgTypes[0]
+	mi := &file_resource_model_table_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -51,7 +144,7 @@ func (x *TableAddOneInput) String() string {
 func (*TableAddOneInput) ProtoMessage() {}
 
 func (x *TableAddOneInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[0]
+	mi := &file_resource_model_table_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -64,61 +157,12 @@ func (x *TableAddOneInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableAddOneInput.ProtoReflect.Descriptor instead.
 func (*TableAddOneInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{0}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *TableAddOneInput) GetNo() string {
-	if x != nil && x.No != nil {
-		return *x.No
-	}
-	return ""
-}
-
-func (x *TableAddOneInput) GetGameId() uint32 {
-	if x != nil && x.GameId != nil {
-		return *x.GameId
-	}
-	return 0
-}
-
-func (x *TableAddOneInput) GetKey() string {
-	if x != nil && x.Key != nil {
-		return *x.Key
-	}
-	return ""
-}
-
-func (x *TableAddOneInput) GetState() uint32 {
-	if x != nil && x.State != nil {
-		return *x.State
-	}
-	return 0
-}
-
-func (x *TableAddOneInput) GetDescription() string {
-	if x != nil && x.Description != nil {
-		return *x.Description
-	}
-	return ""
-}
-
-func (x *TableAddOneInput) GetResult() string {
-	if x != nil && x.Result != nil {
-		return *x.Result
-	}
-	return ""
-}
-
-func (x *TableAddOneInput) GetStartedAt() *timestamppb.Timestamp {
+func (x *TableAddOneInput) GetVariable() *TableVariable {
 	if x != nil {
-		return x.StartedAt
-	}
-	return nil
-}
-
-func (x *TableAddOneInput) GetEndedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.EndedAt
+		return x.Variable
 	}
 	return nil
 }
@@ -132,7 +176,7 @@ type TableAddOneOutput struct {
 
 func (x *TableAddOneOutput) Reset() {
 	*x = TableAddOneOutput{}
-	mi := &file_resource_model_table_proto_msgTypes[1]
+	mi := &file_resource_model_table_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -144,7 +188,7 @@ func (x *TableAddOneOutput) String() string {
 func (*TableAddOneOutput) ProtoMessage() {}
 
 func (x *TableAddOneOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[1]
+	mi := &file_resource_model_table_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -157,7 +201,7 @@ func (x *TableAddOneOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableAddOneOutput.ProtoReflect.Descriptor instead.
 func (*TableAddOneOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{1}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *TableAddOneOutput) GetStatus() bool {
@@ -176,7 +220,7 @@ type TableShowOneByIdInput struct {
 
 func (x *TableShowOneByIdInput) Reset() {
 	*x = TableShowOneByIdInput{}
-	mi := &file_resource_model_table_proto_msgTypes[2]
+	mi := &file_resource_model_table_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -188,7 +232,7 @@ func (x *TableShowOneByIdInput) String() string {
 func (*TableShowOneByIdInput) ProtoMessage() {}
 
 func (x *TableShowOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[2]
+	mi := &file_resource_model_table_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -201,7 +245,7 @@ func (x *TableShowOneByIdInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableShowOneByIdInput.ProtoReflect.Descriptor instead.
 func (*TableShowOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{2}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *TableShowOneByIdInput) GetId() uint32 {
@@ -213,26 +257,14 @@ func (x *TableShowOneByIdInput) GetId() uint32 {
 
 type TableShowOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	No            string                 `protobuf:"bytes,2,opt,name=no,proto3" json:"no,omitempty"`
-	GameId        uint32                 `protobuf:"varint,3,opt,name=game_id,json=gameId,proto3" json:"game_id,omitempty"`
-	Key           string                 `protobuf:"bytes,4,opt,name=key,proto3" json:"key,omitempty"`
-	State         uint32                 `protobuf:"varint,5,opt,name=state,proto3" json:"state,omitempty"`
-	Description   string                 `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty"`
-	Result        string                 `protobuf:"bytes,7,opt,name=result,proto3" json:"result,omitempty"`
-	StartedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
-	EndedAt       *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=ended_at,json=endedAt,proto3" json:"ended_at,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
-	Game          *resource.Game         `protobuf:"bytes,13,opt,name=game,proto3" json:"game,omitempty"`
+	Table         *resource.Table        `protobuf:"bytes,1,opt,name=table,proto3" json:"table,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TableShowOneByIdOutput) Reset() {
 	*x = TableShowOneByIdOutput{}
-	mi := &file_resource_model_table_proto_msgTypes[3]
+	mi := &file_resource_model_table_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -244,7 +276,7 @@ func (x *TableShowOneByIdOutput) String() string {
 func (*TableShowOneByIdOutput) ProtoMessage() {}
 
 func (x *TableShowOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[3]
+	mi := &file_resource_model_table_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -257,118 +289,27 @@ func (x *TableShowOneByIdOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableShowOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*TableShowOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{3}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *TableShowOneByIdOutput) GetId() uint32 {
+func (x *TableShowOneByIdOutput) GetTable() *resource.Table {
 	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-func (x *TableShowOneByIdOutput) GetNo() string {
-	if x != nil {
-		return x.No
-	}
-	return ""
-}
-
-func (x *TableShowOneByIdOutput) GetGameId() uint32 {
-	if x != nil {
-		return x.GameId
-	}
-	return 0
-}
-
-func (x *TableShowOneByIdOutput) GetKey() string {
-	if x != nil {
-		return x.Key
-	}
-	return ""
-}
-
-func (x *TableShowOneByIdOutput) GetState() uint32 {
-	if x != nil {
-		return x.State
-	}
-	return 0
-}
-
-func (x *TableShowOneByIdOutput) GetDescription() string {
-	if x != nil {
-		return x.Description
-	}
-	return ""
-}
-
-func (x *TableShowOneByIdOutput) GetResult() string {
-	if x != nil {
-		return x.Result
-	}
-	return ""
-}
-
-func (x *TableShowOneByIdOutput) GetStartedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.StartedAt
-	}
-	return nil
-}
-
-func (x *TableShowOneByIdOutput) GetEndedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.EndedAt
-	}
-	return nil
-}
-
-func (x *TableShowOneByIdOutput) GetCreatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return nil
-}
-
-func (x *TableShowOneByIdOutput) GetUpdatedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.UpdatedAt
-	}
-	return nil
-}
-
-func (x *TableShowOneByIdOutput) GetDeletedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.DeletedAt
-	}
-	return nil
-}
-
-func (x *TableShowOneByIdOutput) GetGame() *resource.Game {
-	if x != nil {
-		return x.Game
+		return x.Table
 	}
 	return nil
 }
 
 type TableEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	No            *string                `protobuf:"bytes,2,opt,name=no,proto3,oneof" json:"no,omitempty"`
-	GameId        *uint32                `protobuf:"varint,3,opt,name=game_id,json=gameId,proto3,oneof" json:"game_id,omitempty"`
-	Key           *string                `protobuf:"bytes,4,opt,name=key,proto3,oneof" json:"key,omitempty"`
-	State         *uint32                `protobuf:"varint,5,opt,name=state,proto3,oneof" json:"state,omitempty"`
-	Description   *string                `protobuf:"bytes,6,opt,name=description,proto3,oneof" json:"description,omitempty"`
-	Result        *string                `protobuf:"bytes,7,opt,name=result,proto3,oneof" json:"result,omitempty"`
-	StartedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
-	EndedAt       *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=ended_at,json=endedAt,proto3" json:"ended_at,omitempty"`
+	Variable      *TableVariable         `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint32                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TableEditOneByIdInput) Reset() {
 	*x = TableEditOneByIdInput{}
-	mi := &file_resource_model_table_proto_msgTypes[4]
+	mi := &file_resource_model_table_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -380,7 +321,7 @@ func (x *TableEditOneByIdInput) String() string {
 func (*TableEditOneByIdInput) ProtoMessage() {}
 
 func (x *TableEditOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[4]
+	mi := &file_resource_model_table_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -393,7 +334,14 @@ func (x *TableEditOneByIdInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableEditOneByIdInput.ProtoReflect.Descriptor instead.
 func (*TableEditOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{4}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *TableEditOneByIdInput) GetVariable() *TableVariable {
+	if x != nil {
+		return x.Variable
+	}
+	return nil
 }
 
 func (x *TableEditOneByIdInput) GetId() uint32 {
@@ -401,62 +349,6 @@ func (x *TableEditOneByIdInput) GetId() uint32 {
 		return x.Id
 	}
 	return 0
-}
-
-func (x *TableEditOneByIdInput) GetNo() string {
-	if x != nil && x.No != nil {
-		return *x.No
-	}
-	return ""
-}
-
-func (x *TableEditOneByIdInput) GetGameId() uint32 {
-	if x != nil && x.GameId != nil {
-		return *x.GameId
-	}
-	return 0
-}
-
-func (x *TableEditOneByIdInput) GetKey() string {
-	if x != nil && x.Key != nil {
-		return *x.Key
-	}
-	return ""
-}
-
-func (x *TableEditOneByIdInput) GetState() uint32 {
-	if x != nil && x.State != nil {
-		return *x.State
-	}
-	return 0
-}
-
-func (x *TableEditOneByIdInput) GetDescription() string {
-	if x != nil && x.Description != nil {
-		return *x.Description
-	}
-	return ""
-}
-
-func (x *TableEditOneByIdInput) GetResult() string {
-	if x != nil && x.Result != nil {
-		return *x.Result
-	}
-	return ""
-}
-
-func (x *TableEditOneByIdInput) GetStartedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.StartedAt
-	}
-	return nil
-}
-
-func (x *TableEditOneByIdInput) GetEndedAt() *timestamppb.Timestamp {
-	if x != nil {
-		return x.EndedAt
-	}
-	return nil
 }
 
 type TableEditOneByIdOutput struct {
@@ -468,7 +360,7 @@ type TableEditOneByIdOutput struct {
 
 func (x *TableEditOneByIdOutput) Reset() {
 	*x = TableEditOneByIdOutput{}
-	mi := &file_resource_model_table_proto_msgTypes[5]
+	mi := &file_resource_model_table_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -480,7 +372,7 @@ func (x *TableEditOneByIdOutput) String() string {
 func (*TableEditOneByIdOutput) ProtoMessage() {}
 
 func (x *TableEditOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[5]
+	mi := &file_resource_model_table_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -493,7 +385,7 @@ func (x *TableEditOneByIdOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableEditOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*TableEditOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{5}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *TableEditOneByIdOutput) GetStatus() bool {
@@ -512,7 +404,7 @@ type TableRemoveOneByIdInput struct {
 
 func (x *TableRemoveOneByIdInput) Reset() {
 	*x = TableRemoveOneByIdInput{}
-	mi := &file_resource_model_table_proto_msgTypes[6]
+	mi := &file_resource_model_table_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -524,7 +416,7 @@ func (x *TableRemoveOneByIdInput) String() string {
 func (*TableRemoveOneByIdInput) ProtoMessage() {}
 
 func (x *TableRemoveOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[6]
+	mi := &file_resource_model_table_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -537,7 +429,7 @@ func (x *TableRemoveOneByIdInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableRemoveOneByIdInput.ProtoReflect.Descriptor instead.
 func (*TableRemoveOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{6}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *TableRemoveOneByIdInput) GetId() uint32 {
@@ -556,7 +448,7 @@ type TableRemoveOneByIdOutput struct {
 
 func (x *TableRemoveOneByIdOutput) Reset() {
 	*x = TableRemoveOneByIdOutput{}
-	mi := &file_resource_model_table_proto_msgTypes[7]
+	mi := &file_resource_model_table_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -568,7 +460,7 @@ func (x *TableRemoveOneByIdOutput) String() string {
 func (*TableRemoveOneByIdOutput) ProtoMessage() {}
 
 func (x *TableRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[7]
+	mi := &file_resource_model_table_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -581,7 +473,7 @@ func (x *TableRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*TableRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{7}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *TableRemoveOneByIdOutput) GetStatus() bool {
@@ -602,7 +494,7 @@ type TableShowOnesByFiltersWithSortersPaginationInput struct {
 
 func (x *TableShowOnesByFiltersWithSortersPaginationInput) Reset() {
 	*x = TableShowOnesByFiltersWithSortersPaginationInput{}
-	mi := &file_resource_model_table_proto_msgTypes[8]
+	mi := &file_resource_model_table_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -614,7 +506,7 @@ func (x *TableShowOnesByFiltersWithSortersPaginationInput) String() string {
 func (*TableShowOnesByFiltersWithSortersPaginationInput) ProtoMessage() {}
 
 func (x *TableShowOnesByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[8]
+	mi := &file_resource_model_table_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -627,7 +519,7 @@ func (x *TableShowOnesByFiltersWithSortersPaginationInput) ProtoReflect() protor
 
 // Deprecated: Use TableShowOnesByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
 func (*TableShowOnesByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{8}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *TableShowOnesByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
@@ -652,15 +544,15 @@ func (x *TableShowOnesByFiltersWithSortersPaginationInput) GetPagination() *reso
 }
 
 type TableShowOnesByFiltersWithSortersPaginationOutput struct {
-	state         protoimpl.MessageState    `protogen:"open.v1"`
-	Tables        []*TableShowOneByIdOutput `protobuf:"bytes,1,rep,name=tables,proto3" json:"tables,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Tables        []*resource.Table      `protobuf:"bytes,1,rep,name=tables,proto3" json:"tables,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *TableShowOnesByFiltersWithSortersPaginationOutput) Reset() {
 	*x = TableShowOnesByFiltersWithSortersPaginationOutput{}
-	mi := &file_resource_model_table_proto_msgTypes[9]
+	mi := &file_resource_model_table_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -672,7 +564,7 @@ func (x *TableShowOnesByFiltersWithSortersPaginationOutput) String() string {
 func (*TableShowOnesByFiltersWithSortersPaginationOutput) ProtoMessage() {}
 
 func (x *TableShowOnesByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[9]
+	mi := &file_resource_model_table_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -685,10 +577,10 @@ func (x *TableShowOnesByFiltersWithSortersPaginationOutput) ProtoReflect() proto
 
 // Deprecated: Use TableShowOnesByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
 func (*TableShowOnesByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{9}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *TableShowOnesByFiltersWithSortersPaginationOutput) GetTables() []*TableShowOneByIdOutput {
+func (x *TableShowOnesByFiltersWithSortersPaginationOutput) GetTables() []*resource.Table {
 	if x != nil {
 		return x.Tables
 	}
@@ -704,7 +596,7 @@ type TableTotalByFiltersInput struct {
 
 func (x *TableTotalByFiltersInput) Reset() {
 	*x = TableTotalByFiltersInput{}
-	mi := &file_resource_model_table_proto_msgTypes[10]
+	mi := &file_resource_model_table_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -716,7 +608,7 @@ func (x *TableTotalByFiltersInput) String() string {
 func (*TableTotalByFiltersInput) ProtoMessage() {}
 
 func (x *TableTotalByFiltersInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[10]
+	mi := &file_resource_model_table_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -729,7 +621,7 @@ func (x *TableTotalByFiltersInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableTotalByFiltersInput.ProtoReflect.Descriptor instead.
 func (*TableTotalByFiltersInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{10}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *TableTotalByFiltersInput) GetFilters() []*resource.Filter {
@@ -748,7 +640,7 @@ type TableTotalByFiltersOutput struct {
 
 func (x *TableTotalByFiltersOutput) Reset() {
 	*x = TableTotalByFiltersOutput{}
-	mi := &file_resource_model_table_proto_msgTypes[11]
+	mi := &file_resource_model_table_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -760,7 +652,7 @@ func (x *TableTotalByFiltersOutput) String() string {
 func (*TableTotalByFiltersOutput) ProtoMessage() {}
 
 func (x *TableTotalByFiltersOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[11]
+	mi := &file_resource_model_table_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -773,7 +665,7 @@ func (x *TableTotalByFiltersOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableTotalByFiltersOutput.ProtoReflect.Descriptor instead.
 func (*TableTotalByFiltersOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{11}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *TableTotalByFiltersOutput) GetTotal() uint64 {
@@ -787,8 +679,8 @@ var File_resource_model_table_proto protoreflect.FileDescriptor
 
 const file_resource_model_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15resource/common.proto\"\xed\x02\n" +
-	"\x10TableAddOneInput\x12\x13\n" +
+	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15resource/common.proto\"\xea\x02\n" +
+	"\rTableVariable\x12\x13\n" +
 	"\x02no\x18\x01 \x01(\tH\x00R\x02no\x88\x01\x01\x12\x1c\n" +
 	"\agame_id\x18\x02 \x01(\rH\x01R\x06gameId\x88\x01\x01\x12\x15\n" +
 	"\x03key\x18\x03 \x01(\tH\x02R\x03key\x88\x01\x01\x12\x19\n" +
@@ -804,48 +696,18 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\x04_keyB\b\n" +
 	"\x06_stateB\x0e\n" +
 	"\f_descriptionB\t\n" +
-	"\a_result\"+\n" +
+	"\a_result\"P\n" +
+	"\x10TableAddOneInput\x12<\n" +
+	"\bvariable\x18\x01 \x01(\v2 .pb.resource.model.TableVariableR\bvariable\"+\n" +
 	"\x11TableAddOneOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"'\n" +
 	"\x15TableShowOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"\xfd\x03\n" +
-	"\x16TableShowOneByIdOutput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x0e\n" +
-	"\x02no\x18\x02 \x01(\tR\x02no\x12\x17\n" +
-	"\agame_id\x18\x03 \x01(\rR\x06gameId\x12\x10\n" +
-	"\x03key\x18\x04 \x01(\tR\x03key\x12\x14\n" +
-	"\x05state\x18\x05 \x01(\rR\x05state\x12 \n" +
-	"\vdescription\x18\x06 \x01(\tR\vdescription\x12\x16\n" +
-	"\x06result\x18\a \x01(\tR\x06result\x129\n" +
-	"\n" +
-	"started_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x125\n" +
-	"\bended_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\aendedAt\x129\n" +
-	"\n" +
-	"created_at\x18\n" +
-	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
-	"\n" +
-	"updated_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
-	"\n" +
-	"deleted_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12%\n" +
-	"\x04game\x18\r \x01(\v2\x11.pb.resource.GameR\x04game\"\x82\x03\n" +
-	"\x15TableEditOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x13\n" +
-	"\x02no\x18\x02 \x01(\tH\x00R\x02no\x88\x01\x01\x12\x1c\n" +
-	"\agame_id\x18\x03 \x01(\rH\x01R\x06gameId\x88\x01\x01\x12\x15\n" +
-	"\x03key\x18\x04 \x01(\tH\x02R\x03key\x88\x01\x01\x12\x19\n" +
-	"\x05state\x18\x05 \x01(\rH\x03R\x05state\x88\x01\x01\x12%\n" +
-	"\vdescription\x18\x06 \x01(\tH\x04R\vdescription\x88\x01\x01\x12\x1b\n" +
-	"\x06result\x18\a \x01(\tH\x05R\x06result\x88\x01\x01\x129\n" +
-	"\n" +
-	"started_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x125\n" +
-	"\bended_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\aendedAtB\x05\n" +
-	"\x03_noB\n" +
-	"\n" +
-	"\b_game_idB\x06\n" +
-	"\x04_keyB\b\n" +
-	"\x06_stateB\x0e\n" +
-	"\f_descriptionB\t\n" +
-	"\a_result\"0\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"B\n" +
+	"\x16TableShowOneByIdOutput\x12(\n" +
+	"\x05table\x18\x01 \x01(\v2\x12.pb.resource.TableR\x05table\"e\n" +
+	"\x15TableEditOneByIdInput\x12<\n" +
+	"\bvariable\x18\x01 \x01(\v2 .pb.resource.model.TableVariableR\bvariable\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\rR\x02id\"0\n" +
 	"\x16TableEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\")\n" +
 	"\x17TableRemoveOneByIdInput\x12\x0e\n" +
@@ -857,9 +719,9 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\asorters\x18\x03 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
 	"\n" +
 	"pagination\x18\x02 \x01(\v2\x17.pb.resource.PaginationR\n" +
-	"pagination\"v\n" +
-	"1TableShowOnesByFiltersWithSortersPaginationOutput\x12A\n" +
-	"\x06tables\x18\x01 \x03(\v2).pb.resource.model.TableShowOneByIdOutputR\x06tables\"I\n" +
+	"pagination\"_\n" +
+	"1TableShowOnesByFiltersWithSortersPaginationOutput\x12*\n" +
+	"\x06tables\x18\x01 \x03(\v2\x12.pb.resource.TableR\x06tables\"I\n" +
 	"\x18TableTotalByFiltersInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\"1\n" +
 	"\x19TableTotalByFiltersOutput\x12\x14\n" +
@@ -885,59 +747,55 @@ func file_resource_model_table_proto_rawDescGZIP() []byte {
 	return file_resource_model_table_proto_rawDescData
 }
 
-var file_resource_model_table_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
+var file_resource_model_table_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
 var file_resource_model_table_proto_goTypes = []any{
-	(*TableAddOneInput)(nil),                                  // 0: pb.resource.model.TableAddOneInput
-	(*TableAddOneOutput)(nil),                                 // 1: pb.resource.model.TableAddOneOutput
-	(*TableShowOneByIdInput)(nil),                             // 2: pb.resource.model.TableShowOneByIdInput
-	(*TableShowOneByIdOutput)(nil),                            // 3: pb.resource.model.TableShowOneByIdOutput
-	(*TableEditOneByIdInput)(nil),                             // 4: pb.resource.model.TableEditOneByIdInput
-	(*TableEditOneByIdOutput)(nil),                            // 5: pb.resource.model.TableEditOneByIdOutput
-	(*TableRemoveOneByIdInput)(nil),                           // 6: pb.resource.model.TableRemoveOneByIdInput
-	(*TableRemoveOneByIdOutput)(nil),                          // 7: pb.resource.model.TableRemoveOneByIdOutput
-	(*TableShowOnesByFiltersWithSortersPaginationInput)(nil),  // 8: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput
-	(*TableShowOnesByFiltersWithSortersPaginationOutput)(nil), // 9: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput
-	(*TableTotalByFiltersInput)(nil),                          // 10: pb.resource.model.TableTotalByFiltersInput
-	(*TableTotalByFiltersOutput)(nil),                         // 11: pb.resource.model.TableTotalByFiltersOutput
-	(*timestamppb.Timestamp)(nil),                             // 12: google.protobuf.Timestamp
-	(*resource.Game)(nil),                                     // 13: pb.resource.Game
-	(*resource.Filter)(nil),                                   // 14: pb.resource.Filter
-	(*resource.Sorter)(nil),                                   // 15: pb.resource.Sorter
-	(*resource.Pagination)(nil),                               // 16: pb.resource.Pagination
+	(*TableVariable)(nil),                                     // 0: pb.resource.model.TableVariable
+	(*TableAddOneInput)(nil),                                  // 1: pb.resource.model.TableAddOneInput
+	(*TableAddOneOutput)(nil),                                 // 2: pb.resource.model.TableAddOneOutput
+	(*TableShowOneByIdInput)(nil),                             // 3: pb.resource.model.TableShowOneByIdInput
+	(*TableShowOneByIdOutput)(nil),                            // 4: pb.resource.model.TableShowOneByIdOutput
+	(*TableEditOneByIdInput)(nil),                             // 5: pb.resource.model.TableEditOneByIdInput
+	(*TableEditOneByIdOutput)(nil),                            // 6: pb.resource.model.TableEditOneByIdOutput
+	(*TableRemoveOneByIdInput)(nil),                           // 7: pb.resource.model.TableRemoveOneByIdInput
+	(*TableRemoveOneByIdOutput)(nil),                          // 8: pb.resource.model.TableRemoveOneByIdOutput
+	(*TableShowOnesByFiltersWithSortersPaginationInput)(nil),  // 9: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput
+	(*TableShowOnesByFiltersWithSortersPaginationOutput)(nil), // 10: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput
+	(*TableTotalByFiltersInput)(nil),                          // 11: pb.resource.model.TableTotalByFiltersInput
+	(*TableTotalByFiltersOutput)(nil),                         // 12: pb.resource.model.TableTotalByFiltersOutput
+	(*timestamppb.Timestamp)(nil),                             // 13: google.protobuf.Timestamp
+	(*resource.Table)(nil),                                    // 14: pb.resource.Table
+	(*resource.Filter)(nil),                                   // 15: pb.resource.Filter
+	(*resource.Sorter)(nil),                                   // 16: pb.resource.Sorter
+	(*resource.Pagination)(nil),                               // 17: pb.resource.Pagination
 }
 var file_resource_model_table_proto_depIdxs = []int32{
-	12, // 0: pb.resource.model.TableAddOneInput.started_at:type_name -> google.protobuf.Timestamp
-	12, // 1: pb.resource.model.TableAddOneInput.ended_at:type_name -> google.protobuf.Timestamp
-	12, // 2: pb.resource.model.TableShowOneByIdOutput.started_at:type_name -> google.protobuf.Timestamp
-	12, // 3: pb.resource.model.TableShowOneByIdOutput.ended_at:type_name -> google.protobuf.Timestamp
-	12, // 4: pb.resource.model.TableShowOneByIdOutput.created_at:type_name -> google.protobuf.Timestamp
-	12, // 5: pb.resource.model.TableShowOneByIdOutput.updated_at:type_name -> google.protobuf.Timestamp
-	12, // 6: pb.resource.model.TableShowOneByIdOutput.deleted_at:type_name -> google.protobuf.Timestamp
-	13, // 7: pb.resource.model.TableShowOneByIdOutput.game:type_name -> pb.resource.Game
-	12, // 8: pb.resource.model.TableEditOneByIdInput.started_at:type_name -> google.protobuf.Timestamp
-	12, // 9: pb.resource.model.TableEditOneByIdInput.ended_at:type_name -> google.protobuf.Timestamp
-	14, // 10: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	15, // 11: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	16, // 12: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	3,  // 13: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput.tables:type_name -> pb.resource.model.TableShowOneByIdOutput
-	14, // 14: pb.resource.model.TableTotalByFiltersInput.filters:type_name -> pb.resource.Filter
-	0,  // 15: pb.resource.model.TableModel.AddOne:input_type -> pb.resource.model.TableAddOneInput
-	2,  // 16: pb.resource.model.TableModel.ShowOneById:input_type -> pb.resource.model.TableShowOneByIdInput
-	4,  // 17: pb.resource.model.TableModel.EditOneById:input_type -> pb.resource.model.TableEditOneByIdInput
-	6,  // 18: pb.resource.model.TableModel.RemoveOneById:input_type -> pb.resource.model.TableRemoveOneByIdInput
-	8,  // 19: pb.resource.model.TableModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput
-	10, // 20: pb.resource.model.TableModel.TotalByFilters:input_type -> pb.resource.model.TableTotalByFiltersInput
-	1,  // 21: pb.resource.model.TableModel.AddOne:output_type -> pb.resource.model.TableAddOneOutput
-	3,  // 22: pb.resource.model.TableModel.ShowOneById:output_type -> pb.resource.model.TableShowOneByIdOutput
-	5,  // 23: pb.resource.model.TableModel.EditOneById:output_type -> pb.resource.model.TableEditOneByIdOutput
-	7,  // 24: pb.resource.model.TableModel.RemoveOneById:output_type -> pb.resource.model.TableRemoveOneByIdOutput
-	9,  // 25: pb.resource.model.TableModel.ShowOnesByFiltersWithSortersPagination:output_type -> pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput
-	11, // 26: pb.resource.model.TableModel.TotalByFilters:output_type -> pb.resource.model.TableTotalByFiltersOutput
-	21, // [21:27] is the sub-list for method output_type
-	15, // [15:21] is the sub-list for method input_type
-	15, // [15:15] is the sub-list for extension type_name
-	15, // [15:15] is the sub-list for extension extendee
-	0,  // [0:15] is the sub-list for field type_name
+	13, // 0: pb.resource.model.TableVariable.started_at:type_name -> google.protobuf.Timestamp
+	13, // 1: pb.resource.model.TableVariable.ended_at:type_name -> google.protobuf.Timestamp
+	0,  // 2: pb.resource.model.TableAddOneInput.variable:type_name -> pb.resource.model.TableVariable
+	14, // 3: pb.resource.model.TableShowOneByIdOutput.table:type_name -> pb.resource.Table
+	0,  // 4: pb.resource.model.TableEditOneByIdInput.variable:type_name -> pb.resource.model.TableVariable
+	15, // 5: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
+	16, // 6: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	17, // 7: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
+	14, // 8: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput.tables:type_name -> pb.resource.Table
+	15, // 9: pb.resource.model.TableTotalByFiltersInput.filters:type_name -> pb.resource.Filter
+	1,  // 10: pb.resource.model.TableModel.AddOne:input_type -> pb.resource.model.TableAddOneInput
+	3,  // 11: pb.resource.model.TableModel.ShowOneById:input_type -> pb.resource.model.TableShowOneByIdInput
+	5,  // 12: pb.resource.model.TableModel.EditOneById:input_type -> pb.resource.model.TableEditOneByIdInput
+	7,  // 13: pb.resource.model.TableModel.RemoveOneById:input_type -> pb.resource.model.TableRemoveOneByIdInput
+	9,  // 14: pb.resource.model.TableModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput
+	11, // 15: pb.resource.model.TableModel.TotalByFilters:input_type -> pb.resource.model.TableTotalByFiltersInput
+	2,  // 16: pb.resource.model.TableModel.AddOne:output_type -> pb.resource.model.TableAddOneOutput
+	4,  // 17: pb.resource.model.TableModel.ShowOneById:output_type -> pb.resource.model.TableShowOneByIdOutput
+	6,  // 18: pb.resource.model.TableModel.EditOneById:output_type -> pb.resource.model.TableEditOneByIdOutput
+	8,  // 19: pb.resource.model.TableModel.RemoveOneById:output_type -> pb.resource.model.TableRemoveOneByIdOutput
+	10, // 20: pb.resource.model.TableModel.ShowOnesByFiltersWithSortersPagination:output_type -> pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput
+	12, // 21: pb.resource.model.TableModel.TotalByFilters:output_type -> pb.resource.model.TableTotalByFiltersOutput
+	16, // [16:22] is the sub-list for method output_type
+	10, // [10:16] is the sub-list for method input_type
+	10, // [10:10] is the sub-list for extension type_name
+	10, // [10:10] is the sub-list for extension extendee
+	0,  // [0:10] is the sub-list for field type_name
 }
 
 func init() { file_resource_model_table_proto_init() }
@@ -946,14 +804,13 @@ func file_resource_model_table_proto_init() {
 		return
 	}
 	file_resource_model_table_proto_msgTypes[0].OneofWrappers = []any{}
-	file_resource_model_table_proto_msgTypes[4].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_model_table_proto_rawDesc), len(file_resource_model_table_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   12,
+			NumMessages:   13,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

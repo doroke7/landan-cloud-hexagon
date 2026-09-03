@@ -531,6 +531,146 @@ func (x *Game) GetGameType() *GameType {
 	return nil
 }
 
+type Table struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	No            string                 `protobuf:"bytes,2,opt,name=no,proto3" json:"no,omitempty"`
+	GameId        uint32                 `protobuf:"varint,3,opt,name=game_id,json=gameId,proto3" json:"game_id,omitempty"`
+	Key           string                 `protobuf:"bytes,4,opt,name=key,proto3" json:"key,omitempty"`
+	State         uint32                 `protobuf:"varint,5,opt,name=state,proto3" json:"state,omitempty"`
+	Description   string                 `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty"`
+	Result        string                 `protobuf:"bytes,7,opt,name=result,proto3" json:"result,omitempty"`
+	StartedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
+	EndedAt       *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=ended_at,json=endedAt,proto3" json:"ended_at,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
+	Game          *Game                  `protobuf:"bytes,13,opt,name=game,proto3" json:"game,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *Table) Reset() {
+	*x = Table{}
+	mi := &file_resource_common_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *Table) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*Table) ProtoMessage() {}
+
+func (x *Table) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_common_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use Table.ProtoReflect.Descriptor instead.
+func (*Table) Descriptor() ([]byte, []int) {
+	return file_resource_common_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *Table) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *Table) GetNo() string {
+	if x != nil {
+		return x.No
+	}
+	return ""
+}
+
+func (x *Table) GetGameId() uint32 {
+	if x != nil {
+		return x.GameId
+	}
+	return 0
+}
+
+func (x *Table) GetKey() string {
+	if x != nil {
+		return x.Key
+	}
+	return ""
+}
+
+func (x *Table) GetState() uint32 {
+	if x != nil {
+		return x.State
+	}
+	return 0
+}
+
+func (x *Table) GetDescription() string {
+	if x != nil {
+		return x.Description
+	}
+	return ""
+}
+
+func (x *Table) GetResult() string {
+	if x != nil {
+		return x.Result
+	}
+	return ""
+}
+
+func (x *Table) GetStartedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.StartedAt
+	}
+	return nil
+}
+
+func (x *Table) GetEndedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.EndedAt
+	}
+	return nil
+}
+
+func (x *Table) GetCreatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.CreatedAt
+	}
+	return nil
+}
+
+func (x *Table) GetUpdatedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.UpdatedAt
+	}
+	return nil
+}
+
+func (x *Table) GetDeletedAt() *timestamppb.Timestamp {
+	if x != nil {
+		return x.DeletedAt
+	}
+	return nil
+}
+
+func (x *Table) GetGame() *Game {
+	if x != nil {
+		return x.Game
+	}
+	return nil
+}
+
 var File_resource_common_proto protoreflect.FileDescriptor
 
 const file_resource_common_proto_rawDesc = "" +
@@ -582,7 +722,26 @@ const file_resource_common_proto_rawDesc = "" +
 	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
 	"deleted_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x122\n" +
-	"\tgame_type\x18\t \x01(\v2\x15.pb.resource.GameTypeR\bgameTypeB!Z\x1fexample/pb/resource;pb_resourceb\x06proto3"
+	"\tgame_type\x18\t \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"\xec\x03\n" +
+	"\x05Table\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x0e\n" +
+	"\x02no\x18\x02 \x01(\tR\x02no\x12\x17\n" +
+	"\agame_id\x18\x03 \x01(\rR\x06gameId\x12\x10\n" +
+	"\x03key\x18\x04 \x01(\tR\x03key\x12\x14\n" +
+	"\x05state\x18\x05 \x01(\rR\x05state\x12 \n" +
+	"\vdescription\x18\x06 \x01(\tR\vdescription\x12\x16\n" +
+	"\x06result\x18\a \x01(\tR\x06result\x129\n" +
+	"\n" +
+	"started_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tstartedAt\x125\n" +
+	"\bended_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\aendedAt\x129\n" +
+	"\n" +
+	"created_at\x18\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
+	"\n" +
+	"updated_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
+	"\n" +
+	"deleted_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12%\n" +
+	"\x04game\x18\r \x01(\v2\x11.pb.resource.GameR\x04gameB!Z\x1fexample/pb/resource;pb_resourceb\x06proto3"
 
 var (
 	file_resource_common_proto_rawDescOnce sync.Once
@@ -596,7 +755,7 @@ func file_resource_common_proto_rawDescGZIP() []byte {
 	return file_resource_common_proto_rawDescData
 }
 
-var file_resource_common_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
+var file_resource_common_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_resource_common_proto_goTypes = []any{
 	(*Filter)(nil),                // 0: pb.resource.Filter
 	(*Sorter)(nil),                // 1: pb.resource.Sorter
@@ -605,25 +764,32 @@ var file_resource_common_proto_goTypes = []any{
 	(*AdminUser)(nil),             // 4: pb.resource.AdminUser
 	(*AppUser)(nil),               // 5: pb.resource.AppUser
 	(*Game)(nil),                  // 6: pb.resource.Game
-	(*structpb.Value)(nil),        // 7: google.protobuf.Value
-	(*timestamppb.Timestamp)(nil), // 8: google.protobuf.Timestamp
+	(*Table)(nil),                 // 7: pb.resource.Table
+	(*structpb.Value)(nil),        // 8: google.protobuf.Value
+	(*timestamppb.Timestamp)(nil), // 9: google.protobuf.Timestamp
 }
 var file_resource_common_proto_depIdxs = []int32{
-	7,  // 0: pb.resource.Filter.value:type_name -> google.protobuf.Value
-	8,  // 1: pb.resource.GameType.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 2: pb.resource.GameType.updated_at:type_name -> google.protobuf.Timestamp
-	8,  // 3: pb.resource.GameType.deleted_at:type_name -> google.protobuf.Timestamp
+	8,  // 0: pb.resource.Filter.value:type_name -> google.protobuf.Value
+	9,  // 1: pb.resource.GameType.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 2: pb.resource.GameType.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 3: pb.resource.GameType.deleted_at:type_name -> google.protobuf.Timestamp
 	3,  // 4: pb.resource.GameType.parent:type_name -> pb.resource.GameType
 	3,  // 5: pb.resource.GameType.children:type_name -> pb.resource.GameType
-	8,  // 6: pb.resource.Game.created_at:type_name -> google.protobuf.Timestamp
-	8,  // 7: pb.resource.Game.updated_at:type_name -> google.protobuf.Timestamp
-	8,  // 8: pb.resource.Game.deleted_at:type_name -> google.protobuf.Timestamp
+	9,  // 6: pb.resource.Game.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 7: pb.resource.Game.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 8: pb.resource.Game.deleted_at:type_name -> google.protobuf.Timestamp
 	3,  // 9: pb.resource.Game.game_type:type_name -> pb.resource.GameType
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	9,  // 10: pb.resource.Table.started_at:type_name -> google.protobuf.Timestamp
+	9,  // 11: pb.resource.Table.ended_at:type_name -> google.protobuf.Timestamp
+	9,  // 12: pb.resource.Table.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 13: pb.resource.Table.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 14: pb.resource.Table.deleted_at:type_name -> google.protobuf.Timestamp
+	6,  // 15: pb.resource.Table.game:type_name -> pb.resource.Game
+	16, // [16:16] is the sub-list for method output_type
+	16, // [16:16] is the sub-list for method input_type
+	16, // [16:16] is the sub-list for extension type_name
+	16, // [16:16] is the sub-list for extension extendee
+	0,  // [0:16] is the sub-list for field type_name
 }
 
 func init() { file_resource_common_proto_init() }
@@ -637,7 +803,7 @@ func file_resource_common_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_common_proto_rawDesc), len(file_resource_common_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   7,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

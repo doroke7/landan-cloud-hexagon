@@ -48,10 +48,12 @@ func NewGameTypeModel(oAbstractModel *resourceBase.AbstractResource) outputPortA
 
 func (oSelf *GameTypeModel) AddOne(oGameTypeParm *domain.GameTypeValue) (bool, error) {
 
-	oRequest := &pbResourceModel.GameTypeAddOneInput{}
-
-	oRequest.Key = oGameTypeParm.Key
-	oRequest.Name = oGameTypeParm.Name
+	oRequest := &pbResourceModel.GameTypeAddOneInput{
+		Variable: &pbResourceModel.GameTypeVariable{
+			Key:  oGameTypeParm.Key,
+			Name: oGameTypeParm.Name,
+		},
+	}
 
 	_, oErr := oSelf.ResourceModelClient.GameType.AddOne(oSelf.Context, oRequest)
 
@@ -73,18 +75,14 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
 		return nil, oErr
 	}
 
-	if oResponse.GetId() == 0 {
+	oProtoGameType := oResponse.GetGameType()
+	if oProtoGameType.GetId() == 0 {
 		return nil, nil
 	}
 
-	return &domain.GameType{
-		Id:        uint(oResponse.GetId()),
-		Key:       oResponse.GetKey(),
-		Name:      oResponse.GetName(),
-		CreatedAt: oResponse.GetCreatedAt().AsTime(),
-		UpdatedAt: oResponse.GetUpdatedAt().AsTime(),
-		DeletedAt: oResponse.GetDeletedAt().AsTime(),
-	}, nil
+	oGameType := protoGameTypeToDomainGameType(oProtoGameType)
+
+	return &oGameType, nil
 }
 
 func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
@@ -157,10 +155,13 @@ func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64,
 
 func (oSelf *GameTypeModel) EditOneById(oGameType *domain.GameTypeValue, iId uint) (bool, error) {
 
-	oRequest := &pbResourceModel.GameTypeEditOneByIdInput{Id: uint32(iId)}
-
-	oRequest.Key = oGameType.Key
-	oRequest.Name = oGameType.Name
+	oRequest := &pbResourceModel.GameTypeEditOneByIdInput{
+		Id: uint32(iId),
+		Variable: &pbResourceModel.GameTypeVariable{
+			Key:  oGameType.Key,
+			Name: oGameType.Name,
+		},
+	}
 
 	oResponse, oErr := oSelf.ResourceModelClient.GameType.EditOneById(oSelf.Context, oRequest)
 
