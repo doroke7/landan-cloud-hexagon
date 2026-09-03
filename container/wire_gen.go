@@ -115,6 +115,9 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	tableHandler := inputApplicationHttpAdminResource.NewTableHandler(abstractHandler, tableUsecase)
 	adminUserUsecase := usecaseApplicationAnyAdminResource.NewAdminUserUsecase(adminUserModel, abstractUsecase)
 	adminUserHandler := inputApplicationHttpAdminResource.NewAdminUserHandler(abstractHandler, adminUserUsecase)
+	adminRoleModel := outputApplicationResourceModel.NewAdminRoleModel(abstractResource)
+	adminRoleUsecase := usecaseApplicationAnyAdminResource.NewAdminRoleUsecase(adminRoleModel, abstractUsecase)
+	adminRoleHandler := inputApplicationHttpAdminResource.NewAdminRoleHandler(abstractHandler, adminRoleUsecase)
 	gameTypeModel := outputApplicationResourceModel.NewGameTypeModel(abstractResource)
 	gameTypeLogic := outputApplicationResourceLogic.NewGameTypeLogic(abstractResource)
 	gameTypeUsecase := usecaseApplicationAnyAdminResource.NewGameTypeUsecase(gameTypeModel, gameTypeLogic, gameModel, abstractUsecase)
@@ -170,6 +173,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		HttpAdminResourceGame:                gameHandler,
 		HttpAdminResourceTable:               tableHandler,
 		HttpAdminResourceAdminUser:           adminUserHandler,
+		HttpAdminResourceAdminRole:           adminRoleHandler,
 		HttpAdminResourceGameType:            gameTypeHandler,
 		HttpAdminOptionGameType:              inputApplicationHttpAdminOptionGameTypeHandler,
 		HttpGameAuthenticationAuthenticator:  inputApplicationHttpGameAuthenticationAuthenticatorHandler,
@@ -305,6 +309,9 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	gameTypeUsecase := usecaseApplicationAnyModel.NewGameTypeUsecase(gameTypeModel, abstractUsecase)
 	abstractHandler := inputApplicationResource.NewAbstractHandler()
 	adminUserHandler := inputApplicationResourceModel.NewAdminUserHandler(abstractHandler, adminUserUsecase)
+	adminRoleModel := outputApplicationMysqlModel.NewAdminRoleModel(abstractMysql)
+	adminRoleUsecase := usecaseApplicationAnyModel.NewAdminRoleUsecase(adminRoleModel, abstractUsecase)
+	adminRoleHandler := inputApplicationResourceModel.NewAdminRoleHandler(abstractHandler, adminRoleUsecase)
 	appUserHandler := inputApplicationResourceModel.NewAppUserHandler(abstractHandler, appUserUsecase)
 	gameHandler := inputApplicationResourceModel.NewGameHandler(abstractHandler, gameUsecase)
 	tableHandler := inputApplicationResourceModel.NewTableHandler(abstractHandler, tableUsecase)
@@ -354,6 +361,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		GameTypeUsecase:                        gameTypeUsecase,
 		ResourceAbstract:                       abstractHandler,
 		ResourceModelAdminUser:                 adminUserHandler,
+		ResourceModelAdminRole:                 adminRoleHandler,
 		ResourceModelAppUser:                   appUserHandler,
 		ResourceModelGame:                      gameHandler,
 		ResourceModelTable:                     tableHandler,
@@ -684,6 +692,7 @@ type HttpContainer struct {
 	HttpAdminResourceGame                *inputApplicationHttpAdminResource.GameHandler
 	HttpAdminResourceTable               *inputApplicationHttpAdminResource.TableHandler
 	HttpAdminResourceAdminUser           *inputApplicationHttpAdminResource.AdminUserHandler
+	HttpAdminResourceAdminRole           *inputApplicationHttpAdminResource.AdminRoleHandler
 	HttpAdminResourceGameType            *inputApplicationHttpAdminResource.GameTypeHandler
 	HttpAdminOptionGameType              *inputApplicationHttpAdminOption.GameTypeHandler
 	HttpGameAuthenticationAuthenticator  *inputApplicationHttpGameAuthentication.AuthenticatorHandler
@@ -781,6 +790,7 @@ type ResourceContainer struct {
 	// gRPC Resource server
 	ResourceAbstract       *inputApplicationResource.AbstractHandler
 	ResourceModelAdminUser *inputApplicationResourceModel.AdminUserHandler
+	ResourceModelAdminRole *inputApplicationResourceModel.AdminRoleHandler
 	ResourceModelAppUser   *inputApplicationResourceModel.AppUserHandler
 	ResourceModelGame      *inputApplicationResourceModel.GameHandler
 	ResourceModelTable     *inputApplicationResourceModel.TableHandler

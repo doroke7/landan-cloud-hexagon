@@ -15,6 +15,7 @@ func NewModel(oClientConn *grpc.ClientConn) *Model {
 		Game:      pbResourceModel.NewGameModelClient(oClientConn),
 		Table:     pbResourceModel.NewTableModelClient(oClientConn),
 		GameType:  pbResourceModel.NewGameTypeModelClient(oClientConn),
+		AdminRole: pbResourceModel.NewAdminRoleModelClient(oClientConn),
 	}
 }
 
@@ -34,6 +35,7 @@ func NewEvent(oClientConn *grpc.ClientConn) *Event {
 
 type Model struct {
 	AdminUser pbResourceModel.AdminUserModelClient
+	AdminRole pbResourceModel.AdminRoleModelClient
 	AppUser   pbResourceModel.AppUserModelClient
 	Game      pbResourceModel.GameModelClient
 	Table     pbResourceModel.TableModelClient

@@ -144,6 +144,12 @@ func Init(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 			oAdminResource.DELETE("/AdminUser/RemoveOne", oContainer.HttpAdminResourceAdminUser.RemoveOne)
 			oAdminResource.GET("/AdminUser/ShowOnes", oContainer.HttpAdminResourceAdminUser.ShowOnes)
 
+			oAdminResource.POST("/AdminRole/AddOne", oContainer.HttpAdminResourceAdminRole.AddOne)
+			oAdminResource.PUT("/AdminRole/EditOne", oContainer.HttpAdminResourceAdminRole.EditOne)
+			oAdminResource.DELETE("/AdminRole/RemoveOne", oContainer.HttpAdminResourceAdminRole.RemoveOne)
+			oAdminResource.GET("/AdminRole/ShowOne", oContainer.HttpAdminResourceAdminRole.ShowOne)
+			oAdminResource.GET("/AdminRole/ShowOnes", oContainer.HttpAdminResourceAdminRole.ShowOnes)
+
 			oAdminResource.POST("/GameType/AddOne", oContainer.HttpAdminResourceGameType.AddOne)
 			oAdminResource.PUT("/GameType/EditOne", oContainer.HttpAdminResourceGameType.EditOne)
 			oAdminResource.DELETE("/GameType/RemoveOne", oContainer.HttpAdminResourceGameType.RemoveOne)

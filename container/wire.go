@@ -130,6 +130,7 @@ type HttpContainer struct {
 	HttpAdminResourceGame                *inputApplicationHttpAdminResource.GameHandler
 	HttpAdminResourceTable               *inputApplicationHttpAdminResource.TableHandler
 	HttpAdminResourceAdminUser           *inputApplicationHttpAdminResource.AdminUserHandler
+	HttpAdminResourceAdminRole           *inputApplicationHttpAdminResource.AdminRoleHandler
 	HttpAdminResourceGameType            *inputApplicationHttpAdminResource.GameTypeHandler
 	HttpAdminOptionGameType              *inputApplicationHttpAdminOption.GameTypeHandler
 	HttpGameAuthenticationAuthenticator  *inputApplicationHttpGameAuthentication.AuthenticatorHandler
@@ -192,6 +193,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		// output
 		outputApplicationResource.NewAbstractResource,
 		outputApplicationResourceModel.NewAdminUserModel,
+		outputApplicationResourceModel.NewAdminRoleModel,
 		outputApplicationResourceModel.NewGameModel,
 		outputApplicationResourceModel.NewTableModel,
 		outputApplicationResourceModel.NewGameTypeModel,
@@ -208,6 +210,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		usecaseApplicationAnyAdminResource.NewGameUsecase,
 		usecaseApplicationAnyAdminResource.NewTableUsecase,
 		usecaseApplicationAnyAdminResource.NewAdminUserUsecase,
+		usecaseApplicationAnyAdminResource.NewAdminRoleUsecase,
 		usecaseApplicationAnyAdminResource.NewGameTypeUsecase,
 		usecaseApplicationAnyAdminOption.NewGameTypeUsecase,
 
@@ -225,6 +228,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		inputApplicationHttpAdminResource.NewGameHandler,
 		inputApplicationHttpAdminResource.NewTableHandler,
 		inputApplicationHttpAdminResource.NewAdminUserHandler,
+		inputApplicationHttpAdminResource.NewAdminRoleHandler,
 		inputApplicationHttpAdminResource.NewGameTypeHandler,
 		inputApplicationHttpAdminOption.NewGameTypeHandler,
 
@@ -384,6 +388,7 @@ type ResourceContainer struct {
 	// gRPC Resource server
 	ResourceAbstract       *inputApplicationResource.AbstractHandler
 	ResourceModelAdminUser *inputApplicationResourceModel.AdminUserHandler
+	ResourceModelAdminRole *inputApplicationResourceModel.AdminRoleHandler
 	ResourceModelAppUser   *inputApplicationResourceModel.AppUserHandler
 	ResourceModelGame      *inputApplicationResourceModel.GameHandler
 	ResourceModelTable     *inputApplicationResourceModel.TableHandler
@@ -423,6 +428,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		// output
 		outputApplicationMysql.NewAbstractMysql,
 		outputApplicationMysqlModel.NewAdminUserModel,
+		outputApplicationMysqlModel.NewAdminRoleModel,
 		outputApplicationMysqlModel.NewAppUserModel,
 		outputApplicationMysqlModel.NewGameModel,
 		outputApplicationMysqlModel.NewTableModel,
@@ -436,6 +442,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		// usecase
 		usecaseApplicationAnyModel.NewAbstractUsecase,
 		usecaseApplicationAnyModel.NewAdminUserUsecase,
+		usecaseApplicationAnyModel.NewAdminRoleUsecase,
 		usecaseApplicationAnyModel.NewAppUserUsecase,
 		usecaseApplicationAnyModel.NewGameUsecase,
 		usecaseApplicationAnyModel.NewTableUsecase,
@@ -449,6 +456,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		// input-resource
 		inputApplicationResource.NewAbstractHandler,
 		inputApplicationResourceModel.NewAdminUserHandler,
+		inputApplicationResourceModel.NewAdminRoleHandler,
 		inputApplicationResourceModel.NewAppUserHandler,
 		inputApplicationResourceModel.NewGameHandler,
 		inputApplicationResourceModel.NewTableHandler,
