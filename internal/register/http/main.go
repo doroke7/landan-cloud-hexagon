@@ -140,6 +140,7 @@ func Init(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 			oAdminResource.GET("/Table/ShowOnes", oContainer.HttpAdminResourceTable.ShowOnes)
 
 			oAdminResource.POST("/AdminUser/AddOne", oContainer.HttpAdminResourceAdminUser.AddOne)
+			oAdminResource.PUT("/AdminUser/EditOne", oContainer.HttpAdminResourceAdminUser.EditOne)
 			oAdminResource.GET("/AdminUser/ShowOnes", oContainer.HttpAdminResourceAdminUser.ShowOnes)
 
 			oAdminResource.POST("/GameType/AddOne", oContainer.HttpAdminResourceGameType.AddOne)

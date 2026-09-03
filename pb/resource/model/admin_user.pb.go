@@ -7,6 +7,7 @@
 package pb_resource_model
 
 import (
+	resource "example/pb/resource"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -21,6 +22,58 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type AdminUserVarible struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Password      *string                `protobuf:"bytes,2,opt,name=password,proto3,oneof" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserVarible) Reset() {
+	*x = AdminUserVarible{}
+	mi := &file_resource_model_admin_user_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserVarible) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserVarible) ProtoMessage() {}
+
+func (x *AdminUserVarible) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_admin_user_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserVarible.ProtoReflect.Descriptor instead.
+func (*AdminUserVarible) Descriptor() ([]byte, []int) {
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *AdminUserVarible) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *AdminUserVarible) GetPassword() string {
+	if x != nil && x.Password != nil {
+		return *x.Password
+	}
+	return ""
+}
+
 type AdminUserShowOneByNameInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
@@ -30,7 +83,7 @@ type AdminUserShowOneByNameInput struct {
 
 func (x *AdminUserShowOneByNameInput) Reset() {
 	*x = AdminUserShowOneByNameInput{}
-	mi := &file_resource_model_admin_user_proto_msgTypes[0]
+	mi := &file_resource_model_admin_user_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +95,7 @@ func (x *AdminUserShowOneByNameInput) String() string {
 func (*AdminUserShowOneByNameInput) ProtoMessage() {}
 
 func (x *AdminUserShowOneByNameInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_user_proto_msgTypes[0]
+	mi := &file_resource_model_admin_user_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,7 +108,7 @@ func (x *AdminUserShowOneByNameInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminUserShowOneByNameInput.ProtoReflect.Descriptor instead.
 func (*AdminUserShowOneByNameInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{0}
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *AdminUserShowOneByNameInput) GetName() string {
@@ -67,16 +120,14 @@ func (x *AdminUserShowOneByNameInput) GetName() string {
 
 type AdminUserShowOneByNameOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	AdminUser     *resource.AdminUser    `protobuf:"bytes,1,opt,name=admin_user,json=adminUser,proto3" json:"admin_user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AdminUserShowOneByNameOutput) Reset() {
 	*x = AdminUserShowOneByNameOutput{}
-	mi := &file_resource_model_admin_user_proto_msgTypes[1]
+	mi := &file_resource_model_admin_user_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -88,7 +139,7 @@ func (x *AdminUserShowOneByNameOutput) String() string {
 func (*AdminUserShowOneByNameOutput) ProtoMessage() {}
 
 func (x *AdminUserShowOneByNameOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_user_proto_msgTypes[1]
+	mi := &file_resource_model_admin_user_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -101,28 +152,14 @@ func (x *AdminUserShowOneByNameOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminUserShowOneByNameOutput.ProtoReflect.Descriptor instead.
 func (*AdminUserShowOneByNameOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{1}
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *AdminUserShowOneByNameOutput) GetId() int32 {
+func (x *AdminUserShowOneByNameOutput) GetAdminUser() *resource.AdminUser {
 	if x != nil {
-		return x.Id
+		return x.AdminUser
 	}
-	return 0
-}
-
-func (x *AdminUserShowOneByNameOutput) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *AdminUserShowOneByNameOutput) GetPassword() string {
-	if x != nil {
-		return x.Password
-	}
-	return ""
+	return nil
 }
 
 type AdminUserShowOneByIdInput struct {
@@ -134,7 +171,7 @@ type AdminUserShowOneByIdInput struct {
 
 func (x *AdminUserShowOneByIdInput) Reset() {
 	*x = AdminUserShowOneByIdInput{}
-	mi := &file_resource_model_admin_user_proto_msgTypes[2]
+	mi := &file_resource_model_admin_user_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -146,7 +183,7 @@ func (x *AdminUserShowOneByIdInput) String() string {
 func (*AdminUserShowOneByIdInput) ProtoMessage() {}
 
 func (x *AdminUserShowOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_user_proto_msgTypes[2]
+	mi := &file_resource_model_admin_user_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -159,7 +196,7 @@ func (x *AdminUserShowOneByIdInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminUserShowOneByIdInput.ProtoReflect.Descriptor instead.
 func (*AdminUserShowOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{2}
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *AdminUserShowOneByIdInput) GetId() uint32 {
@@ -171,16 +208,14 @@ func (x *AdminUserShowOneByIdInput) GetId() uint32 {
 
 type AdminUserShowOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	AdminUser     *resource.AdminUser    `protobuf:"bytes,1,opt,name=admin_user,json=adminUser,proto3" json:"admin_user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AdminUserShowOneByIdOutput) Reset() {
 	*x = AdminUserShowOneByIdOutput{}
-	mi := &file_resource_model_admin_user_proto_msgTypes[3]
+	mi := &file_resource_model_admin_user_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -192,7 +227,7 @@ func (x *AdminUserShowOneByIdOutput) String() string {
 func (*AdminUserShowOneByIdOutput) ProtoMessage() {}
 
 func (x *AdminUserShowOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_user_proto_msgTypes[3]
+	mi := &file_resource_model_admin_user_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -205,41 +240,26 @@ func (x *AdminUserShowOneByIdOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminUserShowOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminUserShowOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{3}
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *AdminUserShowOneByIdOutput) GetId() uint32 {
+func (x *AdminUserShowOneByIdOutput) GetAdminUser() *resource.AdminUser {
 	if x != nil {
-		return x.Id
+		return x.AdminUser
 	}
-	return 0
-}
-
-func (x *AdminUserShowOneByIdOutput) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
-func (x *AdminUserShowOneByIdOutput) GetPassword() string {
-	if x != nil {
-		return x.Password
-	}
-	return ""
+	return nil
 }
 
 type AdminUserAddOneInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
-	Password      *string                `protobuf:"bytes,2,opt,name=password,proto3,oneof" json:"password,omitempty"`
+	Varible       *AdminUserVarible      `protobuf:"bytes,1,opt,name=varible,proto3" json:"varible,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AdminUserAddOneInput) Reset() {
 	*x = AdminUserAddOneInput{}
-	mi := &file_resource_model_admin_user_proto_msgTypes[4]
+	mi := &file_resource_model_admin_user_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -251,7 +271,7 @@ func (x *AdminUserAddOneInput) String() string {
 func (*AdminUserAddOneInput) ProtoMessage() {}
 
 func (x *AdminUserAddOneInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_user_proto_msgTypes[4]
+	mi := &file_resource_model_admin_user_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -264,21 +284,14 @@ func (x *AdminUserAddOneInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminUserAddOneInput.ProtoReflect.Descriptor instead.
 func (*AdminUserAddOneInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{4}
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *AdminUserAddOneInput) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
+func (x *AdminUserAddOneInput) GetVarible() *AdminUserVarible {
+	if x != nil {
+		return x.Varible
 	}
-	return ""
-}
-
-func (x *AdminUserAddOneInput) GetPassword() string {
-	if x != nil && x.Password != nil {
-		return *x.Password
-	}
-	return ""
+	return nil
 }
 
 type AdminUserAddOneOutput struct {
@@ -290,7 +303,7 @@ type AdminUserAddOneOutput struct {
 
 func (x *AdminUserAddOneOutput) Reset() {
 	*x = AdminUserAddOneOutput{}
-	mi := &file_resource_model_admin_user_proto_msgTypes[5]
+	mi := &file_resource_model_admin_user_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -302,7 +315,7 @@ func (x *AdminUserAddOneOutput) String() string {
 func (*AdminUserAddOneOutput) ProtoMessage() {}
 
 func (x *AdminUserAddOneOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_user_proto_msgTypes[5]
+	mi := &file_resource_model_admin_user_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -315,10 +328,106 @@ func (x *AdminUserAddOneOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminUserAddOneOutput.ProtoReflect.Descriptor instead.
 func (*AdminUserAddOneOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{5}
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *AdminUserAddOneOutput) GetStatus() bool {
+	if x != nil {
+		return x.Status
+	}
+	return false
+}
+
+type AdminUserEditOneByIdInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Varible       *AdminUserVarible      `protobuf:"bytes,1,opt,name=varible,proto3" json:"varible,omitempty"`
+	Id            uint32                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserEditOneByIdInput) Reset() {
+	*x = AdminUserEditOneByIdInput{}
+	mi := &file_resource_model_admin_user_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserEditOneByIdInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserEditOneByIdInput) ProtoMessage() {}
+
+func (x *AdminUserEditOneByIdInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_admin_user_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserEditOneByIdInput.ProtoReflect.Descriptor instead.
+func (*AdminUserEditOneByIdInput) Descriptor() ([]byte, []int) {
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *AdminUserEditOneByIdInput) GetVarible() *AdminUserVarible {
+	if x != nil {
+		return x.Varible
+	}
+	return nil
+}
+
+func (x *AdminUserEditOneByIdInput) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type AdminUserEditOneByIdOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserEditOneByIdOutput) Reset() {
+	*x = AdminUserEditOneByIdOutput{}
+	mi := &file_resource_model_admin_user_proto_msgTypes[8]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserEditOneByIdOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserEditOneByIdOutput) ProtoMessage() {}
+
+func (x *AdminUserEditOneByIdOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_admin_user_proto_msgTypes[8]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserEditOneByIdOutput.ProtoReflect.Descriptor instead.
+func (*AdminUserEditOneByIdOutput) Descriptor() ([]byte, []int) {
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{8}
+}
+
+func (x *AdminUserEditOneByIdOutput) GetStatus() bool {
 	if x != nil {
 		return x.Status
 	}
@@ -329,30 +438,36 @@ var File_resource_model_admin_user_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1fresource/model/admin_user.proto\x12\x11pb.resource.model\"1\n" +
-	"\x1bAdminUserShowOneByNameInput\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"^\n" +
-	"\x1cAdminUserShowOneByNameOutput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\"+\n" +
-	"\x19AdminUserShowOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"\\\n" +
-	"\x1aAdminUserShowOneByIdOutput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
-	"\bpassword\x18\x03 \x01(\tR\bpassword\"f\n" +
-	"\x14AdminUserAddOneInput\x12\x17\n" +
+	"\x1fresource/model/admin_user.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"b\n" +
+	"\x10AdminUserVarible\x12\x17\n" +
 	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
 	"\bpassword\x18\x02 \x01(\tH\x01R\bpassword\x88\x01\x01B\a\n" +
 	"\x05_nameB\v\n" +
-	"\t_password\"/\n" +
+	"\t_password\"1\n" +
+	"\x1bAdminUserShowOneByNameInput\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"U\n" +
+	"\x1cAdminUserShowOneByNameOutput\x125\n" +
+	"\n" +
+	"admin_user\x18\x01 \x01(\v2\x16.pb.resource.AdminUserR\tadminUser\"+\n" +
+	"\x19AdminUserShowOneByIdInput\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\"S\n" +
+	"\x1aAdminUserShowOneByIdOutput\x125\n" +
+	"\n" +
+	"admin_user\x18\x01 \x01(\v2\x16.pb.resource.AdminUserR\tadminUser\"U\n" +
+	"\x14AdminUserAddOneInput\x12=\n" +
+	"\avarible\x18\x01 \x01(\v2#.pb.resource.model.AdminUserVaribleR\avarible\"/\n" +
 	"\x15AdminUserAddOneOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status2\xcb\x02\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\"j\n" +
+	"\x19AdminUserEditOneByIdInput\x12=\n" +
+	"\avarible\x18\x01 \x01(\v2#.pb.resource.model.AdminUserVaribleR\avarible\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\rR\x02id\"4\n" +
+	"\x1aAdminUserEditOneByIdOutput\x12\x16\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status2\xb7\x03\n" +
 	"\x0eAdminUserModel\x12p\n" +
 	"\rShowOneByName\x12..pb.resource.model.AdminUserShowOneByNameInput\x1a/.pb.resource.model.AdminUserShowOneByNameOutput\x12j\n" +
 	"\vShowOneById\x12,.pb.resource.model.AdminUserShowOneByIdInput\x1a-.pb.resource.model.AdminUserShowOneByIdOutput\x12[\n" +
-	"\x06AddOne\x12'.pb.resource.model.AdminUserAddOneInput\x1a(.pb.resource.model.AdminUserAddOneOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
+	"\x06AddOne\x12'.pb.resource.model.AdminUserAddOneInput\x1a(.pb.resource.model.AdminUserAddOneOutput\x12j\n" +
+	"\vEditOneById\x12,.pb.resource.model.AdminUserEditOneByIdInput\x1a-.pb.resource.model.AdminUserEditOneByIdOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
 
 var (
 	file_resource_model_admin_user_proto_rawDescOnce sync.Once
@@ -366,27 +481,37 @@ func file_resource_model_admin_user_proto_rawDescGZIP() []byte {
 	return file_resource_model_admin_user_proto_rawDescData
 }
 
-var file_resource_model_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_resource_model_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_resource_model_admin_user_proto_goTypes = []any{
-	(*AdminUserShowOneByNameInput)(nil),  // 0: pb.resource.model.AdminUserShowOneByNameInput
-	(*AdminUserShowOneByNameOutput)(nil), // 1: pb.resource.model.AdminUserShowOneByNameOutput
-	(*AdminUserShowOneByIdInput)(nil),    // 2: pb.resource.model.AdminUserShowOneByIdInput
-	(*AdminUserShowOneByIdOutput)(nil),   // 3: pb.resource.model.AdminUserShowOneByIdOutput
-	(*AdminUserAddOneInput)(nil),         // 4: pb.resource.model.AdminUserAddOneInput
-	(*AdminUserAddOneOutput)(nil),        // 5: pb.resource.model.AdminUserAddOneOutput
+	(*AdminUserVarible)(nil),             // 0: pb.resource.model.AdminUserVarible
+	(*AdminUserShowOneByNameInput)(nil),  // 1: pb.resource.model.AdminUserShowOneByNameInput
+	(*AdminUserShowOneByNameOutput)(nil), // 2: pb.resource.model.AdminUserShowOneByNameOutput
+	(*AdminUserShowOneByIdInput)(nil),    // 3: pb.resource.model.AdminUserShowOneByIdInput
+	(*AdminUserShowOneByIdOutput)(nil),   // 4: pb.resource.model.AdminUserShowOneByIdOutput
+	(*AdminUserAddOneInput)(nil),         // 5: pb.resource.model.AdminUserAddOneInput
+	(*AdminUserAddOneOutput)(nil),        // 6: pb.resource.model.AdminUserAddOneOutput
+	(*AdminUserEditOneByIdInput)(nil),    // 7: pb.resource.model.AdminUserEditOneByIdInput
+	(*AdminUserEditOneByIdOutput)(nil),   // 8: pb.resource.model.AdminUserEditOneByIdOutput
+	(*resource.AdminUser)(nil),           // 9: pb.resource.AdminUser
 }
 var file_resource_model_admin_user_proto_depIdxs = []int32{
-	0, // 0: pb.resource.model.AdminUserModel.ShowOneByName:input_type -> pb.resource.model.AdminUserShowOneByNameInput
-	2, // 1: pb.resource.model.AdminUserModel.ShowOneById:input_type -> pb.resource.model.AdminUserShowOneByIdInput
-	4, // 2: pb.resource.model.AdminUserModel.AddOne:input_type -> pb.resource.model.AdminUserAddOneInput
-	1, // 3: pb.resource.model.AdminUserModel.ShowOneByName:output_type -> pb.resource.model.AdminUserShowOneByNameOutput
-	3, // 4: pb.resource.model.AdminUserModel.ShowOneById:output_type -> pb.resource.model.AdminUserShowOneByIdOutput
-	5, // 5: pb.resource.model.AdminUserModel.AddOne:output_type -> pb.resource.model.AdminUserAddOneOutput
-	3, // [3:6] is the sub-list for method output_type
-	0, // [0:3] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	9, // 0: pb.resource.model.AdminUserShowOneByNameOutput.admin_user:type_name -> pb.resource.AdminUser
+	9, // 1: pb.resource.model.AdminUserShowOneByIdOutput.admin_user:type_name -> pb.resource.AdminUser
+	0, // 2: pb.resource.model.AdminUserAddOneInput.varible:type_name -> pb.resource.model.AdminUserVarible
+	0, // 3: pb.resource.model.AdminUserEditOneByIdInput.varible:type_name -> pb.resource.model.AdminUserVarible
+	1, // 4: pb.resource.model.AdminUserModel.ShowOneByName:input_type -> pb.resource.model.AdminUserShowOneByNameInput
+	3, // 5: pb.resource.model.AdminUserModel.ShowOneById:input_type -> pb.resource.model.AdminUserShowOneByIdInput
+	5, // 6: pb.resource.model.AdminUserModel.AddOne:input_type -> pb.resource.model.AdminUserAddOneInput
+	7, // 7: pb.resource.model.AdminUserModel.EditOneById:input_type -> pb.resource.model.AdminUserEditOneByIdInput
+	2, // 8: pb.resource.model.AdminUserModel.ShowOneByName:output_type -> pb.resource.model.AdminUserShowOneByNameOutput
+	4, // 9: pb.resource.model.AdminUserModel.ShowOneById:output_type -> pb.resource.model.AdminUserShowOneByIdOutput
+	6, // 10: pb.resource.model.AdminUserModel.AddOne:output_type -> pb.resource.model.AdminUserAddOneOutput
+	8, // 11: pb.resource.model.AdminUserModel.EditOneById:output_type -> pb.resource.model.AdminUserEditOneByIdOutput
+	8, // [8:12] is the sub-list for method output_type
+	4, // [4:8] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_resource_model_admin_user_proto_init() }
@@ -394,14 +519,14 @@ func file_resource_model_admin_user_proto_init() {
 	if File_resource_model_admin_user_proto != nil {
 		return
 	}
-	file_resource_model_admin_user_proto_msgTypes[4].OneofWrappers = []any{}
+	file_resource_model_admin_user_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_model_admin_user_proto_rawDesc), len(file_resource_model_admin_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -13,6 +13,7 @@ import (
 	elasticsearchBase "example/internal/output/application/elasticsearch"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type AdminUserModel struct {
@@ -77,6 +78,20 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	}
 
 	return &oAdminUser, nil
+}
+
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
+	oColumns, oErr := pkgUtility.StructToMap(oAdminUser)
+	if oErr != nil {
+		return false, oErr
+	}
+	oColumns["updated_at"] = time.Now()
+
+	sId := strconv.FormatUint(uint64(iId), 10)
+
+	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oColumns)
+
+	return bOk, oErr
 }
 
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {

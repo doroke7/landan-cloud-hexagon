@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
@@ -34,9 +35,11 @@ func (oSelf *AdminUserHandler) ShowOneByName(oContext context.Context, oReq *pbR
 	}
 
 	return &pbResourceModel.AdminUserShowOneByNameOutput{
-		Id:       int32(oAdminUser.Id),
-		Name:     oAdminUser.Name,
-		Password: oAdminUser.Password,
+		AdminUser: &pbResource.AdminUser{
+			Id:       uint32(oAdminUser.Id),
+			Name:     oAdminUser.Name,
+			Password: oAdminUser.Password,
+		},
 	}, nil
 
 }
@@ -49,18 +52,23 @@ func (oSelf *AdminUserHandler) ShowOneById(oContext context.Context, oReq *pbRes
 	}
 
 	return &pbResourceModel.AdminUserShowOneByIdOutput{
-		Id:       uint32(oAdminUser.Id),
-		Name:     oAdminUser.Name,
-		Password: oAdminUser.Password,
+		AdminUser: &pbResource.AdminUser{
+			Id:       uint32(oAdminUser.Id),
+			Name:     oAdminUser.Name,
+			Password: oAdminUser.Password,
+		},
 	}, nil
 
 }
 
 func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResourceModel.AdminUserAddOneInput) (*pbResourceModel.AdminUserAddOneOutput, error) {
 
-	oAdminUserValue := domain.AdminUserValue{
-		Name:     oReq.Name,
-		Password: oReq.Password,
+	oVarible := oReq.GetVarible()
+
+	oAdminUserValue := domain.AdminUserValue{}
+	if oVarible != nil {
+		oAdminUserValue.Name = oVarible.Name
+		oAdminUserValue.Password = oVarible.Password
 	}
 
 	bResult, oErr := oSelf.AdminUserUsecase.AddOne(&oAdminUserValue)
@@ -70,6 +78,27 @@ func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResource
 	}
 
 	return &pbResourceModel.AdminUserAddOneOutput{
+		Status: bResult,
+	}, nil
+}
+
+func (oSelf *AdminUserHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminUserEditOneByIdInput) (*pbResourceModel.AdminUserEditOneByIdOutput, error) {
+
+	oVarible := oReq.GetVarible()
+
+	oAdminUserValue := domain.AdminUserValue{}
+	if oVarible != nil {
+		oAdminUserValue.Name = oVarible.Name
+		oAdminUserValue.Password = oVarible.Password
+	}
+
+	bResult, oErr := oSelf.AdminUserUsecase.EditOneById(&oAdminUserValue, uint(oReq.Id))
+
+	if oErr != nil {
+		return nil, status.Error(codes.Aborted, oErr.Error())
+	}
+
+	return &pbResourceModel.AdminUserEditOneByIdOutput{
 		Status: bResult,
 	}, nil
 }

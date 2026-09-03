@@ -31,10 +31,12 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 		return nil, err
 	}
 
+	oProtoAdminUser := oResp.GetAdminUser()
+
 	return &domain.AdminUser{
-		Id:       uint(oResp.GetId()),
-		Name:     oResp.GetName(),
-		Password: oResp.GetPassword(),
+		Id:       uint(oProtoAdminUser.GetId()),
+		Name:     oProtoAdminUser.GetName(),
+		Password: oProtoAdminUser.GetPassword(),
 	}, nil
 }
 
@@ -49,10 +51,12 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 		return nil, err
 	}
 
+	oProtoAdminUser := oResp.GetAdminUser()
+
 	return &domain.AdminUser{
-		Id:       uint(oResp.GetId()),
-		Name:     oResp.GetName(),
-		Password: oResp.GetPassword(),
+		Id:       uint(oProtoAdminUser.GetId()),
+		Name:     oProtoAdminUser.GetName(),
+		Password: oProtoAdminUser.GetPassword(),
 	}, nil
 }
 
@@ -69,11 +73,32 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
 
 	oRequest := &pbResourceModel.AdminUserAddOneInput{
-		Name:     oAdminUser.Name,
-		Password: oAdminUser.Password,
+		Varible: &pbResourceModel.AdminUserVarible{
+			Name:     oAdminUser.Name,
+			Password: oAdminUser.Password,
+		},
 	}
 
 	oResponse, oErr := oSelf.ResourceModelClient.AdminUser.AddOne(oSelf.Context, oRequest)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return oResponse.GetStatus(), nil
+}
+
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
+
+	oRequest := &pbResourceModel.AdminUserEditOneByIdInput{
+		Id: uint32(iId),
+		Varible: &pbResourceModel.AdminUserVarible{
+			Name:     oAdminUser.Name,
+			Password: oAdminUser.Password,
+		},
+	}
+
+	oResponse, oErr := oSelf.ResourceModelClient.AdminUser.EditOneById(oSelf.Context, oRequest)
 
 	if oErr != nil {
 		return false, oErr

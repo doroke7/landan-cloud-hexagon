@@ -97,6 +97,28 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return &oAdminUser, nil
 }
 
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
+	oSet := bson.M{"updated_at": time.Now()}
+
+	if oAdminUser.Name != nil {
+		oSet["name"] = *oAdminUser.Name
+	}
+	if oAdminUser.Password != nil {
+		oSet["password"] = *oAdminUser.Password
+	}
+
+	oResult, oErr := oSelf.Collection.UpdateOne(
+		oSelf.Context,
+		bson.M{"_id": iId},
+		bson.M{"$set": oSet},
+	)
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return oResult.MatchedCount > 0, nil
+}
+
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero

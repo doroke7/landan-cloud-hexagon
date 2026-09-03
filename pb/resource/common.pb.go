@@ -295,6 +295,66 @@ func (x *GameType) GetChildren() []*GameType {
 	return nil
 }
 
+type AdminUser struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUser) Reset() {
+	*x = AdminUser{}
+	mi := &file_resource_common_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUser) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUser) ProtoMessage() {}
+
+func (x *AdminUser) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_common_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUser.ProtoReflect.Descriptor instead.
+func (*AdminUser) Descriptor() ([]byte, []int) {
+	return file_resource_common_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *AdminUser) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+func (x *AdminUser) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
+func (x *AdminUser) GetPassword() string {
+	if x != nil {
+		return x.Password
+	}
+	return ""
+}
+
 type Game struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -312,7 +372,7 @@ type Game struct {
 
 func (x *Game) Reset() {
 	*x = Game{}
-	mi := &file_resource_common_proto_msgTypes[4]
+	mi := &file_resource_common_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -324,7 +384,7 @@ func (x *Game) String() string {
 func (*Game) ProtoMessage() {}
 
 func (x *Game) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_common_proto_msgTypes[4]
+	mi := &file_resource_common_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -337,7 +397,7 @@ func (x *Game) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Game.ProtoReflect.Descriptor instead.
 func (*Game) Descriptor() ([]byte, []int) {
-	return file_resource_common_proto_rawDescGZIP(), []int{4}
+	return file_resource_common_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *Game) GetId() uint32 {
@@ -431,7 +491,11 @@ const file_resource_common_proto_rawDesc = "" +
 	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1b\n" +
 	"\tparent_id\x18\a \x01(\rR\bparentId\x12-\n" +
 	"\x06parent\x18\b \x01(\v2\x15.pb.resource.GameTypeR\x06parent\x121\n" +
-	"\bchildren\x18\t \x03(\v2\x15.pb.resource.GameTypeR\bchildren\"\xe5\x02\n" +
+	"\bchildren\x18\t \x03(\v2\x15.pb.resource.GameTypeR\bchildren\"K\n" +
+	"\tAdminUser\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
+	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
+	"\bpassword\x18\x03 \x01(\tR\bpassword\"\xe5\x02\n" +
 	"\x04Game\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12 \n" +
 	"\fgame_type_id\x18\x02 \x01(\rR\n" +
@@ -459,26 +523,27 @@ func file_resource_common_proto_rawDescGZIP() []byte {
 	return file_resource_common_proto_rawDescData
 }
 
-var file_resource_common_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_resource_common_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_resource_common_proto_goTypes = []any{
 	(*Filter)(nil),                // 0: pb.resource.Filter
 	(*Sorter)(nil),                // 1: pb.resource.Sorter
 	(*Pagination)(nil),            // 2: pb.resource.Pagination
 	(*GameType)(nil),              // 3: pb.resource.GameType
-	(*Game)(nil),                  // 4: pb.resource.Game
-	(*structpb.Value)(nil),        // 5: google.protobuf.Value
-	(*timestamppb.Timestamp)(nil), // 6: google.protobuf.Timestamp
+	(*AdminUser)(nil),             // 4: pb.resource.AdminUser
+	(*Game)(nil),                  // 5: pb.resource.Game
+	(*structpb.Value)(nil),        // 6: google.protobuf.Value
+	(*timestamppb.Timestamp)(nil), // 7: google.protobuf.Timestamp
 }
 var file_resource_common_proto_depIdxs = []int32{
-	5,  // 0: pb.resource.Filter.value:type_name -> google.protobuf.Value
-	6,  // 1: pb.resource.GameType.created_at:type_name -> google.protobuf.Timestamp
-	6,  // 2: pb.resource.GameType.updated_at:type_name -> google.protobuf.Timestamp
-	6,  // 3: pb.resource.GameType.deleted_at:type_name -> google.protobuf.Timestamp
+	6,  // 0: pb.resource.Filter.value:type_name -> google.protobuf.Value
+	7,  // 1: pb.resource.GameType.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 2: pb.resource.GameType.updated_at:type_name -> google.protobuf.Timestamp
+	7,  // 3: pb.resource.GameType.deleted_at:type_name -> google.protobuf.Timestamp
 	3,  // 4: pb.resource.GameType.parent:type_name -> pb.resource.GameType
 	3,  // 5: pb.resource.GameType.children:type_name -> pb.resource.GameType
-	6,  // 6: pb.resource.Game.created_at:type_name -> google.protobuf.Timestamp
-	6,  // 7: pb.resource.Game.updated_at:type_name -> google.protobuf.Timestamp
-	6,  // 8: pb.resource.Game.deleted_at:type_name -> google.protobuf.Timestamp
+	7,  // 6: pb.resource.Game.created_at:type_name -> google.protobuf.Timestamp
+	7,  // 7: pb.resource.Game.updated_at:type_name -> google.protobuf.Timestamp
+	7,  // 8: pb.resource.Game.deleted_at:type_name -> google.protobuf.Timestamp
 	3,  // 9: pb.resource.Game.game_type:type_name -> pb.resource.GameType
 	10, // [10:10] is the sub-list for method output_type
 	10, // [10:10] is the sub-list for method input_type
@@ -498,7 +563,7 @@ func file_resource_common_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_common_proto_rawDesc), len(file_resource_common_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},
