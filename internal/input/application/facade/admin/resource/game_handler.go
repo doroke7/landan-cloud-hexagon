@@ -40,6 +40,30 @@ func toStatusError(oErr error) error {
 	return status.Error(codes.Internal, oErr.Error())
 }
 
+// domainGameTypeToProtoGameType 遞迴帶出 Parent / Children。
+func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbFacade.GameType {
+	if oGameType == nil {
+		return nil
+	}
+
+	oProto := &pbFacade.GameType{
+		Id:        uint32(oGameType.Id),
+		ParentId:  uint32(oGameType.ParentId),
+		Key:       oGameType.Key,
+		Name:      oGameType.Name,
+		CreatedAt: timestamppb.New(oGameType.CreatedAt),
+		UpdatedAt: timestamppb.New(oGameType.UpdatedAt),
+		DeletedAt: timestamppb.New(oGameType.DeletedAt),
+		Parent:    domainGameTypeToProtoGameType(oGameType.Parent),
+	}
+
+	for i := range oGameType.Children {
+		oProto.Children = append(oProto.Children, domainGameTypeToProtoGameType(&oGameType.Children[i]))
+	}
+
+	return oProto
+}
+
 func domainGameToProtoGame(oGame *domain.Game) *pbFacade.Game {
 	if oGame == nil {
 		return nil
@@ -54,6 +78,7 @@ func domainGameToProtoGame(oGame *domain.Game) *pbFacade.Game {
 		CreatedAt:   timestamppb.New(oGame.CreatedAt),
 		UpdatedAt:   timestamppb.New(oGame.UpdatedAt),
 		DeletedAt:   timestamppb.New(oGame.DeletedAt),
+		GameType:    domainGameTypeToProtoGameType(&oGame.GameType),
 	}
 }
 
