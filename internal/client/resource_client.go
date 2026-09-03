@@ -10,12 +10,13 @@ import (
 
 func NewModel(oClientConn *grpc.ClientConn) *Model {
 	return &Model{
-		AdminUser: pbResourceModel.NewAdminUserModelClient(oClientConn),
-		AppUser:   pbResourceModel.NewAppUserModelClient(oClientConn),
-		Game:      pbResourceModel.NewGameModelClient(oClientConn),
-		Table:     pbResourceModel.NewTableModelClient(oClientConn),
-		GameType:  pbResourceModel.NewGameTypeModelClient(oClientConn),
-		AdminRole: pbResourceModel.NewAdminRoleModelClient(oClientConn),
+		AdminUser:       pbResourceModel.NewAdminUserModelClient(oClientConn),
+		AppUser:         pbResourceModel.NewAppUserModelClient(oClientConn),
+		Game:            pbResourceModel.NewGameModelClient(oClientConn),
+		Table:           pbResourceModel.NewTableModelClient(oClientConn),
+		GameType:        pbResourceModel.NewGameTypeModelClient(oClientConn),
+		AdminRole:       pbResourceModel.NewAdminRoleModelClient(oClientConn),
+		AdminPermission: pbResourceModel.NewAdminPermissionModelClient(oClientConn),
 	}
 }
 
@@ -34,12 +35,13 @@ func NewEvent(oClientConn *grpc.ClientConn) *Event {
 }
 
 type Model struct {
-	AdminUser pbResourceModel.AdminUserModelClient
-	AdminRole pbResourceModel.AdminRoleModelClient
-	AppUser   pbResourceModel.AppUserModelClient
-	Game      pbResourceModel.GameModelClient
-	Table     pbResourceModel.TableModelClient
-	GameType  pbResourceModel.GameTypeModelClient
+	AdminUser       pbResourceModel.AdminUserModelClient
+	AdminRole       pbResourceModel.AdminRoleModelClient
+	AdminPermission pbResourceModel.AdminPermissionModelClient
+	AppUser         pbResourceModel.AppUserModelClient
+	Game            pbResourceModel.GameModelClient
+	Table           pbResourceModel.TableModelClient
+	GameType        pbResourceModel.GameTypeModelClient
 }
 
 type Logic struct {

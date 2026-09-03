@@ -118,6 +118,9 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	adminRoleModel := outputApplicationResourceModel.NewAdminRoleModel(abstractResource)
 	adminRoleUsecase := usecaseApplicationAnyAdminResource.NewAdminRoleUsecase(adminRoleModel, abstractUsecase)
 	adminRoleHandler := inputApplicationHttpAdminResource.NewAdminRoleHandler(abstractHandler, adminRoleUsecase)
+	adminPermissionModel := outputApplicationResourceModel.NewAdminPermissionModel(abstractResource)
+	adminPermissionUsecase := usecaseApplicationAnyAdminResource.NewAdminPermissionUsecase(adminPermissionModel, abstractUsecase)
+	adminPermissionHandler := inputApplicationHttpAdminResource.NewAdminPermissionHandler(abstractHandler, adminPermissionUsecase)
 	gameTypeModel := outputApplicationResourceModel.NewGameTypeModel(abstractResource)
 	gameTypeLogic := outputApplicationResourceLogic.NewGameTypeLogic(abstractResource)
 	gameTypeUsecase := usecaseApplicationAnyAdminResource.NewGameTypeUsecase(gameTypeModel, gameTypeLogic, gameModel, abstractUsecase)
@@ -174,6 +177,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		HttpAdminResourceTable:               tableHandler,
 		HttpAdminResourceAdminUser:           adminUserHandler,
 		HttpAdminResourceAdminRole:           adminRoleHandler,
+		HttpAdminResourceAdminPermission:     adminPermissionHandler,
 		HttpAdminResourceGameType:            gameTypeHandler,
 		HttpAdminOptionGameType:              inputApplicationHttpAdminOptionGameTypeHandler,
 		HttpGameAuthenticationAuthenticator:  inputApplicationHttpGameAuthenticationAuthenticatorHandler,
@@ -312,6 +316,9 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	adminRoleModel := outputApplicationMysqlModel.NewAdminRoleModel(abstractMysql)
 	adminRoleUsecase := usecaseApplicationAnyModel.NewAdminRoleUsecase(adminRoleModel, abstractUsecase)
 	adminRoleHandler := inputApplicationResourceModel.NewAdminRoleHandler(abstractHandler, adminRoleUsecase)
+	adminPermissionModel := outputApplicationMysqlModel.NewAdminPermissionModel(abstractMysql)
+	adminPermissionUsecase := usecaseApplicationAnyModel.NewAdminPermissionUsecase(adminPermissionModel, abstractUsecase)
+	adminPermissionHandler := inputApplicationResourceModel.NewAdminPermissionHandler(abstractHandler, adminPermissionUsecase)
 	appUserHandler := inputApplicationResourceModel.NewAppUserHandler(abstractHandler, appUserUsecase)
 	gameHandler := inputApplicationResourceModel.NewGameHandler(abstractHandler, gameUsecase)
 	tableHandler := inputApplicationResourceModel.NewTableHandler(abstractHandler, tableUsecase)
@@ -362,6 +369,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		ResourceAbstract:                       abstractHandler,
 		ResourceModelAdminUser:                 adminUserHandler,
 		ResourceModelAdminRole:                 adminRoleHandler,
+		ResourceModelAdminPermission:           adminPermissionHandler,
 		ResourceModelAppUser:                   appUserHandler,
 		ResourceModelGame:                      gameHandler,
 		ResourceModelTable:                     tableHandler,
@@ -693,6 +701,7 @@ type HttpContainer struct {
 	HttpAdminResourceTable               *inputApplicationHttpAdminResource.TableHandler
 	HttpAdminResourceAdminUser           *inputApplicationHttpAdminResource.AdminUserHandler
 	HttpAdminResourceAdminRole           *inputApplicationHttpAdminResource.AdminRoleHandler
+	HttpAdminResourceAdminPermission     *inputApplicationHttpAdminResource.AdminPermissionHandler
 	HttpAdminResourceGameType            *inputApplicationHttpAdminResource.GameTypeHandler
 	HttpAdminOptionGameType              *inputApplicationHttpAdminOption.GameTypeHandler
 	HttpGameAuthenticationAuthenticator  *inputApplicationHttpGameAuthentication.AuthenticatorHandler
@@ -788,17 +797,18 @@ type ResourceContainer struct {
 	usecasePortAnyModel.GameTypeUsecase
 
 	// gRPC Resource server
-	ResourceAbstract       *inputApplicationResource.AbstractHandler
-	ResourceModelAdminUser *inputApplicationResourceModel.AdminUserHandler
-	ResourceModelAdminRole *inputApplicationResourceModel.AdminRoleHandler
-	ResourceModelAppUser   *inputApplicationResourceModel.AppUserHandler
-	ResourceModelGame      *inputApplicationResourceModel.GameHandler
-	ResourceModelTable     *inputApplicationResourceModel.TableHandler
-	ResourceModelGameType  *inputApplicationResourceModel.GameTypeHandler
-	ResourceLogicGame      *inputApplicationResourceLogic.GameHandler
-	ResourceLogicTable     *inputApplicationResourceLogic.TableHandler
-	ResourceLogicGameType  *inputApplicationResourceLogic.GameTypeHandler
-	ResourceEventAdminUser *inputApplicationResourceEvent.AdminUserHandler
+	ResourceAbstract             *inputApplicationResource.AbstractHandler
+	ResourceModelAdminUser       *inputApplicationResourceModel.AdminUserHandler
+	ResourceModelAdminRole       *inputApplicationResourceModel.AdminRoleHandler
+	ResourceModelAdminPermission *inputApplicationResourceModel.AdminPermissionHandler
+	ResourceModelAppUser         *inputApplicationResourceModel.AppUserHandler
+	ResourceModelGame            *inputApplicationResourceModel.GameHandler
+	ResourceModelTable           *inputApplicationResourceModel.TableHandler
+	ResourceModelGameType        *inputApplicationResourceModel.GameTypeHandler
+	ResourceLogicGame            *inputApplicationResourceLogic.GameHandler
+	ResourceLogicTable           *inputApplicationResourceLogic.TableHandler
+	ResourceLogicGameType        *inputApplicationResourceLogic.GameTypeHandler
+	ResourceEventAdminUser       *inputApplicationResourceEvent.AdminUserHandler
 
 	// gRPC Resource Interceptor
 	ResourceLogicAuthenticationInterceptor *interceptorResourceLogic.AuthenticationInterceptor
