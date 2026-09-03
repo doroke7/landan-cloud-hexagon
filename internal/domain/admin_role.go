@@ -13,12 +13,13 @@ import (
 )
 
 type AdminRole struct {
-	Id        uint      `json:"id" bson:"_id"`
-	Key       string    `json:"key" bson:"key"`
-	Name      string    `json:"name" bson:"name"`
-	CreatedAt time.Time `json:"created_at" bson:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
-	DeletedAt time.Time `json:"deleted_at" bson:"deleted_at"`
+	Id               uint              `json:"id" bson:"_id"`
+	Key              string            `json:"key" bson:"key"`
+	Name             string            `json:"name" bson:"name"`
+	CreatedAt        time.Time         `json:"created_at" bson:"created_at"`
+	UpdatedAt        time.Time         `json:"updated_at" bson:"updated_at"`
+	DeletedAt        time.Time         `json:"deleted_at" bson:"deleted_at"`
+	AdminPermissions []AdminPermission `json:"admin_permissions,omitempty" bson:"-" gorm:"many2many:admin_roles_to_admin_permissions"`
 }
 
 type AdminRoleValue struct {
