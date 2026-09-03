@@ -346,6 +346,7 @@ func (x *GameTypeEditOneByIdOutput) GetStatus() bool {
 	return false
 }
 
+// 數據模型直接對ID查找
 type GameTypeRemoveOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`

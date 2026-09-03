@@ -7,6 +7,7 @@
 package pb_resource_logic
 
 import (
+	resource "example/pb/resource"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -21,16 +22,68 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type AppUserVariable struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Password      *string                `protobuf:"bytes,2,opt,name=password,proto3,oneof" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AppUserVariable) Reset() {
+	*x = AppUserVariable{}
+	mi := &file_resource_logic_app_user_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AppUserVariable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AppUserVariable) ProtoMessage() {}
+
+func (x *AppUserVariable) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_app_user_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AppUserVariable.ProtoReflect.Descriptor instead.
+func (*AppUserVariable) Descriptor() ([]byte, []int) {
+	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *AppUserVariable) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *AppUserVariable) GetPassword() string {
+	if x != nil && x.Password != nil {
+		return *x.Password
+	}
+	return ""
+}
+
 type AppUserAddAppUserInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Variable      *AppUserVariable       `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AppUserAddAppUserInput) Reset() {
 	*x = AppUserAddAppUserInput{}
-	mi := &file_resource_logic_app_user_proto_msgTypes[0]
+	mi := &file_resource_logic_app_user_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -42,7 +95,7 @@ func (x *AppUserAddAppUserInput) String() string {
 func (*AppUserAddAppUserInput) ProtoMessage() {}
 
 func (x *AppUserAddAppUserInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_app_user_proto_msgTypes[0]
+	mi := &file_resource_logic_app_user_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -55,26 +108,26 @@ func (x *AppUserAddAppUserInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppUserAddAppUserInput.ProtoReflect.Descriptor instead.
 func (*AppUserAddAppUserInput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{0}
+	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AppUserAddAppUserInput) GetName() string {
+func (x *AppUserAddAppUserInput) GetVariable() *AppUserVariable {
 	if x != nil {
-		return x.Name
+		return x.Variable
 	}
-	return ""
+	return nil
 }
 
 type AppUserAddAppUserOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	AppUser       *resource.AppUser      `protobuf:"bytes,1,opt,name=app_user,json=appUser,proto3" json:"app_user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AppUserAddAppUserOutput) Reset() {
 	*x = AppUserAddAppUserOutput{}
-	mi := &file_resource_logic_app_user_proto_msgTypes[1]
+	mi := &file_resource_logic_app_user_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +139,7 @@ func (x *AppUserAddAppUserOutput) String() string {
 func (*AppUserAddAppUserOutput) ProtoMessage() {}
 
 func (x *AppUserAddAppUserOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_app_user_proto_msgTypes[1]
+	mi := &file_resource_logic_app_user_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,25 +152,30 @@ func (x *AppUserAddAppUserOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppUserAddAppUserOutput.ProtoReflect.Descriptor instead.
 func (*AppUserAddAppUserOutput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{1}
+	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *AppUserAddAppUserOutput) GetName() string {
+func (x *AppUserAddAppUserOutput) GetAppUser() *resource.AppUser {
 	if x != nil {
-		return x.Name
+		return x.AppUser
 	}
-	return ""
+	return nil
 }
 
 var File_resource_logic_app_user_proto protoreflect.FileDescriptor
 
 const file_resource_logic_app_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1dresource/logic/app_user.proto\x12\x11pb.resource.logic\",\n" +
-	"\x16AppUserAddAppUserInput\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"-\n" +
-	"\x17AppUserAddAppUserOutput\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name2s\n" +
+	"\x1dresource/logic/app_user.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"a\n" +
+	"\x0fAppUserVariable\x12\x17\n" +
+	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
+	"\bpassword\x18\x02 \x01(\tH\x01R\bpassword\x88\x01\x01B\a\n" +
+	"\x05_nameB\v\n" +
+	"\t_password\"X\n" +
+	"\x16AppUserAddAppUserInput\x12>\n" +
+	"\bvariable\x18\x01 \x01(\v2\".pb.resource.logic.AppUserVariableR\bvariable\"J\n" +
+	"\x17AppUserAddAppUserOutput\x12/\n" +
+	"\bapp_user\x18\x01 \x01(\v2\x14.pb.resource.AppUserR\aappUser2s\n" +
 	"\fAppUserModel\x12c\n" +
 	"\n" +
 	"AddAppUser\x12).pb.resource.logic.AppUserAddAppUserInput\x1a*.pb.resource.logic.AppUserAddAppUserOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
@@ -134,19 +192,23 @@ func file_resource_logic_app_user_proto_rawDescGZIP() []byte {
 	return file_resource_logic_app_user_proto_rawDescData
 }
 
-var file_resource_logic_app_user_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_resource_logic_app_user_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_resource_logic_app_user_proto_goTypes = []any{
-	(*AppUserAddAppUserInput)(nil),  // 0: pb.resource.logic.AppUserAddAppUserInput
-	(*AppUserAddAppUserOutput)(nil), // 1: pb.resource.logic.AppUserAddAppUserOutput
+	(*AppUserVariable)(nil),         // 0: pb.resource.logic.AppUserVariable
+	(*AppUserAddAppUserInput)(nil),  // 1: pb.resource.logic.AppUserAddAppUserInput
+	(*AppUserAddAppUserOutput)(nil), // 2: pb.resource.logic.AppUserAddAppUserOutput
+	(*resource.AppUser)(nil),        // 3: pb.resource.AppUser
 }
 var file_resource_logic_app_user_proto_depIdxs = []int32{
-	0, // 0: pb.resource.logic.AppUserModel.AddAppUser:input_type -> pb.resource.logic.AppUserAddAppUserInput
-	1, // 1: pb.resource.logic.AppUserModel.AddAppUser:output_type -> pb.resource.logic.AppUserAddAppUserOutput
-	1, // [1:2] is the sub-list for method output_type
-	0, // [0:1] is the sub-list for method input_type
-	0, // [0:0] is the sub-list for extension type_name
-	0, // [0:0] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0, // 0: pb.resource.logic.AppUserAddAppUserInput.variable:type_name -> pb.resource.logic.AppUserVariable
+	3, // 1: pb.resource.logic.AppUserAddAppUserOutput.app_user:type_name -> pb.resource.AppUser
+	1, // 2: pb.resource.logic.AppUserModel.AddAppUser:input_type -> pb.resource.logic.AppUserAddAppUserInput
+	2, // 3: pb.resource.logic.AppUserModel.AddAppUser:output_type -> pb.resource.logic.AppUserAddAppUserOutput
+	3, // [3:4] is the sub-list for method output_type
+	2, // [2:3] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	2, // [2:2] is the sub-list for extension extendee
+	0, // [0:2] is the sub-list for field type_name
 }
 
 func init() { file_resource_logic_app_user_proto_init() }
@@ -154,13 +216,14 @@ func file_resource_logic_app_user_proto_init() {
 	if File_resource_logic_app_user_proto != nil {
 		return
 	}
+	file_resource_logic_app_user_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_logic_app_user_proto_rawDesc), len(file_resource_logic_app_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

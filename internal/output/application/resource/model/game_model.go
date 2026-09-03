@@ -9,6 +9,21 @@ import (
 	pkgInput "example/pkg/input"
 )
 
+func domainGameValueToProtoGameVariable(oGame *domain.GameValue) *pbResourceModel.GameVariable {
+	oVariable := &pbResourceModel.GameVariable{
+		Key:         oGame.Key,
+		Name:        oGame.Name,
+		Description: oGame.Description,
+	}
+
+	if oGame.GameTypeId != nil {
+		iGameTypeId := uint32(*oGame.GameTypeId)
+		oVariable.GameTypeId = &iGameTypeId
+	}
+
+	return oVariable
+}
+
 func protoGameToDomainGame(oProtoGame *pbResource.Game) domain.Game {
 	if oProtoGame == nil {
 		return domain.Game{}
@@ -39,16 +54,9 @@ func NewGameModel(oAbstractModel *resourceBase.AbstractResource) outputPortAnyMo
 
 func (oSelf *GameModel) AddOne(oGameParm *domain.GameValue) (bool, error) {
 
-	oRequest := &pbResourceModel.GameAddOneInput{}
-
-	if oGameParm.GameTypeId != nil {
-		iGameTypeId := uint32(*oGameParm.GameTypeId)
-		oRequest.GameTypeId = &iGameTypeId
+	oRequest := &pbResourceModel.GameAddOneInput{
+		Variable: domainGameValueToProtoGameVariable(oGameParm),
 	}
-
-	oRequest.Key = oGameParm.Key
-	oRequest.Name = oGameParm.Name
-	oRequest.Description = oGameParm.Description
 
 	bResult, oErr := oSelf.ResourceModelClient.Game.AddOne(oSelf.Context, oRequest)
 	_ = bResult
@@ -71,21 +79,14 @@ func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
 		return nil, oErr
 	}
 
-	if oResponse.GetId() == 0 {
+	oProtoGame := oResponse.GetGame()
+	if oProtoGame.GetId() == 0 {
 		return nil, nil
 	}
 
-	return &domain.Game{
-		Id:          uint(oResponse.GetId()),
-		GameTypeId:  uint(oResponse.GetGameTypeId()),
-		Key:         oResponse.GetKey(),
-		Name:        oResponse.GetName(),
-		Description: oResponse.GetDescription(),
-		CreatedAt:   oResponse.GetCreatedAt().AsTime(),
-		UpdatedAt:   oResponse.GetUpdatedAt().AsTime(),
-		DeletedAt:   oResponse.GetDeletedAt().AsTime(),
-		GameType:    protoGameTypeToDomainGameType(oResponse.GetGameType()),
-	}, nil
+	oGame := protoGameToDomainGame(oProtoGame)
+
+	return &oGame, nil
 }
 
 func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
@@ -99,21 +100,14 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 		return nil, oErr
 	}
 
-	if oResponse.GetId() == 0 {
+	oProtoGame := oResponse.GetGame()
+	if oProtoGame.GetId() == 0 {
 		return nil, nil
 	}
 
-	return &domain.Game{
-		Id:          uint(oResponse.GetId()),
-		GameTypeId:  uint(oResponse.GetGameTypeId()),
-		Key:         oResponse.GetKey(),
-		Name:        oResponse.GetName(),
-		Description: oResponse.GetDescription(),
-		CreatedAt:   oResponse.GetCreatedAt().AsTime(),
-		UpdatedAt:   oResponse.GetUpdatedAt().AsTime(),
-		DeletedAt:   oResponse.GetDeletedAt().AsTime(),
-		GameType:    protoGameTypeToDomainGameType(oResponse.GetGameType()),
-	}, nil
+	oGame := protoGameToDomainGame(oProtoGame)
+
+	return &oGame, nil
 }
 
 func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, error) {
@@ -156,17 +150,8 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 
 	aGames := make([]*domain.Game, 0, len(oResponse.GetGames()))
 	for _, oOne := range oResponse.GetGames() {
-		aGames = append(aGames, &domain.Game{
-			Id:          uint(oOne.GetId()),
-			GameTypeId:  uint(oOne.GetGameTypeId()),
-			Key:         oOne.GetKey(),
-			Name:        oOne.GetName(),
-			Description: oOne.GetDescription(),
-			CreatedAt:   oOne.GetCreatedAt().AsTime(),
-			UpdatedAt:   oOne.GetUpdatedAt().AsTime(),
-			DeletedAt:   oOne.GetDeletedAt().AsTime(),
-			GameType:    protoGameTypeToDomainGameType(oOne.GetGameType()),
-		})
+		oGame := protoGameToDomainGame(oOne)
+		aGames = append(aGames, &oGame)
 	}
 
 	return aGames, nil
@@ -187,16 +172,10 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 
 func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) (bool, error) {
 
-	oRequest := &pbResourceModel.GameEditOneByIdInput{Id: uint32(iId)}
-
-	if oGame.GameTypeId != nil {
-		iGameTypeId := uint32(*oGame.GameTypeId)
-		oRequest.GameTypeId = &iGameTypeId
+	oRequest := &pbResourceModel.GameEditOneByIdInput{
+		Id:       uint32(iId),
+		Variable: domainGameValueToProtoGameVariable(oGame),
 	}
-
-	oRequest.Key = oGame.Key
-	oRequest.Name = oGame.Name
-	oRequest.Description = oGame.Description
 
 	oResponse, oErr := oSelf.ResourceModelClient.Game.EditOneById(oSelf.Context, oRequest)
 

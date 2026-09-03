@@ -162,6 +162,7 @@ func (x *AdminUserShowOneByNameOutput) GetAdminUser() *resource.AdminUser {
 	return nil
 }
 
+// 數據模型直接對ID查找
 type AdminUserShowOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -338,6 +339,7 @@ func (x *AdminUserAddOneOutput) GetStatus() bool {
 	return false
 }
 
+// 數據模型直接對ID查找
 type AdminUserEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Variable      *AdminUserVariable     `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`

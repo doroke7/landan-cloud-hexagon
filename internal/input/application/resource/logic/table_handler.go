@@ -7,6 +7,7 @@ import (
 
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
+	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
 )
@@ -64,9 +65,9 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 
 	aTables, iTotal, oErr := oSelf.TableUsecase.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	aPbTables := make([]*pbResourceLogic.Table, 0, len(aTables))
+	aPbTables := make([]*pbResource.Table, 0, len(aTables))
 	for _, oTable := range aTables {
-		aPbTables = append(aPbTables, &pbResourceLogic.Table{
+		aPbTables = append(aPbTables, &pbResource.Table{
 			Id:          uint32(oTable.Id),
 			No:          oTable.No,
 			GameId:      uint32(oTable.GameId),

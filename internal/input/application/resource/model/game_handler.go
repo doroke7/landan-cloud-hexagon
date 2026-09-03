@@ -29,6 +29,25 @@ func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, 
 	}
 }
 
+// protoGameVariableToDomainGameValue 把 gRPC 帶進來的 variable 攤成 domain.GameValue（指標欄位可選）。
+func protoGameVariableToDomainGameValue(oVariable *pbResourceModel.GameVariable) domain.GameValue {
+	var oValue domain.GameValue
+	if oVariable == nil {
+		return oValue
+	}
+
+	oValue.Key = oVariable.Key
+	oValue.Name = oVariable.Name
+	oValue.Description = oVariable.Description
+
+	if oVariable.GameTypeId != nil {
+		iGameTypeId := uint(*oVariable.GameTypeId)
+		oValue.GameTypeId = &iGameTypeId
+	}
+
+	return oValue
+}
+
 func domainGameToProtoGame(oGame *domain.Game) *pbResource.Game {
 	return &pbResource.Game{
 		Id:          uint32(oGame.Id),
@@ -46,16 +65,7 @@ func domainGameToProtoGame(oGame *domain.Game) *pbResource.Game {
 func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel.GameAddOneInput) (*pbResourceModel.GameAddOneOutput, error) {
 	fmt.Println(runtime.Caller(0))
 
-	var oGameValue domain.GameValue
-
-	if oReq.GameTypeId != nil {
-		iGameTypeId := uint(*oReq.GameTypeId)
-		oGameValue.GameTypeId = &iGameTypeId
-	}
-
-	oGameValue.Key = oReq.Key
-	oGameValue.Name = oReq.Name
-	oGameValue.Description = oReq.Description
+	oGameValue := protoGameVariableToDomainGameValue(oReq.GetVariable())
 
 	_, oErr := oSelf.GameUsecase.AddOne(&oGameValue)
 
@@ -63,29 +73,23 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel
 		return nil, oErr
 	}
 
-	var iGameTypeId uint32
+	oProtoGame := &pbResource.Game{}
 
 	if oGameValue.GameTypeId != nil {
-		iGameTypeId = uint32(*oGameValue.GameTypeId)
+		oProtoGame.GameTypeId = uint32(*oGameValue.GameTypeId)
 	}
-
-	var sKey, sName, sDescription string
-
 	if oGameValue.Key != nil {
-		sKey = *oGameValue.Key
+		oProtoGame.Key = *oGameValue.Key
 	}
 	if oGameValue.Name != nil {
-		sName = *oGameValue.Name
+		oProtoGame.Name = *oGameValue.Name
 	}
 	if oGameValue.Description != nil {
-		sDescription = *oGameValue.Description
+		oProtoGame.Description = *oGameValue.Description
 	}
 
 	return &pbResourceModel.GameAddOneOutput{
-		GameTypeId:  iGameTypeId,
-		Key:         sKey,
-		Name:        sName,
-		Description: sDescription,
+		Game: oProtoGame,
 	}, nil
 }
 
@@ -104,15 +108,7 @@ func (oSelf *GameHandler) ShowOneById(oContext context.Context, oReq *pbResource
 	oProtoGame := domainGameToProtoGame(oGame)
 
 	return &pbResourceModel.GameShowOneByIdOutput{
-		Id:          oProtoGame.Id,
-		GameTypeId:  oProtoGame.GameTypeId,
-		Key:         oProtoGame.Key,
-		Name:        oProtoGame.Name,
-		Description: oProtoGame.Description,
-		CreatedAt:   oProtoGame.CreatedAt,
-		UpdatedAt:   oProtoGame.UpdatedAt,
-		DeletedAt:   oProtoGame.DeletedAt,
-		GameType:    oProtoGame.GameType,
+		Game: oProtoGame,
 	}, nil
 
 }
@@ -132,15 +128,7 @@ func (oSelf *GameHandler) ShowOneByKey(oContext context.Context, oReq *pbResourc
 	oProtoGame := domainGameToProtoGame(oGame)
 
 	return &pbResourceModel.GameShowOneByKeyOutput{
-		Id:          oProtoGame.Id,
-		GameTypeId:  oProtoGame.GameTypeId,
-		Key:         oProtoGame.Key,
-		Name:        oProtoGame.Name,
-		Description: oProtoGame.Description,
-		CreatedAt:   oProtoGame.CreatedAt,
-		UpdatedAt:   oProtoGame.UpdatedAt,
-		DeletedAt:   oProtoGame.DeletedAt,
-		GameType:    oProtoGame.GameType,
+		Game: oProtoGame,
 	}, nil
 
 }
@@ -202,16 +190,7 @@ func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context
 
 func (oSelf *GameHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.GameEditOneByIdInput) (*pbResourceModel.GameEditOneByIdOutput, error) {
 
-	var oGameValue domain.GameValue
-
-	if oReq.GameTypeId != nil {
-		iGameTypeId := uint(*oReq.GameTypeId)
-		oGameValue.GameTypeId = &iGameTypeId
-	}
-
-	oGameValue.Key = oReq.Key
-	oGameValue.Name = oReq.Name
-	oGameValue.Description = oReq.Description
+	oGameValue := protoGameVariableToDomainGameValue(oReq.GetVariable())
 
 	_, oErr := oSelf.GameUsecase.EditOneById(&oGameValue, uint64(oReq.Id))
 	if oErr != nil {
