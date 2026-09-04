@@ -49,37 +49,42 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 
 		oResponse, oErr = fnHandler(oContext, oRequest)
 
-		if oErr != nil {
-
-			oStatus, bOk := status.FromError(oErr)
-
-			// 如果是 gRPC error 就打印 並且回傳 error 到前級 Http或Facade
-			if bOk {
-				pkgUtility.Logger(pkgUtility.ResourceModelInterceptor).Error(
-					"業務錯誤",
-					zap.String("method", oServerInfo.FullMethod),
-					zap.String("message", oStatus.Message()),
-					zap.Int32("code", int32(oStatus.Code())),
-				)
-				return nil, status.Error(codes.Aborted, oStatus.Message())
-
-			}
-			// 如果非 gRPC error 就打印 並且回傳 “內部錯誤” 到前級 Http或Facade
-			// 例如 MYSQL 錯誤。Redis 錯誤
-			if !bOk {
-				pkgUtility.Logger(pkgUtility.ResourceModelInterceptor).Error(
-					"resource暫不可用",
-					zap.String("method", oServerInfo.FullMethod),
-					zap.Error(oErr),
-				)
-
-				return nil, status.Error(codes.Unavailable, "resource暫不可用")
-
-			}
-
+		if oErr == nil {
+			return oResponse, nil
 		}
 
-		return oResponse, oErr
+		// 1. handler 直接回的 *DefaultError（業務錯誤）
+		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
+			pkgUtility.Logger(pkgUtility.ResourceModelInterceptor).Warn(
+				"業務錯誤",
+				zap.String("method", oServerInfo.FullMethod),
+				zap.String("message", oDefaultError.Message),
+				zap.Int16("code", oDefaultError.Code),
+			)
+
+			return nil, status.Error(codes.Aborted, oDefaultError.Message)
+		}
+
+		// 2. handler 用 status.Error 回的（也當業務錯誤）
+		if oStatus, bOk := status.FromError(oErr); bOk {
+			pkgUtility.Logger(pkgUtility.ResourceModelInterceptor).Warn(
+				"業務錯誤",
+				zap.String("method", oServerInfo.FullMethod),
+				zap.String("message", oStatus.Message()),
+				zap.Int32("code", int32(oStatus.Code())),
+			)
+
+			return nil, status.Error(codes.Aborted, oStatus.Message())
+		}
+
+		// 3. 其他原生錯誤（MYSQL / Redis 等）
+		pkgUtility.Logger(pkgUtility.ResourceModelInterceptor).Error(
+			"resource暫不可用",
+			zap.String("method", oServerInfo.FullMethod),
+			zap.Error(oErr),
+		)
+
+		return nil, status.Error(codes.Unavailable, "resource暫不可用")
 	}
 
 }

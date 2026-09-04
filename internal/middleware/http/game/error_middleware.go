@@ -8,6 +8,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"go.uber.org/zap"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	bootstrap "example/bootstrap"
 
@@ -53,7 +55,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 				switch oErrorType := oError.(type) {
 				case *pkgUtility.DefaultError: // 需要用 *指標， 因為 controller 是用 指標
 					pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Warn(
-						"業務異常",
+						"http 業務異常",
 						zap.Any("error", oError),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
@@ -65,12 +67,12 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 					fmt.Println("進入 recover oError=", oError)
 
 					pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Error(
-						"前級系統錯誤2",
+						"http 系統錯誤",
 						zap.Any("error", oError),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
 
-					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤2", struct{}{}, 0, "", nil)
+					oSelf.Response.Set(oContext, 200, -4, "http 系統錯誤", struct{}{}, 0, "", nil)
 
 				}
 
@@ -89,23 +91,31 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 
 				switch oErrorType := oLastErr.Err.(type) {
 				case *pkgUtility.DefaultError:
-
+					// 本進程內產生的業務錯誤（沒過 gRPC）
 					pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Warn(
-						"業務異常",
+						"http 業務異常",
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
 					oSelf.Response.Set(oContext, int(oErrorType.Status), int(oErrorType.Code), oErrorType.Message, struct{}{}, 0, "", nil)
 
 				default:
-					// Logger.Fatal 會再觸發 panic
+					// 從 resource gRPC 來的：codes.Aborted = 業務錯誤，其餘 = 系統錯誤
+					if oStatus, bOk := status.FromError(oLastErr.Err); bOk && oStatus.Code() == codes.Aborted {
+						pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Warn(
+							"resource 業務異常",
+							zap.String("error", oLastErr.Error()),
+						)
+						oSelf.Response.Set(oContext, 200, -3, oStatus.Message(), struct{}{}, 0, "", nil)
+						break
+					}
 
 					pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Error(
-						"前級系統錯誤3",
+						"http 系統錯誤",
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
-					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤3", struct{}{}, 0, "", nil)
+					oSelf.Response.Set(oContext, 200, -4, "http 系統錯誤", struct{}{}, 0, "", nil)
 
 				}
 

@@ -5,7 +5,6 @@ import (
 
 	pkgGin "example/pkg/gin"
 	pkgInput "example/pkg/input"
-	pkgUtility "example/pkg/utility"
 
 	domain "example/internal/domain"
 
@@ -39,13 +38,7 @@ func (oSelf *AdminRoleHandler) AddOne(oContext *gin.Context) {
 	_ = bResult
 
 	if oErr != nil {
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-
-		oSelf.Response.Set(oContext, 200, -3, "新增失敗", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 
@@ -85,14 +78,7 @@ func (oSelf *AdminRoleHandler) EditOne(oContext *gin.Context) {
 	_ = bResult
 
 	if oErr != nil {
-
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-
-		oSelf.Response.Set(oContext, 200, -3, "修改失敗", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 
@@ -126,14 +112,7 @@ func (oSelf *AdminRoleHandler) RemoveOne(oContext *gin.Context) {
 	_ = bResult
 
 	if oErr != nil {
-
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-
-		oSelf.Response.Set(oContext, 200, -3, "刪除失敗", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 
@@ -166,14 +145,7 @@ func (oSelf *AdminRoleHandler) ShowOne(oContext *gin.Context) {
 	oAdminRole, oErr := oSelf.AdminRoleUsecase.ShowOne(iId)
 
 	if oErr != nil {
-
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-
-		oSelf.Response.Set(oContext, 200, -3, "查詢失敗", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 
@@ -216,13 +188,7 @@ func (oSelf *AdminRoleHandler) ShowOnes(oContext *gin.Context) {
 	aAdminRoles, iTotal, oErr := oSelf.AdminRoleUsecase.ShowOnes(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
-
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 

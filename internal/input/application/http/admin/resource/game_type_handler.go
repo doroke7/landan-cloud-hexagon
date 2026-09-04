@@ -5,7 +5,6 @@ import (
 
 	pkgGin "example/pkg/gin"
 	pkgInput "example/pkg/input"
-	pkgUtility "example/pkg/utility"
 
 	domain "example/internal/domain"
 
@@ -39,13 +38,7 @@ func (oSelf *GameTypeHandler) AddOne(oContext *gin.Context) {
 	_ = bResult
 
 	if oErr != nil {
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-
-		oSelf.Response.Set(oContext, 200, -3, "新增失敗", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 
@@ -85,14 +78,7 @@ func (oSelf *GameTypeHandler) EditOne(oContext *gin.Context) {
 	_ = bResult
 
 	if oErr != nil {
-
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-
-		oSelf.Response.Set(oContext, 200, -3, "修改失敗", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 
@@ -126,14 +112,7 @@ func (oSelf *GameTypeHandler) RemoveOne(oContext *gin.Context) {
 	_ = bResult
 
 	if oErr != nil {
-
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-
-		oSelf.Response.Set(oContext, 200, -3, "刪除失敗", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 
@@ -166,14 +145,7 @@ func (oSelf *GameTypeHandler) ShowOne(oContext *gin.Context) {
 	oGameType, oErr := oSelf.GameTypeUsecase.ShowOne(iId)
 
 	if oErr != nil {
-
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-
-		oSelf.Response.Set(oContext, 200, -3, "查詢失敗", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 
@@ -188,14 +160,7 @@ func (oSelf *GameTypeHandler) ShowTree(oContext *gin.Context) {
 	oTree, oErr := oSelf.GameTypeUsecase.ShowTree()
 
 	if oErr != nil {
-
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-
-		oSelf.Response.Set(oContext, 200, -3, "查詢失敗", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 
@@ -238,13 +203,7 @@ func (oSelf *GameTypeHandler) ShowOnes(oContext *gin.Context) {
 	aGameTypes, iTotal, oErr := oSelf.GameTypeUsecase.ShowOnes(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
-
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 

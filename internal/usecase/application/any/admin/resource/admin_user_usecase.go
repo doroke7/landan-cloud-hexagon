@@ -6,7 +6,6 @@ import (
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkgInput "example/pkg/input"
-	pkgUtility "example/pkg/utility"
 )
 
 type AdminUserUsecase struct {
@@ -35,7 +34,7 @@ func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId ui
 func (oSelf *AdminUserUsecase) RemoveOne(iId uint) (bool, error) {
 
 	if iId == 1 {
-		return false, pkgUtility.NewDefaultError("AdminUser.Id=1 無法刪除", -1, 200)
+		// return false, pkgUtility.NewDefaultError("AdminUser.Id=1 無法刪除", -1, 200)
 
 	}
 
