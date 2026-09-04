@@ -140,6 +140,7 @@ func (oSelf *AdminUserHandler) ShowOnes(oContext *gin.Context) {
 	}
 
 	var aFilters []*pkgInput.Filter
+
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
 		_ = oContext.Error(pkgUtility.NewDefaultError("filters 格式錯誤", -1, 200))
 		return
