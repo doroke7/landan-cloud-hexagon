@@ -311,7 +311,9 @@
 ## HTTP 服務的流程是什麼？ 
 1. 在 handler 裡面，如果訊息是正常的 -> 改寫 context, context 傳遞給 ResponseMiddleware -> ResponseMiddleware 寫接口訊息
 2. 在 handler 裡面，如果訊息是異常的 -> context 寫入 error -> ResponseMiddleware 有 error 不做事 -> ErrorMiddleware 寫接口訊息
-*. 我們不使用 panic ，panic 性能差
+3. http 服務，如果是 DefaultError 代表 可以被查看訊息的異常，resoure 服務，如果是 abort 代表業務異常，也可以被查看訊息
+4. ErrorMiddleware 針對 3 的異常 選擇展示
+*. 我們不使用 panic 統一捕獲錯誤後返回的策略，panic 性能差
 
 ## DI 依賴注入樹狀圖（ResourceContainer）
 
