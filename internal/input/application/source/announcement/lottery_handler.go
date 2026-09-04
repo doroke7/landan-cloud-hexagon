@@ -18,13 +18,13 @@ import (
 type LotteryHandler struct {
 	pbSourceAnnouncement.UnimplementedLotteryControllerServer
 	*inputApplicationSource.AbstractHandler
-	usecasePortAnyAnnoucement.LotteryUsecase
+	AnnouncementLotteryUsecase usecasePortAnyAnnoucement.LotteryUsecase
 }
 
 func NewLotteryHandler(oAbstractHandler *inputApplicationSource.AbstractHandler, oLotteryUsecase usecasePortAnyAnnoucement.LotteryUsecase) *LotteryHandler {
 	return &LotteryHandler{
-		AbstractHandler: oAbstractHandler,
-		LotteryUsecase:  oLotteryUsecase,
+		AbstractHandler:            oAbstractHandler,
+		AnnouncementLotteryUsecase: oLotteryUsecase,
 	}
 }
 
@@ -45,7 +45,7 @@ func (oSelf *LotteryHandler) Watch(oReq *pbSourceAnnouncement.LotteryWatchReques
 		case <-oTicker.C:
 			iCount++
 
-			oLottert, oError := oSelf.LotteryUsecase.WatchOneByKey("SGS")
+			oLottert, oError := oSelf.AnnouncementLotteryUsecase.WatchOneByKey("SGS")
 
 			if oError != nil {
 				log.Printf("取得資料失敗: %v", oError)

@@ -19,13 +19,13 @@ import (
 type AdminPermissionHandler struct {
 	pbResourceModel.UnimplementedAdminPermissionModelServer
 	*inputApplicationResource.AbstractHandler
-	usecasePortAnyModel.AdminPermissionUsecase
+	ModelAdminPermissionUsecase usecasePortAnyModel.AdminPermissionUsecase
 }
 
 func NewAdminPermissionHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oAdminPermissionUsecase usecasePortAnyModel.AdminPermissionUsecase) *AdminPermissionHandler {
 	return &AdminPermissionHandler{
-		AbstractHandler:        oAbstractHandler,
-		AdminPermissionUsecase: oAdminPermissionUsecase,
+		AbstractHandler:             oAbstractHandler,
+		ModelAdminPermissionUsecase: oAdminPermissionUsecase,
 	}
 }
 
@@ -66,7 +66,7 @@ func (oSelf *AdminPermissionHandler) AddOne(oContext context.Context, oReq *pbRe
 
 	oAdminPermissionValue := protoAdminPermissionVariableToDomainAdminPermissionValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.AdminPermissionUsecase.AddOne(&oAdminPermissionValue)
+	bResult, oErr := oSelf.ModelAdminPermissionUsecase.AddOne(&oAdminPermissionValue)
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -79,7 +79,7 @@ func (oSelf *AdminPermissionHandler) AddOne(oContext context.Context, oReq *pbRe
 
 func (oSelf *AdminPermissionHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionShowOneByIdInput) (*pbResourceModel.AdminPermissionShowOneByIdOutput, error) {
 
-	oAdminPermission, oErr := oSelf.AdminPermissionUsecase.ShowOneById(uint(oReq.Id))
+	oAdminPermission, oErr := oSelf.ModelAdminPermissionUsecase.ShowOneById(uint(oReq.Id))
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
@@ -97,7 +97,7 @@ func (oSelf *AdminPermissionHandler) EditOneById(oContext context.Context, oReq 
 
 	oAdminPermissionValue := protoAdminPermissionVariableToDomainAdminPermissionValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.AdminPermissionUsecase.EditOneById(&oAdminPermissionValue, uint(oReq.Id))
+	bResult, oErr := oSelf.ModelAdminPermissionUsecase.EditOneById(&oAdminPermissionValue, uint(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -110,7 +110,7 @@ func (oSelf *AdminPermissionHandler) EditOneById(oContext context.Context, oReq 
 
 func (oSelf *AdminPermissionHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionRemoveOneByIdInput) (*pbResourceModel.AdminPermissionRemoveOneByIdOutput, error) {
 
-	bResult, oErr := oSelf.AdminPermissionUsecase.RemoveOneById(uint(oReq.Id))
+	bResult, oErr := oSelf.ModelAdminPermissionUsecase.RemoveOneById(uint(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -159,7 +159,7 @@ func (oSelf *AdminPermissionHandler) ShowOnesByFiltersWithSortersPagination(oCon
 		Page: &iPage,
 	}
 
-	aAdminPermissions, oErr := oSelf.AdminPermissionUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	aAdminPermissions, oErr := oSelf.ModelAdminPermissionUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
@@ -192,7 +192,7 @@ func (oSelf *AdminPermissionHandler) TotalByFilters(oContext context.Context, oR
 		})
 	}
 
-	iTotal, oErr := oSelf.AdminPermissionUsecase.TotalByFilters(aFilters)
+	iTotal, oErr := oSelf.ModelAdminPermissionUsecase.TotalByFilters(aFilters)
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}

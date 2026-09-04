@@ -19,13 +19,13 @@ import (
 type TableHandler struct {
 	*inputApplicationResource.AbstractHandler
 	pbResourceModel.UnimplementedTableModelServer
-	usecasePortAnyModel.TableUsecase
+	ModelTableUsecase usecasePortAnyModel.TableUsecase
 }
 
 func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oTableUsecase usecasePortAnyModel.TableUsecase) *TableHandler {
 	return &TableHandler{
-		AbstractHandler: oAbstractHandler,
-		TableUsecase:    oTableUsecase,
+		AbstractHandler:   oAbstractHandler,
+		ModelTableUsecase: oTableUsecase,
 	}
 }
 
@@ -92,7 +92,7 @@ func protoTableVariableToDomainTableValue(oVariable *pbResourceModel.TableVariab
 
 func (oSelf *TableHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.TableShowOneByIdInput) (*pbResourceModel.TableShowOneByIdOutput, error) {
 
-	oTable, oErr := oSelf.TableUsecase.ShowOneById(uint(oReq.Id))
+	oTable, oErr := oSelf.ModelTableUsecase.ShowOneById(uint(oReq.Id))
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
@@ -110,7 +110,7 @@ func (oSelf *TableHandler) AddOne(oContext context.Context, oReq *pbResourceMode
 
 	oTableValue := protoTableVariableToDomainTableValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.TableUsecase.AddOne(&oTableValue)
+	bResult, oErr := oSelf.ModelTableUsecase.AddOne(&oTableValue)
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -125,7 +125,7 @@ func (oSelf *TableHandler) EditOneById(oContext context.Context, oReq *pbResourc
 
 	oTableValue := protoTableVariableToDomainTableValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.TableUsecase.EditOneById(&oTableValue, uint(oReq.Id))
+	bResult, oErr := oSelf.ModelTableUsecase.EditOneById(&oTableValue, uint(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -138,7 +138,7 @@ func (oSelf *TableHandler) EditOneById(oContext context.Context, oReq *pbResourc
 
 func (oSelf *TableHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.TableRemoveOneByIdInput) (*pbResourceModel.TableRemoveOneByIdOutput, error) {
 
-	bResult, oErr := oSelf.TableUsecase.RemoveOneById(uint(oReq.Id))
+	bResult, oErr := oSelf.ModelTableUsecase.RemoveOneById(uint(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -187,7 +187,7 @@ func (oSelf *TableHandler) ShowOnesByFiltersWithSortersPagination(oContext conte
 		Page: &iPage,
 	}
 
-	aTables, oErr := oSelf.TableUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	aTables, oErr := oSelf.ModelTableUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
@@ -220,7 +220,7 @@ func (oSelf *TableHandler) TotalByFilters(oContext context.Context, oReq *pbReso
 		})
 	}
 
-	iTotal, oErr := oSelf.TableUsecase.TotalByFilters(aFilters)
+	iTotal, oErr := oSelf.ModelTableUsecase.TotalByFilters(aFilters)
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}

@@ -15,13 +15,13 @@ import (
 
 type AdminUserHandler struct {
 	*inputApplicationHttp.AbstractHandler
-	AdminUserUsecase usecasePortAnyAdminResource.AdminUserUsecase
+	AdminResourceAdminUserUsecase usecasePortAnyAdminResource.AdminUserUsecase
 }
 
 func NewAdminUserHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, oAdminUserUsecase usecasePortAnyAdminResource.AdminUserUsecase) *AdminUserHandler {
 	return &AdminUserHandler{
-		AbstractHandler:  oAbstractHandler,
-		AdminUserUsecase: oAdminUserUsecase,
+		AbstractHandler:               oAbstractHandler,
+		AdminResourceAdminUserUsecase: oAdminUserUsecase,
 	}
 }
 
@@ -35,7 +35,7 @@ func (oSelf *AdminUserHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	bResult, oErr := oSelf.AdminUserUsecase.AddOne(oValue)
+	bResult, oErr := oSelf.AdminResourceAdminUserUsecase.AddOne(oValue)
 	_ = bResult
 
 	if oErr != nil {
@@ -75,7 +75,7 @@ func (oSelf *AdminUserHandler) EditOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.AdminUserUsecase.EditOne(oValue, iId)
+	bResult, oErr := oSelf.AdminResourceAdminUserUsecase.EditOne(oValue, iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -109,7 +109,7 @@ func (oSelf *AdminUserHandler) RemoveOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.AdminUserUsecase.RemoveOne(iId)
+	bResult, oErr := oSelf.AdminResourceAdminUserUsecase.RemoveOne(iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -152,7 +152,7 @@ func (oSelf *AdminUserHandler) ShowOnes(oContext *gin.Context) {
 		return
 	}
 
-	aAdminUsers, iTotal, oErr := oSelf.AdminUserUsecase.ShowOnes(aFilters, aSorters, oPagination)
+	aAdminUsers, iTotal, oErr := oSelf.AdminResourceAdminUserUsecase.ShowOnes(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)

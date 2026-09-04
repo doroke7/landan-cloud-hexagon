@@ -20,13 +20,13 @@ type increaseBalanceMessage struct {
 
 type AppUserHandler struct {
 	*inputApplicationRabbitmq.AbstractHandler
-	appUserUsecase usecasePortAnyAdminResource.AppUserUsecase
+	AdminResourceAppUserUsecase usecasePortAnyAdminResource.AppUserUsecase
 }
 
 func NewAppUserHandler(oAppUserUsecase usecasePortAnyAdminResource.AppUserUsecase, oAbstractHandler *inputApplicationRabbitmq.AbstractHandler) *AppUserHandler {
 	return &AppUserHandler{
-		AbstractHandler: oAbstractHandler,
-		appUserUsecase:  oAppUserUsecase,
+		AbstractHandler:             oAbstractHandler,
+		AdminResourceAppUserUsecase: oAppUserUsecase,
 	}
 }
 
@@ -40,7 +40,7 @@ func (oSelf *AppUserHandler) IncreaseBalance(msg amqp.Delivery) {
 		return
 	}
 
-	bResult, err := oSelf.appUserUsecase.IncreaseBalance(payload.Id, payload.Amount)
+	bResult, err := oSelf.AdminResourceAppUserUsecase.IncreaseBalance(payload.Id, payload.Amount)
 	if err != nil {
 		pkgUtility.Logger(pkgUtility.Consumer).Error("IncreaseBalance 失敗",
 			zap.Uint("id", payload.Id),

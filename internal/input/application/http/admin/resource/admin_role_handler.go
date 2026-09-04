@@ -15,13 +15,13 @@ import (
 
 type AdminRoleHandler struct {
 	*inputApplicationHttp.AbstractHandler
-	AdminRoleUsecase usecasePortAnyAdminResource.AdminRoleUsecase
+	AdminResourceAdminRoleUsecase usecasePortAnyAdminResource.AdminRoleUsecase
 }
 
 func NewAdminRoleHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, oAdminRoleUsecase usecasePortAnyAdminResource.AdminRoleUsecase) *AdminRoleHandler {
 	return &AdminRoleHandler{
-		AbstractHandler:  oAbstractHandler,
-		AdminRoleUsecase: oAdminRoleUsecase,
+		AbstractHandler:               oAbstractHandler,
+		AdminResourceAdminRoleUsecase: oAdminRoleUsecase,
 	}
 }
 
@@ -35,7 +35,7 @@ func (oSelf *AdminRoleHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	bResult, oErr := oSelf.AdminRoleUsecase.AddOne(oValue)
+	bResult, oErr := oSelf.AdminResourceAdminRoleUsecase.AddOne(oValue)
 	_ = bResult
 
 	if oErr != nil {
@@ -75,7 +75,7 @@ func (oSelf *AdminRoleHandler) EditOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.AdminRoleUsecase.EditOne(oValue, iId)
+	bResult, oErr := oSelf.AdminResourceAdminRoleUsecase.EditOne(oValue, iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -109,7 +109,7 @@ func (oSelf *AdminRoleHandler) RemoveOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.AdminRoleUsecase.RemoveOne(iId)
+	bResult, oErr := oSelf.AdminResourceAdminRoleUsecase.RemoveOne(iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -143,7 +143,7 @@ func (oSelf *AdminRoleHandler) ShowOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	oAdminRole, oErr := oSelf.AdminRoleUsecase.ShowOne(iId)
+	oAdminRole, oErr := oSelf.AdminResourceAdminRoleUsecase.ShowOne(iId)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -186,7 +186,7 @@ func (oSelf *AdminRoleHandler) ShowOnes(oContext *gin.Context) {
 		return
 	}
 
-	aAdminRoles, iTotal, oErr := oSelf.AdminRoleUsecase.ShowOnes(aFilters, aSorters, oPagination)
+	aAdminRoles, iTotal, oErr := oSelf.AdminResourceAdminRoleUsecase.ShowOnes(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)

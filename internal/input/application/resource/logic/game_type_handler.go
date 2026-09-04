@@ -16,13 +16,13 @@ import (
 type GameTypeHandler struct {
 	*inputApplicationResource.AbstractHandler
 	pbResourceLogic.UnimplementedGameTypeLogicServer
-	usecasePortAnyLogic.GameTypeUsecase
+	LogicGameTypeUsecase usecasePortAnyLogic.GameTypeUsecase
 }
 
 func NewGameTypeHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oGameTypeUsecase usecasePortAnyLogic.GameTypeUsecase) *GameTypeHandler {
 	return &GameTypeHandler{
-		AbstractHandler: oAbstractHandler,
-		GameTypeUsecase: oGameTypeUsecase,
+		AbstractHandler:      oAbstractHandler,
+		LogicGameTypeUsecase: oGameTypeUsecase,
 	}
 }
 
@@ -30,7 +30,7 @@ func NewGameTypeHandler(oAbstractHandler *inputApplicationResource.AbstractHandl
 // client 端再自己組回 tree（組 tree 每個 adapter 各寫一份）。
 func (oSelf *GameTypeHandler) ShowTree(oContext context.Context, oReq *pbResourceLogic.GameTypeShowTreeInput) (*pbResourceLogic.GameTypeShowTreeOutput, error) {
 
-	aRoots, oErr := oSelf.GameTypeUsecase.ShowTree()
+	aRoots, oErr := oSelf.LogicGameTypeUsecase.ShowTree()
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -99,7 +99,7 @@ func (oSelf *GameTypeHandler) ShowGameTypesTotalByFiltersWithSortersPagination(o
 		Page: &iPage,
 	}
 
-	aGameTypes, iTotal, oErr := oSelf.GameTypeUsecase.ShowGameTypesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	aGameTypes, iTotal, oErr := oSelf.LogicGameTypeUsecase.ShowGameTypesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {
 		return nil, oErr
 	}

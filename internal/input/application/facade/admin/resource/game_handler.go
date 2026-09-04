@@ -21,13 +21,13 @@ import (
 type GameHandler struct {
 	pbFacadeAdminResource.UnimplementedGameControllerServer
 	*inputApplicationFacade.AbstractHandler
-	GameUsecase usecasePortAnyAdminResource.GameUsecase
+	AdminResourceGameUsecase usecasePortAnyAdminResource.GameUsecase
 }
 
 func NewGameHandler(oGameUsecase usecasePortAnyAdminResource.GameUsecase, oAbstractHandler *inputApplicationFacade.AbstractHandler) *GameHandler {
 	return &GameHandler{
-		AbstractHandler: oAbstractHandler,
-		GameUsecase:     oGameUsecase,
+		AbstractHandler:          oAbstractHandler,
+		AdminResourceGameUsecase: oGameUsecase,
 	}
 }
 
@@ -118,7 +118,7 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oRequest *pbFacadeAdm
 
 	oValue := protoGameValueToDomainGameValue(oRequest.GetValue())
 
-	if _, oErr := oSelf.GameUsecase.AddOne(oValue); oErr != nil {
+	if _, oErr := oSelf.AdminResourceGameUsecase.AddOne(oValue); oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr
 	}
@@ -135,7 +135,7 @@ func (oSelf *GameHandler) EditOne(oContext context.Context, oRequest *pbFacadeAd
 
 	oValue := protoGameValueToDomainGameValue(oRequest.GetValue())
 
-	if _, oErr := oSelf.GameUsecase.EditOne(oValue, iId); oErr != nil {
+	if _, oErr := oSelf.AdminResourceGameUsecase.EditOne(oValue, iId); oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr
 	}
@@ -150,7 +150,7 @@ func (oSelf *GameHandler) RemoveOne(oContext context.Context, oRequest *pbFacade
 		return nil, oErr
 	}
 
-	if _, oErr := oSelf.GameUsecase.RemoveOne(iId); oErr != nil {
+	if _, oErr := oSelf.AdminResourceGameUsecase.RemoveOne(iId); oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr
 	}
@@ -165,7 +165,7 @@ func (oSelf *GameHandler) ShowOne(oContext context.Context, oRequest *pbFacadeAd
 		return nil, oErr
 	}
 
-	oGame, oErr := oSelf.GameUsecase.ShowOne(iId)
+	oGame, oErr := oSelf.AdminResourceGameUsecase.ShowOne(iId)
 	if oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr
@@ -216,7 +216,7 @@ func (oSelf *GameHandler) ShowOnes(oContext context.Context, oRequest *pbFacadeA
 		Page: &iPage,
 	}
 
-	aGames, iTotal, oErr := oSelf.GameUsecase.ShowOnes(aFilters, aSorters, oPagination)
+	aGames, iTotal, oErr := oSelf.AdminResourceGameUsecase.ShowOnes(aFilters, aSorters, oPagination)
 	if oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr

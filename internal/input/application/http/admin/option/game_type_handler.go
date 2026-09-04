@@ -13,13 +13,13 @@ import (
 
 type GameTypeHandler struct {
 	*inputApplicationHttp.AbstractHandler
-	GameTypeUsecase usecasePortAnyAdminOption.GameTypeUsecase
+	AdminOptionGameTypeUsecase usecasePortAnyAdminOption.GameTypeUsecase
 }
 
 func NewGameTypeHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, oGameTypeUsecase usecasePortAnyAdminOption.GameTypeUsecase) *GameTypeHandler {
 	return &GameTypeHandler{
-		AbstractHandler: oAbstractHandler,
-		GameTypeUsecase: oGameTypeUsecase,
+		AbstractHandler:            oAbstractHandler,
+		AdminOptionGameTypeUsecase: oGameTypeUsecase,
 	}
 }
 
@@ -53,7 +53,7 @@ func (oSelf *GameTypeHandler) SelectOnes(oContext *gin.Context) {
 		return
 	}
 
-	aGameTypes, iTotal, oErr := oSelf.GameTypeUsecase.ShowOnes(aFilters, aSorters, oPagination)
+	aGameTypes, iTotal, oErr := oSelf.AdminOptionGameTypeUsecase.ShowOnes(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -68,7 +68,7 @@ func (oSelf *GameTypeHandler) SelectOnes(oContext *gin.Context) {
 
 func (oSelf *GameTypeHandler) SelectTree(oContext *gin.Context) {
 
-	aTree, oErr := oSelf.GameTypeUsecase.ShowTree()
+	aTree, oErr := oSelf.AdminOptionGameTypeUsecase.ShowTree()
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)

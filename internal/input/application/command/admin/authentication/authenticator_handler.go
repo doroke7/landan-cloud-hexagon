@@ -7,13 +7,13 @@ import (
 
 type AuthenticatorHandler struct {
 	*inputApplicationCommand.AbstractHandler
-	AuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase
+	AdminAuthenticationAuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase
 }
 
 func NewAuthenticatorHandler(oAuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase, oAbstractHandler *inputApplicationCommand.AbstractHandler) *AuthenticatorHandler {
 	return &AuthenticatorHandler{
-		AbstractHandler:      oAbstractHandler,
-		AuthenticatorUsecase: oAuthenticatorUsecase,
+		AbstractHandler:                         oAbstractHandler,
+		AdminAuthenticationAuthenticatorUsecase: oAuthenticatorUsecase,
 	}
 }
 
@@ -21,5 +21,5 @@ func NewAuthenticatorHandler(oAuthenticatorUsecase usecasePortAnyAdminAuthentica
 // cobra.Command 的組裝、container 的建立時機、JWT secret 要用哪個 carrier 的設定，
 // 都交給 cmd/register 那層決定。
 func (oSelf *AuthenticatorHandler) SignIn(sName string, sPassword string, sSecret string) (string, error) {
-	return oSelf.AuthenticatorUsecase.SignIn(sName, sPassword, sSecret)
+	return oSelf.AdminAuthenticationAuthenticatorUsecase.SignIn(sName, sPassword, sSecret)
 }

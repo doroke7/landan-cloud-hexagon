@@ -15,13 +15,13 @@ import (
 
 type AdminPermissionHandler struct {
 	*inputApplicationHttp.AbstractHandler
-	AdminPermissionUsecase usecasePortAnyAdminResource.AdminPermissionUsecase
+	AdminResourceAdminPermissionUsecase usecasePortAnyAdminResource.AdminPermissionUsecase
 }
 
 func NewAdminPermissionHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, oAdminPermissionUsecase usecasePortAnyAdminResource.AdminPermissionUsecase) *AdminPermissionHandler {
 	return &AdminPermissionHandler{
-		AbstractHandler:        oAbstractHandler,
-		AdminPermissionUsecase: oAdminPermissionUsecase,
+		AbstractHandler:                     oAbstractHandler,
+		AdminResourceAdminPermissionUsecase: oAdminPermissionUsecase,
 	}
 }
 
@@ -35,7 +35,7 @@ func (oSelf *AdminPermissionHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	bResult, oErr := oSelf.AdminPermissionUsecase.AddOne(oValue)
+	bResult, oErr := oSelf.AdminResourceAdminPermissionUsecase.AddOne(oValue)
 	_ = bResult
 
 	if oErr != nil {
@@ -75,7 +75,7 @@ func (oSelf *AdminPermissionHandler) EditOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.AdminPermissionUsecase.EditOne(oValue, iId)
+	bResult, oErr := oSelf.AdminResourceAdminPermissionUsecase.EditOne(oValue, iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -109,7 +109,7 @@ func (oSelf *AdminPermissionHandler) RemoveOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.AdminPermissionUsecase.RemoveOne(iId)
+	bResult, oErr := oSelf.AdminResourceAdminPermissionUsecase.RemoveOne(iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -143,7 +143,7 @@ func (oSelf *AdminPermissionHandler) ShowOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	oAdminPermission, oErr := oSelf.AdminPermissionUsecase.ShowOne(iId)
+	oAdminPermission, oErr := oSelf.AdminResourceAdminPermissionUsecase.ShowOne(iId)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -186,7 +186,7 @@ func (oSelf *AdminPermissionHandler) ShowOnes(oContext *gin.Context) {
 		return
 	}
 
-	aAdminPermissions, iTotal, oErr := oSelf.AdminPermissionUsecase.ShowOnes(aFilters, aSorters, oPagination)
+	aAdminPermissions, iTotal, oErr := oSelf.AdminResourceAdminPermissionUsecase.ShowOnes(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)

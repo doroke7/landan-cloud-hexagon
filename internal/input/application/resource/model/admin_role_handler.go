@@ -19,13 +19,13 @@ import (
 type AdminRoleHandler struct {
 	pbResourceModel.UnimplementedAdminRoleModelServer
 	*inputApplicationResource.AbstractHandler
-	usecasePortAnyModel.AdminRoleUsecase
+	ModelAdminRoleUsecase usecasePortAnyModel.AdminRoleUsecase
 }
 
 func NewAdminRoleHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oAdminRoleUsecase usecasePortAnyModel.AdminRoleUsecase) *AdminRoleHandler {
 	return &AdminRoleHandler{
-		AbstractHandler:  oAbstractHandler,
-		AdminRoleUsecase: oAdminRoleUsecase,
+		AbstractHandler:       oAbstractHandler,
+		ModelAdminRoleUsecase: oAdminRoleUsecase,
 	}
 }
 
@@ -60,7 +60,7 @@ func (oSelf *AdminRoleHandler) AddOne(oContext context.Context, oReq *pbResource
 
 	oAdminRoleValue := protoAdminRoleVariableToDomainAdminRoleValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.AdminRoleUsecase.AddOne(&oAdminRoleValue)
+	bResult, oErr := oSelf.ModelAdminRoleUsecase.AddOne(&oAdminRoleValue)
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -73,7 +73,7 @@ func (oSelf *AdminRoleHandler) AddOne(oContext context.Context, oReq *pbResource
 
 func (oSelf *AdminRoleHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.AdminRoleShowOneByIdInput) (*pbResourceModel.AdminRoleShowOneByIdOutput, error) {
 
-	oAdminRole, oErr := oSelf.AdminRoleUsecase.ShowOneById(uint(oReq.Id))
+	oAdminRole, oErr := oSelf.ModelAdminRoleUsecase.ShowOneById(uint(oReq.Id))
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
@@ -91,7 +91,7 @@ func (oSelf *AdminRoleHandler) EditOneById(oContext context.Context, oReq *pbRes
 
 	oAdminRoleValue := protoAdminRoleVariableToDomainAdminRoleValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.AdminRoleUsecase.EditOneById(&oAdminRoleValue, uint(oReq.Id))
+	bResult, oErr := oSelf.ModelAdminRoleUsecase.EditOneById(&oAdminRoleValue, uint(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -104,7 +104,7 @@ func (oSelf *AdminRoleHandler) EditOneById(oContext context.Context, oReq *pbRes
 
 func (oSelf *AdminRoleHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminRoleRemoveOneByIdInput) (*pbResourceModel.AdminRoleRemoveOneByIdOutput, error) {
 
-	bResult, oErr := oSelf.AdminRoleUsecase.RemoveOneById(uint(oReq.Id))
+	bResult, oErr := oSelf.ModelAdminRoleUsecase.RemoveOneById(uint(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -153,7 +153,7 @@ func (oSelf *AdminRoleHandler) ShowOnesByFiltersWithSortersPagination(oContext c
 		Page: &iPage,
 	}
 
-	aAdminRoles, oErr := oSelf.AdminRoleUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	aAdminRoles, oErr := oSelf.ModelAdminRoleUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
@@ -186,7 +186,7 @@ func (oSelf *AdminRoleHandler) TotalByFilters(oContext context.Context, oReq *pb
 		})
 	}
 
-	iTotal, oErr := oSelf.AdminRoleUsecase.TotalByFilters(aFilters)
+	iTotal, oErr := oSelf.ModelAdminRoleUsecase.TotalByFilters(aFilters)
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}

@@ -16,19 +16,19 @@ import (
 type AuthenticatorHandler struct {
 	pbFacadeAdminAuthentication.UnimplementedAuthenticatorControllerServer
 	*inputApplicationFacade.AbstractHandler
-	AuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase
+	AdminAuthenticationAuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase
 }
 
 func NewAuthenticatorHandler(oAuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase, oAbstractHandler *inputApplicationFacade.AbstractHandler) *AuthenticatorHandler {
 	return &AuthenticatorHandler{
-		AbstractHandler:      oAbstractHandler,
-		AuthenticatorUsecase: oAuthenticatorUsecase,
+		AbstractHandler:                         oAbstractHandler,
+		AdminAuthenticationAuthenticatorUsecase: oAuthenticatorUsecase,
 	}
 }
 
 func (oSelf *AuthenticatorHandler) SignIn(oContext context.Context, oRequest *pbFacadeAdminAuthentication.AuthenticatorSignInRequest) (*pbFacadeAdminAuthentication.AuthenticatorSignInResponse, error) {
 
-	sAuthorization, oErr := oSelf.AuthenticatorUsecase.SignIn(oRequest.Name, oRequest.Password, bootstrap.CONFIG.SERVICES.FACADE.ADMIN.JWT.SECRET)
+	sAuthorization, oErr := oSelf.AdminAuthenticationAuthenticatorUsecase.SignIn(oRequest.Name, oRequest.Password, bootstrap.CONFIG.SERVICES.FACADE.ADMIN.JWT.SECRET)
 
 	if oErr != nil {
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {

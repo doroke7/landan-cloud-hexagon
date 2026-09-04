@@ -19,13 +19,13 @@ import (
 type AdminUserHandler struct {
 	pbResourceModel.UnimplementedAdminUserModelServer
 	*inputApplicationResource.AbstractHandler
-	usecasePortAnyModel.AdminUserUsecase
+	ModelAdminUserUsecase usecasePortAnyModel.AdminUserUsecase
 }
 
 func NewAdminUserHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oAdminUserUsecase usecasePortAnyModel.AdminUserUsecase) *AdminUserHandler {
 	return &AdminUserHandler{
-		AbstractHandler:  oAbstractHandler,
-		AdminUserUsecase: oAdminUserUsecase,
+		AbstractHandler:       oAbstractHandler,
+		ModelAdminUserUsecase: oAdminUserUsecase,
 	}
 }
 
@@ -46,7 +46,7 @@ func domainAdminUserToProtoAdminUser(oAdminUser *domain.AdminUser) *pbResource.A
 
 func (oSelf *AdminUserHandler) ShowOneByName(oContext context.Context, oReq *pbResourceModel.AdminUserShowOneByNameInput) (*pbResourceModel.AdminUserShowOneByNameOutput, error) {
 
-	oAdminUser, err := oSelf.AdminUserUsecase.ShowOneByName(oReq.Name)
+	oAdminUser, err := oSelf.ModelAdminUserUsecase.ShowOneByName(oReq.Name)
 	if err != nil {
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
@@ -59,7 +59,7 @@ func (oSelf *AdminUserHandler) ShowOneByName(oContext context.Context, oReq *pbR
 
 func (oSelf *AdminUserHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.AdminUserShowOneByIdInput) (*pbResourceModel.AdminUserShowOneByIdOutput, error) {
 
-	oAdminUser, err := oSelf.AdminUserUsecase.ShowOneById(uint(oReq.Id))
+	oAdminUser, err := oSelf.ModelAdminUserUsecase.ShowOneById(uint(oReq.Id))
 	if err != nil {
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
@@ -80,7 +80,7 @@ func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResource
 		oAdminUserValue.Password = oVariable.Password
 	}
 
-	bResult, oErr := oSelf.AdminUserUsecase.AddOne(&oAdminUserValue)
+	bResult, oErr := oSelf.ModelAdminUserUsecase.AddOne(&oAdminUserValue)
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -101,7 +101,7 @@ func (oSelf *AdminUserHandler) EditOneById(oContext context.Context, oReq *pbRes
 		oAdminUserValue.Password = oVariable.Password
 	}
 
-	bResult, oErr := oSelf.AdminUserUsecase.EditOneById(&oAdminUserValue, uint(oReq.Id))
+	bResult, oErr := oSelf.ModelAdminUserUsecase.EditOneById(&oAdminUserValue, uint(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -114,7 +114,7 @@ func (oSelf *AdminUserHandler) EditOneById(oContext context.Context, oReq *pbRes
 
 func (oSelf *AdminUserHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminUserRemoveOneByIdInput) (*pbResourceModel.AdminUserRemoveOneByIdOutput, error) {
 
-	bResult, oErr := oSelf.AdminUserUsecase.RemoveOneById(uint(oReq.Id))
+	bResult, oErr := oSelf.ModelAdminUserUsecase.RemoveOneById(uint(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
@@ -163,7 +163,7 @@ func (oSelf *AdminUserHandler) ShowOnesByFiltersWithSortersPagination(oContext c
 		Page: &iPage,
 	}
 
-	aAdminUsers, oErr := oSelf.AdminUserUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	aAdminUsers, oErr := oSelf.ModelAdminUserUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
@@ -197,7 +197,7 @@ func (oSelf *AdminUserHandler) TotalByFilters(oContext context.Context, oReq *pb
 		})
 	}
 
-	iTotal, oErr := oSelf.AdminUserUsecase.TotalByFilters(aFilters)
+	iTotal, oErr := oSelf.ModelAdminUserUsecase.TotalByFilters(aFilters)
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}

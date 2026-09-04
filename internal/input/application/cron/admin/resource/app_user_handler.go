@@ -11,18 +11,18 @@ import (
 
 type AppUserHandler struct {
 	*inputApplicationCron.AbstractHandler
-	appUserUsecase usecasePortAnyAdminResource.AppUserUsecase
+	AdminResourceAppUserUsecase usecasePortAnyAdminResource.AppUserUsecase
 }
 
 func NewAppUserHandler(oAppUserUsecase usecasePortAnyAdminResource.AppUserUsecase, oAbstractHandler *inputApplicationCron.AbstractHandler) *AppUserHandler {
 	return &AppUserHandler{
-		AbstractHandler: oAbstractHandler,
-		appUserUsecase:  oAppUserUsecase,
+		AbstractHandler:             oAbstractHandler,
+		AdminResourceAppUserUsecase: oAppUserUsecase,
 	}
 }
 
 func (oSelf *AppUserHandler) IncreaseBalance() {
-	bResult, err := oSelf.appUserUsecase.IncreaseBalance(1, 10)
+	bResult, err := oSelf.AdminResourceAppUserUsecase.IncreaseBalance(1, 10)
 	if err != nil {
 		pkgUtility.Logger(pkgUtility.Cron).Error("IncreaseBalance 失敗",
 			zap.Error(err),

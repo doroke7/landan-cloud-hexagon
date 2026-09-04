@@ -15,13 +15,13 @@ import (
 
 type GameTypeHandler struct {
 	*inputApplicationHttp.AbstractHandler
-	GameTypeUsecase usecasePortAnyAdminResource.GameTypeUsecase
+	AdminResourceGameTypeUsecase usecasePortAnyAdminResource.GameTypeUsecase
 }
 
 func NewGameTypeHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, oGameTypeUsecase usecasePortAnyAdminResource.GameTypeUsecase) *GameTypeHandler {
 	return &GameTypeHandler{
-		AbstractHandler: oAbstractHandler,
-		GameTypeUsecase: oGameTypeUsecase,
+		AbstractHandler:              oAbstractHandler,
+		AdminResourceGameTypeUsecase: oGameTypeUsecase,
 	}
 }
 
@@ -35,7 +35,7 @@ func (oSelf *GameTypeHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	bResult, oErr := oSelf.GameTypeUsecase.AddOne(oValue)
+	bResult, oErr := oSelf.AdminResourceGameTypeUsecase.AddOne(oValue)
 	_ = bResult
 
 	if oErr != nil {
@@ -75,7 +75,7 @@ func (oSelf *GameTypeHandler) EditOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.GameTypeUsecase.EditOne(oValue, iId)
+	bResult, oErr := oSelf.AdminResourceGameTypeUsecase.EditOne(oValue, iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -109,7 +109,7 @@ func (oSelf *GameTypeHandler) RemoveOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.GameTypeUsecase.RemoveOne(iId)
+	bResult, oErr := oSelf.AdminResourceGameTypeUsecase.RemoveOne(iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -143,7 +143,7 @@ func (oSelf *GameTypeHandler) ShowOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	oGameType, oErr := oSelf.GameTypeUsecase.ShowOne(iId)
+	oGameType, oErr := oSelf.AdminResourceGameTypeUsecase.ShowOne(iId)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -158,7 +158,7 @@ func (oSelf *GameTypeHandler) ShowOne(oContext *gin.Context) {
 
 func (oSelf *GameTypeHandler) ShowTree(oContext *gin.Context) {
 
-	oTree, oErr := oSelf.GameTypeUsecase.ShowTree()
+	oTree, oErr := oSelf.AdminResourceGameTypeUsecase.ShowTree()
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -201,7 +201,7 @@ func (oSelf *GameTypeHandler) ShowOnes(oContext *gin.Context) {
 		return
 	}
 
-	aGameTypes, iTotal, oErr := oSelf.GameTypeUsecase.ShowOnes(aFilters, aSorters, oPagination)
+	aGameTypes, iTotal, oErr := oSelf.AdminResourceGameTypeUsecase.ShowOnes(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)

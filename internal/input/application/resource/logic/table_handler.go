@@ -15,13 +15,13 @@ import (
 type TableHandler struct {
 	*inputApplicationResource.AbstractHandler
 	pbResourceLogic.UnimplementedTableLogicServer
-	usecasePortAnyLogic.TableUsecase
+	LogicTableUsecase usecasePortAnyLogic.TableUsecase
 }
 
 func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oTableUsecase usecasePortAnyLogic.TableUsecase) *TableHandler {
 	return &TableHandler{
-		AbstractHandler: oAbstractHandler,
-		TableUsecase:    oTableUsecase,
+		AbstractHandler:   oAbstractHandler,
+		LogicTableUsecase: oTableUsecase,
 	}
 }
 
@@ -63,7 +63,7 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 		})
 	}
 
-	aTables, iTotal, oErr := oSelf.TableUsecase.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	aTables, iTotal, oErr := oSelf.LogicTableUsecase.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	aPbTables := make([]*pbResource.Table, 0, len(aTables))
 	for _, oTable := range aTables {

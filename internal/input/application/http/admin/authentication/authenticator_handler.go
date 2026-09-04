@@ -12,7 +12,7 @@ import (
 
 type AuthenticatorHandler struct {
 	*inputApplicationHttp.AbstractHandler
-	AuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase
+	AdminAuthenticationAuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase
 }
 
 // NewUserHandler 構造函數 (Go 的慣用法)，
@@ -20,8 +20,8 @@ type AuthenticatorHandler struct {
 
 func NewAuthenticatorHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, oAuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase) *AuthenticatorHandler {
 	return &AuthenticatorHandler{
-		AbstractHandler:      oAbstractHandler,
-		AuthenticatorUsecase: oAuthenticatorUsecase,
+		AbstractHandler:                         oAbstractHandler,
+		AdminAuthenticationAuthenticatorUsecase: oAuthenticatorUsecase,
 	}
 }
 
@@ -42,7 +42,7 @@ func (oSelf *AuthenticatorHandler) SignIn(oContext *gin.Context) {
 		return
 	}
 
-	sAuthorization, oErr := oSelf.AuthenticatorUsecase.SignIn(
+	sAuthorization, oErr := oSelf.AdminAuthenticationAuthenticatorUsecase.SignIn(
 		*oValue.Name,
 		*oValue.Password,
 		bootstrap.CONFIG.SERVICES.HTTP.ADMIN.JWT.SECRET,
@@ -65,7 +65,7 @@ func (oSelf *AuthenticatorHandler) Refresh(oContext *gin.Context) {
 	sJwt := oContext.GetHeader("Authorization")
 
 	// Authorization
-	sAuthorization, oErr := oSelf.AuthenticatorUsecase.Refresh(
+	sAuthorization, oErr := oSelf.AdminAuthenticationAuthenticatorUsecase.Refresh(
 		sJwt,
 		bootstrap.CONFIG.SERVICES.HTTP.ADMIN.JWT.SECRET,
 	)

@@ -15,13 +15,13 @@ import (
 
 type GameHandler struct {
 	*inputApplicationHttp.AbstractHandler
-	GameUsecase usecasePortAnyAdminResource.GameUsecase
+	AdminResourceGameUsecase usecasePortAnyAdminResource.GameUsecase
 }
 
 func NewGameHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, oGameUsecase usecasePortAnyAdminResource.GameUsecase) *GameHandler {
 	return &GameHandler{
-		AbstractHandler: oAbstractHandler,
-		GameUsecase:     oGameUsecase,
+		AbstractHandler:          oAbstractHandler,
+		AdminResourceGameUsecase: oGameUsecase,
 	}
 }
 
@@ -35,7 +35,7 @@ func (oSelf *GameHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	bResult, oErr := oSelf.GameUsecase.AddOne(oValue)
+	bResult, oErr := oSelf.AdminResourceGameUsecase.AddOne(oValue)
 	_ = bResult
 
 	if oErr != nil {
@@ -75,7 +75,7 @@ func (oSelf *GameHandler) EditOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.GameUsecase.EditOne(oValue, iId)
+	bResult, oErr := oSelf.AdminResourceGameUsecase.EditOne(oValue, iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -109,7 +109,7 @@ func (oSelf *GameHandler) RemoveOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.GameUsecase.RemoveOne(iId)
+	bResult, oErr := oSelf.AdminResourceGameUsecase.RemoveOne(iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -143,7 +143,7 @@ func (oSelf *GameHandler) ShowOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	oGame, oErr := oSelf.GameUsecase.ShowOne(iId)
+	oGame, oErr := oSelf.AdminResourceGameUsecase.ShowOne(iId)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -186,7 +186,7 @@ func (oSelf *GameHandler) ShowOnes(oContext *gin.Context) {
 		return
 	}
 
-	aGames, iTotal, oErr := oSelf.GameUsecase.ShowOnes(aFilters, aSorters, oPagination)
+	aGames, iTotal, oErr := oSelf.AdminResourceGameUsecase.ShowOnes(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)

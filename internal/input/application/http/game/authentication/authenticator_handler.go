@@ -13,13 +13,13 @@ import (
 
 type AuthenticatorHandler struct {
 	*inputApplicationHttp.AbstractHandler
-	AuthenticatorUsecase usecasePortAnyGameAuthentication.AuthenticatorUsecase
+	GameAuthenticationAuthenticatorUsecase usecasePortAnyGameAuthentication.AuthenticatorUsecase
 }
 
 func NewAuthenticatorHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, oAuthenticatorUsecase usecasePortAnyGameAuthentication.AuthenticatorUsecase) *AuthenticatorHandler {
 	return &AuthenticatorHandler{
-		AbstractHandler:      oAbstractHandler,
-		AuthenticatorUsecase: oAuthenticatorUsecase,
+		AbstractHandler:                        oAbstractHandler,
+		GameAuthenticationAuthenticatorUsecase: oAuthenticatorUsecase,
 	}
 }
 
@@ -37,7 +37,7 @@ func (oSelf *AuthenticatorHandler) LogIn(oContext *gin.Context) {
 		return
 	}
 
-	sAuthorization, oErr := oSelf.AuthenticatorUsecase.LogIn(
+	sAuthorization, oErr := oSelf.GameAuthenticationAuthenticatorUsecase.LogIn(
 		*oValue.Name,
 		*oValue.Password,
 		bootstrap.CONFIG.SERVICES.HTTP.GAME.JWT.SECRET,
@@ -56,7 +56,7 @@ func (oSelf *AuthenticatorHandler) Refresh(oContext *gin.Context) {
 
 	sJwt := oContext.GetHeader("Authorization")
 
-	sAuthorization, oErr := oSelf.AuthenticatorUsecase.Refresh(
+	sAuthorization, oErr := oSelf.GameAuthenticationAuthenticatorUsecase.Refresh(
 		sJwt,
 		bootstrap.CONFIG.SERVICES.HTTP.GAME.JWT.SECRET,
 	)

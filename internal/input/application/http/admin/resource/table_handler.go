@@ -15,13 +15,13 @@ import (
 
 type TableHandler struct {
 	*inputApplicationHttp.AbstractHandler
-	TableUsecase usecasePortAnyAdminResource.TableUsecase
+	AdminResourceTableUsecase usecasePortAnyAdminResource.TableUsecase
 }
 
 func NewTableHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, oTableUsecase usecasePortAnyAdminResource.TableUsecase) *TableHandler {
 	return &TableHandler{
-		AbstractHandler: oAbstractHandler,
-		TableUsecase:    oTableUsecase,
+		AbstractHandler:           oAbstractHandler,
+		AdminResourceTableUsecase: oTableUsecase,
 	}
 }
 
@@ -35,7 +35,7 @@ func (oSelf *TableHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	bResult, oErr := oSelf.TableUsecase.AddOne(oValue)
+	bResult, oErr := oSelf.AdminResourceTableUsecase.AddOne(oValue)
 	_ = bResult
 
 	if oErr != nil {
@@ -69,7 +69,7 @@ func (oSelf *TableHandler) ShowOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	oTable, oErr := oSelf.TableUsecase.ShowOne(iId)
+	oTable, oErr := oSelf.AdminResourceTableUsecase.ShowOne(iId)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -110,7 +110,7 @@ func (oSelf *TableHandler) EditOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.TableUsecase.EditOne(oValue, iId)
+	bResult, oErr := oSelf.AdminResourceTableUsecase.EditOne(oValue, iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -144,7 +144,7 @@ func (oSelf *TableHandler) RemoveOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.TableUsecase.RemoveOne(iId)
+	bResult, oErr := oSelf.AdminResourceTableUsecase.RemoveOne(iId)
 	_ = bResult
 
 	if oErr != nil {
@@ -186,7 +186,7 @@ func (oSelf *TableHandler) ShowOnes(oContext *gin.Context) {
 		return
 	}
 
-	aTables, iTotal, oErr := oSelf.TableUsecase.ShowOnes(aFilters, aSorters, oPagination)
+	aTables, iTotal, oErr := oSelf.AdminResourceTableUsecase.ShowOnes(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)

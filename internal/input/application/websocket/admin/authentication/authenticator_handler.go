@@ -16,13 +16,13 @@ type signInParam struct {
 
 type AuthenticatorHandler struct {
 	*inputApplicationWebsocket.AbstractHandler
-	AuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase
+	AdminAuthenticationAuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase
 }
 
 func NewAuthenticatorHandler(oAuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase, oAbstractHandler *inputApplicationWebsocket.AbstractHandler) *AuthenticatorHandler {
 	return &AuthenticatorHandler{
-		AbstractHandler:      oAbstractHandler,
-		AuthenticatorUsecase: oAuthenticatorUsecase,
+		AbstractHandler:                         oAbstractHandler,
+		AdminAuthenticationAuthenticatorUsecase: oAuthenticatorUsecase,
 	}
 }
 
@@ -32,7 +32,7 @@ func (oSelf *AuthenticatorHandler) SignIn(oConn types.WebsocketConn, oReq types.
 		return types.WebsocketResponse{Event: "normal", Code: -1, Message: "invalid param, expect {\"name\":..., \"password\":...}"}
 	}
 
-	sAuthorization, err := oSelf.AuthenticatorUsecase.SignIn(oParam.Name, oParam.Password, bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN.JWT.SECRET)
+	sAuthorization, err := oSelf.AdminAuthenticationAuthenticatorUsecase.SignIn(oParam.Name, oParam.Password, bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN.JWT.SECRET)
 	if err != nil {
 		return types.WebsocketResponse{Event: "normal", Code: -1, Message: err.Error()}
 	}

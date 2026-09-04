@@ -19,13 +19,13 @@ import (
 type GameHandler struct {
 	*inputApplicationResource.AbstractHandler
 	pbResourceModel.UnimplementedGameModelServer
-	usecasePortAnyModel.GameUsecase
+	ModelGameUsecase usecasePortAnyModel.GameUsecase
 }
 
 func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oGameUsecase usecasePortAnyModel.GameUsecase) *GameHandler {
 	return &GameHandler{
-		AbstractHandler: oAbstractHandler,
-		GameUsecase:     oGameUsecase,
+		AbstractHandler:  oAbstractHandler,
+		ModelGameUsecase: oGameUsecase,
 	}
 }
 
@@ -67,7 +67,7 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel
 
 	oGameValue := protoGameVariableToDomainGameValue(oReq.GetVariable())
 
-	_, oErr := oSelf.GameUsecase.AddOne(&oGameValue)
+	_, oErr := oSelf.ModelGameUsecase.AddOne(&oGameValue)
 
 	if oErr != nil {
 		return nil, oErr
@@ -95,7 +95,7 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel
 
 func (oSelf *GameHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.GameShowOneByIdInput) (*pbResourceModel.GameShowOneByIdOutput, error) {
 
-	oGame, oErr := oSelf.GameUsecase.ShowOneById(uint(oReq.Id))
+	oGame, oErr := oSelf.ModelGameUsecase.ShowOneById(uint(oReq.Id))
 
 	if oErr != nil {
 		return nil, oErr
@@ -115,7 +115,7 @@ func (oSelf *GameHandler) ShowOneById(oContext context.Context, oReq *pbResource
 
 func (oSelf *GameHandler) ShowOneByKey(oContext context.Context, oReq *pbResourceModel.GameShowOneByKeyInput) (*pbResourceModel.GameShowOneByKeyOutput, error) {
 
-	oGame, oErr := oSelf.GameUsecase.ShowOneByKey(oReq.Key)
+	oGame, oErr := oSelf.ModelGameUsecase.ShowOneByKey(oReq.Key)
 
 	if oErr != nil {
 		return nil, oErr
@@ -171,7 +171,7 @@ func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context
 		Page: &iPage,
 	}
 
-	aGames, oErr := oSelf.GameUsecase.ShowOnesByFiltersWithOrdersPagination(aFilters, aSorters, oPagination)
+	aGames, oErr := oSelf.ModelGameUsecase.ShowOnesByFiltersWithOrdersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		return nil, oErr
@@ -192,7 +192,7 @@ func (oSelf *GameHandler) EditOneById(oContext context.Context, oReq *pbResource
 
 	oGameValue := protoGameVariableToDomainGameValue(oReq.GetVariable())
 
-	_, oErr := oSelf.GameUsecase.EditOneById(&oGameValue, uint64(oReq.Id))
+	_, oErr := oSelf.ModelGameUsecase.EditOneById(&oGameValue, uint64(oReq.Id))
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -204,7 +204,7 @@ func (oSelf *GameHandler) EditOneById(oContext context.Context, oReq *pbResource
 
 func (oSelf *GameHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.GameRemoveOneByIdInput) (*pbResourceModel.GameRemoveOneByIdOutput, error) {
 
-	_, oErr := oSelf.GameUsecase.RemoveOneById(uint(oReq.Id))
+	_, oErr := oSelf.ModelGameUsecase.RemoveOneById(uint(oReq.Id))
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -231,7 +231,7 @@ func (oSelf *GameHandler) TotalByFilters(oContext context.Context, oReq *pbResou
 		})
 	}
 
-	iTotal, oErr := oSelf.GameUsecase.TotalByFilters(aFilters)
+	iTotal, oErr := oSelf.ModelGameUsecase.TotalByFilters(aFilters)
 
 	if oErr != nil {
 		return nil, oErr

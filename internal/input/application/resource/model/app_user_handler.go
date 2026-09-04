@@ -17,13 +17,13 @@ import (
 type AppUserHandler struct {
 	pbResourceModel.UnimplementedAppUserModelServer
 	*inputApplicationResource.AbstractHandler
-	usecasePortAnyModel.AppUserUsecase
+	ModelAppUserUsecase usecasePortAnyModel.AppUserUsecase
 }
 
 func NewAppUserHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oAppUserUsecase usecasePortAnyModel.AppUserUsecase) *AppUserHandler {
 	return &AppUserHandler{
-		AbstractHandler: oAbstractHandler,
-		AppUserUsecase:  oAppUserUsecase,
+		AbstractHandler:     oAbstractHandler,
+		ModelAppUserUsecase: oAppUserUsecase,
 	}
 }
 
@@ -37,7 +37,7 @@ func (oSelf *AppUserHandler) AddAppUser(oContext context.Context, oReq *pbResour
 		oAppUserValue.Password = oVariable.Password
 	}
 
-	if _, oErr := oSelf.AppUserUsecase.AddOne(&oAppUserValue); oErr != nil {
+	if _, oErr := oSelf.ModelAppUserUsecase.AddOne(&oAppUserValue); oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
@@ -53,7 +53,7 @@ func (oSelf *AppUserHandler) AddAppUser(oContext context.Context, oReq *pbResour
 
 func (oSelf *AppUserHandler) ShowOneByName(oContext context.Context, oReq *pbResourceModel.AppUserShowOneByNameInput) (*pbResourceModel.AppUserShowOneByNameOutput, error) {
 
-	oAppUser, oErr := oSelf.AppUserUsecase.ShowOneByName(oReq.Name)
+	oAppUser, oErr := oSelf.ModelAppUserUsecase.ShowOneByName(oReq.Name)
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
@@ -70,7 +70,7 @@ func (oSelf *AppUserHandler) ShowOneByName(oContext context.Context, oReq *pbRes
 
 func (oSelf *AppUserHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.AppUserShowOneByIdInput) (*pbResourceModel.AppUserShowOneByIdOutput, error) {
 
-	oAppUser, oErr := oSelf.AppUserUsecase.ShowOneById(uint(oReq.Id))
+	oAppUser, oErr := oSelf.ModelAppUserUsecase.ShowOneById(uint(oReq.Id))
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
@@ -87,7 +87,7 @@ func (oSelf *AppUserHandler) ShowOneById(oContext context.Context, oReq *pbResou
 
 func (oSelf *AppUserHandler) IncreaseBalance(oContext context.Context, oReq *pbResourceModel.AppUserIncreaseBalanceInput) (*pbResourceModel.AppUserIncreaseBalanceOutput, error) {
 
-	bResult, oErr := oSelf.AppUserUsecase.IncreaseBalance(uint(oReq.Id), uint(oReq.Amount))
+	bResult, oErr := oSelf.ModelAppUserUsecase.IncreaseBalance(uint(oReq.Id), uint(oReq.Amount))
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}

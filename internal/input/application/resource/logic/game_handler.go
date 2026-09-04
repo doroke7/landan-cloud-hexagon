@@ -16,13 +16,13 @@ import (
 type GameHandler struct {
 	*inputApplicationResource.AbstractHandler
 	pbResourceLogic.UnimplementedGameLogicServer
-	usecasePortAnyLogic.GameUsecase
+	LogicGameUsecase usecasePortAnyLogic.GameUsecase
 }
 
 func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oGameUsecase usecasePortAnyLogic.GameUsecase) *GameHandler {
 	return &GameHandler{
-		AbstractHandler: oAbstractHandler,
-		GameUsecase:     oGameUsecase,
+		AbstractHandler:  oAbstractHandler,
+		LogicGameUsecase: oGameUsecase,
 	}
 }
 
@@ -102,7 +102,7 @@ func (oSelf *GameHandler) ShowGamesTotalByFiltersWithSortersPagination(oContext 
 		})
 	}
 
-	aGames, iTotal, oErr := oSelf.GameUsecase.ShowGamesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	aGames, iTotal, oErr := oSelf.LogicGameUsecase.ShowGamesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	aPbGames := make([]*pbResource.Game, 0, len(aGames))
 	for _, oGame := range aGames {

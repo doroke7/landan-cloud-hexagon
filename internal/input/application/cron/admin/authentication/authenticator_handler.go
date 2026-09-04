@@ -12,19 +12,19 @@ import (
 
 type AuthenticatorHandler struct {
 	*inputApplicationCron.AbstractHandler
-	AuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase
+	AdminAuthenticationAuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase
 }
 
 func NewAuthenticatorHandler(oAuthenticatorUsecase usecasePortAnyAdminAuthentication.AuthenticatorUsecase, oAbstractHandler *inputApplicationCron.AbstractHandler) *AuthenticatorHandler {
 	return &AuthenticatorHandler{
-		AbstractHandler:      oAbstractHandler,
-		AuthenticatorUsecase: oAuthenticatorUsecase,
+		AbstractHandler:                         oAbstractHandler,
+		AdminAuthenticationAuthenticatorUsecase: oAuthenticatorUsecase,
 	}
 }
 
 func (oSelf *AuthenticatorHandler) SignIn() {
 	// NOTE: cron carrier 目前沒有自己的 services.cron.admin.jwt 設定，先借用 http 那組 secret。
-	sAuthorization, err := oSelf.AuthenticatorUsecase.SignIn("tom", "secret", bootstrap.CONFIG.SERVICES.HTTP.ADMIN.JWT.SECRET)
+	sAuthorization, err := oSelf.AdminAuthenticationAuthenticatorUsecase.SignIn("tom", "secret", bootstrap.CONFIG.SERVICES.HTTP.ADMIN.JWT.SECRET)
 	if err != nil {
 		pkgUtility.Logger(pkgUtility.Cron).Error("SignIn 失敗",
 			zap.Error(err),

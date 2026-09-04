@@ -17,13 +17,13 @@ import (
 type GameTypeHandler struct {
 	*inputApplicationResource.AbstractHandler
 	pbResourceModel.UnimplementedGameTypeModelServer
-	usecasePortAnyModel.GameTypeUsecase
+	ModelGameTypeUsecase usecasePortAnyModel.GameTypeUsecase
 }
 
 func NewGameTypeHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oGameTypeUsecase usecasePortAnyModel.GameTypeUsecase) *GameTypeHandler {
 	return &GameTypeHandler{
-		AbstractHandler: oAbstractHandler,
-		GameTypeUsecase: oGameTypeUsecase,
+		AbstractHandler:      oAbstractHandler,
+		ModelGameTypeUsecase: oGameTypeUsecase,
 	}
 }
 
@@ -61,7 +61,7 @@ func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceM
 		oGameTypeValue.Name = oVariable.Name
 	}
 
-	_, oErr := oSelf.GameTypeUsecase.AddOne(&oGameTypeValue)
+	_, oErr := oSelf.ModelGameTypeUsecase.AddOne(&oGameTypeValue)
 
 	if oErr != nil {
 		return nil, oErr
@@ -86,7 +86,7 @@ func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceM
 
 func (oSelf *GameTypeHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.GameTypeShowOneByIdInput) (*pbResourceModel.GameTypeShowOneByIdOutput, error) {
 
-	oGameType, oErr := oSelf.GameTypeUsecase.ShowOneById(uint(oReq.Id))
+	oGameType, oErr := oSelf.ModelGameTypeUsecase.ShowOneById(uint(oReq.Id))
 
 	if oErr != nil {
 		return nil, oErr
@@ -141,7 +141,7 @@ func (oSelf *GameTypeHandler) ShowOnesByFiltersWithSortersPagination(oContext co
 		Page: &iPage,
 	}
 
-	aGameTypes, oErr := oSelf.GameTypeUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	aGameTypes, oErr := oSelf.ModelGameTypeUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		return nil, oErr
@@ -167,7 +167,7 @@ func (oSelf *GameTypeHandler) EditOneById(oContext context.Context, oReq *pbReso
 		oGameTypeValue.Name = oVariable.Name
 	}
 
-	_, oErr := oSelf.GameTypeUsecase.EditOneById(&oGameTypeValue, uint64(oReq.Id))
+	_, oErr := oSelf.ModelGameTypeUsecase.EditOneById(&oGameTypeValue, uint64(oReq.Id))
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -179,7 +179,7 @@ func (oSelf *GameTypeHandler) EditOneById(oContext context.Context, oReq *pbReso
 
 func (oSelf *GameTypeHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.GameTypeRemoveOneByIdInput) (*pbResourceModel.GameTypeRemoveOneByIdOutput, error) {
 
-	_, oErr := oSelf.GameTypeUsecase.RemoveOneById(uint(oReq.Id))
+	_, oErr := oSelf.ModelGameTypeUsecase.RemoveOneById(uint(oReq.Id))
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -206,7 +206,7 @@ func (oSelf *GameTypeHandler) TotalByFilters(oContext context.Context, oReq *pbR
 		})
 	}
 
-	iTotal, oErr := oSelf.GameTypeUsecase.TotalByFilters(aFilters)
+	iTotal, oErr := oSelf.ModelGameTypeUsecase.TotalByFilters(aFilters)
 
 	if oErr != nil {
 		return nil, oErr
