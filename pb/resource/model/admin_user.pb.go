@@ -524,6 +524,198 @@ func (x *AdminUserRemoveOneByIdOutput) GetStatus() bool {
 	return false
 }
 
+type AdminUserShowOnesByFiltersWithSortersPaginationInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*resource.Sorter     `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *resource.Pagination   `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) Reset() {
+	*x = AdminUserShowOnesByFiltersWithSortersPaginationInput{}
+	mi := &file_resource_model_admin_user_proto_msgTypes[11]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserShowOnesByFiltersWithSortersPaginationInput) ProtoMessage() {}
+
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_admin_user_proto_msgTypes[11]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserShowOnesByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
+func (*AdminUserShowOnesByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
+	if x != nil {
+		return x.Filters
+	}
+	return nil
+}
+
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) GetSorters() []*resource.Sorter {
+	if x != nil {
+		return x.Sorters
+	}
+	return nil
+}
+
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
+	if x != nil {
+		return x.Pagination
+	}
+	return nil
+}
+
+type AdminUserShowOnesByFiltersWithSortersPaginationOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminUsers    []*resource.AdminUser  `protobuf:"bytes,1,rep,name=admin_users,json=adminUsers,proto3" json:"admin_users,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationOutput) Reset() {
+	*x = AdminUserShowOnesByFiltersWithSortersPaginationOutput{}
+	mi := &file_resource_model_admin_user_proto_msgTypes[12]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserShowOnesByFiltersWithSortersPaginationOutput) ProtoMessage() {}
+
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_admin_user_proto_msgTypes[12]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserShowOnesByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
+func (*AdminUserShowOnesByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{12}
+}
+
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationOutput) GetAdminUsers() []*resource.AdminUser {
+	if x != nil {
+		return x.AdminUsers
+	}
+	return nil
+}
+
+type AdminUserTotalByFiltersInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserTotalByFiltersInput) Reset() {
+	*x = AdminUserTotalByFiltersInput{}
+	mi := &file_resource_model_admin_user_proto_msgTypes[13]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserTotalByFiltersInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserTotalByFiltersInput) ProtoMessage() {}
+
+func (x *AdminUserTotalByFiltersInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_admin_user_proto_msgTypes[13]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserTotalByFiltersInput.ProtoReflect.Descriptor instead.
+func (*AdminUserTotalByFiltersInput) Descriptor() ([]byte, []int) {
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{13}
+}
+
+func (x *AdminUserTotalByFiltersInput) GetFilters() []*resource.Filter {
+	if x != nil {
+		return x.Filters
+	}
+	return nil
+}
+
+type AdminUserTotalByFiltersOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Total         uint64                 `protobuf:"varint,1,opt,name=total,proto3" json:"total,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserTotalByFiltersOutput) Reset() {
+	*x = AdminUserTotalByFiltersOutput{}
+	mi := &file_resource_model_admin_user_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserTotalByFiltersOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserTotalByFiltersOutput) ProtoMessage() {}
+
+func (x *AdminUserTotalByFiltersOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_admin_user_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserTotalByFiltersOutput.ProtoReflect.Descriptor instead.
+func (*AdminUserTotalByFiltersOutput) Descriptor() ([]byte, []int) {
+	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *AdminUserTotalByFiltersOutput) GetTotal() uint64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
+}
+
 var File_resource_model_admin_user_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_user_proto_rawDesc = "" +
@@ -556,13 +748,28 @@ const file_resource_model_admin_user_proto_rawDesc = "" +
 	"\x1bAdminUserRemoveOneByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\"6\n" +
 	"\x1cAdminUserRemoveOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status2\xa9\x04\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\"\xcd\x01\n" +
+	"4AdminUserShowOnesByFiltersWithSortersPaginationInput\x12-\n" +
+	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
+	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
+	"\n" +
+	"pagination\x18\x03 \x01(\v2\x17.pb.resource.PaginationR\n" +
+	"pagination\"p\n" +
+	"5AdminUserShowOnesByFiltersWithSortersPaginationOutput\x127\n" +
+	"\vadmin_users\x18\x01 \x03(\v2\x16.pb.resource.AdminUserR\n" +
+	"adminUsers\"M\n" +
+	"\x1cAdminUserTotalByFiltersInput\x12-\n" +
+	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\"5\n" +
+	"\x1dAdminUserTotalByFiltersOutput\x12\x14\n" +
+	"\x05total\x18\x01 \x01(\x04R\x05total2\xdc\x06\n" +
 	"\x0eAdminUserModel\x12p\n" +
 	"\rShowOneByName\x12..pb.resource.model.AdminUserShowOneByNameInput\x1a/.pb.resource.model.AdminUserShowOneByNameOutput\x12j\n" +
 	"\vShowOneById\x12,.pb.resource.model.AdminUserShowOneByIdInput\x1a-.pb.resource.model.AdminUserShowOneByIdOutput\x12[\n" +
 	"\x06AddOne\x12'.pb.resource.model.AdminUserAddOneInput\x1a(.pb.resource.model.AdminUserAddOneOutput\x12j\n" +
 	"\vEditOneById\x12,.pb.resource.model.AdminUserEditOneByIdInput\x1a-.pb.resource.model.AdminUserEditOneByIdOutput\x12p\n" +
-	"\rRemoveOneById\x12..pb.resource.model.AdminUserRemoveOneByIdInput\x1a/.pb.resource.model.AdminUserRemoveOneByIdOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
+	"\rRemoveOneById\x12..pb.resource.model.AdminUserRemoveOneByIdInput\x1a/.pb.resource.model.AdminUserRemoveOneByIdOutput\x12\xbb\x01\n" +
+	"&ShowOnesByFiltersWithSortersPagination\x12G.pb.resource.model.AdminUserShowOnesByFiltersWithSortersPaginationInput\x1aH.pb.resource.model.AdminUserShowOnesByFiltersWithSortersPaginationOutput\x12s\n" +
+	"\x0eTotalByFilters\x12/.pb.resource.model.AdminUserTotalByFiltersInput\x1a0.pb.resource.model.AdminUserTotalByFiltersOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
 
 var (
 	file_resource_model_admin_user_proto_rawDescOnce sync.Once
@@ -576,41 +783,57 @@ func file_resource_model_admin_user_proto_rawDescGZIP() []byte {
 	return file_resource_model_admin_user_proto_rawDescData
 }
 
-var file_resource_model_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
+var file_resource_model_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_resource_model_admin_user_proto_goTypes = []any{
-	(*AdminUserVariable)(nil),            // 0: pb.resource.model.AdminUserVariable
-	(*AdminUserShowOneByNameInput)(nil),  // 1: pb.resource.model.AdminUserShowOneByNameInput
-	(*AdminUserShowOneByNameOutput)(nil), // 2: pb.resource.model.AdminUserShowOneByNameOutput
-	(*AdminUserShowOneByIdInput)(nil),    // 3: pb.resource.model.AdminUserShowOneByIdInput
-	(*AdminUserShowOneByIdOutput)(nil),   // 4: pb.resource.model.AdminUserShowOneByIdOutput
-	(*AdminUserAddOneInput)(nil),         // 5: pb.resource.model.AdminUserAddOneInput
-	(*AdminUserAddOneOutput)(nil),        // 6: pb.resource.model.AdminUserAddOneOutput
-	(*AdminUserEditOneByIdInput)(nil),    // 7: pb.resource.model.AdminUserEditOneByIdInput
-	(*AdminUserEditOneByIdOutput)(nil),   // 8: pb.resource.model.AdminUserEditOneByIdOutput
-	(*AdminUserRemoveOneByIdInput)(nil),  // 9: pb.resource.model.AdminUserRemoveOneByIdInput
-	(*AdminUserRemoveOneByIdOutput)(nil), // 10: pb.resource.model.AdminUserRemoveOneByIdOutput
-	(*resource.AdminUser)(nil),           // 11: pb.resource.AdminUser
+	(*AdminUserVariable)(nil),                                     // 0: pb.resource.model.AdminUserVariable
+	(*AdminUserShowOneByNameInput)(nil),                           // 1: pb.resource.model.AdminUserShowOneByNameInput
+	(*AdminUserShowOneByNameOutput)(nil),                          // 2: pb.resource.model.AdminUserShowOneByNameOutput
+	(*AdminUserShowOneByIdInput)(nil),                             // 3: pb.resource.model.AdminUserShowOneByIdInput
+	(*AdminUserShowOneByIdOutput)(nil),                            // 4: pb.resource.model.AdminUserShowOneByIdOutput
+	(*AdminUserAddOneInput)(nil),                                  // 5: pb.resource.model.AdminUserAddOneInput
+	(*AdminUserAddOneOutput)(nil),                                 // 6: pb.resource.model.AdminUserAddOneOutput
+	(*AdminUserEditOneByIdInput)(nil),                             // 7: pb.resource.model.AdminUserEditOneByIdInput
+	(*AdminUserEditOneByIdOutput)(nil),                            // 8: pb.resource.model.AdminUserEditOneByIdOutput
+	(*AdminUserRemoveOneByIdInput)(nil),                           // 9: pb.resource.model.AdminUserRemoveOneByIdInput
+	(*AdminUserRemoveOneByIdOutput)(nil),                          // 10: pb.resource.model.AdminUserRemoveOneByIdOutput
+	(*AdminUserShowOnesByFiltersWithSortersPaginationInput)(nil),  // 11: pb.resource.model.AdminUserShowOnesByFiltersWithSortersPaginationInput
+	(*AdminUserShowOnesByFiltersWithSortersPaginationOutput)(nil), // 12: pb.resource.model.AdminUserShowOnesByFiltersWithSortersPaginationOutput
+	(*AdminUserTotalByFiltersInput)(nil),                          // 13: pb.resource.model.AdminUserTotalByFiltersInput
+	(*AdminUserTotalByFiltersOutput)(nil),                         // 14: pb.resource.model.AdminUserTotalByFiltersOutput
+	(*resource.AdminUser)(nil),                                    // 15: pb.resource.AdminUser
+	(*resource.Filter)(nil),                                       // 16: pb.resource.Filter
+	(*resource.Sorter)(nil),                                       // 17: pb.resource.Sorter
+	(*resource.Pagination)(nil),                                   // 18: pb.resource.Pagination
 }
 var file_resource_model_admin_user_proto_depIdxs = []int32{
-	11, // 0: pb.resource.model.AdminUserShowOneByNameOutput.admin_user:type_name -> pb.resource.AdminUser
-	11, // 1: pb.resource.model.AdminUserShowOneByIdOutput.admin_user:type_name -> pb.resource.AdminUser
+	15, // 0: pb.resource.model.AdminUserShowOneByNameOutput.admin_user:type_name -> pb.resource.AdminUser
+	15, // 1: pb.resource.model.AdminUserShowOneByIdOutput.admin_user:type_name -> pb.resource.AdminUser
 	0,  // 2: pb.resource.model.AdminUserAddOneInput.variable:type_name -> pb.resource.model.AdminUserVariable
 	0,  // 3: pb.resource.model.AdminUserEditOneByIdInput.variable:type_name -> pb.resource.model.AdminUserVariable
-	1,  // 4: pb.resource.model.AdminUserModel.ShowOneByName:input_type -> pb.resource.model.AdminUserShowOneByNameInput
-	3,  // 5: pb.resource.model.AdminUserModel.ShowOneById:input_type -> pb.resource.model.AdminUserShowOneByIdInput
-	5,  // 6: pb.resource.model.AdminUserModel.AddOne:input_type -> pb.resource.model.AdminUserAddOneInput
-	7,  // 7: pb.resource.model.AdminUserModel.EditOneById:input_type -> pb.resource.model.AdminUserEditOneByIdInput
-	9,  // 8: pb.resource.model.AdminUserModel.RemoveOneById:input_type -> pb.resource.model.AdminUserRemoveOneByIdInput
-	2,  // 9: pb.resource.model.AdminUserModel.ShowOneByName:output_type -> pb.resource.model.AdminUserShowOneByNameOutput
-	4,  // 10: pb.resource.model.AdminUserModel.ShowOneById:output_type -> pb.resource.model.AdminUserShowOneByIdOutput
-	6,  // 11: pb.resource.model.AdminUserModel.AddOne:output_type -> pb.resource.model.AdminUserAddOneOutput
-	8,  // 12: pb.resource.model.AdminUserModel.EditOneById:output_type -> pb.resource.model.AdminUserEditOneByIdOutput
-	10, // 13: pb.resource.model.AdminUserModel.RemoveOneById:output_type -> pb.resource.model.AdminUserRemoveOneByIdOutput
-	9,  // [9:14] is the sub-list for method output_type
-	4,  // [4:9] is the sub-list for method input_type
-	4,  // [4:4] is the sub-list for extension type_name
-	4,  // [4:4] is the sub-list for extension extendee
-	0,  // [0:4] is the sub-list for field type_name
+	16, // 4: pb.resource.model.AdminUserShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
+	17, // 5: pb.resource.model.AdminUserShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	18, // 6: pb.resource.model.AdminUserShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
+	15, // 7: pb.resource.model.AdminUserShowOnesByFiltersWithSortersPaginationOutput.admin_users:type_name -> pb.resource.AdminUser
+	16, // 8: pb.resource.model.AdminUserTotalByFiltersInput.filters:type_name -> pb.resource.Filter
+	1,  // 9: pb.resource.model.AdminUserModel.ShowOneByName:input_type -> pb.resource.model.AdminUserShowOneByNameInput
+	3,  // 10: pb.resource.model.AdminUserModel.ShowOneById:input_type -> pb.resource.model.AdminUserShowOneByIdInput
+	5,  // 11: pb.resource.model.AdminUserModel.AddOne:input_type -> pb.resource.model.AdminUserAddOneInput
+	7,  // 12: pb.resource.model.AdminUserModel.EditOneById:input_type -> pb.resource.model.AdminUserEditOneByIdInput
+	9,  // 13: pb.resource.model.AdminUserModel.RemoveOneById:input_type -> pb.resource.model.AdminUserRemoveOneByIdInput
+	11, // 14: pb.resource.model.AdminUserModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.AdminUserShowOnesByFiltersWithSortersPaginationInput
+	13, // 15: pb.resource.model.AdminUserModel.TotalByFilters:input_type -> pb.resource.model.AdminUserTotalByFiltersInput
+	2,  // 16: pb.resource.model.AdminUserModel.ShowOneByName:output_type -> pb.resource.model.AdminUserShowOneByNameOutput
+	4,  // 17: pb.resource.model.AdminUserModel.ShowOneById:output_type -> pb.resource.model.AdminUserShowOneByIdOutput
+	6,  // 18: pb.resource.model.AdminUserModel.AddOne:output_type -> pb.resource.model.AdminUserAddOneOutput
+	8,  // 19: pb.resource.model.AdminUserModel.EditOneById:output_type -> pb.resource.model.AdminUserEditOneByIdOutput
+	10, // 20: pb.resource.model.AdminUserModel.RemoveOneById:output_type -> pb.resource.model.AdminUserRemoveOneByIdOutput
+	12, // 21: pb.resource.model.AdminUserModel.ShowOnesByFiltersWithSortersPagination:output_type -> pb.resource.model.AdminUserShowOnesByFiltersWithSortersPaginationOutput
+	14, // 22: pb.resource.model.AdminUserModel.TotalByFilters:output_type -> pb.resource.model.AdminUserTotalByFiltersOutput
+	16, // [16:23] is the sub-list for method output_type
+	9,  // [9:16] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_resource_model_admin_user_proto_init() }
@@ -625,7 +848,7 @@ func file_resource_model_admin_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_model_admin_user_proto_rawDesc), len(file_resource_model_admin_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   11,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

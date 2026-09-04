@@ -2,6 +2,7 @@ package usecasePortAnyModel
 
 import (
 	"example/internal/domain"
+	pkgInput "example/pkg/input"
 )
 
 type AdminUserUsecase interface {
@@ -10,4 +11,6 @@ type AdminUserUsecase interface {
 	AddOne(oAdminUser *domain.AdminUserValue) (bool, error)
 	EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error)
 	RemoveOneById(iId uint) (bool, error)
+	ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error)
+	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
 }

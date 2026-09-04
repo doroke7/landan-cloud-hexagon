@@ -19,11 +19,13 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	AdminUserModel_ShowOneByName_FullMethodName = "/pb.resource.model.AdminUserModel/ShowOneByName"
-	AdminUserModel_ShowOneById_FullMethodName   = "/pb.resource.model.AdminUserModel/ShowOneById"
-	AdminUserModel_AddOne_FullMethodName        = "/pb.resource.model.AdminUserModel/AddOne"
-	AdminUserModel_EditOneById_FullMethodName   = "/pb.resource.model.AdminUserModel/EditOneById"
-	AdminUserModel_RemoveOneById_FullMethodName = "/pb.resource.model.AdminUserModel/RemoveOneById"
+	AdminUserModel_ShowOneByName_FullMethodName                          = "/pb.resource.model.AdminUserModel/ShowOneByName"
+	AdminUserModel_ShowOneById_FullMethodName                            = "/pb.resource.model.AdminUserModel/ShowOneById"
+	AdminUserModel_AddOne_FullMethodName                                 = "/pb.resource.model.AdminUserModel/AddOne"
+	AdminUserModel_EditOneById_FullMethodName                            = "/pb.resource.model.AdminUserModel/EditOneById"
+	AdminUserModel_RemoveOneById_FullMethodName                          = "/pb.resource.model.AdminUserModel/RemoveOneById"
+	AdminUserModel_ShowOnesByFiltersWithSortersPagination_FullMethodName = "/pb.resource.model.AdminUserModel/ShowOnesByFiltersWithSortersPagination"
+	AdminUserModel_TotalByFilters_FullMethodName                         = "/pb.resource.model.AdminUserModel/TotalByFilters"
 )
 
 // AdminUserModelClient is the client API for AdminUserModel service.
@@ -35,6 +37,8 @@ type AdminUserModelClient interface {
 	AddOne(ctx context.Context, in *AdminUserAddOneInput, opts ...grpc.CallOption) (*AdminUserAddOneOutput, error)
 	EditOneById(ctx context.Context, in *AdminUserEditOneByIdInput, opts ...grpc.CallOption) (*AdminUserEditOneByIdOutput, error)
 	RemoveOneById(ctx context.Context, in *AdminUserRemoveOneByIdInput, opts ...grpc.CallOption) (*AdminUserRemoveOneByIdOutput, error)
+	ShowOnesByFiltersWithSortersPagination(ctx context.Context, in *AdminUserShowOnesByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*AdminUserShowOnesByFiltersWithSortersPaginationOutput, error)
+	TotalByFilters(ctx context.Context, in *AdminUserTotalByFiltersInput, opts ...grpc.CallOption) (*AdminUserTotalByFiltersOutput, error)
 }
 
 type adminUserModelClient struct {
@@ -95,6 +99,26 @@ func (c *adminUserModelClient) RemoveOneById(ctx context.Context, in *AdminUserR
 	return out, nil
 }
 
+func (c *adminUserModelClient) ShowOnesByFiltersWithSortersPagination(ctx context.Context, in *AdminUserShowOnesByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*AdminUserShowOnesByFiltersWithSortersPaginationOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdminUserShowOnesByFiltersWithSortersPaginationOutput)
+	err := c.cc.Invoke(ctx, AdminUserModel_ShowOnesByFiltersWithSortersPagination_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminUserModelClient) TotalByFilters(ctx context.Context, in *AdminUserTotalByFiltersInput, opts ...grpc.CallOption) (*AdminUserTotalByFiltersOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdminUserTotalByFiltersOutput)
+	err := c.cc.Invoke(ctx, AdminUserModel_TotalByFilters_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminUserModelServer is the server API for AdminUserModel service.
 // All implementations must embed UnimplementedAdminUserModelServer
 // for forward compatibility.
@@ -104,6 +128,8 @@ type AdminUserModelServer interface {
 	AddOne(context.Context, *AdminUserAddOneInput) (*AdminUserAddOneOutput, error)
 	EditOneById(context.Context, *AdminUserEditOneByIdInput) (*AdminUserEditOneByIdOutput, error)
 	RemoveOneById(context.Context, *AdminUserRemoveOneByIdInput) (*AdminUserRemoveOneByIdOutput, error)
+	ShowOnesByFiltersWithSortersPagination(context.Context, *AdminUserShowOnesByFiltersWithSortersPaginationInput) (*AdminUserShowOnesByFiltersWithSortersPaginationOutput, error)
+	TotalByFilters(context.Context, *AdminUserTotalByFiltersInput) (*AdminUserTotalByFiltersOutput, error)
 	mustEmbedUnimplementedAdminUserModelServer()
 }
 
@@ -128,6 +154,12 @@ func (UnimplementedAdminUserModelServer) EditOneById(context.Context, *AdminUser
 }
 func (UnimplementedAdminUserModelServer) RemoveOneById(context.Context, *AdminUserRemoveOneByIdInput) (*AdminUserRemoveOneByIdOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method RemoveOneById not implemented")
+}
+func (UnimplementedAdminUserModelServer) ShowOnesByFiltersWithSortersPagination(context.Context, *AdminUserShowOnesByFiltersWithSortersPaginationInput) (*AdminUserShowOnesByFiltersWithSortersPaginationOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowOnesByFiltersWithSortersPagination not implemented")
+}
+func (UnimplementedAdminUserModelServer) TotalByFilters(context.Context, *AdminUserTotalByFiltersInput) (*AdminUserTotalByFiltersOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method TotalByFilters not implemented")
 }
 func (UnimplementedAdminUserModelServer) mustEmbedUnimplementedAdminUserModelServer() {}
 func (UnimplementedAdminUserModelServer) testEmbeddedByValue()                        {}
@@ -240,6 +272,42 @@ func _AdminUserModel_RemoveOneById_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminUserModel_ShowOnesByFiltersWithSortersPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminUserShowOnesByFiltersWithSortersPaginationInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminUserModelServer).ShowOnesByFiltersWithSortersPagination(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminUserModel_ShowOnesByFiltersWithSortersPagination_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminUserModelServer).ShowOnesByFiltersWithSortersPagination(ctx, req.(*AdminUserShowOnesByFiltersWithSortersPaginationInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AdminUserModel_TotalByFilters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminUserTotalByFiltersInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminUserModelServer).TotalByFilters(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminUserModel_TotalByFilters_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminUserModelServer).TotalByFilters(ctx, req.(*AdminUserTotalByFiltersInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminUserModel_ServiceDesc is the grpc.ServiceDesc for AdminUserModel service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -266,6 +334,14 @@ var AdminUserModel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveOneById",
 			Handler:    _AdminUserModel_RemoveOneById_Handler,
+		},
+		{
+			MethodName: "ShowOnesByFiltersWithSortersPagination",
+			Handler:    _AdminUserModel_ShowOnesByFiltersWithSortersPagination_Handler,
+		},
+		{
+			MethodName: "TotalByFilters",
+			Handler:    _AdminUserModel_TotalByFilters_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

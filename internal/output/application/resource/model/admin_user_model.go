@@ -1,14 +1,28 @@
 package outputApplicationResourceModel
 
 import (
-	"errors"
-
 	domain "example/internal/domain"
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
 )
+
+func protoAdminUserToDomainAdminUser(oProto *pbResource.AdminUser) domain.AdminUser {
+	if oProto == nil {
+		return domain.AdminUser{}
+	}
+
+	return domain.AdminUser{
+		Id:        uint(oProto.GetId()),
+		Name:      oProto.GetName(),
+		Password:  oProto.GetPassword(),
+		CreatedAt: oProto.GetCreatedAt().AsTime(),
+		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
+		DeletedAt: oProto.GetDeletedAt().AsTime(),
+	}
+}
 
 type AdminUserModel struct {
 	*resourceBase.AbstractResource
@@ -31,13 +45,9 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 		return nil, err
 	}
 
-	oProtoAdminUser := oResp.GetAdminUser()
+	oAdminUser := protoAdminUserToDomainAdminUser(oResp.GetAdminUser())
 
-	return &domain.AdminUser{
-		Id:       uint(oProtoAdminUser.GetId()),
-		Name:     oProtoAdminUser.GetName(),
-		Password: oProtoAdminUser.GetPassword(),
-	}, nil
+	return &oAdminUser, nil
 }
 
 func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
@@ -51,23 +61,45 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 		return nil, err
 	}
 
-	oProtoAdminUser := oResp.GetAdminUser()
+	oAdminUser := protoAdminUserToDomainAdminUser(oResp.GetAdminUser())
 
-	return &domain.AdminUser{
-		Id:       uint(oProtoAdminUser.GetId()),
-		Name:     oProtoAdminUser.GetName(),
-		Password: oProtoAdminUser.GetPassword(),
-	}, nil
+	return &oAdminUser, nil
 }
 
-// ShowOnesByFiltersWithSortersPagination 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {
-	return nil, errors.New("not supported by resource 1")
+
+	oRequest := &pbResourceModel.AdminUserShowOnesByFiltersWithSortersPaginationInput{
+		Filters:    oSelf.ToFilters(aFilters),
+		Sorters:    oSelf.ToSorters(aSorters),
+		Pagination: oSelf.ToPagination(oPagination),
+	}
+
+	oResponse, oErr := oSelf.ResourceModelClient.AdminUser.ShowOnesByFiltersWithSortersPagination(oSelf.Context, oRequest)
+
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aAdminUsers := make([]*domain.AdminUser, 0, len(oResponse.GetAdminUsers()))
+	for _, oOne := range oResponse.GetAdminUsers() {
+		oAdminUser := protoAdminUserToDomainAdminUser(oOne)
+		aAdminUsers = append(aAdminUsers, &oAdminUser)
+	}
+
+	return aAdminUsers, nil
 }
 
-// TotalByFilters 目前 Resource gRPC service 沒有對應的 RPC，先不支援。
 func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
-	return 0, errors.New("not supported by resource 2")
+
+	oRequest := &pbResourceModel.AdminUserTotalByFiltersInput{
+		Filters: oSelf.ToFilters(aFilters),
+	}
+
+	oResponse, oErr := oSelf.ResourceModelClient.AdminUser.TotalByFilters(oSelf.Context, oRequest)
+
+	iTotal := oResponse.GetTotal()
+
+	return iTotal, oErr
 }
 
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {

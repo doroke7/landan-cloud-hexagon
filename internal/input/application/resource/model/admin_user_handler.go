@@ -5,6 +5,7 @@ import (
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
@@ -12,6 +13,7 @@ import (
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
+	pkgInput "example/pkg/input"
 )
 
 type AdminUserHandler struct {
@@ -27,6 +29,21 @@ func NewAdminUserHandler(oAbstractHandler *inputApplicationResource.AbstractHand
 	}
 }
 
+func domainAdminUserToProtoAdminUser(oAdminUser *domain.AdminUser) *pbResource.AdminUser {
+	if oAdminUser == nil {
+		return nil
+	}
+
+	return &pbResource.AdminUser{
+		Id:        uint32(oAdminUser.Id),
+		Name:      oAdminUser.Name,
+		Password:  oAdminUser.Password,
+		CreatedAt: timestamppb.New(oAdminUser.CreatedAt),
+		UpdatedAt: timestamppb.New(oAdminUser.UpdatedAt),
+		DeletedAt: timestamppb.New(oAdminUser.DeletedAt),
+	}
+}
+
 func (oSelf *AdminUserHandler) ShowOneByName(oContext context.Context, oReq *pbResourceModel.AdminUserShowOneByNameInput) (*pbResourceModel.AdminUserShowOneByNameOutput, error) {
 
 	oAdminUser, err := oSelf.AdminUserUsecase.ShowOneByName(oReq.Name)
@@ -35,11 +52,7 @@ func (oSelf *AdminUserHandler) ShowOneByName(oContext context.Context, oReq *pbR
 	}
 
 	return &pbResourceModel.AdminUserShowOneByNameOutput{
-		AdminUser: &pbResource.AdminUser{
-			Id:       uint32(oAdminUser.Id),
-			Name:     oAdminUser.Name,
-			Password: oAdminUser.Password,
-		},
+		AdminUser: domainAdminUserToProtoAdminUser(oAdminUser),
 	}, nil
 
 }
@@ -52,11 +65,7 @@ func (oSelf *AdminUserHandler) ShowOneById(oContext context.Context, oReq *pbRes
 	}
 
 	return &pbResourceModel.AdminUserShowOneByIdOutput{
-		AdminUser: &pbResource.AdminUser{
-			Id:       uint32(oAdminUser.Id),
-			Name:     oAdminUser.Name,
-			Password: oAdminUser.Password,
-		},
+		AdminUser: domainAdminUserToProtoAdminUser(oAdminUser),
 	}, nil
 
 }
@@ -113,5 +122,87 @@ func (oSelf *AdminUserHandler) RemoveOneById(oContext context.Context, oReq *pbR
 
 	return &pbResourceModel.AdminUserRemoveOneByIdOutput{
 		Status: bResult,
+	}, nil
+}
+
+func (oSelf *AdminUserHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.AdminUserShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.AdminUserShowOnesByFiltersWithSortersPaginationOutput, error) {
+
+	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
+	for _, oOne := range oReq.GetFilters() {
+		if oOne == nil {
+			continue
+		}
+
+		sField := oOne.GetField()
+		sOperator := oOne.GetOperator()
+		aFilters = append(aFilters, &pkgInput.Filter{
+			Field:    &sField,
+			Operator: &sOperator,
+			Value:    oOne.GetValue().AsInterface(),
+		})
+	}
+
+	aSorters := make([]*pkgInput.Sorter, 0, len(oReq.GetSorters()))
+	for _, oOne := range oReq.GetSorters() {
+		if oOne == nil {
+			continue
+		}
+
+		sField := oOne.GetField()
+		sOrder := oOne.GetOrder()
+		aSorters = append(aSorters, &pkgInput.Sorter{
+			Field: &sField,
+			Order: &sOrder,
+		})
+	}
+
+	iSize := uint(oReq.GetPagination().GetSize())
+	iPage := uint(oReq.GetPagination().GetPage())
+	oPagination := &pkgInput.Pagination{
+		Size: &iSize,
+		Page: &iPage,
+	}
+
+	aAdminUsers, oErr := oSelf.AdminUserUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	if oErr != nil {
+		return nil, status.Error(codes.NotFound, oErr.Error())
+	}
+
+	aProtoAdminUsers := make([]*pbResource.AdminUser, 0, len(aAdminUsers))
+	for _, oAdminUser := range aAdminUsers {
+		oProtoAdminUser := domainAdminUserToProtoAdminUser(oAdminUser)
+		oProtoAdminUser.Password = "" // 列表不外洩密碼
+		aProtoAdminUsers = append(aProtoAdminUsers, oProtoAdminUser)
+	}
+
+	return &pbResourceModel.AdminUserShowOnesByFiltersWithSortersPaginationOutput{
+		AdminUsers: aProtoAdminUsers,
+	}, nil
+}
+
+func (oSelf *AdminUserHandler) TotalByFilters(oContext context.Context, oReq *pbResourceModel.AdminUserTotalByFiltersInput) (*pbResourceModel.AdminUserTotalByFiltersOutput, error) {
+
+	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
+	for _, oOne := range oReq.GetFilters() {
+		if oOne == nil {
+			continue
+		}
+
+		sField := oOne.GetField()
+		sOperator := oOne.GetOperator()
+		aFilters = append(aFilters, &pkgInput.Filter{
+			Field:    &sField,
+			Operator: &sOperator,
+			Value:    oOne.GetValue().AsInterface(),
+		})
+	}
+
+	iTotal, oErr := oSelf.AdminUserUsecase.TotalByFilters(aFilters)
+	if oErr != nil {
+		return nil, status.Error(codes.NotFound, oErr.Error())
+	}
+
+	return &pbResourceModel.AdminUserTotalByFiltersOutput{
+		Total: iTotal,
 	}, nil
 }
