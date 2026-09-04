@@ -34,7 +34,13 @@ func (oSelf *AppUserModel) IncreaseBalance(id uint, amount uint) (bool, error) {
 func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) {
 	var oAppUser domain.AppUser
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).Where("name = ?", sName).First(&oAppUser).Error; oErr != nil {
+	if oErr := oSelf.
+		DB.
+		WithContext(oSelf.Context).
+		Where("name = ?", sName).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		First(&oAppUser).
+		Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, errors.New("資料不存在")
 		}
@@ -47,7 +53,12 @@ func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) 
 func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 	var oAppUser domain.AppUser
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).First(&oAppUser, iId).Error; oErr != nil {
+	if oErr := oSelf.
+		DB.
+		WithContext(oSelf.Context).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		First(&oAppUser, iId).
+		Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, errors.New("資料不存在")
 		}

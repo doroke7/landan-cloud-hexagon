@@ -125,6 +125,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
+	oQuery = oQuery.Where("deleted_at = ?", "2038-01-19 03:14:07")
 
 	for _, oOrder := range aOrders {
 		if oOrder == nil || oOrder.Field == nil || oOrder.Value == nil {
@@ -160,6 +161,7 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
+	oQuery = oQuery.Where("deleted_at = ?", "2038-01-19 03:14:07")
 
 	if oErr := oQuery.Count(&iTotal).Error; oErr != nil {
 		return 0, oErr
