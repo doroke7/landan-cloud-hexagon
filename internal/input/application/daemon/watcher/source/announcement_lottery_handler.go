@@ -18,13 +18,13 @@ import (
 
 type AnnouncementLotteryHandler struct {
 	*inputApplicationDaemon.AbstractHandler
-	lotteryUsecase usecasePortAnyWatcherSource.AnnouncementLotteryUsecase
+	WatcherSourceAnnouncementLotteryUsecase usecasePortAnyWatcherSource.AnnouncementLotteryUsecase
 }
 
 func NewAnnouncementLotteryHandler(oLotteryUsecase usecasePortAnyWatcherSource.AnnouncementLotteryUsecase, oAbstractHandler *inputApplicationDaemon.AbstractHandler) *AnnouncementLotteryHandler {
 	return &AnnouncementLotteryHandler{
-		AbstractHandler: oAbstractHandler,
-		lotteryUsecase:  oLotteryUsecase,
+		AbstractHandler:                         oAbstractHandler,
+		WatcherSourceAnnouncementLotteryUsecase: oLotteryUsecase,
 	}
 }
 
@@ -61,7 +61,7 @@ func (oSelf *AnnouncementLotteryHandler) Watch(oStream grpc.ServerStreamingClien
 			Numbers: &sNumbers,
 		}
 
-		if err := oSelf.lotteryUsecase.Watch(oLotteryValue); err != nil {
+		if err := oSelf.WatcherSourceAnnouncementLotteryUsecase.Watch(oLotteryValue); err != nil {
 			pkgUtility.Logger(pkgUtility.DeamonWatcher).Error("處理開獎資料失敗", zap.Error(err))
 			continue
 		}
