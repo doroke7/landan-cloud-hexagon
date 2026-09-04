@@ -43,7 +43,7 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 				)
 
 				oResponse = nil
-				oErr = status.Error(codes.Internal, "resource 系統錯誤")
+				oErr = status.Error(codes.Internal, "resource system error")
 			}
 		}()
 
@@ -73,7 +73,7 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 					zap.Error(oErr),
 				)
 
-				return nil, status.Error(codes.Unavailable, "resource 系統錯誤")
+				return nil, status.Error(codes.Unavailable, "resource system error")
 
 			}
 

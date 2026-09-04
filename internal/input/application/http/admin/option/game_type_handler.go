@@ -29,7 +29,7 @@ func (oSelf *GameTypeHandler) SelectOnes(oContext *gin.Context) {
 
 	oPagination := &pkgInput.Pagination{}
 	if oErr := oRequest.Bind("pagination", oPagination); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("pagination 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("pagination format error", -1, 200))
 		return
 	}
 	if oPagination.Size == nil || *oPagination.Size == 0 {
@@ -43,13 +43,13 @@ func (oSelf *GameTypeHandler) SelectOnes(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("filters 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("filters format error", -1, 200))
 		return
 	}
 
 	var aSorters []*pkgInput.Sorter
 	if oErr := oRequest.Bind("sorters", &aSorters); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("sorters 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("sorters format error", -1, 200))
 		return
 	}
 
@@ -62,7 +62,7 @@ func (oSelf *GameTypeHandler) SelectOnes(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(nil, aGameTypes, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
+	oSelf.Response.Set(oContext, 200, 1, "Query successful", oResult, int(iTotal), "")
 
 }
 
@@ -77,6 +77,6 @@ func (oSelf *GameTypeHandler) SelectTree(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(nil, nil, aTree)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, len(aTree), "")
+	oSelf.Response.Set(oContext, 200, 1, "Query successful", oResult, len(aTree), "")
 
 }

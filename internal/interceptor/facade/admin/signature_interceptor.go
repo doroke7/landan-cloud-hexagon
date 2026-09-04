@@ -62,7 +62,7 @@ func (oSelf *SignatureInterceptor) Handle() grpc.UnaryServerInterceptor {
 		sMd5Signature := pkgUtility.Md5(sStrings)
 
 		if bootstrap.CONFIG.SERVICES.FACADE.ADMIN.SIGNATURE && sMd5Signature != sHeaderSignature {
-			return nil, status.Error(codes.Unauthenticated, "簽名失敗")
+			return nil, status.Error(codes.Unauthenticated, "signature verification failed")
 		}
 
 		return fnHandler(oContext, oRequest)

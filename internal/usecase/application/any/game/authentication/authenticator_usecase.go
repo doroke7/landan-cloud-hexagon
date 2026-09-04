@@ -24,11 +24,11 @@ func NewAuthenticatorUsecase(oAppUserRepository outputPortAnyModel.AppUserModel,
 func (oSelf *AuthenticatorUsecase) LogIn(sName string, sPassword string, sSecret string) (string, error) {
 
 	if sName == "" {
-		return "", pkgUtility.NewDefaultError("name 不能為空", -1, 200)
+		return "", pkgUtility.NewDefaultError("name must not be empty", -1, 200)
 	}
 
 	if sPassword == "" {
-		return "", pkgUtility.NewDefaultError("password 不能為空", -1, 200)
+		return "", pkgUtility.NewDefaultError("password must not be empty", -1, 200)
 	}
 
 	oAppUser, oErr := oSelf.AppUserModel.ShowOneByName(sName)
@@ -36,18 +36,18 @@ func (oSelf *AuthenticatorUsecase) LogIn(sName string, sPassword string, sSecret
 		return "", oErr
 	}
 	if oAppUser == nil {
-		return "", pkgUtility.NewDefaultError(sName+" 不存在", -2, 200)
+		return "", pkgUtility.NewDefaultError(sName+" does not exist", -2, 200)
 	}
 
 	sMd5 := pkgUtility.Md5(sPassword + bootstrap.CONFIG.TABLE.APP_USER.PASSWORD)
 	fmt.Println("sMd5=", sMd5)
 	if oAppUser.Password != sMd5 {
-		return "", pkgUtility.NewDefaultError("密碼錯誤", -2, 200)
+		return "", pkgUtility.NewDefaultError("incorrect password", -2, 200)
 	}
 
 	sAuthorization, oErr := oSelf.JwtHelper.Generate(0, int64(oAppUser.Id), map[string]any{}, sSecret)
 	if oErr != nil {
-		return "", pkgUtility.NewDefaultError("JWT 產生失敗", -2, 200)
+		return "", pkgUtility.NewDefaultError("JWT generation failed", -2, 200)
 	}
 
 	return sAuthorization, nil
@@ -56,12 +56,12 @@ func (oSelf *AuthenticatorUsecase) LogIn(sName string, sPassword string, sSecret
 func (oSelf *AuthenticatorUsecase) Refresh(sJwt string, sSecret string) (string, error) {
 
 	if sJwt == "" {
-		return "", pkgUtility.NewDefaultError("JWT 不能為空", -1, 200)
+		return "", pkgUtility.NewDefaultError("JWT must not be empty", -1, 200)
 	}
 
 	oClaims, oErr := oSelf.JwtHelper.Parse(sJwt)
 	if oErr != nil {
-		return "", pkgUtility.NewDefaultError("JWT 無效", -2, 200)
+		return "", pkgUtility.NewDefaultError("invalid JWT", -2, 200)
 	}
 
 	iId := uint(oClaims.AppUserId)
@@ -70,12 +70,12 @@ func (oSelf *AuthenticatorUsecase) Refresh(sJwt string, sSecret string) (string,
 		return "", oErr
 	}
 	if oAppUser == nil {
-		return "", pkgUtility.NewDefaultError("AppUser 不存在", -2, 200)
+		return "", pkgUtility.NewDefaultError("AppUser does not exist", -2, 200)
 	}
 
 	sAuthorization, oErr := oSelf.JwtHelper.Generate(oClaims.AdminUserId, oClaims.AppUserId, oClaims.Payload, sSecret)
 	if oErr != nil {
-		return "", pkgUtility.NewDefaultError("JWT 產生失敗", -2, 200)
+		return "", pkgUtility.NewDefaultError("JWT generation failed", -2, 200)
 	}
 
 	return sAuthorization, nil

@@ -59,12 +59,12 @@ func (oSelf *DecryptionInterceptor) Handle() grpc.UnaryServerInterceptor {
 			sK = aValues[0]
 		}
 		if sK == "" {
-			return nil, status.Error(codes.InvalidArgument, "缺少 k header")
+			return nil, status.Error(codes.InvalidArgument, "missing k header")
 		}
 
 		sKeys, oErr := oSelf.RsaHelper.Decrypt(sK, bootstrap.CONFIG.SERVICES.FACADE.ADMIN.PRIVATE_KEY)
 		if oErr != nil {
-			return nil, status.Error(codes.InvalidArgument, "金鑰解密失敗")
+			return nil, status.Error(codes.InvalidArgument, "key decryption failed")
 		}
 
 		oKeys, oErr := pkgUtility.JsonDecode[struct {
@@ -72,7 +72,7 @@ func (oSelf *DecryptionInterceptor) Handle() grpc.UnaryServerInterceptor {
 			Iv  string `json:"iv"`
 		}](sKeys)
 		if oErr != nil {
-			return nil, status.Error(codes.InvalidArgument, "金鑰格式錯誤")
+			return nil, status.Error(codes.InvalidArgument, "key format error")
 		}
 
 		for _, oField := range aEncryptedFields {
@@ -92,7 +92,7 @@ func (oSelf *DecryptionInterceptor) Handle() grpc.UnaryServerInterceptor {
 
 			sDecrypted, oErr := oSelf.AesHelper.Decrypt(sNormalized, oKeys.Key, oKeys.Iv)
 			if oErr != nil {
-				return nil, status.Error(codes.InvalidArgument, "內容解密失敗")
+				return nil, status.Error(codes.InvalidArgument, "content decryption failed")
 			}
 
 			oReflect.Set(oField, protoreflect.ValueOfString(sDecrypted))

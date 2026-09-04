@@ -70,7 +70,7 @@ func (oSelf *SignatureMiddleware) Handle() gin.HandlerFunc {
 					   3-1. 這個會 Abort + Error + 寫入 http-status
 					   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 				*/
-				_ = oContext.Error(pkgUtility.NewDefaultError("簽名失敗", -3, 406))
+				_ = oContext.Error(pkgUtility.NewDefaultError("signature verification failed", -3, 406))
 				oContext.Abort()
 				return
 			}

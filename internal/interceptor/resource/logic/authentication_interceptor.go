@@ -38,7 +38,7 @@ func (oSelf *AuthenticationInterceptor) Handle() grpc.UnaryServerInterceptor {
 			sAuthotization := "Basic " + pkgUtility.Base64Encode(sUser+":"+sPassword)
 
 			if sAuthotizations != sAuthotization {
-				return nil, status.Error(codes.PermissionDenied, "resource 密碼錯誤")
+				return nil, status.Error(codes.PermissionDenied, "resource incorrect password")
 			}
 		}
 

@@ -33,7 +33,7 @@ func (oSelf *AuthenticatorHandler) LogIn(oContext *gin.Context) {
 	}{}
 
 	if oErr := oRequest.Bind("value", oValue); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("pagination 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("pagination format error", -1, 200))
 		return
 	}
 
@@ -48,7 +48,7 @@ func (oSelf *AuthenticatorHandler) LogIn(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "AppUser 成功登入", struct{}{}, 0, sAuthorization)
+	oSelf.Response.Set(oContext, 200, 1, "AppUser signed in successfully", struct{}{}, 0, sAuthorization)
 
 }
 
@@ -66,6 +66,6 @@ func (oSelf *AuthenticatorHandler) Refresh(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "成功刷新", struct{}{}, 0, sAuthorization)
+	oSelf.Response.Set(oContext, 200, 1, "Refreshed successfully", struct{}{}, 0, sAuthorization)
 
 }

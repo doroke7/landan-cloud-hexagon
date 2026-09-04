@@ -85,12 +85,12 @@ func domainGameToProtoGame(oGame *domain.Game) *pbFacade.Game {
 // idFromFilters 從 filters[0]（field 必須是 "id"）取出 id，比照 http admin resource handler 的做法。
 func idFromFilters(aFilters []*pbFacade.Filter) (uint, error) {
 	if len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].GetField() != "id" {
-		return 0, status.Error(codes.InvalidArgument, "filter 位置錯誤")
+		return 0, status.Error(codes.InvalidArgument, "filter position error")
 	}
 
 	fId, bOk := aFilters[0].GetValue().AsInterface().(float64)
 	if !bOk {
-		return 0, status.Error(codes.InvalidArgument, "filter.id 格式錯誤")
+		return 0, status.Error(codes.InvalidArgument, "filter.id format error")
 	}
 
 	return uint(fId), nil

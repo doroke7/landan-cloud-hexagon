@@ -31,7 +31,7 @@ func (oSelf *AdminPermissionHandler) AddOne(oContext *gin.Context) {
 
 	oValue := &domain.AdminPermissionValue{}
 	if oErr := oRequest.Bind("value", oValue); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("request 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("request format error", -1, 200))
 		return
 	}
 
@@ -43,7 +43,7 @@ func (oSelf *AdminPermissionHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "新增成功", struct{}{}, 0, "")
+	oSelf.Response.Set(oContext, 200, 1, "Added successfully", struct{}{}, 0, "")
 
 }
 
@@ -53,24 +53,24 @@ func (oSelf *AdminPermissionHandler) EditOne(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("filters 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("filters format error", -1, 200))
 		return
 	}
 
 	if len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
-		_ = oContext.Error(pkgUtility.NewDefaultError("filter 位置錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter position error", -1, 200))
 		return
 	}
 
 	fId, bOk := aFilters[0].Value.(float64)
 	if !bOk {
-		_ = oContext.Error(pkgUtility.NewDefaultError("filter.id 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter.id format error", -1, 200))
 		return
 	}
 
 	oValue := &domain.AdminPermissionValue{}
 	if oErr := oRequest.Bind("value", oValue); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("value 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("value format error", -1, 200))
 		return
 	}
 
@@ -83,7 +83,7 @@ func (oSelf *AdminPermissionHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "修改成功", struct{}{}, 0, "")
+	oSelf.Response.Set(oContext, 200, 1, "Updated successfully", struct{}{}, 0, "")
 
 }
 
@@ -93,18 +93,18 @@ func (oSelf *AdminPermissionHandler) RemoveOne(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("filters 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("filters format error", -1, 200))
 		return
 	}
 
 	if aFilters[0].Field == nil || *aFilters[0].Field != "id" {
-		_ = oContext.Error(pkgUtility.NewDefaultError("filter 位置錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter position error", -1, 200))
 		return
 	}
 
 	fId, bOk := aFilters[0].Value.(float64)
 	if !bOk {
-		_ = oContext.Error(pkgUtility.NewDefaultError("filter.id 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter.id format error", -1, 200))
 		return
 	}
 
@@ -117,7 +117,7 @@ func (oSelf *AdminPermissionHandler) RemoveOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "刪除成功", struct{}{}, 0, "")
+	oSelf.Response.Set(oContext, 200, 1, "Deleted successfully", struct{}{}, 0, "")
 
 }
 
@@ -127,18 +127,18 @@ func (oSelf *AdminPermissionHandler) ShowOne(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("filters 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("filters format error", -1, 200))
 		return
 	}
 
 	if len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
-		_ = oContext.Error(pkgUtility.NewDefaultError("filter 位置錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter position error", -1, 200))
 		return
 	}
 
 	fId, bOk := aFilters[0].Value.(float64)
 	if !bOk {
-		_ = oContext.Error(pkgUtility.NewDefaultError("filter.id 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter.id format error", -1, 200))
 		return
 	}
 
@@ -152,7 +152,7 @@ func (oSelf *AdminPermissionHandler) ShowOne(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(oAdminPermission, nil, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "")
+	oSelf.Response.Set(oContext, 200, 1, "Query successful", oResult, 0, "")
 
 }
 
@@ -162,7 +162,7 @@ func (oSelf *AdminPermissionHandler) ShowOnes(oContext *gin.Context) {
 
 	oPagination := &pkgInput.Pagination{}
 	if oErr := oRequest.Bind("pagination", oPagination); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("pagination 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("pagination format error", -1, 200))
 		return
 	}
 	if oPagination.Size == nil || *oPagination.Size == 0 {
@@ -176,13 +176,13 @@ func (oSelf *AdminPermissionHandler) ShowOnes(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("filters 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("filters format error", -1, 200))
 		return
 	}
 
 	var aSorters []*pkgInput.Sorter
 	if oErr := oRequest.Bind("sorters", &aSorters); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("sorters 格式錯誤", -1, 200))
+		_ = oContext.Error(pkgUtility.NewDefaultError("sorters format error", -1, 200))
 		return
 	}
 
@@ -195,6 +195,6 @@ func (oSelf *AdminPermissionHandler) ShowOnes(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(nil, aAdminPermissions, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
+	oSelf.Response.Set(oContext, 200, 1, "Query successful", oResult, int(iTotal), "")
 
 }

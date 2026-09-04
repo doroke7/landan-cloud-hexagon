@@ -29,19 +29,19 @@ func (oSelf *AuthenticationInterceptor) Handle() grpc.UnaryServerInterceptor {
 
 		oMd, bOk := metadata.FromIncomingContext(oContext)
 		if !bOk {
-			return nil, status.Error(codes.Unauthenticated, "缺少認證資訊")
+			return nil, status.Error(codes.Unauthenticated, "missing authentication info")
 		}
 
 		aValues := oMd.Get("authorization")
 		if len(aValues) == 0 {
-			return nil, status.Error(codes.Unauthenticated, "缺少 authorization header")
+			return nil, status.Error(codes.Unauthenticated, "missing authorization header")
 		}
 
 		sToken := strings.TrimPrefix(aValues[0], "Bearer ")
 
 		oClaims, oErr := oSelf.JwtHelper.Parse(sToken)
 		if oErr != nil {
-			return nil, status.Error(codes.Unauthenticated, "token 無效或已過期")
+			return nil, status.Error(codes.Unauthenticated, "invalid or expired token")
 		}
 
 		oContext = context.WithValue(oContext, AdminUserIDKey, oClaims.AdminUserId)

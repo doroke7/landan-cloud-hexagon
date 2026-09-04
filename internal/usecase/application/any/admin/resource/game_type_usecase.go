@@ -87,7 +87,7 @@ func (oSelf *GameTypeUsecase) RemoveOne(iId uint) (bool, error) {
 	}
 
 	if iChildren > 0 {
-		return false, pkgUtility.NewDefaultError("此遊戲類型底下還有子類型，請先移除子類型再刪除", -2, 500)
+		return false, pkgUtility.NewDefaultError("This game type still has child types; remove them before deleting", -2, 500)
 	}
 
 	// 底下還有掛在此類型的遊戲也不放行
@@ -98,7 +98,7 @@ func (oSelf *GameTypeUsecase) RemoveOne(iId uint) (bool, error) {
 	}
 
 	if iGames > 0 {
-		return false, pkgUtility.NewDefaultError("此遊戲類型底下還有遊戲，請先移除遊戲再刪除", -2, 500)
+		return false, pkgUtility.NewDefaultError("This game type still has games; remove them before deleting", -2, 500)
 	}
 
 	_, oErr = oSelf.GameTypeModel.RemoveOneById(iId)

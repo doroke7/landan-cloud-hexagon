@@ -35,11 +35,11 @@ func NewErrorMiddleware(oAbstractMiddleware *AbstractMiddleware) *ErrorMiddlewar
 func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 
 	return func(oContext *gin.Context) {
-		oContext.Set("result", struct{}{}) // 錯誤訊息給一個預設的，避免取 空 報錯
-		oContext.Set("code", 0)            // 錯誤訊息給一個預設的，避免取 空 報錯
-		oContext.Set("message", "未知訊息")    // 錯誤訊息給一個預設的，避免取 空 報錯
-		oContext.Set("status", 200)        // 錯誤訊息給一個預設的，避免取 空 報錯
-		oContext.Set("authorization", "")  // 錯誤訊息給一個預設的，避免取 空 報錯
+		oContext.Set("result", struct{}{})         // 錯誤訊息給一個預設的，避免取 空 報錯
+		oContext.Set("code", 0)                    // 錯誤訊息給一個預設的，避免取 空 報錯
+		oContext.Set("message", "unknown message") // 錯誤訊息給一個預設的，避免取 空 報錯
+		oContext.Set("status", 200)                // 錯誤訊息給一個預設的，避免取 空 報錯
+		oContext.Set("authorization", "")          // 錯誤訊息給一個預設的，避免取 空 報錯
 
 		// 我知道了
 		// 就是 AES 那邊解密發生錯誤後 panic 到 ErrorMiddleware ,然後 ErrorMiddleware 捕獲到這個錯誤後，又放行繼續執行
@@ -71,7 +71,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.Any("stack", aByteStack[:iLen]),
 					)
 
-					oSelf.Response.Set(oContext, 200, -4, "http 系統錯誤", struct{}{}, 0, "")
+					oSelf.Response.Set(oContext, 200, -4, "http system error", struct{}{}, 0, "")
 
 				}
 
@@ -114,7 +114,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 							"resource 系統錯誤",
 							zap.String("error", oLastErr.Error()),
 						)
-						oSelf.Response.Set(oContext, 200, -4, "resource 系統錯誤", struct{}{}, 0, "")
+						oSelf.Response.Set(oContext, 200, -4, "resource system error", struct{}{}, 0, "")
 						break
 					}
 
@@ -123,7 +123,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
-					oSelf.Response.Set(oContext, 200, -4, "http 系統錯誤", struct{}{}, 0, "")
+					oSelf.Response.Set(oContext, 200, -4, "http system error", struct{}{}, 0, "")
 
 				}
 
