@@ -190,6 +190,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		helper.NewAesHelper,
 		helper.NewRsaHelper,
 		helper.NewJwtHelper,
+		helper.NewValiatorHelper,
 
 		// output
 		outputApplicationResource.NewAbstractResource,
@@ -326,6 +327,7 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 		helper.NewAesHelper,
 		helper.NewRsaHelper,
 		helper.NewJwtHelper,
+		helper.NewValiatorHelper,
 
 		// output
 		outputApplicationResource.NewAbstractResource,
@@ -520,6 +522,7 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 		helper.NewAbstractHelper,
 		helper.NewAesHelper,
 		helper.NewJwtHelper,
+		helper.NewValiatorHelper,
 
 		// output
 		outputApplicationMysql.NewAbstractMysql,
@@ -569,6 +572,7 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 		helper.NewAbstractHelper,
 		helper.NewAesHelper,
 		helper.NewJwtHelper,
+		helper.NewValiatorHelper,
 
 		// output
 		outputApplicationMysql.NewAbstractMysql,
@@ -634,6 +638,7 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 		helper.NewAesHelper,
 		helper.NewRsaHelper,
 		helper.NewJwtHelper,
+		helper.NewValiatorHelper,
 
 		// output
 		outputApplicationResource.NewAbstractResource,
@@ -773,6 +778,7 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 		helper.NewAbstractHelper,
 		helper.NewAesHelper,
 		helper.NewJwtHelper,
+		helper.NewValiatorHelper,
 
 		// output
 		outputApplicationMysql.NewAbstractMysql,
@@ -825,6 +831,7 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 		helper.NewAbstractHelper,
 		helper.NewAesHelper,
 		helper.NewJwtHelper,
+		helper.NewValiatorHelper,
 
 		// output
 		outputApplicationResource.NewAbstractResource,

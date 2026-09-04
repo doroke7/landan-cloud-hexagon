@@ -1,13 +1,15 @@
 package usecaseApplicationAnyAdminResource
 
 import (
-	"example/bootstrap"
+	bootstrap "example/bootstrap"
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
+
+	"github.com/go-playground/validator/v10"
 )
 
 type AdminUserUsecase struct {
@@ -24,9 +26,20 @@ func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAbs
 
 func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
 
+	oErr := oSelf.ValidatorHelper.Struct(oAdminUser)
+
+	if oErr != nil {
+		oErrors := oErr.(validator.ValidationErrors)
+		oError := oErrors[0]
+
+		sMessage := oError.Field() + " requires " + oError.Tag() + " " + oError.Param()
+		return false, pkgUtility.NewDefaultError(sMessage, -1, 200)
+
+	}
+
 	*oAdminUser.Password = pkgUtility.Md5(*oAdminUser.Password + bootstrap.CONFIG.TABLE.ADMIN_USER.PASSWORD)
 
-	_, oErr := oSelf.AdminUserModel.EditOneById(oAdminUser, iId)
+	_, oErr = oSelf.AdminUserModel.EditOneById(oAdminUser, iId)
 
 	if oErr != nil {
 		return false, oErr
@@ -38,7 +51,7 @@ func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId ui
 func (oSelf *AdminUserUsecase) RemoveOne(iId uint) (bool, error) {
 
 	if iId == 1 {
-		// return false, pkgUtility.NewDefaultError("AdminUser.Id=1 無法刪除", -1, 200)
+		return false, pkgUtility.NewDefaultError("AdminUser.Id=1 無法刪除", -1, 200)
 
 	}
 

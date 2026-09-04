@@ -24,7 +24,7 @@ type AdminUser struct {
 
 type AdminUserValue struct {
 	Name     *string `json:"name,omitempty"`
-	Password *string `json:"password,omitempty"`
+	Password *string `json:"password,omitempty" validate:"required,min=8"`
 	// CreatedAt *time.Time `json:"created_at"`
 	// UpdatedAt *time.Time `json:"updated_at"`
 	// DeletedAt *time.Time `json:"deleted_at"`

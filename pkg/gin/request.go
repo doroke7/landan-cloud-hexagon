@@ -2,7 +2,6 @@ package pkgGin
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -20,7 +19,6 @@ func (oSelf *Request) Bind(sString string, oValue any) error {
 
 	if sString == "sorters" {
 		sSorters := oSelf.Context.Query("sorters")
-		fmt.Println("sSorters=", sSorters)
 		return json.Unmarshal([]byte(sSorters), oValue)
 	}
 

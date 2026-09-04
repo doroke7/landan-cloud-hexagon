@@ -7,11 +7,13 @@ import (
 type AbstractUsecase struct {
 	*helper.AesHelper
 	*helper.JwtHelper
+	*helper.ValidatorHelper
 }
 
-func NewAbstractUsecase(oAesHelper *helper.AesHelper, oJwtHelper *helper.JwtHelper) *AbstractUsecase {
+func NewAbstractUsecase(oAesHelper *helper.AesHelper, oJwtHelper *helper.JwtHelper, oValidatorHelper *helper.ValidatorHelper) *AbstractUsecase {
 	return &AbstractUsecase{
-		AesHelper: oAesHelper,
-		JwtHelper: oJwtHelper,
+		AesHelper:       oAesHelper,
+		JwtHelper:       oJwtHelper,
+		ValidatorHelper: oValidatorHelper,
 	}
 }
