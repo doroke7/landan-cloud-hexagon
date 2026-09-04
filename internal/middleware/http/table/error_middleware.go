@@ -64,7 +64,6 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 				default:
 					iLen := runtime.Stack(aByteStack, false)
 					// Logger.Fatal 會再觸發 panic
-					fmt.Println("進入 recover oError=", oError)
 
 					pkgUtility.Logger(pkgUtility.HttpTableMiddleware).Error(
 						"http 系統錯誤",
@@ -72,7 +71,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.Any("stack", aByteStack[:iLen]),
 					)
 
-					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤2", struct{}{}, 0, "", nil)
+					oSelf.Response.Set(oContext, 200, -4, "http 系統錯誤", struct{}{}, 0, "", nil)
 
 				}
 
@@ -115,7 +114,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
-					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤3", struct{}{}, 0, "", nil)
+					oSelf.Response.Set(oContext, 200, -4, "http 系統錯誤", struct{}{}, 0, "", nil)
 
 				}
 

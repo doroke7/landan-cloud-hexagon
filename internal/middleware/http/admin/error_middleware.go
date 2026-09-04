@@ -64,7 +64,6 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 				default:
 					iLen := runtime.Stack(aByteStack, false)
 					// Logger.Fatal 會再觸發 panic
-					fmt.Println("進入 recover oError=", oError)
 
 					pkgUtility.Logger(pkgUtility.HttpAdminMiddleware).Error(
 						"http 系統錯誤",
