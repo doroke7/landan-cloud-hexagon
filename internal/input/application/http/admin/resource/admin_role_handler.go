@@ -5,6 +5,7 @@ import (
 
 	pkgGin "example/pkg/gin"
 	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 
 	domain "example/internal/domain"
 
@@ -30,7 +31,7 @@ func (oSelf *AdminRoleHandler) AddOne(oContext *gin.Context) {
 
 	oValue := &domain.AdminRoleValue{}
 	if oErr := oRequest.Bind("value", oValue); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "request 格式錯誤", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(pkgUtility.NewDefaultError("request 格式錯誤", -1, 200))
 		return
 	}
 
@@ -52,24 +53,24 @@ func (oSelf *AdminRoleHandler) EditOne(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(pkgUtility.NewDefaultError("filters 格式錯誤", -1, 200))
 		return
 	}
 
 	if aFilters == nil || len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
-		oSelf.Response.Set(oContext, 200, -1, "filter 位置錯誤", struct{}{}, 0, "", nil)
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter 位置錯誤", -1, 200))
 		return
 	}
 
 	fId, bOk := aFilters[0].Value.(float64)
 	if !bOk {
-		oSelf.Response.Set(oContext, 200, -1, "filter.id 格式錯誤", struct{}{}, 0, "", nil)
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter.id 格式錯誤", -1, 200))
 		return
 	}
 
 	oValue := &domain.AdminRoleValue{}
 	if oErr := oRequest.Bind("value", oValue); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "value 格式錯誤", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(pkgUtility.NewDefaultError("value 格式錯誤", -1, 200))
 		return
 	}
 
@@ -92,18 +93,18 @@ func (oSelf *AdminRoleHandler) RemoveOne(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(pkgUtility.NewDefaultError("filters 格式錯誤", -1, 200))
 		return
 	}
 
 	if aFilters == nil || len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
-		oSelf.Response.Set(oContext, 200, -1, "filter 位置錯誤", struct{}{}, 0, "", nil)
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter 位置錯誤", -1, 200))
 		return
 	}
 
 	fId, bOk := aFilters[0].Value.(float64)
 	if !bOk {
-		oSelf.Response.Set(oContext, 200, -1, "filter.id 格式錯誤", struct{}{}, 0, "", nil)
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter.id 格式錯誤", -1, 200))
 		return
 	}
 
@@ -126,18 +127,18 @@ func (oSelf *AdminRoleHandler) ShowOne(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(pkgUtility.NewDefaultError("filters 格式錯誤", -1, 200))
 		return
 	}
 
 	if aFilters == nil || len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
-		oSelf.Response.Set(oContext, 200, -1, "filter 位置錯誤", struct{}{}, 0, "", nil)
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter 位置錯誤", -1, 200))
 		return
 	}
 
 	fId, bOk := aFilters[0].Value.(float64)
 	if !bOk {
-		oSelf.Response.Set(oContext, 200, -1, "filter.id 格式錯誤", struct{}{}, 0, "", nil)
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter.id 格式錯誤", -1, 200))
 		return
 	}
 
@@ -161,7 +162,7 @@ func (oSelf *AdminRoleHandler) ShowOnes(oContext *gin.Context) {
 
 	oPagination := &pkgInput.Pagination{}
 	if oErr := oRequest.Bind("pagination", oPagination); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "pagination 格式錯誤", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(pkgUtility.NewDefaultError("pagination 格式錯誤", -1, 200))
 		return
 	}
 	if oPagination.Size == nil || *oPagination.Size == 0 {
@@ -175,13 +176,13 @@ func (oSelf *AdminRoleHandler) ShowOnes(oContext *gin.Context) {
 
 	var aFilters []*pkgInput.Filter
 	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "filters 格式錯誤", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(pkgUtility.NewDefaultError("filters 格式錯誤", -1, 200))
 		return
 	}
 
 	var aSorters []*pkgInput.Sorter
 	if oErr := oRequest.Bind("sorters", &aSorters); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "sorters 格式錯誤", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(pkgUtility.NewDefaultError("sorters 格式錯誤", -1, 200))
 		return
 	}
 

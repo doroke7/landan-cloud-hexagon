@@ -33,7 +33,7 @@ func (oSelf *AuthenticatorHandler) LogIn(oContext *gin.Context) {
 	}{}
 
 	if oErr := oRequest.Bind("value", oValue); oErr != nil {
-		oSelf.Response.Set(oContext, 200, -1, "pagination 格式錯誤", struct{}{}, 0, "", oErr)
+		_ = oContext.Error(pkgUtility.NewDefaultError("pagination 格式錯誤", -1, 200))
 		return
 	}
 
@@ -44,14 +44,7 @@ func (oSelf *AuthenticatorHandler) LogIn(oContext *gin.Context) {
 	)
 
 	if oErr != nil {
-
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-
-		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 
@@ -69,14 +62,7 @@ func (oSelf *AuthenticatorHandler) Refresh(oContext *gin.Context) {
 	)
 
 	if oErr != nil {
-
-		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-
-			oSelf.Response.Set(oContext, 200, int(oDefaultError.Code), oDefaultError.Error(), struct{}{}, 0, "", oErr)
-			return
-		}
-
-		oSelf.Response.Set(oContext, 200, -3, oErr.Error(), struct{}{}, 0, "", oErr)
+		_ = oContext.Error(oErr)
 		return
 	}
 
