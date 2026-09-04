@@ -117,7 +117,9 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, er
 		return false, oErr
 	}
 
-	return oResponse.GetStatus(), nil
+	bStatus := oResponse.GetStatus()
+
+	return bStatus, nil
 }
 
 func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
@@ -136,7 +138,9 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 		return false, oErr
 	}
 
-	return oResponse.GetStatus(), nil
+	bStatus := oResponse.GetStatus()
+
+	return bStatus, nil
 }
 
 func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
@@ -150,5 +154,7 @@ func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
 		return false, oErr
 	}
 
-	return oResponse.GetStatus(), nil
+	bStatus := oResponse.GetStatus()
+
+	return bStatus, nil
 }

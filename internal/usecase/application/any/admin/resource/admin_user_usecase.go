@@ -35,7 +35,7 @@ func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId ui
 func (oSelf *AdminUserUsecase) RemoveOne(iId uint) (bool, error) {
 
 	if iId == 1 {
-		return false, pkgUtility.NewDefaultError("AdminUser.Id=1 無法刪除", -2, 200)
+		return false, pkgUtility.NewDefaultError("AdminUser.Id=1 無法刪除", -1, 200)
 
 	}
 
