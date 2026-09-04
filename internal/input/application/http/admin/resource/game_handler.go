@@ -97,7 +97,7 @@ func (oSelf *GameHandler) RemoveOne(oContext *gin.Context) {
 		return
 	}
 
-	if aFilters == nil || len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
+	if aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
 		_ = oContext.Error(pkgUtility.NewDefaultError("filter 位置錯誤", -1, 200))
 		return
 	}
@@ -131,7 +131,7 @@ func (oSelf *GameHandler) ShowOne(oContext *gin.Context) {
 		return
 	}
 
-	if aFilters == nil || len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
+	if len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
 		_ = oContext.Error(pkgUtility.NewDefaultError("filter.id 位置錯誤", -1, 200))
 		return
 	}
