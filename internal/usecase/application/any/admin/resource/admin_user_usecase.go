@@ -8,8 +8,7 @@ import (
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
-
-	"github.com/go-playground/validator/v10"
+	"fmt"
 )
 
 type AdminUserUsecase struct {
@@ -26,15 +25,18 @@ func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAbs
 
 func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
 
-	oErr := oSelf.ValidatorHelper.Struct(oAdminUser)
+	fmt.Printf("*oAdminUser30 =%+v", *oAdminUser)
+	fmt.Printf("*oAdminUser30 =%+v", (*oAdminUser).Name)
+
+	if (*oAdminUser).Name != nil && *oAdminUser.Name != "" {
+		return false, pkgUtility.NewDefaultError("name can not be modified", -1, 200)
+
+	}
+
+	oErr := oSelf.ValidatorHelper.Valiate(oAdminUser)
 
 	if oErr != nil {
-		oErrors := oErr.(validator.ValidationErrors)
-		oError := oErrors[0]
-
-		sMessage := oError.Field() + " requires " + oError.Tag() + " " + oError.Param()
-		return false, pkgUtility.NewDefaultError(sMessage, -1, 200)
-
+		return false, oErr
 	}
 
 	*oAdminUser.Password = pkgUtility.Md5(*oAdminUser.Password + bootstrap.CONFIG.TABLE.ADMIN_USER.PASSWORD)

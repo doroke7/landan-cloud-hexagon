@@ -6,6 +6,8 @@ package helper
 */
 
 import (
+	pkgUtility "example/pkg/utility"
+
 	"github.com/go-playground/validator/v10"
 )
 
@@ -23,5 +25,20 @@ func NewValiatorHelper(oAbstractHelper *AbstractHelper) *ValidatorHelper {
 
 func (oSelf *ValidatorHelper) Struct(oStruct any) error {
 	oError := oSelf.validator.Struct(oStruct)
+	return oError
+}
+
+func (oSelf *ValidatorHelper) Valiate(oStruct any) error {
+	oError := oSelf.validator.Struct(oStruct)
+
+	if oError != nil {
+		oErrors := oError.(validator.ValidationErrors)
+		oError := oErrors[0]
+
+		sMessage := oError.Field() + " requires " + oError.Tag() + " " + oError.Param()
+		return pkgUtility.NewDefaultError(sMessage, -1, 200)
+
+	}
+
 	return oError
 }
