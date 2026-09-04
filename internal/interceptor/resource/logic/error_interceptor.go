@@ -36,14 +36,14 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 				// Logger.Fatal 會再觸發 panic
 
 				pkgUtility.Logger(pkgUtility.ResourceLogicInterceptor).Error(
-					"resource內部錯誤",
+					"resource 系統錯誤",
 					zap.Any("panic", oPanic),
 					zap.String("method", oServerInfo.FullMethod),
 					zap.String("stack", string(oByteStack[:iLen])),
 				)
 
 				oResponse = nil
-				oErr = status.Error(codes.Internal, "resource內部異常")
+				oErr = status.Error(codes.Internal, "resource 系統錯誤")
 			}
 		}()
 
@@ -56,7 +56,7 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 			// 如果是 gRPC error 就打印 並且回傳 error 到前級 Http或Facade
 			if bOk {
 				pkgUtility.Logger(pkgUtility.ResourceLogicInterceptor).Error(
-					"業務錯誤",
+					"resource 業務異常",
 					zap.String("method", oServerInfo.FullMethod),
 					zap.String("message", oStatus.Message()),
 					zap.Int32("code", int32(oStatus.Code())),
@@ -68,12 +68,12 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 			// 例如 MYSQL 錯誤。Redis 錯誤
 			if !bOk {
 				pkgUtility.Logger(pkgUtility.ResourceLogicInterceptor).Error(
-					"resource暫不可用",
+					"resource 系統錯誤",
 					zap.String("method", oServerInfo.FullMethod),
 					zap.Error(oErr),
 				)
 
-				return nil, status.Error(codes.Unavailable, "resource暫不可用")
+				return nil, status.Error(codes.Unavailable, "resource 系統錯誤")
 
 			}
 

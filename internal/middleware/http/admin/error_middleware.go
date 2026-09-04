@@ -109,12 +109,21 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						break
 					}
 
+					if oStatus, bOk := status.FromError(oLastErr.Err); bOk && oStatus.Code() == codes.Unavailable {
+						pkgUtility.Logger(pkgUtility.HttpAdminMiddleware).Warn(
+							"resource 系統錯誤",
+							zap.String("error", oLastErr.Error()),
+						)
+						oSelf.Response.Set(oContext, 200, -4, "resource 系統錯誤", struct{}{}, 0, "", nil)
+						break
+					}
+
 					pkgUtility.Logger(pkgUtility.HttpAdminMiddleware).Error(
 						"http 系統錯誤",
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
-					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤3", struct{}{}, 0, "", nil)
+					oSelf.Response.Set(oContext, 200, -4, "http 系統錯誤", struct{}{}, 0, "", nil)
 
 				}
 

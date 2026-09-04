@@ -109,6 +109,15 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						break
 					}
 
+					if oStatus, bOk := status.FromError(oLastErr.Err); bOk && oStatus.Code() == codes.Unavailable {
+						pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Warn(
+							"resource 系統錯誤",
+							zap.String("error", oLastErr.Error()),
+						)
+						oSelf.Response.Set(oContext, 200, -4, "resource 系統錯誤", struct{}{}, 0, "", nil)
+						break
+					}
+
 					pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Error(
 						"http 系統錯誤",
 						zap.String("error", oLastErr.Error()),
