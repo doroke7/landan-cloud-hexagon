@@ -43,7 +43,7 @@ func (oSelf *AdminUserHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "新增成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "新增成功", struct{}{}, 0, "")
 
 }
 
@@ -83,7 +83,7 @@ func (oSelf *AdminUserHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "修改成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "修改成功", struct{}{}, 0, "")
 
 }
 
@@ -117,7 +117,7 @@ func (oSelf *AdminUserHandler) RemoveOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "刪除成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "刪除成功", struct{}{}, 0, "")
 
 }
 
@@ -160,6 +160,6 @@ func (oSelf *AdminUserHandler) ShowOnes(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(nil, aAdminUsers, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
 
 }

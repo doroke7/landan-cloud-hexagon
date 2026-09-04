@@ -53,7 +53,7 @@ func (oSelf *AuthenticatorHandler) SignIn(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "AdminUser 成功登入", struct{}{}, 0, sAuthorization, nil)
+	oSelf.Response.Set(oContext, 200, 1, "AdminUser 成功登入", struct{}{}, 0, sAuthorization)
 
 }
 
@@ -75,6 +75,6 @@ func (oSelf *AuthenticatorHandler) Refresh(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "成功刷新", struct{}{}, 0, sAuthorization, nil)
+	oSelf.Response.Set(oContext, 200, 1, "成功刷新", struct{}{}, 0, sAuthorization)
 
 }

@@ -59,7 +59,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.Any("error", oError),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
-					oSelf.Response.Set(oContext, int(oErrorType.Status), int(oErrorType.Code), oErrorType.Message, struct{}{}, 0, "", nil)
+					oSelf.Response.Set(oContext, int(oErrorType.Status), int(oErrorType.Code), oErrorType.Message, struct{}{}, 0, "")
 
 				default:
 					iLen := runtime.Stack(aByteStack, false)
@@ -71,7 +71,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.Any("stack", aByteStack[:iLen]),
 					)
 
-					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤2", struct{}{}, 0, "", nil)
+					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤2", struct{}{}, 0, "")
 
 				}
 
@@ -96,7 +96,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
-					oSelf.Response.Set(oContext, int(oErrorType.Status), int(oErrorType.Code), oErrorType.Message, struct{}{}, 0, "", nil)
+					oSelf.Response.Set(oContext, int(oErrorType.Status), int(oErrorType.Code), oErrorType.Message, struct{}{}, 0, "")
 
 				default:
 					// 從 resource gRPC 來的：codes.Aborted = 業務錯誤，其餘 = 系統錯誤
@@ -105,7 +105,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 							"resource 業務異常",
 							zap.String("error", oLastErr.Error()),
 						)
-						oSelf.Response.Set(oContext, 200, -3, oStatus.Message(), struct{}{}, 0, "", nil)
+						oSelf.Response.Set(oContext, 200, -3, oStatus.Message(), struct{}{}, 0, "")
 						break
 					}
 
@@ -114,7 +114,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 							"resource 系統錯誤",
 							zap.String("error", oLastErr.Error()),
 						)
-						oSelf.Response.Set(oContext, 200, -4, "resource 系統錯誤", struct{}{}, 0, "", nil)
+						oSelf.Response.Set(oContext, 200, -4, "resource 系統錯誤", struct{}{}, 0, "")
 						break
 					}
 
@@ -123,7 +123,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
 					)
-					oSelf.Response.Set(oContext, 200, -4, "http 系統錯誤", struct{}{}, 0, "", nil)
+					oSelf.Response.Set(oContext, 200, -4, "http 系統錯誤", struct{}{}, 0, "")
 
 				}
 

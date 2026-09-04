@@ -43,7 +43,7 @@ func (oSelf *TableHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "新增成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "新增成功", struct{}{}, 0, "")
 
 }
 
@@ -78,7 +78,7 @@ func (oSelf *TableHandler) ShowOne(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(oTable, nil, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "")
 
 }
 
@@ -118,7 +118,7 @@ func (oSelf *TableHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "修改成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "修改成功", struct{}{}, 0, "")
 
 }
 
@@ -152,7 +152,7 @@ func (oSelf *TableHandler) RemoveOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "刪除成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "刪除成功", struct{}{}, 0, "")
 
 }
 
@@ -195,6 +195,6 @@ func (oSelf *TableHandler) ShowOnes(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(nil, aTables, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
 
 }

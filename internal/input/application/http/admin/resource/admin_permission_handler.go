@@ -43,7 +43,7 @@ func (oSelf *AdminPermissionHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "新增成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "新增成功", struct{}{}, 0, "")
 
 }
 
@@ -83,7 +83,7 @@ func (oSelf *AdminPermissionHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "修改成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "修改成功", struct{}{}, 0, "")
 
 }
 
@@ -117,7 +117,7 @@ func (oSelf *AdminPermissionHandler) RemoveOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "刪除成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "刪除成功", struct{}{}, 0, "")
 
 }
 
@@ -152,7 +152,7 @@ func (oSelf *AdminPermissionHandler) ShowOne(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(oAdminPermission, nil, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "")
 
 }
 
@@ -195,6 +195,6 @@ func (oSelf *AdminPermissionHandler) ShowOnes(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(nil, aAdminPermissions, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
 
 }

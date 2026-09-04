@@ -43,7 +43,7 @@ func (oSelf *GameTypeHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "新增成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "新增成功", struct{}{}, 0, "")
 
 }
 
@@ -83,7 +83,7 @@ func (oSelf *GameTypeHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "修改成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "修改成功", struct{}{}, 0, "")
 
 }
 
@@ -117,7 +117,7 @@ func (oSelf *GameTypeHandler) RemoveOne(oContext *gin.Context) {
 		return
 	}
 
-	oSelf.Response.Set(oContext, 200, 1, "刪除成功", struct{}{}, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "刪除成功", struct{}{}, 0, "")
 
 }
 
@@ -152,7 +152,7 @@ func (oSelf *GameTypeHandler) ShowOne(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(oGameType, nil, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "")
 
 }
 
@@ -167,7 +167,7 @@ func (oSelf *GameTypeHandler) ShowTree(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(nil, nil, oTree)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, 0, "")
 
 }
 
@@ -210,6 +210,6 @@ func (oSelf *GameTypeHandler) ShowOnes(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(nil, aGameTypes, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
 
 }

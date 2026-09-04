@@ -62,7 +62,7 @@ func (oSelf *GameTypeHandler) SelectOnes(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(nil, aGameTypes, nil)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, int(iTotal), "")
 
 }
 
@@ -77,6 +77,6 @@ func (oSelf *GameTypeHandler) SelectTree(oContext *gin.Context) {
 
 	oResult := pkgGin.NewResult(nil, nil, aTree)
 
-	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, len(aTree), "", nil)
+	oSelf.Response.Set(oContext, 200, 1, "成功查詢", oResult, len(aTree), "")
 
 }
