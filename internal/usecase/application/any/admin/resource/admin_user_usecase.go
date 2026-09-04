@@ -1,11 +1,13 @@
 package usecaseApplicationAnyAdminResource
 
 import (
+	"example/bootstrap"
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type AdminUserUsecase struct {
@@ -21,6 +23,8 @@ func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAbs
 }
 
 func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
+
+	*oAdminUser.Password = pkgUtility.Md5(*oAdminUser.Password + bootstrap.CONFIG.TABLE.ADMIN_USER.PASSWORD)
 
 	_, oErr := oSelf.AdminUserModel.EditOneById(oAdminUser, iId)
 
