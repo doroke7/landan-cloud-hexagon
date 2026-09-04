@@ -30,6 +30,11 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 
 		oContext.Next()
 
+		// 有 error 就交給 ErrorMiddleware 的 defer 統一輸出，不用在這邊加密
+		if len(oContext.Errors) > 0 {
+			return
+		}
+
 		mKey, _ := oContext.Get("key")
 		mIv, _ := oContext.Get("iv")
 

@@ -30,6 +30,11 @@ func (oSelf *ResponseMiddleware) Handle() gin.HandlerFunc {
 
 		oContext.Next()
 
+		// 有 error 就交給 ErrorMiddleware 的 defer 統一輸出，這邊不要再寫一次
+		if len(oContext.Errors) > 0 {
+			return
+		}
+
 		mStatus, _ := oContext.Get("status")
 		mCode, _ := oContext.Get("code")
 		mMessage, _ := oContext.Get("message")

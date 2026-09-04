@@ -308,6 +308,11 @@
 └── pb/                             # protoc 產生的程式碼，對應 proto/ 底下的定義
 ```
 
+## HTTP 服務的流程是什麼？ 
+1. 在 handler 裡面，如果訊息是正常的 -> 改寫 context, context 傳遞給 ResponseMiddleware -> ResponseMiddleware 寫接口訊息
+2. 在 handler 裡面，如果訊息是異常的 -> context 寫入 error -> ResponseMiddleware 有 error 不做事 -> ErrorMiddleware 寫接口訊息
+*. 我們不使用 panic ，panic 性能差
+
 ## DI 依賴注入樹狀圖（ResourceContainer）
 
 文字版（由下往上）：

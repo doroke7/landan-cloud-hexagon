@@ -40,9 +40,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 		oContext.Set("message", "未知訊息")    // 錯誤訊息給一個預設的，避免取 空 報錯
 		oContext.Set("status", 200)        // 錯誤訊息給一個預設的，避免取 空 報錯
 		oContext.Set("authorization", "")  // 錯誤訊息給一個預設的，避免取 空 報錯
-
-		// 我知道了
-		// 就是 AES 那邊解密發生錯誤後 panic 到 ErrorMiddleware ,然後 ErrorMiddleware 捕獲到這個錯誤後，又放行繼續執行
+		oContext.Set("total", 0)           // 錯誤訊息給一個預設的，避免取 空 報錯
 
 		defer func() {
 			bError := false
@@ -71,7 +69,7 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						zap.Any("stack", aByteStack[:iLen]),
 					)
 
-					oSelf.Response.Set(oContext, 200, -4, "前級系統錯誤2", struct{}{}, 0, "")
+					oSelf.Response.Set(oContext, 200, -4, "http 系統錯誤", struct{}{}, 0, "")
 
 				}
 
