@@ -1,7 +1,7 @@
 package usecasePortAnyModel
 
 import (
-	"example/internal/domain"
+	domain "example/internal/domain"
 	pkgInput "example/pkg/input"
 )
 
