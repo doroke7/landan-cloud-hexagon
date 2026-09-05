@@ -54,7 +54,7 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 	}
 
 	if len(oResult.Hits) == 0 {
-		return nil, errors.New("資料不存在")
+		return nil, errors.New("record not found")
 	}
 
 	var oAdminUser domain.AdminUser
@@ -74,7 +74,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) 
 	}
 
 	if !bFound {
-		return nil, errors.New("資料不存在")
+		return nil, errors.New("record not found")
 	}
 
 	return &oAdminUser, nil
@@ -90,7 +90,7 @@ func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
 	}
 
 	if !bOk {
-		return errors.New("刪除0筆")
+		return errors.New("0 rows deleted")
 	}
 
 	return nil
@@ -111,7 +111,7 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 	}
 
 	if !bOk {
-		return errors.New("更新0筆")
+		return errors.New("0 rows updated")
 	}
 
 	return nil

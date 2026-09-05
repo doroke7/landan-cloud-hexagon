@@ -208,7 +208,7 @@ func (oSelf *TableRecordModel) EditOneById(oValue *domain.TableRecordValue, iId 
 	}
 
 	if !bOk {
-		return errors.New("更新0筆")
+		return errors.New("0 rows updated")
 	}
 
 	return nil
@@ -224,7 +224,7 @@ func (oSelf *TableRecordModel) RemoveOneById(iId uint64) error {
 	}
 
 	if !bOk {
-		return errors.New("刪除0筆")
+		return errors.New("0 rows deleted")
 	}
 
 	return nil

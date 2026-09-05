@@ -34,7 +34,7 @@ func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint64) error {
 		return oErr
 	}
 	if oAppUser == nil {
-		return errors.New("資料不存在")
+		return errors.New("record not found")
 	}
 
 	sId := strconv.FormatUint(uint64(iId), 10)
@@ -74,7 +74,7 @@ func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) 
 	}
 
 	if len(oResult.Hits) == 0 {
-		return nil, errors.New("資料不存在")
+		return nil, errors.New("record not found")
 	}
 
 	var oAppUser domain.AppUser

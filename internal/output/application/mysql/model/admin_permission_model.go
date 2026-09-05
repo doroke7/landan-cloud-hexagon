@@ -39,7 +39,7 @@ func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissi
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("新增0筆")
+		return errors.New("0 rows inserted")
 	}
 
 	return nil
@@ -77,7 +77,7 @@ func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPer
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("更新0筆")
+		return errors.New("0 rows updated")
 	}
 
 	return nil
@@ -95,7 +95,7 @@ func (oSelf *AdminPermissionModel) RemoveOneById(iId uint64) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("刪除0筆")
+		return errors.New("0 rows deleted")
 	}
 
 	return nil

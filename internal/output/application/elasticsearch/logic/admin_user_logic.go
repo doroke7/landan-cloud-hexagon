@@ -96,7 +96,7 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 	}
 
 	if !bOk {
-		return errors.New("更新0筆")
+		return errors.New("0 rows updated")
 	}
 
 	return nil

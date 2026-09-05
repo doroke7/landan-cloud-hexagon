@@ -211,7 +211,7 @@ func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint64
 	}
 
 	if oResult.MatchedCount == 0 {
-		return errors.New("更新0筆")
+		return errors.New("0 rows updated")
 	}
 
 	return nil
@@ -228,7 +228,7 @@ func (oSelf *GameTypeModel) RemoveOneById(iId uint64) error {
 	}
 
 	if oResult.ModifiedCount == 0 {
-		return errors.New("刪除0筆")
+		return errors.New("0 rows deleted")
 	}
 
 	return nil

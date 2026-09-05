@@ -38,7 +38,7 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 
 	if err := oSelf.DB.WithContext(oCurrentContext).Where("name = ?", sName).First(&oAdminUser).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("資料不存在")
+			return nil, errors.New("record not found")
 		}
 		return nil, err
 	}
@@ -62,7 +62,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) 
 		var oAdminUser domain.AdminUser
 		if err := oSelf.DB.WithContext(oThisContext).First(&oAdminUser, iId).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				return nil, errors.New("資料不存在")
+				return nil, errors.New("record not found")
 			}
 			return nil, err
 		}
@@ -84,7 +84,7 @@ func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("刪除0筆")
+		return errors.New("0 rows deleted")
 	}
 
 	return nil
@@ -106,7 +106,7 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("更新0筆")
+		return errors.New("0 rows updated")
 	}
 
 	return nil
@@ -183,7 +183,7 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("新增0筆")
+		return errors.New("0 rows inserted")
 	}
 
 	return nil

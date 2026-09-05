@@ -39,7 +39,7 @@ func (oSelf *AdminRoleModel) AddOne(oAdminRole *domain.AdminRoleValue) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("新增0筆")
+		return errors.New("0 rows inserted")
 	}
 
 	return nil
@@ -77,7 +77,7 @@ func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleValue, iId 
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("更新0筆")
+		return errors.New("0 rows updated")
 	}
 
 	return nil
@@ -95,7 +95,7 @@ func (oSelf *AdminRoleModel) RemoveOneById(iId uint64) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("刪除0筆")
+		return errors.New("0 rows deleted")
 	}
 
 	return nil

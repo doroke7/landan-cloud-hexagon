@@ -116,7 +116,7 @@ func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogV
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("新增0筆")
+		return errors.New("0 rows inserted")
 	}
 
 	return nil

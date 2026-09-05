@@ -170,7 +170,7 @@ func (oSelf *GameModel) AddOne(oValue *domain.GameValue) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("新增0筆")
+		return errors.New("0 rows inserted")
 
 	}
 
@@ -190,7 +190,7 @@ func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint64) error 
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("更新0筆")
+		return errors.New("0 rows updated")
 
 	}
 
@@ -209,7 +209,7 @@ func (oSelf *GameModel) RemoveOneById(iId uint64) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("刪除0筆")
+		return errors.New("0 rows deleted")
 
 	}
 

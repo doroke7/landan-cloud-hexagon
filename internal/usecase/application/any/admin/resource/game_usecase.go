@@ -37,7 +37,7 @@ func (oSelf *GameUsecase) AddOne(oValue *domain.GameValue) error {
 		}
 
 		if oGameByKey != nil {
-			return errors.New("key 已被其他遊戲使用")
+			return errors.New("key already used by another game")
 		}
 	}
 

@@ -75,7 +75,7 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{"name": sName}).Decode(&oAdminUser)
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
-			return nil, errors.New("資料不存在")
+			return nil, errors.New("record not found")
 		}
 		return nil, oErr
 	}
@@ -89,7 +89,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) 
 	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{"_id": iId}).Decode(&oAdminUser)
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
-			return nil, errors.New("資料不存在")
+			return nil, errors.New("record not found")
 		}
 		return nil, oErr
 	}
@@ -108,7 +108,7 @@ func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
 	}
 
 	if oResult.ModifiedCount == 0 {
-		return errors.New("刪除0筆")
+		return errors.New("0 rows deleted")
 	}
 
 	return nil
@@ -134,7 +134,7 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 	}
 
 	if oResult.MatchedCount == 0 {
-		return errors.New("更新0筆")
+		return errors.New("0 rows updated")
 	}
 
 	return nil

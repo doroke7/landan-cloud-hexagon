@@ -59,7 +59,7 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) erro
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("更新0筆")
+		return errors.New("0 rows updated")
 	}
 
 	return nil
@@ -77,7 +77,7 @@ func (oSelf *TableModel) RemoveOneById(iId uint64) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("刪除0筆")
+		return errors.New("0 rows deleted")
 	}
 
 	return nil
@@ -161,7 +161,7 @@ func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("新增0筆")
+		return errors.New("0 rows inserted")
 	}
 
 	return nil

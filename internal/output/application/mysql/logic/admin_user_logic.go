@@ -103,61 +103,8 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
 	delete(oColumns, "admin_role_ids")
 
-	/*
-
-		defer func() {
-			if oRecover := recover(); oRecover != nil {
-				oTx.Rollback()
-			}
-		}()
-
-		oResult := oTx.
-			Model(&domain.AdminUser{}).
-			Create(oColumns)
-
-		if oResult.Error != nil {
-			oTx.Rollback()
-			return oResult.Error
-		}
-
-		if oResult.RowsAffected == 0 {
-			oTx.Rollback()
-			return errors.New("新增0筆")
-		}
-
-		var iAdminUserId uint64
-		if oErr := oTx.Raw("SELECT LAST_INSERT_ID()").Scan(&iAdminUserId).Error; oErr != nil {
-			oTx.Rollback()
-			return oErr
-		}
-
-		if oErr := oTx.Where("admin_user_id = ?", iAdminUserId).Delete(&domain.AdminUsersToAdminRole{}).Error; oErr != nil {
-			oTx.Rollback()
-			return oErr
-		}
-
-		if len(oValue.AdminRoleIds) > 0 {
-			aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
-			for _, iAdminRoleId := range oValue.AdminRoleIds {
-				aRelations = append(aRelations, domain.AdminUsersToAdminRole{
-					AdminUserId: uint(iAdminUserId),
-					AdminRoleId: uint(iAdminRoleId),
-				})
-			}
-
-			if oErr := oTx.Create(&aRelations).Error; oErr != nil {
-				oTx.Rollback()
-				return oErr
-			}
-		}
-
-		oError := oTx.Commit().Error
-
-
-	*/
-
 	if len(oColumns) == 0 {
-		return errors.New("新增欄目個數0")
+		return errors.New("0 columns to insert")
 
 	}
 
@@ -172,7 +119,7 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 		}
 
 		if oResult.RowsAffected == 0 {
-			return errors.New("新增0筆")
+			return errors.New("0 rows inserted")
 		}
 
 		var iAdminUserId uint64
@@ -225,7 +172,7 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 			}
 
 			if oResult.RowsAffected == 0 {
-				return errors.New("更新0筆")
+				return errors.New("0 rows updated")
 			}
 		}
 

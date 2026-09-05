@@ -70,6 +70,6 @@ func Race[T any](oContext context.Context, aTasks ...func(ctx context.Context) (
 		return ch
 	}():
 		var zero T
-		return zero, errors.New("所有任務皆執行失敗")
+		return zero, errors.New("all tasks failed")
 	}
 }

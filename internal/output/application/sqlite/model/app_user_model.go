@@ -36,7 +36,7 @@ func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) 
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).Where("name = ?", sName).First(&oAppUser).Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
-			return nil, errors.New("資料不存在")
+			return nil, errors.New("record not found")
 		}
 		return nil, oErr
 	}
@@ -49,7 +49,7 @@ func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).First(&oAppUser, iId).Error; oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
-			return nil, errors.New("資料不存在")
+			return nil, errors.New("record not found")
 		}
 		return nil, oErr
 	}
@@ -69,7 +69,7 @@ func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("新增0筆")
+		return errors.New("0 rows inserted")
 	}
 
 	return nil

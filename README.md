@@ -472,3 +472,10 @@ air -c .air.http.toml     # 啟動 http 服務
    get param 排序器列表
 4. piganition (分頁機制）
    get param 分頁數據
+
+## 刪掉數據跟 關係架構的注意事項
+A. 無關係 。（configs 表），可以直接刪除 config 一筆
+B. 屬於關係(Person 屬於 Nation), nation_id 在 person 裡面。可以直接刪除 person 一筆
+C. 擁有關係(AppUser 擁有 AppUserOrder), app_user_id 在 AppUserOrder 裡面。刪除AppUser 一筆之前，需要把旗下的 AppUserOrder 都刪除
+   如：Menu 跟 Menu，GameType 跟 GameType，
+D. 多對多關係(AdminUser <-> AdminRole)。刪除 AdminUser 一筆之前，先把 admin_users_to_admin_roles 旗 admin_user 的關係刪掉，資料不動。
