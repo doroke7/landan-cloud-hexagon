@@ -24,7 +24,7 @@ func NewAdminUserLogic(oAbstractLogic *mysqlBase.AbstractMysql) outputPortAnyLog
 	}
 }
 
-func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint, error) {
+func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
@@ -92,7 +92,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 		return aAdminUsers, 0, oCountErr
 	}
 
-	return aAdminUsers, uint(iTotal), nil
+	return aAdminUsers, uint64(iTotal), nil
 }
 
 func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {

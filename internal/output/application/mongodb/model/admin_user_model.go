@@ -83,7 +83,7 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 	return &oAdminUser, nil
 }
 
-func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
+func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) {
 	var oAdminUser domain.AdminUser
 
 	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{"_id": iId}).Decode(&oAdminUser)
@@ -97,7 +97,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return &oAdminUser, nil
 }
 
-func (oSelf *AdminUserModel) RemoveOneById(iId uint) error {
+func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
@@ -114,7 +114,7 @@ func (oSelf *AdminUserModel) RemoveOneById(iId uint) error {
 	return nil
 }
 
-func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) error {
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint64) error {
 	oSet := bson.M{"updated_at": time.Now()}
 
 	if oAdminUser.Name != nil {
@@ -160,7 +160,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	return aAdminUsers, nil
 }
 
-func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
@@ -169,7 +169,7 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, 
 		return 0, oErr
 	}
 
-	return uint(iCount), nil
+	return uint64(iCount), nil
 }
 
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {

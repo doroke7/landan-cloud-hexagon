@@ -26,19 +26,19 @@ func (oSelf *AdminPermissionUsecase) AddOne(oAdminPermission *domain.AdminPermis
 
 func (oSelf *AdminPermissionUsecase) ShowOneById(iId uint64) (*domain.AdminPermission, error) {
 
-	oAdminPermission, oErr := oSelf.AdminPermissionModel.ShowOneById(uint(iId))
+	oAdminPermission, oErr := oSelf.AdminPermissionModel.ShowOneById(iId)
 
 	return oAdminPermission, oErr
 }
 
 func (oSelf *AdminPermissionUsecase) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint64) error {
 
-	return oSelf.AdminPermissionModel.EditOneById(oAdminPermission, uint(iId))
+	return oSelf.AdminPermissionModel.EditOneById(oAdminPermission, iId)
 }
 
 func (oSelf *AdminPermissionUsecase) RemoveOneById(iId uint64) error {
 
-	return oSelf.AdminPermissionModel.RemoveOneById(uint(iId))
+	return oSelf.AdminPermissionModel.RemoveOneById(iId)
 }
 
 func (oSelf *AdminPermissionUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

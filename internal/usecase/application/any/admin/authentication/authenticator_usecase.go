@@ -67,7 +67,7 @@ func (oSelf *AuthenticatorUsecase) Refresh(sJwt string, sSecret string) (string,
 		return "", pkgUtility.NewDefaultError("invalid JWT", -2, 200)
 	}
 
-	iId := uint(oClaims.AdminUserId)
+	iId := uint64(oClaims.AdminUserId)
 	oAdminUser, err := oSelf.AdminUserModel.ShowOneById(iId)
 	fmt.Println("err=", err)
 

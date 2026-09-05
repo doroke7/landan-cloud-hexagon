@@ -23,7 +23,7 @@ func NewTableLogic(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) o
 	}
 }
 
-func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint, error) {
+func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
@@ -66,5 +66,5 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 		return aTables, 0, oCountErr
 	}
 
-	return aTables, uint(iTotal), nil
+	return aTables, uint64(iTotal), nil
 }

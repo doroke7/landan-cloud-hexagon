@@ -52,7 +52,7 @@ func (oSelf *AdminRoleModel) AddOne(oAdminRole *domain.AdminRoleValue) error {
 	return oErr
 }
 
-func (oSelf *AdminRoleModel) ShowOneById(iId uint) (*domain.AdminRole, error) {
+func (oSelf *AdminRoleModel) ShowOneById(iId uint64) (*domain.AdminRole, error) {
 
 	oResponse, oErr := oSelf.ResourceModelClient.AdminRole.ShowOneById(
 		oSelf.Context,
@@ -73,7 +73,7 @@ func (oSelf *AdminRoleModel) ShowOneById(iId uint) (*domain.AdminRole, error) {
 	return &oAdminRole, nil
 }
 
-func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint) error {
+func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.AdminRoleEditOneByIdInput{
 		Id:       uint32(iId),
@@ -85,7 +85,7 @@ func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleValue, iId 
 	return oErr
 }
 
-func (oSelf *AdminRoleModel) RemoveOneById(iId uint) error {
+func (oSelf *AdminRoleModel) RemoveOneById(iId uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.AdminRole.RemoveOneById(
 		oSelf.Context,
@@ -118,7 +118,7 @@ func (oSelf *AdminRoleModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	return aAdminRoles, nil
 }
 
-func (oSelf *AdminRoleModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *AdminRoleModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
 	oRequest := &pbResourceModel.AdminRoleTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -126,7 +126,7 @@ func (oSelf *AdminRoleModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, 
 
 	oResponse, oErr := oSelf.ResourceModelClient.AdminRole.TotalByFilters(oSelf.Context, oRequest)
 
-	iTotal := uint(oResponse.GetTotal())
+	iTotal := uint64(oResponse.GetTotal())
 
 	return iTotal, oErr
 }

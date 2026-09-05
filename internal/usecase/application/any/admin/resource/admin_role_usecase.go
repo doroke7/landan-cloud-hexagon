@@ -27,19 +27,19 @@ func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleValue) error {
 
 func (oSelf *AdminRoleUsecase) ShowOne(iId uint64) (*domain.AdminRole, error) {
 
-	oAdminRole, oErr := oSelf.AdminRoleModel.ShowOneById(uint(iId))
+	oAdminRole, oErr := oSelf.AdminRoleModel.ShowOneById(iId)
 
 	return oAdminRole, oErr
 }
 
 func (oSelf *AdminRoleUsecase) EditOne(oAdminRole *domain.AdminRoleValue, iId uint64) error {
 
-	return oSelf.AdminRoleModel.EditOneById(oAdminRole, uint(iId))
+	return oSelf.AdminRoleModel.EditOneById(oAdminRole, iId)
 }
 
 func (oSelf *AdminRoleUsecase) RemoveOne(iId uint64) error {
 
-	return oSelf.AdminRoleModel.RemoveOneById(uint(iId))
+	return oSelf.AdminRoleModel.RemoveOneById(iId)
 }
 
 func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminRole, uint64, error) {

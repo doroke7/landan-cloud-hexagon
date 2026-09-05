@@ -56,7 +56,7 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 	return &oAdminUser, nil
 }
 
-func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
+func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) {
 
 	oResp, err := oSelf.ResourceModelClient.AdminUser.ShowOneById(
 		oSelf.Context,
@@ -95,7 +95,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	return aAdminUsers, nil
 }
 
-func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
 	oRequest := &pbResourceModel.AdminUserTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -103,7 +103,7 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, 
 
 	oResponse, oErr := oSelf.ResourceModelClient.AdminUser.TotalByFilters(oSelf.Context, oRequest)
 
-	iTotal := uint(oResponse.GetTotal())
+	iTotal := uint64(oResponse.GetTotal())
 
 	return iTotal, oErr
 }
@@ -122,7 +122,7 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {
 	return oErr
 }
 
-func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) error {
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.AdminUserEditOneByIdInput{
 		Id: uint32(iId),
@@ -137,7 +137,7 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 	return oErr
 }
 
-func (oSelf *AdminUserModel) RemoveOneById(iId uint) error {
+func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.AdminUser.RemoveOneById(
 		oSelf.Context,

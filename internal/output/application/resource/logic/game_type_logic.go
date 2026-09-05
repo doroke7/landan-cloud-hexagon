@@ -60,7 +60,7 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 	return aRoots, nil
 }
 
-func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint, error) {
+func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
 
 	oRequest := &pbResourceLogic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -89,6 +89,6 @@ func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFi
 		})
 	}
 
-	iTotal := uint(oResponse.GetTotal())
+	iTotal := uint64(oResponse.GetTotal())
 	return aGameTypes, iTotal, nil
 }

@@ -28,7 +28,7 @@ func NewGameLogic(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) ou
 	}
 }
 
-func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint, error) {
+func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
@@ -71,5 +71,5 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 		return aGames, 0, oCountErr
 	}
 
-	return aGames, uint(iTotal), nil
+	return aGames, uint64(iTotal), nil
 }

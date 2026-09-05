@@ -71,7 +71,7 @@ func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 	}, nil
 }
 
-func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint) error {
+func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.AppUser.IncreaseBalance(
 		oSelf.Context,

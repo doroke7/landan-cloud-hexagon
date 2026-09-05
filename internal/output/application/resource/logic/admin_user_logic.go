@@ -34,7 +34,7 @@ func NewAdminUserLogic(oAbstractLogic *resourceBase.AbstractResource) outputPort
 	}
 }
 
-func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint, error) {
+func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
 
 	oRequest := &pbResourceLogic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -65,7 +65,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 		})
 	}
 
-	iTotal := uint(oResponse.GetTotal())
+	iTotal := uint64(oResponse.GetTotal())
 	return aAdminUsers, iTotal, oErr
 }
 

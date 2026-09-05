@@ -54,7 +54,7 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 	return aRoots, nil
 }
 
-func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint, error) {
+func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
 	aWheres := oSelf.FiltersToWheres(aFilters)
 	aOrders := oSelf.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
@@ -122,5 +122,5 @@ func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFi
 		return aGameTypes, 0, oCountErr
 	}
 
-	return aGameTypes, uint(iTotal), nil
+	return aGameTypes, uint64(iTotal), nil
 }

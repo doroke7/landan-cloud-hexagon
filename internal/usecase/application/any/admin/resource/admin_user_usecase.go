@@ -67,12 +67,12 @@ func (oSelf *AdminUserUsecase) RemoveOne(iId uint64) error {
 
 	}
 
-	return oSelf.AdminUserModel.RemoveOneById(uint(iId))
+	return oSelf.AdminUserModel.RemoveOneById(iId)
 }
 
 func (oSelf *AdminUserUsecase) ShowOne(iId uint64) (*domain.AdminUser, error) {
 
-	oAdminUser, oErr := oSelf.AdminUserModel.ShowOneById(uint(iId))
+	oAdminUser, oErr := oSelf.AdminUserModel.ShowOneById(iId)
 
 	return oAdminUser, oErr
 }

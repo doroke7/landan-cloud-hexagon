@@ -46,7 +46,7 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 	return &oAdminUser, nil
 }
 
-func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
+func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) {
 
 	var oAdminUser domain.AdminUser
 	sKey := oSelf.Aop.Key("AdminUser.SObI", iId)
@@ -72,7 +72,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return &oAdminUser, err
 }
 
-func (oSelf *AdminUserModel) RemoveOneById(iId uint) error {
+func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
 	sKey := oSelf.Aop.Key("AdminUser.SObI", iId)
 
 	return oSelf.Aop.CacheEvict(sKey, func() error {
@@ -94,7 +94,7 @@ func (oSelf *AdminUserModel) RemoveOneById(iId uint) error {
 	})
 }
 
-func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) error {
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminUser)
 	if oErr != nil {
 		return oErr
@@ -158,7 +158,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	return aAdminUsers, nil
 }
 
-func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -175,7 +175,7 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, 
 		return 0, oErr
 	}
 
-	return uint(iTotal), nil
+	return uint64(iTotal), nil
 }
 
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {

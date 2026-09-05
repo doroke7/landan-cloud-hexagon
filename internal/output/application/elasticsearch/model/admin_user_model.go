@@ -65,7 +65,7 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 	return &oAdminUser, nil
 }
 
-func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
+func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) {
 	var oAdminUser domain.AdminUser
 
 	bFound, oErr := oSelf.GetById(oSelf.Index, strconv.FormatUint(uint64(iId), 10), &oAdminUser)
@@ -80,7 +80,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return &oAdminUser, nil
 }
 
-func (oSelf *AdminUserModel) RemoveOneById(iId uint) error {
+func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
 	sId := strconv.FormatUint(uint64(iId), 10)
 	oPartial := map[string]any{"deleted_at": time.Now()}
 
@@ -96,7 +96,7 @@ func (oSelf *AdminUserModel) RemoveOneById(iId uint) error {
 	return nil
 }
 
-func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) error {
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminUser)
 	if oErr != nil {
 		return oErr
@@ -140,7 +140,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	return aAdminUsers, nil
 }
 
-func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -212,7 +212,7 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, 
 
 	iTotal, oErr := oSelf.CountWithOptions(aOptions)
 
-	return uint(iTotal), oErr
+	return uint64(iTotal), oErr
 }
 
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {

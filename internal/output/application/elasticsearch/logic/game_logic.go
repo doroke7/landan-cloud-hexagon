@@ -27,7 +27,7 @@ func NewGameLogic(oAbstractLogic *elasticsearchBase.AbstractElasticsearch) outpu
 
 // ShowGamesTotalByFiltersWithSortersPagination 一次 search 就同時拿到「這一頁」跟「符合條件的總數」
 // （options 裡有 track_total_hits），不用再另外打一次 count。
-func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint, error) {
+func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error) {
 	sDeletedAtField := "deleted_at"
 	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
 
@@ -50,5 +50,5 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 		aGames[i] = &oGame
 	}
 
-	return aGames, uint(oResult.Total), nil
+	return aGames, uint64(oResult.Total), nil
 }

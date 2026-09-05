@@ -60,7 +60,7 @@ func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissi
 	return oErr
 }
 
-func (oSelf *AdminPermissionModel) ShowOneById(iId uint) (*domain.AdminPermission, error) {
+func (oSelf *AdminPermissionModel) ShowOneById(iId uint64) (*domain.AdminPermission, error) {
 
 	oResponse, oErr := oSelf.ResourceModelClient.AdminPermission.ShowOneById(
 		oSelf.Context,
@@ -81,7 +81,7 @@ func (oSelf *AdminPermissionModel) ShowOneById(iId uint) (*domain.AdminPermissio
 	return &oAdminPermission, nil
 }
 
-func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint) error {
+func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.AdminPermissionEditOneByIdInput{
 		Id:       uint32(iId),
@@ -93,7 +93,7 @@ func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPer
 	return oErr
 }
 
-func (oSelf *AdminPermissionModel) RemoveOneById(iId uint) error {
+func (oSelf *AdminPermissionModel) RemoveOneById(iId uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.AdminPermission.RemoveOneById(
 		oSelf.Context,
@@ -126,7 +126,7 @@ func (oSelf *AdminPermissionModel) ShowOnesByFiltersWithSortersPagination(aFilte
 	return aAdminPermissions, nil
 }
 
-func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
 	oRequest := &pbResourceModel.AdminPermissionTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -134,7 +134,7 @@ func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (
 
 	oResponse, oErr := oSelf.ResourceModelClient.AdminPermission.TotalByFilters(oSelf.Context, oRequest)
 
-	iTotal := uint(oResponse.GetTotal())
+	iTotal := uint64(oResponse.GetTotal())
 
 	return iTotal, oErr
 }

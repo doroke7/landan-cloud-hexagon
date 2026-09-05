@@ -30,7 +30,7 @@ func (oSelf *AdminUserUsecase) ShowOneByName(sName string) (*domain.AdminUser, e
 func (oSelf *AdminUserUsecase) ShowOneById(iId uint64) (*domain.AdminUser, error) {
 
 	// 不需要 太多判斷，直接回傳 資料庫方法
-	oAdminUser, err := oSelf.AdminUserModel.ShowOneById(uint(iId))
+	oAdminUser, err := oSelf.AdminUserModel.ShowOneById(iId)
 
 	return oAdminUser, err
 }
@@ -42,12 +42,12 @@ func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) error {
 
 func (oSelf *AdminUserUsecase) EditOneById(oAdminUser *domain.AdminUserValue, iId uint64) error {
 
-	return oSelf.AdminUserModel.EditOneById(oAdminUser, uint(iId))
+	return oSelf.AdminUserModel.EditOneById(oAdminUser, iId)
 }
 
 func (oSelf *AdminUserUsecase) RemoveOneById(iId uint64) error {
 
-	return oSelf.AdminUserModel.RemoveOneById(uint(iId))
+	return oSelf.AdminUserModel.RemoveOneById(iId)
 }
 
 func (oSelf *AdminUserUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

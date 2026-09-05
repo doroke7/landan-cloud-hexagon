@@ -45,7 +45,7 @@ func (oSelf *AdminRoleModel) AddOne(oAdminRole *domain.AdminRoleValue) error {
 	return nil
 }
 
-func (oSelf *AdminRoleModel) ShowOneById(iId uint) (*domain.AdminRole, error) {
+func (oSelf *AdminRoleModel) ShowOneById(iId uint64) (*domain.AdminRole, error) {
 	var oAdminRole domain.AdminRole
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -61,7 +61,7 @@ func (oSelf *AdminRoleModel) ShowOneById(iId uint) (*domain.AdminRole, error) {
 	return &oAdminRole, nil
 }
 
-func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint) error {
+func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminRole)
 	if oErr != nil {
 		return oErr
@@ -83,7 +83,7 @@ func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleValue, iId 
 	return nil
 }
 
-func (oSelf *AdminRoleModel) RemoveOneById(iId uint) error {
+func (oSelf *AdminRoleModel) RemoveOneById(iId uint64) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminRole{}).
 		Where("id = ?", iId).
@@ -139,7 +139,7 @@ func (oSelf *AdminRoleModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	return aAdminRoles, nil
 }
 
-func (oSelf *AdminRoleModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *AdminRoleModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -154,5 +154,5 @@ func (oSelf *AdminRoleModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, 
 		return 0, oErr
 	}
 
-	return uint(iTotal), nil
+	return uint64(iTotal), nil
 }

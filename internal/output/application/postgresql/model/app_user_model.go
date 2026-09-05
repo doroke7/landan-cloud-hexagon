@@ -21,7 +21,7 @@ func NewAppUserModel(oAbstractModel *postgresqlBase.AbstractPostgresql) outputPo
 	}
 }
 
-func (oSelf *AppUserModel) IncreaseBalance(id uint, amount uint) error {
+func (oSelf *AppUserModel) IncreaseBalance(id uint, amount uint64) error {
 	if err := oSelf.DB.WithContext(oSelf.Context).Model(&domain.AppUser{}).
 		Where("id = ?", id).
 		UpdateColumn("balance", gorm.Expr("balance + ?", amount)).Error; err != nil {

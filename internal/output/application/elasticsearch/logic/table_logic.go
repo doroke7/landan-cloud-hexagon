@@ -21,7 +21,7 @@ func NewTableLogic(oAbstractLogic *elasticsearchBase.AbstractElasticsearch) outp
 	}
 }
 
-func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint, error) {
+func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {
 	sDeletedAtField := "deleted_at"
 	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
 
@@ -44,5 +44,5 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 		aTables[i] = &oTable
 	}
 
-	return aTables, uint(oResult.Total), nil
+	return aTables, uint64(oResult.Total), nil
 }

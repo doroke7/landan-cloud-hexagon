@@ -45,7 +45,7 @@ func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissi
 	return nil
 }
 
-func (oSelf *AdminPermissionModel) ShowOneById(iId uint) (*domain.AdminPermission, error) {
+func (oSelf *AdminPermissionModel) ShowOneById(iId uint64) (*domain.AdminPermission, error) {
 	var oAdminPermission domain.AdminPermission
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -61,7 +61,7 @@ func (oSelf *AdminPermissionModel) ShowOneById(iId uint) (*domain.AdminPermissio
 	return &oAdminPermission, nil
 }
 
-func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint) error {
+func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminPermission)
 	if oErr != nil {
 		return oErr
@@ -83,7 +83,7 @@ func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPer
 	return nil
 }
 
-func (oSelf *AdminPermissionModel) RemoveOneById(iId uint) error {
+func (oSelf *AdminPermissionModel) RemoveOneById(iId uint64) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermission{}).
 		Where("id = ?", iId).
@@ -139,7 +139,7 @@ func (oSelf *AdminPermissionModel) ShowOnesByFiltersWithSortersPagination(aFilte
 	return aAdminPermissions, nil
 }
 
-func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -154,5 +154,5 @@ func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (
 		return 0, oErr
 	}
 
-	return uint(iTotal), nil
+	return uint64(iTotal), nil
 }

@@ -39,5 +39,5 @@ func (oSelf *AppUserUsecase) AddOne(oAppUser *domain.AppUserValue) error {
 
 func (oSelf *AppUserUsecase) IncreaseBalance(iId uint64, iAmount uint64) error {
 
-	return oSelf.AppUserModel.IncreaseBalance(uint(iId), uint(iAmount))
+	return oSelf.AppUserModel.IncreaseBalance(uint(iId), iAmount)
 }

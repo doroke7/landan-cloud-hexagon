@@ -28,7 +28,7 @@ func NewAppUserModel(oAbstractModel *elasticsearchBase.AbstractElasticsearch) ou
 
 // IncreaseBalance 讀出目前餘額、加上 amount 再寫回。ES 沒有 gorm 那種 UpdateColumn 原子加，
 // 這裡是「讀-改-寫」，不保證併發原子性（跟 lottery/memory adapter 的取捨一致）。
-func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint) error {
+func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint64) error {
 	oAppUser, oErr := oSelf.ShowOneById(iId)
 	if oErr != nil {
 		return oErr
@@ -39,7 +39,7 @@ func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint) error {
 
 	sId := strconv.FormatUint(uint64(iId), 10)
 	oPartial := map[string]any{
-		"balance":    oAppUser.Balance + iAmount,
+		"balance":    oAppUser.Balance + uint(iAmount),
 		"updated_at": time.Now(),
 	}
 

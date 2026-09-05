@@ -24,14 +24,21 @@ func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleValue) error {
 	return oSelf.AdminRoleModel.AddOne(oAdminRole)
 }
 
+func (oSelf *AdminRoleUsecase) ShowOneById(iId uint) (*domain.AdminRole, error) {
+
+	oAdminRole, oErr := oSelf.AdminRoleModel.ShowOneById(uint64(iId))
+
+	return oAdminRole, oErr
+}
+
 func (oSelf *AdminRoleUsecase) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint64) error {
 
-	return oSelf.AdminRoleModel.EditOneById(oAdminRole, uint(iId))
+	return oSelf.AdminRoleModel.EditOneById(oAdminRole, iId)
 }
 
 func (oSelf *AdminRoleUsecase) RemoveOneById(iId uint64) error {
 
-	return oSelf.AdminRoleModel.RemoveOneById(uint(iId))
+	return oSelf.AdminRoleModel.RemoveOneById(iId)
 }
 
 func (oSelf *AdminRoleUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
