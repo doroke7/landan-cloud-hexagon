@@ -34,13 +34,19 @@ func domainAdminUserToProtoAdminUser(oAdminUser *domain.AdminUser) *pbResource.A
 		return nil
 	}
 
+	aAdminRoles := make([]*pbResource.AdminRole, 0, len(oAdminUser.AdminRoles))
+	for i := range oAdminUser.AdminRoles {
+		aAdminRoles = append(aAdminRoles, domainAdminRoleToProtoAdminRole(&oAdminUser.AdminRoles[i]))
+	}
+
 	return &pbResource.AdminUser{
-		Id:        uint32(oAdminUser.Id),
-		Name:      oAdminUser.Name,
-		Password:  oAdminUser.Password,
-		CreatedAt: timestamppb.New(oAdminUser.CreatedAt),
-		UpdatedAt: timestamppb.New(oAdminUser.UpdatedAt),
-		DeletedAt: timestamppb.New(oAdminUser.DeletedAt),
+		Id:         uint32(oAdminUser.Id),
+		Name:       oAdminUser.Name,
+		Password:   oAdminUser.Password,
+		CreatedAt:  timestamppb.New(oAdminUser.CreatedAt),
+		UpdatedAt:  timestamppb.New(oAdminUser.UpdatedAt),
+		DeletedAt:  timestamppb.New(oAdminUser.DeletedAt),
+		AdminRoles: aAdminRoles,
 	}
 }
 

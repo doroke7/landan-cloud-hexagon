@@ -14,13 +14,19 @@ func protoAdminUserToDomainAdminUser(oProto *pbResource.AdminUser) domain.AdminU
 		return domain.AdminUser{}
 	}
 
+	aAdminRoles := make([]domain.AdminRole, 0, len(oProto.GetAdminRoles()))
+	for _, oProtoAdminRole := range oProto.GetAdminRoles() {
+		aAdminRoles = append(aAdminRoles, protoAdminRoleToDomainAdminRole(oProtoAdminRole))
+	}
+
 	return domain.AdminUser{
-		Id:        uint(oProto.GetId()),
-		Name:      oProto.GetName(),
-		Password:  oProto.GetPassword(),
-		CreatedAt: oProto.GetCreatedAt().AsTime(),
-		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
-		DeletedAt: oProto.GetDeletedAt().AsTime(),
+		Id:         uint(oProto.GetId()),
+		Name:       oProto.GetName(),
+		Password:   oProto.GetPassword(),
+		CreatedAt:  oProto.GetCreatedAt().AsTime(),
+		UpdatedAt:  oProto.GetUpdatedAt().AsTime(),
+		DeletedAt:  oProto.GetDeletedAt().AsTime(),
+		AdminRoles: aAdminRoles,
 	}
 }
 

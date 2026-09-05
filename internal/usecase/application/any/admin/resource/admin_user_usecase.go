@@ -9,6 +9,7 @@ import (
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
+	"fmt"
 )
 
 type AdminUserUsecase struct {
@@ -33,9 +34,22 @@ func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) (bool, 
 		return false, oErr
 	}
 
-	bResult, oErr := oSelf.AdminUserModel.AddOne(oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
+	fmt.Println("oAdminUser=", oAdminUser)
 
-	return bResult, oErr
+	oErr = oSelf.AdminUserLogic.AddAminUser(oAdminUser)
+
+	return true, oErr
 }
 
 func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {

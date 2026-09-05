@@ -60,7 +60,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 		defer cCancel()
 
 		var oAdminUser domain.AdminUser
-		if err := oSelf.DB.WithContext(oThisContext).First(&oAdminUser, iId).Error; err != nil {
+		if err := oSelf.DB.WithContext(oThisContext).Preload("AdminRoles").First(&oAdminUser, iId).Error; err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
 				return nil, errors.New("資料不存在")
 			}

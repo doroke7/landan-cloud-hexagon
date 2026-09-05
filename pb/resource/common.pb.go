@@ -303,6 +303,7 @@ type AdminUser struct {
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
+	AdminRoles    []*AdminRole           `protobuf:"bytes,7,rep,name=admin_roles,json=adminRoles,proto3" json:"admin_roles,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -375,6 +376,13 @@ func (x *AdminUser) GetUpdatedAt() *timestamppb.Timestamp {
 func (x *AdminUser) GetDeletedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.DeletedAt
+	}
+	return nil
+}
+
+func (x *AdminUser) GetAdminRoles() []*AdminRole {
+	if x != nil {
+		return x.AdminRoles
 	}
 	return nil
 }
@@ -899,7 +907,7 @@ const file_resource_common_proto_rawDesc = "" +
 	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1b\n" +
 	"\tparent_id\x18\a \x01(\rR\bparentId\x12-\n" +
 	"\x06parent\x18\b \x01(\v2\x15.pb.resource.GameTypeR\x06parent\x121\n" +
-	"\bchildren\x18\t \x03(\v2\x15.pb.resource.GameTypeR\bchildren\"\xfc\x01\n" +
+	"\bchildren\x18\t \x03(\v2\x15.pb.resource.GameTypeR\bchildren\"\xb5\x02\n" +
 	"\tAdminUser\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
@@ -909,7 +917,9 @@ const file_resource_common_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
-	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\"\xf2\x01\n" +
+	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x127\n" +
+	"\vadmin_roles\x18\a \x03(\v2\x16.pb.resource.AdminRoleR\n" +
+	"adminRoles\"\xf2\x01\n" +
 	"\tAdminRole\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\rR\x02id\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x12\n" +
@@ -1007,27 +1017,28 @@ var file_resource_common_proto_depIdxs = []int32{
 	11, // 6: pb.resource.AdminUser.created_at:type_name -> google.protobuf.Timestamp
 	11, // 7: pb.resource.AdminUser.updated_at:type_name -> google.protobuf.Timestamp
 	11, // 8: pb.resource.AdminUser.deleted_at:type_name -> google.protobuf.Timestamp
-	11, // 9: pb.resource.AdminRole.created_at:type_name -> google.protobuf.Timestamp
-	11, // 10: pb.resource.AdminRole.updated_at:type_name -> google.protobuf.Timestamp
-	11, // 11: pb.resource.AdminRole.deleted_at:type_name -> google.protobuf.Timestamp
-	11, // 12: pb.resource.AdminPermission.created_at:type_name -> google.protobuf.Timestamp
-	11, // 13: pb.resource.AdminPermission.updated_at:type_name -> google.protobuf.Timestamp
-	11, // 14: pb.resource.AdminPermission.deleted_at:type_name -> google.protobuf.Timestamp
-	11, // 15: pb.resource.Game.created_at:type_name -> google.protobuf.Timestamp
-	11, // 16: pb.resource.Game.updated_at:type_name -> google.protobuf.Timestamp
-	11, // 17: pb.resource.Game.deleted_at:type_name -> google.protobuf.Timestamp
-	3,  // 18: pb.resource.Game.game_type:type_name -> pb.resource.GameType
-	11, // 19: pb.resource.Table.started_at:type_name -> google.protobuf.Timestamp
-	11, // 20: pb.resource.Table.ended_at:type_name -> google.protobuf.Timestamp
-	11, // 21: pb.resource.Table.created_at:type_name -> google.protobuf.Timestamp
-	11, // 22: pb.resource.Table.updated_at:type_name -> google.protobuf.Timestamp
-	11, // 23: pb.resource.Table.deleted_at:type_name -> google.protobuf.Timestamp
-	8,  // 24: pb.resource.Table.game:type_name -> pb.resource.Game
-	25, // [25:25] is the sub-list for method output_type
-	25, // [25:25] is the sub-list for method input_type
-	25, // [25:25] is the sub-list for extension type_name
-	25, // [25:25] is the sub-list for extension extendee
-	0,  // [0:25] is the sub-list for field type_name
+	5,  // 9: pb.resource.AdminUser.admin_roles:type_name -> pb.resource.AdminRole
+	11, // 10: pb.resource.AdminRole.created_at:type_name -> google.protobuf.Timestamp
+	11, // 11: pb.resource.AdminRole.updated_at:type_name -> google.protobuf.Timestamp
+	11, // 12: pb.resource.AdminRole.deleted_at:type_name -> google.protobuf.Timestamp
+	11, // 13: pb.resource.AdminPermission.created_at:type_name -> google.protobuf.Timestamp
+	11, // 14: pb.resource.AdminPermission.updated_at:type_name -> google.protobuf.Timestamp
+	11, // 15: pb.resource.AdminPermission.deleted_at:type_name -> google.protobuf.Timestamp
+	11, // 16: pb.resource.Game.created_at:type_name -> google.protobuf.Timestamp
+	11, // 17: pb.resource.Game.updated_at:type_name -> google.protobuf.Timestamp
+	11, // 18: pb.resource.Game.deleted_at:type_name -> google.protobuf.Timestamp
+	3,  // 19: pb.resource.Game.game_type:type_name -> pb.resource.GameType
+	11, // 20: pb.resource.Table.started_at:type_name -> google.protobuf.Timestamp
+	11, // 21: pb.resource.Table.ended_at:type_name -> google.protobuf.Timestamp
+	11, // 22: pb.resource.Table.created_at:type_name -> google.protobuf.Timestamp
+	11, // 23: pb.resource.Table.updated_at:type_name -> google.protobuf.Timestamp
+	11, // 24: pb.resource.Table.deleted_at:type_name -> google.protobuf.Timestamp
+	8,  // 25: pb.resource.Table.game:type_name -> pb.resource.Game
+	26, // [26:26] is the sub-list for method output_type
+	26, // [26:26] is the sub-list for method input_type
+	26, // [26:26] is the sub-list for extension type_name
+	26, // [26:26] is the sub-list for extension extendee
+	0,  // [0:26] is the sub-list for field type_name
 }
 
 func init() { file_resource_common_proto_init() }
