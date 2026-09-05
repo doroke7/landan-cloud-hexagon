@@ -23,5 +23,5 @@ func (oSelf *GameUsecase) ShowGamesTotalByFiltersWithSortersPagination(aFilters 
 
 	aGames, iTotal, oErr := oSelf.GameLogic.ShowGamesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aGames, iTotal, oErr
+	return aGames, uint64(iTotal), oErr
 }

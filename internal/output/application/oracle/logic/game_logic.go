@@ -20,7 +20,7 @@ func NewGameLogic(oAbstractLogic *oracleBase.AbstractOracle) outputPortAnyLogic.
 	}
 }
 
-func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error) {
+func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint, error) {
 	aWheres := oSelf.AbstractOracle.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractOracle.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
@@ -88,5 +88,5 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 		return aGames, 0, oCountErr
 	}
 
-	return aGames, uint64(iTotal), nil
+	return aGames, uint(iTotal), nil
 }

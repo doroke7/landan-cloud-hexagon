@@ -47,7 +47,7 @@ func (oSelf *AdminUserLogic) nextId() (uint, error) {
 	return oCounter.Seq, nil
 }
 
-func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
+func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
@@ -90,7 +90,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 		return aAdminUsers, 0, oCountErr
 	}
 
-	return aAdminUsers, uint64(iTotal), nil
+	return aAdminUsers, uint(iTotal), nil
 }
 
 func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {

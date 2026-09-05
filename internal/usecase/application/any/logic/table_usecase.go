@@ -23,5 +23,5 @@ func (oSelf *TableUsecase) ShowTablesTotalByFiltersWithSortersPagination(aFilter
 
 	aTables, iTotal, oErr := oSelf.TableLogic.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aTables, iTotal, oErr
+	return aTables, uint64(iTotal), oErr
 }

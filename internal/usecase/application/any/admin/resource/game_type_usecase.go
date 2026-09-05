@@ -74,7 +74,7 @@ func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*
 
 	aGameTypes, iTotal, oErr := oSelf.GameTypeLogic.ShowGameTypesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aGameTypes, iTotal, oErr
+	return aGameTypes, uint64(iTotal), oErr
 }
 
 func (oSelf *GameTypeUsecase) RemoveOne(iId uint) (bool, error) {

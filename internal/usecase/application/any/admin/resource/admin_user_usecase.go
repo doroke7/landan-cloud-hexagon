@@ -95,5 +95,5 @@ func (oSelf *AdminUserUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []
 
 	aAdminUsers, iTotal, oErr := oSelf.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aAdminUsers, iTotal, oErr
+	return aAdminUsers, uint64(iTotal), oErr
 }

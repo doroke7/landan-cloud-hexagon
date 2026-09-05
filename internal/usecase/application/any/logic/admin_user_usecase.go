@@ -23,7 +23,7 @@ func (oSelf *AdminUserUsecase) ShowAdminUsersTotalByFiltersWithSortersPagination
 
 	aAdminUsers, iTotal, oErr := oSelf.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aAdminUsers, iTotal, oErr
+	return aAdminUsers, uint64(iTotal), oErr
 }
 
 func (oSelf *AdminUserUsecase) AddAminUser(oValue *domain.AdminUserValue) error {

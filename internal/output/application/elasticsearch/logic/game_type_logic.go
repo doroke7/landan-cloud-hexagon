@@ -71,7 +71,7 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 	return aRoots, nil
 }
 
-func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
+func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint, error) {
 	sDeletedAtField := "deleted_at"
 	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
 
@@ -94,5 +94,5 @@ func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFi
 		aGameTypes = append(aGameTypes, &oGameType)
 	}
 
-	return aGameTypes, uint64(oResult.Total), nil
+	return aGameTypes, uint(oResult.Total), nil
 }

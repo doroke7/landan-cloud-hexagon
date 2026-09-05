@@ -27,7 +27,7 @@ func NewAdminUserLogic(oAbstractLogic *elasticsearchBase.AbstractElasticsearch) 
 
 // ShowAdminUsersTotalByFiltersWithSortersPagination 一次 search 就同時拿到「這一頁」跟「符合條件的總數」
 // （options 裡有 track_total_hits），不用再另外打一次 count。
-func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
+func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint, error) {
 	sDeletedAtField := "deleted_at"
 	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
 
@@ -50,7 +50,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 		aAdminUsers[i] = &oAdminUser
 	}
 
-	return aAdminUsers, uint64(oResult.Total), nil
+	return aAdminUsers, uint(oResult.Total), nil
 }
 
 func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {

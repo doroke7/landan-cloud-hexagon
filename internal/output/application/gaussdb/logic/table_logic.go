@@ -20,7 +20,7 @@ func NewTableLogic(oAbstractLogic *gaussdbBase.AbstractGaussdb) outputPortAnyLog
 	}
 }
 
-func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {
+func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint, error) {
 	aWheres := oSelf.AbstractGaussdb.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractGaussdb.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
@@ -81,5 +81,5 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 		return aTables, 0, oCountErr
 	}
 
-	return aTables, uint64(iTotal), nil
+	return aTables, uint(iTotal), nil
 }

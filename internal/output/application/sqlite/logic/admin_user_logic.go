@@ -22,7 +22,7 @@ func NewAdminUserLogic(oAbstractLogic *sqliteBase.AbstractSqlite) outputPortAnyL
 	}
 }
 
-func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
+func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint, error) {
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractSqlite.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
@@ -89,7 +89,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 		return aAdminUsers, 0, oCountErr
 	}
 
-	return aAdminUsers, uint64(iTotal), nil
+	return aAdminUsers, uint(iTotal), nil
 }
 
 func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
