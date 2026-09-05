@@ -1,0 +1,50 @@
+package outputApplicationElasticsearchLogic
+
+import (
+	"encoding/json"
+
+	domain "example/internal/domain"
+	elasticsearchBase "example/internal/output/application/elasticsearch"
+	outputPortAnyLogic "example/internal/output/port/any/logic"
+	pkgInput "example/pkg/input"
+)
+
+type AdminUserLogic struct {
+	*elasticsearchBase.AbstractElasticsearch
+	Index string
+}
+
+func NewAdminUserLogic(oAbstractLogic *elasticsearchBase.AbstractElasticsearch) outputPortAnyLogic.AdminUserLogic {
+	return &AdminUserLogic{
+		AbstractElasticsearch: oAbstractLogic,
+		Index:                 oAbstractLogic.IndexName("admin_users"),
+	}
+}
+
+// ShowAdminUsersTotalByFiltersWithSortersPagination 一次 search 就同時拿到「這一頁」跟「符合條件的總數」
+// （options 裡有 track_total_hits），不用再另外打一次 count。
+func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
+	sDeletedAtField := "deleted_at"
+	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
+
+	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, aSorters, oPagination)
+	if oErr != nil {
+		return nil, 0, oErr
+	}
+
+	oResult, oErr := oSelf.SearchWithOptions(aOptions)
+	if oErr != nil {
+		return nil, 0, oErr
+	}
+
+	aAdminUsers := make([]*domain.AdminUser, len(oResult.Hits))
+	for i, oHit := range oResult.Hits {
+		var oAdminUser domain.AdminUser
+		if oErr := json.Unmarshal(oHit.Source, &oAdminUser); oErr != nil {
+			return nil, 0, oErr
+		}
+		aAdminUsers[i] = &oAdminUser
+	}
+
+	return aAdminUsers, uint64(oResult.Total), nil
+}

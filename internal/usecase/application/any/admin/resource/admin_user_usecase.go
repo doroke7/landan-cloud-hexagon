@@ -3,30 +3,32 @@ package usecaseApplicationAnyAdminResource
 import (
 	bootstrap "example/bootstrap"
 	domain "example/internal/domain"
+	outputPortAnyLogic "example/internal/output/port/any/logic"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
-	"fmt"
 )
 
 type AdminUserUsecase struct {
 	*usecaseApplicationAnyAdmin.AbstractUsecase
 	outputPortAnyModel.AdminUserModel
+	AdminUserLogic outputPortAnyLogic.AdminUserLogic
 }
 
-func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminResource.AdminUserUsecase {
+func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAdminUserLogic outputPortAnyLogic.AdminUserLogic, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminResource.AdminUserUsecase {
 	return &AdminUserUsecase{
 		AbstractUsecase: oAbstractUsecase,
 		AdminUserModel:  oAdminUserModel,
+		AdminUserLogic:  oAdminUserLogic,
 	}
 }
 
 func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
 
-	fmt.Printf("*oAdminUser30 =%+v", *oAdminUser)
-	fmt.Printf("*oAdminUser30 =%+v", (*oAdminUser).Name)
+	// oAdminUser.  相當 *oAdminUser.
+	// *oAdminUser.Name 相當 (*(oAdminUser).Name)
 
 	if (*oAdminUser).Name != nil && *oAdminUser.Name != "" {
 		return false, pkgUtility.NewDefaultError("name can not be modified", -1, 200)
@@ -68,12 +70,7 @@ func (oSelf *AdminUserUsecase) RemoveOne(iId uint) (bool, error) {
 
 func (oSelf *AdminUserUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
 
-	aAdminUsers, oErr := oSelf.AdminUserModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
-	if oErr != nil {
-		return nil, 0, oErr
-	}
-
-	iTotal, oErr := oSelf.AdminUserModel.TotalByFilters(aFilters)
+	aAdminUsers, iTotal, oErr := oSelf.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	return aAdminUsers, iTotal, oErr
 }

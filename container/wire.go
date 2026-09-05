@@ -200,6 +200,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		outputApplicationResourceModel.NewGameModel,
 		outputApplicationResourceModel.NewTableModel,
 		outputApplicationResourceModel.NewGameTypeModel,
+		outputApplicationResourceLogic.NewAdminUserLogic,
 		outputApplicationResourceLogic.NewGameLogic,
 		outputApplicationResourceLogic.NewTableLogic,
 		outputApplicationResourceLogic.NewGameTypeLogic,
@@ -400,6 +401,7 @@ type ResourceContainer struct {
 	ResourceModelGame            *inputApplicationResourceModel.GameHandler
 	ResourceModelTable           *inputApplicationResourceModel.TableHandler
 	ResourceModelGameType        *inputApplicationResourceModel.GameTypeHandler
+	ResourceLogicAdminUser       *inputApplicationResourceLogic.AdminUserHandler
 	ResourceLogicGame            *inputApplicationResourceLogic.GameHandler
 	ResourceLogicTable           *inputApplicationResourceLogic.TableHandler
 	ResourceLogicGameType        *inputApplicationResourceLogic.GameTypeHandler
@@ -441,6 +443,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		outputApplicationMysqlModel.NewGameModel,
 		outputApplicationMysqlModel.NewTableModel,
 		outputApplicationMysqlModel.NewGameTypeModel,
+		outputApplicationMysqlLogic.NewAdminUserLogic,
 		outputApplicationMysqlLogic.NewGameLogic,
 		outputApplicationMysqlLogic.NewTableLogic,
 		outputApplicationMysqlLogic.NewGameTypeLogic,
@@ -457,6 +460,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		usecaseApplicationAnyModel.NewTableUsecase,
 		usecaseApplicationAnyModel.NewGameTypeUsecase,
 		usecaseApplicationAnyLogic.NewAbstractUsecase,
+		usecaseApplicationAnyLogic.NewAdminUserUsecase,
 		usecaseApplicationAnyLogic.NewGameUsecase,
 		usecaseApplicationAnyLogic.NewTableUsecase,
 		usecaseApplicationAnyLogic.NewGameTypeUsecase,
@@ -471,6 +475,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		inputApplicationResourceModel.NewGameHandler,
 		inputApplicationResourceModel.NewTableHandler,
 		inputApplicationResourceModel.NewGameTypeHandler,
+		inputApplicationResourceLogic.NewAdminUserHandler,
 		inputApplicationResourceLogic.NewGameHandler,
 		inputApplicationResourceLogic.NewTableHandler,
 		inputApplicationResourceLogic.NewGameTypeHandler,
