@@ -101,7 +101,7 @@ func (oSelf *AdminUserHandler) ShowAdminUsersTotalByFiltersWithSortersPagination
 	}
 
 	return &pbResourceLogic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput{
-		Total:      iTotal,
+		Total:      uint64(iTotal),
 		AdminUsers: aPbAdminUsers,
 	}, oErr
 }

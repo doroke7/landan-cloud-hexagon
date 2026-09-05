@@ -35,8 +35,7 @@ func (oSelf *TableHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	bResult, oErr := oSelf.AdminResourceTableUsecase.AddOne(oValue)
-	_ = bResult
+	oErr := oSelf.AdminResourceTableUsecase.AddOne(oValue)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -110,8 +109,7 @@ func (oSelf *TableHandler) EditOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.AdminResourceTableUsecase.EditOne(oValue, iId)
-	_ = bResult
+	oErr := oSelf.AdminResourceTableUsecase.EditOne(oValue, iId)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -144,8 +142,7 @@ func (oSelf *TableHandler) RemoveOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.AdminResourceTableUsecase.RemoveOne(iId)
-	_ = bResult
+	oErr := oSelf.AdminResourceTableUsecase.RemoveOne(iId)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)

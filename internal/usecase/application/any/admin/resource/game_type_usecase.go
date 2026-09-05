@@ -26,26 +26,14 @@ func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oGameTy
 	}
 }
 
-func (oSelf *GameTypeUsecase) AddOne(oValue *domain.GameTypeValue) (bool, error) {
+func (oSelf *GameTypeUsecase) AddOne(oValue *domain.GameTypeValue) error {
 
-	oErr := oSelf.GameTypeModel.AddOne(oValue)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.GameTypeModel.AddOne(oValue)
 }
 
-func (oSelf *GameTypeUsecase) EditOne(oValue *domain.GameTypeValue, iId uint) (bool, error) {
+func (oSelf *GameTypeUsecase) EditOne(oValue *domain.GameTypeValue, iId uint) error {
 
-	oErr := oSelf.GameTypeModel.EditOneById(oValue, iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.GameTypeModel.EditOneById(oValue, iId)
 }
 
 func (oSelf *GameTypeUsecase) ShowOne(iId uint) (*domain.GameType, error) {
@@ -70,42 +58,36 @@ func (oSelf *GameTypeUsecase) ShowTree() (*domain.GameType, error) {
 	return oRoot, nil
 }
 
-func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
+func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint, error) {
 
 	aGameTypes, iTotal, oErr := oSelf.GameTypeLogic.ShowGameTypesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aGameTypes, uint64(iTotal), oErr
+	return aGameTypes, iTotal, oErr
 }
 
-func (oSelf *GameTypeUsecase) RemoveOne(iId uint) (bool, error) {
+func (oSelf *GameTypeUsecase) RemoveOne(iId uint) error {
 
 	// 底下還有未刪除的子類型就不放行，避免刪掉父類型後留下孤兒資料
 	iChildren, oErr := oSelf.GameTypeModel.TotalByParentId(iId)
 
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	if iChildren > 0 {
-		return false, pkgUtility.NewDefaultError("This game type still has child types; remove them before deleting", -2, 500)
+		return pkgUtility.NewDefaultError("This game type still has child types; remove them before deleting", -2, 500)
 	}
 
 	// 底下還有掛在此類型的遊戲也不放行
 	iGames, oErr := oSelf.GameModel.TotalByGameTypeId(iId)
 
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	if iGames > 0 {
-		return false, pkgUtility.NewDefaultError("This game type still has games; remove them before deleting", -2, 500)
+		return pkgUtility.NewDefaultError("This game type still has games; remove them before deleting", -2, 500)
 	}
 
-	oErr = oSelf.GameTypeModel.RemoveOneById(iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.GameTypeModel.RemoveOneById(iId)
 }

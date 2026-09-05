@@ -5,5 +5,5 @@ import (
 )
 
 type AppUserUsecase interface {
-	AddAppUser(oAppUser *domain.AppUser) (bool, error)
+	AddAppUser(oAppUser *domain.AppUser) error
 }

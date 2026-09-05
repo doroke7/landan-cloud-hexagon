@@ -19,11 +19,11 @@ func NewAdminUserUsecase(oAbstractUsecase *AbstractUsecase, oAdminUserLogic outp
 	}
 }
 
-func (oSelf *AdminUserUsecase) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
+func (oSelf *AdminUserUsecase) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint, error) {
 
 	aAdminUsers, iTotal, oErr := oSelf.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aAdminUsers, uint64(iTotal), oErr
+	return aAdminUsers, iTotal, oErr
 }
 
 func (oSelf *AdminUserUsecase) AddAminUser(oValue *domain.AdminUserValue) error {

@@ -6,7 +6,7 @@ import (
 )
 
 type AdminUserUsecase interface {
-	ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error)
+	ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint, error)
 	AddAminUser(oValue *domain.AdminUserValue) error
 	EditAdminUserById(oValue *domain.AdminUserValue, iId uint) error
 }

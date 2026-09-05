@@ -40,7 +40,7 @@ func (oSelf *AppUserHandler) IncreaseBalance(msg amqp.Delivery) {
 		return
 	}
 
-	bResult, err := oSelf.AdminResourceAppUserUsecase.IncreaseBalance(payload.Id, payload.Amount)
+	err := oSelf.AdminResourceAppUserUsecase.IncreaseBalance(payload.Id, payload.Amount)
 	if err != nil {
 		pkgUtility.Logger(pkgUtility.Consumer).Error("IncreaseBalance 失敗",
 			zap.Uint("id", payload.Id),
@@ -52,7 +52,6 @@ func (oSelf *AppUserHandler) IncreaseBalance(msg amqp.Delivery) {
 
 	pkgUtility.Logger(pkgUtility.Consumer).Info("IncreaseBalance 成功",
 		zap.Uint("id", payload.Id),
-		zap.Bool("status", bResult),
 	)
 	msg.Ack(false)
 }

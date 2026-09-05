@@ -20,15 +20,9 @@ func NewAdminRoleUsecase(oAdminRoleModel outputPortAnyModel.AdminRoleModel, oAbs
 	}
 }
 
-func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleValue) (bool, error) {
+func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleValue) error {
 
-	oErr := oSelf.AdminRoleModel.AddOne(oAdminRole)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminRoleModel.AddOne(oAdminRole)
 }
 
 func (oSelf *AdminRoleUsecase) ShowOne(iId uint) (*domain.AdminRole, error) {
@@ -38,29 +32,17 @@ func (oSelf *AdminRoleUsecase) ShowOne(iId uint) (*domain.AdminRole, error) {
 	return oAdminRole, oErr
 }
 
-func (oSelf *AdminRoleUsecase) EditOne(oAdminRole *domain.AdminRoleValue, iId uint) (bool, error) {
+func (oSelf *AdminRoleUsecase) EditOne(oAdminRole *domain.AdminRoleValue, iId uint) error {
 
-	oErr := oSelf.AdminRoleModel.EditOneById(oAdminRole, iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminRoleModel.EditOneById(oAdminRole, iId)
 }
 
-func (oSelf *AdminRoleUsecase) RemoveOne(iId uint) (bool, error) {
+func (oSelf *AdminRoleUsecase) RemoveOne(iId uint) error {
 
-	oErr := oSelf.AdminRoleModel.RemoveOneById(iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminRoleModel.RemoveOneById(iId)
 }
 
-func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminRole, uint64, error) {
+func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminRole, uint, error) {
 
 	aAdminRoles, oErr := oSelf.AdminRoleModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {
@@ -69,5 +51,5 @@ func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []
 
 	iTotal, oErr := oSelf.AdminRoleModel.TotalByFilters(aFilters)
 
-	return aAdminRoles, uint64(iTotal), oErr
+	return aAdminRoles, iTotal, oErr
 }

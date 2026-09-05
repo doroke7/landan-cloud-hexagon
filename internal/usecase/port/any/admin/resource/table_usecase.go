@@ -6,9 +6,9 @@ import (
 )
 
 type TableUsecase interface {
-	AddOne(oValue *domain.TableValue) (bool, error)
+	AddOne(oValue *domain.TableValue) error
 	ShowOne(iId uint) (*domain.Table, error)
-	EditOne(oValue *domain.TableValue, iId uint) (bool, error)
-	RemoveOne(iId uint) (bool, error)
-	ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error)
+	EditOne(oValue *domain.TableValue, iId uint) error
+	RemoveOne(iId uint) error
+	ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint, error)
 }

@@ -20,7 +20,7 @@ func NewAdminRoleUsecase(oAdminRoleModel outputPortAnyModel.AdminRoleModel, oAbs
 	}
 }
 
-func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminRole, uint64, error) {
+func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminRole, uint, error) {
 
 	aAdminRoles, oErr := oSelf.AdminRoleModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {
@@ -29,5 +29,5 @@ func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []
 
 	iTotal, oErr := oSelf.AdminRoleModel.TotalByFilters(aFilters)
 
-	return aAdminRoles, uint64(iTotal), oErr
+	return aAdminRoles, iTotal, oErr
 }

@@ -118,7 +118,7 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oRequest *pbFacadeAdm
 
 	oValue := protoGameValueToDomainGameValue(oRequest.GetValue())
 
-	if _, oErr := oSelf.AdminResourceGameUsecase.AddOne(oValue); oErr != nil {
+	if oErr := oSelf.AdminResourceGameUsecase.AddOne(oValue); oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr
 	}
@@ -135,7 +135,7 @@ func (oSelf *GameHandler) EditOne(oContext context.Context, oRequest *pbFacadeAd
 
 	oValue := protoGameValueToDomainGameValue(oRequest.GetValue())
 
-	if _, oErr := oSelf.AdminResourceGameUsecase.EditOne(oValue, iId); oErr != nil {
+	if oErr := oSelf.AdminResourceGameUsecase.EditOne(oValue, iId); oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr
 	}
@@ -150,7 +150,7 @@ func (oSelf *GameHandler) RemoveOne(oContext context.Context, oRequest *pbFacade
 		return nil, oErr
 	}
 
-	if _, oErr := oSelf.AdminResourceGameUsecase.RemoveOne(iId); oErr != nil {
+	if oErr := oSelf.AdminResourceGameUsecase.RemoveOne(iId); oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr
 	}
@@ -229,6 +229,6 @@ func (oSelf *GameHandler) ShowOnes(oContext context.Context, oRequest *pbFacadeA
 
 	return &pbFacadeAdminResource.GameShowOnesResponse{
 		Ones:  aProtoGames,
-		Total: iTotal,
+		Total: uint64(iTotal),
 	}, nil
 }

@@ -35,8 +35,7 @@ func (oSelf *GameTypeHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	bResult, oErr := oSelf.AdminResourceGameTypeUsecase.AddOne(oValue)
-	_ = bResult
+	oErr := oSelf.AdminResourceGameTypeUsecase.AddOne(oValue)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -75,8 +74,7 @@ func (oSelf *GameTypeHandler) EditOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.AdminResourceGameTypeUsecase.EditOne(oValue, iId)
-	_ = bResult
+	oErr := oSelf.AdminResourceGameTypeUsecase.EditOne(oValue, iId)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -109,8 +107,7 @@ func (oSelf *GameTypeHandler) RemoveOne(oContext *gin.Context) {
 	}
 
 	iId := uint(fId)
-	bResult, oErr := oSelf.AdminResourceGameTypeUsecase.RemoveOne(iId)
-	_ = bResult
+	oErr := oSelf.AdminResourceGameTypeUsecase.RemoveOne(iId)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)

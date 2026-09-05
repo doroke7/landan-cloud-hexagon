@@ -23,15 +23,9 @@ func NewTableUsecase(oTableModel outputPortAnyModel.TableModel, oTableLogic outp
 	}
 }
 
-func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) (bool, error) {
+func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) error {
 
-	oErr := oSelf.TableModel.AddOne(oValue)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.TableModel.AddOne(oValue)
 }
 
 func (oSelf *TableUsecase) ShowOne(iId uint) (*domain.Table, error) {
@@ -39,31 +33,19 @@ func (oSelf *TableUsecase) ShowOne(iId uint) (*domain.Table, error) {
 	return oTable, oErr
 }
 
-func (oSelf *TableUsecase) EditOne(oValue *domain.TableValue, iId uint) (bool, error) {
+func (oSelf *TableUsecase) EditOne(oValue *domain.TableValue, iId uint) error {
 
-	oErr := oSelf.TableModel.EditOneById(oValue, iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.TableModel.EditOneById(oValue, iId)
 }
 
-func (oSelf *TableUsecase) RemoveOne(iId uint) (bool, error) {
+func (oSelf *TableUsecase) RemoveOne(iId uint) error {
 
-	oErr := oSelf.TableModel.RemoveOneById(iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.TableModel.RemoveOneById(iId)
 }
 
-func (oSelf *TableUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {
+func (oSelf *TableUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint, error) {
 
 	aTables, iTotal, oErr := oSelf.TableLogic.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aTables, uint64(iTotal), oErr
+	return aTables, iTotal, oErr
 }

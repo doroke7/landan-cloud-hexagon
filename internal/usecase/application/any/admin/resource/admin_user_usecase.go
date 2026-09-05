@@ -25,33 +25,31 @@ func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAdm
 	}
 }
 
-func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
+func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) error {
 
 	oErr := oSelf.ValidatorHelper.Valiate(oAdminUser)
 
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	oErr = oSelf.AdminUserLogic.AddAminUser(oAdminUser)
-
-	return true, oErr
+	return oSelf.AdminUserLogic.AddAminUser(oAdminUser)
 }
 
-func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
+func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint) error {
 
 	// oAdminUser.  相當 *oAdminUser.
 	// *oAdminUser.Name 相當 (*(oAdminUser).Name)
 
 	if (*oAdminUser).Name != nil && *oAdminUser.Name != "" {
-		return false, pkgUtility.NewDefaultError("name can not be modified", -1, 200)
+		return pkgUtility.NewDefaultError("name can not be modified", -1, 200)
 
 	}
 
 	oErr := oSelf.ValidatorHelper.Valiate(oAdminUser)
 
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	if (*oAdminUser).Password != nil && *(*oAdminUser).Password != "" {
@@ -59,29 +57,17 @@ func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId ui
 
 	}
 
-	oErr = oSelf.AdminUserLogic.EditAdminUserById(oAdminUser, iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminUserLogic.EditAdminUserById(oAdminUser, iId)
 }
 
-func (oSelf *AdminUserUsecase) RemoveOne(iId uint) (bool, error) {
+func (oSelf *AdminUserUsecase) RemoveOne(iId uint) error {
 
 	if iId == 1 {
-		return false, pkgUtility.NewDefaultError("AdminUser.Id=1 cannot be deleted", -1, 200)
+		return pkgUtility.NewDefaultError("AdminUser.Id=1 cannot be deleted", -1, 200)
 
 	}
 
-	oErr := oSelf.AdminUserModel.RemoveOneById(iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminUserModel.RemoveOneById(iId)
 }
 
 func (oSelf *AdminUserUsecase) ShowOne(iId uint) (*domain.AdminUser, error) {
@@ -91,9 +77,9 @@ func (oSelf *AdminUserUsecase) ShowOne(iId uint) (*domain.AdminUser, error) {
 	return oAdminUser, oErr
 }
 
-func (oSelf *AdminUserUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
+func (oSelf *AdminUserUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint, error) {
 
 	aAdminUsers, iTotal, oErr := oSelf.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aAdminUsers, uint64(iTotal), oErr
+	return aAdminUsers, iTotal, oErr
 }

@@ -35,8 +35,7 @@ func (oSelf *AdminPermissionHandler) AddOne(oContext *gin.Context) {
 		return
 	}
 
-	bResult, oErr := oSelf.AdminResourceAdminPermissionUsecase.AddOne(oValue)
-	_ = bResult
+	oErr := oSelf.AdminResourceAdminPermissionUsecase.AddOne(oValue)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)

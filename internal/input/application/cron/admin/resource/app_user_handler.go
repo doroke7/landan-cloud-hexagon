@@ -22,7 +22,7 @@ func NewAppUserHandler(oAppUserUsecase usecasePortAnyAdminResource.AppUserUsecas
 }
 
 func (oSelf *AppUserHandler) IncreaseBalance() {
-	bResult, err := oSelf.AdminResourceAppUserUsecase.IncreaseBalance(1, 10)
+	err := oSelf.AdminResourceAppUserUsecase.IncreaseBalance(1, 10)
 	if err != nil {
 		pkgUtility.Logger(pkgUtility.Cron).Error("IncreaseBalance 失敗",
 			zap.Error(err),
@@ -30,7 +30,5 @@ func (oSelf *AppUserHandler) IncreaseBalance() {
 		return
 	}
 
-	pkgUtility.Logger(pkgUtility.Cron).Info("IncreaseBalance 成功",
-		zap.Bool("status", bResult),
-	)
+	pkgUtility.Logger(pkgUtility.Cron).Info("IncreaseBalance 成功")
 }

@@ -18,7 +18,7 @@ func NewAppUserUsecase(oAppUserRepository outputPortAnyLogic.AppUserLogic, oAbst
 	}
 }
 
-func (oSelf *AppUserUsecase) AddAppUser(oAppUser *domain.AppUser) (bool, error) {
+func (oSelf *AppUserUsecase) AddAppUser(oAppUser *domain.AppUser) error {
 
-	return true, nil
+	return nil
 }

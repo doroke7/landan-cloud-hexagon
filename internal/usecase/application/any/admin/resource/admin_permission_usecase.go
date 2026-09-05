@@ -20,15 +20,11 @@ func NewAdminPermissionUsecase(oAdminPermissionModel outputPortAnyModel.AdminPer
 	}
 }
 
-func (oSelf *AdminPermissionUsecase) AddOne(oAdminPermission *domain.AdminPermissionValue) (bool, error) {
+func (oSelf *AdminPermissionUsecase) AddOne(oAdminPermission *domain.AdminPermissionValue) error {
 
 	oErr := oSelf.AdminPermissionModel.AddOne(oAdminPermission)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oErr
 }
 
 func (oSelf *AdminPermissionUsecase) ShowOne(iId uint) (*domain.AdminPermission, error) {
@@ -60,7 +56,7 @@ func (oSelf *AdminPermissionUsecase) RemoveOne(iId uint) (bool, error) {
 	return true, nil
 }
 
-func (oSelf *AdminPermissionUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermission, uint64, error) {
+func (oSelf *AdminPermissionUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermission, uint, error) {
 
 	aAdminPermissions, oErr := oSelf.AdminPermissionModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {
@@ -69,5 +65,5 @@ func (oSelf *AdminPermissionUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSort
 
 	iTotal, oErr := oSelf.AdminPermissionModel.TotalByFilters(aFilters)
 
-	return aAdminPermissions, uint64(iTotal), oErr
+	return aAdminPermissions, iTotal, oErr
 }

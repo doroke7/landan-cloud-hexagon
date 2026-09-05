@@ -5,5 +5,5 @@ import (
 )
 
 type AppUserUsecase interface {
-	IncreaseBalance(iId uint, iAmount uint) (bool, error)
+	IncreaseBalance(iId uint, iAmount uint) error
 }
