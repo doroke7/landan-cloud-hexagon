@@ -65,7 +65,7 @@ func (oSelf *AdminUserHandler) ShowOneByName(oContext context.Context, oReq *pbR
 
 func (oSelf *AdminUserHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.AdminUserShowOneByIdInput) (*pbResourceModel.AdminUserShowOneByIdOutput, error) {
 
-	oAdminUser, err := oSelf.ModelAdminUserUsecase.ShowOneById(uint(oReq.Id))
+	oAdminUser, err := oSelf.ModelAdminUserUsecase.ShowOneById(uint64(oReq.Id))
 	if err != nil {
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
@@ -86,14 +86,14 @@ func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResource
 		oAdminUserValue.Password = oVariable.Password
 	}
 
-	bResult, oErr := oSelf.ModelAdminUserUsecase.AddOne(&oAdminUserValue)
+	oErr := oSelf.ModelAdminUserUsecase.AddOne(&oAdminUserValue)
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.AdminUserAddOneOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 
@@ -107,27 +107,27 @@ func (oSelf *AdminUserHandler) EditOneById(oContext context.Context, oReq *pbRes
 		oAdminUserValue.Password = oVariable.Password
 	}
 
-	bResult, oErr := oSelf.ModelAdminUserUsecase.EditOneById(&oAdminUserValue, uint(oReq.Id))
+	oErr := oSelf.ModelAdminUserUsecase.EditOneById(&oAdminUserValue, uint64(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.AdminUserEditOneByIdOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 
 func (oSelf *AdminUserHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminUserRemoveOneByIdInput) (*pbResourceModel.AdminUserRemoveOneByIdOutput, error) {
 
-	bResult, oErr := oSelf.ModelAdminUserUsecase.RemoveOneById(uint(oReq.Id))
+	oErr := oSelf.ModelAdminUserUsecase.RemoveOneById(uint64(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.AdminUserRemoveOneByIdOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 

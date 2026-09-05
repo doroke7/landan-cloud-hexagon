@@ -32,24 +32,12 @@ func (oSelf *AppUserUsecase) ShowOneById(iId uint) (*domain.AppUser, error) {
 	return oAppUser, err
 }
 
-func (oSelf *AppUserUsecase) AddOne(oAppUser *domain.AppUserValue) (bool, error) {
+func (oSelf *AppUserUsecase) AddOne(oAppUser *domain.AppUserValue) error {
 
-	oErr := oSelf.AppUserModel.AddOne(oAppUser)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AppUserModel.AddOne(oAppUser)
 }
 
-func (oSelf *AppUserUsecase) IncreaseBalance(iId uint, iAmount uint) (bool, error) {
+func (oSelf *AppUserUsecase) IncreaseBalance(iId uint64, iAmount uint64) error {
 
-	oErr := oSelf.AppUserModel.IncreaseBalance(iId, iAmount)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AppUserModel.IncreaseBalance(uint(iId), uint(iAmount))
 }

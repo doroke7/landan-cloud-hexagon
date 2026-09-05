@@ -36,7 +36,7 @@ func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) error {
 	return oSelf.AdminUserLogic.AddAminUser(oAdminUser)
 }
 
-func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint) error {
+func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint64) error {
 
 	// oAdminUser.  相當 *oAdminUser.
 	// *oAdminUser.Name 相當 (*(oAdminUser).Name)
@@ -57,29 +57,29 @@ func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId ui
 
 	}
 
-	return oSelf.AdminUserLogic.EditAdminUserById(oAdminUser, iId)
+	return oSelf.AdminUserLogic.EditAdminUserById(oAdminUser, uint(iId))
 }
 
-func (oSelf *AdminUserUsecase) RemoveOne(iId uint) error {
+func (oSelf *AdminUserUsecase) RemoveOne(iId uint64) error {
 
 	if iId == 1 {
 		return pkgUtility.NewDefaultError("AdminUser.Id=1 cannot be deleted", -1, 200)
 
 	}
 
-	return oSelf.AdminUserModel.RemoveOneById(iId)
+	return oSelf.AdminUserModel.RemoveOneById(uint(iId))
 }
 
-func (oSelf *AdminUserUsecase) ShowOne(iId uint) (*domain.AdminUser, error) {
+func (oSelf *AdminUserUsecase) ShowOne(iId uint64) (*domain.AdminUser, error) {
 
-	oAdminUser, oErr := oSelf.AdminUserModel.ShowOneById(iId)
+	oAdminUser, oErr := oSelf.AdminUserModel.ShowOneById(uint(iId))
 
 	return oAdminUser, oErr
 }
 
-func (oSelf *AdminUserUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint, error) {
+func (oSelf *AdminUserUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
 
 	aAdminUsers, iTotal, oErr := oSelf.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aAdminUsers, iTotal, oErr
+	return aAdminUsers, uint64(iTotal), oErr
 }

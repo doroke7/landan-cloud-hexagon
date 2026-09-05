@@ -67,7 +67,7 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel
 
 	oGameValue := protoGameVariableToDomainGameValue(oReq.GetVariable())
 
-	_, oErr := oSelf.ModelGameUsecase.AddOne(&oGameValue)
+	oErr := oSelf.ModelGameUsecase.AddOne(&oGameValue)
 
 	if oErr != nil {
 		return nil, oErr
@@ -95,7 +95,7 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel
 
 func (oSelf *GameHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.GameShowOneByIdInput) (*pbResourceModel.GameShowOneByIdOutput, error) {
 
-	oGame, oErr := oSelf.ModelGameUsecase.ShowOneById(uint(oReq.Id))
+	oGame, oErr := oSelf.ModelGameUsecase.ShowOneById(uint64(oReq.Id))
 
 	if oErr != nil {
 		return nil, oErr
@@ -192,7 +192,7 @@ func (oSelf *GameHandler) EditOneById(oContext context.Context, oReq *pbResource
 
 	oGameValue := protoGameVariableToDomainGameValue(oReq.GetVariable())
 
-	_, oErr := oSelf.ModelGameUsecase.EditOneById(&oGameValue, uint64(oReq.Id))
+	oErr := oSelf.ModelGameUsecase.EditOneById(&oGameValue, uint64(oReq.Id))
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -204,7 +204,7 @@ func (oSelf *GameHandler) EditOneById(oContext context.Context, oReq *pbResource
 
 func (oSelf *GameHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.GameRemoveOneByIdInput) (*pbResourceModel.GameRemoveOneByIdOutput, error) {
 
-	_, oErr := oSelf.ModelGameUsecase.RemoveOneById(uint(oReq.Id))
+	oErr := oSelf.ModelGameUsecase.RemoveOneById(uint64(oReq.Id))
 	if oErr != nil {
 		return nil, oErr
 	}

@@ -14,8 +14,8 @@ import (
 )
 
 type increaseBalanceMessage struct {
-	Id     uint `json:"id"`
-	Amount uint `json:"amount"`
+	Id     uint64 `json:"id"`
+	Amount uint64 `json:"amount"`
 }
 
 type AppUserHandler struct {
@@ -43,7 +43,7 @@ func (oSelf *AppUserHandler) IncreaseBalance(msg amqp.Delivery) {
 	err := oSelf.AdminResourceAppUserUsecase.IncreaseBalance(payload.Id, payload.Amount)
 	if err != nil {
 		pkgUtility.Logger(pkgUtility.Consumer).Error("IncreaseBalance 失敗",
-			zap.Uint("id", payload.Id),
+			zap.Uint64("id", payload.Id),
 			zap.Error(err),
 		)
 		msg.Nack(false, true)
@@ -51,7 +51,7 @@ func (oSelf *AppUserHandler) IncreaseBalance(msg amqp.Delivery) {
 	}
 
 	pkgUtility.Logger(pkgUtility.Consumer).Info("IncreaseBalance 成功",
-		zap.Uint("id", payload.Id),
+		zap.Uint64("id", payload.Id),
 	)
 	msg.Ack(false)
 }

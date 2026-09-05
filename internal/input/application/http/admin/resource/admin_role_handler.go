@@ -73,7 +73,7 @@ func (oSelf *AdminRoleHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	iId := uint(fId)
+	iId := uint64(fId)
 	oErr := oSelf.AdminResourceAdminRoleUsecase.EditOne(oValue, iId)
 
 	if oErr != nil {
@@ -106,7 +106,7 @@ func (oSelf *AdminRoleHandler) RemoveOne(oContext *gin.Context) {
 		return
 	}
 
-	iId := uint(fId)
+	iId := uint64(fId)
 	oErr := oSelf.AdminResourceAdminRoleUsecase.RemoveOne(iId)
 
 	if oErr != nil {
@@ -139,7 +139,7 @@ func (oSelf *AdminRoleHandler) ShowOne(oContext *gin.Context) {
 		return
 	}
 
-	iId := uint(fId)
+	iId := uint64(fId)
 	oAdminRole, oErr := oSelf.AdminResourceAdminRoleUsecase.ShowOne(iId)
 
 	if oErr != nil {

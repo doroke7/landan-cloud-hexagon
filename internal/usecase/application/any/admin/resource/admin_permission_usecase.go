@@ -27,36 +27,24 @@ func (oSelf *AdminPermissionUsecase) AddOne(oAdminPermission *domain.AdminPermis
 	return oErr
 }
 
-func (oSelf *AdminPermissionUsecase) ShowOne(iId uint) (*domain.AdminPermission, error) {
+func (oSelf *AdminPermissionUsecase) ShowOne(iId uint64) (*domain.AdminPermission, error) {
 
-	oAdminPermission, oErr := oSelf.AdminPermissionModel.ShowOneById(iId)
+	oAdminPermission, oErr := oSelf.AdminPermissionModel.ShowOneById(uint(iId))
 
 	return oAdminPermission, oErr
 }
 
-func (oSelf *AdminPermissionUsecase) EditOne(oAdminPermission *domain.AdminPermissionValue, iId uint) (bool, error) {
+func (oSelf *AdminPermissionUsecase) EditOne(oAdminPermission *domain.AdminPermissionValue, iId uint64) error {
 
-	oErr := oSelf.AdminPermissionModel.EditOneById(oAdminPermission, iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminPermissionModel.EditOneById(oAdminPermission, uint(iId))
 }
 
-func (oSelf *AdminPermissionUsecase) RemoveOne(iId uint) (bool, error) {
+func (oSelf *AdminPermissionUsecase) RemoveOne(iId uint64) error {
 
-	oErr := oSelf.AdminPermissionModel.RemoveOneById(iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminPermissionModel.RemoveOneById(uint(iId))
 }
 
-func (oSelf *AdminPermissionUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermission, uint, error) {
+func (oSelf *AdminPermissionUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermission, uint64, error) {
 
 	aAdminPermissions, oErr := oSelf.AdminPermissionModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {
@@ -65,5 +53,5 @@ func (oSelf *AdminPermissionUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSort
 
 	iTotal, oErr := oSelf.AdminPermissionModel.TotalByFilters(aFilters)
 
-	return aAdminPermissions, iTotal, oErr
+	return aAdminPermissions, uint64(iTotal), oErr
 }

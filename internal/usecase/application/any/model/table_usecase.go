@@ -22,37 +22,26 @@ func (oSelf *TableUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []*pk
 	return oSelf.TableModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 }
 
-func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) (bool, error) {
+func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) error {
 
-	oErr := oSelf.TableModel.AddOne(oValue)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.TableModel.AddOne(oValue)
 }
 
-func (oSelf *TableUsecase) EditOneById(oValue *domain.TableValue, iId uint) (bool, error) {
+func (oSelf *TableUsecase) ShowOneById(iId uint64) (*domain.Table, error) {
 
-	oErr := oSelf.TableModel.EditOneById(oValue, iId)
+	oTable, oErr := oSelf.TableModel.ShowOneById(uint(iId))
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oTable, oErr
 }
 
-func (oSelf *TableUsecase) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *TableUsecase) EditOneById(oValue *domain.TableValue, iId uint64) error {
 
-	oErr := oSelf.TableModel.RemoveOneById(iId)
+	return oSelf.TableModel.EditOneById(oValue, uint(iId))
+}
 
-	if oErr != nil {
-		return false, oErr
-	}
+func (oSelf *TableUsecase) RemoveOneById(iId uint64) error {
 
-	return true, nil
+	return oSelf.TableModel.RemoveOneById(uint(iId))
 }
 
 func (oSelf *TableUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

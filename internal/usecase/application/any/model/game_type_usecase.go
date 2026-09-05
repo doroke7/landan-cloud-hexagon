@@ -19,20 +19,14 @@ func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oAbstra
 	}
 }
 
-func (oSelf *GameTypeUsecase) AddOne(oAdd *domain.GameTypeValue) (bool, error) {
+func (oSelf *GameTypeUsecase) AddOne(oAdd *domain.GameTypeValue) error {
 
-	oErr := oSelf.GameTypeModel.AddOne(oAdd)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.GameTypeModel.AddOne(oAdd)
 }
 
-func (oSelf *GameTypeUsecase) ShowOneById(iId uint) (*domain.GameType, error) {
+func (oSelf *GameTypeUsecase) ShowOneById(iId uint64) (*domain.GameType, error) {
 
-	oGameType, oErr := oSelf.GameTypeModel.ShowOneById(iId)
+	oGameType, oErr := oSelf.GameTypeModel.ShowOneById(uint(iId))
 
 	return oGameType, oErr
 }
@@ -44,26 +38,14 @@ func (oSelf *GameTypeUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []
 	return aGameTypes, oErr
 }
 
-func (oSelf *GameTypeUsecase) EditOneById(oEdit *domain.GameTypeValue, iId uint64) (bool, error) {
+func (oSelf *GameTypeUsecase) EditOneById(oEdit *domain.GameTypeValue, iId uint64) error {
 
-	oErr := oSelf.GameTypeModel.EditOneById(oEdit, uint(iId))
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.GameTypeModel.EditOneById(oEdit, uint(iId))
 }
 
-func (oSelf *GameTypeUsecase) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *GameTypeUsecase) RemoveOneById(iId uint64) error {
 
-	oErr := oSelf.GameTypeModel.RemoveOneById(iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.GameTypeModel.RemoveOneById(uint(iId))
 }
 
 func (oSelf *GameTypeUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

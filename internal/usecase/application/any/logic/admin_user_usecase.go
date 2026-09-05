@@ -19,11 +19,11 @@ func NewAdminUserUsecase(oAbstractUsecase *AbstractUsecase, oAdminUserLogic outp
 	}
 }
 
-func (oSelf *AdminUserUsecase) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint, error) {
+func (oSelf *AdminUserUsecase) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
 
 	aAdminUsers, iTotal, oErr := oSelf.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aAdminUsers, iTotal, oErr
+	return aAdminUsers, uint64(iTotal), oErr
 }
 
 func (oSelf *AdminUserUsecase) AddAminUser(oValue *domain.AdminUserValue) error {
@@ -33,9 +33,9 @@ func (oSelf *AdminUserUsecase) AddAminUser(oValue *domain.AdminUserValue) error 
 	return oErr
 }
 
-func (oSelf *AdminUserUsecase) EditAdminUserById(oValue *domain.AdminUserValue, iId uint) error {
+func (oSelf *AdminUserUsecase) EditAdminUserById(oValue *domain.AdminUserValue, iId uint64) error {
 
-	oErr := oSelf.AdminUserLogic.EditAdminUserById(oValue, iId)
+	oErr := oSelf.AdminUserLogic.EditAdminUserById(oValue, uint(iId))
 
 	return oErr
 }

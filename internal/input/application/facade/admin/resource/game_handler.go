@@ -135,7 +135,7 @@ func (oSelf *GameHandler) EditOne(oContext context.Context, oRequest *pbFacadeAd
 
 	oValue := protoGameValueToDomainGameValue(oRequest.GetValue())
 
-	if oErr := oSelf.AdminResourceGameUsecase.EditOne(oValue, iId); oErr != nil {
+	if oErr := oSelf.AdminResourceGameUsecase.EditOne(oValue, uint64(iId)); oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr
 	}
@@ -165,7 +165,7 @@ func (oSelf *GameHandler) ShowOne(oContext context.Context, oRequest *pbFacadeAd
 		return nil, oErr
 	}
 
-	oGame, oErr := oSelf.AdminResourceGameUsecase.ShowOne(iId)
+	oGame, oErr := oSelf.AdminResourceGameUsecase.ShowOne(uint64(iId))
 	if oErr != nil {
 		oStatusErr := toStatusError(oErr)
 		return nil, oStatusErr

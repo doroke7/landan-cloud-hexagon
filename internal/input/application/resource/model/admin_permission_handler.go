@@ -66,20 +66,20 @@ func (oSelf *AdminPermissionHandler) AddOne(oContext context.Context, oReq *pbRe
 
 	oAdminPermissionValue := protoAdminPermissionVariableToDomainAdminPermissionValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.ModelAdminPermissionUsecase.AddOne(&oAdminPermissionValue)
+	oErr := oSelf.ModelAdminPermissionUsecase.AddOne(&oAdminPermissionValue)
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.AdminPermissionAddOneOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 
 func (oSelf *AdminPermissionHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionShowOneByIdInput) (*pbResourceModel.AdminPermissionShowOneByIdOutput, error) {
 
-	oAdminPermission, oErr := oSelf.ModelAdminPermissionUsecase.ShowOneById(uint(oReq.Id))
+	oAdminPermission, oErr := oSelf.ModelAdminPermissionUsecase.ShowOneById(uint64(oReq.Id))
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
@@ -97,27 +97,27 @@ func (oSelf *AdminPermissionHandler) EditOneById(oContext context.Context, oReq 
 
 	oAdminPermissionValue := protoAdminPermissionVariableToDomainAdminPermissionValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.ModelAdminPermissionUsecase.EditOneById(&oAdminPermissionValue, uint(oReq.Id))
+	oErr := oSelf.ModelAdminPermissionUsecase.EditOneById(&oAdminPermissionValue, uint64(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.AdminPermissionEditOneByIdOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 
 func (oSelf *AdminPermissionHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionRemoveOneByIdInput) (*pbResourceModel.AdminPermissionRemoveOneByIdOutput, error) {
 
-	bResult, oErr := oSelf.ModelAdminPermissionUsecase.RemoveOneById(uint(oReq.Id))
+	oErr := oSelf.ModelAdminPermissionUsecase.RemoveOneById(uint64(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.AdminPermissionRemoveOneByIdOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 

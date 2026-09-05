@@ -7,8 +7,8 @@ import (
 
 type GameUsecase interface {
 	AddOne(oValue *domain.GameValue) error
-	ShowOne(iId uint) (*domain.Game, error)
-	EditOne(oValue *domain.GameValue, iId uint) error
+	ShowOne(iId uint64) (*domain.Game, error)
+	EditOne(oValue *domain.GameValue, iId uint64) error
 	RemoveOne(iId uint) error
-	ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint, error)
+	ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error)
 }

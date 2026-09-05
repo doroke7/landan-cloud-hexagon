@@ -1,6 +1,6 @@
 package usecasePortAnyAdminAuthentication
 
 type AuthenticatorUsecase interface {
-	SignIn(name string, password string, secret string) (authorization string, err error)
-	Refresh(jwt string, secret string) (authorization string, err error)
+	SignIn(sName string, sPassword string, sSecret string) (sAuthorization string, oError error)
+	Refresh(sJwt string, sSecret string) (sAuthorization string, oError error)
 }

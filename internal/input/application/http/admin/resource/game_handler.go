@@ -73,7 +73,7 @@ func (oSelf *GameHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	iId := uint(fId)
+	iId := uint64(fId)
 	oErr := oSelf.AdminResourceGameUsecase.EditOne(oValue, iId)
 
 	if oErr != nil {
@@ -139,7 +139,7 @@ func (oSelf *GameHandler) ShowOne(oContext *gin.Context) {
 		return
 	}
 
-	iId := uint(fId)
+	iId := uint64(fId)
 	oGame, oErr := oSelf.AdminResourceGameUsecase.ShowOne(iId)
 
 	if oErr != nil {

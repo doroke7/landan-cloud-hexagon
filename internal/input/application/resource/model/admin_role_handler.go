@@ -60,14 +60,14 @@ func (oSelf *AdminRoleHandler) AddOne(oContext context.Context, oReq *pbResource
 
 	oAdminRoleValue := protoAdminRoleVariableToDomainAdminRoleValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.ModelAdminRoleUsecase.AddOne(&oAdminRoleValue)
+	oErr := oSelf.ModelAdminRoleUsecase.AddOne(&oAdminRoleValue)
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.AdminRoleAddOneOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 
@@ -91,27 +91,27 @@ func (oSelf *AdminRoleHandler) EditOneById(oContext context.Context, oReq *pbRes
 
 	oAdminRoleValue := protoAdminRoleVariableToDomainAdminRoleValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.ModelAdminRoleUsecase.EditOneById(&oAdminRoleValue, uint(oReq.Id))
+	oErr := oSelf.ModelAdminRoleUsecase.EditOneById(&oAdminRoleValue, uint64(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.AdminRoleEditOneByIdOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 
 func (oSelf *AdminRoleHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminRoleRemoveOneByIdInput) (*pbResourceModel.AdminRoleRemoveOneByIdOutput, error) {
 
-	bResult, oErr := oSelf.ModelAdminRoleUsecase.RemoveOneById(uint(oReq.Id))
+	oErr := oSelf.ModelAdminRoleUsecase.RemoveOneById(uint64(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.AdminRoleRemoveOneByIdOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 

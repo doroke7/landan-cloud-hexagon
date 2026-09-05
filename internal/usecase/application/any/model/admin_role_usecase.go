@@ -19,37 +19,19 @@ func NewAdminRoleUsecase(oAdminRoleModel outputPortAnyModel.AdminRoleModel, oAbs
 	}
 }
 
-func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleValue) (bool, error) {
+func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleValue) error {
 
-	oErr := oSelf.AdminRoleModel.AddOne(oAdminRole)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminRoleModel.AddOne(oAdminRole)
 }
 
-func (oSelf *AdminRoleUsecase) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint) (bool, error) {
+func (oSelf *AdminRoleUsecase) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint64) error {
 
-	oErr := oSelf.AdminRoleModel.EditOneById(oAdminRole, iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminRoleModel.EditOneById(oAdminRole, uint(iId))
 }
 
-func (oSelf *AdminRoleUsecase) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *AdminRoleUsecase) RemoveOneById(iId uint64) error {
 
-	oErr := oSelf.AdminRoleModel.RemoveOneById(iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminRoleModel.RemoveOneById(uint(iId))
 }
 
 func (oSelf *AdminRoleUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

@@ -23,7 +23,7 @@ func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oGameTy
 	}
 }
 
-func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint, error) {
+func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
 
 	aGameTypes, oErr := oSelf.GameTypeModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {
@@ -32,7 +32,7 @@ func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*
 
 	iTotal, oErr := oSelf.GameTypeModel.TotalByFilters(aFilters)
 
-	return aGameTypes, iTotal, oErr
+	return aGameTypes, uint64(iTotal), oErr
 }
 
 func (oSelf *GameTypeUsecase) ShowTree() ([]*domain.GameType, error) {

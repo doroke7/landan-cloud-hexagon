@@ -19,37 +19,26 @@ func NewAdminPermissionUsecase(oAdminPermissionModel outputPortAnyModel.AdminPer
 	}
 }
 
-func (oSelf *AdminPermissionUsecase) AddOne(oAdminPermission *domain.AdminPermissionValue) (bool, error) {
+func (oSelf *AdminPermissionUsecase) AddOne(oAdminPermission *domain.AdminPermissionValue) error {
 
-	oErr := oSelf.AdminPermissionModel.AddOne(oAdminPermission)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminPermissionModel.AddOne(oAdminPermission)
 }
 
-func (oSelf *AdminPermissionUsecase) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint) (bool, error) {
+func (oSelf *AdminPermissionUsecase) ShowOneById(iId uint64) (*domain.AdminPermission, error) {
 
-	oErr := oSelf.AdminPermissionModel.EditOneById(oAdminPermission, iId)
+	oAdminPermission, oErr := oSelf.AdminPermissionModel.ShowOneById(uint(iId))
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oAdminPermission, oErr
 }
 
-func (oSelf *AdminPermissionUsecase) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *AdminPermissionUsecase) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint64) error {
 
-	oErr := oSelf.AdminPermissionModel.RemoveOneById(iId)
+	return oSelf.AdminPermissionModel.EditOneById(oAdminPermission, uint(iId))
+}
 
-	if oErr != nil {
-		return false, oErr
-	}
+func (oSelf *AdminPermissionUsecase) RemoveOneById(iId uint64) error {
 
-	return true, nil
+	return oSelf.AdminPermissionModel.RemoveOneById(uint(iId))
 }
 
 func (oSelf *AdminPermissionUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

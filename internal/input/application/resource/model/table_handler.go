@@ -92,7 +92,7 @@ func protoTableVariableToDomainTableValue(oVariable *pbResourceModel.TableVariab
 
 func (oSelf *TableHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.TableShowOneByIdInput) (*pbResourceModel.TableShowOneByIdOutput, error) {
 
-	oTable, oErr := oSelf.ModelTableUsecase.ShowOneById(uint(oReq.Id))
+	oTable, oErr := oSelf.ModelTableUsecase.ShowOneById(uint64(oReq.Id))
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
@@ -110,14 +110,14 @@ func (oSelf *TableHandler) AddOne(oContext context.Context, oReq *pbResourceMode
 
 	oTableValue := protoTableVariableToDomainTableValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.ModelTableUsecase.AddOne(&oTableValue)
+	oErr := oSelf.ModelTableUsecase.AddOne(&oTableValue)
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.TableAddOneOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 
@@ -125,27 +125,27 @@ func (oSelf *TableHandler) EditOneById(oContext context.Context, oReq *pbResourc
 
 	oTableValue := protoTableVariableToDomainTableValue(oReq.GetVariable())
 
-	bResult, oErr := oSelf.ModelTableUsecase.EditOneById(&oTableValue, uint(oReq.Id))
+	oErr := oSelf.ModelTableUsecase.EditOneById(&oTableValue, uint64(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.TableEditOneByIdOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 
 func (oSelf *TableHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.TableRemoveOneByIdInput) (*pbResourceModel.TableRemoveOneByIdOutput, error) {
 
-	bResult, oErr := oSelf.ModelTableUsecase.RemoveOneById(uint(oReq.Id))
+	oErr := oSelf.ModelTableUsecase.RemoveOneById(uint64(oReq.Id))
 
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.TableRemoveOneByIdOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }
 

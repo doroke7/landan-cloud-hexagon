@@ -25,24 +25,24 @@ func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleValue) error {
 	return oSelf.AdminRoleModel.AddOne(oAdminRole)
 }
 
-func (oSelf *AdminRoleUsecase) ShowOne(iId uint) (*domain.AdminRole, error) {
+func (oSelf *AdminRoleUsecase) ShowOne(iId uint64) (*domain.AdminRole, error) {
 
-	oAdminRole, oErr := oSelf.AdminRoleModel.ShowOneById(iId)
+	oAdminRole, oErr := oSelf.AdminRoleModel.ShowOneById(uint(iId))
 
 	return oAdminRole, oErr
 }
 
-func (oSelf *AdminRoleUsecase) EditOne(oAdminRole *domain.AdminRoleValue, iId uint) error {
+func (oSelf *AdminRoleUsecase) EditOne(oAdminRole *domain.AdminRoleValue, iId uint64) error {
 
-	return oSelf.AdminRoleModel.EditOneById(oAdminRole, iId)
+	return oSelf.AdminRoleModel.EditOneById(oAdminRole, uint(iId))
 }
 
-func (oSelf *AdminRoleUsecase) RemoveOne(iId uint) error {
+func (oSelf *AdminRoleUsecase) RemoveOne(iId uint64) error {
 
-	return oSelf.AdminRoleModel.RemoveOneById(iId)
+	return oSelf.AdminRoleModel.RemoveOneById(uint(iId))
 }
 
-func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminRole, uint, error) {
+func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminRole, uint64, error) {
 
 	aAdminRoles, oErr := oSelf.AdminRoleModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {
@@ -51,5 +51,5 @@ func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []
 
 	iTotal, oErr := oSelf.AdminRoleModel.TotalByFilters(aFilters)
 
-	return aAdminRoles, iTotal, oErr
+	return aAdminRoles, uint64(iTotal), oErr
 }

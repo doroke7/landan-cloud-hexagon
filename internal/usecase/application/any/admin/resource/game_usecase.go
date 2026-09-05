@@ -44,7 +44,7 @@ func (oSelf *GameUsecase) AddOne(oValue *domain.GameValue) error {
 	return oSelf.GameModel.AddOne(oValue)
 }
 
-func (oSelf *GameUsecase) EditOne(oValue *domain.GameValue, iId uint) error {
+func (oSelf *GameUsecase) EditOne(oValue *domain.GameValue, iId uint64) error {
 
 	if oValue.Key != nil {
 		oGameByKey, oErr := oSelf.GameModel.ShowOneByKey(*oValue.Key)
@@ -53,12 +53,12 @@ func (oSelf *GameUsecase) EditOne(oValue *domain.GameValue, iId uint) error {
 			return oErr
 		}
 
-		if oGameByKey != nil && oGameByKey.Id != iId {
+		if oGameByKey != nil && oGameByKey.Id != uint(iId) {
 			return pkgUtility.NewDefaultError("key="+*oValue.Key+" already exists", -2, 500)
 		}
 	}
 
-	return oSelf.GameModel.EditOneById(oValue, iId)
+	return oSelf.GameModel.EditOneById(oValue, uint(iId))
 }
 
 func (oSelf *GameUsecase) RemoveOne(iId uint) error {
@@ -66,15 +66,15 @@ func (oSelf *GameUsecase) RemoveOne(iId uint) error {
 	return oSelf.GameModel.RemoveOneById(iId)
 }
 
-func (oSelf *GameUsecase) ShowOne(iId uint) (*domain.Game, error) {
-	oGame, oErr := oSelf.GameModel.ShowOneById(iId)
+func (oSelf *GameUsecase) ShowOne(iId uint64) (*domain.Game, error) {
+	oGame, oErr := oSelf.GameModel.ShowOneById(uint(iId))
 
 	return oGame, oErr
 }
 
-func (oSelf *GameUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint, error) {
+func (oSelf *GameUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error) {
 
 	aGames, iTotal, oErr := oSelf.GameLogic.ShowGamesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aGames, iTotal, oErr
+	return aGames, uint64(iTotal), oErr
 }

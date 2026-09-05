@@ -27,45 +27,27 @@ func (oSelf *AdminUserUsecase) ShowOneByName(sName string) (*domain.AdminUser, e
 	return oAdminUser, err
 }
 
-func (oSelf *AdminUserUsecase) ShowOneById(iId uint) (*domain.AdminUser, error) {
+func (oSelf *AdminUserUsecase) ShowOneById(iId uint64) (*domain.AdminUser, error) {
 
 	// 不需要 太多判斷，直接回傳 資料庫方法
-	oAdminUser, err := oSelf.AdminUserModel.ShowOneById(iId)
+	oAdminUser, err := oSelf.AdminUserModel.ShowOneById(uint(iId))
 
 	return oAdminUser, err
 }
 
-func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
+func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) error {
 
-	oErr := oSelf.AdminUserModel.AddOne(oAdminUser)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminUserModel.AddOne(oAdminUser)
 }
 
-func (oSelf *AdminUserUsecase) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
+func (oSelf *AdminUserUsecase) EditOneById(oAdminUser *domain.AdminUserValue, iId uint64) error {
 
-	oErr := oSelf.AdminUserModel.EditOneById(oAdminUser, iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminUserModel.EditOneById(oAdminUser, uint(iId))
 }
 
-func (oSelf *AdminUserUsecase) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *AdminUserUsecase) RemoveOneById(iId uint64) error {
 
-	oErr := oSelf.AdminUserModel.RemoveOneById(iId)
-
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oSelf.AdminUserModel.RemoveOneById(uint(iId))
 }
 
 func (oSelf *AdminUserUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

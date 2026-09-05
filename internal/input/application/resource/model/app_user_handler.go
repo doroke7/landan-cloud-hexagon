@@ -37,7 +37,7 @@ func (oSelf *AppUserHandler) AddAppUser(oContext context.Context, oReq *pbResour
 		oAppUserValue.Password = oVariable.Password
 	}
 
-	if _, oErr := oSelf.ModelAppUserUsecase.AddOne(&oAppUserValue); oErr != nil {
+	if oErr := oSelf.ModelAppUserUsecase.AddOne(&oAppUserValue); oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
@@ -87,12 +87,12 @@ func (oSelf *AppUserHandler) ShowOneById(oContext context.Context, oReq *pbResou
 
 func (oSelf *AppUserHandler) IncreaseBalance(oContext context.Context, oReq *pbResourceModel.AppUserIncreaseBalanceInput) (*pbResourceModel.AppUserIncreaseBalanceOutput, error) {
 
-	bResult, oErr := oSelf.ModelAppUserUsecase.IncreaseBalance(uint(oReq.Id), uint(oReq.Amount))
+	oErr := oSelf.ModelAppUserUsecase.IncreaseBalance(uint64(oReq.Id), uint64(oReq.Amount))
 	if oErr != nil {
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
 	return &pbResourceModel.AppUserIncreaseBalanceOutput{
-		Status: bResult,
+		Status: true,
 	}, nil
 }

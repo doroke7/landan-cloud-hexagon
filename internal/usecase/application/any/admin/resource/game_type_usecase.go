@@ -31,13 +31,13 @@ func (oSelf *GameTypeUsecase) AddOne(oValue *domain.GameTypeValue) error {
 	return oSelf.GameTypeModel.AddOne(oValue)
 }
 
-func (oSelf *GameTypeUsecase) EditOne(oValue *domain.GameTypeValue, iId uint) error {
+func (oSelf *GameTypeUsecase) EditOne(oValue *domain.GameTypeValue, iId uint64) error {
 
-	return oSelf.GameTypeModel.EditOneById(oValue, iId)
+	return oSelf.GameTypeModel.EditOneById(oValue, uint(iId))
 }
 
-func (oSelf *GameTypeUsecase) ShowOne(iId uint) (*domain.GameType, error) {
-	oGameType, oErr := oSelf.GameTypeModel.ShowOneById(iId)
+func (oSelf *GameTypeUsecase) ShowOne(iId uint64) (*domain.GameType, error) {
+	oGameType, oErr := oSelf.GameTypeModel.ShowOneById(uint(iId))
 
 	return oGameType, oErr
 }
@@ -58,17 +58,17 @@ func (oSelf *GameTypeUsecase) ShowTree() (*domain.GameType, error) {
 	return oRoot, nil
 }
 
-func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint, error) {
+func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
 
 	aGameTypes, iTotal, oErr := oSelf.GameTypeLogic.ShowGameTypesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aGameTypes, iTotal, oErr
+	return aGameTypes, uint64(iTotal), oErr
 }
 
-func (oSelf *GameTypeUsecase) RemoveOne(iId uint) error {
+func (oSelf *GameTypeUsecase) RemoveOne(iId uint64) error {
 
 	// 底下還有未刪除的子類型就不放行，避免刪掉父類型後留下孤兒資料
-	iChildren, oErr := oSelf.GameTypeModel.TotalByParentId(iId)
+	iChildren, oErr := oSelf.GameTypeModel.TotalByParentId(uint(iId))
 
 	if oErr != nil {
 		return oErr
@@ -79,7 +79,7 @@ func (oSelf *GameTypeUsecase) RemoveOne(iId uint) error {
 	}
 
 	// 底下還有掛在此類型的遊戲也不放行
-	iGames, oErr := oSelf.GameModel.TotalByGameTypeId(iId)
+	iGames, oErr := oSelf.GameModel.TotalByGameTypeId(uint(iId))
 
 	if oErr != nil {
 		return oErr
@@ -89,5 +89,5 @@ func (oSelf *GameTypeUsecase) RemoveOne(iId uint) error {
 		return pkgUtility.NewDefaultError("This game type still has games; remove them before deleting", -2, 500)
 	}
 
-	return oSelf.GameTypeModel.RemoveOneById(iId)
+	return oSelf.GameTypeModel.RemoveOneById(uint(iId))
 }

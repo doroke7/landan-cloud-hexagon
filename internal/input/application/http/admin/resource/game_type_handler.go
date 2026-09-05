@@ -73,7 +73,7 @@ func (oSelf *GameTypeHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	iId := uint(fId)
+	iId := uint64(fId)
 	oErr := oSelf.AdminResourceGameTypeUsecase.EditOne(oValue, iId)
 
 	if oErr != nil {
@@ -106,7 +106,7 @@ func (oSelf *GameTypeHandler) RemoveOne(oContext *gin.Context) {
 		return
 	}
 
-	iId := uint(fId)
+	iId := uint64(fId)
 	oErr := oSelf.AdminResourceGameTypeUsecase.RemoveOne(iId)
 
 	if oErr != nil {
@@ -139,7 +139,7 @@ func (oSelf *GameTypeHandler) ShowOne(oContext *gin.Context) {
 		return
 	}
 
-	iId := uint(fId)
+	iId := uint64(fId)
 	oGameType, oErr := oSelf.AdminResourceGameTypeUsecase.ShowOne(iId)
 
 	if oErr != nil {

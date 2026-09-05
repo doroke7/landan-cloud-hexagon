@@ -137,7 +137,7 @@ func (oSelf *AdminUserHandler) EditAdminUserById(oContext context.Context, oReq 
 		AdminRoleIds: aAdminRoleIds,
 	}
 
-	oErr := oSelf.LogicAdminUserUsecase.EditAdminUserById(oValue, uint(oReq.GetId()))
+	oErr := oSelf.LogicAdminUserUsecase.EditAdminUserById(oValue, uint64(oReq.GetId()))
 
 	return &pbResourceLogic.AdminUserEditAdminUserByIdOutput{}, oErr
 }

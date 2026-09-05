@@ -28,24 +28,24 @@ func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) error {
 	return oSelf.TableModel.AddOne(oValue)
 }
 
-func (oSelf *TableUsecase) ShowOne(iId uint) (*domain.Table, error) {
-	oTable, oErr := oSelf.TableModel.ShowOneById(iId)
+func (oSelf *TableUsecase) ShowOne(iId uint64) (*domain.Table, error) {
+	oTable, oErr := oSelf.TableModel.ShowOneById(uint(iId))
 	return oTable, oErr
 }
 
-func (oSelf *TableUsecase) EditOne(oValue *domain.TableValue, iId uint) error {
+func (oSelf *TableUsecase) EditOne(oValue *domain.TableValue, iId uint64) error {
 
-	return oSelf.TableModel.EditOneById(oValue, iId)
+	return oSelf.TableModel.EditOneById(oValue, uint(iId))
 }
 
-func (oSelf *TableUsecase) RemoveOne(iId uint) error {
+func (oSelf *TableUsecase) RemoveOne(iId uint64) error {
 
-	return oSelf.TableModel.RemoveOneById(iId)
+	return oSelf.TableModel.RemoveOneById(uint(iId))
 }
 
-func (oSelf *TableUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint, error) {
+func (oSelf *TableUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {
 
 	aTables, iTotal, oErr := oSelf.TableLogic.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aTables, iTotal, oErr
+	return aTables, uint64(iTotal), oErr
 }

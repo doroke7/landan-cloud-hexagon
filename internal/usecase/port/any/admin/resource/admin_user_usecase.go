@@ -7,8 +7,8 @@ import (
 
 type AdminUserUsecase interface {
 	AddOne(oAdminUser *domain.AdminUserValue) error
-	EditOne(oAdminUser *domain.AdminUserValue, iId uint) error
-	RemoveOne(iId uint) error
-	ShowOne(iId uint) (*domain.AdminUser, error)
-	ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint, error)
+	EditOne(oAdminUser *domain.AdminUserValue, iId uint64) error
+	RemoveOne(iId uint64) error
+	ShowOne(iId uint64) (*domain.AdminUser, error)
+	ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error)
 }

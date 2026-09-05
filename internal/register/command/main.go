@@ -15,8 +15,8 @@ import (
 // container.InitCommandContainer() 延後到 Run: 真正執行時才呼叫，
 // 這樣註冊子命令樹（init() 階段）就不需要先連上 MySQL。
 func Init(oCommandCommand *cobra.Command) *cobra.Command {
-	var iId uint
-	var iAmount uint
+	var iId uint64
+	var iAmount uint64
 
 	oAppUserIncreaseBalanceCommand := &cobra.Command{
 		Use:   "Admin-Resource-AppUser-IncreaseBalance",
@@ -33,8 +33,8 @@ func Init(oCommandCommand *cobra.Command) *cobra.Command {
 		},
 	}
 
-	oAppUserIncreaseBalanceCommand.Flags().UintVar(&iId, "id", 1, "AppUser 的 id")
-	oAppUserIncreaseBalanceCommand.Flags().UintVar(&iAmount, "amount", 10, "要增加的餘額")
+	oAppUserIncreaseBalanceCommand.Flags().Uint64Var(&iId, "id", 1, "AppUser 的 id")
+	oAppUserIncreaseBalanceCommand.Flags().Uint64Var(&iAmount, "amount", 10, "要增加的餘額")
 
 	oCommandCommand.AddCommand(oAppUserIncreaseBalanceCommand)
 

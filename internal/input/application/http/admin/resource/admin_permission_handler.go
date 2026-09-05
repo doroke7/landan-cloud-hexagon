@@ -73,9 +73,8 @@ func (oSelf *AdminPermissionHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	iId := uint(fId)
-	bResult, oErr := oSelf.AdminResourceAdminPermissionUsecase.EditOne(oValue, iId)
-	_ = bResult
+	iId := uint64(fId)
+	oErr := oSelf.AdminResourceAdminPermissionUsecase.EditOne(oValue, iId)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -107,9 +106,8 @@ func (oSelf *AdminPermissionHandler) RemoveOne(oContext *gin.Context) {
 		return
 	}
 
-	iId := uint(fId)
-	bResult, oErr := oSelf.AdminResourceAdminPermissionUsecase.RemoveOne(iId)
-	_ = bResult
+	iId := uint64(fId)
+	oErr := oSelf.AdminResourceAdminPermissionUsecase.RemoveOne(iId)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
@@ -141,7 +139,7 @@ func (oSelf *AdminPermissionHandler) ShowOne(oContext *gin.Context) {
 		return
 	}
 
-	iId := uint(fId)
+	iId := uint64(fId)
 	oAdminPermission, oErr := oSelf.AdminResourceAdminPermissionUsecase.ShowOne(iId)
 
 	if oErr != nil {
