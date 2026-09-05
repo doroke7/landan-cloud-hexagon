@@ -121,7 +121,7 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 	return nil
 }
 
-func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint) error {
+func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint64) error {
 	oSet := bson.M{"updated_at": time.Now()}
 
 	if oValue.Name != nil {

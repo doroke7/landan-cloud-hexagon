@@ -25,6 +25,7 @@ func NewLotteryUsecase(oAbstractUsecase *AbstractUsecase, oLotteryRepository out
 
 func (oSelf *LotteryUsecase) WatchOneByKey(sKey string) (*domain.Lottery, error) {
 
-	return oSelf.LotteryModel.WatchOneByKey(sKey)
+	oLottery, oErr := oSelf.LotteryModel.WatchOneByKey(sKey)
 
+	return oLottery, oErr
 }

@@ -151,7 +151,7 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 	return oError
 }
 
-func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint) error {
+func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr
@@ -159,7 +159,7 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 
 	delete(oColumns, "admin_role_ids")
 
-	return oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
+	oErr = oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
 
 		if len(oColumns) > 0 {
 			oResult := oTx.
@@ -187,11 +187,15 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 		aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
 		for _, iAdminRoleId := range oValue.AdminRoleIds {
 			aRelations = append(aRelations, domain.AdminUsersToAdminRole{
-				AdminUserId: iId,
+				AdminUserId: uint(iId),
 				AdminRoleId: uint(iAdminRoleId),
 			})
 		}
 
-		return oTx.Create(&aRelations).Error
+		oError := oTx.Create(&aRelations).Error
+
+		return oError
 	})
+
+	return oErr
 }

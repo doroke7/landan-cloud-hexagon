@@ -36,12 +36,16 @@ func (oSelf *AdminPermissionUsecase) ShowOne(iId uint64) (*domain.AdminPermissio
 
 func (oSelf *AdminPermissionUsecase) EditOne(oAdminPermission *domain.AdminPermissionValue, iId uint64) error {
 
-	return oSelf.AdminPermissionModel.EditOneById(oAdminPermission, iId)
+	oErr := oSelf.AdminPermissionModel.EditOneById(oAdminPermission, iId)
+
+	return oErr
 }
 
 func (oSelf *AdminPermissionUsecase) RemoveOne(iId uint64) error {
 
-	return oSelf.AdminPermissionModel.RemoveOneById(iId)
+	oErr := oSelf.AdminPermissionModel.RemoveOneById(iId)
+
+	return oErr
 }
 
 func (oSelf *AdminPermissionUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermission, uint64, error) {

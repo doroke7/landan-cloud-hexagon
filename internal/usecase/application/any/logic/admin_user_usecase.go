@@ -35,7 +35,7 @@ func (oSelf *AdminUserUsecase) AddAminUser(oValue *domain.AdminUserValue) error 
 
 func (oSelf *AdminUserUsecase) EditAdminUserById(oValue *domain.AdminUserValue, iId uint64) error {
 
-	oErr := oSelf.AdminUserLogic.EditAdminUserById(oValue, uint(iId))
+	oErr := oSelf.AdminUserLogic.EditAdminUserById(oValue, iId)
 
 	return oErr
 }

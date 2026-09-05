@@ -89,7 +89,7 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 	return oErr
 }
 
-func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint) error {
+func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint64) error {
 
 	aAdminRoleIds := make([]uint64, 0, len(oValue.AdminRoleIds))
 	for _, iAdminRoleId := range oValue.AdminRoleIds {

@@ -17,5 +17,7 @@ func NewAdminUserUsecase(oAdminUserEvent outputPortAnyEvent.AdminUserEvent) usec
 }
 
 func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUser) error {
-	return oSelf.AdminUserEvent.AddOne(oAdminUser)
+	oErr := oSelf.AdminUserEvent.AddOne(oAdminUser)
+
+	return oErr
 }

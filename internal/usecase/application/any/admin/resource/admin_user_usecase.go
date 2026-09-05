@@ -33,7 +33,9 @@ func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) error {
 		return oErr
 	}
 
-	return oSelf.AdminUserLogic.AddAminUser(oAdminUser)
+	oErr = oSelf.AdminUserLogic.AddAminUser(oAdminUser)
+
+	return oErr
 }
 
 func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint64) error {
@@ -57,7 +59,9 @@ func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId ui
 
 	}
 
-	return oSelf.AdminUserLogic.EditAdminUserById(oAdminUser, uint(iId))
+	oErr = oSelf.AdminUserLogic.EditAdminUserById(oAdminUser, iId)
+
+	return oErr
 }
 
 func (oSelf *AdminUserUsecase) RemoveOne(iId uint64) error {
@@ -67,7 +71,9 @@ func (oSelf *AdminUserUsecase) RemoveOne(iId uint64) error {
 
 	}
 
-	return oSelf.AdminUserModel.RemoveOneById(iId)
+	oErr := oSelf.AdminUserModel.RemoveOneById(iId)
+
+	return oErr
 }
 
 func (oSelf *AdminUserUsecase) ShowOne(iId uint64) (*domain.AdminUser, error) {

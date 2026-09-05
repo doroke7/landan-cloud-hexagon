@@ -49,7 +49,7 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) {
 
 	var oAdminUser domain.AdminUser
-	sKey := oSelf.Aop.Key("AdminUser.SObI", iId)
+	sKey := oSelf.Aop.Key("AdminUserModel.SObI", iId)
 	iTtl := oSelf.Aop.Ttl(30 * time.Minute)
 
 	err := oSelf.Aop.Cacheable(sKey, iTtl, &oAdminUser, func() (interface{}, error) {
@@ -73,9 +73,9 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) 
 }
 
 func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
-	sKey := oSelf.Aop.Key("AdminUser.SObI", iId)
+	sKey := oSelf.Aop.Key("AdminUserModel.SObI", iId)
 
-	return oSelf.Aop.CacheEvict(sKey, func() error {
+	oErr := oSelf.Aop.CacheEvict(sKey, func() error {
 		oResult := oSelf.DB.WithContext(oSelf.Context).
 			Model(&domain.AdminUser{}).
 			Where("id = ?", iId).
@@ -92,6 +92,8 @@ func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
 
 		return nil
 	})
+
+	return oErr
 }
 
 func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint64) error {
@@ -100,9 +102,9 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 		return oErr
 	}
 
-	sKey := oSelf.Aop.Key("AdminUser.SObI", iId)
+	sKey := oSelf.Aop.Key("AdminUserModel.SObI", iId)
 
-	return oSelf.Aop.CacheEvict(sKey, func() error {
+	oErr = oSelf.Aop.CacheEvict(sKey, func() error {
 		oResult := oSelf.DB.WithContext(oSelf.Context).
 			Model(&domain.AdminUser{}).
 			Where("id = ?", iId).
@@ -118,6 +120,8 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 
 		return nil
 	})
+
+	return oErr
 }
 
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {

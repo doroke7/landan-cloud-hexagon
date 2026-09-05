@@ -34,10 +34,14 @@ func (oSelf *AppUserUsecase) ShowOneById(iId uint) (*domain.AppUser, error) {
 
 func (oSelf *AppUserUsecase) AddOne(oAppUser *domain.AppUserValue) error {
 
-	return oSelf.AppUserModel.AddOne(oAppUser)
+	oErr := oSelf.AppUserModel.AddOne(oAppUser)
+
+	return oErr
 }
 
 func (oSelf *AppUserUsecase) IncreaseBalance(iId uint64, iAmount uint64) error {
 
-	return oSelf.AppUserModel.IncreaseBalance(uint(iId), iAmount)
+	oErr := oSelf.AppUserModel.IncreaseBalance(uint(iId), iAmount)
+
+	return oErr
 }

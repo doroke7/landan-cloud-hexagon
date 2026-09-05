@@ -21,7 +21,9 @@ func NewAdminRoleUsecase(oAdminRoleModel outputPortAnyModel.AdminRoleModel, oAbs
 
 func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleValue) error {
 
-	return oSelf.AdminRoleModel.AddOne(oAdminRole)
+	oErr := oSelf.AdminRoleModel.AddOne(oAdminRole)
+
+	return oErr
 }
 
 func (oSelf *AdminRoleUsecase) ShowOneById(iId uint) (*domain.AdminRole, error) {
@@ -33,12 +35,16 @@ func (oSelf *AdminRoleUsecase) ShowOneById(iId uint) (*domain.AdminRole, error) 
 
 func (oSelf *AdminRoleUsecase) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint64) error {
 
-	return oSelf.AdminRoleModel.EditOneById(oAdminRole, iId)
+	oErr := oSelf.AdminRoleModel.EditOneById(oAdminRole, iId)
+
+	return oErr
 }
 
 func (oSelf *AdminRoleUsecase) RemoveOneById(iId uint64) error {
 
-	return oSelf.AdminRoleModel.RemoveOneById(iId)
+	oErr := oSelf.AdminRoleModel.RemoveOneById(iId)
+
+	return oErr
 }
 
 func (oSelf *AdminRoleUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

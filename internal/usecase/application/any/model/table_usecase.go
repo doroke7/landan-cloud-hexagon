@@ -19,12 +19,16 @@ func NewTableUsecase(oTableModel outputPortAnyModel.TableModel) usecasePortAnyMo
 
 func (oSelf *TableUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
 
-	return oSelf.TableModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	aTables, oErr := oSelf.TableModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+
+	return aTables, oErr
 }
 
 func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) error {
 
-	return oSelf.TableModel.AddOne(oValue)
+	oErr := oSelf.TableModel.AddOne(oValue)
+
+	return oErr
 }
 
 func (oSelf *TableUsecase) ShowOneById(iId uint64) (*domain.Table, error) {
@@ -36,12 +40,16 @@ func (oSelf *TableUsecase) ShowOneById(iId uint64) (*domain.Table, error) {
 
 func (oSelf *TableUsecase) EditOneById(oValue *domain.TableValue, iId uint64) error {
 
-	return oSelf.TableModel.EditOneById(oValue, iId)
+	oErr := oSelf.TableModel.EditOneById(oValue, iId)
+
+	return oErr
 }
 
 func (oSelf *TableUsecase) RemoveOneById(iId uint64) error {
 
-	return oSelf.TableModel.RemoveOneById(iId)
+	oErr := oSelf.TableModel.RemoveOneById(iId)
+
+	return oErr
 }
 
 func (oSelf *TableUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

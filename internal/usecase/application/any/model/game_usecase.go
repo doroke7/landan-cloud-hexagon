@@ -21,7 +21,9 @@ func NewGameUsecase(oGameModel outputPortAnyModel.GameModel, oAbstractUsecase *A
 
 func (oSelf *GameUsecase) AddOne(oAdd *domain.GameValue) error {
 
-	return oSelf.GameModel.AddOne(oAdd)
+	oErr := oSelf.GameModel.AddOne(oAdd)
+
+	return oErr
 }
 
 func (oSelf *GameUsecase) ShowOneById(iId uint64) (*domain.Game, error) {
@@ -40,12 +42,16 @@ func (oSelf *GameUsecase) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgI
 
 func (oSelf *GameUsecase) EditOneById(oEdit *domain.GameValue, iId uint64) error {
 
-	return oSelf.GameModel.EditOneById(oEdit, iId)
+	oErr := oSelf.GameModel.EditOneById(oEdit, iId)
+
+	return oErr
 }
 
 func (oSelf *GameUsecase) RemoveOneById(iId uint64) error {
 
-	return oSelf.GameModel.RemoveOneById(iId)
+	oErr := oSelf.GameModel.RemoveOneById(iId)
+
+	return oErr
 }
 
 func (oSelf *GameUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
