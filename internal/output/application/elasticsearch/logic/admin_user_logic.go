@@ -101,3 +101,20 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 
 	return nil
 }
+
+func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, error) {
+	var oAdminUser domain.AdminUser
+
+	sId := strconv.FormatUint(iId, 10)
+
+	bFound, oErr := oSelf.GetById(oSelf.Index, sId, &oAdminUser)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	if !bFound {
+		return nil, errors.New("record not found")
+	}
+
+	return &oAdminUser, nil
+}

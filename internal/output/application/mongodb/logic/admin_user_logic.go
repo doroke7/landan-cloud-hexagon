@@ -146,3 +146,22 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 
 	return nil
 }
+
+func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, error) {
+	var oAdminUser domain.AdminUser
+
+	oErr := oSelf.Collection.FindOne(
+		oSelf.Context,
+		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
+	).Decode(&oAdminUser)
+
+	if errors.Is(oErr, mongo.ErrNoDocuments) {
+		return nil, errors.New("record not found")
+	}
+
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	return &oAdminUser, nil
+}

@@ -1,6 +1,8 @@
 package outputApplicationResourceLogic
 
 import (
+	"errors"
+
 	domain "example/internal/domain"
 	resourceBase "example/internal/output/application/resource"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
@@ -108,4 +110,30 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 	_, oErr := oSelf.ResourceLogicClient.AdminUser.EditAdminUserById(oSelf.Context, oRequest)
 
 	return oErr
+}
+
+// ShowAdminUserById proto 沒有對應 rpc，改用既有的 list rpc 帶 id 過濾、size=1 取第一筆。
+func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, error) {
+	sField := "id"
+	sOperator := "eq"
+	iSize := uint(1)
+	iPage := uint(1)
+
+	aFilters := []*pkgInput.Filter{
+		{Field: &sField, Operator: &sOperator, Value: float64(iId)},
+	}
+	oPagination := &pkgInput.Pagination{Size: &iSize, Page: &iPage}
+
+	aAdminUsers, _, oErr := oSelf.ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters, nil, oPagination)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	if len(aAdminUsers) == 0 {
+		return nil, errors.New("record not found")
+	}
+
+	oAdminUser := aAdminUsers[0]
+
+	return oAdminUser, nil
 }

@@ -199,3 +199,22 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 
 	return oErr
 }
+
+func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, error) {
+	var oAdminUser domain.AdminUser
+
+	oErr := oSelf.DB.WithContext(oSelf.Context).
+		Preload("AdminRoles").
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		First(&oAdminUser, iId).Error
+
+	if errors.Is(oErr, gorm.ErrRecordNotFound) {
+		return nil, errors.New("record not found")
+	}
+
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	return &oAdminUser, nil
+}
