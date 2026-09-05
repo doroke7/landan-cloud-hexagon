@@ -121,6 +121,41 @@ func (oSelf *AdminUserHandler) RemoveOne(oContext *gin.Context) {
 
 }
 
+func (oSelf *AdminUserHandler) ShowOne(oContext *gin.Context) {
+
+	oRequest := &pkgGin.Request{Context: oContext}
+
+	var aFilters []*pkgInput.Filter
+	if oErr := oRequest.Bind("filters", &aFilters); oErr != nil {
+		_ = oContext.Error(pkgUtility.NewDefaultError("filters format error", -1, 200))
+		return
+	}
+
+	if len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].Field == nil || *aFilters[0].Field != "id" {
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter position error", -1, 200))
+		return
+	}
+
+	fId, bOk := aFilters[0].Value.(float64)
+	if !bOk {
+		_ = oContext.Error(pkgUtility.NewDefaultError("filter.id format error", -1, 200))
+		return
+	}
+
+	iId := uint(fId)
+	oAdminUser, oErr := oSelf.AdminResourceAdminUserUsecase.ShowOne(iId)
+
+	if oErr != nil {
+		_ = oContext.Error(oErr)
+		return
+	}
+
+	oResult := pkgGin.NewResult(oAdminUser, nil, nil)
+
+	oSelf.Response.Set(oContext, 200, 1, "Query successful", oResult, 0, "")
+
+}
+
 func (oSelf *AdminUserHandler) ShowOnes(oContext *gin.Context) {
 
 	oRequest := &pkgGin.Request{Context: oContext}
@@ -157,6 +192,12 @@ func (oSelf *AdminUserHandler) ShowOnes(oContext *gin.Context) {
 	if oErr != nil {
 		_ = oContext.Error(oErr)
 		return
+	}
+
+	for _, oAdminUser := range aAdminUsers {
+		if oAdminUser != nil {
+			oAdminUser.Password = "" // 列表不外洩密碼
+		}
 	}
 
 	oResult := pkgGin.NewResult(nil, aAdminUsers, nil)

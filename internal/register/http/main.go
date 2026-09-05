@@ -142,6 +142,7 @@ func Init(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 			oAdminResource.POST("/AdminUser/AddOne", oContainer.HttpAdminResourceAdminUser.AddOne)
 			oAdminResource.PUT("/AdminUser/EditOne", oContainer.HttpAdminResourceAdminUser.EditOne)
 			oAdminResource.DELETE("/AdminUser/RemoveOne", oContainer.HttpAdminResourceAdminUser.RemoveOne)
+			oAdminResource.GET("/AdminUser/ShowOne", oContainer.HttpAdminResourceAdminUser.ShowOne)
 			oAdminResource.GET("/AdminUser/ShowOnes", oContainer.HttpAdminResourceAdminUser.ShowOnes)
 
 			oAdminResource.POST("/AdminRole/AddOne", oContainer.HttpAdminResourceAdminRole.AddOne)

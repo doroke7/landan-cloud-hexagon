@@ -68,6 +68,17 @@ func (oSelf *AdminUserUsecase) RemoveOne(iId uint) (bool, error) {
 	return true, nil
 }
 
+func (oSelf *AdminUserUsecase) ShowOne(iId uint) (*domain.AdminUser, error) {
+
+	oAdminUser, oErr := oSelf.AdminUserModel.ShowOneById(iId)
+
+	if oAdminUser != nil {
+		oAdminUser.Password = "" // 不外洩密碼
+	}
+
+	return oAdminUser, oErr
+}
+
 func (oSelf *AdminUserUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
 
 	aAdminUsers, iTotal, oErr := oSelf.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)

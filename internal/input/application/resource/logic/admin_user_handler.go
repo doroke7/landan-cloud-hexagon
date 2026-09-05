@@ -80,7 +80,6 @@ func (oSelf *AdminUserHandler) ShowAdminUsersTotalByFiltersWithSortersPagination
 	aPbAdminUsers := make([]*pbResource.AdminUser, 0, len(aAdminUsers))
 	for _, oAdminUser := range aAdminUsers {
 		oProtoAdminUser := domainAdminUserToProtoAdminUser(oAdminUser)
-		oProtoAdminUser.Password = "" // 列表不外洩密碼
 		aPbAdminUsers = append(aPbAdminUsers, oProtoAdminUser)
 	}
 
