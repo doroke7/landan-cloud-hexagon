@@ -98,6 +98,8 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 		return oErr
 	}
 
+	delete(oColumns, "admin_role_ids")
+
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminUser{}).
 		Create(oColumns)
@@ -108,6 +110,30 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
 	if oResult.RowsAffected == 0 {
 		return errors.New("新增0筆")
+	}
+
+	return nil
+}
+
+func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint) error {
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
+	if oErr != nil {
+		return oErr
+	}
+
+	delete(oColumns, "admin_role_ids")
+
+	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.AdminUser{}).
+		Where("id = ?", iId).
+		UpdateColumns(oColumns)
+
+	if oResult.Error != nil {
+		return oResult.Error
+	}
+
+	if oResult.RowsAffected == 0 {
+		return errors.New("更新0筆")
 	}
 
 	return nil

@@ -9,7 +9,6 @@ import (
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
-	"fmt"
 )
 
 type AdminUserUsecase struct {
@@ -34,19 +33,6 @@ func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) (bool, 
 		return false, oErr
 	}
 
-	fmt.Println("oAdminUser=", oAdminUser)
-	fmt.Println("oAdminUser=", oAdminUser)
-	fmt.Println("oAdminUser=", oAdminUser)
-	fmt.Println("oAdminUser=", oAdminUser)
-	fmt.Println("oAdminUser=", oAdminUser)
-	fmt.Println("oAdminUser=", oAdminUser)
-	fmt.Println("oAdminUser=", oAdminUser)
-	fmt.Println("oAdminUser=", oAdminUser)
-	fmt.Println("oAdminUser=", oAdminUser)
-	fmt.Println("oAdminUser=", oAdminUser)
-	fmt.Println("oAdminUser=", oAdminUser)
-	fmt.Println("oAdminUser=", oAdminUser)
-
 	oErr = oSelf.AdminUserLogic.AddAminUser(oAdminUser)
 
 	return true, oErr
@@ -68,9 +54,12 @@ func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId ui
 		return false, oErr
 	}
 
-	*oAdminUser.Password = pkgUtility.Md5(*oAdminUser.Password + bootstrap.CONFIG.TABLE.ADMIN_USER.PASSWORD)
+	if (*oAdminUser).Password != nil && *(*oAdminUser).Password != "" {
+		*oAdminUser.Password = pkgUtility.Md5(*oAdminUser.Password + bootstrap.CONFIG.TABLE.ADMIN_USER.PASSWORD)
 
-	_, oErr = oSelf.AdminUserModel.EditOneById(oAdminUser, iId)
+	}
+
+	oErr = oSelf.AdminUserLogic.EditAdminUserById(oAdminUser, iId)
 
 	if oErr != nil {
 		return false, oErr

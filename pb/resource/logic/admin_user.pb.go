@@ -274,6 +274,94 @@ func (*AdminUserAddAminUserOutput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{4}
 }
 
+type AdminUserEditAdminUserByIdInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *AdminUserVariable     `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint32                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserEditAdminUserByIdInput) Reset() {
+	*x = AdminUserEditAdminUserByIdInput{}
+	mi := &file_resource_logic_admin_user_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserEditAdminUserByIdInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserEditAdminUserByIdInput) ProtoMessage() {}
+
+func (x *AdminUserEditAdminUserByIdInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_admin_user_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserEditAdminUserByIdInput.ProtoReflect.Descriptor instead.
+func (*AdminUserEditAdminUserByIdInput) Descriptor() ([]byte, []int) {
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *AdminUserEditAdminUserByIdInput) GetVariable() *AdminUserVariable {
+	if x != nil {
+		return x.Variable
+	}
+	return nil
+}
+
+func (x *AdminUserEditAdminUserByIdInput) GetId() uint32 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type AdminUserEditAdminUserByIdOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserEditAdminUserByIdOutput) Reset() {
+	*x = AdminUserEditAdminUserByIdOutput{}
+	mi := &file_resource_logic_admin_user_proto_msgTypes[6]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserEditAdminUserByIdOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserEditAdminUserByIdOutput) ProtoMessage() {}
+
+func (x *AdminUserEditAdminUserByIdOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_admin_user_proto_msgTypes[6]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserEditAdminUserByIdOutput.ProtoReflect.Descriptor instead.
+func (*AdminUserEditAdminUserByIdOutput) Descriptor() ([]byte, []int) {
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{6}
+}
+
 var File_resource_logic_admin_user_proto protoreflect.FileDescriptor
 
 const file_resource_logic_admin_user_proto_rawDesc = "" +
@@ -297,10 +385,15 @@ const file_resource_logic_admin_user_proto_rawDesc = "" +
 	"\t_password\"]\n" +
 	"\x19AdminUserAddAminUserInput\x12@\n" +
 	"\bvariable\x18\x01 \x01(\v2$.pb.resource.logic.AdminUserVariableR\bvariable\"\x1c\n" +
-	"\x1aAdminUserAddAminUserOutput2\xdb\x02\n" +
+	"\x1aAdminUserAddAminUserOutput\"s\n" +
+	"\x1fAdminUserEditAdminUserByIdInput\x12@\n" +
+	"\bvariable\x18\x01 \x01(\v2$.pb.resource.logic.AdminUserVariableR\bvariable\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\rR\x02id\"\"\n" +
+	" AdminUserEditAdminUserByIdOutput2\xd9\x03\n" +
 	"\x0eAdminUserLogic\x12\xdc\x01\n" +
 	"1ShowAdminUsersTotalByFiltersWithSortersPagination\x12R.pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput\x1aS.pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput\x12j\n" +
-	"\vAddAminUser\x12,.pb.resource.logic.AdminUserAddAminUserInput\x1a-.pb.resource.logic.AdminUserAddAminUserOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
+	"\vAddAminUser\x12,.pb.resource.logic.AdminUserAddAminUserInput\x1a-.pb.resource.logic.AdminUserAddAminUserOutput\x12|\n" +
+	"\x11EditAdminUserById\x122.pb.resource.logic.AdminUserEditAdminUserByIdInput\x1a3.pb.resource.logic.AdminUserEditAdminUserByIdOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
 
 var (
 	file_resource_logic_admin_user_proto_rawDescOnce sync.Once
@@ -314,33 +407,38 @@ func file_resource_logic_admin_user_proto_rawDescGZIP() []byte {
 	return file_resource_logic_admin_user_proto_rawDescData
 }
 
-var file_resource_logic_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_resource_logic_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo, 7)
 var file_resource_logic_admin_user_proto_goTypes = []any{
 	(*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput)(nil),  // 0: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput
 	(*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput)(nil), // 1: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput
-	(*AdminUserVariable)(nil),          // 2: pb.resource.logic.AdminUserVariable
-	(*AdminUserAddAminUserInput)(nil),  // 3: pb.resource.logic.AdminUserAddAminUserInput
-	(*AdminUserAddAminUserOutput)(nil), // 4: pb.resource.logic.AdminUserAddAminUserOutput
-	(*resource.Filter)(nil),            // 5: pb.resource.Filter
-	(*resource.Sorter)(nil),            // 6: pb.resource.Sorter
-	(*resource.Pagination)(nil),        // 7: pb.resource.Pagination
-	(*resource.AdminUser)(nil),         // 8: pb.resource.AdminUser
+	(*AdminUserVariable)(nil),                // 2: pb.resource.logic.AdminUserVariable
+	(*AdminUserAddAminUserInput)(nil),        // 3: pb.resource.logic.AdminUserAddAminUserInput
+	(*AdminUserAddAminUserOutput)(nil),       // 4: pb.resource.logic.AdminUserAddAminUserOutput
+	(*AdminUserEditAdminUserByIdInput)(nil),  // 5: pb.resource.logic.AdminUserEditAdminUserByIdInput
+	(*AdminUserEditAdminUserByIdOutput)(nil), // 6: pb.resource.logic.AdminUserEditAdminUserByIdOutput
+	(*resource.Filter)(nil),                  // 7: pb.resource.Filter
+	(*resource.Sorter)(nil),                  // 8: pb.resource.Sorter
+	(*resource.Pagination)(nil),              // 9: pb.resource.Pagination
+	(*resource.AdminUser)(nil),               // 10: pb.resource.AdminUser
 }
 var file_resource_logic_admin_user_proto_depIdxs = []int32{
-	5, // 0: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	6, // 1: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	7, // 2: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	8, // 3: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput.admin_users:type_name -> pb.resource.AdminUser
-	2, // 4: pb.resource.logic.AdminUserAddAminUserInput.variable:type_name -> pb.resource.logic.AdminUserVariable
-	0, // 5: pb.resource.logic.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput
-	3, // 6: pb.resource.logic.AdminUserLogic.AddAminUser:input_type -> pb.resource.logic.AdminUserAddAminUserInput
-	1, // 7: pb.resource.logic.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput
-	4, // 8: pb.resource.logic.AdminUserLogic.AddAminUser:output_type -> pb.resource.logic.AdminUserAddAminUserOutput
-	7, // [7:9] is the sub-list for method output_type
-	5, // [5:7] is the sub-list for method input_type
-	5, // [5:5] is the sub-list for extension type_name
-	5, // [5:5] is the sub-list for extension extendee
-	0, // [0:5] is the sub-list for field type_name
+	7,  // 0: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
+	8,  // 1: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	9,  // 2: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
+	10, // 3: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput.admin_users:type_name -> pb.resource.AdminUser
+	2,  // 4: pb.resource.logic.AdminUserAddAminUserInput.variable:type_name -> pb.resource.logic.AdminUserVariable
+	2,  // 5: pb.resource.logic.AdminUserEditAdminUserByIdInput.variable:type_name -> pb.resource.logic.AdminUserVariable
+	0,  // 6: pb.resource.logic.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput
+	3,  // 7: pb.resource.logic.AdminUserLogic.AddAminUser:input_type -> pb.resource.logic.AdminUserAddAminUserInput
+	5,  // 8: pb.resource.logic.AdminUserLogic.EditAdminUserById:input_type -> pb.resource.logic.AdminUserEditAdminUserByIdInput
+	1,  // 9: pb.resource.logic.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput
+	4,  // 10: pb.resource.logic.AdminUserLogic.AddAminUser:output_type -> pb.resource.logic.AdminUserAddAminUserOutput
+	6,  // 11: pb.resource.logic.AdminUserLogic.EditAdminUserById:output_type -> pb.resource.logic.AdminUserEditAdminUserByIdOutput
+	9,  // [9:12] is the sub-list for method output_type
+	6,  // [6:9] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_resource_logic_admin_user_proto_init() }
@@ -355,7 +453,7 @@ func file_resource_logic_admin_user_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_logic_admin_user_proto_rawDesc), len(file_resource_logic_admin_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
+			NumMessages:   7,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

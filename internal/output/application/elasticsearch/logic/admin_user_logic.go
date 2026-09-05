@@ -2,6 +2,7 @@ package outputApplicationElasticsearchLogic
 
 import (
 	"encoding/json"
+	"errors"
 	"strconv"
 	"time"
 
@@ -9,6 +10,7 @@ import (
 	elasticsearchBase "example/internal/output/application/elasticsearch"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type AdminUserLogic struct {
@@ -73,6 +75,28 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
 	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
 		return oErr
+	}
+
+	return nil
+}
+
+func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint) error {
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
+	if oErr != nil {
+		return oErr
+	}
+	delete(oColumns, "admin_role_ids")
+	oColumns["updated_at"] = time.Now()
+
+	sId := strconv.FormatUint(uint64(iId), 10)
+
+	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oColumns)
+	if oErr != nil {
+		return oErr
+	}
+
+	if !bOk {
+		return errors.New("更新0筆")
 	}
 
 	return nil

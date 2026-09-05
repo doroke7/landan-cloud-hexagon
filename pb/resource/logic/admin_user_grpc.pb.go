@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	AdminUserLogic_ShowAdminUsersTotalByFiltersWithSortersPagination_FullMethodName = "/pb.resource.logic.AdminUserLogic/ShowAdminUsersTotalByFiltersWithSortersPagination"
 	AdminUserLogic_AddAminUser_FullMethodName                                       = "/pb.resource.logic.AdminUserLogic/AddAminUser"
+	AdminUserLogic_EditAdminUserById_FullMethodName                                 = "/pb.resource.logic.AdminUserLogic/EditAdminUserById"
 )
 
 // AdminUserLogicClient is the client API for AdminUserLogic service.
@@ -29,6 +30,7 @@ const (
 type AdminUserLogicClient interface {
 	ShowAdminUsersTotalByFiltersWithSortersPagination(ctx context.Context, in *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput, error)
 	AddAminUser(ctx context.Context, in *AdminUserAddAminUserInput, opts ...grpc.CallOption) (*AdminUserAddAminUserOutput, error)
+	EditAdminUserById(ctx context.Context, in *AdminUserEditAdminUserByIdInput, opts ...grpc.CallOption) (*AdminUserEditAdminUserByIdOutput, error)
 }
 
 type adminUserLogicClient struct {
@@ -59,12 +61,23 @@ func (c *adminUserLogicClient) AddAminUser(ctx context.Context, in *AdminUserAdd
 	return out, nil
 }
 
+func (c *adminUserLogicClient) EditAdminUserById(ctx context.Context, in *AdminUserEditAdminUserByIdInput, opts ...grpc.CallOption) (*AdminUserEditAdminUserByIdOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdminUserEditAdminUserByIdOutput)
+	err := c.cc.Invoke(ctx, AdminUserLogic_EditAdminUserById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminUserLogicServer is the server API for AdminUserLogic service.
 // All implementations must embed UnimplementedAdminUserLogicServer
 // for forward compatibility.
 type AdminUserLogicServer interface {
 	ShowAdminUsersTotalByFiltersWithSortersPagination(context.Context, *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput, error)
 	AddAminUser(context.Context, *AdminUserAddAminUserInput) (*AdminUserAddAminUserOutput, error)
+	EditAdminUserById(context.Context, *AdminUserEditAdminUserByIdInput) (*AdminUserEditAdminUserByIdOutput, error)
 	mustEmbedUnimplementedAdminUserLogicServer()
 }
 
@@ -80,6 +93,9 @@ func (UnimplementedAdminUserLogicServer) ShowAdminUsersTotalByFiltersWithSorters
 }
 func (UnimplementedAdminUserLogicServer) AddAminUser(context.Context, *AdminUserAddAminUserInput) (*AdminUserAddAminUserOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method AddAminUser not implemented")
+}
+func (UnimplementedAdminUserLogicServer) EditAdminUserById(context.Context, *AdminUserEditAdminUserByIdInput) (*AdminUserEditAdminUserByIdOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method EditAdminUserById not implemented")
 }
 func (UnimplementedAdminUserLogicServer) mustEmbedUnimplementedAdminUserLogicServer() {}
 func (UnimplementedAdminUserLogicServer) testEmbeddedByValue()                        {}
@@ -138,6 +154,24 @@ func _AdminUserLogic_AddAminUser_Handler(srv interface{}, ctx context.Context, d
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminUserLogic_EditAdminUserById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminUserEditAdminUserByIdInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminUserLogicServer).EditAdminUserById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminUserLogic_EditAdminUserById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminUserLogicServer).EditAdminUserById(ctx, req.(*AdminUserEditAdminUserByIdInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminUserLogic_ServiceDesc is the grpc.ServiceDesc for AdminUserLogic service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -152,6 +186,10 @@ var AdminUserLogic_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddAminUser",
 			Handler:    _AdminUserLogic_AddAminUser_Handler,
+		},
+		{
+			MethodName: "EditAdminUserById",
+			Handler:    _AdminUserLogic_EditAdminUserById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

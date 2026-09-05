@@ -198,3 +198,46 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
 	return oError
 }
+
+func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint) error {
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
+	if oErr != nil {
+		return oErr
+	}
+
+	delete(oColumns, "admin_role_ids")
+
+	return oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
+
+		oResult := oTx.
+			Model(&domain.AdminUser{}).
+			Where("id = ?", iId).
+			UpdateColumns(oColumns)
+
+		if oResult.Error != nil {
+			return oResult.Error
+		}
+
+		if oResult.RowsAffected == 0 {
+			return errors.New("更新0筆")
+		}
+
+		if oErr := oTx.Where("admin_user_id = ?", iId).Delete(&domain.AdminUsersToAdminRole{}).Error; oErr != nil {
+			return oErr
+		}
+
+		if len(oValue.AdminRoleIds) == 0 {
+			return nil // 沒有角色也算成功，直接結束，不會再往下插入
+		}
+
+		aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
+		for _, iAdminRoleId := range oValue.AdminRoleIds {
+			aRelations = append(aRelations, domain.AdminUsersToAdminRole{
+				AdminUserId: iId,
+				AdminRoleId: uint(iAdminRoleId),
+			})
+		}
+
+		return oTx.Create(&aRelations).Error
+	})
+}

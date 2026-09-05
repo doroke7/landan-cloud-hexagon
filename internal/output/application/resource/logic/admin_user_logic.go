@@ -88,3 +88,24 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
 	return oErr
 }
+
+func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint) error {
+
+	aAdminRoleIds := make([]uint32, 0, len(oValue.AdminRoleIds))
+	for _, iAdminRoleId := range oValue.AdminRoleIds {
+		aAdminRoleIds = append(aAdminRoleIds, uint32(iAdminRoleId))
+	}
+
+	oRequest := &pbResourceLogic.AdminUserEditAdminUserByIdInput{
+		Variable: &pbResourceLogic.AdminUserVariable{
+			Name:         oValue.Name,
+			Password:     oValue.Password,
+			AdminRoleIds: aAdminRoleIds,
+		},
+		Id: uint32(iId),
+	}
+
+	_, oErr := oSelf.ResourceLogicClient.AdminUser.EditAdminUserById(oSelf.Context, oRequest)
+
+	return oErr
+}

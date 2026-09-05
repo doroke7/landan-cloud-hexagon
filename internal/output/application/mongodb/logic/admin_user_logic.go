@@ -1,6 +1,7 @@
 package outputApplicationMongodbLogic
 
 import (
+	"errors"
 	"sync"
 	"time"
 
@@ -115,6 +116,32 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
 	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
 		return oErr
+	}
+
+	return nil
+}
+
+func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint) error {
+	oSet := bson.M{"updated_at": time.Now()}
+
+	if oValue.Name != nil {
+		oSet["name"] = *oValue.Name
+	}
+	if oValue.Password != nil {
+		oSet["password"] = *oValue.Password
+	}
+
+	oResult, oErr := oSelf.Collection.UpdateOne(
+		oSelf.Context,
+		bson.M{"_id": iId},
+		bson.M{"$set": oSet},
+	)
+	if oErr != nil {
+		return oErr
+	}
+
+	if oResult.MatchedCount == 0 {
+		return errors.New("更新0筆")
 	}
 
 	return nil

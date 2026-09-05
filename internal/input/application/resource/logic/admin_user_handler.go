@@ -123,3 +123,21 @@ func (oSelf *AdminUserHandler) AddAminUser(oContext context.Context, oReq *pbRes
 
 	return &pbResourceLogic.AdminUserAddAminUserOutput{}, oErr
 }
+
+func (oSelf *AdminUserHandler) EditAdminUserById(oContext context.Context, oReq *pbResourceLogic.AdminUserEditAdminUserByIdInput) (*pbResourceLogic.AdminUserEditAdminUserByIdOutput, error) {
+
+	aAdminRoleIds := make([]int, 0, len(oReq.GetVariable().GetAdminRoleIds()))
+	for _, iAdminRoleId := range oReq.GetVariable().GetAdminRoleIds() {
+		aAdminRoleIds = append(aAdminRoleIds, int(iAdminRoleId))
+	}
+
+	oValue := &domain.AdminUserValue{
+		Name:         oReq.GetVariable().Name,
+		Password:     oReq.GetVariable().Password,
+		AdminRoleIds: aAdminRoleIds,
+	}
+
+	oErr := oSelf.LogicAdminUserUsecase.EditAdminUserById(oValue, uint(oReq.GetId()))
+
+	return &pbResourceLogic.AdminUserEditAdminUserByIdOutput{}, oErr
+}
