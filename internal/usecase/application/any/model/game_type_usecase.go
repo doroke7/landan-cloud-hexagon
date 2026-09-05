@@ -26,7 +26,7 @@ func (oSelf *GameTypeUsecase) AddOne(oAdd *domain.GameTypeValue) error {
 
 func (oSelf *GameTypeUsecase) ShowOneById(iId uint64) (*domain.GameType, error) {
 
-	oGameType, oErr := oSelf.GameTypeModel.ShowOneById(uint(iId))
+	oGameType, oErr := oSelf.GameTypeModel.ShowOneById(iId)
 
 	return oGameType, oErr
 }
@@ -40,12 +40,12 @@ func (oSelf *GameTypeUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []
 
 func (oSelf *GameTypeUsecase) EditOneById(oEdit *domain.GameTypeValue, iId uint64) error {
 
-	return oSelf.GameTypeModel.EditOneById(oEdit, uint(iId))
+	return oSelf.GameTypeModel.EditOneById(oEdit, iId)
 }
 
 func (oSelf *GameTypeUsecase) RemoveOneById(iId uint64) error {
 
-	return oSelf.GameTypeModel.RemoveOneById(uint(iId))
+	return oSelf.GameTypeModel.RemoveOneById(iId)
 }
 
 func (oSelf *GameTypeUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

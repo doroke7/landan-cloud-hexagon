@@ -130,7 +130,7 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 	return &oTable, nil
 }
 
-func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) error {
+func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) error {
 	oSet := bson.M{"updated_at": time.Now()}
 
 	if oTable.No != nil {
@@ -174,7 +174,7 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) error 
 	return nil
 }
 
-func (oSelf *TableModel) RemoveOneById(iId uint) error {
+func (oSelf *TableModel) RemoveOneById(iId uint64) error {
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
@@ -211,7 +211,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
@@ -220,5 +220,5 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, erro
 		return 0, oErr
 	}
 
-	return uint(iCount), nil
+	return uint64(iCount), nil
 }

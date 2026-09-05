@@ -28,7 +28,7 @@ func NewTableRecordModel(oAbstractModel *elasticsearchBase.AbstractElasticsearch
 	}
 }
 
-func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error) {
+func (oSelf *TableRecordModel) ShowOneById(iId uint64) (*domain.TableRecord, error) {
 	var oTableRecord domain.TableRecord
 
 	bFound, oErr := oSelf.GetById(oSelf.Index, strconv.FormatUint(uint64(iId), 10), &oTableRecord)
@@ -69,7 +69,7 @@ func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters [
 	return aTableRecords, nil
 }
 
-func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -141,7 +141,7 @@ func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint
 
 	iTotal, oErr := oSelf.CountWithOptions(aOptions)
 
-	return uint(iTotal), oErr
+	return uint64(iTotal), oErr
 }
 
 func (oSelf *TableRecordModel) AddOne(oValue *domain.TableRecordValue) error {
@@ -193,7 +193,7 @@ func (oSelf *TableRecordModel) AddOne(oValue *domain.TableRecordValue) error {
 	return nil
 }
 
-func (oSelf *TableRecordModel) EditOneById(oValue *domain.TableRecordValue, iId uint) error {
+func (oSelf *TableRecordModel) EditOneById(oValue *domain.TableRecordValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr
@@ -214,7 +214,7 @@ func (oSelf *TableRecordModel) EditOneById(oValue *domain.TableRecordValue, iId 
 	return nil
 }
 
-func (oSelf *TableRecordModel) RemoveOneById(iId uint) error {
+func (oSelf *TableRecordModel) RemoveOneById(iId uint64) error {
 	sId := strconv.FormatUint(uint64(iId), 10)
 	oPartial := map[string]any{"deleted_at": time.Now()}
 

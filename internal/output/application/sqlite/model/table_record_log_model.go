@@ -23,7 +23,7 @@ func NewTableRecordLogModel(oAbstractModel *sqliteBase.AbstractSqlite) outputPor
 	}
 }
 
-func (oSelf *TableRecordLogModel) ShowOneById(iId uint) (*domain.TableRecordLog, error) {
+func (oSelf *TableRecordLogModel) ShowOneById(iId uint64) (*domain.TableRecordLog, error) {
 	var oTableRecordLog domain.TableRecordLog
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -80,7 +80,7 @@ func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilter
 	return aTableRecordLogs, nil
 }
 
-func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -98,7 +98,7 @@ func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (u
 		return 0, oErr
 	}
 
-	return uint(iTotal), nil
+	return uint64(iTotal), nil
 }
 
 func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogValue) error {

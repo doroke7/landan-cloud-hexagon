@@ -28,7 +28,7 @@ func NewGameTypeModel(oAbstractModel *elasticsearchBase.AbstractElasticsearch) o
 	}
 }
 
-func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
+func (oSelf *GameTypeModel) ShowOneById(iId uint64) (*domain.GameType, error) {
 	var oGameType domain.GameType
 
 	bFound, oErr := oSelf.GetById(oSelf.Index, strconv.FormatUint(uint64(iId), 10), &oGameType)
@@ -51,7 +51,7 @@ func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 
 // ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
 // 走既有的 filters 查詢，deleted_at 的過濾由 ShowOnesByFiltersWithSortersPagination 內部補上。
-func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint, error) {
+func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	sParentIdField := "parent_id"
 	sDeletedAtField := "deleted_at"
 	aFilters := []*pkgInput.Filter{
@@ -63,7 +63,7 @@ func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint, error) {
 	return iTotal, oErr
 }
 
-func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint) ([]*domain.GameType, error) {
+func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint64) ([]*domain.GameType, error) {
 	sField := "parent_id"
 	sOperator := "eq"
 	aFilters := []*pkgInput.Filter{
@@ -101,7 +101,7 @@ func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*p
 	return aGameTypes, nil
 }
 
-func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -173,7 +173,7 @@ func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, e
 
 	iTotal, oErr := oSelf.CountWithOptions(aOptions)
 
-	return uint(iTotal), oErr
+	return uint64(iTotal), oErr
 }
 
 func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {
@@ -204,7 +204,7 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {
 	return nil
 }
 
-func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) error {
+func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr
@@ -225,7 +225,7 @@ func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) 
 	return nil
 }
 
-func (oSelf *GameTypeModel) RemoveOneById(iId uint) error {
+func (oSelf *GameTypeModel) RemoveOneById(iId uint64) error {
 	sId := strconv.FormatUint(uint64(iId), 10)
 	oPartial := map[string]any{"deleted_at": time.Now()}
 

@@ -43,7 +43,7 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 	return &oTable, nil
 }
 
-func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) error {
+func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTable)
 	if oErr != nil {
 		return oErr
@@ -65,7 +65,7 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) error 
 	return nil
 }
 
-func (oSelf *TableModel) RemoveOneById(iId uint) error {
+func (oSelf *TableModel) RemoveOneById(iId uint64) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.Table{}).
 		Where("id = ?", iId).
@@ -125,7 +125,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractOracle.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -143,7 +143,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, erro
 		return 0, oErr
 	}
 
-	return uint(iTotal), nil
+	return uint64(iTotal), nil
 }
 
 func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {

@@ -109,7 +109,7 @@ func (oSelf *GameModel) AddOne(oGame *domain.GameValue) error {
 	return nil
 }
 
-func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
+func (oSelf *GameModel) ShowOneById(iId uint64) (*domain.Game, error) {
 	var oGame domain.Game
 
 	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
@@ -145,7 +145,7 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	return &oGame, nil
 }
 
-func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) error {
+func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint64) error {
 	oSet := bson.M{"updated_at": time.Now()}
 
 	if oGame.GameTypeId != nil {
@@ -177,7 +177,7 @@ func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) error {
 	return nil
 }
 
-func (oSelf *GameModel) RemoveOneById(iId uint) error {
+func (oSelf *GameModel) RemoveOneById(iId uint64) error {
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
@@ -194,7 +194,7 @@ func (oSelf *GameModel) RemoveOneById(iId uint) error {
 	return nil
 }
 
-func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
 	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{
 		"game_type_id": iGameTypeId,
 		"deleted_at":   oDeletedAtZero,
@@ -212,7 +212,7 @@ func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, 
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint, error) {
+func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	iCount, oErr := oSelf.Collection.CountDocuments(oSelf.Context, bson.M{
 		"game_type_id": iGameTypeId,
 		"deleted_at":   oDeletedAtZero,
@@ -244,7 +244,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
@@ -253,5 +253,5 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error
 		return 0, oErr
 	}
 
-	return uint(iCount), nil
+	return uint64(iCount), nil
 }

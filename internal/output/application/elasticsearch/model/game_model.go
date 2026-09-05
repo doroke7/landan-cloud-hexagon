@@ -32,7 +32,7 @@ func NewGameModel(oAbstractModel *elasticsearchBase.AbstractElasticsearch) outpu
 	}
 }
 
-func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
+func (oSelf *GameModel) ShowOneById(iId uint64) (*domain.Game, error) {
 	var oGame domain.Game
 
 	bFound, oErr := oSelf.GetById(oSelf.Index, strconv.FormatUint(uint64(iId), 10), &oGame)
@@ -88,7 +88,7 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	return &oGame, nil
 }
 
-func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
 	sField := "game_type_id"
 	sOperator := "eq"
 	aFilters := []*pkgInput.Filter{
@@ -101,7 +101,7 @@ func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, 
 	return aGames, oErr
 }
 
-func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint, error) {
+func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	sGameTypeIdField := "game_type_id"
 	sDeletedAtField := "deleted_at"
 	aFilters := []*pkgInput.Filter{
@@ -110,7 +110,7 @@ func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint, error) {
 	}
 
 	iTotal, oErr := oSelf.TotalByFilters(aFilters)
-	return iTotal, oErr
+	return uint(iTotal), oErr
 }
 
 func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
@@ -140,7 +140,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -212,7 +212,7 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error
 
 	iTotal, oErr := oSelf.CountWithOptions(aOptions)
 
-	return uint(iTotal), oErr
+	return uint64(iTotal), oErr
 }
 
 func (oSelf *GameModel) AddOne(oValue *domain.GameValue) error {
@@ -249,7 +249,7 @@ func (oSelf *GameModel) AddOne(oValue *domain.GameValue) error {
 	return nil
 }
 
-func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) error {
+func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr
@@ -270,7 +270,7 @@ func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) error {
 	return nil
 }
 
-func (oSelf *GameModel) RemoveOneById(iId uint) error {
+func (oSelf *GameModel) RemoveOneById(iId uint64) error {
 	sId := strconv.FormatUint(uint64(iId), 10)
 	oPartial := map[string]any{"deleted_at": time.Now()}
 

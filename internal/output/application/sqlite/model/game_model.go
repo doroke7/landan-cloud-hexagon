@@ -24,7 +24,7 @@ func NewGameModel(oAbstractModel *sqliteBase.AbstractSqlite) outputPortAnyModel.
 	}
 }
 
-func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
+func (oSelf *GameModel) ShowOneById(iId uint64) (*domain.Game, error) {
 	var oGame domain.Game
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -63,7 +63,7 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	return &oGame, nil
 }
 
-func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
 	var aGames []*domain.Game
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -79,7 +79,7 @@ func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, 
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint, error) {
+func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	var iTotal int64
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -135,7 +135,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -154,7 +154,7 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error
 		return 0, oErr
 	}
 
-	return uint(iTotal), nil
+	return uint64(iTotal), nil
 
 }
 
@@ -177,7 +177,7 @@ func (oSelf *GameModel) AddOne(oValue *domain.GameValue) error {
 	return nil
 }
 
-func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) error {
+func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint64) error {
 	oGame, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -197,7 +197,7 @@ func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) error {
 	return nil
 }
 
-func (oSelf *GameModel) RemoveOneById(iId uint) error {
+func (oSelf *GameModel) RemoveOneById(iId uint64) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.Game{}).
 		Where("id = ?", iId).

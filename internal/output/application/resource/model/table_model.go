@@ -97,7 +97,7 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 	return &oTable, nil
 }
 
-func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) error {
+func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.TableEditOneByIdInput{
 		Id:       uint32(iId),
@@ -109,7 +109,7 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) error 
 	return oErr
 }
 
-func (oSelf *TableModel) RemoveOneById(iId uint) error {
+func (oSelf *TableModel) RemoveOneById(iId uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.Table.RemoveOneById(
 		oSelf.Context,
@@ -142,7 +142,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
 	oRequest := &pbResourceModel.TableTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -150,7 +150,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, erro
 
 	oResponse, oErr := oSelf.ResourceModelClient.Table.TotalByFilters(oSelf.Context, oRequest)
 
-	iTotal := uint(oResponse.GetTotal())
+	iTotal := uint64(oResponse.GetTotal())
 
 	return iTotal, oErr
 }

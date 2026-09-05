@@ -36,12 +36,12 @@ func (oSelf *TableUsecase) ShowOneById(iId uint64) (*domain.Table, error) {
 
 func (oSelf *TableUsecase) EditOneById(oValue *domain.TableValue, iId uint64) error {
 
-	return oSelf.TableModel.EditOneById(oValue, uint(iId))
+	return oSelf.TableModel.EditOneById(oValue, iId)
 }
 
 func (oSelf *TableUsecase) RemoveOneById(iId uint64) error {
 
-	return oSelf.TableModel.RemoveOneById(uint(iId))
+	return oSelf.TableModel.RemoveOneById(iId)
 }
 
 func (oSelf *TableUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

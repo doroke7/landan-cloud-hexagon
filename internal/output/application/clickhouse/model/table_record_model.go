@@ -24,7 +24,7 @@ func NewTableRecordModel(oAbstractModel *clickhouseBase.AbstractClickhouse) outp
 	}
 }
 
-func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error) {
+func (oSelf *TableRecordModel) ShowOneById(iId uint64) (*domain.TableRecord, error) {
 	var oTableRecord domain.TableRecord
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -43,7 +43,7 @@ func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error
 
 // EditOneById 底層送出的是 ClickHouse 的 ALTER TABLE ... UPDATE mutation，
 // 非同步執行，RowsAffected 通常會回 0，不能拿來判斷是否真的更新成功。
-func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue, iId uint) error {
+func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTableRecord)
 	if oErr != nil {
 		return oErr
@@ -63,7 +63,7 @@ func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue
 
 // RemoveOneById 底層送出的是 ClickHouse 的 ALTER TABLE ... UPDATE mutation（軟刪除），
 // 非同步執行，RowsAffected 通常會回 0，不能拿來判斷是否真的刪除成功。
-func (oSelf *TableRecordModel) RemoveOneById(iId uint) error {
+func (oSelf *TableRecordModel) RemoveOneById(iId uint64) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.TableRecord{}).
 		Where("id = ?", iId).
@@ -117,7 +117,7 @@ func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters [
 	return aTableRecords, nil
 }
 
-func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractClickhouse.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -135,7 +135,7 @@ func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint
 		return 0, oErr
 	}
 
-	return uint(iTotal), nil
+	return uint64(iTotal), nil
 }
 
 func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) error {

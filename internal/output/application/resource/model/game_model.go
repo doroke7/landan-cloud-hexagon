@@ -63,7 +63,7 @@ func (oSelf *GameModel) AddOne(oGameParm *domain.GameValue) error {
 	return oErr
 }
 
-func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
+func (oSelf *GameModel) ShowOneById(iId uint64) (*domain.Game, error) {
 
 	oResponse, oErr := oSelf.ResourceModelClient.Game.ShowOneById(
 		oSelf.Context,
@@ -105,7 +105,7 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	return &oGame, nil
 }
 
-func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
 	sField := "game_type_id"
 	sOperator := "eq"
 	aFilters := []*pkgInput.Filter{
@@ -118,7 +118,7 @@ func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, 
 	return aGames, oErr
 }
 
-func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint, error) {
+func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	sField := "game_type_id"
 	sOperator := "eq"
 	aFilters := []*pkgInput.Filter{
@@ -126,7 +126,7 @@ func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint, error) {
 	}
 
 	iTotal, oErr := oSelf.TotalByFilters(aFilters)
-	return iTotal, oErr
+	return uint(iTotal), oErr
 }
 
 func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
@@ -152,7 +152,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
 	oRequest := &pbResourceModel.GameTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -160,12 +160,12 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error
 
 	oResponse, oErr := oSelf.ResourceModelClient.Game.TotalByFilters(oSelf.Context, oRequest)
 
-	iTotal := uint(oResponse.GetTotal())
+	iTotal := uint64(oResponse.GetTotal())
 
 	return iTotal, oErr
 }
 
-func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) error {
+func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.GameEditOneByIdInput{
 		Id:       uint32(iId),
@@ -177,7 +177,7 @@ func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) error {
 	return oErr
 }
 
-func (oSelf *GameModel) RemoveOneById(iId uint) error {
+func (oSelf *GameModel) RemoveOneById(iId uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.Game.RemoveOneById(
 		oSelf.Context,

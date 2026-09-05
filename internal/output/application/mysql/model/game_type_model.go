@@ -24,7 +24,7 @@ func NewGameTypeModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyMode
 	}
 }
 
-func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
+func (oSelf *GameTypeModel) ShowOneById(iId uint64) (*domain.GameType, error) {
 	var oGameType domain.GameType
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -59,7 +59,7 @@ func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 }
 
 // ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
-func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint, error) {
+func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	var iTotal int64
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -70,10 +70,10 @@ func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint, error) {
 		return 0, oErr
 	}
 
-	return uint(iTotal), nil
+	return uint64(iTotal), nil
 }
 
-func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint) ([]*domain.GameType, error) {
+func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint64) ([]*domain.GameType, error) {
 	var aGameTypes []*domain.GameType
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -149,7 +149,7 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {
 	return nil
 }
 
-func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) error {
+func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint64) error {
 	oGameType, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -168,7 +168,7 @@ func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) 
 	return nil
 }
 
-func (oSelf *GameTypeModel) RemoveOneById(iId uint) error {
+func (oSelf *GameTypeModel) RemoveOneById(iId uint64) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.GameType{}).
 		Where("id = ?", iId).
@@ -186,7 +186,7 @@ func (oSelf *GameTypeModel) RemoveOneById(iId uint) error {
 	return nil
 }
 
-func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -204,5 +204,5 @@ func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, e
 		return 0, oErr
 	}
 
-	return uint(iTotal), nil
+	return uint64(iTotal), nil
 }

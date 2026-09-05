@@ -58,16 +58,16 @@ func (oSelf *GameUsecase) EditOne(oValue *domain.GameValue, iId uint64) error {
 		}
 	}
 
-	return oSelf.GameModel.EditOneById(oValue, uint(iId))
+	return oSelf.GameModel.EditOneById(oValue, iId)
 }
 
 func (oSelf *GameUsecase) RemoveOne(iId uint) error {
 
-	return oSelf.GameModel.RemoveOneById(iId)
+	return oSelf.GameModel.RemoveOneById(uint64(iId))
 }
 
 func (oSelf *GameUsecase) ShowOne(iId uint64) (*domain.Game, error) {
-	oGame, oErr := oSelf.GameModel.ShowOneById(uint(iId))
+	oGame, oErr := oSelf.GameModel.ShowOneById(iId)
 
 	return oGame, oErr
 }

@@ -7,14 +7,14 @@ import (
 
 type GameTypeModel interface {
 	AddOne(oGameType *domain.GameTypeValue) error
-	ShowOneById(iId uint) (*domain.GameType, error)
-	EditOneById(oGameType *domain.GameTypeValue, iId uint) error
-	RemoveOneById(iId uint) error
-	ShowOnesByParentId(iParentId uint) ([]*domain.GameType, error)
-	TotalByParentId(iParentId uint) (uint, error)
+	ShowOneById(iId uint64) (*domain.GameType, error)
+	EditOneById(oGameType *domain.GameTypeValue, iId uint64) error
+	RemoveOneById(iId uint64) error
+	ShowOnesByParentId(iParentId uint64) ([]*domain.GameType, error)
+	TotalByParentId(iParentId uint64) (uint64, error)
 
 	ShowOnes() ([]*domain.GameType, error)
 
 	ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error)
-	TotalByFilters(aFilters []*pkgInput.Filter) (uint, error)
+	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
 }

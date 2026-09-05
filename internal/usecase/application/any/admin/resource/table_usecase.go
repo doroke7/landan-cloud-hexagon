@@ -35,12 +35,12 @@ func (oSelf *TableUsecase) ShowOne(iId uint64) (*domain.Table, error) {
 
 func (oSelf *TableUsecase) EditOne(oValue *domain.TableValue, iId uint64) error {
 
-	return oSelf.TableModel.EditOneById(oValue, uint(iId))
+	return oSelf.TableModel.EditOneById(oValue, iId)
 }
 
 func (oSelf *TableUsecase) RemoveOne(iId uint64) error {
 
-	return oSelf.TableModel.RemoveOneById(uint(iId))
+	return oSelf.TableModel.RemoveOneById(iId)
 }
 
 func (oSelf *TableUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {

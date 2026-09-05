@@ -33,11 +33,11 @@ func (oSelf *GameTypeUsecase) AddOne(oValue *domain.GameTypeValue) error {
 
 func (oSelf *GameTypeUsecase) EditOne(oValue *domain.GameTypeValue, iId uint64) error {
 
-	return oSelf.GameTypeModel.EditOneById(oValue, uint(iId))
+	return oSelf.GameTypeModel.EditOneById(oValue, iId)
 }
 
 func (oSelf *GameTypeUsecase) ShowOne(iId uint64) (*domain.GameType, error) {
-	oGameType, oErr := oSelf.GameTypeModel.ShowOneById(uint(iId))
+	oGameType, oErr := oSelf.GameTypeModel.ShowOneById(iId)
 
 	return oGameType, oErr
 }
@@ -68,7 +68,7 @@ func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*
 func (oSelf *GameTypeUsecase) RemoveOne(iId uint64) error {
 
 	// 底下還有未刪除的子類型就不放行，避免刪掉父類型後留下孤兒資料
-	iChildren, oErr := oSelf.GameTypeModel.TotalByParentId(uint(iId))
+	iChildren, oErr := oSelf.GameTypeModel.TotalByParentId(iId)
 
 	if oErr != nil {
 		return oErr
@@ -79,7 +79,7 @@ func (oSelf *GameTypeUsecase) RemoveOne(iId uint64) error {
 	}
 
 	// 底下還有掛在此類型的遊戲也不放行
-	iGames, oErr := oSelf.GameModel.TotalByGameTypeId(uint(iId))
+	iGames, oErr := oSelf.GameModel.TotalByGameTypeId(iId)
 
 	if oErr != nil {
 		return oErr
@@ -89,5 +89,5 @@ func (oSelf *GameTypeUsecase) RemoveOne(iId uint64) error {
 		return pkgUtility.NewDefaultError("This game type still has games; remove them before deleting", -2, 500)
 	}
 
-	return oSelf.GameTypeModel.RemoveOneById(uint(iId))
+	return oSelf.GameTypeModel.RemoveOneById(iId)
 }

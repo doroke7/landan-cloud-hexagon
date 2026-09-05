@@ -6,5 +6,5 @@ import (
 
 type UserModel interface {
 	AddOne(oUser *domain.UserValue) error
-	ShowOneById(iId int) (*domain.User, error)
+	ShowOneById(iId uint64) (*domain.User, error)
 }

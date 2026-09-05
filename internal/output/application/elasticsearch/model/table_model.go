@@ -70,7 +70,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -142,7 +142,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, erro
 
 	iTotal, oErr := oSelf.CountWithOptions(aOptions)
 
-	return uint(iTotal), oErr
+	return uint64(iTotal), oErr
 }
 
 func (oSelf *TableModel) AddOne(oValue *domain.TableValue) error {
@@ -191,7 +191,7 @@ func (oSelf *TableModel) AddOne(oValue *domain.TableValue) error {
 	return nil
 }
 
-func (oSelf *TableModel) EditOneById(oValue *domain.TableValue, iId uint) error {
+func (oSelf *TableModel) EditOneById(oValue *domain.TableValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr
@@ -212,7 +212,7 @@ func (oSelf *TableModel) EditOneById(oValue *domain.TableValue, iId uint) error 
 	return nil
 }
 
-func (oSelf *TableModel) RemoveOneById(iId uint) error {
+func (oSelf *TableModel) RemoveOneById(iId uint64) error {
 	sId := strconv.FormatUint(uint64(iId), 10)
 	oPartial := map[string]any{"deleted_at": time.Now()}
 
