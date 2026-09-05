@@ -99,9 +99,10 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 	if oErr != nil {
 		return oErr
 	}
+
 	delete(oColumns, "admin_role_ids")
 
-	return oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
+	oError := oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
 
 		oResult := oTx.
 			Model(&domain.AdminUser{}).
@@ -140,4 +141,6 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
 		return oErr
 	})
+
+	return oError
 }
