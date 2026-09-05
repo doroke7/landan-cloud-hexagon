@@ -8,7 +8,7 @@ import (
 
 type AppUserUsecase struct {
 	*usecaseApplicationAnyAdmin.AbstractUsecase
-	outputPortAnyModel.AppUserModel
+	AppUserModel outputPortAnyModel.AppUserModel
 }
 
 func NewAppUserUsecase(oAppUserModel outputPortAnyModel.AppUserModel, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminResource.AppUserUsecase {

@@ -170,6 +170,7 @@ func Init(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 		{
 			oAdminOption.GET("/GameType/SelectOnes", oContainer.HttpAdminOptionGameType.SelectOnes)
 			oAdminOption.GET("/GameType/SelectTree", oContainer.HttpAdminOptionGameType.SelectTree)
+			oAdminOption.GET("/AdminRole/SelectOnes", oContainer.HttpAdminOptionAdminRole.SelectOnes)
 		}
 
 	}

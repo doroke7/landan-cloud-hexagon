@@ -13,7 +13,7 @@ import (
 
 type AdminUserUsecase struct {
 	*usecaseApplicationAnyAdmin.AbstractUsecase
-	outputPortAnyModel.AdminUserModel
+	AdminUserModel outputPortAnyModel.AdminUserModel
 	AdminUserLogic outputPortAnyLogic.AdminUserLogic
 }
 
@@ -23,6 +23,19 @@ func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAdm
 		AdminUserModel:  oAdminUserModel,
 		AdminUserLogic:  oAdminUserLogic,
 	}
+}
+
+func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
+
+	oErr := oSelf.ValidatorHelper.Valiate(oAdminUser)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	bResult, oErr := oSelf.AdminUserModel.AddOne(oAdminUser)
+
+	return bResult, oErr
 }
 
 func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
@@ -71,10 +84,6 @@ func (oSelf *AdminUserUsecase) RemoveOne(iId uint) (bool, error) {
 func (oSelf *AdminUserUsecase) ShowOne(iId uint) (*domain.AdminUser, error) {
 
 	oAdminUser, oErr := oSelf.AdminUserModel.ShowOneById(iId)
-
-	if oAdminUser != nil {
-		oAdminUser.Password = "" // 不外洩密碼
-	}
 
 	return oAdminUser, oErr
 }
