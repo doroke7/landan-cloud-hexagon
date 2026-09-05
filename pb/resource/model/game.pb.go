@@ -24,7 +24,7 @@ const (
 
 type GameVariable struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameTypeId    *uint32                `protobuf:"varint,1,opt,name=game_type_id,json=gameTypeId,proto3,oneof" json:"game_type_id,omitempty"`
+	GameTypeId    *uint64                `protobuf:"varint,1,opt,name=game_type_id,json=gameTypeId,proto3,oneof" json:"game_type_id,omitempty"`
 	Key           *string                `protobuf:"bytes,2,opt,name=key,proto3,oneof" json:"key,omitempty"`
 	Name          *string                `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Description   *string                `protobuf:"bytes,4,opt,name=description,proto3,oneof" json:"description,omitempty"`
@@ -62,7 +62,7 @@ func (*GameVariable) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GameVariable) GetGameTypeId() uint32 {
+func (x *GameVariable) GetGameTypeId() uint64 {
 	if x != nil && x.GameTypeId != nil {
 		return *x.GameTypeId
 	}
@@ -180,7 +180,7 @@ func (x *GameAddOneOutput) GetGame() *resource.Game {
 
 type GameShowOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -215,7 +215,7 @@ func (*GameShowOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GameShowOneByIdInput) GetId() uint32 {
+func (x *GameShowOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -736,7 +736,7 @@ const file_resource_model_game_proto_rawDesc = "" +
 	"\n" +
 	"\x19resource/model/game.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"\xbe\x01\n" +
 	"\fGameVariable\x12%\n" +
-	"\fgame_type_id\x18\x01 \x01(\rH\x00R\n" +
+	"\fgame_type_id\x18\x01 \x01(\x04H\x00R\n" +
 	"gameTypeId\x88\x01\x01\x12\x15\n" +
 	"\x03key\x18\x02 \x01(\tH\x01R\x03key\x88\x01\x01\x12\x17\n" +
 	"\x04name\x18\x03 \x01(\tH\x02R\x04name\x88\x01\x01\x12%\n" +
@@ -750,7 +750,7 @@ const file_resource_model_game_proto_rawDesc = "" +
 	"\x10GameAddOneOutput\x12%\n" +
 	"\x04game\x18\x01 \x01(\v2\x11.pb.resource.GameR\x04game\"&\n" +
 	"\x14GameShowOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\">\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\">\n" +
 	"\x15GameShowOneByIdOutput\x12%\n" +
 	"\x04game\x18\x01 \x01(\v2\x11.pb.resource.GameR\x04game\")\n" +
 	"\x15GameShowOneByKeyInput\x12\x10\n" +

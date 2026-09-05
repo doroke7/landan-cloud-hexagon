@@ -51,12 +51,12 @@ func domainTableValueToProtoTableVariable(oTable *domain.TableValue) *pbResource
 	}
 
 	if oTable.GameId != nil {
-		iGameId := uint32(*oTable.GameId)
+		iGameId := uint64(*oTable.GameId)
 		oVariable.GameId = &iGameId
 	}
 
 	if oTable.State != nil {
-		iState := uint32(*oTable.State)
+		iState := uint64(*oTable.State)
 		oVariable.State = &iState
 	}
 
@@ -80,7 +80,7 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 
 	oResponse, oErr := oSelf.ResourceModelClient.Table.ShowOneById(
 		oSelf.Context,
-		&pbResourceModel.TableShowOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.TableShowOneByIdInput{Id: uint64(iId)},
 	)
 
 	if oErr != nil {
@@ -100,7 +100,7 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.TableEditOneByIdInput{
-		Id:       uint32(iId),
+		Id:       uint64(iId),
 		Variable: domainTableValueToProtoTableVariable(oTable),
 	}
 

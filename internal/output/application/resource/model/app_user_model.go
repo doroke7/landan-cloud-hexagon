@@ -55,7 +55,7 @@ func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 
 	oResp, oErr := oSelf.ResourceModelClient.AppUser.ShowOneById(
 		oSelf.Context,
-		&pbResourceModel.AppUserShowOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.AppUserShowOneByIdInput{Id: uint64(iId)},
 	)
 	if oErr != nil {
 		return nil, oErr
@@ -75,7 +75,7 @@ func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.AppUser.IncreaseBalance(
 		oSelf.Context,
-		&pbResourceModel.AppUserIncreaseBalanceInput{Id: uint32(iId), Amount: uint32(iAmount)},
+		&pbResourceModel.AppUserIncreaseBalanceInput{Id: uint64(iId), Amount: uint64(iAmount)},
 	)
 
 	return oErr

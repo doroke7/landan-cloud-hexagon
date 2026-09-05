@@ -60,10 +60,10 @@ func (oSelf *AppUserHandler) ShowOneByName(oContext context.Context, oReq *pbRes
 
 	return &pbResourceModel.AppUserShowOneByNameOutput{
 		AppUser: &pbResource.AppUser{
-			Id:       uint32(oAppUser.Id),
+			Id:       uint64(oAppUser.Id),
 			Name:     oAppUser.Name,
 			Password: oAppUser.Password,
-			Balance:  uint32(oAppUser.Balance),
+			Balance:  uint64(oAppUser.Balance),
 		},
 	}, nil
 }
@@ -77,10 +77,10 @@ func (oSelf *AppUserHandler) ShowOneById(oContext context.Context, oReq *pbResou
 
 	return &pbResourceModel.AppUserShowOneByIdOutput{
 		AppUser: &pbResource.AppUser{
-			Id:       uint32(oAppUser.Id),
+			Id:       uint64(oAppUser.Id),
 			Name:     oAppUser.Name,
 			Password: oAppUser.Password,
-			Balance:  uint32(oAppUser.Balance),
+			Balance:  uint64(oAppUser.Balance),
 		},
 	}, nil
 }

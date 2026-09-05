@@ -26,9 +26,9 @@ const (
 type TableVariable struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	No            *string                `protobuf:"bytes,1,opt,name=no,proto3,oneof" json:"no,omitempty"`
-	GameId        *uint32                `protobuf:"varint,2,opt,name=game_id,json=gameId,proto3,oneof" json:"game_id,omitempty"`
+	GameId        *uint64                `protobuf:"varint,2,opt,name=game_id,json=gameId,proto3,oneof" json:"game_id,omitempty"`
 	Key           *string                `protobuf:"bytes,3,opt,name=key,proto3,oneof" json:"key,omitempty"`
-	State         *uint32                `protobuf:"varint,4,opt,name=state,proto3,oneof" json:"state,omitempty"`
+	State         *uint64                `protobuf:"varint,4,opt,name=state,proto3,oneof" json:"state,omitempty"`
 	Description   *string                `protobuf:"bytes,5,opt,name=description,proto3,oneof" json:"description,omitempty"`
 	Result        *string                `protobuf:"bytes,6,opt,name=result,proto3,oneof" json:"result,omitempty"`
 	StartedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
@@ -74,7 +74,7 @@ func (x *TableVariable) GetNo() string {
 	return ""
 }
 
-func (x *TableVariable) GetGameId() uint32 {
+func (x *TableVariable) GetGameId() uint64 {
 	if x != nil && x.GameId != nil {
 		return *x.GameId
 	}
@@ -88,7 +88,7 @@ func (x *TableVariable) GetKey() string {
 	return ""
 }
 
-func (x *TableVariable) GetState() uint32 {
+func (x *TableVariable) GetState() uint64 {
 	if x != nil && x.State != nil {
 		return *x.State
 	}
@@ -213,7 +213,7 @@ func (x *TableAddOneOutput) GetStatus() bool {
 
 type TableShowOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -248,7 +248,7 @@ func (*TableShowOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *TableShowOneByIdInput) GetId() uint32 {
+func (x *TableShowOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -302,7 +302,7 @@ func (x *TableShowOneByIdOutput) GetTable() *resource.Table {
 type TableEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Variable      *TableVariable         `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint32                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -344,7 +344,7 @@ func (x *TableEditOneByIdInput) GetVariable() *TableVariable {
 	return nil
 }
 
-func (x *TableEditOneByIdInput) GetId() uint32 {
+func (x *TableEditOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -682,9 +682,9 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15resource/common.proto\"\xea\x02\n" +
 	"\rTableVariable\x12\x13\n" +
 	"\x02no\x18\x01 \x01(\tH\x00R\x02no\x88\x01\x01\x12\x1c\n" +
-	"\agame_id\x18\x02 \x01(\rH\x01R\x06gameId\x88\x01\x01\x12\x15\n" +
+	"\agame_id\x18\x02 \x01(\x04H\x01R\x06gameId\x88\x01\x01\x12\x15\n" +
 	"\x03key\x18\x03 \x01(\tH\x02R\x03key\x88\x01\x01\x12\x19\n" +
-	"\x05state\x18\x04 \x01(\rH\x03R\x05state\x88\x01\x01\x12%\n" +
+	"\x05state\x18\x04 \x01(\x04H\x03R\x05state\x88\x01\x01\x12%\n" +
 	"\vdescription\x18\x05 \x01(\tH\x04R\vdescription\x88\x01\x01\x12\x1b\n" +
 	"\x06result\x18\x06 \x01(\tH\x05R\x06result\x88\x01\x01\x129\n" +
 	"\n" +
@@ -702,12 +702,12 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\x11TableAddOneOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"'\n" +
 	"\x15TableShowOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"B\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"B\n" +
 	"\x16TableShowOneByIdOutput\x12(\n" +
 	"\x05table\x18\x01 \x01(\v2\x12.pb.resource.TableR\x05table\"e\n" +
 	"\x15TableEditOneByIdInput\x12<\n" +
 	"\bvariable\x18\x01 \x01(\v2 .pb.resource.model.TableVariableR\bvariable\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\rR\x02id\"0\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"0\n" +
 	"\x16TableEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\")\n" +
 	"\x17TableRemoveOneByIdInput\x12\x0e\n" +

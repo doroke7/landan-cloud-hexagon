@@ -71,9 +71,9 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 
 func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
-	aAdminRoleIds := make([]uint32, 0, len(oValue.AdminRoleIds))
+	aAdminRoleIds := make([]uint64, 0, len(oValue.AdminRoleIds))
 	for _, iAdminRoleId := range oValue.AdminRoleIds {
-		aAdminRoleIds = append(aAdminRoleIds, uint32(iAdminRoleId))
+		aAdminRoleIds = append(aAdminRoleIds, uint64(iAdminRoleId))
 	}
 
 	oRequest := &pbResourceLogic.AdminUserAddAminUserInput{
@@ -91,9 +91,9 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
 func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint) error {
 
-	aAdminRoleIds := make([]uint32, 0, len(oValue.AdminRoleIds))
+	aAdminRoleIds := make([]uint64, 0, len(oValue.AdminRoleIds))
 	for _, iAdminRoleId := range oValue.AdminRoleIds {
-		aAdminRoleIds = append(aAdminRoleIds, uint32(iAdminRoleId))
+		aAdminRoleIds = append(aAdminRoleIds, uint64(iAdminRoleId))
 	}
 
 	oRequest := &pbResourceLogic.AdminUserEditAdminUserByIdInput{
@@ -102,7 +102,7 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 			Password:     oValue.Password,
 			AdminRoleIds: aAdminRoleIds,
 		},
-		Id: uint32(iId),
+		Id: uint64(iId),
 	}
 
 	_, oErr := oSelf.ResourceLogicClient.AdminUser.EditAdminUserById(oSelf.Context, oRequest)

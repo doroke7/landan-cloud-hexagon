@@ -35,8 +35,8 @@ func domainAdminPermissionToProtoAdminPermission(oAdminPermission *domain.AdminP
 	}
 
 	return &pbResource.AdminPermission{
-		Id:        uint32(oAdminPermission.Id),
-		Type:      uint32(oAdminPermission.Type),
+		Id:        uint64(oAdminPermission.Id),
+		Type:      uint64(oAdminPermission.Type),
 		Key:       oAdminPermission.Key,
 		Name:      oAdminPermission.Name,
 		CreatedAt: timestamppb.New(oAdminPermission.CreatedAt),

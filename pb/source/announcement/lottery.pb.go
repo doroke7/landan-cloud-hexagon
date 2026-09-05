@@ -67,7 +67,7 @@ func (x *LotteryWatchRequest) GetKey() string {
 
 type LotteryWatchResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                  // 期號
+	Id            int64                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`                  // 期號
 	Round         string                 `protobuf:"bytes,2,opt,name=round,proto3" json:"round,omitempty"`             // 期號
 	Time          int64                  `protobuf:"varint,3,opt,name=time,proto3" json:"time,omitempty"`              // 開獎時間（unix 秒）
 	Numbers       []int32                `protobuf:"varint,4,rep,packed,name=numbers,proto3" json:"numbers,omitempty"` // 開獎號碼列表
@@ -105,7 +105,7 @@ func (*LotteryWatchResponse) Descriptor() ([]byte, []int) {
 	return file_source_announcement_lottery_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *LotteryWatchResponse) GetId() int32 {
+func (x *LotteryWatchResponse) GetId() int64 {
 	if x != nil {
 		return x.Id
 	}
@@ -141,7 +141,7 @@ const file_source_announcement_lottery_proto_rawDesc = "" +
 	"\x13LotteryWatchRequest\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\"j\n" +
 	"\x14LotteryWatchResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id\x12\x14\n" +
+	"\x02id\x18\x01 \x01(\x03R\x02id\x12\x14\n" +
 	"\x05round\x18\x02 \x01(\tR\x05round\x12\x12\n" +
 	"\x04time\x18\x03 \x01(\x03R\x04time\x12\x18\n" +
 	"\anumbers\x18\x04 \x03(\x05R\anumbers2y\n" +

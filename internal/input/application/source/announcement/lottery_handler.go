@@ -60,7 +60,7 @@ func (oSelf *LotteryHandler) Watch(oReq *pbSourceAnnouncement.LotteryWatchReques
 
 			// 模擬產生開獎資料 (實務上這裡會是呼叫 UseCase / DB 撈資料)
 			oResponse := &pbSourceAnnouncement.LotteryWatchResponse{
-				Id:      int32(oLottert.Id),
+				Id:      int64(oLottert.Id),
 				Round:   oLottert.Round,
 				Time:    oLottert.Time,
 				Numbers: aNumbers,

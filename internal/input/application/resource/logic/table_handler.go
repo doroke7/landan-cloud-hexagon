@@ -68,11 +68,11 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 	aPbTables := make([]*pbResource.Table, 0, len(aTables))
 	for _, oTable := range aTables {
 		aPbTables = append(aPbTables, &pbResource.Table{
-			Id:          uint32(oTable.Id),
+			Id:          uint64(oTable.Id),
 			No:          oTable.No,
-			GameId:      uint32(oTable.GameId),
+			GameId:      uint64(oTable.GameId),
 			Key:         oTable.Key,
-			State:       uint32(oTable.State),
+			State:       uint64(oTable.State),
 			Description: oTable.Description,
 			Result:      oTable.Result,
 			StartedAt:   timestamppb.New(oTable.StartedAt),

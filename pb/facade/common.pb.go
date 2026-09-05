@@ -189,13 +189,13 @@ func (x *Pagination) GetPage() uint64 {
 
 type GameType struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
 	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
-	ParentId      uint32                 `protobuf:"varint,7,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
+	ParentId      uint64                 `protobuf:"varint,7,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
 	Parent        *GameType              `protobuf:"bytes,8,opt,name=parent,proto3" json:"parent,omitempty"`
 	Children      []*GameType            `protobuf:"bytes,9,rep,name=children,proto3" json:"children,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -232,7 +232,7 @@ func (*GameType) Descriptor() ([]byte, []int) {
 	return file_facade_common_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GameType) GetId() uint32 {
+func (x *GameType) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -274,7 +274,7 @@ func (x *GameType) GetDeletedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *GameType) GetParentId() uint32 {
+func (x *GameType) GetParentId() uint64 {
 	if x != nil {
 		return x.ParentId
 	}
@@ -297,8 +297,8 @@ func (x *GameType) GetChildren() []*GameType {
 
 type Game struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	GameTypeId    uint32                 `protobuf:"varint,2,opt,name=game_type_id,json=gameTypeId,proto3" json:"game_type_id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	GameTypeId    uint64                 `protobuf:"varint,2,opt,name=game_type_id,json=gameTypeId,proto3" json:"game_type_id,omitempty"`
 	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
 	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	Description   string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
@@ -340,14 +340,14 @@ func (*Game) Descriptor() ([]byte, []int) {
 	return file_facade_common_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *Game) GetId() uint32 {
+func (x *Game) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *Game) GetGameTypeId() uint32 {
+func (x *Game) GetGameTypeId() uint64 {
 	if x != nil {
 		return x.GameTypeId
 	}
@@ -420,7 +420,7 @@ const file_facade_common_proto_rawDesc = "" +
 	"\x04size\x18\x01 \x01(\x04R\x04size\x12\x12\n" +
 	"\x04page\x18\x02 \x01(\x04R\x04page\"\xec\x02\n" +
 	"\bGameType\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x10\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x129\n" +
 	"\n" +
@@ -429,12 +429,12 @@ const file_facade_common_proto_rawDesc = "" +
 	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
 	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1b\n" +
-	"\tparent_id\x18\a \x01(\rR\bparentId\x12+\n" +
+	"\tparent_id\x18\a \x01(\x04R\bparentId\x12+\n" +
 	"\x06parent\x18\b \x01(\v2\x13.pb.facade.GameTypeR\x06parent\x12/\n" +
 	"\bchildren\x18\t \x03(\v2\x13.pb.facade.GameTypeR\bchildren\"\xe3\x02\n" +
 	"\x04Game\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12 \n" +
-	"\fgame_type_id\x18\x02 \x01(\rR\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12 \n" +
+	"\fgame_type_id\x18\x02 \x01(\x04R\n" +
 	"gameTypeId\x12\x10\n" +
 	"\x03key\x18\x03 \x01(\tR\x03key\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12 \n" +

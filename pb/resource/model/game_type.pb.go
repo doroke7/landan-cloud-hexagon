@@ -164,7 +164,7 @@ func (x *GameTypeAddOneOutput) GetGameType() *resource.GameType {
 
 type GameTypeShowOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -199,7 +199,7 @@ func (*GameTypeShowOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_type_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GameTypeShowOneByIdInput) GetId() uint32 {
+func (x *GameTypeShowOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -253,7 +253,7 @@ func (x *GameTypeShowOneByIdOutput) GetGameType() *resource.GameType {
 type GameTypeEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Variable      *GameTypeVariable      `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint32                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -295,7 +295,7 @@ func (x *GameTypeEditOneByIdInput) GetVariable() *GameTypeVariable {
 	return nil
 }
 
-func (x *GameTypeEditOneByIdInput) GetId() uint32 {
+func (x *GameTypeEditOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -642,12 +642,12 @@ const file_resource_model_game_type_proto_rawDesc = "" +
 	"\x14GameTypeAddOneOutput\x122\n" +
 	"\tgame_type\x18\x01 \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"*\n" +
 	"\x18GameTypeShowOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"O\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"O\n" +
 	"\x19GameTypeShowOneByIdOutput\x122\n" +
 	"\tgame_type\x18\x01 \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"k\n" +
 	"\x18GameTypeEditOneByIdInput\x12?\n" +
 	"\bvariable\x18\x01 \x01(\v2#.pb.resource.model.GameTypeVariableR\bvariable\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\rR\x02id\"3\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"3\n" +
 	"\x19GameTypeEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\",\n" +
 	"\x1aGameTypeRemoveOneByIdInput\x12\x0e\n" +

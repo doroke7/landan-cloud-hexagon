@@ -42,7 +42,7 @@ func domainAdminPermissionValueToProtoAdminPermissionVariable(oValue *domain.Adm
 	}
 
 	if oValue.Type != nil {
-		iType := uint32(*oValue.Type)
+		iType := uint64(*oValue.Type)
 		oVariable.Type = &iType
 	}
 
@@ -64,7 +64,7 @@ func (oSelf *AdminPermissionModel) ShowOneById(iId uint64) (*domain.AdminPermiss
 
 	oResponse, oErr := oSelf.ResourceModelClient.AdminPermission.ShowOneById(
 		oSelf.Context,
-		&pbResourceModel.AdminPermissionShowOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.AdminPermissionShowOneByIdInput{Id: uint64(iId)},
 	)
 
 	if oErr != nil {
@@ -84,7 +84,7 @@ func (oSelf *AdminPermissionModel) ShowOneById(iId uint64) (*domain.AdminPermiss
 func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.AdminPermissionEditOneByIdInput{
-		Id:       uint32(iId),
+		Id:       uint64(iId),
 		Variable: domainAdminPermissionValueToProtoAdminPermissionVariable(oAdminPermission),
 	}
 
@@ -97,7 +97,7 @@ func (oSelf *AdminPermissionModel) RemoveOneById(iId uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.AdminPermission.RemoveOneById(
 		oSelf.Context,
-		&pbResourceModel.AdminPermissionRemoveOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.AdminPermissionRemoveOneByIdInput{Id: uint64(iId)},
 	)
 
 	return oErr

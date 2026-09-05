@@ -17,7 +17,7 @@ func domainGameValueToProtoGameVariable(oGame *domain.GameValue) *pbResourceMode
 	}
 
 	if oGame.GameTypeId != nil {
-		iGameTypeId := uint32(*oGame.GameTypeId)
+		iGameTypeId := uint64(*oGame.GameTypeId)
 		oVariable.GameTypeId = &iGameTypeId
 	}
 
@@ -67,7 +67,7 @@ func (oSelf *GameModel) ShowOneById(iId uint64) (*domain.Game, error) {
 
 	oResponse, oErr := oSelf.ResourceModelClient.Game.ShowOneById(
 		oSelf.Context,
-		&pbResourceModel.GameShowOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.GameShowOneByIdInput{Id: uint64(iId)},
 	)
 
 	if oErr != nil {

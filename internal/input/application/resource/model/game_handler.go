@@ -50,8 +50,8 @@ func protoGameVariableToDomainGameValue(oVariable *pbResourceModel.GameVariable)
 
 func domainGameToProtoGame(oGame *domain.Game) *pbResource.Game {
 	return &pbResource.Game{
-		Id:          uint32(oGame.Id),
-		GameTypeId:  uint32(oGame.GameTypeId),
+		Id:          uint64(oGame.Id),
+		GameTypeId:  uint64(oGame.GameTypeId),
 		Key:         oGame.Key,
 		Name:        oGame.Name,
 		Description: oGame.Description,
@@ -76,7 +76,7 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel
 	oProtoGame := &pbResource.Game{}
 
 	if oGameValue.GameTypeId != nil {
-		oProtoGame.GameTypeId = uint32(*oGameValue.GameTypeId)
+		oProtoGame.GameTypeId = uint64(*oGameValue.GameTypeId)
 	}
 	if oGameValue.Key != nil {
 		oProtoGame.Key = *oGameValue.Key

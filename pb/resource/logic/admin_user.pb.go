@@ -138,7 +138,7 @@ type AdminUserVariable struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Password      *string                `protobuf:"bytes,2,opt,name=password,proto3,oneof" json:"password,omitempty"`
-	AdminRoleIds  []uint32               `protobuf:"varint,3,rep,packed,name=admin_role_ids,json=adminRoleIds,proto3" json:"admin_role_ids,omitempty"` // repeated 本身語意就是可以是空的，不用也不能標。
+	AdminRoleIds  []uint64               `protobuf:"varint,3,rep,packed,name=admin_role_ids,json=adminRoleIds,proto3" json:"admin_role_ids,omitempty"` // repeated 本身語意就是可以是空的，不用也不能標。
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -187,7 +187,7 @@ func (x *AdminUserVariable) GetPassword() string {
 	return ""
 }
 
-func (x *AdminUserVariable) GetAdminRoleIds() []uint32 {
+func (x *AdminUserVariable) GetAdminRoleIds() []uint64 {
 	if x != nil {
 		return x.AdminRoleIds
 	}
@@ -277,7 +277,7 @@ func (*AdminUserAddAminUserOutput) Descriptor() ([]byte, []int) {
 type AdminUserEditAdminUserByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Variable      *AdminUserVariable     `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint32                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -319,7 +319,7 @@ func (x *AdminUserEditAdminUserByIdInput) GetVariable() *AdminUserVariable {
 	return nil
 }
 
-func (x *AdminUserEditAdminUserByIdInput) GetId() uint32 {
+func (x *AdminUserEditAdminUserByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -380,7 +380,7 @@ const file_resource_logic_admin_user_proto_rawDesc = "" +
 	"\x11AdminUserVariable\x12\x17\n" +
 	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
 	"\bpassword\x18\x02 \x01(\tH\x01R\bpassword\x88\x01\x01\x12$\n" +
-	"\x0eadmin_role_ids\x18\x03 \x03(\rR\fadminRoleIdsB\a\n" +
+	"\x0eadmin_role_ids\x18\x03 \x03(\x04R\fadminRoleIdsB\a\n" +
 	"\x05_nameB\v\n" +
 	"\t_password\"]\n" +
 	"\x19AdminUserAddAminUserInput\x12@\n" +
@@ -388,7 +388,7 @@ const file_resource_logic_admin_user_proto_rawDesc = "" +
 	"\x1aAdminUserAddAminUserOutput\"s\n" +
 	"\x1fAdminUserEditAdminUserByIdInput\x12@\n" +
 	"\bvariable\x18\x01 \x01(\v2$.pb.resource.logic.AdminUserVariableR\bvariable\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\rR\x02id\"\"\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"\"\n" +
 	" AdminUserEditAdminUserByIdOutput2\xd9\x03\n" +
 	"\x0eAdminUserLogic\x12\xdc\x01\n" +
 	"1ShowAdminUsersTotalByFiltersWithSortersPagination\x12R.pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput\x1aS.pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput\x12j\n" +

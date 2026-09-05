@@ -35,7 +35,7 @@ func domainAdminRoleToProtoAdminRole(oAdminRole *domain.AdminRole) *pbResource.A
 	}
 
 	return &pbResource.AdminRole{
-		Id:        uint32(oAdminRole.Id),
+		Id:        uint64(oAdminRole.Id),
 		Key:       oAdminRole.Key,
 		Name:      oAdminRole.Name,
 		CreatedAt: timestamppb.New(oAdminRole.CreatedAt),

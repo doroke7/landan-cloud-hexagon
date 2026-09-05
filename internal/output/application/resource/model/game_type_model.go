@@ -64,7 +64,7 @@ func (oSelf *GameTypeModel) ShowOneById(iId uint64) (*domain.GameType, error) {
 
 	oResponse, oErr := oSelf.ResourceModelClient.GameType.ShowOneById(
 		oSelf.Context,
-		&pbResourceModel.GameTypeShowOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.GameTypeShowOneByIdInput{Id: uint64(iId)},
 	)
 
 	if oErr != nil {
@@ -152,7 +152,7 @@ func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64,
 func (oSelf *GameTypeModel) EditOneById(oGameType *domain.GameTypeValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.GameTypeEditOneByIdInput{
-		Id: uint32(iId),
+		Id: uint64(iId),
 		Variable: &pbResourceModel.GameTypeVariable{
 			Key:  oGameType.Key,
 			Name: oGameType.Name,

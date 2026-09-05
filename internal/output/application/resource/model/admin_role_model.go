@@ -56,7 +56,7 @@ func (oSelf *AdminRoleModel) ShowOneById(iId uint64) (*domain.AdminRole, error) 
 
 	oResponse, oErr := oSelf.ResourceModelClient.AdminRole.ShowOneById(
 		oSelf.Context,
-		&pbResourceModel.AdminRoleShowOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.AdminRoleShowOneByIdInput{Id: uint64(iId)},
 	)
 
 	if oErr != nil {
@@ -76,7 +76,7 @@ func (oSelf *AdminRoleModel) ShowOneById(iId uint64) (*domain.AdminRole, error) 
 func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.AdminRoleEditOneByIdInput{
-		Id:       uint32(iId),
+		Id:       uint64(iId),
 		Variable: domainAdminRoleValueToProtoAdminRoleVariable(oAdminRole),
 	}
 
@@ -89,7 +89,7 @@ func (oSelf *AdminRoleModel) RemoveOneById(iId uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.AdminRole.RemoveOneById(
 		oSelf.Context,
-		&pbResourceModel.AdminRoleRemoveOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.AdminRoleRemoveOneByIdInput{Id: uint64(iId)},
 	)
 
 	return oErr

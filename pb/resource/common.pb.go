@@ -189,13 +189,13 @@ func (x *Pagination) GetPage() uint64 {
 
 type GameType struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
 	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
 	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
-	ParentId      uint32                 `protobuf:"varint,7,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
+	ParentId      uint64                 `protobuf:"varint,7,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
 	Parent        *GameType              `protobuf:"bytes,8,opt,name=parent,proto3" json:"parent,omitempty"`
 	Children      []*GameType            `protobuf:"bytes,9,rep,name=children,proto3" json:"children,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -232,7 +232,7 @@ func (*GameType) Descriptor() ([]byte, []int) {
 	return file_resource_common_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GameType) GetId() uint32 {
+func (x *GameType) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -274,7 +274,7 @@ func (x *GameType) GetDeletedAt() *timestamppb.Timestamp {
 	return nil
 }
 
-func (x *GameType) GetParentId() uint32 {
+func (x *GameType) GetParentId() uint64 {
 	if x != nil {
 		return x.ParentId
 	}
@@ -297,7 +297,7 @@ func (x *GameType) GetChildren() []*GameType {
 
 type AdminUser struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
@@ -338,7 +338,7 @@ func (*AdminUser) Descriptor() ([]byte, []int) {
 	return file_resource_common_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *AdminUser) GetId() uint32 {
+func (x *AdminUser) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -389,7 +389,7 @@ func (x *AdminUser) GetAdminRoles() []*AdminRole {
 
 type AdminRole struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
 	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
@@ -429,7 +429,7 @@ func (*AdminRole) Descriptor() ([]byte, []int) {
 	return file_resource_common_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *AdminRole) GetId() uint32 {
+func (x *AdminRole) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -473,8 +473,8 @@ func (x *AdminRole) GetDeletedAt() *timestamppb.Timestamp {
 
 type AdminPermission struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Type          uint32                 `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Type          uint64                 `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`
 	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
 	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
@@ -514,14 +514,14 @@ func (*AdminPermission) Descriptor() ([]byte, []int) {
 	return file_resource_common_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *AdminPermission) GetId() uint32 {
+func (x *AdminPermission) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *AdminPermission) GetType() uint32 {
+func (x *AdminPermission) GetType() uint64 {
 	if x != nil {
 		return x.Type
 	}
@@ -565,10 +565,10 @@ func (x *AdminPermission) GetDeletedAt() *timestamppb.Timestamp {
 
 type AppUser struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
 	Password      string                 `protobuf:"bytes,3,opt,name=password,proto3" json:"password,omitempty"`
-	Balance       uint32                 `protobuf:"varint,4,opt,name=balance,proto3" json:"balance,omitempty"`
+	Balance       uint64                 `protobuf:"varint,4,opt,name=balance,proto3" json:"balance,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -603,7 +603,7 @@ func (*AppUser) Descriptor() ([]byte, []int) {
 	return file_resource_common_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *AppUser) GetId() uint32 {
+func (x *AppUser) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -624,7 +624,7 @@ func (x *AppUser) GetPassword() string {
 	return ""
 }
 
-func (x *AppUser) GetBalance() uint32 {
+func (x *AppUser) GetBalance() uint64 {
 	if x != nil {
 		return x.Balance
 	}
@@ -633,8 +633,8 @@ func (x *AppUser) GetBalance() uint32 {
 
 type Game struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	GameTypeId    uint32                 `protobuf:"varint,2,opt,name=game_type_id,json=gameTypeId,proto3" json:"game_type_id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	GameTypeId    uint64                 `protobuf:"varint,2,opt,name=game_type_id,json=gameTypeId,proto3" json:"game_type_id,omitempty"`
 	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
 	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
 	Description   string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`
@@ -676,14 +676,14 @@ func (*Game) Descriptor() ([]byte, []int) {
 	return file_resource_common_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *Game) GetId() uint32 {
+func (x *Game) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *Game) GetGameTypeId() uint32 {
+func (x *Game) GetGameTypeId() uint64 {
 	if x != nil {
 		return x.GameTypeId
 	}
@@ -741,11 +741,11 @@ func (x *Game) GetGameType() *GameType {
 
 type Table struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	No            string                 `protobuf:"bytes,2,opt,name=no,proto3" json:"no,omitempty"`
-	GameId        uint32                 `protobuf:"varint,3,opt,name=game_id,json=gameId,proto3" json:"game_id,omitempty"`
+	GameId        uint64                 `protobuf:"varint,3,opt,name=game_id,json=gameId,proto3" json:"game_id,omitempty"`
 	Key           string                 `protobuf:"bytes,4,opt,name=key,proto3" json:"key,omitempty"`
-	State         uint32                 `protobuf:"varint,5,opt,name=state,proto3" json:"state,omitempty"`
+	State         uint64                 `protobuf:"varint,5,opt,name=state,proto3" json:"state,omitempty"`
 	Description   string                 `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty"`
 	Result        string                 `protobuf:"bytes,7,opt,name=result,proto3" json:"result,omitempty"`
 	StartedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`
@@ -788,7 +788,7 @@ func (*Table) Descriptor() ([]byte, []int) {
 	return file_resource_common_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *Table) GetId() uint32 {
+func (x *Table) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -802,7 +802,7 @@ func (x *Table) GetNo() string {
 	return ""
 }
 
-func (x *Table) GetGameId() uint32 {
+func (x *Table) GetGameId() uint64 {
 	if x != nil {
 		return x.GameId
 	}
@@ -816,7 +816,7 @@ func (x *Table) GetKey() string {
 	return ""
 }
 
-func (x *Table) GetState() uint32 {
+func (x *Table) GetState() uint64 {
 	if x != nil {
 		return x.State
 	}
@@ -896,7 +896,7 @@ const file_resource_common_proto_rawDesc = "" +
 	"\x04size\x18\x01 \x01(\x04R\x04size\x12\x12\n" +
 	"\x04page\x18\x02 \x01(\x04R\x04page\"\xf0\x02\n" +
 	"\bGameType\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x10\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x129\n" +
 	"\n" +
@@ -905,11 +905,11 @@ const file_resource_common_proto_rawDesc = "" +
 	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
 	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1b\n" +
-	"\tparent_id\x18\a \x01(\rR\bparentId\x12-\n" +
+	"\tparent_id\x18\a \x01(\x04R\bparentId\x12-\n" +
 	"\x06parent\x18\b \x01(\v2\x15.pb.resource.GameTypeR\x06parent\x121\n" +
 	"\bchildren\x18\t \x03(\v2\x15.pb.resource.GameTypeR\bchildren\"\xb5\x02\n" +
 	"\tAdminUser\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword\x129\n" +
 	"\n" +
@@ -921,7 +921,7 @@ const file_resource_common_proto_rawDesc = "" +
 	"\vadmin_roles\x18\a \x03(\v2\x16.pb.resource.AdminRoleR\n" +
 	"adminRoles\"\xf2\x01\n" +
 	"\tAdminRole\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x10\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x12\n" +
 	"\x04name\x18\x03 \x01(\tR\x04name\x129\n" +
 	"\n" +
@@ -931,8 +931,8 @@ const file_resource_common_proto_rawDesc = "" +
 	"\n" +
 	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\"\x8c\x02\n" +
 	"\x0fAdminPermission\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
-	"\x04type\x18\x02 \x01(\rR\x04type\x12\x10\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
+	"\x04type\x18\x02 \x01(\x04R\x04type\x12\x10\n" +
 	"\x03key\x18\x03 \x01(\tR\x03key\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x129\n" +
 	"\n" +
@@ -942,13 +942,13 @@ const file_resource_common_proto_rawDesc = "" +
 	"\n" +
 	"deleted_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\"c\n" +
 	"\aAppUser\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x12\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword\x12\x18\n" +
-	"\abalance\x18\x04 \x01(\rR\abalance\"\xe5\x02\n" +
+	"\abalance\x18\x04 \x01(\x04R\abalance\"\xe5\x02\n" +
 	"\x04Game\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12 \n" +
-	"\fgame_type_id\x18\x02 \x01(\rR\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12 \n" +
+	"\fgame_type_id\x18\x02 \x01(\x04R\n" +
 	"gameTypeId\x12\x10\n" +
 	"\x03key\x18\x03 \x01(\tR\x03key\x12\x12\n" +
 	"\x04name\x18\x04 \x01(\tR\x04name\x12 \n" +
@@ -961,11 +961,11 @@ const file_resource_common_proto_rawDesc = "" +
 	"deleted_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x122\n" +
 	"\tgame_type\x18\t \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"\xec\x03\n" +
 	"\x05Table\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x0e\n" +
 	"\x02no\x18\x02 \x01(\tR\x02no\x12\x17\n" +
-	"\agame_id\x18\x03 \x01(\rR\x06gameId\x12\x10\n" +
+	"\agame_id\x18\x03 \x01(\x04R\x06gameId\x12\x10\n" +
 	"\x03key\x18\x04 \x01(\tR\x03key\x12\x14\n" +
-	"\x05state\x18\x05 \x01(\rR\x05state\x12 \n" +
+	"\x05state\x18\x05 \x01(\x04R\x05state\x12 \n" +
 	"\vdescription\x18\x06 \x01(\tR\vdescription\x12\x16\n" +
 	"\x06result\x18\a \x01(\tR\x06result\x129\n" +
 	"\n" +

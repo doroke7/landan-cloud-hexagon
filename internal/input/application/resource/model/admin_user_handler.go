@@ -40,7 +40,7 @@ func domainAdminUserToProtoAdminUser(oAdminUser *domain.AdminUser) *pbResource.A
 	}
 
 	return &pbResource.AdminUser{
-		Id:         uint32(oAdminUser.Id),
+		Id:         uint64(oAdminUser.Id),
 		Name:       oAdminUser.Name,
 		Password:   oAdminUser.Password,
 		CreatedAt:  timestamppb.New(oAdminUser.CreatedAt),

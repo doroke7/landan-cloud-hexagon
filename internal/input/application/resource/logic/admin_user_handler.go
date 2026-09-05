@@ -28,7 +28,7 @@ func NewAdminUserHandler(oAbstractHandler *inputApplicationResource.AbstractHand
 
 func domainAdminRoleToProtoAdminRole(oAdminRole *domain.AdminRole) *pbResource.AdminRole {
 	return &pbResource.AdminRole{
-		Id:        uint32(oAdminRole.Id),
+		Id:        uint64(oAdminRole.Id),
 		Key:       oAdminRole.Key,
 		Name:      oAdminRole.Name,
 		CreatedAt: timestamppb.New(oAdminRole.CreatedAt),
@@ -44,7 +44,7 @@ func domainAdminUserToProtoAdminUser(oAdminUser *domain.AdminUser) *pbResource.A
 	}
 
 	return &pbResource.AdminUser{
-		Id:         uint32(oAdminUser.Id),
+		Id:         uint64(oAdminUser.Id),
 		Name:       oAdminUser.Name,
 		Password:   oAdminUser.Password,
 		CreatedAt:  timestamppb.New(oAdminUser.CreatedAt),

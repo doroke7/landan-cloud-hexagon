@@ -252,7 +252,7 @@ func (x *AppUserShowOneByNameOutput) GetAppUser() *resource.AppUser {
 
 type AppUserShowOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -287,7 +287,7 @@ func (*AppUserShowOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_app_user_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *AppUserShowOneByIdInput) GetId() uint32 {
+func (x *AppUserShowOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -340,8 +340,8 @@ func (x *AppUserShowOneByIdOutput) GetAppUser() *resource.AppUser {
 
 type AppUserIncreaseBalanceInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Amount        uint32                 `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Amount        uint64                 `protobuf:"varint,2,opt,name=amount,proto3" json:"amount,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -376,14 +376,14 @@ func (*AppUserIncreaseBalanceInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_app_user_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *AppUserIncreaseBalanceInput) GetId() uint32 {
+func (x *AppUserIncreaseBalanceInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
 	return 0
 }
 
-func (x *AppUserIncreaseBalanceInput) GetAmount() uint32 {
+func (x *AppUserIncreaseBalanceInput) GetAmount() uint64 {
 	if x != nil {
 		return x.Amount
 	}
@@ -453,12 +453,12 @@ const file_resource_model_app_user_proto_rawDesc = "" +
 	"\x1aAppUserShowOneByNameOutput\x12/\n" +
 	"\bapp_user\x18\x01 \x01(\v2\x14.pb.resource.AppUserR\aappUser\")\n" +
 	"\x17AppUserShowOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"K\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"K\n" +
 	"\x18AppUserShowOneByIdOutput\x12/\n" +
 	"\bapp_user\x18\x01 \x01(\v2\x14.pb.resource.AppUserR\aappUser\"E\n" +
 	"\x1bAppUserIncreaseBalanceInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\x12\x16\n" +
-	"\x06amount\x18\x02 \x01(\rR\x06amount\"6\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x16\n" +
+	"\x06amount\x18\x02 \x01(\x04R\x06amount\"6\n" +
 	"\x1cAppUserIncreaseBalanceOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status2\xb5\x03\n" +
 	"\fAppUserModel\x12[\n" +

@@ -40,8 +40,8 @@ func (oSelf *GameTypeHandler) ShowTree(oContext context.Context, oReq *pbResourc
 	var fnFlatten func(oNode domain.GameType)
 	fnFlatten = func(oNode domain.GameType) {
 		aNodes = append(aNodes, &pbResource.GameType{
-			Id:        uint32(oNode.Id),
-			ParentId:  uint32(oNode.ParentId),
+			Id:        uint64(oNode.Id),
+			ParentId:  uint64(oNode.ParentId),
 			Key:       oNode.Key,
 			Name:      oNode.Name,
 			CreatedAt: timestamppb.New(oNode.CreatedAt),
@@ -107,8 +107,8 @@ func (oSelf *GameTypeHandler) ShowGameTypesTotalByFiltersWithSortersPagination(o
 	aNodes := make([]*pbResource.GameType, 0, len(aGameTypes))
 	for _, oOne := range aGameTypes {
 		aNodes = append(aNodes, &pbResource.GameType{
-			Id:        uint32(oOne.Id),
-			ParentId:  uint32(oOne.ParentId),
+			Id:        uint64(oOne.Id),
+			ParentId:  uint64(oOne.ParentId),
 			Key:       oOne.Key,
 			Name:      oOne.Name,
 			CreatedAt: timestamppb.New(oOne.CreatedAt),

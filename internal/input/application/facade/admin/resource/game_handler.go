@@ -47,8 +47,8 @@ func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbFacade.GameTyp
 	}
 
 	oProto := &pbFacade.GameType{
-		Id:        uint32(oGameType.Id),
-		ParentId:  uint32(oGameType.ParentId),
+		Id:        uint64(oGameType.Id),
+		ParentId:  uint64(oGameType.ParentId),
 		Key:       oGameType.Key,
 		Name:      oGameType.Name,
 		CreatedAt: timestamppb.New(oGameType.CreatedAt),
@@ -70,8 +70,8 @@ func domainGameToProtoGame(oGame *domain.Game) *pbFacade.Game {
 	}
 
 	return &pbFacade.Game{
-		Id:          uint32(oGame.Id),
-		GameTypeId:  uint32(oGame.GameTypeId),
+		Id:          uint64(oGame.Id),
+		GameTypeId:  uint64(oGame.GameTypeId),
 		Key:         oGame.Key,
 		Name:        oGame.Name,
 		Description: oGame.Description,

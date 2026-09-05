@@ -24,7 +24,7 @@ const (
 
 type GameValue struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameTypeId    *uint32                `protobuf:"varint,1,opt,name=game_type_id,json=gameTypeId,proto3,oneof" json:"game_type_id,omitempty"`
+	GameTypeId    *uint64                `protobuf:"varint,1,opt,name=game_type_id,json=gameTypeId,proto3,oneof" json:"game_type_id,omitempty"`
 	Key           *string                `protobuf:"bytes,2,opt,name=key,proto3,oneof" json:"key,omitempty"`
 	Name          *string                `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Description   *string                `protobuf:"bytes,4,opt,name=description,proto3,oneof" json:"description,omitempty"`
@@ -62,7 +62,7 @@ func (*GameValue) Descriptor() ([]byte, []int) {
 	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GameValue) GetGameTypeId() uint32 {
+func (x *GameValue) GetGameTypeId() uint64 {
 	if x != nil && x.GameTypeId != nil {
 		return *x.GameTypeId
 	}
@@ -544,7 +544,7 @@ const file_facade_admin_resource_game_proto_rawDesc = "" +
 	"\n" +
 	" facade/admin/resource/game.proto\x12\x18pb.facade.admin.resource\x1a\x13facade/common.proto\"\xbb\x01\n" +
 	"\tGameValue\x12%\n" +
-	"\fgame_type_id\x18\x01 \x01(\rH\x00R\n" +
+	"\fgame_type_id\x18\x01 \x01(\x04H\x00R\n" +
 	"gameTypeId\x88\x01\x01\x12\x15\n" +
 	"\x03key\x18\x02 \x01(\tH\x01R\x03key\x88\x01\x01\x12\x17\n" +
 	"\x04name\x18\x03 \x01(\tH\x02R\x04name\x88\x01\x01\x12%\n" +

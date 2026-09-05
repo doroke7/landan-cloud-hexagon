@@ -24,7 +24,7 @@ const (
 
 type AdminPermissionVariable struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Type          *uint32                `protobuf:"varint,1,opt,name=type,proto3,oneof" json:"type,omitempty"`
+	Type          *uint64                `protobuf:"varint,1,opt,name=type,proto3,oneof" json:"type,omitempty"`
 	Key           *string                `protobuf:"bytes,2,opt,name=key,proto3,oneof" json:"key,omitempty"`
 	Name          *string                `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
@@ -61,7 +61,7 @@ func (*AdminPermissionVariable) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminPermissionVariable) GetType() uint32 {
+func (x *AdminPermissionVariable) GetType() uint64 {
 	if x != nil && x.Type != nil {
 		return *x.Type
 	}
@@ -172,7 +172,7 @@ func (x *AdminPermissionAddOneOutput) GetStatus() bool {
 
 type AdminPermissionShowOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -207,7 +207,7 @@ func (*AdminPermissionShowOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AdminPermissionShowOneByIdInput) GetId() uint32 {
+func (x *AdminPermissionShowOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -261,7 +261,7 @@ func (x *AdminPermissionShowOneByIdOutput) GetAdminPermission() *resource.AdminP
 type AdminPermissionEditOneByIdInput struct {
 	state         protoimpl.MessageState   `protogen:"open.v1"`
 	Variable      *AdminPermissionVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint32                   `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                   `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -303,7 +303,7 @@ func (x *AdminPermissionEditOneByIdInput) GetVariable() *AdminPermissionVariable
 	return nil
 }
 
-func (x *AdminPermissionEditOneByIdInput) GetId() uint32 {
+func (x *AdminPermissionEditOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -356,7 +356,7 @@ func (x *AdminPermissionEditOneByIdOutput) GetStatus() bool {
 
 type AdminPermissionRemoveOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -391,7 +391,7 @@ func (*AdminPermissionRemoveOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *AdminPermissionRemoveOneByIdInput) GetId() uint32 {
+func (x *AdminPermissionRemoveOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -640,7 +640,7 @@ const file_resource_model_admin_permission_proto_rawDesc = "" +
 	"\n" +
 	"%resource/model/admin_permission.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"|\n" +
 	"\x17AdminPermissionVariable\x12\x17\n" +
-	"\x04type\x18\x01 \x01(\rH\x00R\x04type\x88\x01\x01\x12\x15\n" +
+	"\x04type\x18\x01 \x01(\x04H\x00R\x04type\x88\x01\x01\x12\x15\n" +
 	"\x03key\x18\x02 \x01(\tH\x01R\x03key\x88\x01\x01\x12\x17\n" +
 	"\x04name\x18\x03 \x01(\tH\x02R\x04name\x88\x01\x01B\a\n" +
 	"\x05_typeB\x06\n" +
@@ -651,16 +651,16 @@ const file_resource_model_admin_permission_proto_rawDesc = "" +
 	"\x1bAdminPermissionAddOneOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"1\n" +
 	"\x1fAdminPermissionShowOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"k\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"k\n" +
 	" AdminPermissionShowOneByIdOutput\x12G\n" +
 	"\x10admin_permission\x18\x01 \x01(\v2\x1c.pb.resource.AdminPermissionR\x0fadminPermission\"y\n" +
 	"\x1fAdminPermissionEditOneByIdInput\x12F\n" +
 	"\bvariable\x18\x01 \x01(\v2*.pb.resource.model.AdminPermissionVariableR\bvariable\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\rR\x02id\":\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\":\n" +
 	" AdminPermissionEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"3\n" +
 	"!AdminPermissionRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"<\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"<\n" +
 	"\"AdminPermissionRemoveOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"\xd3\x01\n" +
 	":AdminPermissionShowOnesByFiltersWithSortersPaginationInput\x12-\n" +
