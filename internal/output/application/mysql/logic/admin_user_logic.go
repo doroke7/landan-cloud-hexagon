@@ -203,5 +203,7 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 		}
 	}
 
-	return oTx.Commit().Error
+	oError := oTx.Commit().Error
+
+	return oError
 }
