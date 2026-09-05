@@ -73,21 +73,29 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 }
 
 func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
-	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.AdminUser{}).
-		Where("id = ?", iId).
-		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		UpdateColumn("deleted_at", time.Now())
+	sKey := oSelf.Aop.Key("AdminUser.SObI", iId)
 
-	if oResult.Error != nil {
-		return false, oResult.Error
-	}
+	var bStatus bool
+	oErr := oSelf.Aop.CacheEvict(sKey, func() error {
+		oResult := oSelf.DB.WithContext(oSelf.Context).
+			Model(&domain.AdminUser{}).
+			Where("id = ?", iId).
+			Where("deleted_at = ?", "2038-01-19 03:14:07").
+			UpdateColumn("deleted_at", time.Now())
 
-	if oResult.RowsAffected == 0 {
-		return false, errors.New("刪除0筆")
-	}
+		if oResult.Error != nil {
+			return oResult.Error
+		}
 
-	return true, nil
+		if oResult.RowsAffected == 0 {
+			return errors.New("刪除0筆")
+		}
+
+		bStatus = true
+		return nil
+	})
+
+	return bStatus, oErr
 }
 
 func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
@@ -96,20 +104,28 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 		return false, oErr
 	}
 
-	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.AdminUser{}).
-		Where("id = ?", iId).
-		UpdateColumns(oColumns)
+	sKey := oSelf.Aop.Key("AdminUser.SObI", iId)
 
-	if oResult.Error != nil {
-		return false, oResult.Error
-	}
+	var bStatus bool
+	oErr = oSelf.Aop.CacheEvict(sKey, func() error {
+		oResult := oSelf.DB.WithContext(oSelf.Context).
+			Model(&domain.AdminUser{}).
+			Where("id = ?", iId).
+			UpdateColumns(oColumns)
 
-	if oResult.RowsAffected == 0 {
-		return false, errors.New("更新0筆")
-	}
+		if oResult.Error != nil {
+			return oResult.Error
+		}
 
-	return true, nil
+		if oResult.RowsAffected == 0 {
+			return errors.New("更新0筆")
+		}
+
+		bStatus = true
+		return nil
+	})
+
+	return bStatus, oErr
 }
 
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {

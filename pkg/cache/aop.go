@@ -11,6 +11,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/charmbracelet/log"
 	"github.com/redis/go-redis/v9"
 
 	bootstrap "example/bootstrap"
@@ -54,15 +55,15 @@ func (oSelf *Aop) Cacheable(sKey string, oTtl time.Duration, pDest interface{}, 
 	if oErr == nil {
 		// 🎉 快取命中 (Hit)！直接反序列化進傳進來的 pDest 指針
 		if oErr := json.Unmarshal([]byte(sJsonStr), pDest); oErr == nil {
-			fmt.Printf("🎯 [Aop] 完美命中快取！資料已自動注入。Key: '%s'\n", sKey)
+			log.Debug("[Aop] 完美命中快取！資料已自動注入。", "key", sKey)
 			return nil
 		}
 	} else if !errors.Is(oErr, redis.Nil) {
 		// 快取降級：Redis 異常不中斷主業務，讓流量穿透去查 DB
-		fmt.Printf("⚠️ [Aop] 快取連線異常: %v，自動降級穿透。\n", oErr)
+		log.Warn("[Aop] 快取連線異常，自動降級穿透。", "error", oErr)
 	}
 
-	fmt.Printf("🔍 [Aop] 快取未命中 (Miss)，準備執行核心業務... Key: '%s'\n", sKey)
+	log.Debug("[Aop] 快取未命中 (Miss)，準備執行核心業務...", "key", sKey)
 
 	// 3. 執行核心業務 (Join Point：例如查 MySQL)
 	oRes, oErr := cFn()
@@ -74,7 +75,7 @@ func (oSelf *Aop) Cacheable(sKey string, oTtl time.Duration, pDest interface{}, 
 	aByteData, oErr := json.Marshal(oRes)
 	if oErr == nil {
 		oSelf.Cache.Set(oCurrentContext, sKey, string(aByteData), oTtl)
-		fmt.Printf("💾 [Aop] 數據已自動同步至 Redis（TTL: %v）。Key: '%s'\n", oTtl, sKey)
+		log.Debug("[Aop] 數據已自動同步至 Redis。", "key", sKey, "ttl", oTtl)
 	}
 
 	// 5. 💡 核心魔法：如果快取沒中，查完 DB 後，要把結果深拷貝（Deep Copy）給外面的 pDest 指針
@@ -106,11 +107,11 @@ func (oSelf *Aop) CacheEvict(sKey string, cFn func() error) error {
 
 	// 3. 後置切面 (After Returning)：把快取踢出去
 	if oErr := oSelf.Cache.Del(oCurrentContext, sKey).Err(); oErr != nil && !errors.Is(oErr, redis.Nil) {
-		fmt.Printf("⚠️ [Aop] 快取清除失敗: %v，Key: '%s'\n", oErr, sKey)
+		log.Error("[Aop] 快取清除失敗", "error", oErr, "key", sKey)
 		return oErr
 	}
 
-	fmt.Printf("🗑️ [Aop] 快取已清除。Key: '%s'\n", sKey)
+	log.Debug("[Aop] 快取已清除。", "key", sKey)
 	return nil
 }
 

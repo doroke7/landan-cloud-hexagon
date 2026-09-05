@@ -43,6 +43,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 		oQuery := oSelf.
 			DB.
 			WithContext(oSelf.Context).
+			Preload("AdminRoles").
 			Model(&domain.AdminUser{}).
 			Where("deleted_at = ?", "2038-01-19 03:14:07")
 

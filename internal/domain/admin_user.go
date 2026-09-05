@@ -24,7 +24,7 @@ type AdminUser struct {
 
 type AdminUserValue struct {
 	Name         *string `json:"name,omitempty" validate:"omitempty,min=4"`
-	Password     *string `json:"password,omitempty" validate:"required,min=8"`
+	Password     *string `json:"password,omitempty" validate:"omitempty,min=8"`
 	AdminRoleIds []int   `json:"admin_role_ids,omitempty" validate:"omitempty,dive,gt=0"`
 	// CreatedAt *time.Time `json:"created_at"`
 	// UpdatedAt *time.Time `json:"updated_at"`

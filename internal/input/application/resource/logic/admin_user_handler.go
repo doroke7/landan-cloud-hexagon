@@ -26,14 +26,31 @@ func NewAdminUserHandler(oAbstractHandler *inputApplicationResource.AbstractHand
 	}
 }
 
+func domainAdminRoleToProtoAdminRole(oAdminRole *domain.AdminRole) *pbResource.AdminRole {
+	return &pbResource.AdminRole{
+		Id:        uint32(oAdminRole.Id),
+		Key:       oAdminRole.Key,
+		Name:      oAdminRole.Name,
+		CreatedAt: timestamppb.New(oAdminRole.CreatedAt),
+		UpdatedAt: timestamppb.New(oAdminRole.UpdatedAt),
+		DeletedAt: timestamppb.New(oAdminRole.DeletedAt),
+	}
+}
+
 func domainAdminUserToProtoAdminUser(oAdminUser *domain.AdminUser) *pbResource.AdminUser {
+	aAdminRoles := make([]*pbResource.AdminRole, 0, len(oAdminUser.AdminRoles))
+	for i := range oAdminUser.AdminRoles {
+		aAdminRoles = append(aAdminRoles, domainAdminRoleToProtoAdminRole(&oAdminUser.AdminRoles[i]))
+	}
+
 	return &pbResource.AdminUser{
-		Id:        uint32(oAdminUser.Id),
-		Name:      oAdminUser.Name,
-		Password:  oAdminUser.Password,
-		CreatedAt: timestamppb.New(oAdminUser.CreatedAt),
-		UpdatedAt: timestamppb.New(oAdminUser.UpdatedAt),
-		DeletedAt: timestamppb.New(oAdminUser.DeletedAt),
+		Id:         uint32(oAdminUser.Id),
+		Name:       oAdminUser.Name,
+		Password:   oAdminUser.Password,
+		CreatedAt:  timestamppb.New(oAdminUser.CreatedAt),
+		UpdatedAt:  timestamppb.New(oAdminUser.UpdatedAt),
+		DeletedAt:  timestamppb.New(oAdminUser.DeletedAt),
+		AdminRoles: aAdminRoles,
 	}
 }
 
