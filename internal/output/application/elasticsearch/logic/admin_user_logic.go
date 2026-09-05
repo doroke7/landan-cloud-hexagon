@@ -2,6 +2,8 @@ package outputApplicationElasticsearchLogic
 
 import (
 	"encoding/json"
+	"strconv"
+	"time"
 
 	domain "example/internal/domain"
 	elasticsearchBase "example/internal/output/application/elasticsearch"
@@ -47,4 +49,31 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 	}
 
 	return aAdminUsers, uint64(oResult.Total), nil
+}
+
+func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
+	iId, oErr := oSelf.NextId("admin_user")
+	if oErr != nil {
+		return oErr
+	}
+
+	oNow := time.Now()
+	oDoc := &domain.AdminUser{
+		Id:        iId,
+		CreatedAt: oNow,
+		UpdatedAt: oNow,
+	}
+
+	if oValue.Name != nil {
+		oDoc.Name = *oValue.Name
+	}
+	if oValue.Password != nil {
+		oDoc.Password = *oValue.Password
+	}
+
+	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
+		return oErr
+	}
+
+	return nil
 }

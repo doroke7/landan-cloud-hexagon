@@ -88,3 +88,21 @@ func (oSelf *AdminUserHandler) ShowAdminUsersTotalByFiltersWithSortersPagination
 		AdminUsers: aPbAdminUsers,
 	}, oErr
 }
+
+func (oSelf *AdminUserHandler) AddAminUser(oContext context.Context, oReq *pbResourceLogic.AdminUserAddAminUserInput) (*pbResourceLogic.AdminUserAddAminUserOutput, error) {
+
+	aAdminRoleIds := make([]int, 0, len(oReq.GetVariable().GetAdminRoleIds()))
+	for _, iAdminRoleId := range oReq.GetVariable().GetAdminRoleIds() {
+		aAdminRoleIds = append(aAdminRoleIds, int(iAdminRoleId))
+	}
+
+	oValue := &domain.AdminUserValue{
+		Name:         oReq.GetVariable().Name,
+		Password:     oReq.GetVariable().Password,
+		AdminRoleIds: aAdminRoleIds,
+	}
+
+	oErr := oSelf.LogicAdminUserUsecase.AddAminUser(oValue)
+
+	return &pbResourceLogic.AdminUserAddAminUserOutput{}, oErr
+}

@@ -1,6 +1,7 @@
 package outputApplicationOracleLogic
 
 import (
+	"errors"
 	"strings"
 	"sync"
 
@@ -8,6 +9,7 @@ import (
 	oracleBase "example/internal/output/application/oracle"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type AdminUserLogic struct {
@@ -88,4 +90,25 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 	}
 
 	return aAdminUsers, uint64(iTotal), nil
+}
+
+func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
+	if oErr != nil {
+		return oErr
+	}
+
+	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.AdminUser{}).
+		Create(oColumns)
+
+	if oResult.Error != nil {
+		return oResult.Error
+	}
+
+	if oResult.RowsAffected == 0 {
+		return errors.New("新增0筆")
+	}
+
+	return nil
 }

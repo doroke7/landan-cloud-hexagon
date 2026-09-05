@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	AdminUserLogic_ShowAdminUsersTotalByFiltersWithSortersPagination_FullMethodName = "/pb.resource.logic.AdminUserLogic/ShowAdminUsersTotalByFiltersWithSortersPagination"
+	AdminUserLogic_AddAminUser_FullMethodName                                       = "/pb.resource.logic.AdminUserLogic/AddAminUser"
 )
 
 // AdminUserLogicClient is the client API for AdminUserLogic service.
@@ -27,6 +28,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AdminUserLogicClient interface {
 	ShowAdminUsersTotalByFiltersWithSortersPagination(ctx context.Context, in *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput, error)
+	AddAminUser(ctx context.Context, in *AdminUserAddAminUserInput, opts ...grpc.CallOption) (*AdminUserAddAminUserOutput, error)
 }
 
 type adminUserLogicClient struct {
@@ -47,11 +49,22 @@ func (c *adminUserLogicClient) ShowAdminUsersTotalByFiltersWithSortersPagination
 	return out, nil
 }
 
+func (c *adminUserLogicClient) AddAminUser(ctx context.Context, in *AdminUserAddAminUserInput, opts ...grpc.CallOption) (*AdminUserAddAminUserOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdminUserAddAminUserOutput)
+	err := c.cc.Invoke(ctx, AdminUserLogic_AddAminUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // AdminUserLogicServer is the server API for AdminUserLogic service.
 // All implementations must embed UnimplementedAdminUserLogicServer
 // for forward compatibility.
 type AdminUserLogicServer interface {
 	ShowAdminUsersTotalByFiltersWithSortersPagination(context.Context, *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput, error)
+	AddAminUser(context.Context, *AdminUserAddAminUserInput) (*AdminUserAddAminUserOutput, error)
 	mustEmbedUnimplementedAdminUserLogicServer()
 }
 
@@ -64,6 +77,9 @@ type UnimplementedAdminUserLogicServer struct{}
 
 func (UnimplementedAdminUserLogicServer) ShowAdminUsersTotalByFiltersWithSortersPagination(context.Context, *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowAdminUsersTotalByFiltersWithSortersPagination not implemented")
+}
+func (UnimplementedAdminUserLogicServer) AddAminUser(context.Context, *AdminUserAddAminUserInput) (*AdminUserAddAminUserOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddAminUser not implemented")
 }
 func (UnimplementedAdminUserLogicServer) mustEmbedUnimplementedAdminUserLogicServer() {}
 func (UnimplementedAdminUserLogicServer) testEmbeddedByValue()                        {}
@@ -104,6 +120,24 @@ func _AdminUserLogic_ShowAdminUsersTotalByFiltersWithSortersPagination_Handler(s
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminUserLogic_AddAminUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminUserAddAminUserInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminUserLogicServer).AddAminUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminUserLogic_AddAminUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminUserLogicServer).AddAminUser(ctx, req.(*AdminUserAddAminUserInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // AdminUserLogic_ServiceDesc is the grpc.ServiceDesc for AdminUserLogic service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -114,6 +148,10 @@ var AdminUserLogic_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ShowAdminUsersTotalByFiltersWithSortersPagination",
 			Handler:    _AdminUserLogic_ShowAdminUsersTotalByFiltersWithSortersPagination_Handler,
+		},
+		{
+			MethodName: "AddAminUser",
+			Handler:    _AdminUserLogic_AddAminUser_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

@@ -7,4 +7,5 @@ import (
 
 type AdminUserLogic interface {
 	ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error)
+	AddAminUser(oValue *domain.AdminUserValue) error
 }

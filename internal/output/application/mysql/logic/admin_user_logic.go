@@ -1,13 +1,17 @@
 package outputApplicationMysqlLogic
 
 import (
+	"errors"
 	"strings"
 	"sync"
+
+	"gorm.io/gorm"
 
 	domain "example/internal/domain"
 	mysqlBase "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type AdminUserLogic struct {
@@ -88,4 +92,52 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 	}
 
 	return aAdminUsers, uint64(iTotal), nil
+}
+
+func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
+	if oErr != nil {
+		return oErr
+	}
+	delete(oColumns, "admin_role_ids")
+
+	return oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
+
+		oResult := oTx.
+			Model(&domain.AdminUser{}).
+			Create(oColumns)
+
+		if oResult.Error != nil {
+			return oResult.Error
+		}
+
+		if oResult.RowsAffected == 0 {
+			return errors.New("新增0筆")
+		}
+
+		var iAdminUserId uint64
+		if oErr := oTx.Raw("SELECT LAST_INSERT_ID()").Scan(&iAdminUserId).Error; oErr != nil {
+			return oErr
+		}
+
+		if oErr := oTx.Where("admin_user_id = ?", iAdminUserId).Delete(&domain.AdminUsersToAdminRole{}).Error; oErr != nil {
+			return oErr
+		}
+
+		if len(oValue.AdminRoleIds) == 0 {
+			return nil // 沒有角色也算成功，直接結束，不會再往下插入
+		}
+
+		aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
+		for _, iAdminRoleId := range oValue.AdminRoleIds {
+			aRelations = append(aRelations, domain.AdminUsersToAdminRole{
+				AdminUserId: uint(iAdminUserId),
+				AdminRoleId: uint(iAdminRoleId),
+			})
+		}
+
+		oErr = oTx.Create(&aRelations).Error
+
+		return oErr
+	})
 }
