@@ -4,11 +4,11 @@ import (
 	"context"
 	"strings"
 
+	"gorm.io/gorm"
+
 	pkgCache "example/pkg/cache"
 	pkgInput "example/pkg/input"
 	pkgMysql "example/pkg/mysql"
-
-	"gorm.io/gorm"
 )
 
 var oOperatorMap = map[string]string{

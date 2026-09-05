@@ -74,7 +74,10 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 	go func() {
 		defer oWaitGroup.Done()
 
-		oQuery := oSelf.DB.WithContext(oSelf.Context).Model(&domain.AdminUser{}).Where("deleted_at = ?", "2038-01-19 03:14:07")
+		oQuery := oSelf.DB.WithContext(oSelf.Context).
+			Model(&domain.AdminUser{}).
+			Where("deleted_at = ?", "2038-01-19 03:14:07")
+
 		for _, oWhere := range aWheres {
 			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 		}
