@@ -22,7 +22,41 @@ func (oSelf *TableUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []*pk
 	return oSelf.TableModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 }
 
+func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) (bool, error) {
+
+	oErr := oSelf.TableModel.AddOne(oValue)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return true, nil
+}
+
+func (oSelf *TableUsecase) EditOneById(oValue *domain.TableValue, iId uint) (bool, error) {
+
+	oErr := oSelf.TableModel.EditOneById(oValue, iId)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return true, nil
+}
+
+func (oSelf *TableUsecase) RemoveOneById(iId uint) (bool, error) {
+
+	oErr := oSelf.TableModel.RemoveOneById(iId)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return true, nil
+}
+
 func (oSelf *TableUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
-	return oSelf.TableModel.TotalByFilters(aFilters)
+	iTotal, oErr := oSelf.TableModel.TotalByFilters(aFilters)
+	return uint64(iTotal), oErr
 }

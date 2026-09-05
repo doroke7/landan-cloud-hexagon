@@ -97,20 +97,24 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return &oAdminUser, nil
 }
 
-func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *AdminUserModel) RemoveOneById(iId uint) error {
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
 		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
 	)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return oResult.ModifiedCount > 0, nil
+	if oResult.ModifiedCount == 0 {
+		return errors.New("刪除0筆")
+	}
+
+	return nil
 }
 
-func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) error {
 	oSet := bson.M{"updated_at": time.Now()}
 
 	if oAdminUser.Name != nil {
@@ -126,10 +130,14 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 		bson.M{"$set": oSet},
 	)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return oResult.MatchedCount > 0, nil
+	if oResult.MatchedCount == 0 {
+		return errors.New("更新0筆")
+	}
+
+	return nil
 }
 
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {
@@ -152,7 +160,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	return aAdminUsers, nil
 }
 
-func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
@@ -161,13 +169,13 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 		return 0, oErr
 	}
 
-	return uint64(iCount), nil
+	return uint(iCount), nil
 }
 
-func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
+func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {
 	iId, oErr := oSelf.nextId()
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oNow := time.Now()
@@ -186,8 +194,8 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, er
 	}
 
 	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return true, nil
+	return nil
 }

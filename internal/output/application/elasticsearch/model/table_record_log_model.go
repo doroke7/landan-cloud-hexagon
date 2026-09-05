@@ -26,10 +26,10 @@ func NewTableRecordLogModel(oAbstractModel *elasticsearchBase.AbstractElasticsea
 	}
 }
 
-func (oSelf *TableRecordLogModel) AddOne(oValue *domain.TableRecordLogValue) (bool, error) {
+func (oSelf *TableRecordLogModel) AddOne(oValue *domain.TableRecordLogValue) error {
 	iId, oErr := oSelf.NextId("table_record_log")
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oNow := time.Now()
@@ -57,10 +57,10 @@ func (oSelf *TableRecordLogModel) AddOne(oValue *domain.TableRecordLogValue) (bo
 	}
 
 	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return true, nil
+	return nil
 }
 
 func (oSelf *TableRecordLogModel) ShowOneById(iId uint) (*domain.TableRecordLog, error) {
@@ -104,7 +104,7 @@ func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilter
 	return aTableRecordLogs, nil
 }
 
-func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	sDeletedAtField := "deleted_at"
 	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
 
@@ -126,5 +126,7 @@ func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (u
 		oSelf.Client.Count.WithBody(bytes.NewReader(aBodyBytes)),
 	}
 
-	return oSelf.CountWithOptions(aOptions)
+	iTotal, oErr := oSelf.CountWithOptions(aOptions)
+
+	return uint(iTotal), oErr
 }

@@ -6,10 +6,10 @@ import (
 )
 
 type TableRecordModel interface {
-	AddOne(oTableRecord *domain.TableRecordValue) (bool, error)
+	AddOne(oTableRecord *domain.TableRecordValue) error
 	ShowOneById(iId uint) (*domain.TableRecord, error)
-	EditOneById(oTableRecord *domain.TableRecordValue, iId uint) (bool, error)
-	RemoveOneById(iId uint) (bool, error)
+	EditOneById(oTableRecord *domain.TableRecordValue, iId uint) error
+	RemoveOneById(iId uint) error
 	ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.TableRecord, error)
-	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
+	TotalByFilters(aFilters []*pkgInput.Filter) (uint, error)
 }

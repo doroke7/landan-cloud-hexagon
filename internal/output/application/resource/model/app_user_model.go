@@ -17,7 +17,7 @@ func NewAppUserModel(oAbstractModel *resourceBase.AbstractResource) outputPortAn
 	}
 }
 
-func (oSelf *AppUserModel) AddOne(oAppUser *domain.AppUserValue) (bool, error) {
+func (oSelf *AppUserModel) AddOne(oAppUser *domain.AppUserValue) error {
 
 	oRequest := &pbResourceModel.AppUserAddOneInput{
 		Variable: &pbResourceModel.AppUserVariable{
@@ -26,11 +26,9 @@ func (oSelf *AppUserModel) AddOne(oAppUser *domain.AppUserValue) (bool, error) {
 		},
 	}
 
-	if _, oErr := oSelf.ResourceModelClient.AppUser.AddAppUser(oSelf.Context, oRequest); oErr != nil {
-		return false, oErr
-	}
+	_, oErr := oSelf.ResourceModelClient.AppUser.AddAppUser(oSelf.Context, oRequest)
 
-	return true, nil
+	return oErr
 }
 
 func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) {
@@ -73,15 +71,12 @@ func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 	}, nil
 }
 
-func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint) (bool, error) {
+func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint) error {
 
-	oResp, oErr := oSelf.ResourceModelClient.AppUser.IncreaseBalance(
+	_, oErr := oSelf.ResourceModelClient.AppUser.IncreaseBalance(
 		oSelf.Context,
 		&pbResourceModel.AppUserIncreaseBalanceInput{Id: uint32(iId), Amount: uint32(iAmount)},
 	)
-	if oErr != nil {
-		return false, oErr
-	}
 
-	return oResp.GetStatus(), nil
+	return oErr
 }

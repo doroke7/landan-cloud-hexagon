@@ -20,6 +20,17 @@ func NewAdminRoleUsecase(oAdminRoleModel outputPortAnyModel.AdminRoleModel, oAbs
 	}
 }
 
+func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleValue) (bool, error) {
+
+	oErr := oSelf.AdminRoleModel.AddOne(oAdminRole)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return true, nil
+}
+
 func (oSelf *AdminRoleUsecase) ShowOne(iId uint) (*domain.AdminRole, error) {
 
 	oAdminRole, oErr := oSelf.AdminRoleModel.ShowOneById(iId)
@@ -29,7 +40,7 @@ func (oSelf *AdminRoleUsecase) ShowOne(iId uint) (*domain.AdminRole, error) {
 
 func (oSelf *AdminRoleUsecase) EditOne(oAdminRole *domain.AdminRoleValue, iId uint) (bool, error) {
 
-	_, oErr := oSelf.AdminRoleModel.EditOneById(oAdminRole, iId)
+	oErr := oSelf.AdminRoleModel.EditOneById(oAdminRole, iId)
 
 	if oErr != nil {
 		return false, oErr
@@ -40,7 +51,7 @@ func (oSelf *AdminRoleUsecase) EditOne(oAdminRole *domain.AdminRoleValue, iId ui
 
 func (oSelf *AdminRoleUsecase) RemoveOne(iId uint) (bool, error) {
 
-	_, oErr := oSelf.AdminRoleModel.RemoveOneById(iId)
+	oErr := oSelf.AdminRoleModel.RemoveOneById(iId)
 
 	if oErr != nil {
 		return false, oErr
@@ -58,5 +69,5 @@ func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []
 
 	iTotal, oErr := oSelf.AdminRoleModel.TotalByFilters(aFilters)
 
-	return aAdminRoles, iTotal, oErr
+	return aAdminRoles, uint64(iTotal), oErr
 }

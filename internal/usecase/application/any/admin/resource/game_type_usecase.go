@@ -28,7 +28,7 @@ func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oGameTy
 
 func (oSelf *GameTypeUsecase) AddOne(oValue *domain.GameTypeValue) (bool, error) {
 
-	_, oErr := oSelf.GameTypeModel.AddOne(oValue)
+	oErr := oSelf.GameTypeModel.AddOne(oValue)
 
 	if oErr != nil {
 		return false, oErr
@@ -39,7 +39,7 @@ func (oSelf *GameTypeUsecase) AddOne(oValue *domain.GameTypeValue) (bool, error)
 
 func (oSelf *GameTypeUsecase) EditOne(oValue *domain.GameTypeValue, iId uint) (bool, error) {
 
-	_, oErr := oSelf.GameTypeModel.EditOneById(oValue, iId)
+	oErr := oSelf.GameTypeModel.EditOneById(oValue, iId)
 
 	if oErr != nil {
 		return false, oErr
@@ -101,7 +101,7 @@ func (oSelf *GameTypeUsecase) RemoveOne(iId uint) (bool, error) {
 		return false, pkgUtility.NewDefaultError("This game type still has games; remove them before deleting", -2, 500)
 	}
 
-	_, oErr = oSelf.GameTypeModel.RemoveOneById(iId)
+	oErr = oSelf.GameTypeModel.RemoveOneById(iId)
 
 	if oErr != nil {
 		return false, oErr

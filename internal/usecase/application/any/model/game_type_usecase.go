@@ -21,7 +21,7 @@ func NewGameTypeUsecase(oGameTypeModel outputPortAnyModel.GameTypeModel, oAbstra
 
 func (oSelf *GameTypeUsecase) AddOne(oAdd *domain.GameTypeValue) (bool, error) {
 
-	_, oErr := oSelf.GameTypeModel.AddOne(oAdd)
+	oErr := oSelf.GameTypeModel.AddOne(oAdd)
 
 	if oErr != nil {
 		return false, oErr
@@ -46,7 +46,7 @@ func (oSelf *GameTypeUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []
 
 func (oSelf *GameTypeUsecase) EditOneById(oEdit *domain.GameTypeValue, iId uint64) (bool, error) {
 
-	_, oErr := oSelf.GameTypeModel.EditOneById(oEdit, uint(iId))
+	oErr := oSelf.GameTypeModel.EditOneById(oEdit, uint(iId))
 
 	if oErr != nil {
 		return false, oErr
@@ -57,7 +57,7 @@ func (oSelf *GameTypeUsecase) EditOneById(oEdit *domain.GameTypeValue, iId uint6
 
 func (oSelf *GameTypeUsecase) RemoveOneById(iId uint) (bool, error) {
 
-	_, oErr := oSelf.GameTypeModel.RemoveOneById(iId)
+	oErr := oSelf.GameTypeModel.RemoveOneById(iId)
 
 	if oErr != nil {
 		return false, oErr
@@ -70,5 +70,5 @@ func (oSelf *GameTypeUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint6
 
 	iTotal, oErr := oSelf.GameTypeModel.TotalByFilters(aFilters)
 
-	return iTotal, oErr
+	return uint64(iTotal), oErr
 }

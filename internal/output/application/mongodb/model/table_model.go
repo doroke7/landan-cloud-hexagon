@@ -1,6 +1,7 @@
 package outputApplicationMongodbModel
 
 import (
+	"errors"
 	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -65,10 +66,10 @@ func (oSelf *TableModel) nextId() (uint, error) {
 	return oCounter.Seq, nil
 }
 
-func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
+func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {
 	iId, oErr := oSelf.nextId()
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oNow := time.Now()
@@ -105,10 +106,10 @@ func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
 	}
 
 	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return true, nil
+	return nil
 }
 
 func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
@@ -129,7 +130,7 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 	return &oTable, nil
 }
 
-func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool, error) {
+func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) error {
 	oSet := bson.M{"updated_at": time.Now()}
 
 	if oTable.No != nil {
@@ -163,23 +164,31 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool,
 		bson.M{"$set": oSet},
 	)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return oResult.MatchedCount > 0, nil
+	if oResult.MatchedCount == 0 {
+		return errors.New("更新0筆")
+	}
+
+	return nil
 }
 
-func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *TableModel) RemoveOneById(iId uint) error {
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
 		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
 	)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return oResult.ModifiedCount > 0, nil
+	if oResult.ModifiedCount == 0 {
+		return errors.New("刪除0筆")
+	}
+
+	return nil
 }
 
 func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
@@ -202,7 +211,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
@@ -211,5 +220,5 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 		return 0, oErr
 	}
 
-	return uint64(iCount), nil
+	return uint(iCount), nil
 }

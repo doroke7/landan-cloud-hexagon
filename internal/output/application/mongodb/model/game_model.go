@@ -1,6 +1,7 @@
 package outputApplicationMongodbModel
 
 import (
+	"errors"
 	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -74,10 +75,10 @@ func (oSelf *GameModel) nextId() (uint, error) {
 	return oCounter.Seq, nil
 }
 
-func (oSelf *GameModel) AddOne(oGame *domain.GameValue) (bool, error) {
+func (oSelf *GameModel) AddOne(oGame *domain.GameValue) error {
 	iId, oErr := oSelf.nextId()
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oNow := time.Now()
@@ -102,10 +103,10 @@ func (oSelf *GameModel) AddOne(oGame *domain.GameValue) (bool, error) {
 	}
 
 	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return true, nil
+	return nil
 }
 
 func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
@@ -144,7 +145,7 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	return &oGame, nil
 }
 
-func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) (bool, error) {
+func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) error {
 	oSet := bson.M{"updated_at": time.Now()}
 
 	if oGame.GameTypeId != nil {
@@ -166,23 +167,31 @@ func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) (bool, er
 		bson.M{"$set": oSet},
 	)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return oResult.MatchedCount > 0, nil
+	if oResult.MatchedCount == 0 {
+		return errors.New("更新0筆")
+	}
+
+	return nil
 }
 
-func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *GameModel) RemoveOneById(iId uint) error {
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
 		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
 	)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return oResult.ModifiedCount > 0, nil
+	if oResult.ModifiedCount == 0 {
+		return errors.New("刪除0筆")
+	}
+
+	return nil
 }
 
 func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, error) {
@@ -203,7 +212,7 @@ func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, 
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint64, error) {
+func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint, error) {
 	iCount, oErr := oSelf.Collection.CountDocuments(oSelf.Context, bson.M{
 		"game_type_id": iGameTypeId,
 		"deleted_at":   oDeletedAtZero,
@@ -212,7 +221,7 @@ func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint64, error) {
 		return 0, oErr
 	}
 
-	return uint64(iCount), nil
+	return uint(iCount), nil
 }
 
 func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
@@ -235,7 +244,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
@@ -244,5 +253,5 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 		return 0, oErr
 	}
 
-	return uint64(iCount), nil
+	return uint(iCount), nil
 }

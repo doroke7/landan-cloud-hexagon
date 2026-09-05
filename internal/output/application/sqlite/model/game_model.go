@@ -79,7 +79,7 @@ func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, 
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint64, error) {
+func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint, error) {
 	var iTotal int64
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -90,7 +90,7 @@ func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint64, error) {
 		return 0, oErr
 	}
 
-	return uint64(iTotal), nil
+	return uint(iTotal), nil
 }
 
 func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
@@ -135,7 +135,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -148,15 +148,17 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
 
+	// Go 很常先在外面宣告變數，然後把它的 pointer 傳進函數，讓函數可以直接修改原本的變數。
 	if oErr := oQuery.
 		Count(&iTotal).Error; oErr != nil {
 		return 0, oErr
 	}
 
-	return uint64(iTotal), nil
+	return uint(iTotal), nil
+
 }
 
-func (oSelf *GameModel) AddOne(oValue *domain.GameValue) (bool, error) {
+func (oSelf *GameModel) AddOne(oValue *domain.GameValue) error {
 	oGame, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -164,17 +166,18 @@ func (oSelf *GameModel) AddOne(oValue *domain.GameValue) (bool, error) {
 		Create(oGame)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("新增0筆")
+		return errors.New("新增0筆")
+
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) (bool, error) {
+func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) error {
 	oGame, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -183,17 +186,18 @@ func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) (bool, e
 		UpdateColumns(oGame)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("更新0筆")
+		return errors.New("更新0筆")
+
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *GameModel) RemoveOneById(iId uint) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.Game{}).
 		Where("id = ?", iId).
@@ -201,12 +205,13 @@ func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
 		UpdateColumn("deleted_at", time.Now())
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("刪除0筆")
+		return errors.New("刪除0筆")
+
 	}
 
-	return true, nil
+	return nil
 }

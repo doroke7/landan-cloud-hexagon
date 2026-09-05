@@ -28,13 +28,13 @@ func NewAppUserModel(oAbstractModel *elasticsearchBase.AbstractElasticsearch) ou
 
 // IncreaseBalance 讀出目前餘額、加上 amount 再寫回。ES 沒有 gorm 那種 UpdateColumn 原子加，
 // 這裡是「讀-改-寫」，不保證併發原子性（跟 lottery/memory adapter 的取捨一致）。
-func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint) (bool, error) {
+func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint) error {
 	oAppUser, oErr := oSelf.ShowOneById(iId)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 	if oAppUser == nil {
-		return false, errors.New("資料不存在")
+		return errors.New("資料不存在")
 	}
 
 	sId := strconv.FormatUint(uint64(iId), 10)
@@ -43,7 +43,9 @@ func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint) (bool, error)
 		"updated_at": time.Now(),
 	}
 
-	return oSelf.UpdateOne(oSelf.Index, sId, oPartial)
+	_, oErr = oSelf.UpdateOne(oSelf.Index, sId, oPartial)
+
+	return oErr
 }
 
 func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) {
@@ -98,10 +100,10 @@ func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 	return &oAppUser, nil
 }
 
-func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) (bool, error) {
+func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) error {
 	iId, oErr := oSelf.NextId("app_user")
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oDoc := &domain.AppUser{Id: iId}
@@ -117,8 +119,8 @@ func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) (bool, error) {
 	}
 
 	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return true, nil
+	return nil
 }

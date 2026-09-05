@@ -95,7 +95,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	return aAdminUsers, nil
 }
 
-func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 
 	oRequest := &pbResourceModel.AdminUserTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -103,12 +103,12 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 
 	oResponse, oErr := oSelf.ResourceModelClient.AdminUser.TotalByFilters(oSelf.Context, oRequest)
 
-	iTotal := oResponse.GetTotal()
+	iTotal := uint(oResponse.GetTotal())
 
 	return iTotal, oErr
 }
 
-func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
+func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {
 
 	oRequest := &pbResourceModel.AdminUserAddOneInput{
 		Variable: &pbResourceModel.AdminUserVariable{
@@ -117,18 +117,12 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, er
 		},
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.AdminUser.AddOne(oSelf.Context, oRequest)
+	_, oErr := oSelf.ResourceModelClient.AdminUser.AddOne(oSelf.Context, oRequest)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	bStatus := oResponse.GetStatus()
-
-	return bStatus, nil
+	return oErr
 }
 
-func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) error {
 
 	oRequest := &pbResourceModel.AdminUserEditOneByIdInput{
 		Id: uint32(iId),
@@ -138,29 +132,17 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 		},
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.AdminUser.EditOneById(oSelf.Context, oRequest)
+	_, oErr := oSelf.ResourceModelClient.AdminUser.EditOneById(oSelf.Context, oRequest)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	bStatus := oResponse.GetStatus()
-
-	return bStatus, nil
+	return oErr
 }
 
-func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *AdminUserModel) RemoveOneById(iId uint) error {
 
-	oResponse, oErr := oSelf.ResourceModelClient.AdminUser.RemoveOneById(
+	_, oErr := oSelf.ResourceModelClient.AdminUser.RemoveOneById(
 		oSelf.Context,
 		&pbResourceModel.AdminUserRemoveOneByIdInput{Id: uint32(iId)},
 	)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	bStatus := oResponse.GetStatus()
-
-	return bStatus, nil
+	return oErr
 }

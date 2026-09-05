@@ -72,7 +72,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return &oAdminUser, err
 }
 
-func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *AdminUserModel) RemoveOneById(iId uint) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminUser{}).
 		Where("id = ?", iId).
@@ -80,20 +80,20 @@ func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
 		UpdateColumn("deleted_at", time.Now())
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("刪除0筆")
+		return errors.New("刪除0筆")
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminUser)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -102,14 +102,14 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 		UpdateColumns(oColumns)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("更新0筆")
+		return errors.New("更新0筆")
 	}
 
-	return true, nil
+	return nil
 }
 
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {
@@ -149,7 +149,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	return aAdminUsers, nil
 }
 
-func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	aWheres := oSelf.AbstractTidb.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -165,13 +165,13 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 		return 0, oErr
 	}
 
-	return uint64(iTotal), nil
+	return uint(iTotal), nil
 }
 
-func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
+func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminUser)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -179,12 +179,12 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, er
 		Create(oColumns)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("新增0筆")
+		return errors.New("新增0筆")
 	}
 
-	return true, nil
+	return nil
 }

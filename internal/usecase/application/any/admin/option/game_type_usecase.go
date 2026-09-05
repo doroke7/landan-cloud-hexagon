@@ -32,7 +32,7 @@ func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*
 
 	iTotal, oErr := oSelf.GameTypeModel.TotalByFilters(aFilters)
 
-	return aGameTypes, iTotal, oErr
+	return aGameTypes, uint64(iTotal), oErr
 }
 
 func (oSelf *GameTypeUsecase) ShowTree() ([]*domain.GameType, error) {

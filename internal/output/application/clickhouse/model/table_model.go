@@ -45,10 +45,10 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 
 // EditOneById 底層送出的是 ClickHouse 的 ALTER TABLE ... UPDATE mutation，
 // 非同步執行，RowsAffected 通常會回 0，不能拿來判斷是否真的更新成功。
-func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool, error) {
+func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTable)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -57,15 +57,15 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool,
 		UpdateColumns(oColumns)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
-	return true, nil
+	return nil
 }
 
 // RemoveOneById 底層送出的是 ClickHouse 的 ALTER TABLE ... UPDATE mutation（軟刪除），
 // 非同步執行，RowsAffected 通常會回 0，不能拿來判斷是否真的刪除成功。
-func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *TableModel) RemoveOneById(iId uint) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.Table{}).
 		Where("id = ?", iId).
@@ -73,10 +73,10 @@ func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
 		UpdateColumn("deleted_at", time.Now())
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
-	return true, nil
+	return nil
 }
 
 func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
@@ -121,7 +121,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	aWheres := oSelf.AbstractClickhouse.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -139,13 +139,13 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 		return 0, oErr
 	}
 
-	return uint64(iTotal), nil
+	return uint(iTotal), nil
 }
 
-func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
+func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTable)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -153,12 +153,12 @@ func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
 		Create(oColumns)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("新增0筆")
+		return errors.New("新增0筆")
 	}
 
-	return true, nil
+	return nil
 }

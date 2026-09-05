@@ -41,10 +41,10 @@ func (oSelf *TableRecordModel) ShowOneById(iId uint) (*domain.TableRecord, error
 	return &oTableRecord, nil
 }
 
-func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue, iId uint) (bool, error) {
+func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue, iId uint) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTableRecord)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -53,17 +53,17 @@ func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue
 		UpdateColumns(oColumns)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("更新0筆")
+		return errors.New("更新0筆")
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *TableRecordModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *TableRecordModel) RemoveOneById(iId uint) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.TableRecord{}).
 		Where("id = ?", iId).
@@ -71,14 +71,14 @@ func (oSelf *TableRecordModel) RemoveOneById(iId uint) (bool, error) {
 		UpdateColumn("deleted_at", time.Now())
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("刪除0筆")
+		return errors.New("刪除0筆")
 	}
 
-	return true, nil
+	return nil
 }
 
 func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.TableRecord, error) {
@@ -121,7 +121,7 @@ func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters [
 	return aTableRecords, nil
 }
 
-func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	aWheres := oSelf.AbstractPostgresql.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -139,13 +139,13 @@ func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint
 		return 0, oErr
 	}
 
-	return uint64(iTotal), nil
+	return uint(iTotal), nil
 }
 
-func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) (bool, error) {
+func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTableRecord)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -153,12 +153,12 @@ func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) (bo
 		Create(oColumns)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("新增0筆")
+		return errors.New("新增0筆")
 	}
 
-	return true, nil
+	return nil
 }

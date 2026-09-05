@@ -52,20 +52,15 @@ func NewGameModel(oAbstractModel *resourceBase.AbstractResource) outputPortAnyMo
 	}
 }
 
-func (oSelf *GameModel) AddOne(oGameParm *domain.GameValue) (bool, error) {
+func (oSelf *GameModel) AddOne(oGameParm *domain.GameValue) error {
 
 	oRequest := &pbResourceModel.GameAddOneInput{
 		Variable: domainGameValueToProtoGameVariable(oGameParm),
 	}
 
-	bResult, oErr := oSelf.ResourceModelClient.Game.AddOne(oSelf.Context, oRequest)
-	_ = bResult
+	_, oErr := oSelf.ResourceModelClient.Game.AddOne(oSelf.Context, oRequest)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oErr
 }
 
 func (oSelf *GameModel) ShowOneById(iId uint) (*domain.Game, error) {
@@ -123,7 +118,7 @@ func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, 
 	return aGames, oErr
 }
 
-func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint64, error) {
+func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint, error) {
 	sField := "game_type_id"
 	sOperator := "eq"
 	aFilters := []*pkgInput.Filter{
@@ -157,7 +152,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 
 	oRequest := &pbResourceModel.GameTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -165,37 +160,29 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 
 	oResponse, oErr := oSelf.ResourceModelClient.Game.TotalByFilters(oSelf.Context, oRequest)
 
-	iTotal := oResponse.GetTotal()
+	iTotal := uint(oResponse.GetTotal())
 
 	return iTotal, oErr
 }
 
-func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) (bool, error) {
+func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint) error {
 
 	oRequest := &pbResourceModel.GameEditOneByIdInput{
 		Id:       uint32(iId),
 		Variable: domainGameValueToProtoGameVariable(oGame),
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.Game.EditOneById(oSelf.Context, oRequest)
+	_, oErr := oSelf.ResourceModelClient.Game.EditOneById(oSelf.Context, oRequest)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return oResponse.GetStatus(), nil
+	return oErr
 }
 
-func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *GameModel) RemoveOneById(iId uint) error {
 
-	oResponse, oErr := oSelf.ResourceModelClient.Game.RemoveOneById(
+	_, oErr := oSelf.ResourceModelClient.Game.RemoveOneById(
 		oSelf.Context,
 		&pbResourceModel.GameRemoveOneByIdInput{Id: uint32(iId)},
 	)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return oResponse.GetStatus(), nil
+	return oErr
 }

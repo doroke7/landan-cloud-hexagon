@@ -49,19 +49,15 @@ func domainAdminPermissionValueToProtoAdminPermissionVariable(oValue *domain.Adm
 	return oVariable
 }
 
-func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissionValue) (bool, error) {
+func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissionValue) error {
 
 	oRequest := &pbResourceModel.AdminPermissionAddOneInput{
 		Variable: domainAdminPermissionValueToProtoAdminPermissionVariable(oAdminPermission),
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.AdminPermission.AddOne(oSelf.Context, oRequest)
+	_, oErr := oSelf.ResourceModelClient.AdminPermission.AddOne(oSelf.Context, oRequest)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return oResponse.GetStatus(), nil
+	return oErr
 }
 
 func (oSelf *AdminPermissionModel) ShowOneById(iId uint) (*domain.AdminPermission, error) {
@@ -85,34 +81,26 @@ func (oSelf *AdminPermissionModel) ShowOneById(iId uint) (*domain.AdminPermissio
 	return &oAdminPermission, nil
 }
 
-func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint) (bool, error) {
+func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint) error {
 
 	oRequest := &pbResourceModel.AdminPermissionEditOneByIdInput{
 		Id:       uint32(iId),
 		Variable: domainAdminPermissionValueToProtoAdminPermissionVariable(oAdminPermission),
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.AdminPermission.EditOneById(oSelf.Context, oRequest)
+	_, oErr := oSelf.ResourceModelClient.AdminPermission.EditOneById(oSelf.Context, oRequest)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return oResponse.GetStatus(), nil
+	return oErr
 }
 
-func (oSelf *AdminPermissionModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *AdminPermissionModel) RemoveOneById(iId uint) error {
 
-	oResponse, oErr := oSelf.ResourceModelClient.AdminPermission.RemoveOneById(
+	_, oErr := oSelf.ResourceModelClient.AdminPermission.RemoveOneById(
 		oSelf.Context,
 		&pbResourceModel.AdminPermissionRemoveOneByIdInput{Id: uint32(iId)},
 	)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return oResponse.GetStatus(), nil
+	return oErr
 }
 
 func (oSelf *AdminPermissionModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermission, error) {
@@ -138,7 +126,7 @@ func (oSelf *AdminPermissionModel) ShowOnesByFiltersWithSortersPagination(aFilte
 	return aAdminPermissions, nil
 }
 
-func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 
 	oRequest := &pbResourceModel.AdminPermissionTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -146,7 +134,7 @@ func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (
 
 	oResponse, oErr := oSelf.ResourceModelClient.AdminPermission.TotalByFilters(oSelf.Context, oRequest)
 
-	iTotal := oResponse.GetTotal()
+	iTotal := uint(oResponse.GetTotal())
 
 	return iTotal, oErr
 }

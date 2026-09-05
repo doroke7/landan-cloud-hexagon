@@ -97,34 +97,26 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 	return &oTable, nil
 }
 
-func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) (bool, error) {
+func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint) error {
 
 	oRequest := &pbResourceModel.TableEditOneByIdInput{
 		Id:       uint32(iId),
 		Variable: domainTableValueToProtoTableVariable(oTable),
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.Table.EditOneById(oSelf.Context, oRequest)
+	_, oErr := oSelf.ResourceModelClient.Table.EditOneById(oSelf.Context, oRequest)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return oResponse.GetStatus(), nil
+	return oErr
 }
 
-func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *TableModel) RemoveOneById(iId uint) error {
 
-	oResponse, oErr := oSelf.ResourceModelClient.Table.RemoveOneById(
+	_, oErr := oSelf.ResourceModelClient.Table.RemoveOneById(
 		oSelf.Context,
 		&pbResourceModel.TableRemoveOneByIdInput{Id: uint32(iId)},
 	)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return oResponse.GetStatus(), nil
+	return oErr
 }
 
 func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
@@ -150,7 +142,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 
 	oRequest := &pbResourceModel.TableTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -158,22 +150,18 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 
 	oResponse, oErr := oSelf.ResourceModelClient.Table.TotalByFilters(oSelf.Context, oRequest)
 
-	iTotal := oResponse.GetTotal()
+	iTotal := uint(oResponse.GetTotal())
 
 	return iTotal, oErr
 }
 
-func (oSelf *TableModel) AddOne(oTable *domain.TableValue) (bool, error) {
+func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {
 
 	oRequest := &pbResourceModel.TableAddOneInput{
 		Variable: domainTableValueToProtoTableVariable(oTable),
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.Table.AddOne(oSelf.Context, oRequest)
+	_, oErr := oSelf.ResourceModelClient.Table.AddOne(oSelf.Context, oRequest)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return oResponse.GetStatus(), nil
+	return oErr
 }

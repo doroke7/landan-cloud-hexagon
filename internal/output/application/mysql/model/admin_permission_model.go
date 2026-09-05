@@ -24,10 +24,10 @@ func NewAdminPermissionModel(oAbstractModel *mysqlBase.AbstractMysql) outputPort
 	}
 }
 
-func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissionValue) (bool, error) {
+func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissionValue) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminPermission)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -35,14 +35,14 @@ func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissi
 		Create(oColumns)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("新增0筆")
+		return errors.New("新增0筆")
 	}
 
-	return true, nil
+	return nil
 }
 
 func (oSelf *AdminPermissionModel) ShowOneById(iId uint) (*domain.AdminPermission, error) {
@@ -61,10 +61,10 @@ func (oSelf *AdminPermissionModel) ShowOneById(iId uint) (*domain.AdminPermissio
 	return &oAdminPermission, nil
 }
 
-func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint) (bool, error) {
+func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminPermission)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -73,17 +73,17 @@ func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPer
 		UpdateColumns(oColumns)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("更新0筆")
+		return errors.New("更新0筆")
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *AdminPermissionModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *AdminPermissionModel) RemoveOneById(iId uint) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermission{}).
 		Where("id = ?", iId).
@@ -91,14 +91,14 @@ func (oSelf *AdminPermissionModel) RemoveOneById(iId uint) (bool, error) {
 		UpdateColumn("deleted_at", time.Now())
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("刪除0筆")
+		return errors.New("刪除0筆")
 	}
 
-	return true, nil
+	return nil
 }
 
 func (oSelf *AdminPermissionModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermission, error) {
@@ -139,7 +139,7 @@ func (oSelf *AdminPermissionModel) ShowOnesByFiltersWithSortersPagination(aFilte
 	return aAdminPermissions, nil
 }
 
-func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -154,5 +154,5 @@ func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (
 		return 0, oErr
 	}
 
-	return uint64(iTotal), nil
+	return uint(iTotal), nil
 }

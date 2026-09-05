@@ -75,7 +75,7 @@ func (oSelf *AdminUserUsecase) RemoveOne(iId uint) (bool, error) {
 
 	}
 
-	_, oErr := oSelf.AdminUserModel.RemoveOneById(iId)
+	oErr := oSelf.AdminUserModel.RemoveOneById(iId)
 
 	if oErr != nil {
 		return false, oErr

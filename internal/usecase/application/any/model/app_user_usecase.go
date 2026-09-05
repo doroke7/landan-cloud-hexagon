@@ -31,3 +31,25 @@ func (oSelf *AppUserUsecase) ShowOneById(iId uint) (*domain.AppUser, error) {
 
 	return oAppUser, err
 }
+
+func (oSelf *AppUserUsecase) AddOne(oAppUser *domain.AppUserValue) (bool, error) {
+
+	oErr := oSelf.AppUserModel.AddOne(oAppUser)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return true, nil
+}
+
+func (oSelf *AppUserUsecase) IncreaseBalance(iId uint, iAmount uint) (bool, error) {
+
+	oErr := oSelf.AppUserModel.IncreaseBalance(iId, iAmount)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return true, nil
+}

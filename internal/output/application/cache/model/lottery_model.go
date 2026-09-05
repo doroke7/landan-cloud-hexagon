@@ -28,7 +28,7 @@ func (oSelf *LotteryModel) WatchOneByKey(sKey string) (*domain.Lottery, error) {
 }
 
 // EditOneByKey 是寫：把呼叫端給的 oValue 寫進 redis。
-func (oSelf *LotteryModel) EditOneByKey(oValue *domain.LotteryValue, sKey string) (bool, error) {
+func (oSelf *LotteryModel) EditOneByKey(oValue *domain.LotteryValue, sKey string) error {
 
 	var oLottery domain.Lottery
 
@@ -45,10 +45,10 @@ func (oSelf *LotteryModel) EditOneByKey(oValue *domain.LotteryValue, sKey string
 	}
 
 	if err := oSelf.CacheHelper.WriteCache(oSelf.cacheKey(sKey), &oLottery); err != nil {
-		return false, err
+		return err
 	}
 
-	return true, nil
+	return nil
 }
 
 func (oSelf *LotteryModel) cacheKey(sKey string) string {

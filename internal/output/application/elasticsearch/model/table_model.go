@@ -3,6 +3,7 @@ package outputApplicationElasticsearchModel
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"strconv"
 	"time"
 
@@ -69,7 +70,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 	return aTables, nil
 }
 
-func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -141,13 +142,13 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 
 	iTotal, oErr := oSelf.CountWithOptions(aOptions)
 
-	return iTotal, oErr
+	return uint(iTotal), oErr
 }
 
-func (oSelf *TableModel) AddOne(oValue *domain.TableValue) (bool, error) {
+func (oSelf *TableModel) AddOne(oValue *domain.TableValue) error {
 	iId, oErr := oSelf.NextId("table")
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oNow := time.Now()
@@ -184,31 +185,45 @@ func (oSelf *TableModel) AddOne(oValue *domain.TableValue) (bool, error) {
 	}
 
 	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *TableModel) EditOneById(oValue *domain.TableValue, iId uint) (bool, error) {
+func (oSelf *TableModel) EditOneById(oValue *domain.TableValue, iId uint) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 	oColumns["updated_at"] = time.Now()
 
 	sId := strconv.FormatUint(uint64(iId), 10)
 
 	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oColumns)
+	if oErr != nil {
+		return oErr
+	}
 
-	return bOk, oErr
+	if !bOk {
+		return errors.New("更新0筆")
+	}
+
+	return nil
 }
 
-func (oSelf *TableModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *TableModel) RemoveOneById(iId uint) error {
 	sId := strconv.FormatUint(uint64(iId), 10)
 	oPartial := map[string]any{"deleted_at": time.Now()}
 
 	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oPartial)
+	if oErr != nil {
+		return oErr
+	}
 
-	return bOk, oErr
+	if !bOk {
+		return errors.New("刪除0筆")
+	}
+
+	return nil
 }

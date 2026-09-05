@@ -25,7 +25,7 @@ func NewTableUsecase(oTableModel outputPortAnyModel.TableModel, oTableLogic outp
 
 func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) (bool, error) {
 
-	_, oErr := oSelf.TableModel.AddOne(oValue)
+	oErr := oSelf.TableModel.AddOne(oValue)
 
 	if oErr != nil {
 		return false, oErr
@@ -41,7 +41,7 @@ func (oSelf *TableUsecase) ShowOne(iId uint) (*domain.Table, error) {
 
 func (oSelf *TableUsecase) EditOne(oValue *domain.TableValue, iId uint) (bool, error) {
 
-	_, oErr := oSelf.TableModel.EditOneById(oValue, iId)
+	oErr := oSelf.TableModel.EditOneById(oValue, iId)
 
 	if oErr != nil {
 		return false, oErr
@@ -52,7 +52,7 @@ func (oSelf *TableUsecase) EditOne(oValue *domain.TableValue, iId uint) (bool, e
 
 func (oSelf *TableUsecase) RemoveOne(iId uint) (bool, error) {
 
-	_, oErr := oSelf.TableModel.RemoveOneById(iId)
+	oErr := oSelf.TableModel.RemoveOneById(iId)
 
 	if oErr != nil {
 		return false, oErr

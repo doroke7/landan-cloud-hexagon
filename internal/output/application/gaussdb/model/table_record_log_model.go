@@ -80,7 +80,7 @@ func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilter
 	return aTableRecordLogs, nil
 }
 
-func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	aWheres := oSelf.AbstractGaussdb.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -98,13 +98,13 @@ func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (u
 		return 0, oErr
 	}
 
-	return uint64(iTotal), nil
+	return uint(iTotal), nil
 }
 
-func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogValue) (bool, error) {
+func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogValue) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTableRecordLog)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -112,12 +112,12 @@ func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogV
 		Create(oColumns)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("新增0筆")
+		return errors.New("新增0筆")
 	}
 
-	return true, nil
+	return nil
 }

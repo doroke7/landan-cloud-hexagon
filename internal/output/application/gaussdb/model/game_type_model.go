@@ -55,7 +55,7 @@ func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 }
 
 // ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
-func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint64, error) {
+func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint, error) {
 	var iTotal int64
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
@@ -66,7 +66,7 @@ func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint64, error) {
 		return 0, oErr
 	}
 
-	return uint64(iTotal), nil
+	return uint(iTotal), nil
 }
 
 func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint) ([]*domain.GameType, error) {
@@ -123,7 +123,7 @@ func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*p
 	return aGameTypes, nil
 }
 
-func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) (bool, error) {
+func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {
 	oGameType, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -131,17 +131,17 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) (bool, error) {
 		Create(oGameType)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("新增0筆")
+		return errors.New("新增0筆")
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) (bool, error) {
+func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) error {
 	oGameType, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -150,17 +150,17 @@ func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) 
 		UpdateColumns(oGameType)
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("更新0筆")
+		return errors.New("更新0筆")
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *GameTypeModel) RemoveOneById(iId uint) error {
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.GameType{}).
 		Where("id = ?", iId).
@@ -168,17 +168,17 @@ func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
 		UpdateColumn("deleted_at", time.Now())
 
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("刪除0筆")
+		return errors.New("刪除0筆")
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	aWheres := oSelf.AbstractGaussdb.FiltersToWheres(aFilters)
 
 	var iTotal int64
@@ -196,5 +196,5 @@ func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64,
 		return 0, oErr
 	}
 
-	return uint64(iTotal), nil
+	return uint(iTotal), nil
 }

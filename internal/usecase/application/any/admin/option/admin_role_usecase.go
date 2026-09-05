@@ -29,5 +29,5 @@ func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []
 
 	iTotal, oErr := oSelf.AdminRoleModel.TotalByFilters(aFilters)
 
-	return aAdminRoles, iTotal, oErr
+	return aAdminRoles, uint64(iTotal), oErr
 }

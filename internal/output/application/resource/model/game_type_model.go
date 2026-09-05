@@ -46,7 +46,7 @@ func NewGameTypeModel(oAbstractModel *resourceBase.AbstractResource) outputPortA
 	}
 }
 
-func (oSelf *GameTypeModel) AddOne(oGameTypeParm *domain.GameTypeValue) (bool, error) {
+func (oSelf *GameTypeModel) AddOne(oGameTypeParm *domain.GameTypeValue) error {
 
 	oRequest := &pbResourceModel.GameTypeAddOneInput{
 		Variable: &pbResourceModel.GameTypeVariable{
@@ -57,11 +57,7 @@ func (oSelf *GameTypeModel) AddOne(oGameTypeParm *domain.GameTypeValue) (bool, e
 
 	_, oErr := oSelf.ResourceModelClient.GameType.AddOne(oSelf.Context, oRequest)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return true, nil
+	return oErr
 }
 
 func (oSelf *GameTypeModel) ShowOneById(iId uint) (*domain.GameType, error) {
@@ -93,7 +89,7 @@ func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 
 // ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
 // 走既有的 filters 查詢，實際的 deleted_at 過濾由 gRPC 後端底層的持久化 adapter 負責。
-func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint64, error) {
+func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint, error) {
 	sField := "parent_id"
 	sOperator := "eq"
 	aFilters := []*pkgInput.Filter{
@@ -140,7 +136,7 @@ func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*p
 	return aGameTypes, nil
 }
 
-func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 
 	oRequest := &pbResourceModel.GameTypeTotalByFiltersInput{
 		Filters: oSelf.ToFilters(aFilters),
@@ -148,12 +144,12 @@ func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64,
 
 	oResponse, oErr := oSelf.ResourceModelClient.GameType.TotalByFilters(oSelf.Context, oRequest)
 
-	iTotal := oResponse.GetTotal()
+	iTotal := uint(oResponse.GetTotal())
 
 	return iTotal, oErr
 }
 
-func (oSelf *GameTypeModel) EditOneById(oGameType *domain.GameTypeValue, iId uint) (bool, error) {
+func (oSelf *GameTypeModel) EditOneById(oGameType *domain.GameTypeValue, iId uint) error {
 
 	oRequest := &pbResourceModel.GameTypeEditOneByIdInput{
 		Id: uint32(iId),
@@ -163,25 +159,17 @@ func (oSelf *GameTypeModel) EditOneById(oGameType *domain.GameTypeValue, iId uin
 		},
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.GameType.EditOneById(oSelf.Context, oRequest)
+	_, oErr := oSelf.ResourceModelClient.GameType.EditOneById(oSelf.Context, oRequest)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return oResponse.GetStatus(), nil
+	return oErr
 }
 
-func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *GameTypeModel) RemoveOneById(iId uint) error {
 
-	oResponse, oErr := oSelf.ResourceModelClient.GameType.RemoveOneById(
+	_, oErr := oSelf.ResourceModelClient.GameType.RemoveOneById(
 		oSelf.Context,
 		&pbResourceModel.GameTypeRemoveOneByIdInput{Id: uint32(iId)},
 	)
 
-	if oErr != nil {
-		return false, oErr
-	}
-
-	return oResponse.GetStatus(), nil
+	return oErr
 }

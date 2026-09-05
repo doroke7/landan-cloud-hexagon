@@ -20,7 +20,7 @@ func NewAppUserUsecase(oAppUserModel outputPortAnyModel.AppUserModel, oAbstractU
 
 func (oSelf *AppUserUsecase) IncreaseBalance(id uint, amount uint) (bool, error) {
 
-	_, oErr := oSelf.AppUserModel.IncreaseBalance(id, amount)
+	oErr := oSelf.AppUserModel.IncreaseBalance(id, amount)
 
 	if oErr != nil {
 		return false, oErr

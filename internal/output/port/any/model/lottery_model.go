@@ -5,6 +5,6 @@ import (
 )
 
 type LotteryModel interface {
-	EditOneByKey(oLottery *domain.LotteryValue, sKey string) (bool, error)
+	EditOneByKey(oLottery *domain.LotteryValue, sKey string) error
 	WatchOneByKey(sKey string) (*domain.Lottery, error)
 }

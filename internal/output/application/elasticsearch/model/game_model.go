@@ -3,6 +3,7 @@ package outputApplicationElasticsearchModel
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"strconv"
 	"time"
 
@@ -100,7 +101,7 @@ func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint) ([]*domain.Game, 
 	return aGames, oErr
 }
 
-func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint64, error) {
+func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint) (uint, error) {
 	sGameTypeIdField := "game_type_id"
 	sDeletedAtField := "deleted_at"
 	aFilters := []*pkgInput.Filter{
@@ -139,7 +140,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 	return aGames, nil
 }
 
-func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -211,13 +212,13 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 
 	iTotal, oErr := oSelf.CountWithOptions(aOptions)
 
-	return iTotal, oErr
+	return uint(iTotal), oErr
 }
 
-func (oSelf *GameModel) AddOne(oValue *domain.GameValue) (bool, error) {
+func (oSelf *GameModel) AddOne(oValue *domain.GameValue) error {
 	iId, oErr := oSelf.NextId("game")
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oNow := time.Now()
@@ -242,31 +243,45 @@ func (oSelf *GameModel) AddOne(oValue *domain.GameValue) (bool, error) {
 	}
 
 	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) (bool, error) {
+func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 	oColumns["updated_at"] = time.Now()
 
 	sId := strconv.FormatUint(uint64(iId), 10)
 
 	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oColumns)
+	if oErr != nil {
+		return oErr
+	}
 
-	return bOk, oErr
+	if !bOk {
+		return errors.New("更新0筆")
+	}
+
+	return nil
 }
 
-func (oSelf *GameModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *GameModel) RemoveOneById(iId uint) error {
 	sId := strconv.FormatUint(uint64(iId), 10)
 	oPartial := map[string]any{"deleted_at": time.Now()}
 
 	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oPartial)
+	if oErr != nil {
+		return oErr
+	}
 
-	return bOk, oErr
+	if !bOk {
+		return errors.New("刪除0筆")
+	}
+
+	return nil
 }

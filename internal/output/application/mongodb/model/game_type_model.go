@@ -1,6 +1,7 @@
 package outputApplicationMongodbModel
 
 import (
+	"errors"
 	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
@@ -100,7 +101,7 @@ func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 }
 
 // ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
-func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint64, error) {
+func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint, error) {
 	iCount, oErr := oSelf.Collection.CountDocuments(oSelf.Context, bson.M{
 		"parent_id":  iParentId,
 		"deleted_at": oDeletedAtZero,
@@ -109,7 +110,7 @@ func (oSelf *GameTypeModel) TotalByParentId(iParentId uint) (uint64, error) {
 		return 0, oErr
 	}
 
-	return uint64(iCount), nil
+	return uint(iCount), nil
 }
 
 func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint) ([]*domain.GameType, error) {
@@ -150,7 +151,7 @@ func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*p
 	return aGameTypes, nil
 }
 
-func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
 
@@ -159,13 +160,13 @@ func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64,
 		return 0, oErr
 	}
 
-	return uint64(iCount), nil
+	return uint(iCount), nil
 }
 
-func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) (bool, error) {
+func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {
 	iId, oErr := oSelf.nextId()
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oNow := time.Now()
@@ -184,13 +185,13 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) (bool, error) {
 	}
 
 	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) (bool, error) {
+func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) error {
 	oSet := bson.M{"updated_at": time.Now()}
 
 	if oValue.Key != nil {
@@ -206,21 +207,29 @@ func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint) 
 		bson.M{"$set": oSet},
 	)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return oResult.MatchedCount > 0, nil
+	if oResult.MatchedCount == 0 {
+		return errors.New("更新0筆")
+	}
+
+	return nil
 }
 
-func (oSelf *GameTypeModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *GameTypeModel) RemoveOneById(iId uint) error {
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
 		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
 	)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return oResult.ModifiedCount > 0, nil
+	if oResult.ModifiedCount == 0 {
+		return errors.New("刪除0筆")
+	}
+
+	return nil
 }

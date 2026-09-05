@@ -41,7 +41,7 @@ func (oSelf *GameUsecase) AddOne(oValue *domain.GameValue) (bool, error) {
 		}
 	}
 
-	_, oErr := oSelf.GameModel.AddOne(oValue)
+	oErr := oSelf.GameModel.AddOne(oValue)
 
 	if oErr != nil {
 		return false, oErr
@@ -64,7 +64,7 @@ func (oSelf *GameUsecase) EditOne(oValue *domain.GameValue, iId uint) (bool, err
 		}
 	}
 
-	_, oErr := oSelf.GameModel.EditOneById(oValue, iId)
+	oErr := oSelf.GameModel.EditOneById(oValue, iId)
 
 	if oErr != nil {
 		return false, oErr
@@ -75,7 +75,7 @@ func (oSelf *GameUsecase) EditOne(oValue *domain.GameValue, iId uint) (bool, err
 
 func (oSelf *GameUsecase) RemoveOne(iId uint) (bool, error) {
 
-	_, oErr := oSelf.GameModel.RemoveOneById(iId)
+	oErr := oSelf.GameModel.RemoveOneById(iId)
 
 	if oErr != nil {
 		return false, oErr

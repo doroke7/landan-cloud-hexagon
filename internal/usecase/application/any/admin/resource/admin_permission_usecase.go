@@ -20,6 +20,17 @@ func NewAdminPermissionUsecase(oAdminPermissionModel outputPortAnyModel.AdminPer
 	}
 }
 
+func (oSelf *AdminPermissionUsecase) AddOne(oAdminPermission *domain.AdminPermissionValue) (bool, error) {
+
+	oErr := oSelf.AdminPermissionModel.AddOne(oAdminPermission)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return true, nil
+}
+
 func (oSelf *AdminPermissionUsecase) ShowOne(iId uint) (*domain.AdminPermission, error) {
 
 	oAdminPermission, oErr := oSelf.AdminPermissionModel.ShowOneById(iId)
@@ -29,7 +40,7 @@ func (oSelf *AdminPermissionUsecase) ShowOne(iId uint) (*domain.AdminPermission,
 
 func (oSelf *AdminPermissionUsecase) EditOne(oAdminPermission *domain.AdminPermissionValue, iId uint) (bool, error) {
 
-	_, oErr := oSelf.AdminPermissionModel.EditOneById(oAdminPermission, iId)
+	oErr := oSelf.AdminPermissionModel.EditOneById(oAdminPermission, iId)
 
 	if oErr != nil {
 		return false, oErr
@@ -40,7 +51,7 @@ func (oSelf *AdminPermissionUsecase) EditOne(oAdminPermission *domain.AdminPermi
 
 func (oSelf *AdminPermissionUsecase) RemoveOne(iId uint) (bool, error) {
 
-	_, oErr := oSelf.AdminPermissionModel.RemoveOneById(iId)
+	oErr := oSelf.AdminPermissionModel.RemoveOneById(iId)
 
 	if oErr != nil {
 		return false, oErr
@@ -58,5 +69,5 @@ func (oSelf *AdminPermissionUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSort
 
 	iTotal, oErr := oSelf.AdminPermissionModel.TotalByFilters(aFilters)
 
-	return aAdminPermissions, iTotal, oErr
+	return aAdminPermissions, uint64(iTotal), oErr
 }

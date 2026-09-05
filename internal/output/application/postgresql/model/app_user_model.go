@@ -21,14 +21,14 @@ func NewAppUserModel(oAbstractModel *postgresqlBase.AbstractPostgresql) outputPo
 	}
 }
 
-func (oSelf *AppUserModel) IncreaseBalance(id uint, amount uint) (bool, error) {
+func (oSelf *AppUserModel) IncreaseBalance(id uint, amount uint) error {
 	if err := oSelf.DB.WithContext(oSelf.Context).Model(&domain.AppUser{}).
 		Where("id = ?", id).
 		UpdateColumn("balance", gorm.Expr("balance + ?", amount)).Error; err != nil {
-		return false, err
+		return err
 	}
 
-	return true, nil
+	return nil
 }
 
 func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) {
@@ -57,20 +57,20 @@ func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 	return &oAppUser, nil
 }
 
-func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) (bool, error) {
+func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).Model(&domain.AppUser{}).Create(oColumns)
 	if oResult.Error != nil {
-		return false, oResult.Error
+		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return false, errors.New("新增0筆")
+		return errors.New("新增0筆")
 	}
 
-	return true, nil
+	return nil
 }

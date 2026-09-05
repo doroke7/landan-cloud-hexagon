@@ -5,8 +5,8 @@ import (
 )
 
 type AppUserModel interface {
-	IncreaseBalance(iId uint, iAmount uint) (bool, error)
+	IncreaseBalance(iId uint, iAmount uint) error
 	ShowOneByName(sName string) (*domain.AppUser, error)
 	ShowOneById(iId uint) (*domain.AppUser, error)
-	AddOne(oAppUser *domain.AppUserValue) (bool, error)
+	AddOne(oAppUser *domain.AppUserValue) error
 }

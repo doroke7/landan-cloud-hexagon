@@ -3,6 +3,7 @@ package outputApplicationElasticsearchModel
 import (
 	"bytes"
 	"encoding/json"
+	"errors"
 	"strconv"
 	"time"
 
@@ -68,7 +69,7 @@ func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters [
 	return aTableRecords, nil
 }
 
-func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -140,13 +141,13 @@ func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint
 
 	iTotal, oErr := oSelf.CountWithOptions(aOptions)
 
-	return iTotal, oErr
+	return uint(iTotal), oErr
 }
 
-func (oSelf *TableRecordModel) AddOne(oValue *domain.TableRecordValue) (bool, error) {
+func (oSelf *TableRecordModel) AddOne(oValue *domain.TableRecordValue) error {
 	iId, oErr := oSelf.NextId("table_record")
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oNow := time.Now()
@@ -186,31 +187,45 @@ func (oSelf *TableRecordModel) AddOne(oValue *domain.TableRecordValue) (bool, er
 	}
 
 	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return true, nil
+	return nil
 }
 
-func (oSelf *TableRecordModel) EditOneById(oValue *domain.TableRecordValue, iId uint) (bool, error) {
+func (oSelf *TableRecordModel) EditOneById(oValue *domain.TableRecordValue, iId uint) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 	oColumns["updated_at"] = time.Now()
 
 	sId := strconv.FormatUint(uint64(iId), 10)
 
 	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oColumns)
+	if oErr != nil {
+		return oErr
+	}
 
-	return bOk, oErr
+	if !bOk {
+		return errors.New("更新0筆")
+	}
+
+	return nil
 }
 
-func (oSelf *TableRecordModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *TableRecordModel) RemoveOneById(iId uint) error {
 	sId := strconv.FormatUint(uint64(iId), 10)
 	oPartial := map[string]any{"deleted_at": time.Now()}
 
 	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oPartial)
+	if oErr != nil {
+		return oErr
+	}
 
-	return bOk, oErr
+	if !bOk {
+		return errors.New("刪除0筆")
+	}
+
+	return nil
 }

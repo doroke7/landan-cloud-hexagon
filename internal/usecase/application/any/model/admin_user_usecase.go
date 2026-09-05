@@ -4,6 +4,7 @@ import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
+	pkgInput "example/pkg/input"
 )
 
 type AdminUserUsecase struct {
@@ -32,4 +33,44 @@ func (oSelf *AdminUserUsecase) ShowOneById(iId uint) (*domain.AdminUser, error) 
 	oAdminUser, err := oSelf.AdminUserModel.ShowOneById(iId)
 
 	return oAdminUser, err
+}
+
+func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
+
+	oErr := oSelf.AdminUserModel.AddOne(oAdminUser)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return true, nil
+}
+
+func (oSelf *AdminUserUsecase) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
+
+	oErr := oSelf.AdminUserModel.EditOneById(oAdminUser, iId)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return true, nil
+}
+
+func (oSelf *AdminUserUsecase) RemoveOneById(iId uint) (bool, error) {
+
+	oErr := oSelf.AdminUserModel.RemoveOneById(iId)
+
+	if oErr != nil {
+		return false, oErr
+	}
+
+	return true, nil
+}
+
+func (oSelf *AdminUserUsecase) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+
+	iTotal, oErr := oSelf.AdminUserModel.TotalByFilters(aFilters)
+
+	return uint64(iTotal), oErr
 }

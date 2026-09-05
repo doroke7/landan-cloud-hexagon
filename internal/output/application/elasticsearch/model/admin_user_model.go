@@ -80,27 +80,41 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint) (*domain.AdminUser, error) {
 	return &oAdminUser, nil
 }
 
-func (oSelf *AdminUserModel) RemoveOneById(iId uint) (bool, error) {
+func (oSelf *AdminUserModel) RemoveOneById(iId uint) error {
 	sId := strconv.FormatUint(uint64(iId), 10)
 	oPartial := map[string]any{"deleted_at": time.Now()}
 
 	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oPartial)
+	if oErr != nil {
+		return oErr
+	}
 
-	return bOk, oErr
+	if !bOk {
+		return errors.New("刪除0筆")
+	}
+
+	return nil
 }
 
-func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) (bool, error) {
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminUser)
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 	oColumns["updated_at"] = time.Now()
 
 	sId := strconv.FormatUint(uint64(iId), 10)
 
 	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oColumns)
+	if oErr != nil {
+		return oErr
+	}
 
-	return bOk, oErr
+	if !bOk {
+		return errors.New("更新0筆")
+	}
+
+	return nil
 }
 
 func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, error) {
@@ -126,7 +140,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 	return aAdminUsers, nil
 }
 
-func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
@@ -198,13 +212,13 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 
 	iTotal, oErr := oSelf.CountWithOptions(aOptions)
 
-	return iTotal, oErr
+	return uint(iTotal), oErr
 }
 
-func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, error) {
+func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {
 	iId, oErr := oSelf.NextId("admin_user")
 	if oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
 	oNow := time.Now()
@@ -222,8 +236,8 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) (bool, er
 	}
 
 	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
-		return false, oErr
+		return oErr
 	}
 
-	return true, nil
+	return nil
 }
