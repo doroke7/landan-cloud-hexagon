@@ -5,8 +5,6 @@ import (
 	"strings"
 	"sync"
 
-	"gorm.io/gorm"
-
 	domain "example/internal/domain"
 	mysqlBase "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
@@ -94,6 +92,58 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 	return aAdminUsers, uint64(iTotal), nil
 }
 
+// func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
+// 	oColumns, oErr := pkgUtility.StructToMap(oValue)
+// 	if oErr != nil {
+// 		return oErr
+// 	}
+//
+// 	delete(oColumns, "admin_role_ids")
+//
+// 	oError := oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
+//
+// 		oResult := oTx.
+// 			Model(&domain.AdminUser{}).
+// 			Create(oColumns)
+//
+// 		if oResult.Error != nil {
+// 			return oResult.Error
+// 		}
+//
+// 		if oResult.RowsAffected == 0 {
+// 			return errors.New("新增0筆")
+// 		}
+//
+// 		var iAdminUserId uint64
+// 		if oErr := oTx.Raw("SELECT LAST_INSERT_ID()").Scan(&iAdminUserId).Error; oErr != nil {
+// 			return oErr
+// 		}
+//
+// 		if oErr := oTx.Where("admin_user_id = ?", iAdminUserId).Delete(&domain.AdminUsersToAdminRole{}).Error; oErr != nil {
+// 			return oErr
+// 		}
+//
+// 		if len(oValue.AdminRoleIds) == 0 {
+// 			return nil // 沒有角色也算成功，直接結束，不會再往下插入
+// 		}
+//
+// 		aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
+// 		for _, iAdminRoleId := range oValue.AdminRoleIds {
+// 			aRelations = append(aRelations, domain.AdminUsersToAdminRole{
+// 				AdminUserId: uint(iAdminUserId),
+// 				AdminRoleId: uint(iAdminRoleId),
+// 			})
+// 		}
+//
+// 		oErr = oTx.Create(&aRelations).Error
+//
+// 		return oErr
+// 	})
+//
+// 	return oError
+// }
+
+// AddAminUser 手動管理 transaction（Begin/Commit/Rollback），不用 oSelf.DB.Transaction 的 callback 寫法。
 func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
@@ -102,33 +152,43 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
 	delete(oColumns, "admin_role_ids")
 
-	oError := oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
+	oTx := oSelf.DB.WithContext(oSelf.Context).Begin()
+	if oTx.Error != nil {
+		return oTx.Error
+	}
 
-		oResult := oTx.
-			Model(&domain.AdminUser{}).
-			Create(oColumns)
-
-		if oResult.Error != nil {
-			return oResult.Error
+	defer func() {
+		if oRecover := recover(); oRecover != nil {
+			oTx.Rollback()
 		}
+	}()
 
-		if oResult.RowsAffected == 0 {
-			return errors.New("新增0筆")
-		}
+	oResult := oTx.
+		Model(&domain.AdminUser{}).
+		Create(oColumns)
 
-		var iAdminUserId uint64
-		if oErr := oTx.Raw("SELECT LAST_INSERT_ID()").Scan(&iAdminUserId).Error; oErr != nil {
-			return oErr
-		}
+	if oResult.Error != nil {
+		oTx.Rollback()
+		return oResult.Error
+	}
 
-		if oErr := oTx.Where("admin_user_id = ?", iAdminUserId).Delete(&domain.AdminUsersToAdminRole{}).Error; oErr != nil {
-			return oErr
-		}
+	if oResult.RowsAffected == 0 {
+		oTx.Rollback()
+		return errors.New("新增0筆")
+	}
 
-		if len(oValue.AdminRoleIds) == 0 {
-			return nil // 沒有角色也算成功，直接結束，不會再往下插入
-		}
+	var iAdminUserId uint64
+	if oErr := oTx.Raw("SELECT LAST_INSERT_ID()").Scan(&iAdminUserId).Error; oErr != nil {
+		oTx.Rollback()
+		return oErr
+	}
 
+	if oErr := oTx.Where("admin_user_id = ?", iAdminUserId).Delete(&domain.AdminUsersToAdminRole{}).Error; oErr != nil {
+		oTx.Rollback()
+		return oErr
+	}
+
+	if len(oValue.AdminRoleIds) > 0 {
 		aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
 		for _, iAdminRoleId := range oValue.AdminRoleIds {
 			aRelations = append(aRelations, domain.AdminUsersToAdminRole{
@@ -137,10 +197,11 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 			})
 		}
 
-		oErr = oTx.Create(&aRelations).Error
+		if oErr := oTx.Create(&aRelations).Error; oErr != nil {
+			oTx.Rollback()
+			return oErr
+		}
+	}
 
-		return oErr
-	})
-
-	return oError
+	return oTx.Commit().Error
 }
