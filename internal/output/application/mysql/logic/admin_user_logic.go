@@ -156,6 +156,11 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
 	*/
 
+	if len(oColumns) == 0 {
+		return errors.New("新增欄目個數0")
+
+	}
+
 	oError := oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
 
 		oResult := oTx.
@@ -209,17 +214,19 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 
 	return oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
 
-		oResult := oTx.
-			Model(&domain.AdminUser{}).
-			Where("id = ?", iId).
-			UpdateColumns(oColumns)
+		if len(oColumns) > 0 {
+			oResult := oTx.
+				Model(&domain.AdminUser{}).
+				Where("id = ?", iId).
+				UpdateColumns(oColumns)
 
-		if oResult.Error != nil {
-			return oResult.Error
-		}
+			if oResult.Error != nil {
+				return oResult.Error
+			}
 
-		if oResult.RowsAffected == 0 {
-			return errors.New("更新0筆")
+			if oResult.RowsAffected == 0 {
+				return errors.New("更新0筆")
+			}
 		}
 
 		if oErr := oTx.Where("admin_user_id = ?", iId).Delete(&domain.AdminUsersToAdminRole{}).Error; oErr != nil {
