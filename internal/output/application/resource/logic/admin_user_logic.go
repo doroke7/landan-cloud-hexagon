@@ -4,10 +4,11 @@ import (
 	"errors"
 
 	domain "example/internal/domain"
-	resourceBase "example/internal/output/application/resource"
+	outputApplicationResource "example/internal/output/application/resource"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
+	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
 )
 
@@ -27,10 +28,10 @@ func protoAdminRoleToDomainAdminRole(oProto *pbResource.AdminRole) domain.AdminR
 }
 
 type AdminUserLogic struct {
-	*resourceBase.AbstractResource
+	*outputApplicationResource.AbstractResource
 }
 
-func NewAdminUserLogic(oAbstractLogic *resourceBase.AbstractResource) outputPortAnyLogic.AdminUserLogic {
+func NewAdminUserLogic(oAbstractLogic *outputApplicationResource.AbstractResource) outputPortAnyLogic.AdminUserLogic {
 	return &AdminUserLogic{
 		AbstractResource: oAbstractLogic,
 	}
@@ -136,4 +137,13 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 	oAdminUser := aAdminUsers[0]
 
 	return oAdminUser, nil
+}
+
+// RemoveAdminUserById logic proto 沒有 remove rpc，改打 model client 的 AdminUser.RemoveOneById。
+func (oSelf *AdminUserLogic) RemoveAdminUserById(iId uint64) error {
+	oRequest := &pbResourceModel.AdminUserRemoveOneByIdInput{Id: uint32(iId)}
+
+	_, oErr := oSelf.ResourceModelClient.AdminUser.RemoveOneById(oSelf.Context, oRequest)
+
+	return oErr
 }

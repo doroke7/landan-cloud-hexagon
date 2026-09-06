@@ -10,18 +10,18 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 
 	domain "example/internal/domain"
-	elasticsearchBase "example/internal/output/application/elasticsearch"
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type AdminUserModel struct {
-	*elasticsearchBase.AbstractElasticsearch
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index string
 }
 
-func NewAdminUserModel(oAbstractModel *elasticsearchBase.AbstractElasticsearch) outputPortAnyModel.AdminUserModel {
+func NewAdminUserModel(oAbstractModel *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyModel.AdminUserModel {
 	return &AdminUserModel{
 		AbstractElasticsearch: oAbstractModel,
 		Index:                 oAbstractModel.IndexName("admin_users"),

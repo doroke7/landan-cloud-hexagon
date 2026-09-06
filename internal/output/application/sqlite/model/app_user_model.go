@@ -6,16 +6,16 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
-	sqliteBase "example/internal/output/application/sqlite"
+	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgUtility "example/pkg/utility"
 )
 
 type AppUserModel struct {
-	*sqliteBase.AbstractSqlite
+	*outputApplicationSqlite.AbstractSqlite
 }
 
-func NewAppUserModel(oAbstractModel *sqliteBase.AbstractSqlite) outputPortAnyModel.AppUserModel {
+func NewAppUserModel(oAbstractModel *outputApplicationSqlite.AbstractSqlite) outputPortAnyModel.AppUserModel {
 	return &AppUserModel{
 		AbstractSqlite: oAbstractModel,
 	}

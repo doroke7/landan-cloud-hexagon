@@ -8,17 +8,17 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
-	mysqlBase "example/internal/output/application/mysql"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type TableModel struct {
-	*mysqlBase.AbstractMysql
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewTableModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyModel.TableModel {
+func NewTableModel(oAbstractModel *outputApplicationMysql.AbstractMysql) outputPortAnyModel.TableModel {
 	return &TableModel{
 		AbstractMysql: oAbstractModel,
 	}

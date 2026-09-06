@@ -7,18 +7,18 @@ import (
 	"time"
 
 	domain "example/internal/domain"
-	elasticsearchBase "example/internal/output/application/elasticsearch"
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type AdminUserLogic struct {
-	*elasticsearchBase.AbstractElasticsearch
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index string
 }
 
-func NewAdminUserLogic(oAbstractLogic *elasticsearchBase.AbstractElasticsearch) outputPortAnyLogic.AdminUserLogic {
+func NewAdminUserLogic(oAbstractLogic *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyLogic.AdminUserLogic {
 	return &AdminUserLogic{
 		AbstractElasticsearch: oAbstractLogic,
 		Index:                 oAbstractLogic.IndexName("admin_users"),
@@ -117,4 +117,20 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 	}
 
 	return &oAdminUser, nil
+}
+
+func (oSelf *AdminUserLogic) RemoveAdminUserById(iId uint64) error {
+	sId := strconv.FormatUint(iId, 10)
+	oPartial := map[string]any{"deleted_at": time.Now()}
+
+	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oPartial)
+	if oErr != nil {
+		return oErr
+	}
+
+	if !bOk {
+		return errors.New("0 rows deleted")
+	}
+
+	return nil
 }

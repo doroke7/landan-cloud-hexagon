@@ -165,3 +165,20 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 
 	return &oAdminUser, nil
 }
+
+func (oSelf *AdminUserLogic) RemoveAdminUserById(iId uint64) error {
+	oResult, oErr := oSelf.Collection.UpdateOne(
+		oSelf.Context,
+		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
+		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
+	)
+	if oErr != nil {
+		return oErr
+	}
+
+	if oResult.MatchedCount == 0 {
+		return errors.New("0 rows deleted")
+	}
+
+	return nil
+}

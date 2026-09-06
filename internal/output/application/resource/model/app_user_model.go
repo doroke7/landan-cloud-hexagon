@@ -2,16 +2,16 @@ package outputApplicationResourceModel
 
 import (
 	domain "example/internal/domain"
-	resourceBase "example/internal/output/application/resource"
+	outputApplicationResource "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pbResourceModel "example/pb/resource/model"
 )
 
 type AppUserModel struct {
-	*resourceBase.AbstractResource
+	*outputApplicationResource.AbstractResource
 }
 
-func NewAppUserModel(oAbstractModel *resourceBase.AbstractResource) outputPortAnyModel.AppUserModel {
+func NewAppUserModel(oAbstractModel *outputApplicationResource.AbstractResource) outputPortAnyModel.AppUserModel {
 	return &AppUserModel{
 		AbstractResource: oAbstractModel,
 	}

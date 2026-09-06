@@ -7,17 +7,17 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
-	mysqlBase "example/internal/output/application/mysql"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type TableRecordLogModel struct {
-	*mysqlBase.AbstractMysql
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewTableRecordLogModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyModel.TableRecordLogModel {
+func NewTableRecordLogModel(oAbstractModel *outputApplicationMysql.AbstractMysql) outputPortAnyModel.TableRecordLogModel {
 	return &TableRecordLogModel{
 		AbstractMysql: oAbstractModel,
 	}

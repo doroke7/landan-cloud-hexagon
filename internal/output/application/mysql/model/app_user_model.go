@@ -6,16 +6,16 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
-	mysqlBase "example/internal/output/application/mysql"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgUtility "example/pkg/utility"
 )
 
 type AppUserModel struct {
-	*mysqlBase.AbstractMysql
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewAppUserModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyModel.AppUserModel {
+func NewAppUserModel(oAbstractModel *outputApplicationMysql.AbstractMysql) outputPortAnyModel.AppUserModel {
 	return &AppUserModel{
 		AbstractMysql: oAbstractModel,
 	}

@@ -2,17 +2,17 @@ package outputApplicationResourceLogic
 
 import (
 	domain "example/internal/domain"
-	resourceBase "example/internal/output/application/resource"
+	outputApplicationResource "example/internal/output/application/resource"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
 )
 
 type TableLogic struct {
-	*resourceBase.AbstractResource
+	*outputApplicationResource.AbstractResource
 }
 
-func NewTableLogic(oAbstractLogic *resourceBase.AbstractResource) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractLogic *outputApplicationResource.AbstractResource) outputPortAnyLogic.TableLogic {
 	return &TableLogic{
 		AbstractResource: oAbstractLogic,
 	}

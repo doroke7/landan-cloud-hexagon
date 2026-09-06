@@ -2,16 +2,16 @@ package outputApplicationEtcdModel
 
 import (
 	domain "example/internal/domain"
-	etcdBase "example/internal/output/application/etcd"
+	outputApplicationEtcd "example/internal/output/application/etcd"
 	outputPortAnyModel "example/internal/output/port/any/model"
 )
 
 // LotteryModel 直接讀寫 etcd，不包其他 repository。
 type LotteryModel struct {
-	*etcdBase.AbstractEtcd
+	*outputApplicationEtcd.AbstractEtcd
 }
 
-func NewLotteryModel(oAbstractEtcd *etcdBase.AbstractEtcd) outputPortAnyModel.LotteryModel {
+func NewLotteryModel(oAbstractEtcd *outputApplicationEtcd.AbstractEtcd) outputPortAnyModel.LotteryModel {
 	return &LotteryModel{
 		AbstractEtcd: oAbstractEtcd,
 	}

@@ -4,17 +4,17 @@ import (
 	"encoding/json"
 
 	domain "example/internal/domain"
-	elasticsearchBase "example/internal/output/application/elasticsearch"
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type TableLogic struct {
-	*elasticsearchBase.AbstractElasticsearch
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index string
 }
 
-func NewTableLogic(oAbstractLogic *elasticsearchBase.AbstractElasticsearch) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractLogic *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyLogic.TableLogic {
 	return &TableLogic{
 		AbstractElasticsearch: oAbstractLogic,
 		Index:                 oAbstractLogic.IndexName("tables"),

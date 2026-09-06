@@ -8,17 +8,17 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
-	mysqlBase "example/internal/output/application/mysql"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type AdminRoleModel struct {
-	*mysqlBase.AbstractMysql
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewAdminRoleModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyModel.AdminRoleModel {
+func NewAdminRoleModel(oAbstractModel *outputApplicationMysql.AbstractMysql) outputPortAnyModel.AdminRoleModel {
 	return &AdminRoleModel{
 		AbstractMysql: oAbstractModel,
 	}

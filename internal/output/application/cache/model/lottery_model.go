@@ -2,16 +2,16 @@ package outputApplicationCacheModel
 
 import (
 	domain "example/internal/domain"
-	cacheBase "example/internal/output/application/cache"
+	outputApplicationCache "example/internal/output/application/cache"
 	outputPortAnyModel "example/internal/output/port/any/model"
 )
 
 // LotteryModel 直接讀寫 redis，不包其他 repository。
 type LotteryModel struct {
-	*cacheBase.AbstractCache
+	*outputApplicationCache.AbstractCache
 }
 
-func NewLotteryModel(oAbstractCache *cacheBase.AbstractCache) outputPortAnyModel.LotteryModel {
+func NewLotteryModel(oAbstractCache *outputApplicationCache.AbstractCache) outputPortAnyModel.LotteryModel {
 	return &LotteryModel{
 		AbstractCache: oAbstractCache,
 	}

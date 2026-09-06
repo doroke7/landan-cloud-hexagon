@@ -4,9 +4,10 @@ import (
 	"errors"
 	"strings"
 	"sync"
+	"time"
 
 	domain "example/internal/domain"
-	sqliteBase "example/internal/output/application/sqlite"
+	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
@@ -15,10 +16,10 @@ import (
 )
 
 type AdminUserLogic struct {
-	*sqliteBase.AbstractSqlite
+	*outputApplicationSqlite.AbstractSqlite
 }
 
-func NewAdminUserLogic(oAbstractLogic *sqliteBase.AbstractSqlite) outputPortAnyLogic.AdminUserLogic {
+func NewAdminUserLogic(oAbstractLogic *outputApplicationSqlite.AbstractSqlite) outputPortAnyLogic.AdminUserLogic {
 	return &AdminUserLogic{
 		AbstractSqlite: oAbstractLogic,
 	}
@@ -158,4 +159,22 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 	}
 
 	return &oAdminUser, nil
+}
+
+func (oSelf *AdminUserLogic) RemoveAdminUserById(iId uint64) error {
+	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.AdminUser{}).
+		Where("id = ?", iId).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		UpdateColumn("deleted_at", time.Now())
+
+	if oResult.Error != nil {
+		return oResult.Error
+	}
+
+	if oResult.RowsAffected == 0 {
+		return errors.New("0 rows deleted")
+	}
+
+	return nil
 }

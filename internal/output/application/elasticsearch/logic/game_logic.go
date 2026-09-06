@@ -5,7 +5,7 @@ import (
 	"time"
 
 	domain "example/internal/domain"
-	elasticsearchBase "example/internal/output/application/elasticsearch"
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
@@ -14,11 +14,11 @@ import (
 var oDeletedAtZero = time.Date(2038, 1, 19, 3, 14, 7, 0, time.UTC)
 
 type GameLogic struct {
-	*elasticsearchBase.AbstractElasticsearch
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index string
 }
 
-func NewGameLogic(oAbstractLogic *elasticsearchBase.AbstractElasticsearch) outputPortAnyLogic.GameLogic {
+func NewGameLogic(oAbstractLogic *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyLogic.GameLogic {
 	return &GameLogic{
 		AbstractElasticsearch: oAbstractLogic,
 		Index:                 oAbstractLogic.IndexName("games"),

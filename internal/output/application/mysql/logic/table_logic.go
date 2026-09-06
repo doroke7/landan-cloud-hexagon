@@ -5,16 +5,16 @@ import (
 	"sync"
 
 	domain "example/internal/domain"
-	mysqlBase "example/internal/output/application/mysql"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type TableLogic struct {
-	*mysqlBase.AbstractMysql
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewTableLogic(oAbstractLogic *mysqlBase.AbstractMysql) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractLogic *outputApplicationMysql.AbstractMysql) outputPortAnyLogic.TableLogic {
 	return &TableLogic{
 		AbstractMysql: oAbstractLogic,
 	}

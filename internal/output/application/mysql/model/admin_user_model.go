@@ -13,15 +13,15 @@ import (
 
 	bootstrap "example/bootstrap"
 	domain "example/internal/domain"
-	mysqlBase "example/internal/output/application/mysql"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
 )
 
 type AdminUserModel struct {
-	*mysqlBase.AbstractMysql
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewAdminUserModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyModel.AdminUserModel {
+func NewAdminUserModel(oAbstractModel *outputApplicationMysql.AbstractMysql) outputPortAnyModel.AdminUserModel {
 	return &AdminUserModel{
 		AbstractMysql: oAbstractModel,
 	}

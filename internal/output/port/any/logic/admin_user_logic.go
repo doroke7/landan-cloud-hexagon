@@ -10,4 +10,5 @@ type AdminUserLogic interface {
 	AddAminUser(oValue *domain.AdminUserValue) error
 	EditAdminUserById(oValue *domain.AdminUserValue, iId uint64) error
 	ShowAdminUserById(iId uint64) (*domain.AdminUser, error)
+	RemoveAdminUserById(iId uint64) error
 }

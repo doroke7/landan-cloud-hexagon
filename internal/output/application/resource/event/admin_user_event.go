@@ -2,16 +2,16 @@ package outputApplicationResourceEvent
 
 import (
 	domain "example/internal/domain"
-	resourceBase "example/internal/output/application/resource"
+	outputApplicationResource "example/internal/output/application/resource"
 	outputPortAnyEvent "example/internal/output/port/any/event"
 	pbResourceEvent "example/pb/resource/event"
 )
 
 type AdminUserEvent struct {
-	*resourceBase.AbstractResource
+	*outputApplicationResource.AbstractResource
 }
 
-func NewAdminUserEvent(oAbstractEvent *resourceBase.AbstractResource) (outputPortAnyEvent.AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractEvent *outputApplicationResource.AbstractResource) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
 		AbstractResource: oAbstractEvent,
 	}, nil

@@ -5,16 +5,16 @@ import (
 	"sync"
 
 	domain "example/internal/domain"
-	mysqlBase "example/internal/output/application/mysql"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type GameLogic struct {
-	*mysqlBase.AbstractMysql
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewGameLogic(oAbstractLogic *mysqlBase.AbstractMysql) outputPortAnyLogic.GameLogic {
+func NewGameLogic(oAbstractLogic *outputApplicationMysql.AbstractMysql) outputPortAnyLogic.GameLogic {
 	return &GameLogic{
 		AbstractMysql: oAbstractLogic,
 	}

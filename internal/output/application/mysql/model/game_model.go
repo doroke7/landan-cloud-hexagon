@@ -8,17 +8,17 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
-	mysqlBase "example/internal/output/application/mysql"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type GameModel struct {
-	*mysqlBase.AbstractMysql
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewGameModel(oAbstractModel *mysqlBase.AbstractMysql) outputPortAnyModel.GameModel {
+func NewGameModel(oAbstractModel *outputApplicationMysql.AbstractMysql) outputPortAnyModel.GameModel {
 	return &GameModel{
 		AbstractMysql: oAbstractModel,
 	}
