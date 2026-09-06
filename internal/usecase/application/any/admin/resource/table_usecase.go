@@ -31,7 +31,7 @@ func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) error {
 }
 
 func (oSelf *TableUsecase) ShowOne(iId uint64) (*domain.Table, error) {
-	oTable, oErr := oSelf.TableModel.ShowOneById(uint(iId))
+	oTable, oErr := oSelf.TableLogic.ShowTableById(uint64(iId))
 	return oTable, oErr
 }
 
