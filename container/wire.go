@@ -126,17 +126,18 @@ type HttpContainer struct {
 	ResourceClient *client.ResourceClient
 
 	// HTTP server -Controller
-	HttpAdminAuthenticationAuthenticator *inputApplicationHttpAdminAuthentication.AuthenticatorHandler
-	HttpAdminResourceGame                *inputApplicationHttpAdminResource.GameHandler
-	HttpAdminResourceTable               *inputApplicationHttpAdminResource.TableHandler
-	HttpAdminResourceAdminUser           *inputApplicationHttpAdminResource.AdminUserHandler
-	HttpAdminResourceAdminRole           *inputApplicationHttpAdminResource.AdminRoleHandler
-	HttpAdminResourceAdminPermission     *inputApplicationHttpAdminResource.AdminPermissionHandler
-	HttpAdminResourceGameType            *inputApplicationHttpAdminResource.GameTypeHandler
-	HttpAdminOptionGameType              *inputApplicationHttpAdminOption.GameTypeHandler
-	HttpAdminOptionAdminRole             *inputApplicationHttpAdminOption.AdminRoleHandler
-	HttpAdminOptionAdminPermission       *inputApplicationHttpAdminOption.AdminPermissionHandler
-	HttpGameAuthenticationAuthenticator  *inputApplicationHttpGameAuthentication.AuthenticatorHandler
+	HttpAdminAuthenticationAuthenticator  *inputApplicationHttpAdminAuthentication.AuthenticatorHandler
+	HttpAdminResourceGame                 *inputApplicationHttpAdminResource.GameHandler
+	HttpAdminResourceTable                *inputApplicationHttpAdminResource.TableHandler
+	HttpAdminResourceAdminUser            *inputApplicationHttpAdminResource.AdminUserHandler
+	HttpAdminResourceAdminRole            *inputApplicationHttpAdminResource.AdminRoleHandler
+	HttpAdminResourceAdminPermission      *inputApplicationHttpAdminResource.AdminPermissionHandler
+	HttpAdminResourceGameType             *inputApplicationHttpAdminResource.GameTypeHandler
+	HttpAdminResourceAdminPermissionGroup *inputApplicationHttpAdminResource.AdminPermissionGroupHandler
+	HttpAdminOptionGameType               *inputApplicationHttpAdminOption.GameTypeHandler
+	HttpAdminOptionAdminRole              *inputApplicationHttpAdminOption.AdminRoleHandler
+	HttpAdminOptionAdminPermission        *inputApplicationHttpAdminOption.AdminPermissionHandler
+	HttpGameAuthenticationAuthenticator   *inputApplicationHttpGameAuthentication.AuthenticatorHandler
 
 	// HTTP server -Middleware
 	// Middleware 部分
@@ -204,10 +205,12 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		outputApplicationResourceModel.NewGameModel,
 		outputApplicationResourceModel.NewTableModel,
 		outputApplicationResourceModel.NewGameTypeModel,
+		outputApplicationResourceModel.NewAdminPermissionGroupModel,
 		outputApplicationResourceLogic.NewAdminUserLogic,
 		outputApplicationResourceLogic.NewGameLogic,
 		outputApplicationResourceLogic.NewTableLogic,
 		outputApplicationResourceLogic.NewGameTypeLogic,
+		outputApplicationResourceLogic.NewAdminPermissionGroupLogic,
 		outputApplicationResourceModel.NewAppUserModel,
 
 		// usecase
@@ -221,6 +224,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		usecaseApplicationAnyAdminResource.NewAdminRoleUsecase,
 		usecaseApplicationAnyAdminResource.NewAdminPermissionUsecase,
 		usecaseApplicationAnyAdminResource.NewGameTypeUsecase,
+		usecaseApplicationAnyAdminResource.NewAdminPermissionGroupUsecase,
 		usecaseApplicationAnyAdminOption.NewGameTypeUsecase,
 		usecaseApplicationAnyAdminOption.NewAdminRoleUsecase,
 		usecaseApplicationAnyAdminOption.NewAdminPermissionUsecase,
@@ -242,6 +246,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		inputApplicationHttpAdminResource.NewAdminRoleHandler,
 		inputApplicationHttpAdminResource.NewAdminPermissionHandler,
 		inputApplicationHttpAdminResource.NewGameTypeHandler,
+		inputApplicationHttpAdminResource.NewAdminPermissionGroupHandler,
 		inputApplicationHttpAdminOption.NewGameTypeHandler,
 		inputApplicationHttpAdminOption.NewAdminRoleHandler,
 		inputApplicationHttpAdminOption.NewAdminPermissionHandler,

@@ -129,6 +129,10 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	gameTypeLogic := outputApplicationResourceLogic.NewGameTypeLogic(abstractLogic)
 	gameTypeUsecase := usecaseApplicationAnyAdminResource.NewGameTypeUsecase(gameTypeModel, gameTypeLogic, gameModel, abstractUsecase)
 	gameTypeHandler := inputApplicationHttpAdminResource.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
+	adminPermissionGroupModel := outputApplicationResourceModel.NewAdminPermissionGroupModel(abstractModel)
+	adminPermissionGroupLogic := outputApplicationResourceLogic.NewAdminPermissionGroupLogic(abstractLogic)
+	adminPermissionGroupUsecase := usecaseApplicationAnyAdminResource.NewAdminPermissionGroupUsecase(adminPermissionGroupModel, adminPermissionGroupLogic, abstractUsecase)
+	adminPermissionGroupHandler := inputApplicationHttpAdminResource.NewAdminPermissionGroupHandler(abstractHandler, adminPermissionGroupUsecase)
 	usecasePortAnyAdminOptionGameTypeUsecase := usecaseApplicationAnyAdminOption.NewGameTypeUsecase(gameTypeModel, gameTypeLogic, abstractUsecase)
 	inputApplicationHttpAdminOptionGameTypeHandler := inputApplicationHttpAdminOption.NewGameTypeHandler(abstractHandler, usecasePortAnyAdminOptionGameTypeUsecase)
 	usecasePortAnyAdminOptionAdminRoleUsecase := usecaseApplicationAnyAdminOption.NewAdminRoleUsecase(adminRoleModel, abstractUsecase)
@@ -173,57 +177,58 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	middlewareHttpGameResponseMiddleware := middlewareHttpGame.NewResponseMiddleware(middlewareHttpGameAbstractMiddleware)
 	middlewareHttpGameSignatureMiddleware := middlewareHttpGame.NewSignatureMiddleware(middlewareHttpGameAbstractMiddleware)
 	httpContainer := &HttpContainer{
-		Response:                             response,
-		Clock:                                clock,
-		AbstractHelper:                       abstractHelper,
-		AesHelper:                            aesHelper,
-		RsaHelper:                            rsaHelper,
-		JwtHelper:                            jwtHelper,
-		ResourceClient:                       resourceClient,
-		HttpAdminAuthenticationAuthenticator: authenticatorHandler,
-		HttpAdminResourceGame:                gameHandler,
-		HttpAdminResourceTable:               tableHandler,
-		HttpAdminResourceAdminUser:           adminUserHandler,
-		HttpAdminResourceAdminRole:           adminRoleHandler,
-		HttpAdminResourceAdminPermission:     adminPermissionHandler,
-		HttpAdminResourceGameType:            gameTypeHandler,
-		HttpAdminOptionGameType:              inputApplicationHttpAdminOptionGameTypeHandler,
-		HttpAdminOptionAdminRole:             inputApplicationHttpAdminOptionAdminRoleHandler,
-		HttpAdminOptionAdminPermission:       inputApplicationHttpAdminOptionAdminPermissionHandler,
-		HttpGameAuthenticationAuthenticator:  inputApplicationHttpGameAuthenticationAuthenticatorHandler,
-		HttpAdminAbstractMiddleware:          abstractMiddleware,
-		HttpAdminAdminMiddleware:             adminMiddleware,
-		HttpAdminAuthenticationMiddleware:    authenticationMiddleware,
-		HttpAdminDecryptionMiddleware:        decryptionMiddleware,
-		HttpAdminEncryptionMiddleware:        encryptionMiddleware,
-		HttpAdminErrorMiddleware:             errorMiddleware,
-		HttpAdminLoggerMiddleware:            loggerMiddleware,
-		HttpAdminNonexistentMiddleware:       nonexistentMiddleware,
-		HttpAdminRequestMiddleware:           requestMiddleware,
-		HttpAdminResponseMiddleware:          responseMiddleware,
-		HttpAdminSignatureMiddleware:         signatureMiddleware,
-		HttpTableAbstractMiddleware:          middlewareHttpTableAbstractMiddleware,
-		HttpTableTableMiddleware:             tableMiddleware,
-		HttpTableAuthenticationMiddleware:    middlewareHttpTableAuthenticationMiddleware,
-		HttpTableDecryptionMiddleware:        middlewareHttpTableDecryptionMiddleware,
-		HttpTableEncryptionMiddleware:        middlewareHttpTableEncryptionMiddleware,
-		HttpTableErrorMiddleware:             middlewareHttpTableErrorMiddleware,
-		HttpTableLoggerMiddleware:            middlewareHttpTableLoggerMiddleware,
-		HttpTableNonexistentMiddleware:       middlewareHttpTableNonexistentMiddleware,
-		HttpTableRequestMiddleware:           middlewareHttpTableRequestMiddleware,
-		HttpTableResponseMiddleware:          middlewareHttpTableResponseMiddleware,
-		HttpTableSignatureMiddleware:         middlewareHttpTableSignatureMiddleware,
-		HttpGameAbstractMiddleware:           middlewareHttpGameAbstractMiddleware,
-		HttpGameGameMiddleware:               gameMiddleware,
-		HttpGameAuthenticationMiddleware:     middlewareHttpGameAuthenticationMiddleware,
-		HttpGameDecryptionMiddleware:         middlewareHttpGameDecryptionMiddleware,
-		HttpGameEncryptionMiddleware:         middlewareHttpGameEncryptionMiddleware,
-		HttpGameErrorMiddleware:              middlewareHttpGameErrorMiddleware,
-		HttpGameLoggerMiddleware:             middlewareHttpGameLoggerMiddleware,
-		HttpGameNonexistentMiddleware:        middlewareHttpGameNonexistentMiddleware,
-		HttpGameRequestMiddleware:            middlewareHttpGameRequestMiddleware,
-		HttpGameResponseMiddleware:           middlewareHttpGameResponseMiddleware,
-		HttpGameSignatureMiddleware:          middlewareHttpGameSignatureMiddleware,
+		Response:                              response,
+		Clock:                                 clock,
+		AbstractHelper:                        abstractHelper,
+		AesHelper:                             aesHelper,
+		RsaHelper:                             rsaHelper,
+		JwtHelper:                             jwtHelper,
+		ResourceClient:                        resourceClient,
+		HttpAdminAuthenticationAuthenticator:  authenticatorHandler,
+		HttpAdminResourceGame:                 gameHandler,
+		HttpAdminResourceTable:                tableHandler,
+		HttpAdminResourceAdminUser:            adminUserHandler,
+		HttpAdminResourceAdminRole:            adminRoleHandler,
+		HttpAdminResourceAdminPermission:      adminPermissionHandler,
+		HttpAdminResourceGameType:             gameTypeHandler,
+		HttpAdminResourceAdminPermissionGroup: adminPermissionGroupHandler,
+		HttpAdminOptionGameType:               inputApplicationHttpAdminOptionGameTypeHandler,
+		HttpAdminOptionAdminRole:              inputApplicationHttpAdminOptionAdminRoleHandler,
+		HttpAdminOptionAdminPermission:        inputApplicationHttpAdminOptionAdminPermissionHandler,
+		HttpGameAuthenticationAuthenticator:   inputApplicationHttpGameAuthenticationAuthenticatorHandler,
+		HttpAdminAbstractMiddleware:           abstractMiddleware,
+		HttpAdminAdminMiddleware:              adminMiddleware,
+		HttpAdminAuthenticationMiddleware:     authenticationMiddleware,
+		HttpAdminDecryptionMiddleware:         decryptionMiddleware,
+		HttpAdminEncryptionMiddleware:         encryptionMiddleware,
+		HttpAdminErrorMiddleware:              errorMiddleware,
+		HttpAdminLoggerMiddleware:             loggerMiddleware,
+		HttpAdminNonexistentMiddleware:        nonexistentMiddleware,
+		HttpAdminRequestMiddleware:            requestMiddleware,
+		HttpAdminResponseMiddleware:           responseMiddleware,
+		HttpAdminSignatureMiddleware:          signatureMiddleware,
+		HttpTableAbstractMiddleware:           middlewareHttpTableAbstractMiddleware,
+		HttpTableTableMiddleware:              tableMiddleware,
+		HttpTableAuthenticationMiddleware:     middlewareHttpTableAuthenticationMiddleware,
+		HttpTableDecryptionMiddleware:         middlewareHttpTableDecryptionMiddleware,
+		HttpTableEncryptionMiddleware:         middlewareHttpTableEncryptionMiddleware,
+		HttpTableErrorMiddleware:              middlewareHttpTableErrorMiddleware,
+		HttpTableLoggerMiddleware:             middlewareHttpTableLoggerMiddleware,
+		HttpTableNonexistentMiddleware:        middlewareHttpTableNonexistentMiddleware,
+		HttpTableRequestMiddleware:            middlewareHttpTableRequestMiddleware,
+		HttpTableResponseMiddleware:           middlewareHttpTableResponseMiddleware,
+		HttpTableSignatureMiddleware:          middlewareHttpTableSignatureMiddleware,
+		HttpGameAbstractMiddleware:            middlewareHttpGameAbstractMiddleware,
+		HttpGameGameMiddleware:                gameMiddleware,
+		HttpGameAuthenticationMiddleware:      middlewareHttpGameAuthenticationMiddleware,
+		HttpGameDecryptionMiddleware:          middlewareHttpGameDecryptionMiddleware,
+		HttpGameEncryptionMiddleware:          middlewareHttpGameEncryptionMiddleware,
+		HttpGameErrorMiddleware:               middlewareHttpGameErrorMiddleware,
+		HttpGameLoggerMiddleware:              middlewareHttpGameLoggerMiddleware,
+		HttpGameNonexistentMiddleware:         middlewareHttpGameNonexistentMiddleware,
+		HttpGameRequestMiddleware:             middlewareHttpGameRequestMiddleware,
+		HttpGameResponseMiddleware:            middlewareHttpGameResponseMiddleware,
+		HttpGameSignatureMiddleware:           middlewareHttpGameSignatureMiddleware,
 	}
 	return httpContainer, nil
 }
@@ -736,17 +741,18 @@ type HttpContainer struct {
 	ResourceClient *client.ResourceClient
 
 	// HTTP server -Controller
-	HttpAdminAuthenticationAuthenticator *inputApplicationHttpAdminAuthentication.AuthenticatorHandler
-	HttpAdminResourceGame                *inputApplicationHttpAdminResource.GameHandler
-	HttpAdminResourceTable               *inputApplicationHttpAdminResource.TableHandler
-	HttpAdminResourceAdminUser           *inputApplicationHttpAdminResource.AdminUserHandler
-	HttpAdminResourceAdminRole           *inputApplicationHttpAdminResource.AdminRoleHandler
-	HttpAdminResourceAdminPermission     *inputApplicationHttpAdminResource.AdminPermissionHandler
-	HttpAdminResourceGameType            *inputApplicationHttpAdminResource.GameTypeHandler
-	HttpAdminOptionGameType              *inputApplicationHttpAdminOption.GameTypeHandler
-	HttpAdminOptionAdminRole             *inputApplicationHttpAdminOption.AdminRoleHandler
-	HttpAdminOptionAdminPermission       *inputApplicationHttpAdminOption.AdminPermissionHandler
-	HttpGameAuthenticationAuthenticator  *inputApplicationHttpGameAuthentication.AuthenticatorHandler
+	HttpAdminAuthenticationAuthenticator  *inputApplicationHttpAdminAuthentication.AuthenticatorHandler
+	HttpAdminResourceGame                 *inputApplicationHttpAdminResource.GameHandler
+	HttpAdminResourceTable                *inputApplicationHttpAdminResource.TableHandler
+	HttpAdminResourceAdminUser            *inputApplicationHttpAdminResource.AdminUserHandler
+	HttpAdminResourceAdminRole            *inputApplicationHttpAdminResource.AdminRoleHandler
+	HttpAdminResourceAdminPermission      *inputApplicationHttpAdminResource.AdminPermissionHandler
+	HttpAdminResourceGameType             *inputApplicationHttpAdminResource.GameTypeHandler
+	HttpAdminResourceAdminPermissionGroup *inputApplicationHttpAdminResource.AdminPermissionGroupHandler
+	HttpAdminOptionGameType               *inputApplicationHttpAdminOption.GameTypeHandler
+	HttpAdminOptionAdminRole              *inputApplicationHttpAdminOption.AdminRoleHandler
+	HttpAdminOptionAdminPermission        *inputApplicationHttpAdminOption.AdminPermissionHandler
+	HttpGameAuthenticationAuthenticator   *inputApplicationHttpGameAuthentication.AuthenticatorHandler
 
 	// HTTP server -Middleware
 	// Middleware 部分

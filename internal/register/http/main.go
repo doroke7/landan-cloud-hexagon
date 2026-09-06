@@ -163,6 +163,13 @@ func Init(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 			oAdminResource.GET("/GameType/ShowOne", oContainer.HttpAdminResourceGameType.ShowOne)
 			oAdminResource.GET("/GameType/ShowOnes", oContainer.HttpAdminResourceGameType.ShowOnes)
 			oAdminResource.GET("/GameType/ShowTree", oContainer.HttpAdminResourceGameType.ShowTree)
+
+			oAdminResource.POST("/AdminPermissionGroup/AddOne", oContainer.HttpAdminResourceAdminPermissionGroup.AddOne)
+			oAdminResource.PUT("/AdminPermissionGroup/EditOne", oContainer.HttpAdminResourceAdminPermissionGroup.EditOne)
+			oAdminResource.DELETE("/AdminPermissionGroup/RemoveOne", oContainer.HttpAdminResourceAdminPermissionGroup.RemoveOne)
+			oAdminResource.GET("/AdminPermissionGroup/ShowOne", oContainer.HttpAdminResourceAdminPermissionGroup.ShowOne)
+			oAdminResource.GET("/AdminPermissionGroup/ShowOnes", oContainer.HttpAdminResourceAdminPermissionGroup.ShowOnes)
+			oAdminResource.GET("/AdminPermissionGroup/ShowTree", oContainer.HttpAdminResourceAdminPermissionGroup.ShowTree)
 		}
 
 		oAdminOption := oAdmin.Group("/Option")
