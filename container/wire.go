@@ -411,6 +411,7 @@ type ResourceContainer struct {
 	ResourceModelGame                 *inputApplicationResourceModel.GameHandler
 	ResourceModelTable                *inputApplicationResourceModel.TableHandler
 	ResourceModelGameType             *inputApplicationResourceModel.GameTypeHandler
+	ResourceModelAdminPermissionGroup *inputApplicationResourceModel.AdminPermissionGroupHandler
 	ResourceLogicAdminUser            *inputApplicationResourceLogic.AdminUserHandler
 	ResourceLogicGame                 *inputApplicationResourceLogic.GameHandler
 	ResourceLogicTable                *inputApplicationResourceLogic.TableHandler
@@ -455,6 +456,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		outputApplicationMysqlModel.NewGameModel,
 		outputApplicationMysqlModel.NewTableModel,
 		outputApplicationMysqlModel.NewGameTypeModel,
+		outputApplicationMysqlModel.NewAdminPermissionGroupModel,
 		outputApplicationMysqlLogic.NewAbstractLogic,
 		outputApplicationMysqlLogic.NewAdminUserLogic,
 		outputApplicationMysqlLogic.NewGameLogic,
@@ -474,6 +476,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		usecaseApplicationAnyModel.NewGameUsecase,
 		usecaseApplicationAnyModel.NewTableUsecase,
 		usecaseApplicationAnyModel.NewGameTypeUsecase,
+		usecaseApplicationAnyModel.NewAdminPermissionGroupUsecase,
 		usecaseApplicationAnyLogic.NewAbstractUsecase,
 		usecaseApplicationAnyLogic.NewAdminUserUsecase,
 		usecaseApplicationAnyLogic.NewGameUsecase,
@@ -491,6 +494,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		inputApplicationResourceModel.NewGameHandler,
 		inputApplicationResourceModel.NewTableHandler,
 		inputApplicationResourceModel.NewGameTypeHandler,
+		inputApplicationResourceModel.NewAdminPermissionGroupHandler,
 		inputApplicationResourceLogic.NewAdminUserHandler,
 		inputApplicationResourceLogic.NewGameHandler,
 		inputApplicationResourceLogic.NewTableHandler,

@@ -337,6 +337,9 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	gameHandler := inputApplicationResourceModel.NewGameHandler(abstractHandler, gameUsecase)
 	tableHandler := inputApplicationResourceModel.NewTableHandler(abstractHandler, tableUsecase)
 	gameTypeHandler := inputApplicationResourceModel.NewGameTypeHandler(abstractHandler, gameTypeUsecase)
+	adminPermissionGroupModel := outputApplicationMysqlModel.NewAdminPermissionGroupModel(abstractModel)
+	adminPermissionGroupUsecase := usecaseApplicationAnyModel.NewAdminPermissionGroupUsecase(adminPermissionGroupModel, abstractUsecase)
+	adminPermissionGroupHandler := inputApplicationResourceModel.NewAdminPermissionGroupHandler(abstractHandler, adminPermissionGroupUsecase)
 	usecaseApplicationAnyLogicAbstractUsecase := usecaseApplicationAnyLogic.NewAbstractUsecase(aesHelper)
 	abstractLogic := outputApplicationMysqlLogic.NewAbstractLogic(abstractMysql)
 	adminUserLogic := outputApplicationMysqlLogic.NewAdminUserLogic(abstractLogic)
@@ -352,8 +355,8 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	usecasePortAnyLogicGameTypeUsecase := usecaseApplicationAnyLogic.NewGameTypeUsecase(usecaseApplicationAnyLogicAbstractUsecase, gameTypeLogic)
 	inputApplicationResourceLogicGameTypeHandler := inputApplicationResourceLogic.NewGameTypeHandler(abstractHandler, usecasePortAnyLogicGameTypeUsecase)
 	adminPermissionGroupLogic := outputApplicationMysqlLogic.NewAdminPermissionGroupLogic(abstractLogic)
-	adminPermissionGroupUsecase := usecaseApplicationAnyLogic.NewAdminPermissionGroupUsecase(usecaseApplicationAnyLogicAbstractUsecase, adminPermissionGroupLogic)
-	adminPermissionGroupHandler := inputApplicationResourceLogic.NewAdminPermissionGroupHandler(abstractHandler, adminPermissionGroupUsecase)
+	usecasePortAnyLogicAdminPermissionGroupUsecase := usecaseApplicationAnyLogic.NewAdminPermissionGroupUsecase(usecaseApplicationAnyLogicAbstractUsecase, adminPermissionGroupLogic)
+	inputApplicationResourceLogicAdminPermissionGroupHandler := inputApplicationResourceLogic.NewAdminPermissionGroupHandler(abstractHandler, usecasePortAnyLogicAdminPermissionGroupUsecase)
 	connection, err := bootstrap.NewAmqp()
 	if err != nil {
 		return nil, err
@@ -396,11 +399,12 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		ResourceModelGame:                      gameHandler,
 		ResourceModelTable:                     tableHandler,
 		ResourceModelGameType:                  gameTypeHandler,
+		ResourceModelAdminPermissionGroup:      adminPermissionGroupHandler,
 		ResourceLogicAdminUser:                 inputApplicationResourceLogicAdminUserHandler,
 		ResourceLogicGame:                      inputApplicationResourceLogicGameHandler,
 		ResourceLogicTable:                     inputApplicationResourceLogicTableHandler,
 		ResourceLogicGameType:                  inputApplicationResourceLogicGameTypeHandler,
-		ResourceLogicAdminPermissionGroup:      adminPermissionGroupHandler,
+		ResourceLogicAdminPermissionGroup:      inputApplicationResourceLogicAdminPermissionGroupHandler,
 		ResourceEventAdminUser:                 inputApplicationResourceEventAdminUserHandler,
 		ResourceLogicAuthenticationInterceptor: authenticationInterceptor,
 		ResourceLogicErrorInterceptor:          errorInterceptor,
@@ -843,6 +847,7 @@ type ResourceContainer struct {
 	ResourceModelGame                 *inputApplicationResourceModel.GameHandler
 	ResourceModelTable                *inputApplicationResourceModel.TableHandler
 	ResourceModelGameType             *inputApplicationResourceModel.GameTypeHandler
+	ResourceModelAdminPermissionGroup *inputApplicationResourceModel.AdminPermissionGroupHandler
 	ResourceLogicAdminUser            *inputApplicationResourceLogic.AdminUserHandler
 	ResourceLogicGame                 *inputApplicationResourceLogic.GameHandler
 	ResourceLogicTable                *inputApplicationResourceLogic.TableHandler
