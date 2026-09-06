@@ -27,21 +27,6 @@ func NewAdminPermissionGroupModel(oAbstractModel *AbstractModel) outputPortAnyMo
 	}
 }
 
-func (oSelf *AdminPermissionGroupModel) ShowOneById(iId uint64) (*domain.AdminPermissionGroup, error) {
-	var oAdminPermissionGroup domain.AdminPermissionGroup
-
-	bFound, oErr := oSelf.GetById(oSelf.Index, strconv.FormatUint(iId, 10), &oAdminPermissionGroup)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	if !bFound || !oAdminPermissionGroup.DeletedAt.Equal(oDeletedAtZero) {
-		return nil, nil
-	}
-
-	return &oAdminPermissionGroup, nil
-}
-
 func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, error) {
 	sDeletedAtField := "deleted_at"
 	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})

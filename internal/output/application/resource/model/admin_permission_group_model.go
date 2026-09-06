@@ -59,27 +59,6 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGro
 	return oErr
 }
 
-func (oSelf *AdminPermissionGroupModel) ShowOneById(iId uint64) (*domain.AdminPermissionGroup, error) {
-
-	oResponse, oErr := oSelf.ResourceModelClient.AdminPermissionGroup.ShowOneById(
-		oSelf.Context,
-		&pbResourceModel.AdminPermissionGroupShowOneByIdInput{Id: iId},
-	)
-
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	oProto := oResponse.GetAdminPermissionGroup()
-	if oProto.GetId() == 0 {
-		return nil, nil
-	}
-
-	oAdminPermissionGroup := protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto)
-
-	return &oAdminPermissionGroup, nil
-}
-
 func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, error) {
 
 	oRequest := &pbResourceModel.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput{

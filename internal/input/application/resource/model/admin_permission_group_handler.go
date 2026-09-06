@@ -86,23 +86,6 @@ func (oSelf *AdminPermissionGroupHandler) AddOne(oContext context.Context, oReq 
 	}, nil
 }
 
-func (oSelf *AdminPermissionGroupHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupShowOneByIdInput) (*pbResourceModel.AdminPermissionGroupShowOneByIdOutput, error) {
-
-	oAdminPermissionGroup, oErr := oSelf.ModelAdminPermissionGroupUsecase.ShowOneById(oReq.GetId())
-
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	if oAdminPermissionGroup == nil {
-		return nil, nil
-	}
-
-	return &pbResourceModel.AdminPermissionGroupShowOneByIdOutput{
-		AdminPermissionGroup: domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup),
-	}, nil
-}
-
 func (oSelf *AdminPermissionGroupHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationOutput, error) {
 
 	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))

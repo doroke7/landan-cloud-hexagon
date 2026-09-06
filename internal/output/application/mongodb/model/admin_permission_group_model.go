@@ -66,24 +66,6 @@ func (oSelf *AdminPermissionGroupModel) nextId() (uint64, error) {
 	return oCounter.Seq, nil
 }
 
-func (oSelf *AdminPermissionGroupModel) ShowOneById(iId uint64) (*domain.AdminPermissionGroup, error) {
-	var oAdminPermissionGroup domain.AdminPermissionGroup
-
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
-		"_id":        iId,
-		"deleted_at": oDeletedAtZero,
-	}).Decode(&oAdminPermissionGroup)
-
-	if oErr != nil {
-		if oErr == mongo.ErrNoDocuments {
-			return nil, nil
-		}
-		return nil, oErr
-	}
-
-	return &oAdminPermissionGroup, nil
-}
-
 func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero

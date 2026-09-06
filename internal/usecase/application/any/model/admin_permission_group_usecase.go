@@ -26,13 +26,6 @@ func (oSelf *AdminPermissionGroupUsecase) AddOne(oValue *domain.AdminPermissionG
 	return oErr
 }
 
-func (oSelf *AdminPermissionGroupUsecase) ShowOneById(iId uint64) (*domain.AdminPermissionGroup, error) {
-
-	oAdminPermissionGroup, oErr := oSelf.AdminPermissionGroupModel.ShowOneById(iId)
-
-	return oAdminPermissionGroup, oErr
-}
-
 func (oSelf *AdminPermissionGroupUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, error) {
 
 	aAdminPermissionGroups, oErr := oSelf.AdminPermissionGroupModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)

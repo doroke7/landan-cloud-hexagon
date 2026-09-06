@@ -5,8 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"gorm.io/gorm"
-
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
@@ -21,25 +19,6 @@ func NewAdminPermissionGroupModel(oAbstractModel *AbstractModel) outputPortAnyMo
 	return &AdminPermissionGroupModel{
 		AbstractModel: oAbstractModel,
 	}
-}
-
-func (oSelf *AdminPermissionGroupModel) ShowOneById(iId uint64) (*domain.AdminPermissionGroup, error) {
-	var oAdminPermissionGroup domain.AdminPermissionGroup
-
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oAdminPermissionGroup).
-		Preload("Parent").
-		Preload("Children").
-		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oAdminPermissionGroup, iId).Error; oErr != nil {
-		if errors.Is(oErr, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-
-		return nil, oErr
-	}
-
-	return &oAdminPermissionGroup, nil
 }
 
 func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, error) {
