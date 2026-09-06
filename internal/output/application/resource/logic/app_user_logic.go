@@ -2,17 +2,16 @@ package outputApplicationResourceLogic
 
 import (
 	domain "example/internal/domain"
-	outputApplicationResource "example/internal/output/application/resource"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 )
 
 type AppUserLogic struct {
-	*outputApplicationResource.AbstractResource
+	*AbstractLogic
 }
 
-func NewAppUserLogic(oAbstractLogic *outputApplicationResource.AbstractResource) outputPortAnyLogic.AppUserLogic {
+func NewAppUserLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AppUserLogic {
 	return &AppUserLogic{
-		AbstractResource: oAbstractLogic,
+		AbstractLogic: oAbstractLogic,
 	}
 }
 

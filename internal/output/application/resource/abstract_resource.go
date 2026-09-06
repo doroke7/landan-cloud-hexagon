@@ -1,31 +1,19 @@
 package outputApplicationResource
 
 import (
-	"context"
-
-	client "example/internal/client"
 	pbResource "example/pb/resource"
 	pkgInput "example/pkg/input"
 
 	"google.golang.org/protobuf/types/known/structpb"
 )
 
-// Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
-// AbstractRepository 做法一致。
-type AbstractResource struct {
-	Context             context.Context
-	ResourceLogicClient *client.Logic
-	ResourceModelClient *client.Model
-	ResourceEventClient *client.Event
-}
+// AbstractResource 只放跟 resource client 無關的純轉換方法（pkgInput -> pb），
+// 由各層的 AbstractModel / AbstractLogic / AbstractEvent 內嵌後方法提升上去；
+// client 欄位留在各層自己的 abstract 裡。
+type AbstractResource struct{}
 
-func NewAbstractResource(oContext context.Context, oResourceClient *client.ResourceClient) *AbstractResource {
-	return &AbstractResource{
-		Context:             oContext,
-		ResourceLogicClient: oResourceClient.Logic,
-		ResourceModelClient: oResourceClient.Model,
-		ResourceEventClient: oResourceClient.Event,
-	}
+func NewAbstractResource() *AbstractResource {
+	return &AbstractResource{}
 }
 
 func (oSelf *AbstractResource) ToFilters(aFilters []*pkgInput.Filter) []*pbResource.Filter {

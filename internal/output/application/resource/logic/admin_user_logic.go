@@ -4,7 +4,6 @@ import (
 	"errors"
 
 	domain "example/internal/domain"
-	outputApplicationResource "example/internal/output/application/resource"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
@@ -27,12 +26,12 @@ func protoAdminRoleToDomainAdminRole(oProto *pbResource.AdminRole) domain.AdminR
 }
 
 type AdminUserLogic struct {
-	*outputApplicationResource.AbstractResource
+	*AbstractLogic
 }
 
-func NewAdminUserLogic(oAbstractLogic *outputApplicationResource.AbstractResource) outputPortAnyLogic.AdminUserLogic {
+func NewAdminUserLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminUserLogic {
 	return &AdminUserLogic{
-		AbstractResource: oAbstractLogic,
+		AbstractLogic: oAbstractLogic,
 	}
 }
 

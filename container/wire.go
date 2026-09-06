@@ -37,7 +37,6 @@ import (
 
 	outputApplicationRabbitmq "example/internal/output/application/rabbitmq"
 	outputApplicationRabbitmqEvent "example/internal/output/application/rabbitmq/event"
-	outputApplicationResource "example/internal/output/application/resource"
 	outputApplicationResourceLogic "example/internal/output/application/resource/logic"
 	outputApplicationResourceModel "example/internal/output/application/resource/model"
 	outputPortAnyEvent "example/internal/output/port/any/event"
@@ -194,7 +193,8 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		helper.NewValiatorHelper,
 
 		// output
-		outputApplicationResource.NewAbstractResource,
+		outputApplicationResourceLogic.NewAbstractLogic,
+		outputApplicationResourceModel.NewAbstractModel,
 		outputApplicationResourceModel.NewAdminUserModel,
 		outputApplicationResourceModel.NewAdminRoleModel,
 		outputApplicationResourceModel.NewAdminPermissionModel,
@@ -334,7 +334,8 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 		helper.NewValiatorHelper,
 
 		// output
-		outputApplicationResource.NewAbstractResource,
+		outputApplicationResourceLogic.NewAbstractLogic,
+		outputApplicationResourceModel.NewAbstractModel,
 		outputApplicationResourceModel.NewAdminUserModel,
 		outputApplicationResourceModel.NewGameModel,
 		outputApplicationResourceLogic.NewGameLogic,
@@ -649,7 +650,7 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 		helper.NewValiatorHelper,
 
 		// output
-		outputApplicationResource.NewAbstractResource,
+		outputApplicationResourceModel.NewAbstractModel,
 		outputApplicationResourceModel.NewAdminUserModel,
 
 		// usecase
@@ -842,7 +843,7 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 		helper.NewValiatorHelper,
 
 		// output
-		outputApplicationResource.NewAbstractResource,
+		outputApplicationResourceModel.NewAbstractModel,
 		outputApplicationResourceModel.NewAdminUserModel,
 
 		// usecase

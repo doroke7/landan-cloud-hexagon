@@ -2,7 +2,6 @@ package outputApplicationResourceModel
 
 import (
 	domain "example/internal/domain"
-	outputApplicationResource "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
@@ -31,12 +30,12 @@ func protoAdminUserToDomainAdminUser(oProto *pbResource.AdminUser) domain.AdminU
 }
 
 type AdminUserModel struct {
-	*outputApplicationResource.AbstractResource
+	*AbstractModel
 }
 
-func NewAdminUserModel(oAbstractModel *outputApplicationResource.AbstractResource) outputPortAnyModel.AdminUserModel {
+func NewAdminUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminUserModel {
 	return &AdminUserModel{
-		AbstractResource: oAbstractModel,
+		AbstractModel: oAbstractModel,
 	}
 }
 

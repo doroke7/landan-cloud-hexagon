@@ -2,19 +2,18 @@ package outputApplicationResourceLogic
 
 import (
 	domain "example/internal/domain"
-	outputApplicationResource "example/internal/output/application/resource"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
 )
 
 type GameTypeLogic struct {
-	*outputApplicationResource.AbstractResource
+	*AbstractLogic
 }
 
-func NewGameTypeLogic(oAbstractLogic *outputApplicationResource.AbstractResource) outputPortAnyLogic.GameTypeLogic {
+func NewGameTypeLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
-		AbstractResource: oAbstractLogic,
+		AbstractLogic: oAbstractLogic,
 	}
 }
 

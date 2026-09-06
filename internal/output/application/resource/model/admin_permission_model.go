@@ -2,7 +2,6 @@ package outputApplicationResourceModel
 
 import (
 	domain "example/internal/domain"
-	outputApplicationResource "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
@@ -10,12 +9,12 @@ import (
 )
 
 type AdminPermissionModel struct {
-	*outputApplicationResource.AbstractResource
+	*AbstractModel
 }
 
-func NewAdminPermissionModel(oAbstractModel *outputApplicationResource.AbstractResource) outputPortAnyModel.AdminPermissionModel {
+func NewAdminPermissionModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminPermissionModel {
 	return &AdminPermissionModel{
-		AbstractResource: oAbstractModel,
+		AbstractModel: oAbstractModel,
 	}
 }
 

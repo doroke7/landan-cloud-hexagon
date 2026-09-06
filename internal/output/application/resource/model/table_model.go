@@ -4,7 +4,6 @@ import (
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	domain "example/internal/domain"
-	outputApplicationResource "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
@@ -12,12 +11,12 @@ import (
 )
 
 type TableModel struct {
-	*outputApplicationResource.AbstractResource
+	*AbstractModel
 }
 
-func NewTableModel(oAbstractModel *outputApplicationResource.AbstractResource) outputPortAnyModel.TableModel {
+func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel {
 	return &TableModel{
-		AbstractResource: oAbstractModel,
+		AbstractModel: oAbstractModel,
 	}
 }
 

@@ -2,7 +2,6 @@ package outputApplicationResourceModel
 
 import (
 	domain "example/internal/domain"
-	outputApplicationResource "example/internal/output/application/resource"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
@@ -37,12 +36,12 @@ func protoGameTypeToDomainGameType(oProtoGameType *pbResource.GameType) domain.G
 }
 
 type GameTypeModel struct {
-	*outputApplicationResource.AbstractResource
+	*AbstractModel
 }
 
-func NewGameTypeModel(oAbstractModel *outputApplicationResource.AbstractResource) outputPortAnyModel.GameTypeModel {
+func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameTypeModel {
 	return &GameTypeModel{
-		AbstractResource: oAbstractModel,
+		AbstractModel: oAbstractModel,
 	}
 }
 
