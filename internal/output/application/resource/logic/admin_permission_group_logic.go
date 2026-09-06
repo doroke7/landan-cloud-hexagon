@@ -3,6 +3,7 @@ package outputApplicationResourceLogic
 import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
+	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
 )
@@ -59,9 +60,50 @@ func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGro
 	return aRoots, nil
 }
 
-// ShowAdminPermissionGroupById 尚未接 gRPC，先回 nil。
+func protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto *pbResource.AdminPermissionGroup) domain.AdminPermissionGroup {
+	if oProto == nil {
+		return domain.AdminPermissionGroup{}
+	}
+
+	oAdminPermissionGroup := domain.AdminPermissionGroup{
+		Id:        uint64(oProto.GetId()),
+		ParentId:  uint64(oProto.GetParentId()),
+		Key:       oProto.GetKey(),
+		Name:      oProto.GetName(),
+		CreatedAt: oProto.GetCreatedAt().AsTime(),
+		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
+		DeletedAt: oProto.GetDeletedAt().AsTime(),
+	}
+
+	if oParent := oProto.GetParent(); oParent != nil {
+		oParentDomain := protoAdminPermissionGroupToDomainAdminPermissionGroup(oParent)
+		oAdminPermissionGroup.Parent = &oParentDomain
+	}
+
+	for _, oChild := range oProto.GetChildren() {
+		oAdminPermissionGroup.Children = append(oAdminPermissionGroup.Children, protoAdminPermissionGroupToDomainAdminPermissionGroup(oChild))
+	}
+
+	return oAdminPermissionGroup
+}
+
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64) (*domain.AdminPermissionGroup, error) {
-	return nil, nil
+	oResponse, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.ShowAdminPermissionGroupById(
+		oSelf.Context,
+		&pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdInput{Id: iId},
+	)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oProto := oResponse.GetAdminPermissionGroup()
+	if oProto.GetId() == 0 {
+		return nil, nil
+	}
+
+	oAdminPermissionGroup := protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto)
+
+	return &oAdminPermissionGroup, nil
 }
 
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, uint64, error) {

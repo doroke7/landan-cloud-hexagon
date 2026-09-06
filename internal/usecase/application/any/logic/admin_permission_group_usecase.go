@@ -26,6 +26,13 @@ func (oSelf *AdminPermissionGroupUsecase) ShowTree() ([]*domain.AdminPermissionG
 	return aTree, oErr
 }
 
+func (oSelf *AdminPermissionGroupUsecase) ShowAdminPermissionGroupById(iId uint64) (*domain.AdminPermissionGroup, error) {
+
+	oAdminPermissionGroup, oErr := oSelf.AdminPermissionGroupLogic.ShowAdminPermissionGroupById(iId)
+
+	return oAdminPermissionGroup, oErr
+}
+
 func (oSelf *AdminPermissionGroupUsecase) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, uint64, error) {
 
 	aAdminPermissionGroups, iTotal, oErr := oSelf.AdminPermissionGroupLogic.ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)

@@ -61,6 +61,46 @@ func (oSelf *AdminPermissionGroupHandler) ShowTree(oContext context.Context, oRe
 	return &pbResourceLogic.AdminPermissionGroupShowTreeOutput{AdminPermissionGroups: aNodes}, nil
 }
 
+// domainAdminPermissionGroupToProtoAdminPermissionGroup 遞迴帶出 Parent / Children。
+func domainAdminPermissionGroupToProtoAdminPermissionGroup(oNode *domain.AdminPermissionGroup) *pbResource.AdminPermissionGroup {
+	if oNode == nil {
+		return nil
+	}
+
+	oPb := &pbResource.AdminPermissionGroup{
+		Id:        uint64(oNode.Id),
+		ParentId:  uint64(oNode.ParentId),
+		Key:       oNode.Key,
+		Name:      oNode.Name,
+		CreatedAt: timestamppb.New(oNode.CreatedAt),
+		UpdatedAt: timestamppb.New(oNode.UpdatedAt),
+		DeletedAt: timestamppb.New(oNode.DeletedAt),
+		Parent:    domainAdminPermissionGroupToProtoAdminPermissionGroup(oNode.Parent),
+	}
+
+	for i := range oNode.Children {
+		oPb.Children = append(oPb.Children, domainAdminPermissionGroupToProtoAdminPermissionGroup(&oNode.Children[i]))
+	}
+
+	return oPb
+}
+
+func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroupById(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdInput) (*pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput, error) {
+
+	oAdminPermissionGroup, oErr := oSelf.LogicAdminPermissionGroupUsecase.ShowAdminPermissionGroupById(oReq.GetId())
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	if oAdminPermissionGroup == nil {
+		return nil, nil
+	}
+
+	return &pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput{
+		AdminPermissionGroup: domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup),
+	}, nil
+}
+
 func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) (*pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput, error) {
 
 	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
