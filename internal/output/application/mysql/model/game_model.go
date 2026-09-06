@@ -46,8 +46,6 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	var oGame domain.Game
 
 	if oErr := oSelf.DB.WithContext(oSelf.Context).
-		Preload("GameType").
-		Preload("GameType.Parent").
 		Model(&oGame).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		Where(map[string]any{"key": sKey}).
