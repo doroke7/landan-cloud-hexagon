@@ -7,7 +7,6 @@ import (
 
 type GameTypeModel interface {
 	AddOne(oGameType *domain.GameTypeValue) error
-	ShowOneById(iId uint64) (*domain.GameType, error)
 	EditOneById(oGameType *domain.GameTypeValue, iId uint64) error
 	RemoveOneById(iId uint64) error
 	ShowOnesByParentId(iParentId uint64) ([]*domain.GameType, error)

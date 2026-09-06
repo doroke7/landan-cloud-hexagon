@@ -84,25 +84,6 @@ func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceM
 	}, nil
 }
 
-func (oSelf *GameTypeHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.GameTypeShowOneByIdInput) (*pbResourceModel.GameTypeShowOneByIdOutput, error) {
-
-	oGameType, oErr := oSelf.ModelGameTypeUsecase.ShowOneById(uint64(oReq.Id))
-
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	if oGameType == nil {
-		return nil, nil
-	}
-
-	oProtoGameType := domainGameTypeToProtoGameType(oGameType)
-
-	return &pbResourceModel.GameTypeShowOneByIdOutput{
-		GameType: oProtoGameType,
-	}, nil
-}
-
 func (oSelf *GameTypeHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.GameTypeShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.GameTypeShowOnesByFiltersWithSortersPaginationOutput, error) {
 
 	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))

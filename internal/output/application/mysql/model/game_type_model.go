@@ -5,8 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"gorm.io/gorm"
-
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
@@ -21,25 +19,6 @@ func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameType
 	return &GameTypeModel{
 		AbstractModel: oAbstractModel,
 	}
-}
-
-func (oSelf *GameTypeModel) ShowOneById(iId uint64) (*domain.GameType, error) {
-	var oGameType domain.GameType
-
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
-		Model(&oGameType).
-		Preload("Parent").
-		Preload("Children").
-		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oGameType, iId).Error; oErr != nil {
-		if errors.Is(oErr, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-
-		return nil, oErr
-	}
-
-	return &oGameType, nil
 }
 
 func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {

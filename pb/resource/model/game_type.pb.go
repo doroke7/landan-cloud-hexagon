@@ -162,94 +162,6 @@ func (x *GameTypeAddOneOutput) GetGameType() *resource.GameType {
 	return nil
 }
 
-type GameTypeShowOneByIdInput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GameTypeShowOneByIdInput) Reset() {
-	*x = GameTypeShowOneByIdInput{}
-	mi := &file_resource_model_game_type_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GameTypeShowOneByIdInput) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GameTypeShowOneByIdInput) ProtoMessage() {}
-
-func (x *GameTypeShowOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_game_type_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GameTypeShowOneByIdInput.ProtoReflect.Descriptor instead.
-func (*GameTypeShowOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_game_type_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *GameTypeShowOneByIdInput) GetId() uint64 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-type GameTypeShowOneByIdOutput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameType      *resource.GameType     `protobuf:"bytes,1,opt,name=game_type,json=gameType,proto3" json:"game_type,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *GameTypeShowOneByIdOutput) Reset() {
-	*x = GameTypeShowOneByIdOutput{}
-	mi := &file_resource_model_game_type_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *GameTypeShowOneByIdOutput) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*GameTypeShowOneByIdOutput) ProtoMessage() {}
-
-func (x *GameTypeShowOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_game_type_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use GameTypeShowOneByIdOutput.ProtoReflect.Descriptor instead.
-func (*GameTypeShowOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_game_type_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *GameTypeShowOneByIdOutput) GetGameType() *resource.GameType {
-	if x != nil {
-		return x.GameType
-	}
-	return nil
-}
-
 type GameTypeEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Variable      *GameTypeVariable      `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
@@ -260,7 +172,7 @@ type GameTypeEditOneByIdInput struct {
 
 func (x *GameTypeEditOneByIdInput) Reset() {
 	*x = GameTypeEditOneByIdInput{}
-	mi := &file_resource_model_game_type_proto_msgTypes[5]
+	mi := &file_resource_model_game_type_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -272,7 +184,7 @@ func (x *GameTypeEditOneByIdInput) String() string {
 func (*GameTypeEditOneByIdInput) ProtoMessage() {}
 
 func (x *GameTypeEditOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_game_type_proto_msgTypes[5]
+	mi := &file_resource_model_game_type_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -285,7 +197,7 @@ func (x *GameTypeEditOneByIdInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameTypeEditOneByIdInput.ProtoReflect.Descriptor instead.
 func (*GameTypeEditOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_game_type_proto_rawDescGZIP(), []int{5}
+	return file_resource_model_game_type_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *GameTypeEditOneByIdInput) GetVariable() *GameTypeVariable {
@@ -311,7 +223,7 @@ type GameTypeEditOneByIdOutput struct {
 
 func (x *GameTypeEditOneByIdOutput) Reset() {
 	*x = GameTypeEditOneByIdOutput{}
-	mi := &file_resource_model_game_type_proto_msgTypes[6]
+	mi := &file_resource_model_game_type_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -323,7 +235,7 @@ func (x *GameTypeEditOneByIdOutput) String() string {
 func (*GameTypeEditOneByIdOutput) ProtoMessage() {}
 
 func (x *GameTypeEditOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_game_type_proto_msgTypes[6]
+	mi := &file_resource_model_game_type_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -336,7 +248,7 @@ func (x *GameTypeEditOneByIdOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameTypeEditOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*GameTypeEditOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_game_type_proto_rawDescGZIP(), []int{6}
+	return file_resource_model_game_type_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *GameTypeEditOneByIdOutput) GetStatus() bool {
@@ -356,7 +268,7 @@ type GameTypeRemoveOneByIdInput struct {
 
 func (x *GameTypeRemoveOneByIdInput) Reset() {
 	*x = GameTypeRemoveOneByIdInput{}
-	mi := &file_resource_model_game_type_proto_msgTypes[7]
+	mi := &file_resource_model_game_type_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -368,7 +280,7 @@ func (x *GameTypeRemoveOneByIdInput) String() string {
 func (*GameTypeRemoveOneByIdInput) ProtoMessage() {}
 
 func (x *GameTypeRemoveOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_game_type_proto_msgTypes[7]
+	mi := &file_resource_model_game_type_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -381,7 +293,7 @@ func (x *GameTypeRemoveOneByIdInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameTypeRemoveOneByIdInput.ProtoReflect.Descriptor instead.
 func (*GameTypeRemoveOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_game_type_proto_rawDescGZIP(), []int{7}
+	return file_resource_model_game_type_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GameTypeRemoveOneByIdInput) GetId() uint64 {
@@ -400,7 +312,7 @@ type GameTypeRemoveOneByIdOutput struct {
 
 func (x *GameTypeRemoveOneByIdOutput) Reset() {
 	*x = GameTypeRemoveOneByIdOutput{}
-	mi := &file_resource_model_game_type_proto_msgTypes[8]
+	mi := &file_resource_model_game_type_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -412,7 +324,7 @@ func (x *GameTypeRemoveOneByIdOutput) String() string {
 func (*GameTypeRemoveOneByIdOutput) ProtoMessage() {}
 
 func (x *GameTypeRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_game_type_proto_msgTypes[8]
+	mi := &file_resource_model_game_type_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -425,7 +337,7 @@ func (x *GameTypeRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameTypeRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*GameTypeRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_game_type_proto_rawDescGZIP(), []int{8}
+	return file_resource_model_game_type_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *GameTypeRemoveOneByIdOutput) GetStatus() bool {
@@ -446,7 +358,7 @@ type GameTypeShowOnesByFiltersWithSortersPaginationInput struct {
 
 func (x *GameTypeShowOnesByFiltersWithSortersPaginationInput) Reset() {
 	*x = GameTypeShowOnesByFiltersWithSortersPaginationInput{}
-	mi := &file_resource_model_game_type_proto_msgTypes[9]
+	mi := &file_resource_model_game_type_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -458,7 +370,7 @@ func (x *GameTypeShowOnesByFiltersWithSortersPaginationInput) String() string {
 func (*GameTypeShowOnesByFiltersWithSortersPaginationInput) ProtoMessage() {}
 
 func (x *GameTypeShowOnesByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_game_type_proto_msgTypes[9]
+	mi := &file_resource_model_game_type_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -471,7 +383,7 @@ func (x *GameTypeShowOnesByFiltersWithSortersPaginationInput) ProtoReflect() pro
 
 // Deprecated: Use GameTypeShowOnesByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
 func (*GameTypeShowOnesByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_game_type_proto_rawDescGZIP(), []int{9}
+	return file_resource_model_game_type_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *GameTypeShowOnesByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
@@ -504,7 +416,7 @@ type GameTypeShowOnesByFiltersWithSortersPaginationOutput struct {
 
 func (x *GameTypeShowOnesByFiltersWithSortersPaginationOutput) Reset() {
 	*x = GameTypeShowOnesByFiltersWithSortersPaginationOutput{}
-	mi := &file_resource_model_game_type_proto_msgTypes[10]
+	mi := &file_resource_model_game_type_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -516,7 +428,7 @@ func (x *GameTypeShowOnesByFiltersWithSortersPaginationOutput) String() string {
 func (*GameTypeShowOnesByFiltersWithSortersPaginationOutput) ProtoMessage() {}
 
 func (x *GameTypeShowOnesByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_game_type_proto_msgTypes[10]
+	mi := &file_resource_model_game_type_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -529,7 +441,7 @@ func (x *GameTypeShowOnesByFiltersWithSortersPaginationOutput) ProtoReflect() pr
 
 // Deprecated: Use GameTypeShowOnesByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
 func (*GameTypeShowOnesByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_game_type_proto_rawDescGZIP(), []int{10}
+	return file_resource_model_game_type_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *GameTypeShowOnesByFiltersWithSortersPaginationOutput) GetGameTypes() []*resource.GameType {
@@ -548,7 +460,7 @@ type GameTypeTotalByFiltersInput struct {
 
 func (x *GameTypeTotalByFiltersInput) Reset() {
 	*x = GameTypeTotalByFiltersInput{}
-	mi := &file_resource_model_game_type_proto_msgTypes[11]
+	mi := &file_resource_model_game_type_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -560,7 +472,7 @@ func (x *GameTypeTotalByFiltersInput) String() string {
 func (*GameTypeTotalByFiltersInput) ProtoMessage() {}
 
 func (x *GameTypeTotalByFiltersInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_game_type_proto_msgTypes[11]
+	mi := &file_resource_model_game_type_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -573,7 +485,7 @@ func (x *GameTypeTotalByFiltersInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameTypeTotalByFiltersInput.ProtoReflect.Descriptor instead.
 func (*GameTypeTotalByFiltersInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_game_type_proto_rawDescGZIP(), []int{11}
+	return file_resource_model_game_type_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *GameTypeTotalByFiltersInput) GetFilters() []*resource.Filter {
@@ -592,7 +504,7 @@ type GameTypeTotalByFiltersOutput struct {
 
 func (x *GameTypeTotalByFiltersOutput) Reset() {
 	*x = GameTypeTotalByFiltersOutput{}
-	mi := &file_resource_model_game_type_proto_msgTypes[12]
+	mi := &file_resource_model_game_type_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -604,7 +516,7 @@ func (x *GameTypeTotalByFiltersOutput) String() string {
 func (*GameTypeTotalByFiltersOutput) ProtoMessage() {}
 
 func (x *GameTypeTotalByFiltersOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_game_type_proto_msgTypes[12]
+	mi := &file_resource_model_game_type_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -617,7 +529,7 @@ func (x *GameTypeTotalByFiltersOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameTypeTotalByFiltersOutput.ProtoReflect.Descriptor instead.
 func (*GameTypeTotalByFiltersOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_game_type_proto_rawDescGZIP(), []int{12}
+	return file_resource_model_game_type_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *GameTypeTotalByFiltersOutput) GetTotal() uint64 {
@@ -640,10 +552,6 @@ const file_resource_model_game_type_proto_rawDesc = "" +
 	"\x13GameTypeAddOneInput\x12?\n" +
 	"\bvariable\x18\x01 \x01(\v2#.pb.resource.model.GameTypeVariableR\bvariable\"J\n" +
 	"\x14GameTypeAddOneOutput\x122\n" +
-	"\tgame_type\x18\x01 \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"*\n" +
-	"\x18GameTypeShowOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"O\n" +
-	"\x19GameTypeShowOneByIdOutput\x122\n" +
 	"\tgame_type\x18\x01 \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"k\n" +
 	"\x18GameTypeEditOneByIdInput\x12?\n" +
 	"\bvariable\x18\x01 \x01(\v2#.pb.resource.model.GameTypeVariableR\bvariable\x12\x0e\n" +
@@ -666,10 +574,9 @@ const file_resource_model_game_type_proto_rawDesc = "" +
 	"\x1bGameTypeTotalByFiltersInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\"4\n" +
 	"\x1cGameTypeTotalByFiltersOutput\x12\x14\n" +
-	"\x05total\x18\x01 \x01(\x04R\x05total2\xdd\x05\n" +
+	"\x05total\x18\x01 \x01(\x04R\x05total2\xf3\x04\n" +
 	"\rGameTypeModel\x12Y\n" +
-	"\x06AddOne\x12&.pb.resource.model.GameTypeAddOneInput\x1a'.pb.resource.model.GameTypeAddOneOutput\x12h\n" +
-	"\vShowOneById\x12+.pb.resource.model.GameTypeShowOneByIdInput\x1a,.pb.resource.model.GameTypeShowOneByIdOutput\x12\xb9\x01\n" +
+	"\x06AddOne\x12&.pb.resource.model.GameTypeAddOneInput\x1a'.pb.resource.model.GameTypeAddOneOutput\x12\xb9\x01\n" +
 	"&ShowOnesByFiltersWithSortersPagination\x12F.pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput\x1aG.pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationOutput\x12h\n" +
 	"\vEditOneById\x12+.pb.resource.model.GameTypeEditOneByIdInput\x1a,.pb.resource.model.GameTypeEditOneByIdOutput\x12n\n" +
 	"\rRemoveOneById\x12-.pb.resource.model.GameTypeRemoveOneByIdInput\x1a..pb.resource.model.GameTypeRemoveOneByIdOutput\x12q\n" +
@@ -687,53 +594,48 @@ func file_resource_model_game_type_proto_rawDescGZIP() []byte {
 	return file_resource_model_game_type_proto_rawDescData
 }
 
-var file_resource_model_game_type_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_resource_model_game_type_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_resource_model_game_type_proto_goTypes = []any{
 	(*GameTypeVariable)(nil),                                     // 0: pb.resource.model.GameTypeVariable
 	(*GameTypeAddOneInput)(nil),                                  // 1: pb.resource.model.GameTypeAddOneInput
 	(*GameTypeAddOneOutput)(nil),                                 // 2: pb.resource.model.GameTypeAddOneOutput
-	(*GameTypeShowOneByIdInput)(nil),                             // 3: pb.resource.model.GameTypeShowOneByIdInput
-	(*GameTypeShowOneByIdOutput)(nil),                            // 4: pb.resource.model.GameTypeShowOneByIdOutput
-	(*GameTypeEditOneByIdInput)(nil),                             // 5: pb.resource.model.GameTypeEditOneByIdInput
-	(*GameTypeEditOneByIdOutput)(nil),                            // 6: pb.resource.model.GameTypeEditOneByIdOutput
-	(*GameTypeRemoveOneByIdInput)(nil),                           // 7: pb.resource.model.GameTypeRemoveOneByIdInput
-	(*GameTypeRemoveOneByIdOutput)(nil),                          // 8: pb.resource.model.GameTypeRemoveOneByIdOutput
-	(*GameTypeShowOnesByFiltersWithSortersPaginationInput)(nil),  // 9: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput
-	(*GameTypeShowOnesByFiltersWithSortersPaginationOutput)(nil), // 10: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationOutput
-	(*GameTypeTotalByFiltersInput)(nil),                          // 11: pb.resource.model.GameTypeTotalByFiltersInput
-	(*GameTypeTotalByFiltersOutput)(nil),                         // 12: pb.resource.model.GameTypeTotalByFiltersOutput
-	(*resource.GameType)(nil),                                    // 13: pb.resource.GameType
-	(*resource.Pagination)(nil),                                  // 14: pb.resource.Pagination
-	(*resource.Filter)(nil),                                      // 15: pb.resource.Filter
-	(*resource.Sorter)(nil),                                      // 16: pb.resource.Sorter
+	(*GameTypeEditOneByIdInput)(nil),                             // 3: pb.resource.model.GameTypeEditOneByIdInput
+	(*GameTypeEditOneByIdOutput)(nil),                            // 4: pb.resource.model.GameTypeEditOneByIdOutput
+	(*GameTypeRemoveOneByIdInput)(nil),                           // 5: pb.resource.model.GameTypeRemoveOneByIdInput
+	(*GameTypeRemoveOneByIdOutput)(nil),                          // 6: pb.resource.model.GameTypeRemoveOneByIdOutput
+	(*GameTypeShowOnesByFiltersWithSortersPaginationInput)(nil),  // 7: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput
+	(*GameTypeShowOnesByFiltersWithSortersPaginationOutput)(nil), // 8: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationOutput
+	(*GameTypeTotalByFiltersInput)(nil),                          // 9: pb.resource.model.GameTypeTotalByFiltersInput
+	(*GameTypeTotalByFiltersOutput)(nil),                         // 10: pb.resource.model.GameTypeTotalByFiltersOutput
+	(*resource.GameType)(nil),                                    // 11: pb.resource.GameType
+	(*resource.Pagination)(nil),                                  // 12: pb.resource.Pagination
+	(*resource.Filter)(nil),                                      // 13: pb.resource.Filter
+	(*resource.Sorter)(nil),                                      // 14: pb.resource.Sorter
 }
 var file_resource_model_game_type_proto_depIdxs = []int32{
 	0,  // 0: pb.resource.model.GameTypeAddOneInput.variable:type_name -> pb.resource.model.GameTypeVariable
-	13, // 1: pb.resource.model.GameTypeAddOneOutput.game_type:type_name -> pb.resource.GameType
-	13, // 2: pb.resource.model.GameTypeShowOneByIdOutput.game_type:type_name -> pb.resource.GameType
-	0,  // 3: pb.resource.model.GameTypeEditOneByIdInput.variable:type_name -> pb.resource.model.GameTypeVariable
-	14, // 4: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	15, // 5: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	16, // 6: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	13, // 7: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationOutput.game_types:type_name -> pb.resource.GameType
-	15, // 8: pb.resource.model.GameTypeTotalByFiltersInput.filters:type_name -> pb.resource.Filter
-	1,  // 9: pb.resource.model.GameTypeModel.AddOne:input_type -> pb.resource.model.GameTypeAddOneInput
-	3,  // 10: pb.resource.model.GameTypeModel.ShowOneById:input_type -> pb.resource.model.GameTypeShowOneByIdInput
-	9,  // 11: pb.resource.model.GameTypeModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput
-	5,  // 12: pb.resource.model.GameTypeModel.EditOneById:input_type -> pb.resource.model.GameTypeEditOneByIdInput
-	7,  // 13: pb.resource.model.GameTypeModel.RemoveOneById:input_type -> pb.resource.model.GameTypeRemoveOneByIdInput
-	11, // 14: pb.resource.model.GameTypeModel.TotalByFilters:input_type -> pb.resource.model.GameTypeTotalByFiltersInput
-	2,  // 15: pb.resource.model.GameTypeModel.AddOne:output_type -> pb.resource.model.GameTypeAddOneOutput
-	4,  // 16: pb.resource.model.GameTypeModel.ShowOneById:output_type -> pb.resource.model.GameTypeShowOneByIdOutput
-	10, // 17: pb.resource.model.GameTypeModel.ShowOnesByFiltersWithSortersPagination:output_type -> pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationOutput
-	6,  // 18: pb.resource.model.GameTypeModel.EditOneById:output_type -> pb.resource.model.GameTypeEditOneByIdOutput
-	8,  // 19: pb.resource.model.GameTypeModel.RemoveOneById:output_type -> pb.resource.model.GameTypeRemoveOneByIdOutput
-	12, // 20: pb.resource.model.GameTypeModel.TotalByFilters:output_type -> pb.resource.model.GameTypeTotalByFiltersOutput
-	15, // [15:21] is the sub-list for method output_type
-	9,  // [9:15] is the sub-list for method input_type
-	9,  // [9:9] is the sub-list for extension type_name
-	9,  // [9:9] is the sub-list for extension extendee
-	0,  // [0:9] is the sub-list for field type_name
+	11, // 1: pb.resource.model.GameTypeAddOneOutput.game_type:type_name -> pb.resource.GameType
+	0,  // 2: pb.resource.model.GameTypeEditOneByIdInput.variable:type_name -> pb.resource.model.GameTypeVariable
+	12, // 3: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
+	13, // 4: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
+	14, // 5: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	11, // 6: pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationOutput.game_types:type_name -> pb.resource.GameType
+	13, // 7: pb.resource.model.GameTypeTotalByFiltersInput.filters:type_name -> pb.resource.Filter
+	1,  // 8: pb.resource.model.GameTypeModel.AddOne:input_type -> pb.resource.model.GameTypeAddOneInput
+	7,  // 9: pb.resource.model.GameTypeModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationInput
+	3,  // 10: pb.resource.model.GameTypeModel.EditOneById:input_type -> pb.resource.model.GameTypeEditOneByIdInput
+	5,  // 11: pb.resource.model.GameTypeModel.RemoveOneById:input_type -> pb.resource.model.GameTypeRemoveOneByIdInput
+	9,  // 12: pb.resource.model.GameTypeModel.TotalByFilters:input_type -> pb.resource.model.GameTypeTotalByFiltersInput
+	2,  // 13: pb.resource.model.GameTypeModel.AddOne:output_type -> pb.resource.model.GameTypeAddOneOutput
+	8,  // 14: pb.resource.model.GameTypeModel.ShowOnesByFiltersWithSortersPagination:output_type -> pb.resource.model.GameTypeShowOnesByFiltersWithSortersPaginationOutput
+	4,  // 15: pb.resource.model.GameTypeModel.EditOneById:output_type -> pb.resource.model.GameTypeEditOneByIdOutput
+	6,  // 16: pb.resource.model.GameTypeModel.RemoveOneById:output_type -> pb.resource.model.GameTypeRemoveOneByIdOutput
+	10, // 17: pb.resource.model.GameTypeModel.TotalByFilters:output_type -> pb.resource.model.GameTypeTotalByFiltersOutput
+	13, // [13:18] is the sub-list for method output_type
+	8,  // [8:13] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_resource_model_game_type_proto_init() }
@@ -748,7 +650,7 @@ func file_resource_model_game_type_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_model_game_type_proto_rawDesc), len(file_resource_model_game_type_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

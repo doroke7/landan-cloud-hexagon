@@ -27,21 +27,6 @@ func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameType
 	}
 }
 
-func (oSelf *GameTypeModel) ShowOneById(iId uint64) (*domain.GameType, error) {
-	var oGameType domain.GameType
-
-	bFound, oErr := oSelf.GetById(oSelf.Index, strconv.FormatUint(uint64(iId), 10), &oGameType)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	if !bFound || !oGameType.DeletedAt.Equal(oDeletedAtZero) {
-		return nil, nil
-	}
-
-	return &oGameType, nil
-}
-
 func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 	iSize := uint(10000)
 	iPage := uint(1)

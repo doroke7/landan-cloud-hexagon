@@ -20,7 +20,6 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	GameTypeModel_AddOne_FullMethodName                                 = "/pb.resource.model.GameTypeModel/AddOne"
-	GameTypeModel_ShowOneById_FullMethodName                            = "/pb.resource.model.GameTypeModel/ShowOneById"
 	GameTypeModel_ShowOnesByFiltersWithSortersPagination_FullMethodName = "/pb.resource.model.GameTypeModel/ShowOnesByFiltersWithSortersPagination"
 	GameTypeModel_EditOneById_FullMethodName                            = "/pb.resource.model.GameTypeModel/EditOneById"
 	GameTypeModel_RemoveOneById_FullMethodName                          = "/pb.resource.model.GameTypeModel/RemoveOneById"
@@ -32,7 +31,6 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type GameTypeModelClient interface {
 	AddOne(ctx context.Context, in *GameTypeAddOneInput, opts ...grpc.CallOption) (*GameTypeAddOneOutput, error)
-	ShowOneById(ctx context.Context, in *GameTypeShowOneByIdInput, opts ...grpc.CallOption) (*GameTypeShowOneByIdOutput, error)
 	ShowOnesByFiltersWithSortersPagination(ctx context.Context, in *GameTypeShowOnesByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*GameTypeShowOnesByFiltersWithSortersPaginationOutput, error)
 	EditOneById(ctx context.Context, in *GameTypeEditOneByIdInput, opts ...grpc.CallOption) (*GameTypeEditOneByIdOutput, error)
 	RemoveOneById(ctx context.Context, in *GameTypeRemoveOneByIdInput, opts ...grpc.CallOption) (*GameTypeRemoveOneByIdOutput, error)
@@ -51,16 +49,6 @@ func (c *gameTypeModelClient) AddOne(ctx context.Context, in *GameTypeAddOneInpu
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GameTypeAddOneOutput)
 	err := c.cc.Invoke(ctx, GameTypeModel_AddOne_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *gameTypeModelClient) ShowOneById(ctx context.Context, in *GameTypeShowOneByIdInput, opts ...grpc.CallOption) (*GameTypeShowOneByIdOutput, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GameTypeShowOneByIdOutput)
-	err := c.cc.Invoke(ctx, GameTypeModel_ShowOneById_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -112,7 +100,6 @@ func (c *gameTypeModelClient) TotalByFilters(ctx context.Context, in *GameTypeTo
 // for forward compatibility.
 type GameTypeModelServer interface {
 	AddOne(context.Context, *GameTypeAddOneInput) (*GameTypeAddOneOutput, error)
-	ShowOneById(context.Context, *GameTypeShowOneByIdInput) (*GameTypeShowOneByIdOutput, error)
 	ShowOnesByFiltersWithSortersPagination(context.Context, *GameTypeShowOnesByFiltersWithSortersPaginationInput) (*GameTypeShowOnesByFiltersWithSortersPaginationOutput, error)
 	EditOneById(context.Context, *GameTypeEditOneByIdInput) (*GameTypeEditOneByIdOutput, error)
 	RemoveOneById(context.Context, *GameTypeRemoveOneByIdInput) (*GameTypeRemoveOneByIdOutput, error)
@@ -129,9 +116,6 @@ type UnimplementedGameTypeModelServer struct{}
 
 func (UnimplementedGameTypeModelServer) AddOne(context.Context, *GameTypeAddOneInput) (*GameTypeAddOneOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method AddOne not implemented")
-}
-func (UnimplementedGameTypeModelServer) ShowOneById(context.Context, *GameTypeShowOneByIdInput) (*GameTypeShowOneByIdOutput, error) {
-	return nil, status.Error(codes.Unimplemented, "method ShowOneById not implemented")
 }
 func (UnimplementedGameTypeModelServer) ShowOnesByFiltersWithSortersPagination(context.Context, *GameTypeShowOnesByFiltersWithSortersPaginationInput) (*GameTypeShowOnesByFiltersWithSortersPaginationOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowOnesByFiltersWithSortersPagination not implemented")
@@ -180,24 +164,6 @@ func _GameTypeModel_AddOne_Handler(srv interface{}, ctx context.Context, dec fun
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(GameTypeModelServer).AddOne(ctx, req.(*GameTypeAddOneInput))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _GameTypeModel_ShowOneById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GameTypeShowOneByIdInput)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GameTypeModelServer).ShowOneById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: GameTypeModel_ShowOneById_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GameTypeModelServer).ShowOneById(ctx, req.(*GameTypeShowOneByIdInput))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -284,10 +250,6 @@ var GameTypeModel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddOne",
 			Handler:    _GameTypeModel_AddOne_Handler,
-		},
-		{
-			MethodName: "ShowOneById",
-			Handler:    _GameTypeModel_ShowOneById_Handler,
 		},
 		{
 			MethodName: "ShowOnesByFiltersWithSortersPagination",

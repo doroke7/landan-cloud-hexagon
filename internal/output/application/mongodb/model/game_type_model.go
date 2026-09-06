@@ -66,24 +66,6 @@ func (oSelf *GameTypeModel) nextId() (uint, error) {
 	return oCounter.Seq, nil
 }
 
-func (oSelf *GameTypeModel) ShowOneById(iId uint64) (*domain.GameType, error) {
-	var oGameType domain.GameType
-
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
-		"_id":        iId,
-		"deleted_at": oDeletedAtZero,
-	}).Decode(&oGameType)
-
-	if oErr != nil {
-		if oErr == mongo.ErrNoDocuments {
-			return nil, nil
-		}
-		return nil, oErr
-	}
-
-	return &oGameType, nil
-}
-
 func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{"deleted_at": oDeletedAtZero})
 	if oErr != nil {

@@ -59,27 +59,6 @@ func (oSelf *GameTypeModel) AddOne(oGameTypeParm *domain.GameTypeValue) error {
 	return oErr
 }
 
-func (oSelf *GameTypeModel) ShowOneById(iId uint64) (*domain.GameType, error) {
-
-	oResponse, oErr := oSelf.ResourceModelClient.GameType.ShowOneById(
-		oSelf.Context,
-		&pbResourceModel.GameTypeShowOneByIdInput{Id: uint64(iId)},
-	)
-
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	oProtoGameType := oResponse.GetGameType()
-	if oProtoGameType.GetId() == 0 {
-		return nil, nil
-	}
-
-	oGameType := protoGameTypeToDomainGameType(oProtoGameType)
-
-	return &oGameType, nil
-}
-
 func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 	iSize := uint(10000)
 	iPage := uint(1)

@@ -85,6 +85,11 @@
 4. 請 AI 做 resource 實作. 
 
 
+## 如何 output 從 model 改用 logic
+1. 在 logic 建立 model 的相似方法，包含 resource
+2. 在原本用 到 model 的 {admin,app,table}usecase 都換成 logic
+3. 刪除 resource + 其他output 的 model 方法，包含 proto
+
 
 ## 框架特點
 1. 六角框架，多彈性輸入，多彈性輸出
