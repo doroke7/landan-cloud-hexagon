@@ -1,8 +1,11 @@
 package outputApplicationMysqlLogic
 
 import (
+	"errors"
 	"strings"
 	"sync"
+
+	"gorm.io/gorm"
 
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
@@ -81,6 +84,25 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 	}
 
 	return aTables, uint64(iTotal), nil
+}
+
+func (oSelf *TableLogic) ShowTableById(iId uint64) (*domain.Table, error) {
+	var oTable domain.Table
+
+	if oErr := oSelf.DB.WithContext(oSelf.Context).
+		Preload("Game").
+		Preload("Game.GameType").
+		Model(&oTable).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		First(&oTable, iId).Error; oErr != nil {
+		if errors.Is(oErr, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+
+		return nil, oErr
+	}
+
+	return &oTable, nil
 }
 
 func (oSelf *TableLogic) ShowTablesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {

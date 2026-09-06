@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	TableLogic_ShowTableById_FullMethodName                                 = "/pb.resource.logic.TableLogic/ShowTableById"
 	TableLogic_ShowTablesTotalByFiltersWithSortersPagination_FullMethodName = "/pb.resource.logic.TableLogic/ShowTablesTotalByFiltersWithSortersPagination"
 )
 
@@ -26,6 +27,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TableLogicClient interface {
+	ShowTableById(ctx context.Context, in *TableShowTableByIdInput, opts ...grpc.CallOption) (*TableShowTableByIdOutput, error)
 	ShowTablesTotalByFiltersWithSortersPagination(ctx context.Context, in *TableShowTablesTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*TableShowTablesTotalByFiltersWithSortersPaginationOutput, error)
 }
 
@@ -35,6 +37,16 @@ type tableLogicClient struct {
 
 func NewTableLogicClient(cc grpc.ClientConnInterface) TableLogicClient {
 	return &tableLogicClient{cc}
+}
+
+func (c *tableLogicClient) ShowTableById(ctx context.Context, in *TableShowTableByIdInput, opts ...grpc.CallOption) (*TableShowTableByIdOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(TableShowTableByIdOutput)
+	err := c.cc.Invoke(ctx, TableLogic_ShowTableById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *tableLogicClient) ShowTablesTotalByFiltersWithSortersPagination(ctx context.Context, in *TableShowTablesTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*TableShowTablesTotalByFiltersWithSortersPaginationOutput, error) {
@@ -51,6 +63,7 @@ func (c *tableLogicClient) ShowTablesTotalByFiltersWithSortersPagination(ctx con
 // All implementations must embed UnimplementedTableLogicServer
 // for forward compatibility.
 type TableLogicServer interface {
+	ShowTableById(context.Context, *TableShowTableByIdInput) (*TableShowTableByIdOutput, error)
 	ShowTablesTotalByFiltersWithSortersPagination(context.Context, *TableShowTablesTotalByFiltersWithSortersPaginationInput) (*TableShowTablesTotalByFiltersWithSortersPaginationOutput, error)
 	mustEmbedUnimplementedTableLogicServer()
 }
@@ -62,6 +75,9 @@ type TableLogicServer interface {
 // pointer dereference when methods are called.
 type UnimplementedTableLogicServer struct{}
 
+func (UnimplementedTableLogicServer) ShowTableById(context.Context, *TableShowTableByIdInput) (*TableShowTableByIdOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowTableById not implemented")
+}
 func (UnimplementedTableLogicServer) ShowTablesTotalByFiltersWithSortersPagination(context.Context, *TableShowTablesTotalByFiltersWithSortersPaginationInput) (*TableShowTablesTotalByFiltersWithSortersPaginationOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowTablesTotalByFiltersWithSortersPagination not implemented")
 }
@@ -84,6 +100,24 @@ func RegisterTableLogicServer(s grpc.ServiceRegistrar, srv TableLogicServer) {
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&TableLogic_ServiceDesc, srv)
+}
+
+func _TableLogic_ShowTableById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TableShowTableByIdInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TableLogicServer).ShowTableById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TableLogic_ShowTableById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TableLogicServer).ShowTableById(ctx, req.(*TableShowTableByIdInput))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _TableLogic_ShowTablesTotalByFiltersWithSortersPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -111,6 +145,10 @@ var TableLogic_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "pb.resource.logic.TableLogic",
 	HandlerType: (*TableLogicServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "ShowTableById",
+			Handler:    _TableLogic_ShowTableById_Handler,
+		},
 		{
 			MethodName: "ShowTablesTotalByFiltersWithSortersPagination",
 			Handler:    _TableLogic_ShowTablesTotalByFiltersWithSortersPagination_Handler,

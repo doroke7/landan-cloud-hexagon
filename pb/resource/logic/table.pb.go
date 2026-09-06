@@ -22,6 +22,94 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type TableShowTableByIdInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TableShowTableByIdInput) Reset() {
+	*x = TableShowTableByIdInput{}
+	mi := &file_resource_logic_table_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TableShowTableByIdInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TableShowTableByIdInput) ProtoMessage() {}
+
+func (x *TableShowTableByIdInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_table_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TableShowTableByIdInput.ProtoReflect.Descriptor instead.
+func (*TableShowTableByIdInput) Descriptor() ([]byte, []int) {
+	return file_resource_logic_table_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *TableShowTableByIdInput) GetId() uint64 {
+	if x != nil {
+		return x.Id
+	}
+	return 0
+}
+
+type TableShowTableByIdOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Table         *resource.Table        `protobuf:"bytes,1,opt,name=table,proto3" json:"table,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *TableShowTableByIdOutput) Reset() {
+	*x = TableShowTableByIdOutput{}
+	mi := &file_resource_logic_table_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *TableShowTableByIdOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*TableShowTableByIdOutput) ProtoMessage() {}
+
+func (x *TableShowTableByIdOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_table_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use TableShowTableByIdOutput.ProtoReflect.Descriptor instead.
+func (*TableShowTableByIdOutput) Descriptor() ([]byte, []int) {
+	return file_resource_logic_table_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *TableShowTableByIdOutput) GetTable() *resource.Table {
+	if x != nil {
+		return x.Table
+	}
+	return nil
+}
+
 type TableShowTablesTotalByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
@@ -33,7 +121,7 @@ type TableShowTablesTotalByFiltersWithSortersPaginationInput struct {
 
 func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) Reset() {
 	*x = TableShowTablesTotalByFiltersWithSortersPaginationInput{}
-	mi := &file_resource_logic_table_proto_msgTypes[0]
+	mi := &file_resource_logic_table_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +133,7 @@ func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) String() strin
 func (*TableShowTablesTotalByFiltersWithSortersPaginationInput) ProtoMessage() {}
 
 func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_table_proto_msgTypes[0]
+	mi := &file_resource_logic_table_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +146,7 @@ func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) ProtoReflect()
 
 // Deprecated: Use TableShowTablesTotalByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
 func (*TableShowTablesTotalByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_table_proto_rawDescGZIP(), []int{0}
+	return file_resource_logic_table_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
@@ -92,7 +180,7 @@ type TableShowTablesTotalByFiltersWithSortersPaginationOutput struct {
 
 func (x *TableShowTablesTotalByFiltersWithSortersPaginationOutput) Reset() {
 	*x = TableShowTablesTotalByFiltersWithSortersPaginationOutput{}
-	mi := &file_resource_logic_table_proto_msgTypes[1]
+	mi := &file_resource_logic_table_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -104,7 +192,7 @@ func (x *TableShowTablesTotalByFiltersWithSortersPaginationOutput) String() stri
 func (*TableShowTablesTotalByFiltersWithSortersPaginationOutput) ProtoMessage() {}
 
 func (x *TableShowTablesTotalByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_table_proto_msgTypes[1]
+	mi := &file_resource_logic_table_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -117,7 +205,7 @@ func (x *TableShowTablesTotalByFiltersWithSortersPaginationOutput) ProtoReflect(
 
 // Deprecated: Use TableShowTablesTotalByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
 func (*TableShowTablesTotalByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_table_proto_rawDescGZIP(), []int{1}
+	return file_resource_logic_table_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *TableShowTablesTotalByFiltersWithSortersPaginationOutput) GetTables() []*resource.Table {
@@ -138,7 +226,11 @@ var File_resource_logic_table_proto protoreflect.FileDescriptor
 
 const file_resource_logic_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aresource/logic/table.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"\xd0\x01\n" +
+	"\x1aresource/logic/table.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\")\n" +
+	"\x17TableShowTableByIdInput\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"D\n" +
+	"\x18TableShowTableByIdOutput\x12(\n" +
+	"\x05table\x18\x01 \x01(\v2\x12.pb.resource.TableR\x05table\"\xd0\x01\n" +
 	"7TableShowTablesTotalByFiltersWithSortersPaginationInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
 	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
@@ -147,9 +239,10 @@ const file_resource_logic_table_proto_rawDesc = "" +
 	"pagination\"|\n" +
 	"8TableShowTablesTotalByFiltersWithSortersPaginationOutput\x12*\n" +
 	"\x06tables\x18\x01 \x03(\v2\x12.pb.resource.TableR\x06tables\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total2\xd7\x01\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total2\xc1\x02\n" +
 	"\n" +
-	"TableLogic\x12\xc8\x01\n" +
+	"TableLogic\x12h\n" +
+	"\rShowTableById\x12*.pb.resource.logic.TableShowTableByIdInput\x1a+.pb.resource.logic.TableShowTableByIdOutput\x12\xc8\x01\n" +
 	"-ShowTablesTotalByFiltersWithSortersPagination\x12J.pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput\x1aK.pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
 
 var (
@@ -164,27 +257,32 @@ func file_resource_logic_table_proto_rawDescGZIP() []byte {
 	return file_resource_logic_table_proto_rawDescData
 }
 
-var file_resource_logic_table_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_resource_logic_table_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_resource_logic_table_proto_goTypes = []any{
-	(*TableShowTablesTotalByFiltersWithSortersPaginationInput)(nil),  // 0: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput
-	(*TableShowTablesTotalByFiltersWithSortersPaginationOutput)(nil), // 1: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutput
-	(*resource.Filter)(nil),     // 2: pb.resource.Filter
-	(*resource.Sorter)(nil),     // 3: pb.resource.Sorter
-	(*resource.Pagination)(nil), // 4: pb.resource.Pagination
-	(*resource.Table)(nil),      // 5: pb.resource.Table
+	(*TableShowTableByIdInput)(nil),                                  // 0: pb.resource.logic.TableShowTableByIdInput
+	(*TableShowTableByIdOutput)(nil),                                 // 1: pb.resource.logic.TableShowTableByIdOutput
+	(*TableShowTablesTotalByFiltersWithSortersPaginationInput)(nil),  // 2: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput
+	(*TableShowTablesTotalByFiltersWithSortersPaginationOutput)(nil), // 3: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutput
+	(*resource.Table)(nil),                                           // 4: pb.resource.Table
+	(*resource.Filter)(nil),                                          // 5: pb.resource.Filter
+	(*resource.Sorter)(nil),                                          // 6: pb.resource.Sorter
+	(*resource.Pagination)(nil),                                      // 7: pb.resource.Pagination
 }
 var file_resource_logic_table_proto_depIdxs = []int32{
-	2, // 0: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	3, // 1: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	4, // 2: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	5, // 3: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutput.tables:type_name -> pb.resource.Table
-	0, // 4: pb.resource.logic.TableLogic.ShowTablesTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput
-	1, // 5: pb.resource.logic.TableLogic.ShowTablesTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutput
-	5, // [5:6] is the sub-list for method output_type
-	4, // [4:5] is the sub-list for method input_type
-	4, // [4:4] is the sub-list for extension type_name
-	4, // [4:4] is the sub-list for extension extendee
-	0, // [0:4] is the sub-list for field type_name
+	4, // 0: pb.resource.logic.TableShowTableByIdOutput.table:type_name -> pb.resource.Table
+	5, // 1: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
+	6, // 2: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	7, // 3: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
+	4, // 4: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutput.tables:type_name -> pb.resource.Table
+	0, // 5: pb.resource.logic.TableLogic.ShowTableById:input_type -> pb.resource.logic.TableShowTableByIdInput
+	2, // 6: pb.resource.logic.TableLogic.ShowTablesTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput
+	1, // 7: pb.resource.logic.TableLogic.ShowTableById:output_type -> pb.resource.logic.TableShowTableByIdOutput
+	3, // 8: pb.resource.logic.TableLogic.ShowTablesTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutput
+	7, // [7:9] is the sub-list for method output_type
+	5, // [5:7] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_resource_logic_table_proto_init() }
@@ -198,7 +296,7 @@ func file_resource_logic_table_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_logic_table_proto_rawDesc), len(file_resource_logic_table_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   4,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

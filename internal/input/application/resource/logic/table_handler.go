@@ -5,6 +5,7 @@ import (
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 
+	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
 	pbResource "example/pb/resource"
@@ -23,6 +24,44 @@ func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler,
 		AbstractHandler:   oAbstractHandler,
 		LogicTableUsecase: oTableUsecase,
 	}
+}
+
+func domainTableToProtoTable(oTable *domain.Table) *pbResource.Table {
+	if oTable == nil {
+		return nil
+	}
+
+	return &pbResource.Table{
+		Id:          uint64(oTable.Id),
+		No:          oTable.No,
+		GameId:      uint64(oTable.GameId),
+		Key:         oTable.Key,
+		State:       uint64(oTable.State),
+		Description: oTable.Description,
+		Result:      oTable.Result,
+		StartedAt:   timestamppb.New(oTable.StartedAt),
+		EndedAt:     timestamppb.New(oTable.EndedAt),
+		CreatedAt:   timestamppb.New(oTable.CreatedAt),
+		UpdatedAt:   timestamppb.New(oTable.UpdatedAt),
+		DeletedAt:   timestamppb.New(oTable.DeletedAt),
+		Game:        domainGameToProtoGame(&oTable.Game),
+	}
+}
+
+func (oSelf *TableHandler) ShowTableById(oContext context.Context, oReq *pbResourceLogic.TableShowTableByIdInput) (*pbResourceLogic.TableShowTableByIdOutput, error) {
+
+	oTable, oErr := oSelf.LogicTableUsecase.ShowTableById(oReq.GetId())
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	if oTable == nil {
+		return nil, nil
+	}
+
+	return &pbResourceLogic.TableShowTableByIdOutput{
+		Table: domainTableToProtoTable(oTable),
+	}, nil
 }
 
 func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationInput) (*pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationOutput, error) {

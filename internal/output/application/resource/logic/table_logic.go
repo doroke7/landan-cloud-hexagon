@@ -3,6 +3,7 @@ package outputApplicationResourceLogic
 import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
+	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
 )
@@ -15,6 +16,47 @@ func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic 
 	return &TableLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+}
+
+func protoTableToDomainTable(oProtoTable *pbResource.Table) domain.Table {
+	if oProtoTable == nil {
+		return domain.Table{}
+	}
+
+	return domain.Table{
+		Id:          uint64(oProtoTable.GetId()),
+		No:          oProtoTable.GetNo(),
+		GameId:      uint64(oProtoTable.GetGameId()),
+		Key:         oProtoTable.GetKey(),
+		State:       uint8(oProtoTable.GetState()),
+		Description: oProtoTable.GetDescription(),
+		Result:      oProtoTable.GetResult(),
+		StartedAt:   oProtoTable.GetStartedAt().AsTime(),
+		EndedAt:     oProtoTable.GetEndedAt().AsTime(),
+		CreatedAt:   oProtoTable.GetCreatedAt().AsTime(),
+		UpdatedAt:   oProtoTable.GetUpdatedAt().AsTime(),
+		DeletedAt:   oProtoTable.GetDeletedAt().AsTime(),
+		Game:        protoGameToDomainGame(oProtoTable.GetGame()),
+	}
+}
+
+func (oSelf *TableLogic) ShowTableById(iId uint64) (*domain.Table, error) {
+
+	oRequest := &pbResourceLogic.TableShowTableByIdInput{Id: iId}
+
+	oResponse, oErr := oSelf.ResourceLogicClient.Table.ShowTableById(oSelf.Context, oRequest)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oProtoTable := oResponse.GetTable()
+	if oProtoTable.GetId() == 0 {
+		return nil, nil
+	}
+
+	oTable := protoTableToDomainTable(oProtoTable)
+
+	return &oTable, nil
 }
 
 func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {

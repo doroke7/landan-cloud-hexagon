@@ -3,6 +3,7 @@ package outputApplicationMongodbLogic
 import (
 	"sync"
 
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 
 	domain "example/internal/domain"
@@ -20,6 +21,24 @@ func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic 
 		AbstractLogic: oAbstractLogic,
 		Collection:    oAbstractLogic.Database.Collection("tables"),
 	}
+}
+
+func (oSelf *TableLogic) ShowTableById(iId uint64) (*domain.Table, error) {
+	var oTable domain.Table
+
+	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
+		"_id":        iId,
+		"deleted_at": oDeletedAtZero,
+	}).Decode(&oTable)
+
+	if oErr != nil {
+		if oErr == mongo.ErrNoDocuments {
+			return nil, nil
+		}
+		return nil, oErr
+	}
+
+	return &oTable, nil
 }
 
 func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {

@@ -19,6 +19,13 @@ func NewTableUsecase(oAbstractUsecase *AbstractUsecase, oTableLogic outputPortAn
 	}
 }
 
+func (oSelf *TableUsecase) ShowTableById(iId uint64) (*domain.Table, error) {
+
+	oTable, oErr := oSelf.TableLogic.ShowTableById(iId)
+
+	return oTable, oErr
+}
+
 func (oSelf *TableUsecase) ShowTablesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
 
 	aTables, oErr := oSelf.TableLogic.ShowTablesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)

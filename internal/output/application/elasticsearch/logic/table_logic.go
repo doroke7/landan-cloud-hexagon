@@ -2,6 +2,7 @@ package outputApplicationElasticsearchLogic
 
 import (
 	"encoding/json"
+	"strconv"
 
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
@@ -18,6 +19,21 @@ func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic 
 		AbstractLogic: oAbstractLogic,
 		Index:         oAbstractLogic.IndexName("tables"),
 	}
+}
+
+func (oSelf *TableLogic) ShowTableById(iId uint64) (*domain.Table, error) {
+	var oTable domain.Table
+
+	bFound, oErr := oSelf.GetById(oSelf.Index, strconv.FormatUint(iId, 10), &oTable)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	if !bFound || !oTable.DeletedAt.Equal(oDeletedAtZero) {
+		return nil, nil
+	}
+
+	return &oTable, nil
 }
 
 func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {
