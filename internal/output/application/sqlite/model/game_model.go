@@ -83,9 +83,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInp
 
 	var aGames []*domain.Game
 
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
 		Preload("GameType").
 		Preload("GameType.Parent").
 		Model(&domain.Game{}).
