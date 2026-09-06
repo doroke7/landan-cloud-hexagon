@@ -87,19 +87,6 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	return &oGame, nil
 }
 
-func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
-	sField := "game_type_id"
-	sOperator := "eq"
-	aFilters := []*pkgInput.Filter{
-		{Field: &sField, Operator: &sOperator, Value: iGameTypeId},
-	}
-
-	iSize := uint(10000)
-	iPage := uint(1)
-	aGames, oErr := oSelf.ShowOnesByFiltersWithOrdersPagination(aFilters, nil, &pkgInput.Pagination{Size: &iSize, Page: &iPage})
-	return aGames, oErr
-}
-
 func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	sGameTypeIdField := "game_type_id"
 	sDeletedAtField := "deleted_at"

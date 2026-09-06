@@ -90,3 +90,21 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 
 	return aGames, uint64(iTotal), nil
 }
+
+func (oSelf *GameLogic) ShowGamesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
+	var aGames []*domain.Game
+
+	oErr := oSelf.DB.WithContext(oSelf.Context).
+		Preload("GameType").
+		Preload("GameType.Parent").
+		Model(&domain.Game{}).
+		Where("game_type_id = ?", iGameTypeId).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		Find(&aGames).Error
+
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	return aGames, nil
+}

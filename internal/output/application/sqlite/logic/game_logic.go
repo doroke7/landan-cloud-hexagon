@@ -19,6 +19,22 @@ func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
 	}
 }
 
+func (oSelf *GameLogic) ShowGamesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
+	var aGames []*domain.Game
+
+	if oErr := oSelf.DB.WithContext(oSelf.Context).
+		Preload("GameType").
+		Preload("GameType.Parent").
+		Model(&domain.Game{}).
+		Where("game_type_id = ?", iGameTypeId).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		Find(&aGames).Error; oErr != nil {
+		return nil, oErr
+	}
+
+	return aGames, nil
+}
+
 func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error) {
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractSqlite.SortersToOrders(aSorters)

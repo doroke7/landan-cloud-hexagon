@@ -51,3 +51,39 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 
 	return aGames, uint64(oResult.Total), nil
 }
+
+func (oSelf *GameLogic) ShowGamesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
+	sGameTypeIdField := "game_type_id"
+	sOperator := "eq"
+	sDeletedAtField := "deleted_at"
+
+	aFilters := []*pkgInput.Filter{
+		{Field: &sGameTypeIdField, Operator: &sOperator, Value: iGameTypeId},
+		{Field: &sDeletedAtField, Value: oDeletedAtZero},
+	}
+
+	iSize := uint(10000)
+	iPage := uint(1)
+	oPagination := &pkgInput.Pagination{Size: &iSize, Page: &iPage}
+
+	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, nil, oPagination)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oResult, oErr := oSelf.SearchWithOptions(aOptions)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aGames := make([]*domain.Game, len(oResult.Hits))
+	for i, oHit := range oResult.Hits {
+		var oGame domain.Game
+		if oErr := json.Unmarshal(oHit.Source, &oGame); oErr != nil {
+			return nil, oErr
+		}
+		aGames[i] = &oGame
+	}
+
+	return aGames, nil
+}

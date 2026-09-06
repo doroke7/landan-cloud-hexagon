@@ -4,6 +4,7 @@ import (
 	"sync"
 	"time"
 
+	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
 
 	domain "example/internal/domain"
@@ -71,4 +72,22 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 	}
 
 	return aGames, uint64(iTotal), nil
+}
+
+func (oSelf *GameLogic) ShowGamesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
+	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{
+		"game_type_id": iGameTypeId,
+		"deleted_at":   oDeletedAtZero,
+	})
+	if oErr != nil {
+		return nil, oErr
+	}
+	defer oCursor.Close(oSelf.Context)
+
+	var aGames []*domain.Game
+	if oErr := oCursor.All(oSelf.Context, &aGames); oErr != nil {
+		return nil, oErr
+	}
+
+	return aGames, nil
 }

@@ -94,3 +94,20 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 	iTotal := uint64(oResponse.GetTotal())
 	return aGames, iTotal, oErr
 }
+
+// ShowGamesByGameTypeId proto GameLogic 沒有對應 rpc，改用既有的 list rpc 帶 game_type_id 過濾。
+func (oSelf *GameLogic) ShowGamesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
+	sField := "game_type_id"
+	sOperator := "eq"
+	iSize := uint(10000)
+	iPage := uint(1)
+
+	aFilters := []*pkgInput.Filter{
+		{Field: &sField, Operator: &sOperator, Value: float64(iGameTypeId)},
+	}
+	oPagination := &pkgInput.Pagination{Size: &iSize, Page: &iPage}
+
+	aGames, _, oErr := oSelf.ShowGamesTotalByFiltersWithSortersPagination(aFilters, nil, oPagination)
+
+	return aGames, oErr
+}

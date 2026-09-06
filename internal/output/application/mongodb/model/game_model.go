@@ -193,24 +193,6 @@ func (oSelf *GameModel) RemoveOneById(iId uint64) error {
 	return nil
 }
 
-func (oSelf *GameModel) ShowOnesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
-	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{
-		"game_type_id": iGameTypeId,
-		"deleted_at":   oDeletedAtZero,
-	})
-	if oErr != nil {
-		return nil, oErr
-	}
-	defer oCursor.Close(oSelf.Context)
-
-	var aGames []*domain.Game
-	if oErr := oCursor.All(oSelf.Context, &aGames); oErr != nil {
-		return nil, oErr
-	}
-
-	return aGames, nil
-}
-
 func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	iCount, oErr := oSelf.Collection.CountDocuments(oSelf.Context, bson.M{
 		"game_type_id": iGameTypeId,
