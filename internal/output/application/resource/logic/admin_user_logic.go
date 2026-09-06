@@ -113,26 +113,33 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 }
 
 func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, error) {
-	sField := "id"
-	sOperator := "eq"
-	iSize := uint(1)
-	iPage := uint(1)
+	oRequest := &pbResourceLogic.AdminUserShowAdminUserByIdInput{Id: iId}
 
-	aFilters := []*pkgInput.Filter{
-		{Field: &sField, Operator: &sOperator, Value: float64(iId)},
-	}
-	oPagination := &pkgInput.Pagination{Size: &iSize, Page: &iPage}
-
-	aAdminUsers, _, oErr := oSelf.ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters, nil, oPagination)
+	oResponse, oErr := oSelf.ResourceLogicClient.AdminUser.ShowAdminUserById(oSelf.Context, oRequest)
 	if oErr != nil {
 		return nil, oErr
 	}
 
-	if len(aAdminUsers) == 0 {
+	if len(oResponse.GetAdminUsers()) == 0 {
 		return nil, errors.New("record not found")
 	}
 
-	oAdminUser := aAdminUsers[0]
+	oOne := oResponse.GetAdminUsers()[0]
+
+	aAdminRoles := make([]domain.AdminRole, 0, len(oOne.GetAdminRoles()))
+	for _, oProtoAdminRole := range oOne.GetAdminRoles() {
+		aAdminRoles = append(aAdminRoles, protoAdminRoleToDomainAdminRole(oProtoAdminRole))
+	}
+
+	oAdminUser := &domain.AdminUser{
+		Id:         uint64(oOne.GetId()),
+		Name:       oOne.GetName(),
+		Password:   oOne.GetPassword(),
+		CreatedAt:  oOne.GetCreatedAt().AsTime(),
+		UpdatedAt:  oOne.GetUpdatedAt().AsTime(),
+		DeletedAt:  oOne.GetDeletedAt().AsTime(),
+		AdminRoles: aAdminRoles,
+	}
 
 	return oAdminUser, nil
 }

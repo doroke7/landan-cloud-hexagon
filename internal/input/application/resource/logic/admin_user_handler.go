@@ -148,3 +148,23 @@ func (oSelf *AdminUserHandler) RemoveAdminUserById(oContext context.Context, oRe
 
 	return &pbResourceLogic.AdminUserRemoveAdminUserByIdOutput{}, oErr
 }
+
+func (oSelf *AdminUserHandler) ShowAdminUserById(oContext context.Context, oReq *pbResourceLogic.AdminUserShowAdminUserByIdInput) (*pbResourceLogic.AdminUserShowAdminUserByIdOutput, error) {
+
+	oAdminUser, oErr := oSelf.LogicAdminUserUsecase.ShowAdminUserById(oReq.GetId())
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aPbAdminUsers := make([]*pbResource.AdminUser, 0, 1)
+	if oAdminUser != nil {
+		aPbAdminUsers = append(aPbAdminUsers, domainAdminUserToProtoAdminUser(oAdminUser))
+	}
+
+	oOutput := &pbResourceLogic.AdminUserShowAdminUserByIdOutput{
+		AdminUsers: aPbAdminUsers,
+		Total:      uint64(len(aPbAdminUsers)),
+	}
+
+	return oOutput, nil
+}

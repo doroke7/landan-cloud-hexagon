@@ -22,6 +22,66 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type AdminUserVariable struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Password      *string                `protobuf:"bytes,2,opt,name=password,proto3,oneof" json:"password,omitempty"`
+	AdminRoleIds  []uint64               `protobuf:"varint,3,rep,packed,name=admin_role_ids,json=adminRoleIds,proto3" json:"admin_role_ids,omitempty"` // repeated 本身語意就是可以是空的，不用也不能標。
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserVariable) Reset() {
+	*x = AdminUserVariable{}
+	mi := &file_resource_logic_admin_user_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserVariable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserVariable) ProtoMessage() {}
+
+func (x *AdminUserVariable) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_admin_user_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserVariable.ProtoReflect.Descriptor instead.
+func (*AdminUserVariable) Descriptor() ([]byte, []int) {
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *AdminUserVariable) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *AdminUserVariable) GetPassword() string {
+	if x != nil && x.Password != nil {
+		return *x.Password
+	}
+	return ""
+}
+
+func (x *AdminUserVariable) GetAdminRoleIds() []uint64 {
+	if x != nil {
+		return x.AdminRoleIds
+	}
+	return nil
+}
+
 type AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
@@ -33,7 +93,7 @@ type AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput struct {
 
 func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) Reset() {
 	*x = AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput{}
-	mi := &file_resource_logic_admin_user_proto_msgTypes[0]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -45,7 +105,7 @@ func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) String
 func (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) ProtoMessage() {}
 
 func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_admin_user_proto_msgTypes[0]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -58,7 +118,7 @@ func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) ProtoR
 
 // Deprecated: Use AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
 func (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{0}
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
@@ -92,7 +152,7 @@ type AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput struct {
 
 func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput) Reset() {
 	*x = AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput{}
-	mi := &file_resource_logic_admin_user_proto_msgTypes[1]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -104,7 +164,7 @@ func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput) Strin
 func (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput) ProtoMessage() {}
 
 func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_admin_user_proto_msgTypes[1]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -117,7 +177,7 @@ func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput) Proto
 
 // Deprecated: Use AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
 func (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{1}
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput) GetAdminUsers() []*resource.AdminUser {
@@ -134,30 +194,28 @@ func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput) GetTo
 	return 0
 }
 
-type AdminUserVariable struct {
+type AdminUserShowAdminUserByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
-	Password      *string                `protobuf:"bytes,2,opt,name=password,proto3,oneof" json:"password,omitempty"`
-	AdminRoleIds  []uint64               `protobuf:"varint,3,rep,packed,name=admin_role_ids,json=adminRoleIds,proto3" json:"admin_role_ids,omitempty"` // repeated 本身語意就是可以是空的，不用也不能標。
+	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AdminUserVariable) Reset() {
-	*x = AdminUserVariable{}
-	mi := &file_resource_logic_admin_user_proto_msgTypes[2]
+func (x *AdminUserShowAdminUserByIdInput) Reset() {
+	*x = AdminUserShowAdminUserByIdInput{}
+	mi := &file_resource_logic_admin_user_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AdminUserVariable) String() string {
+func (x *AdminUserShowAdminUserByIdInput) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AdminUserVariable) ProtoMessage() {}
+func (*AdminUserShowAdminUserByIdInput) ProtoMessage() {}
 
-func (x *AdminUserVariable) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_admin_user_proto_msgTypes[2]
+func (x *AdminUserShowAdminUserByIdInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_admin_user_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -168,30 +226,68 @@ func (x *AdminUserVariable) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AdminUserVariable.ProtoReflect.Descriptor instead.
-func (*AdminUserVariable) Descriptor() ([]byte, []int) {
-	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{2}
+// Deprecated: Use AdminUserShowAdminUserByIdInput.ProtoReflect.Descriptor instead.
+func (*AdminUserShowAdminUserByIdInput) Descriptor() ([]byte, []int) {
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AdminUserVariable) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
-	}
-	return ""
-}
-
-func (x *AdminUserVariable) GetPassword() string {
-	if x != nil && x.Password != nil {
-		return *x.Password
-	}
-	return ""
-}
-
-func (x *AdminUserVariable) GetAdminRoleIds() []uint64 {
+func (x *AdminUserShowAdminUserByIdInput) GetId() uint64 {
 	if x != nil {
-		return x.AdminRoleIds
+		return x.Id
+	}
+	return 0
+}
+
+type AdminUserShowAdminUserByIdOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminUsers    []*resource.AdminUser  `protobuf:"bytes,1,rep,name=admin_users,json=adminUsers,proto3" json:"admin_users,omitempty"`
+	Total         uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserShowAdminUserByIdOutput) Reset() {
+	*x = AdminUserShowAdminUserByIdOutput{}
+	mi := &file_resource_logic_admin_user_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserShowAdminUserByIdOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserShowAdminUserByIdOutput) ProtoMessage() {}
+
+func (x *AdminUserShowAdminUserByIdOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_admin_user_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserShowAdminUserByIdOutput.ProtoReflect.Descriptor instead.
+func (*AdminUserShowAdminUserByIdOutput) Descriptor() ([]byte, []int) {
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *AdminUserShowAdminUserByIdOutput) GetAdminUsers() []*resource.AdminUser {
+	if x != nil {
+		return x.AdminUsers
 	}
 	return nil
+}
+
+func (x *AdminUserShowAdminUserByIdOutput) GetTotal() uint64 {
+	if x != nil {
+		return x.Total
+	}
+	return 0
 }
 
 type AdminUserAddAminUserInput struct {
@@ -203,7 +299,7 @@ type AdminUserAddAminUserInput struct {
 
 func (x *AdminUserAddAminUserInput) Reset() {
 	*x = AdminUserAddAminUserInput{}
-	mi := &file_resource_logic_admin_user_proto_msgTypes[3]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -215,7 +311,7 @@ func (x *AdminUserAddAminUserInput) String() string {
 func (*AdminUserAddAminUserInput) ProtoMessage() {}
 
 func (x *AdminUserAddAminUserInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_admin_user_proto_msgTypes[3]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -228,7 +324,7 @@ func (x *AdminUserAddAminUserInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminUserAddAminUserInput.ProtoReflect.Descriptor instead.
 func (*AdminUserAddAminUserInput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{3}
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *AdminUserAddAminUserInput) GetVariable() *AdminUserVariable {
@@ -246,7 +342,7 @@ type AdminUserAddAminUserOutput struct {
 
 func (x *AdminUserAddAminUserOutput) Reset() {
 	*x = AdminUserAddAminUserOutput{}
-	mi := &file_resource_logic_admin_user_proto_msgTypes[4]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -258,7 +354,7 @@ func (x *AdminUserAddAminUserOutput) String() string {
 func (*AdminUserAddAminUserOutput) ProtoMessage() {}
 
 func (x *AdminUserAddAminUserOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_admin_user_proto_msgTypes[4]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -271,7 +367,7 @@ func (x *AdminUserAddAminUserOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminUserAddAminUserOutput.ProtoReflect.Descriptor instead.
 func (*AdminUserAddAminUserOutput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{4}
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{6}
 }
 
 type AdminUserEditAdminUserByIdInput struct {
@@ -284,7 +380,7 @@ type AdminUserEditAdminUserByIdInput struct {
 
 func (x *AdminUserEditAdminUserByIdInput) Reset() {
 	*x = AdminUserEditAdminUserByIdInput{}
-	mi := &file_resource_logic_admin_user_proto_msgTypes[5]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -296,7 +392,7 @@ func (x *AdminUserEditAdminUserByIdInput) String() string {
 func (*AdminUserEditAdminUserByIdInput) ProtoMessage() {}
 
 func (x *AdminUserEditAdminUserByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_admin_user_proto_msgTypes[5]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -309,7 +405,7 @@ func (x *AdminUserEditAdminUserByIdInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminUserEditAdminUserByIdInput.ProtoReflect.Descriptor instead.
 func (*AdminUserEditAdminUserByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{5}
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *AdminUserEditAdminUserByIdInput) GetVariable() *AdminUserVariable {
@@ -334,7 +430,7 @@ type AdminUserEditAdminUserByIdOutput struct {
 
 func (x *AdminUserEditAdminUserByIdOutput) Reset() {
 	*x = AdminUserEditAdminUserByIdOutput{}
-	mi := &file_resource_logic_admin_user_proto_msgTypes[6]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -346,7 +442,7 @@ func (x *AdminUserEditAdminUserByIdOutput) String() string {
 func (*AdminUserEditAdminUserByIdOutput) ProtoMessage() {}
 
 func (x *AdminUserEditAdminUserByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_admin_user_proto_msgTypes[6]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -359,7 +455,7 @@ func (x *AdminUserEditAdminUserByIdOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminUserEditAdminUserByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminUserEditAdminUserByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{6}
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{8}
 }
 
 type AdminUserRemoveAdminUserByIdInput struct {
@@ -371,7 +467,7 @@ type AdminUserRemoveAdminUserByIdInput struct {
 
 func (x *AdminUserRemoveAdminUserByIdInput) Reset() {
 	*x = AdminUserRemoveAdminUserByIdInput{}
-	mi := &file_resource_logic_admin_user_proto_msgTypes[7]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -383,7 +479,7 @@ func (x *AdminUserRemoveAdminUserByIdInput) String() string {
 func (*AdminUserRemoveAdminUserByIdInput) ProtoMessage() {}
 
 func (x *AdminUserRemoveAdminUserByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_admin_user_proto_msgTypes[7]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -396,7 +492,7 @@ func (x *AdminUserRemoveAdminUserByIdInput) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use AdminUserRemoveAdminUserByIdInput.ProtoReflect.Descriptor instead.
 func (*AdminUserRemoveAdminUserByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{7}
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *AdminUserRemoveAdminUserByIdInput) GetId() uint64 {
@@ -414,7 +510,7 @@ type AdminUserRemoveAdminUserByIdOutput struct {
 
 func (x *AdminUserRemoveAdminUserByIdOutput) Reset() {
 	*x = AdminUserRemoveAdminUserByIdOutput{}
-	mi := &file_resource_logic_admin_user_proto_msgTypes[8]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -426,7 +522,7 @@ func (x *AdminUserRemoveAdminUserByIdOutput) String() string {
 func (*AdminUserRemoveAdminUserByIdOutput) ProtoMessage() {}
 
 func (x *AdminUserRemoveAdminUserByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_admin_user_proto_msgTypes[8]
+	mi := &file_resource_logic_admin_user_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -439,14 +535,20 @@ func (x *AdminUserRemoveAdminUserByIdOutput) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use AdminUserRemoveAdminUserByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminUserRemoveAdminUserByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{8}
+	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{10}
 }
 
 var File_resource_logic_admin_user_proto protoreflect.FileDescriptor
 
 const file_resource_logic_admin_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1fresource/logic/admin_user.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"\xd8\x01\n" +
+	"\x1fresource/logic/admin_user.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"\x89\x01\n" +
+	"\x11AdminUserVariable\x12\x17\n" +
+	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
+	"\bpassword\x18\x02 \x01(\tH\x01R\bpassword\x88\x01\x01\x12$\n" +
+	"\x0eadmin_role_ids\x18\x03 \x03(\x04R\fadminRoleIdsB\a\n" +
+	"\x05_nameB\v\n" +
+	"\t_password\"\xd8\x01\n" +
 	"?AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
 	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
@@ -456,13 +558,13 @@ const file_resource_logic_admin_user_proto_rawDesc = "" +
 	"@AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput\x127\n" +
 	"\vadmin_users\x18\x01 \x03(\v2\x16.pb.resource.AdminUserR\n" +
 	"adminUsers\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total\"\x89\x01\n" +
-	"\x11AdminUserVariable\x12\x17\n" +
-	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
-	"\bpassword\x18\x02 \x01(\tH\x01R\bpassword\x88\x01\x01\x12$\n" +
-	"\x0eadmin_role_ids\x18\x03 \x03(\x04R\fadminRoleIdsB\a\n" +
-	"\x05_nameB\v\n" +
-	"\t_password\"]\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\"1\n" +
+	"\x1fAdminUserShowAdminUserByIdInput\x12\x0e\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"q\n" +
+	" AdminUserShowAdminUserByIdOutput\x127\n" +
+	"\vadmin_users\x18\x01 \x03(\v2\x16.pb.resource.AdminUserR\n" +
+	"adminUsers\x12\x14\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\"]\n" +
 	"\x19AdminUserAddAminUserInput\x12@\n" +
 	"\bvariable\x18\x01 \x01(\v2$.pb.resource.logic.AdminUserVariableR\bvariable\"\x1c\n" +
 	"\x1aAdminUserAddAminUserOutput\"s\n" +
@@ -472,9 +574,10 @@ const file_resource_logic_admin_user_proto_rawDesc = "" +
 	" AdminUserEditAdminUserByIdOutput\"3\n" +
 	"!AdminUserRemoveAdminUserByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"$\n" +
-	"\"AdminUserRemoveAdminUserByIdOutput2\xde\x04\n" +
+	"\"AdminUserRemoveAdminUserByIdOutput2\xdc\x05\n" +
 	"\x0eAdminUserLogic\x12\xdc\x01\n" +
-	"1ShowAdminUsersTotalByFiltersWithSortersPagination\x12R.pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput\x1aS.pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput\x12j\n" +
+	"1ShowAdminUsersTotalByFiltersWithSortersPagination\x12R.pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput\x1aS.pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput\x12|\n" +
+	"\x11ShowAdminUserById\x122.pb.resource.logic.AdminUserShowAdminUserByIdInput\x1a3.pb.resource.logic.AdminUserShowAdminUserByIdOutput\x12j\n" +
 	"\vAddAminUser\x12,.pb.resource.logic.AdminUserAddAminUserInput\x1a-.pb.resource.logic.AdminUserAddAminUserOutput\x12|\n" +
 	"\x11EditAdminUserById\x122.pb.resource.logic.AdminUserEditAdminUserByIdInput\x1a3.pb.resource.logic.AdminUserEditAdminUserByIdOutput\x12\x82\x01\n" +
 	"\x13RemoveAdminUserById\x124.pb.resource.logic.AdminUserRemoveAdminUserByIdInput\x1a5.pb.resource.logic.AdminUserRemoveAdminUserByIdOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
@@ -491,42 +594,47 @@ func file_resource_logic_admin_user_proto_rawDescGZIP() []byte {
 	return file_resource_logic_admin_user_proto_rawDescData
 }
 
-var file_resource_logic_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
+var file_resource_logic_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_resource_logic_admin_user_proto_goTypes = []any{
-	(*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput)(nil),  // 0: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput
-	(*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput)(nil), // 1: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput
-	(*AdminUserVariable)(nil),                  // 2: pb.resource.logic.AdminUserVariable
-	(*AdminUserAddAminUserInput)(nil),          // 3: pb.resource.logic.AdminUserAddAminUserInput
-	(*AdminUserAddAminUserOutput)(nil),         // 4: pb.resource.logic.AdminUserAddAminUserOutput
-	(*AdminUserEditAdminUserByIdInput)(nil),    // 5: pb.resource.logic.AdminUserEditAdminUserByIdInput
-	(*AdminUserEditAdminUserByIdOutput)(nil),   // 6: pb.resource.logic.AdminUserEditAdminUserByIdOutput
-	(*AdminUserRemoveAdminUserByIdInput)(nil),  // 7: pb.resource.logic.AdminUserRemoveAdminUserByIdInput
-	(*AdminUserRemoveAdminUserByIdOutput)(nil), // 8: pb.resource.logic.AdminUserRemoveAdminUserByIdOutput
-	(*resource.Filter)(nil),                    // 9: pb.resource.Filter
-	(*resource.Sorter)(nil),                    // 10: pb.resource.Sorter
-	(*resource.Pagination)(nil),                // 11: pb.resource.Pagination
-	(*resource.AdminUser)(nil),                 // 12: pb.resource.AdminUser
+	(*AdminUserVariable)(nil), // 0: pb.resource.logic.AdminUserVariable
+	(*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput)(nil),  // 1: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput
+	(*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput)(nil), // 2: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput
+	(*AdminUserShowAdminUserByIdInput)(nil),                                  // 3: pb.resource.logic.AdminUserShowAdminUserByIdInput
+	(*AdminUserShowAdminUserByIdOutput)(nil),                                 // 4: pb.resource.logic.AdminUserShowAdminUserByIdOutput
+	(*AdminUserAddAminUserInput)(nil),                                        // 5: pb.resource.logic.AdminUserAddAminUserInput
+	(*AdminUserAddAminUserOutput)(nil),                                       // 6: pb.resource.logic.AdminUserAddAminUserOutput
+	(*AdminUserEditAdminUserByIdInput)(nil),                                  // 7: pb.resource.logic.AdminUserEditAdminUserByIdInput
+	(*AdminUserEditAdminUserByIdOutput)(nil),                                 // 8: pb.resource.logic.AdminUserEditAdminUserByIdOutput
+	(*AdminUserRemoveAdminUserByIdInput)(nil),                                // 9: pb.resource.logic.AdminUserRemoveAdminUserByIdInput
+	(*AdminUserRemoveAdminUserByIdOutput)(nil),                               // 10: pb.resource.logic.AdminUserRemoveAdminUserByIdOutput
+	(*resource.Filter)(nil),                                                  // 11: pb.resource.Filter
+	(*resource.Sorter)(nil),                                                  // 12: pb.resource.Sorter
+	(*resource.Pagination)(nil),                                              // 13: pb.resource.Pagination
+	(*resource.AdminUser)(nil),                                               // 14: pb.resource.AdminUser
 }
 var file_resource_logic_admin_user_proto_depIdxs = []int32{
-	9,  // 0: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	10, // 1: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	11, // 2: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	12, // 3: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput.admin_users:type_name -> pb.resource.AdminUser
-	2,  // 4: pb.resource.logic.AdminUserAddAminUserInput.variable:type_name -> pb.resource.logic.AdminUserVariable
-	2,  // 5: pb.resource.logic.AdminUserEditAdminUserByIdInput.variable:type_name -> pb.resource.logic.AdminUserVariable
-	0,  // 6: pb.resource.logic.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput
-	3,  // 7: pb.resource.logic.AdminUserLogic.AddAminUser:input_type -> pb.resource.logic.AdminUserAddAminUserInput
-	5,  // 8: pb.resource.logic.AdminUserLogic.EditAdminUserById:input_type -> pb.resource.logic.AdminUserEditAdminUserByIdInput
-	7,  // 9: pb.resource.logic.AdminUserLogic.RemoveAdminUserById:input_type -> pb.resource.logic.AdminUserRemoveAdminUserByIdInput
-	1,  // 10: pb.resource.logic.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput
-	4,  // 11: pb.resource.logic.AdminUserLogic.AddAminUser:output_type -> pb.resource.logic.AdminUserAddAminUserOutput
-	6,  // 12: pb.resource.logic.AdminUserLogic.EditAdminUserById:output_type -> pb.resource.logic.AdminUserEditAdminUserByIdOutput
-	8,  // 13: pb.resource.logic.AdminUserLogic.RemoveAdminUserById:output_type -> pb.resource.logic.AdminUserRemoveAdminUserByIdOutput
-	10, // [10:14] is the sub-list for method output_type
-	6,  // [6:10] is the sub-list for method input_type
-	6,  // [6:6] is the sub-list for extension type_name
-	6,  // [6:6] is the sub-list for extension extendee
-	0,  // [0:6] is the sub-list for field type_name
+	11, // 0: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
+	12, // 1: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	13, // 2: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
+	14, // 3: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput.admin_users:type_name -> pb.resource.AdminUser
+	14, // 4: pb.resource.logic.AdminUserShowAdminUserByIdOutput.admin_users:type_name -> pb.resource.AdminUser
+	0,  // 5: pb.resource.logic.AdminUserAddAminUserInput.variable:type_name -> pb.resource.logic.AdminUserVariable
+	0,  // 6: pb.resource.logic.AdminUserEditAdminUserByIdInput.variable:type_name -> pb.resource.logic.AdminUserVariable
+	1,  // 7: pb.resource.logic.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput
+	3,  // 8: pb.resource.logic.AdminUserLogic.ShowAdminUserById:input_type -> pb.resource.logic.AdminUserShowAdminUserByIdInput
+	5,  // 9: pb.resource.logic.AdminUserLogic.AddAminUser:input_type -> pb.resource.logic.AdminUserAddAminUserInput
+	7,  // 10: pb.resource.logic.AdminUserLogic.EditAdminUserById:input_type -> pb.resource.logic.AdminUserEditAdminUserByIdInput
+	9,  // 11: pb.resource.logic.AdminUserLogic.RemoveAdminUserById:input_type -> pb.resource.logic.AdminUserRemoveAdminUserByIdInput
+	2,  // 12: pb.resource.logic.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput
+	4,  // 13: pb.resource.logic.AdminUserLogic.ShowAdminUserById:output_type -> pb.resource.logic.AdminUserShowAdminUserByIdOutput
+	6,  // 14: pb.resource.logic.AdminUserLogic.AddAminUser:output_type -> pb.resource.logic.AdminUserAddAminUserOutput
+	8,  // 15: pb.resource.logic.AdminUserLogic.EditAdminUserById:output_type -> pb.resource.logic.AdminUserEditAdminUserByIdOutput
+	10, // 16: pb.resource.logic.AdminUserLogic.RemoveAdminUserById:output_type -> pb.resource.logic.AdminUserRemoveAdminUserByIdOutput
+	12, // [12:17] is the sub-list for method output_type
+	7,  // [7:12] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_resource_logic_admin_user_proto_init() }
@@ -534,14 +642,14 @@ func file_resource_logic_admin_user_proto_init() {
 	if File_resource_logic_admin_user_proto != nil {
 		return
 	}
-	file_resource_logic_admin_user_proto_msgTypes[2].OneofWrappers = []any{}
+	file_resource_logic_admin_user_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_logic_admin_user_proto_rawDesc), len(file_resource_logic_admin_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   9,
+			NumMessages:   11,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

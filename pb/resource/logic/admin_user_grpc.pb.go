@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	AdminUserLogic_ShowAdminUsersTotalByFiltersWithSortersPagination_FullMethodName = "/pb.resource.logic.AdminUserLogic/ShowAdminUsersTotalByFiltersWithSortersPagination"
+	AdminUserLogic_ShowAdminUserById_FullMethodName                                 = "/pb.resource.logic.AdminUserLogic/ShowAdminUserById"
 	AdminUserLogic_AddAminUser_FullMethodName                                       = "/pb.resource.logic.AdminUserLogic/AddAminUser"
 	AdminUserLogic_EditAdminUserById_FullMethodName                                 = "/pb.resource.logic.AdminUserLogic/EditAdminUserById"
 	AdminUserLogic_RemoveAdminUserById_FullMethodName                               = "/pb.resource.logic.AdminUserLogic/RemoveAdminUserById"
@@ -30,6 +31,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AdminUserLogicClient interface {
 	ShowAdminUsersTotalByFiltersWithSortersPagination(ctx context.Context, in *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput, error)
+	ShowAdminUserById(ctx context.Context, in *AdminUserShowAdminUserByIdInput, opts ...grpc.CallOption) (*AdminUserShowAdminUserByIdOutput, error)
 	AddAminUser(ctx context.Context, in *AdminUserAddAminUserInput, opts ...grpc.CallOption) (*AdminUserAddAminUserOutput, error)
 	EditAdminUserById(ctx context.Context, in *AdminUserEditAdminUserByIdInput, opts ...grpc.CallOption) (*AdminUserEditAdminUserByIdOutput, error)
 	RemoveAdminUserById(ctx context.Context, in *AdminUserRemoveAdminUserByIdInput, opts ...grpc.CallOption) (*AdminUserRemoveAdminUserByIdOutput, error)
@@ -47,6 +49,16 @@ func (c *adminUserLogicClient) ShowAdminUsersTotalByFiltersWithSortersPagination
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput)
 	err := c.cc.Invoke(ctx, AdminUserLogic_ShowAdminUsersTotalByFiltersWithSortersPagination_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminUserLogicClient) ShowAdminUserById(ctx context.Context, in *AdminUserShowAdminUserByIdInput, opts ...grpc.CallOption) (*AdminUserShowAdminUserByIdOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdminUserShowAdminUserByIdOutput)
+	err := c.cc.Invoke(ctx, AdminUserLogic_ShowAdminUserById_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -88,6 +100,7 @@ func (c *adminUserLogicClient) RemoveAdminUserById(ctx context.Context, in *Admi
 // for forward compatibility.
 type AdminUserLogicServer interface {
 	ShowAdminUsersTotalByFiltersWithSortersPagination(context.Context, *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput, error)
+	ShowAdminUserById(context.Context, *AdminUserShowAdminUserByIdInput) (*AdminUserShowAdminUserByIdOutput, error)
 	AddAminUser(context.Context, *AdminUserAddAminUserInput) (*AdminUserAddAminUserOutput, error)
 	EditAdminUserById(context.Context, *AdminUserEditAdminUserByIdInput) (*AdminUserEditAdminUserByIdOutput, error)
 	RemoveAdminUserById(context.Context, *AdminUserRemoveAdminUserByIdInput) (*AdminUserRemoveAdminUserByIdOutput, error)
@@ -103,6 +116,9 @@ type UnimplementedAdminUserLogicServer struct{}
 
 func (UnimplementedAdminUserLogicServer) ShowAdminUsersTotalByFiltersWithSortersPagination(context.Context, *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowAdminUsersTotalByFiltersWithSortersPagination not implemented")
+}
+func (UnimplementedAdminUserLogicServer) ShowAdminUserById(context.Context, *AdminUserShowAdminUserByIdInput) (*AdminUserShowAdminUserByIdOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowAdminUserById not implemented")
 }
 func (UnimplementedAdminUserLogicServer) AddAminUser(context.Context, *AdminUserAddAminUserInput) (*AdminUserAddAminUserOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method AddAminUser not implemented")
@@ -148,6 +164,24 @@ func _AdminUserLogic_ShowAdminUsersTotalByFiltersWithSortersPagination_Handler(s
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AdminUserLogicServer).ShowAdminUsersTotalByFiltersWithSortersPagination(ctx, req.(*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AdminUserLogic_ShowAdminUserById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminUserShowAdminUserByIdInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminUserLogicServer).ShowAdminUserById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminUserLogic_ShowAdminUserById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminUserLogicServer).ShowAdminUserById(ctx, req.(*AdminUserShowAdminUserByIdInput))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -216,6 +250,10 @@ var AdminUserLogic_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ShowAdminUsersTotalByFiltersWithSortersPagination",
 			Handler:    _AdminUserLogic_ShowAdminUsersTotalByFiltersWithSortersPagination_Handler,
+		},
+		{
+			MethodName: "ShowAdminUserById",
+			Handler:    _AdminUserLogic_ShowAdminUserById_Handler,
 		},
 		{
 			MethodName: "AddAminUser",
