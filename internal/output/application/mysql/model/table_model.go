@@ -126,9 +126,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.Table{})
 
 	for _, oWhere := range aWheres {
