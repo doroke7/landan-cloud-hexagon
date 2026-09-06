@@ -473,6 +473,38 @@ air -c .air.http.toml     # 啟動 http 服務
 4. piganition (分頁機制）
    get param 分頁數據
 
+
+## 排查步驟
+
+1. **確認 API 用的是哪一個 usecase**：從 `input/application/<載體>/**/xxx_handler.go` 找到它注入的 usecase 介面（`usecase/port/any/...`）。
+2. **看這個 usecase 呼叫了哪些數據 port**：進 `usecase/application/any/...` 的實作，確認它用的是 `outputPortAnyModel.XxxModel` 還是 `outputPortAnyLogic.XxxLogic`（或兩者）。
+3. **數據輸出是 gRPC 時，檢查 client 呼叫方式**：`output/application/resource/{model,logic}/xxx.go` 裡打的是哪一支 rpc、`ResourceLogicClient` 還是 `ResourceModelClient`、request 欄位有沒有對齊 proto。
+4. **確認 resource 端用的是哪一個 usecase**：resource 服務走 `usecase/application/any/{model,logic}/xxx_usecase.go`，對照它掛在 `input/application/resource/{model,logic}/xxx_handler.go`。
+5. **層次規則**：resource 的 `logic` usecase 只能呼叫 output 的 `logic`；`model` usecase 只能呼叫 output 的 `model`。跨過去就是接錯層。
+6. **最後看 output model / logic 的實作**：確認真正打 DB 的那段（gorm / bson / es query）、soft-delete 條件、事務範圍、Aop 快取 key 是否一致。
+
+
+```
+使用案例 usecase              數據 port（呼叫 model / logic）      output 實作
+─────────────────────────    ──────────────────────────────    ────────────────────────────────
+ResourceAdminUserUsecase     outputAdminUserLogic  ─────────▶   mysql
+  .RemoveOne                 （介面）                            mongodb
+                                                                elasticsearch
+                                                                resource ──┬─▶ logicClient   ✔ 用這個
+                                                                           └─▶ modelClient   ✗ 不是這個
+```
+
+**resource 載體**（資料 gRPC 服務，被 http / facade 呼叫）：
+
+```
+使用案例 usecase                    數據 port（resource logic 只能呼叫 logic）   output 實作
+─────────────────────────────      ─────────────────────────────────────────   ─────────────
+usecase/application/any/logic/     outputAdminUserLogic  ──────────────────▶   mysql
+  admin_user_usecase.go            （介面）                                     mongodb
+
+                                   outputAdminUserModel   ✗ resource 的 logic 不會走 model
+```
+
 ## 刪掉數據跟 關係架構的注意事項
 A. 無關係 。（configs 表），可以直接刪除 config 一筆
 B. 屬於關係(Person 屬於 Nation), nation_id 在 person 裡面。可以直接刪除 person 一筆
