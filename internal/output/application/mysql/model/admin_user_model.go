@@ -35,7 +35,9 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 
 	var oAdminUser domain.AdminUser
 
-	if err := oSelf.DB.WithContext(oCurrentContext).Where("name = ?", sName).First(&oAdminUser).Error; err != nil {
+	if err := oSelf.DB.WithContext(oCurrentContext).
+		Where("name = ?", sName).
+		First(&oAdminUser).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, errors.New("record not found")
 		}

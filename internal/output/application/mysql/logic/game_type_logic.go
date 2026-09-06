@@ -69,9 +69,7 @@ func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFi
 	go func() {
 		defer oWaitGroup.Done()
 
-		oQuery := oSelf.
-			DB.
-			WithContext(oSelf.Context).
+		oQuery := oSelf.DB.WithContext(oSelf.Context).
 			Preload("Parent").
 			Preload("Children").
 			Model(&domain.GameType{}).
