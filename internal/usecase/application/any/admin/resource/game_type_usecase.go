@@ -41,7 +41,7 @@ func (oSelf *GameTypeUsecase) EditOne(oValue *domain.GameTypeValue, iId uint64) 
 }
 
 func (oSelf *GameTypeUsecase) ShowOne(iId uint64) (*domain.GameType, error) {
-	oGameType, oErr := oSelf.GameTypeModel.ShowOneById(iId)
+	oGameType, oErr := oSelf.GameTypeLogic.ShowGameTypeById(iId)
 
 	return oGameType, oErr
 }
