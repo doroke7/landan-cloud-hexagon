@@ -89,9 +89,7 @@ func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgI
 
 	var aTables []*domain.Table
 
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
 		Preload("Game").
 		Preload("Game.GameType").
 		Model(&domain.Table{}).

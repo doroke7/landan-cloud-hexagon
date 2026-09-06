@@ -87,9 +87,7 @@ func (oSelf *TableRecordModel) ShowOnesByFiltersWithSortersPagination(aFilters [
 
 	var aTableRecords []*domain.TableRecord
 
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.TableRecord{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07")
 
