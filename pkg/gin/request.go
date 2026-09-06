@@ -2,7 +2,6 @@ package pkgGin
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/gin-gonic/gin"
 )
@@ -28,11 +27,10 @@ func (oSelf *Request) Bind(sString string, oValue any) error {
 		return json.Unmarshal([]byte(sPagination), oValue)
 	}
 
-	if sString == "value" {
-		sValue := oSelf.Context.PostForm("value")
-		fmt.Println("value=", sValue)
+	if sString == "variable" {
+		sVariable := oSelf.Context.PostForm("variable")
 
-		return json.Unmarshal([]byte(sValue), oValue)
+		return json.Unmarshal([]byte(sVariable), oValue)
 	}
 
 	return nil

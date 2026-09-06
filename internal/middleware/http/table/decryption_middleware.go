@@ -138,7 +138,7 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 			return
 		}
 
-		sValue, oErr := oSelf.aesHelper.Decrypt(sV, oKeys.Key, oKeys.Iv)
+		sVariable, oErr := oSelf.aesHelper.Decrypt(sV, oKeys.Key, oKeys.Iv)
 		if oErr != nil {
 			/*
 				1. panic 可以用嗎？ -> 可以用，但是不建議
@@ -190,7 +190,7 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 		oUrlQuery.Set("pagination", sPagination)
 
 		oContext.Request.URL.RawQuery = oUrlQuery.Encode()
-		oContext.Request.PostForm = url.Values{"value": []string{sValue}}
+		oContext.Request.PostForm = url.Values{"variable": []string{sVariable}}
 
 		oContext.Request.Header.Add(
 			"Authorization",

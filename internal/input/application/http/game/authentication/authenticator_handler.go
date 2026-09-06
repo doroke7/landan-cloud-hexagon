@@ -32,7 +32,7 @@ func (oSelf *AuthenticatorHandler) LogIn(oContext *gin.Context) {
 		Password *string `json:"password,omitempty"`
 	}{}
 
-	if oErr := oRequest.Bind("value", oValue); oErr != nil {
+	if oErr := oRequest.Bind("variable", oValue); oErr != nil {
 		_ = oContext.Error(pkgUtility.NewDefaultError("pagination format error", -1, 200))
 		return
 	}
