@@ -101,7 +101,9 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 }
 
 func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {
+
 	oColumns, oErr := pkgUtility.StructToMap(oTable)
+
 	if oErr != nil {
 		return oErr
 	}
