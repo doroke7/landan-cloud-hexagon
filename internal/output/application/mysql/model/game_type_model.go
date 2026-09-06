@@ -23,12 +23,14 @@ func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameType
 func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	var iTotal int64
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.GameType{}).
 		Where("parent_id = ?", iParentId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		Count(&iTotal).Error; oErr != nil {
-		return 0, oErr
+		Count(&iTotal)
+
+	if oResult.Error != nil {
+		return 0, oResult.Error
 	}
 
 	return uint64(iTotal), nil
@@ -102,9 +104,11 @@ func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64,
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
 
-	if oErr := oQuery.
-		Count(&iTotal).Error; oErr != nil {
-		return 0, oErr
+	oResult := oQuery.
+		Count(&iTotal)
+
+	if oResult.Error != nil {
+		return 0, oResult.Error
 	}
 
 	return uint64(iTotal), nil

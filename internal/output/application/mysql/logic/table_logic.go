@@ -56,10 +56,11 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 			oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 		}
 
-		oFindErr = oQuery.
+		oResult := oQuery.
 			Limit(int(*oLimit.Count)).
 			Offset(int(*oLimit.Offset)).
-			Find(&aTables).Error
+			Find(&aTables)
+		oFindErr = oResult.Error
 	}()
 
 	go func() {
@@ -70,7 +71,8 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 		}
 
-		oCountErr = oQuery.Count(&iTotal).Error
+		oResult := oQuery.Count(&iTotal)
+		oCountErr = oResult.Error
 	}()
 
 	oWaitGroup.Wait()
@@ -89,17 +91,19 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 func (oSelf *TableLogic) ShowTableById(iId uint64) (*domain.Table, error) {
 	var oTable domain.Table
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Preload("Game").
 		Preload("Game.GameType").
 		Model(&oTable).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oTable, iId).Error; oErr != nil {
-		if errors.Is(oErr, gorm.ErrRecordNotFound) {
+		First(&oTable, iId)
+
+	if oResult.Error != nil {
+		if errors.Is(oResult.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
 
-		return nil, oErr
+		return nil, oResult.Error
 	}
 
 	return &oTable, nil
@@ -135,11 +139,13 @@ func (oSelf *TableLogic) ShowTablesByFiltersWithSortersPagination(aFilters []*pk
 		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 	}
 
-	if oErr := oQuery.
+	oResult := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aTables).Error; oErr != nil {
-		return nil, oErr
+		Find(&aTables)
+
+	if oResult.Error != nil {
+		return nil, oResult.Error
 	}
 
 	return aTables, nil

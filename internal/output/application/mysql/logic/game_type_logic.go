@@ -27,12 +27,14 @@ func NewGameTypeLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameType
 func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 	var aFlat []*domain.GameType
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.GameType{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		Order("id ASC").
-		Find(&aFlat).Error; oErr != nil {
-		return nil, oErr
+		Find(&aFlat)
+
+	if oResult.Error != nil {
+		return nil, oResult.Error
 	}
 
 	aByParent := make(map[uint64][]*domain.GameType, len(aFlat))
@@ -59,17 +61,19 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 func (oSelf *GameTypeLogic) ShowGameTypeById(iId uint64) (*domain.GameType, error) {
 	var oGameType domain.GameType
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&oGameType).
 		Preload("Parent").
 		Preload("Children").
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oGameType, iId).Error; oErr != nil {
-		if errors.Is(oErr, gorm.ErrRecordNotFound) {
+		First(&oGameType, iId)
+
+	if oResult.Error != nil {
+		if errors.Is(oResult.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
 
-		return nil, oErr
+		return nil, oResult.Error
 	}
 
 	return &oGameType, nil
@@ -115,10 +119,11 @@ func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFi
 			oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 		}
 
-		oFindErr = oQuery.
+		oResult := oQuery.
 			Limit(int(*oLimit.Count)).
 			Offset(int(*oLimit.Offset)).
-			Find(&aGameTypes).Error
+			Find(&aGameTypes)
+		oFindErr = oResult.Error
 	}()
 
 	go func() {
@@ -129,7 +134,8 @@ func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFi
 			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 		}
 
-		oCountErr = oQuery.Count(&iTotal).Error
+		oResult := oQuery.Count(&iTotal)
+		oCountErr = oResult.Error
 	}()
 
 	oWaitGroup.Wait()
@@ -155,8 +161,7 @@ func (oSelf *GameTypeLogic) ShowGameTypes() ([]*domain.GameType, error) {
 		Model(&domain.GameType{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07")
 
-	oErr := oQuery.
-		Find(&aGameTypes).Error
+	oResult := oQuery.Find(&aGameTypes)
 
-	return aGameTypes, oErr
+	return aGameTypes, oResult.Error
 }

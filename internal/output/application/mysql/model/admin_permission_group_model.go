@@ -26,17 +26,19 @@ func NewAdminPermissionGroupModel(oAbstractModel *AbstractModel) outputPortAnyMo
 func (oSelf *AdminPermissionGroupModel) ShowOneById(iId uint64) (*domain.AdminPermissionGroup, error) {
 	var oAdminPermissionGroup domain.AdminPermissionGroup
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&oAdminPermissionGroup).
 		Preload("Parent").
 		Preload("Children").
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oAdminPermissionGroup, iId).Error; oErr != nil {
-		if errors.Is(oErr, gorm.ErrRecordNotFound) {
+		First(&oAdminPermissionGroup, iId)
+
+	if oResult.Error != nil {
+		if errors.Is(oResult.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
 
-		return nil, oErr
+		return nil, oResult.Error
 	}
 
 	return &oAdminPermissionGroup, nil
@@ -74,11 +76,13 @@ func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(a
 		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 	}
 
-	if oErr := oQuery.
+	oResult := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aAdminPermissionGroups).Error; oErr != nil {
-		return nil, oErr
+		Find(&aAdminPermissionGroups)
+
+	if oResult.Error != nil {
+		return nil, oResult.Error
 	}
 
 	return aAdminPermissionGroups, nil
@@ -97,9 +101,11 @@ func (oSelf *AdminPermissionGroupModel) TotalByFilters(aFilters []*pkgInput.Filt
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
 
-	if oErr := oQuery.
-		Count(&iTotal).Error; oErr != nil {
-		return 0, oErr
+	oResult := oQuery.
+		Count(&iTotal)
+
+	if oResult.Error != nil {
+		return 0, oResult.Error
 	}
 
 	return uint64(iTotal), nil

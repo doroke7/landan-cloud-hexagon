@@ -47,14 +47,16 @@ func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissi
 func (oSelf *AdminPermissionModel) ShowOneById(iId uint64) (*domain.AdminPermission, error) {
 	var oAdminPermission domain.AdminPermission
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oAdminPermission, iId).Error; oErr != nil {
-		if errors.Is(oErr, gorm.ErrRecordNotFound) {
+		First(&oAdminPermission, iId)
+
+	if oResult.Error != nil {
+		if errors.Is(oResult.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
 
-		return nil, oErr
+		return nil, oResult.Error
 	}
 
 	return &oAdminPermission, nil
@@ -128,11 +130,13 @@ func (oSelf *AdminPermissionModel) ShowOnesByFiltersWithSortersPagination(aFilte
 		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 	}
 
-	if oErr := oQuery.
+	oResult := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aAdminPermissions).Error; oErr != nil {
-		return nil, oErr
+		Find(&aAdminPermissions)
+
+	if oResult.Error != nil {
+		return nil, oResult.Error
 	}
 
 	return aAdminPermissions, nil
@@ -149,8 +153,10 @@ func (oSelf *AdminPermissionModel) TotalByFilters(aFilters []*pkgInput.Filter) (
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
 
-	if oErr := oQuery.Count(&iTotal).Error; oErr != nil {
-		return 0, oErr
+	oResult := oQuery.Count(&iTotal)
+
+	if oResult.Error != nil {
+		return 0, oResult.Error
 	}
 
 	return uint64(iTotal), nil

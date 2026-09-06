@@ -66,10 +66,11 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 			oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 		}
 
-		oFindErr = oQuery.
+		oResult := oQuery.
 			Limit(int(*oLimit.Count)).
 			Offset(int(*oLimit.Offset)).
-			Find(&aAdminUsers).Error
+			Find(&aAdminUsers)
+		oFindErr = oResult.Error
 	}()
 
 	go func() {
@@ -83,7 +84,8 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 		}
 
-		oCountErr = oQuery.Count(&iTotal).Error
+		oResult := oQuery.Count(&iTotal)
+		oCountErr = oResult.Error
 	}()
 
 	oWaitGroup.Wait()
@@ -127,12 +129,16 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 		}
 
 		var iAdminUserId uint64
-		if oErr := oTx.Raw("SELECT LAST_INSERT_ID()").Scan(&iAdminUserId).Error; oErr != nil {
-			return oErr
+		oResult = oTx.Raw("SELECT LAST_INSERT_ID()").Scan(&iAdminUserId)
+
+		if oResult.Error != nil {
+			return oResult.Error
 		}
 
-		if oErr := oTx.Where("admin_user_id = ?", iAdminUserId).Delete(&domain.AdminUsersToAdminRole{}).Error; oErr != nil {
-			return oErr
+		oResult = oTx.Where("admin_user_id = ?", iAdminUserId).Delete(&domain.AdminUsersToAdminRole{})
+
+		if oResult.Error != nil {
+			return oResult.Error
 		}
 
 		if len(oValue.AdminRoleIds) == 0 {
@@ -147,7 +153,8 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 			})
 		}
 
-		oErr = oTx.Create(&aRelations).Error
+		oResult = oTx.Create(&aRelations)
+		oErr = oResult.Error
 
 		return oErr
 	})
@@ -183,8 +190,10 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 				}
 			}
 
-			if oErr := oTx.Where("admin_user_id = ?", iId).Delete(&domain.AdminUsersToAdminRole{}).Error; oErr != nil {
-				return oErr
+			oResult := oTx.Where("admin_user_id = ?", iId).Delete(&domain.AdminUsersToAdminRole{})
+
+			if oResult.Error != nil {
+				return oResult.Error
 			}
 
 			if len(oValue.AdminRoleIds) == 0 {
@@ -199,7 +208,8 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 				})
 			}
 
-			oError := oTx.Create(&aRelations).Error
+			oResult = oTx.Create(&aRelations)
+			oError := oResult.Error
 
 			return oError
 		})
@@ -219,17 +229,17 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 	oErr := oSelf.Aop.Cacheable(sKey, iTtl, &oAdminUser, func() (interface{}, error) {
 		var oFresh domain.AdminUser
 
-		oQueryErr := oSelf.DB.WithContext(oSelf.Context).
+		oResult := oSelf.DB.WithContext(oSelf.Context).
 			Preload("AdminRoles").
 			Where("deleted_at = ?", "2038-01-19 03:14:07").
-			First(&oFresh, iId).Error
+			First(&oFresh, iId)
 
-		if errors.Is(oQueryErr, gorm.ErrRecordNotFound) {
+		if errors.Is(oResult.Error, gorm.ErrRecordNotFound) {
 			return nil, errors.New("record not found")
 		}
 
-		if oQueryErr != nil {
-			return nil, oQueryErr
+		if oResult.Error != nil {
+			return nil, oResult.Error
 		}
 
 		return oFresh, nil
@@ -263,10 +273,10 @@ func (oSelf *AdminUserLogic) RemoveAdminUserById(iId uint64) error {
 				return errors.New("0 rows deleted")
 			}
 
-			oError := oTx.
+			oResult = oTx.
 				Where("admin_user_id = ?", iId).
-				Delete(&domain.AdminUsersToAdminRole{}).
-				Error
+				Delete(&domain.AdminUsersToAdminRole{})
+			oError := oResult.Error
 
 			return oError
 		})

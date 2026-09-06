@@ -25,15 +25,17 @@ func NewTableRecordLogModel(oAbstractModel *AbstractModel) outputPortAnyModel.Ta
 func (oSelf *TableRecordLogModel) ShowOneById(iId uint64) (*domain.TableRecordLog, error) {
 	var oTableRecordLog domain.TableRecordLog
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&oTableRecordLog).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oTableRecordLog, iId).Error; oErr != nil {
-		if errors.Is(oErr, gorm.ErrRecordNotFound) {
+		First(&oTableRecordLog, iId)
+
+	if oResult.Error != nil {
+		if errors.Is(oResult.Error, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
 
-		return nil, oErr
+		return nil, oResult.Error
 	}
 
 	return &oTableRecordLog, nil
@@ -67,11 +69,13 @@ func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilter
 		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 	}
 
-	if oErr := oQuery.
+	oResult := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aTableRecordLogs).Error; oErr != nil {
-		return nil, oErr
+		Find(&aTableRecordLogs)
+
+	if oResult.Error != nil {
+		return nil, oResult.Error
 	}
 
 	return aTableRecordLogs, nil
@@ -88,9 +92,11 @@ func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (u
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
 
-	if oErr := oQuery.
-		Count(&iTotal).Error; oErr != nil {
-		return 0, oErr
+	oResult := oQuery.
+		Count(&iTotal)
+
+	if oResult.Error != nil {
+		return 0, oResult.Error
 	}
 
 	return uint64(iTotal), nil

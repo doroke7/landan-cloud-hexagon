@@ -24,12 +24,14 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGroup, error) {
 	var aFlat []*domain.AdminPermissionGroup
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermissionGroup{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		Order("id ASC").
-		Find(&aFlat).Error; oErr != nil {
-		return nil, oErr
+		Find(&aFlat)
+
+	if oResult.Error != nil {
+		return nil, oResult.Error
 	}
 
 	aByParent := make(map[uint64][]*domain.AdminPermissionGroup, len(aFlat))
@@ -94,10 +96,11 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersW
 			oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 		}
 
-		oFindErr = oQuery.
+		oResult := oQuery.
 			Limit(int(*oLimit.Count)).
 			Offset(int(*oLimit.Offset)).
-			Find(&aAdminPermissionGroups).Error
+			Find(&aAdminPermissionGroups)
+		oFindErr = oResult.Error
 	}()
 
 	go func() {
@@ -108,7 +111,8 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersW
 			oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 		}
 
-		oCountErr = oQuery.Count(&iTotal).Error
+		oResult := oQuery.Count(&iTotal)
+		oCountErr = oResult.Error
 	}()
 
 	oWaitGroup.Wait()

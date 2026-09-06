@@ -35,13 +35,15 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 
 	var oAdminUser domain.AdminUser
 
-	if err := oSelf.DB.WithContext(oCurrentContext).
+	oResult := oSelf.DB.WithContext(oCurrentContext).
 		Where("name = ?", sName).
-		First(&oAdminUser).Error; err != nil {
-		if errors.Is(err, gorm.ErrRecordNotFound) {
+		First(&oAdminUser)
+
+	if oResult.Error != nil {
+		if errors.Is(oResult.Error, gorm.ErrRecordNotFound) {
 			return nil, errors.New("record not found")
 		}
-		return nil, err
+		return nil, oResult.Error
 	}
 
 	return &oAdminUser, nil
@@ -61,11 +63,14 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) 
 		defer cCancel()
 
 		var oAdminUser domain.AdminUser
-		if err := oSelf.DB.WithContext(oThisContext).Preload("AdminRoles").First(&oAdminUser, iId).Error; err != nil {
-			if errors.Is(err, gorm.ErrRecordNotFound) {
+
+		oResult := oSelf.DB.WithContext(oThisContext).Preload("AdminRoles").First(&oAdminUser, iId)
+
+		if oResult.Error != nil {
+			if errors.Is(oResult.Error, gorm.ErrRecordNotFound) {
 				return nil, errors.New("record not found")
 			}
-			return nil, err
+			return nil, oResult.Error
 		}
 		return oAdminUser, nil
 	})
@@ -153,11 +158,13 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 	}
 
-	if oErr := oQuery.
+	oResult := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aAdminUsers).Error; oErr != nil {
-		return nil, oErr
+		Find(&aAdminUsers)
+
+	if oResult.Error != nil {
+		return nil, oResult.Error
 	}
 
 	return aAdminUsers, nil
@@ -176,8 +183,10 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 	}
 	oQuery = oQuery.Where("deleted_at = ?", "2038-01-19 03:14:07")
 
-	if oErr := oQuery.Count(&iTotal).Error; oErr != nil {
-		return 0, oErr
+	oResult := oQuery.Count(&iTotal)
+
+	if oResult.Error != nil {
+		return 0, oResult.Error
 	}
 
 	return uint64(iTotal), nil
