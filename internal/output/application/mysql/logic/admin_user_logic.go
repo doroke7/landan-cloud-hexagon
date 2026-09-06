@@ -4,6 +4,7 @@ import (
 	"errors"
 	"strings"
 	"sync"
+	"time"
 
 	domain "example/internal/domain"
 	mysqlBase "example/internal/output/application/mysql"
@@ -25,6 +26,7 @@ func NewAdminUserLogic(oAbstractLogic *mysqlBase.AbstractMysql) outputPortAnyLog
 }
 
 func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
+
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
@@ -162,42 +164,48 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 
 	delete(oColumns, "admin_role_ids")
 
-	oErr = oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
+	sKey := oSelf.Aop.Key("AdminUserLogic.AUBI", iId)
 
-		if len(oColumns) > 0 {
-			oResult := oTx.
-				Model(&domain.AdminUser{}).
-				Where("id = ?", iId).
-				UpdateColumns(oColumns)
+	oErr = oSelf.Aop.CacheEvict(sKey, func() error {
+		oTxErr := oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
 
-			if oResult.Error != nil {
-				return oResult.Error
+			if len(oColumns) > 0 {
+				oResult := oTx.
+					Model(&domain.AdminUser{}).
+					Where("id = ?", iId).
+					UpdateColumns(oColumns)
+
+				if oResult.Error != nil {
+					return oResult.Error
+				}
+
+				if oResult.RowsAffected == 0 {
+					return errors.New("0 rows updated")
+				}
 			}
 
-			if oResult.RowsAffected == 0 {
-				return errors.New("0 rows updated")
+			if oErr := oTx.Where("admin_user_id = ?", iId).Delete(&domain.AdminUsersToAdminRole{}).Error; oErr != nil {
+				return oErr
 			}
-		}
 
-		if oErr := oTx.Where("admin_user_id = ?", iId).Delete(&domain.AdminUsersToAdminRole{}).Error; oErr != nil {
-			return oErr
-		}
+			if len(oValue.AdminRoleIds) == 0 {
+				return nil // 沒有角色也算成功，直接結束，不會再往下插入
+			}
 
-		if len(oValue.AdminRoleIds) == 0 {
-			return nil // 沒有角色也算成功，直接結束，不會再往下插入
-		}
+			aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
+			for _, iAdminRoleId := range oValue.AdminRoleIds {
+				aRelations = append(aRelations, domain.AdminUsersToAdminRole{
+					AdminUserId: uint(iId),
+					AdminRoleId: uint(iAdminRoleId),
+				})
+			}
 
-		aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
-		for _, iAdminRoleId := range oValue.AdminRoleIds {
-			aRelations = append(aRelations, domain.AdminUsersToAdminRole{
-				AdminUserId: uint(iId),
-				AdminRoleId: uint(iAdminRoleId),
-			})
-		}
+			oError := oTx.Create(&aRelations).Error
 
-		oError := oTx.Create(&aRelations).Error
+			return oError
+		})
 
-		return oError
+		return oTxErr
 	})
 
 	return oErr
@@ -206,18 +214,63 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, error) {
 	var oAdminUser domain.AdminUser
 
-	oErr := oSelf.DB.WithContext(oSelf.Context).
-		Preload("AdminRoles").
-		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oAdminUser, iId).Error
+	sKey := oSelf.Aop.Key("AdminUserLogic.AUBI", iId)
+	iTtl := oSelf.Aop.Ttl(30 * time.Minute)
 
-	if errors.Is(oErr, gorm.ErrRecordNotFound) {
-		return nil, errors.New("record not found")
-	}
+	oErr := oSelf.Aop.Cacheable(sKey, iTtl, &oAdminUser, func() (interface{}, error) {
+		var oFresh domain.AdminUser
+
+		oQueryErr := oSelf.DB.WithContext(oSelf.Context).
+			Preload("AdminRoles").
+			Where("deleted_at = ?", "2038-01-19 03:14:07").
+			First(&oFresh, iId).Error
+
+		if errors.Is(oQueryErr, gorm.ErrRecordNotFound) {
+			return nil, errors.New("record not found")
+		}
+
+		if oQueryErr != nil {
+			return nil, oQueryErr
+		}
+
+		return oFresh, nil
+	})
 
 	if oErr != nil {
 		return nil, oErr
 	}
 
 	return &oAdminUser, nil
+}
+
+func (oSelf *AdminUserLogic) RemoveAdminUserById(iId uint64) error {
+
+	sKey := oSelf.Aop.Key("AdminUserLogic.AUBI", iId)
+
+	oErr := oSelf.Aop.CacheEvict(sKey, func() error {
+		oTxErr := oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
+
+			oResult := oTx.
+				Model(&domain.AdminUser{}).
+				Where("id = ?", iId).
+				Where("deleted_at = ?", "2038-01-19 03:14:07").
+				UpdateColumn("deleted_at", time.Now())
+
+			if oResult.Error != nil {
+				return oResult.Error
+			}
+
+			if oResult.RowsAffected == 0 {
+				return errors.New("0 rows deleted")
+			}
+
+			oDeleteErr := oTx.Where("admin_user_id = ?", iId).Delete(&domain.AdminUsersToAdminRole{}).Error
+
+			return oDeleteErr
+		})
+
+		return oTxErr
+	})
+
+	return oErr
 }
