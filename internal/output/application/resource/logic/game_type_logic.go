@@ -59,6 +59,43 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 	return aRoots, nil
 }
 
+func (oSelf *GameTypeLogic) ShowGameTypeById(iId uint64) (*domain.GameType, error) {
+	oResponse, oErr := oSelf.ResourceLogicClient.GameType.ShowGameTypeById(
+		oSelf.Context,
+		&pbResourceLogic.GameTypeShowGameTypeByIdInput{Id: iId},
+	)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oProtoGameType := oResponse.GetGameType()
+	if oProtoGameType.GetId() == 0 {
+		return nil, nil
+	}
+
+	oGameType := protoGameTypeToDomainGameType(oProtoGameType)
+
+	return &oGameType, nil
+}
+
+func (oSelf *GameTypeLogic) ShowGameTypes() ([]*domain.GameType, error) {
+	oResponse, oErr := oSelf.ResourceLogicClient.GameType.ShowGameTypes(
+		oSelf.Context,
+		&pbResourceLogic.GameTypeShowGameTypesInput{},
+	)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aGameTypes := make([]*domain.GameType, 0, len(oResponse.GetGameTypes()))
+	for _, oOne := range oResponse.GetGameTypes() {
+		oGameType := protoGameTypeToDomainGameType(oOne)
+		aGameTypes = append(aGameTypes, &oGameType)
+	}
+
+	return aGameTypes, nil
+}
+
 func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
 
 	oRequest := &pbResourceLogic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput{

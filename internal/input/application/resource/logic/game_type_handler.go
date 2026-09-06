@@ -61,6 +61,37 @@ func (oSelf *GameTypeHandler) ShowTree(oContext context.Context, oReq *pbResourc
 	return &pbResourceLogic.GameTypeShowTreeOutput{GameTypes: aNodes}, nil
 }
 
+func (oSelf *GameTypeHandler) ShowGameTypeById(oContext context.Context, oReq *pbResourceLogic.GameTypeShowGameTypeByIdInput) (*pbResourceLogic.GameTypeShowGameTypeByIdOutput, error) {
+
+	oGameType, oErr := oSelf.LogicGameTypeUsecase.ShowGameTypeById(oReq.GetId())
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	if oGameType == nil {
+		return nil, nil
+	}
+
+	return &pbResourceLogic.GameTypeShowGameTypeByIdOutput{
+		GameType: domainGameTypeToProtoGameType(oGameType),
+	}, nil
+}
+
+func (oSelf *GameTypeHandler) ShowGameTypes(oContext context.Context, oReq *pbResourceLogic.GameTypeShowGameTypesInput) (*pbResourceLogic.GameTypeShowGameTypesOutput, error) {
+
+	aGameTypes, oErr := oSelf.LogicGameTypeUsecase.ShowGameTypes()
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aNodes := make([]*pbResource.GameType, 0, len(aGameTypes))
+	for _, oOne := range aGameTypes {
+		aNodes = append(aNodes, domainGameTypeToProtoGameType(oOne))
+	}
+
+	return &pbResourceLogic.GameTypeShowGameTypesOutput{GameTypes: aNodes}, nil
+}
+
 func (oSelf *GameTypeHandler) ShowGameTypesTotalByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceLogic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) (*pbResourceLogic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput, error) {
 
 	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))

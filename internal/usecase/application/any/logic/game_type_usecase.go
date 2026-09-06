@@ -26,6 +26,20 @@ func (oSelf *GameTypeUsecase) ShowTree() ([]*domain.GameType, error) {
 	return aTree, oErr
 }
 
+func (oSelf *GameTypeUsecase) ShowGameTypeById(iId uint64) (*domain.GameType, error) {
+
+	oGameType, oErr := oSelf.GameTypeLogic.ShowGameTypeById(iId)
+
+	return oGameType, oErr
+}
+
+func (oSelf *GameTypeUsecase) ShowGameTypes() ([]*domain.GameType, error) {
+
+	aGameTypes, oErr := oSelf.GameTypeLogic.ShowGameTypes()
+
+	return aGameTypes, oErr
+}
+
 func (oSelf *GameTypeUsecase) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
 
 	aGameTypes, iTotal, oErr := oSelf.GameTypeLogic.ShowGameTypesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
