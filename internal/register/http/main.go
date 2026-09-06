@@ -151,12 +151,6 @@ func Init(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 			oAdminResource.GET("/AdminRole/ShowOne", oContainer.HttpAdminResourceAdminRole.ShowOne)
 			oAdminResource.GET("/AdminRole/ShowOnes", oContainer.HttpAdminResourceAdminRole.ShowOnes)
 
-			oAdminResource.POST("/AdminPermission/AddOne", oContainer.HttpAdminResourceAdminPermission.AddOne)
-			oAdminResource.PUT("/AdminPermission/EditOne", oContainer.HttpAdminResourceAdminPermission.EditOne)
-			oAdminResource.DELETE("/AdminPermission/RemoveOne", oContainer.HttpAdminResourceAdminPermission.RemoveOne)
-			oAdminResource.GET("/AdminPermission/ShowOne", oContainer.HttpAdminResourceAdminPermission.ShowOne)
-			oAdminResource.GET("/AdminPermission/ShowOnes", oContainer.HttpAdminResourceAdminPermission.ShowOnes)
-
 			oAdminResource.POST("/GameType/AddOne", oContainer.HttpAdminResourceGameType.AddOne)
 			oAdminResource.PUT("/GameType/EditOne", oContainer.HttpAdminResourceGameType.EditOne)
 			oAdminResource.DELETE("/GameType/RemoveOne", oContainer.HttpAdminResourceGameType.RemoveOne)
@@ -178,7 +172,8 @@ func Init(oGin *gin.Engine, oContainer *container.HttpContainer) *gin.Engine {
 			oAdminOption.GET("/GameType/SelectOnes", oContainer.HttpAdminOptionGameType.SelectOnes)
 			oAdminOption.GET("/GameType/SelectTree", oContainer.HttpAdminOptionGameType.SelectTree)
 			oAdminOption.GET("/AdminRole/SelectOnes", oContainer.HttpAdminOptionAdminRole.SelectOnes)
-			oAdminOption.GET("/AdminPermission/SelectOnes", oContainer.HttpAdminOptionAdminPermission.SelectOnes)
+			oAdminOption.GET("/AdminPermissionGroup/SelectOnes", oContainer.HttpAdminOptionAdminPermissionGroup.SelectOnes)
+			oAdminOption.GET("/AdminPermissionGroup/SelectTree", oContainer.HttpAdminOptionAdminPermissionGroup.SelectTree)
 		}
 
 	}

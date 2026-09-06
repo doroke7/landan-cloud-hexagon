@@ -137,8 +137,8 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	inputApplicationHttpAdminOptionGameTypeHandler := inputApplicationHttpAdminOption.NewGameTypeHandler(abstractHandler, usecasePortAnyAdminOptionGameTypeUsecase)
 	usecasePortAnyAdminOptionAdminRoleUsecase := usecaseApplicationAnyAdminOption.NewAdminRoleUsecase(adminRoleModel, abstractUsecase)
 	inputApplicationHttpAdminOptionAdminRoleHandler := inputApplicationHttpAdminOption.NewAdminRoleHandler(abstractHandler, usecasePortAnyAdminOptionAdminRoleUsecase)
-	usecasePortAnyAdminOptionAdminPermissionUsecase := usecaseApplicationAnyAdminOption.NewAdminPermissionUsecase(adminPermissionModel, abstractUsecase)
-	inputApplicationHttpAdminOptionAdminPermissionHandler := inputApplicationHttpAdminOption.NewAdminPermissionHandler(abstractHandler, usecasePortAnyAdminOptionAdminPermissionUsecase)
+	usecasePortAnyAdminOptionAdminPermissionGroupUsecase := usecaseApplicationAnyAdminOption.NewAdminPermissionGroupUsecase(adminPermissionGroupLogic, abstractUsecase)
+	inputApplicationHttpAdminOptionAdminPermissionGroupHandler := inputApplicationHttpAdminOption.NewAdminPermissionGroupHandler(abstractHandler, usecasePortAnyAdminOptionAdminPermissionGroupUsecase)
 	appUserModel := outputApplicationResourceModel.NewAppUserModel(abstractModel)
 	usecaseApplicationAnyGameAbstractUsecase := usecaseApplicationAnyGame.NewAbstractUsecase(aesHelper, jwtHelper)
 	usecasePortAnyGameAuthenticationAuthenticatorUsecase := usecaseApplicationAnyGameAuthentication.NewAuthenticatorUsecase(appUserModel, usecaseApplicationAnyGameAbstractUsecase)
@@ -194,7 +194,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		HttpAdminResourceAdminPermissionGroup: adminPermissionGroupHandler,
 		HttpAdminOptionGameType:               inputApplicationHttpAdminOptionGameTypeHandler,
 		HttpAdminOptionAdminRole:              inputApplicationHttpAdminOptionAdminRoleHandler,
-		HttpAdminOptionAdminPermission:        inputApplicationHttpAdminOptionAdminPermissionHandler,
+		HttpAdminOptionAdminPermissionGroup:   inputApplicationHttpAdminOptionAdminPermissionGroupHandler,
 		HttpGameAuthenticationAuthenticator:   inputApplicationHttpGameAuthenticationAuthenticatorHandler,
 		HttpAdminAbstractMiddleware:           abstractMiddleware,
 		HttpAdminAdminMiddleware:              adminMiddleware,
@@ -751,7 +751,7 @@ type HttpContainer struct {
 	HttpAdminResourceAdminPermissionGroup *inputApplicationHttpAdminResource.AdminPermissionGroupHandler
 	HttpAdminOptionGameType               *inputApplicationHttpAdminOption.GameTypeHandler
 	HttpAdminOptionAdminRole              *inputApplicationHttpAdminOption.AdminRoleHandler
-	HttpAdminOptionAdminPermission        *inputApplicationHttpAdminOption.AdminPermissionHandler
+	HttpAdminOptionAdminPermissionGroup   *inputApplicationHttpAdminOption.AdminPermissionGroupHandler
 	HttpGameAuthenticationAuthenticator   *inputApplicationHttpGameAuthentication.AuthenticatorHandler
 
 	// HTTP server -Middleware

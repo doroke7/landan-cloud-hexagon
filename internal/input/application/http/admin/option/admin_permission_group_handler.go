@@ -11,19 +11,19 @@ import (
 	usecasePortAnyAdminOption "example/internal/usecase/port/any/admin/option"
 )
 
-type AdminPermissionHandler struct {
+type AdminPermissionGroupHandler struct {
 	*inputApplicationHttp.AbstractHandler
-	AdminOptionAdminPermissionUsecase usecasePortAnyAdminOption.AdminPermissionUsecase
+	AdminOptionAdminPermissionGroupUsecase usecasePortAnyAdminOption.AdminPermissionGroupUsecase
 }
 
-func NewAdminPermissionHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, oAdminPermissionUsecase usecasePortAnyAdminOption.AdminPermissionUsecase) *AdminPermissionHandler {
-	return &AdminPermissionHandler{
-		AbstractHandler:                   oAbstractHandler,
-		AdminOptionAdminPermissionUsecase: oAdminPermissionUsecase,
+func NewAdminPermissionGroupHandler(oAbstractHandler *inputApplicationHttp.AbstractHandler, oAdminPermissionGroupUsecase usecasePortAnyAdminOption.AdminPermissionGroupUsecase) *AdminPermissionGroupHandler {
+	return &AdminPermissionGroupHandler{
+		AbstractHandler:                        oAbstractHandler,
+		AdminOptionAdminPermissionGroupUsecase: oAdminPermissionGroupUsecase,
 	}
 }
 
-func (oSelf *AdminPermissionHandler) SelectOnes(oContext *gin.Context) {
+func (oSelf *AdminPermissionGroupHandler) SelectOnes(oContext *gin.Context) {
 
 	oRequest := &pkgGin.Request{Context: oContext}
 
@@ -53,15 +53,30 @@ func (oSelf *AdminPermissionHandler) SelectOnes(oContext *gin.Context) {
 		return
 	}
 
-	aAdminPermissions, iTotal, oErr := oSelf.AdminOptionAdminPermissionUsecase.ShowOnes(aFilters, aSorters, oPagination)
+	aAdminPermissionGroups, iTotal, oErr := oSelf.AdminOptionAdminPermissionGroupUsecase.ShowOnes(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		_ = oContext.Error(oErr)
 		return
 	}
 
-	oResult := pkgGin.NewResult(nil, aAdminPermissions, nil)
+	oResult := pkgGin.NewResult(nil, aAdminPermissionGroups, nil)
 
 	oSelf.Response.Set(oContext, 200, 1, "Query successful", oResult, int(iTotal), "")
+
+}
+
+func (oSelf *AdminPermissionGroupHandler) SelectTree(oContext *gin.Context) {
+
+	aTree, oErr := oSelf.AdminOptionAdminPermissionGroupUsecase.ShowTree()
+
+	if oErr != nil {
+		_ = oContext.Error(oErr)
+		return
+	}
+
+	oResult := pkgGin.NewResult(nil, nil, aTree)
+
+	oSelf.Response.Set(oContext, 200, 1, "Query successful", oResult, len(aTree), "")
 
 }
