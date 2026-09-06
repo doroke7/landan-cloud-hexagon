@@ -82,6 +82,7 @@
 1. 建立 domain
 2. 建立 output port
 3. 請 AI 做其他實作，但是除了 resource
+4. 請 AI 做 resource 實作. 
 
 
 

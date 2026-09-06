@@ -403,19 +403,20 @@ type ResourceContainer struct {
 	usecasePortAnyModel.GameTypeUsecase
 
 	// gRPC Resource server
-	ResourceAbstract             *inputApplicationResource.AbstractHandler
-	ResourceModelAdminUser       *inputApplicationResourceModel.AdminUserHandler
-	ResourceModelAdminRole       *inputApplicationResourceModel.AdminRoleHandler
-	ResourceModelAdminPermission *inputApplicationResourceModel.AdminPermissionHandler
-	ResourceModelAppUser         *inputApplicationResourceModel.AppUserHandler
-	ResourceModelGame            *inputApplicationResourceModel.GameHandler
-	ResourceModelTable           *inputApplicationResourceModel.TableHandler
-	ResourceModelGameType        *inputApplicationResourceModel.GameTypeHandler
-	ResourceLogicAdminUser       *inputApplicationResourceLogic.AdminUserHandler
-	ResourceLogicGame            *inputApplicationResourceLogic.GameHandler
-	ResourceLogicTable           *inputApplicationResourceLogic.TableHandler
-	ResourceLogicGameType        *inputApplicationResourceLogic.GameTypeHandler
-	ResourceEventAdminUser       *inputApplicationResourceEvent.AdminUserHandler
+	ResourceAbstract                  *inputApplicationResource.AbstractHandler
+	ResourceModelAdminUser            *inputApplicationResourceModel.AdminUserHandler
+	ResourceModelAdminRole            *inputApplicationResourceModel.AdminRoleHandler
+	ResourceModelAdminPermission      *inputApplicationResourceModel.AdminPermissionHandler
+	ResourceModelAppUser              *inputApplicationResourceModel.AppUserHandler
+	ResourceModelGame                 *inputApplicationResourceModel.GameHandler
+	ResourceModelTable                *inputApplicationResourceModel.TableHandler
+	ResourceModelGameType             *inputApplicationResourceModel.GameTypeHandler
+	ResourceLogicAdminUser            *inputApplicationResourceLogic.AdminUserHandler
+	ResourceLogicGame                 *inputApplicationResourceLogic.GameHandler
+	ResourceLogicTable                *inputApplicationResourceLogic.TableHandler
+	ResourceLogicGameType             *inputApplicationResourceLogic.GameTypeHandler
+	ResourceLogicAdminPermissionGroup *inputApplicationResourceLogic.AdminPermissionGroupHandler
+	ResourceEventAdminUser            *inputApplicationResourceEvent.AdminUserHandler
 
 	// gRPC Resource Interceptor
 	ResourceLogicAuthenticationInterceptor *interceptorResourceLogic.AuthenticationInterceptor
@@ -459,6 +460,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		outputApplicationMysqlLogic.NewGameLogic,
 		outputApplicationMysqlLogic.NewTableLogic,
 		outputApplicationMysqlLogic.NewGameTypeLogic,
+		outputApplicationMysqlLogic.NewAdminPermissionGroupLogic,
 		outputApplicationRabbitmq.NewAbstractRabbitmq,
 		outputApplicationRabbitmqEvent.NewAbstractEvent,
 		outputApplicationRabbitmqEvent.NewAdminUserEvent,
@@ -477,6 +479,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		usecaseApplicationAnyLogic.NewGameUsecase,
 		usecaseApplicationAnyLogic.NewTableUsecase,
 		usecaseApplicationAnyLogic.NewGameTypeUsecase,
+		usecaseApplicationAnyLogic.NewAdminPermissionGroupUsecase,
 		usecaseApplicationAnyEvent.NewAdminUserUsecase,
 
 		// input-resource
@@ -492,6 +495,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		inputApplicationResourceLogic.NewGameHandler,
 		inputApplicationResourceLogic.NewTableHandler,
 		inputApplicationResourceLogic.NewGameTypeHandler,
+		inputApplicationResourceLogic.NewAdminPermissionGroupHandler,
 		inputApplicationResourceEvent.NewAdminUserHandler,
 
 		// interceptor-resource

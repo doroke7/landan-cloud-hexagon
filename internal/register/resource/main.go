@@ -69,6 +69,7 @@ func Init(oContainer *container.ResourceContainer) *grpc.Server {
 	pbResourceLogic.RegisterGameLogicServer(oGrpcServer, oContainer.ResourceLogicGame)
 	pbResourceLogic.RegisterTableLogicServer(oGrpcServer, oContainer.ResourceLogicTable)
 	pbResourceLogic.RegisterGameTypeLogicServer(oGrpcServer, oContainer.ResourceLogicGameType)
+	pbResourceLogic.RegisterAdminPermissionGroupLogicServer(oGrpcServer, oContainer.ResourceLogicAdminPermissionGroup)
 	pbResourceEvent.RegisterAdminUserEventServer(oGrpcServer, oContainer.ResourceEventAdminUser)
 
 	return oGrpcServer

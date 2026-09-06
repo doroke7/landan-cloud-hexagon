@@ -351,6 +351,9 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	gameTypeLogic := outputApplicationMysqlLogic.NewGameTypeLogic(abstractLogic)
 	usecasePortAnyLogicGameTypeUsecase := usecaseApplicationAnyLogic.NewGameTypeUsecase(usecaseApplicationAnyLogicAbstractUsecase, gameTypeLogic)
 	inputApplicationResourceLogicGameTypeHandler := inputApplicationResourceLogic.NewGameTypeHandler(abstractHandler, usecasePortAnyLogicGameTypeUsecase)
+	adminPermissionGroupLogic := outputApplicationMysqlLogic.NewAdminPermissionGroupLogic(abstractLogic)
+	adminPermissionGroupUsecase := usecaseApplicationAnyLogic.NewAdminPermissionGroupUsecase(usecaseApplicationAnyLogicAbstractUsecase, adminPermissionGroupLogic)
+	adminPermissionGroupHandler := inputApplicationResourceLogic.NewAdminPermissionGroupHandler(abstractHandler, adminPermissionGroupUsecase)
 	connection, err := bootstrap.NewAmqp()
 	if err != nil {
 		return nil, err
@@ -397,6 +400,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		ResourceLogicGame:                      inputApplicationResourceLogicGameHandler,
 		ResourceLogicTable:                     inputApplicationResourceLogicTableHandler,
 		ResourceLogicGameType:                  inputApplicationResourceLogicGameTypeHandler,
+		ResourceLogicAdminPermissionGroup:      adminPermissionGroupHandler,
 		ResourceEventAdminUser:                 inputApplicationResourceEventAdminUserHandler,
 		ResourceLogicAuthenticationInterceptor: authenticationInterceptor,
 		ResourceLogicErrorInterceptor:          errorInterceptor,
@@ -831,19 +835,20 @@ type ResourceContainer struct {
 	usecasePortAnyModel.GameTypeUsecase
 
 	// gRPC Resource server
-	ResourceAbstract             *inputApplicationResource.AbstractHandler
-	ResourceModelAdminUser       *inputApplicationResourceModel.AdminUserHandler
-	ResourceModelAdminRole       *inputApplicationResourceModel.AdminRoleHandler
-	ResourceModelAdminPermission *inputApplicationResourceModel.AdminPermissionHandler
-	ResourceModelAppUser         *inputApplicationResourceModel.AppUserHandler
-	ResourceModelGame            *inputApplicationResourceModel.GameHandler
-	ResourceModelTable           *inputApplicationResourceModel.TableHandler
-	ResourceModelGameType        *inputApplicationResourceModel.GameTypeHandler
-	ResourceLogicAdminUser       *inputApplicationResourceLogic.AdminUserHandler
-	ResourceLogicGame            *inputApplicationResourceLogic.GameHandler
-	ResourceLogicTable           *inputApplicationResourceLogic.TableHandler
-	ResourceLogicGameType        *inputApplicationResourceLogic.GameTypeHandler
-	ResourceEventAdminUser       *inputApplicationResourceEvent.AdminUserHandler
+	ResourceAbstract                  *inputApplicationResource.AbstractHandler
+	ResourceModelAdminUser            *inputApplicationResourceModel.AdminUserHandler
+	ResourceModelAdminRole            *inputApplicationResourceModel.AdminRoleHandler
+	ResourceModelAdminPermission      *inputApplicationResourceModel.AdminPermissionHandler
+	ResourceModelAppUser              *inputApplicationResourceModel.AppUserHandler
+	ResourceModelGame                 *inputApplicationResourceModel.GameHandler
+	ResourceModelTable                *inputApplicationResourceModel.TableHandler
+	ResourceModelGameType             *inputApplicationResourceModel.GameTypeHandler
+	ResourceLogicAdminUser            *inputApplicationResourceLogic.AdminUserHandler
+	ResourceLogicGame                 *inputApplicationResourceLogic.GameHandler
+	ResourceLogicTable                *inputApplicationResourceLogic.TableHandler
+	ResourceLogicGameType             *inputApplicationResourceLogic.GameTypeHandler
+	ResourceLogicAdminPermissionGroup *inputApplicationResourceLogic.AdminPermissionGroupHandler
+	ResourceEventAdminUser            *inputApplicationResourceEvent.AdminUserHandler
 
 	// gRPC Resource Interceptor
 	ResourceLogicAuthenticationInterceptor *interceptorResourceLogic.AuthenticationInterceptor

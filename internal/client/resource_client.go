@@ -22,10 +22,11 @@ func NewModel(oClientConn *grpc.ClientConn) *Model {
 
 func NewLogic(oClientConn *grpc.ClientConn) *Logic {
 	return &Logic{
-		AdminUser: pbResourceLogic.NewAdminUserLogicClient(oClientConn),
-		Game:      pbResourceLogic.NewGameLogicClient(oClientConn),
-		Table:     pbResourceLogic.NewTableLogicClient(oClientConn),
-		GameType:  pbResourceLogic.NewGameTypeLogicClient(oClientConn),
+		AdminUser:            pbResourceLogic.NewAdminUserLogicClient(oClientConn),
+		AdminPermissionGroup: pbResourceLogic.NewAdminPermissionGroupLogicClient(oClientConn),
+		Game:                 pbResourceLogic.NewGameLogicClient(oClientConn),
+		Table:                pbResourceLogic.NewTableLogicClient(oClientConn),
+		GameType:             pbResourceLogic.NewGameTypeLogicClient(oClientConn),
 	}
 }
 
@@ -46,10 +47,11 @@ type Model struct {
 }
 
 type Logic struct {
-	AdminUser pbResourceLogic.AdminUserLogicClient
-	Game      pbResourceLogic.GameLogicClient
-	Table     pbResourceLogic.TableLogicClient
-	GameType  pbResourceLogic.GameTypeLogicClient
+	AdminUser            pbResourceLogic.AdminUserLogicClient
+	AdminPermissionGroup pbResourceLogic.AdminPermissionGroupLogicClient
+	Game                 pbResourceLogic.GameLogicClient
+	Table                pbResourceLogic.TableLogicClient
+	GameType             pbResourceLogic.GameTypeLogicClient
 }
 
 type Event struct {
