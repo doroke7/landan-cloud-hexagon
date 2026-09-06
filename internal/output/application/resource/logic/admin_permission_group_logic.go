@@ -106,6 +106,24 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64)
 	return &oAdminPermissionGroup, nil
 }
 
+func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroups() ([]*domain.AdminPermissionGroup, error) {
+	oResponse, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.ShowAdminPermissionGroups(
+		oSelf.Context,
+		&pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsInput{},
+	)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aAdminPermissionGroups := make([]*domain.AdminPermissionGroup, 0, len(oResponse.GetAdminPermissionGroups()))
+	for _, oOne := range oResponse.GetAdminPermissionGroups() {
+		oAdminPermissionGroup := protoAdminPermissionGroupToDomainAdminPermissionGroup(oOne)
+		aAdminPermissionGroups = append(aAdminPermissionGroups, &oAdminPermissionGroup)
+	}
+
+	return aAdminPermissionGroups, nil
+}
+
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, uint64, error) {
 
 	oRequest := &pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput{

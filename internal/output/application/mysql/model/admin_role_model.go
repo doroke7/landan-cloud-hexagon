@@ -62,6 +62,21 @@ func (oSelf *AdminRoleModel) ShowOneById(iId uint64) (*domain.AdminRole, error) 
 	return &oAdminRole, nil
 }
 
+func (oSelf *AdminRoleModel) ShowOnes() ([]*domain.AdminRole, error) {
+	var aAdminRoles []*domain.AdminRole
+
+	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.AdminRole{}).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		Find(&aAdminRoles)
+
+	if oResult.Error != nil {
+		return nil, oResult.Error
+	}
+
+	return aAdminRoles, nil
+}
+
 func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminRole)
 	if oErr != nil {

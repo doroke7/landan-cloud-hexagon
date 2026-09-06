@@ -21,6 +21,7 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	AdminPermissionGroupLogic_ShowTree_FullMethodName                                                     = "/pb.resource.logic.AdminPermissionGroupLogic/ShowTree"
 	AdminPermissionGroupLogic_ShowAdminPermissionGroupById_FullMethodName                                 = "/pb.resource.logic.AdminPermissionGroupLogic/ShowAdminPermissionGroupById"
+	AdminPermissionGroupLogic_ShowAdminPermissionGroups_FullMethodName                                    = "/pb.resource.logic.AdminPermissionGroupLogic/ShowAdminPermissionGroups"
 	AdminPermissionGroupLogic_ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination_FullMethodName = "/pb.resource.logic.AdminPermissionGroupLogic/ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination"
 )
 
@@ -30,6 +31,7 @@ const (
 type AdminPermissionGroupLogicClient interface {
 	ShowTree(ctx context.Context, in *AdminPermissionGroupShowTreeInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowTreeOutput, error)
 	ShowAdminPermissionGroupById(ctx context.Context, in *AdminPermissionGroupShowAdminPermissionGroupByIdInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowAdminPermissionGroupByIdOutput, error)
+	ShowAdminPermissionGroups(ctx context.Context, in *AdminPermissionGroupShowAdminPermissionGroupsInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowAdminPermissionGroupsOutput, error)
 	ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(ctx context.Context, in *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput, error)
 }
 
@@ -61,6 +63,16 @@ func (c *adminPermissionGroupLogicClient) ShowAdminPermissionGroupById(ctx conte
 	return out, nil
 }
 
+func (c *adminPermissionGroupLogicClient) ShowAdminPermissionGroups(ctx context.Context, in *AdminPermissionGroupShowAdminPermissionGroupsInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowAdminPermissionGroupsOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdminPermissionGroupShowAdminPermissionGroupsOutput)
+	err := c.cc.Invoke(ctx, AdminPermissionGroupLogic_ShowAdminPermissionGroups_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *adminPermissionGroupLogicClient) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(ctx context.Context, in *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput)
@@ -77,6 +89,7 @@ func (c *adminPermissionGroupLogicClient) ShowAdminPermissionGroupsTotalByFilter
 type AdminPermissionGroupLogicServer interface {
 	ShowTree(context.Context, *AdminPermissionGroupShowTreeInput) (*AdminPermissionGroupShowTreeOutput, error)
 	ShowAdminPermissionGroupById(context.Context, *AdminPermissionGroupShowAdminPermissionGroupByIdInput) (*AdminPermissionGroupShowAdminPermissionGroupByIdOutput, error)
+	ShowAdminPermissionGroups(context.Context, *AdminPermissionGroupShowAdminPermissionGroupsInput) (*AdminPermissionGroupShowAdminPermissionGroupsOutput, error)
 	ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(context.Context, *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) (*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput, error)
 	mustEmbedUnimplementedAdminPermissionGroupLogicServer()
 }
@@ -93,6 +106,9 @@ func (UnimplementedAdminPermissionGroupLogicServer) ShowTree(context.Context, *A
 }
 func (UnimplementedAdminPermissionGroupLogicServer) ShowAdminPermissionGroupById(context.Context, *AdminPermissionGroupShowAdminPermissionGroupByIdInput) (*AdminPermissionGroupShowAdminPermissionGroupByIdOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowAdminPermissionGroupById not implemented")
+}
+func (UnimplementedAdminPermissionGroupLogicServer) ShowAdminPermissionGroups(context.Context, *AdminPermissionGroupShowAdminPermissionGroupsInput) (*AdminPermissionGroupShowAdminPermissionGroupsOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowAdminPermissionGroups not implemented")
 }
 func (UnimplementedAdminPermissionGroupLogicServer) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(context.Context, *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) (*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination not implemented")
@@ -155,6 +171,24 @@ func _AdminPermissionGroupLogic_ShowAdminPermissionGroupById_Handler(srv interfa
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminPermissionGroupLogic_ShowAdminPermissionGroups_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminPermissionGroupShowAdminPermissionGroupsInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminPermissionGroupLogicServer).ShowAdminPermissionGroups(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminPermissionGroupLogic_ShowAdminPermissionGroups_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminPermissionGroupLogicServer).ShowAdminPermissionGroups(ctx, req.(*AdminPermissionGroupShowAdminPermissionGroupsInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AdminPermissionGroupLogic_ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput)
 	if err := dec(in); err != nil {
@@ -187,6 +221,10 @@ var AdminPermissionGroupLogic_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ShowAdminPermissionGroupById",
 			Handler:    _AdminPermissionGroupLogic_ShowAdminPermissionGroupById_Handler,
+		},
+		{
+			MethodName: "ShowAdminPermissionGroups",
+			Handler:    _AdminPermissionGroupLogic_ShowAdminPermissionGroups_Handler,
 		},
 		{
 			MethodName: "ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination",

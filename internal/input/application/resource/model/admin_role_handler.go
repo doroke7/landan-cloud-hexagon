@@ -115,6 +115,24 @@ func (oSelf *AdminRoleHandler) RemoveOneById(oContext context.Context, oReq *pbR
 	}, nil
 }
 
+func (oSelf *AdminRoleHandler) ShowOnes(oContext context.Context, oReq *pbResourceModel.AdminRoleShowOnesInput) (*pbResourceModel.AdminRoleShowOnesOutput, error) {
+
+	aAdminRoles, oErr := oSelf.ModelAdminRoleUsecase.ShowOnes()
+
+	if oErr != nil {
+		return nil, status.Error(codes.NotFound, oErr.Error())
+	}
+
+	aProtoAdminRoles := make([]*pbResource.AdminRole, 0, len(aAdminRoles))
+	for _, oAdminRole := range aAdminRoles {
+		aProtoAdminRoles = append(aProtoAdminRoles, domainAdminRoleToProtoAdminRole(oAdminRole))
+	}
+
+	return &pbResourceModel.AdminRoleShowOnesOutput{
+		AdminRoles: aProtoAdminRoles,
+	}, nil
+}
+
 func (oSelf *AdminRoleHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.AdminRoleShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.AdminRoleShowOnesByFiltersWithSortersPaginationOutput, error) {
 
 	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))

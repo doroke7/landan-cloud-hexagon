@@ -86,6 +86,36 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64)
 	return &oAdminPermissionGroup, nil
 }
 
+func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroups() ([]*domain.AdminPermissionGroup, error) {
+	sDeletedAtField := "deleted_at"
+	aFilters := []*pkgInput.Filter{{Field: &sDeletedAtField, Value: oDeletedAtZero}}
+
+	iSize := uint(10000)
+	iPage := uint(1)
+	oPagination := &pkgInput.Pagination{Size: &iSize, Page: &iPage}
+
+	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, nil, oPagination)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oResult, oErr := oSelf.SearchWithOptions(aOptions)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aAdminPermissionGroups := make([]*domain.AdminPermissionGroup, 0, len(oResult.Hits))
+	for _, oHit := range oResult.Hits {
+		var oAdminPermissionGroup domain.AdminPermissionGroup
+		if oErr := json.Unmarshal(oHit.Source, &oAdminPermissionGroup); oErr != nil {
+			return nil, oErr
+		}
+		aAdminPermissionGroups = append(aAdminPermissionGroups, &oAdminPermissionGroup)
+	}
+
+	return aAdminPermissionGroups, nil
+}
+
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, uint64, error) {
 	sDeletedAtField := "deleted_at"
 	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})

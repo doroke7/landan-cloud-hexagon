@@ -22,12 +22,12 @@ func NewAdminRoleUsecase(oAdminRoleModel outputPortAnyModel.AdminRoleModel, oAbs
 
 func (oSelf *AdminRoleUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminRole, uint64, error) {
 
-	aAdminRoles, oErr := oSelf.AdminRoleModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	aAdminRoles, oErr := oSelf.AdminRoleModel.ShowOnes()
 	if oErr != nil {
 		return nil, 0, oErr
 	}
 
-	iTotal, oErr := oSelf.AdminRoleModel.TotalByFilters(aFilters)
+	iTotal := len(aAdminRoles)
 
 	return aAdminRoles, uint64(iTotal), oErr
 }

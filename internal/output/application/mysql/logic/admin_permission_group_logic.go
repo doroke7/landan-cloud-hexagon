@@ -79,6 +79,22 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64)
 	return &oAdminPermissionGroup, nil
 }
 
+func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroups() ([]*domain.AdminPermissionGroup, error) {
+	var aAdminPermissionGroups []*domain.AdminPermissionGroup
+
+	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.AdminPermissionGroup{}).
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		Order("id ASC").
+		Find(&aAdminPermissionGroups)
+
+	if oResult.Error != nil {
+		return nil, oResult.Error
+	}
+
+	return aAdminPermissionGroups, nil
+}
+
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, uint64, error) {
 	aWheres := oSelf.FiltersToWheres(aFilters)
 	aOrders := oSelf.SortersToOrders(aSorters)

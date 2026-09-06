@@ -190,6 +190,86 @@ func (x *AdminPermissionGroupShowAdminPermissionGroupByIdOutput) GetAdminPermiss
 	return nil
 }
 
+type AdminPermissionGroupShowAdminPermissionGroupsInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminPermissionGroupShowAdminPermissionGroupsInput) Reset() {
+	*x = AdminPermissionGroupShowAdminPermissionGroupsInput{}
+	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[4]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminPermissionGroupShowAdminPermissionGroupsInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminPermissionGroupShowAdminPermissionGroupsInput) ProtoMessage() {}
+
+func (x *AdminPermissionGroupShowAdminPermissionGroupsInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[4]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminPermissionGroupShowAdminPermissionGroupsInput.ProtoReflect.Descriptor instead.
+func (*AdminPermissionGroupShowAdminPermissionGroupsInput) Descriptor() ([]byte, []int) {
+	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{4}
+}
+
+type AdminPermissionGroupShowAdminPermissionGroupsOutput struct {
+	state                 protoimpl.MessageState           `protogen:"open.v1"`
+	AdminPermissionGroups []*resource.AdminPermissionGroup `protobuf:"bytes,1,rep,name=admin_permission_groups,json=adminPermissionGroups,proto3" json:"admin_permission_groups,omitempty"`
+	unknownFields         protoimpl.UnknownFields
+	sizeCache             protoimpl.SizeCache
+}
+
+func (x *AdminPermissionGroupShowAdminPermissionGroupsOutput) Reset() {
+	*x = AdminPermissionGroupShowAdminPermissionGroupsOutput{}
+	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[5]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminPermissionGroupShowAdminPermissionGroupsOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminPermissionGroupShowAdminPermissionGroupsOutput) ProtoMessage() {}
+
+func (x *AdminPermissionGroupShowAdminPermissionGroupsOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[5]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminPermissionGroupShowAdminPermissionGroupsOutput.ProtoReflect.Descriptor instead.
+func (*AdminPermissionGroupShowAdminPermissionGroupsOutput) Descriptor() ([]byte, []int) {
+	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *AdminPermissionGroupShowAdminPermissionGroupsOutput) GetAdminPermissionGroups() []*resource.AdminPermissionGroup {
+	if x != nil {
+		return x.AdminPermissionGroups
+	}
+	return nil
+}
+
 type AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
@@ -201,7 +281,7 @@ type AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPagin
 
 func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) Reset() {
 	*x = AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput{}
-	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[4]
+	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -214,7 +294,7 @@ func (*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPag
 }
 
 func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[4]
+	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -227,7 +307,7 @@ func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersP
 
 // Deprecated: Use AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{4}
+	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
@@ -261,7 +341,7 @@ type AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPagin
 
 func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput) Reset() {
 	*x = AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput{}
-	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[5]
+	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -274,7 +354,7 @@ func (*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPag
 }
 
 func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[5]
+	mi := &file_resource_logic_admin_permission_group_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -287,7 +367,7 @@ func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersP
 
 // Deprecated: Use AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{5}
+	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput) GetAdminPermissionGroups() []*resource.AdminPermissionGroup {
@@ -315,7 +395,10 @@ const file_resource_logic_admin_permission_group_proto_rawDesc = "" +
 	"5AdminPermissionGroupShowAdminPermissionGroupByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"\x91\x01\n" +
 	"6AdminPermissionGroupShowAdminPermissionGroupByIdOutput\x12W\n" +
-	"\x16admin_permission_group\x18\x01 \x01(\v2!.pb.resource.AdminPermissionGroupR\x14adminPermissionGroup\"\xee\x01\n" +
+	"\x16admin_permission_group\x18\x01 \x01(\v2!.pb.resource.AdminPermissionGroupR\x14adminPermissionGroup\"4\n" +
+	"2AdminPermissionGroupShowAdminPermissionGroupsInput\"\x90\x01\n" +
+	"3AdminPermissionGroupShowAdminPermissionGroupsOutput\x12Y\n" +
+	"\x17admin_permission_groups\x18\x01 \x03(\v2!.pb.resource.AdminPermissionGroupR\x15adminPermissionGroups\"\xee\x01\n" +
 	"UAdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
 	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
@@ -324,10 +407,11 @@ const file_resource_logic_admin_permission_group_proto_rawDesc = "" +
 	"pagination\"\xc9\x01\n" +
 	"VAdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput\x12Y\n" +
 	"\x17admin_permission_groups\x18\x01 \x03(\v2!.pb.resource.AdminPermissionGroupR\x15adminPermissionGroups\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total2\xe0\x04\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total2\x8d\x06\n" +
 	"\x19AdminPermissionGroupLogic\x12w\n" +
 	"\bShowTree\x124.pb.resource.logic.AdminPermissionGroupShowTreeInput\x1a5.pb.resource.logic.AdminPermissionGroupShowTreeOutput\x12\xb3\x01\n" +
-	"\x1cShowAdminPermissionGroupById\x12H.pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdInput\x1aI.pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput\x12\x93\x02\n" +
+	"\x1cShowAdminPermissionGroupById\x12H.pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdInput\x1aI.pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput\x12\xaa\x01\n" +
+	"\x19ShowAdminPermissionGroups\x12E.pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsInput\x1aF.pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsOutput\x12\x93\x02\n" +
 	"<ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination\x12h.pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput\x1ai.pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
 
 var (
@@ -342,37 +426,42 @@ func file_resource_logic_admin_permission_group_proto_rawDescGZIP() []byte {
 	return file_resource_logic_admin_permission_group_proto_rawDescData
 }
 
-var file_resource_logic_admin_permission_group_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
+var file_resource_logic_admin_permission_group_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_resource_logic_admin_permission_group_proto_goTypes = []any{
 	(*AdminPermissionGroupShowTreeInput)(nil),                                                      // 0: pb.resource.logic.AdminPermissionGroupShowTreeInput
 	(*AdminPermissionGroupShowTreeOutput)(nil),                                                     // 1: pb.resource.logic.AdminPermissionGroupShowTreeOutput
 	(*AdminPermissionGroupShowAdminPermissionGroupByIdInput)(nil),                                  // 2: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdInput
 	(*AdminPermissionGroupShowAdminPermissionGroupByIdOutput)(nil),                                 // 3: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput
-	(*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput)(nil),  // 4: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput
-	(*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput)(nil), // 5: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput
-	(*resource.AdminPermissionGroup)(nil),                                                          // 6: pb.resource.AdminPermissionGroup
-	(*resource.Filter)(nil),                                                                        // 7: pb.resource.Filter
-	(*resource.Sorter)(nil),                                                                        // 8: pb.resource.Sorter
-	(*resource.Pagination)(nil),                                                                    // 9: pb.resource.Pagination
+	(*AdminPermissionGroupShowAdminPermissionGroupsInput)(nil),                                     // 4: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsInput
+	(*AdminPermissionGroupShowAdminPermissionGroupsOutput)(nil),                                    // 5: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsOutput
+	(*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput)(nil),  // 6: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput
+	(*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput)(nil), // 7: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput
+	(*resource.AdminPermissionGroup)(nil),                                                          // 8: pb.resource.AdminPermissionGroup
+	(*resource.Filter)(nil),                                                                        // 9: pb.resource.Filter
+	(*resource.Sorter)(nil),                                                                        // 10: pb.resource.Sorter
+	(*resource.Pagination)(nil),                                                                    // 11: pb.resource.Pagination
 }
 var file_resource_logic_admin_permission_group_proto_depIdxs = []int32{
-	6, // 0: pb.resource.logic.AdminPermissionGroupShowTreeOutput.admin_permission_groups:type_name -> pb.resource.AdminPermissionGroup
-	6, // 1: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput.admin_permission_group:type_name -> pb.resource.AdminPermissionGroup
-	7, // 2: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	8, // 3: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	9, // 4: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	6, // 5: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput.admin_permission_groups:type_name -> pb.resource.AdminPermissionGroup
-	0, // 6: pb.resource.logic.AdminPermissionGroupLogic.ShowTree:input_type -> pb.resource.logic.AdminPermissionGroupShowTreeInput
-	2, // 7: pb.resource.logic.AdminPermissionGroupLogic.ShowAdminPermissionGroupById:input_type -> pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdInput
-	4, // 8: pb.resource.logic.AdminPermissionGroupLogic.ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput
-	1, // 9: pb.resource.logic.AdminPermissionGroupLogic.ShowTree:output_type -> pb.resource.logic.AdminPermissionGroupShowTreeOutput
-	3, // 10: pb.resource.logic.AdminPermissionGroupLogic.ShowAdminPermissionGroupById:output_type -> pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput
-	5, // 11: pb.resource.logic.AdminPermissionGroupLogic.ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput
-	9, // [9:12] is the sub-list for method output_type
-	6, // [6:9] is the sub-list for method input_type
-	6, // [6:6] is the sub-list for extension type_name
-	6, // [6:6] is the sub-list for extension extendee
-	0, // [0:6] is the sub-list for field type_name
+	8,  // 0: pb.resource.logic.AdminPermissionGroupShowTreeOutput.admin_permission_groups:type_name -> pb.resource.AdminPermissionGroup
+	8,  // 1: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput.admin_permission_group:type_name -> pb.resource.AdminPermissionGroup
+	8,  // 2: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsOutput.admin_permission_groups:type_name -> pb.resource.AdminPermissionGroup
+	9,  // 3: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
+	10, // 4: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	11, // 5: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
+	8,  // 6: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput.admin_permission_groups:type_name -> pb.resource.AdminPermissionGroup
+	0,  // 7: pb.resource.logic.AdminPermissionGroupLogic.ShowTree:input_type -> pb.resource.logic.AdminPermissionGroupShowTreeInput
+	2,  // 8: pb.resource.logic.AdminPermissionGroupLogic.ShowAdminPermissionGroupById:input_type -> pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdInput
+	4,  // 9: pb.resource.logic.AdminPermissionGroupLogic.ShowAdminPermissionGroups:input_type -> pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsInput
+	6,  // 10: pb.resource.logic.AdminPermissionGroupLogic.ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput
+	1,  // 11: pb.resource.logic.AdminPermissionGroupLogic.ShowTree:output_type -> pb.resource.logic.AdminPermissionGroupShowTreeOutput
+	3,  // 12: pb.resource.logic.AdminPermissionGroupLogic.ShowAdminPermissionGroupById:output_type -> pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput
+	5,  // 13: pb.resource.logic.AdminPermissionGroupLogic.ShowAdminPermissionGroups:output_type -> pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsOutput
+	7,  // 14: pb.resource.logic.AdminPermissionGroupLogic.ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput
+	11, // [11:15] is the sub-list for method output_type
+	7,  // [7:11] is the sub-list for method input_type
+	7,  // [7:7] is the sub-list for extension type_name
+	7,  // [7:7] is the sub-list for extension extendee
+	0,  // [0:7] is the sub-list for field type_name
 }
 
 func init() { file_resource_logic_admin_permission_group_proto_init() }
@@ -386,7 +475,7 @@ func file_resource_logic_admin_permission_group_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_logic_admin_permission_group_proto_rawDesc), len(file_resource_logic_admin_permission_group_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   6,
+			NumMessages:   8,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

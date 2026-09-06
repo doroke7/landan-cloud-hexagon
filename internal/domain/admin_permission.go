@@ -13,14 +13,14 @@ import (
 )
 
 type AdminPermission struct {
-	Id        uint64    `json:"id" bson:"_id"`
-	ParentId  uint64    `json:"parent_id" bson:"parent_id"`
-	Type      uint8     `json:"type" bson:"type"` // 1=菜單 2=頁面 3=接口
-	Key       string    `json:"key" bson:"key"`
-	Name      string    `json:"name" bson:"name"`
-	CreatedAt time.Time `json:"created_at" bson:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
-	DeletedAt time.Time `json:"deleted_at" bson:"deleted_at"`
+	Id                     uint64    `json:"id" bson:"_id"`
+	AdminPermissionGroupId uint64    `json:"admin_permission_group_id" bson:"admin_permission_group_id"`
+	Type                   uint8     `json:"type" bson:"type"` // 1=菜單 2=頁面 3=接口
+	Key                    string    `json:"key" bson:"key"`
+	Name                   string    `json:"name" bson:"name"`
+	CreatedAt              time.Time `json:"created_at" bson:"created_at"`
+	UpdatedAt              time.Time `json:"updated_at" bson:"updated_at"`
+	DeletedAt              time.Time `json:"deleted_at" bson:"deleted_at"`
 }
 
 type AdminPermissionValue struct {

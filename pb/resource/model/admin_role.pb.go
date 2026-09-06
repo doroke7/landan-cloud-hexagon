@@ -434,6 +434,86 @@ func (x *AdminRoleRemoveOneByIdOutput) GetStatus() bool {
 	return false
 }
 
+type AdminRoleShowOnesInput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminRoleShowOnesInput) Reset() {
+	*x = AdminRoleShowOnesInput{}
+	mi := &file_resource_model_admin_role_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminRoleShowOnesInput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminRoleShowOnesInput) ProtoMessage() {}
+
+func (x *AdminRoleShowOnesInput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_admin_role_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminRoleShowOnesInput.ProtoReflect.Descriptor instead.
+func (*AdminRoleShowOnesInput) Descriptor() ([]byte, []int) {
+	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{9}
+}
+
+type AdminRoleShowOnesOutput struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	AdminRoles    []*resource.AdminRole  `protobuf:"bytes,1,rep,name=admin_roles,json=adminRoles,proto3" json:"admin_roles,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminRoleShowOnesOutput) Reset() {
+	*x = AdminRoleShowOnesOutput{}
+	mi := &file_resource_model_admin_role_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminRoleShowOnesOutput) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminRoleShowOnesOutput) ProtoMessage() {}
+
+func (x *AdminRoleShowOnesOutput) ProtoReflect() protoreflect.Message {
+	mi := &file_resource_model_admin_role_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminRoleShowOnesOutput.ProtoReflect.Descriptor instead.
+func (*AdminRoleShowOnesOutput) Descriptor() ([]byte, []int) {
+	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *AdminRoleShowOnesOutput) GetAdminRoles() []*resource.AdminRole {
+	if x != nil {
+		return x.AdminRoles
+	}
+	return nil
+}
+
 type AdminRoleShowOnesByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
@@ -445,7 +525,7 @@ type AdminRoleShowOnesByFiltersWithSortersPaginationInput struct {
 
 func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) Reset() {
 	*x = AdminRoleShowOnesByFiltersWithSortersPaginationInput{}
-	mi := &file_resource_model_admin_role_proto_msgTypes[9]
+	mi := &file_resource_model_admin_role_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -457,7 +537,7 @@ func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) String() string {
 func (*AdminRoleShowOnesByFiltersWithSortersPaginationInput) ProtoMessage() {}
 
 func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_role_proto_msgTypes[9]
+	mi := &file_resource_model_admin_role_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -470,7 +550,7 @@ func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) ProtoReflect() pr
 
 // Deprecated: Use AdminRoleShowOnesByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
 func (*AdminRoleShowOnesByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{9}
+	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
@@ -503,7 +583,7 @@ type AdminRoleShowOnesByFiltersWithSortersPaginationOutput struct {
 
 func (x *AdminRoleShowOnesByFiltersWithSortersPaginationOutput) Reset() {
 	*x = AdminRoleShowOnesByFiltersWithSortersPaginationOutput{}
-	mi := &file_resource_model_admin_role_proto_msgTypes[10]
+	mi := &file_resource_model_admin_role_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -515,7 +595,7 @@ func (x *AdminRoleShowOnesByFiltersWithSortersPaginationOutput) String() string 
 func (*AdminRoleShowOnesByFiltersWithSortersPaginationOutput) ProtoMessage() {}
 
 func (x *AdminRoleShowOnesByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_role_proto_msgTypes[10]
+	mi := &file_resource_model_admin_role_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -528,7 +608,7 @@ func (x *AdminRoleShowOnesByFiltersWithSortersPaginationOutput) ProtoReflect() p
 
 // Deprecated: Use AdminRoleShowOnesByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
 func (*AdminRoleShowOnesByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{10}
+	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *AdminRoleShowOnesByFiltersWithSortersPaginationOutput) GetAdminRoles() []*resource.AdminRole {
@@ -547,7 +627,7 @@ type AdminRoleTotalByFiltersInput struct {
 
 func (x *AdminRoleTotalByFiltersInput) Reset() {
 	*x = AdminRoleTotalByFiltersInput{}
-	mi := &file_resource_model_admin_role_proto_msgTypes[11]
+	mi := &file_resource_model_admin_role_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -559,7 +639,7 @@ func (x *AdminRoleTotalByFiltersInput) String() string {
 func (*AdminRoleTotalByFiltersInput) ProtoMessage() {}
 
 func (x *AdminRoleTotalByFiltersInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_role_proto_msgTypes[11]
+	mi := &file_resource_model_admin_role_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -572,7 +652,7 @@ func (x *AdminRoleTotalByFiltersInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminRoleTotalByFiltersInput.ProtoReflect.Descriptor instead.
 func (*AdminRoleTotalByFiltersInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{11}
+	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *AdminRoleTotalByFiltersInput) GetFilters() []*resource.Filter {
@@ -591,7 +671,7 @@ type AdminRoleTotalByFiltersOutput struct {
 
 func (x *AdminRoleTotalByFiltersOutput) Reset() {
 	*x = AdminRoleTotalByFiltersOutput{}
-	mi := &file_resource_model_admin_role_proto_msgTypes[12]
+	mi := &file_resource_model_admin_role_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -603,7 +683,7 @@ func (x *AdminRoleTotalByFiltersOutput) String() string {
 func (*AdminRoleTotalByFiltersOutput) ProtoMessage() {}
 
 func (x *AdminRoleTotalByFiltersOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_role_proto_msgTypes[12]
+	mi := &file_resource_model_admin_role_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -616,7 +696,7 @@ func (x *AdminRoleTotalByFiltersOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminRoleTotalByFiltersOutput.ProtoReflect.Descriptor instead.
 func (*AdminRoleTotalByFiltersOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{12}
+	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *AdminRoleTotalByFiltersOutput) GetTotal() uint64 {
@@ -653,7 +733,11 @@ const file_resource_model_admin_role_proto_rawDesc = "" +
 	"\x1bAdminRoleRemoveOneByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"6\n" +
 	"\x1cAdminRoleRemoveOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"\xcd\x01\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\"\x18\n" +
+	"\x16AdminRoleShowOnesInput\"R\n" +
+	"\x17AdminRoleShowOnesOutput\x127\n" +
+	"\vadmin_roles\x18\x01 \x03(\v2\x16.pb.resource.AdminRoleR\n" +
+	"adminRoles\"\xcd\x01\n" +
 	"4AdminRoleShowOnesByFiltersWithSortersPaginationInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
 	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
@@ -666,12 +750,13 @@ const file_resource_model_admin_role_proto_rawDesc = "" +
 	"\x1cAdminRoleTotalByFiltersInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\"5\n" +
 	"\x1dAdminRoleTotalByFiltersOutput\x12\x14\n" +
-	"\x05total\x18\x01 \x01(\x04R\x05total2\xea\x05\n" +
+	"\x05total\x18\x01 \x01(\x04R\x05total2\xcd\x06\n" +
 	"\x0eAdminRoleModel\x12[\n" +
 	"\x06AddOne\x12'.pb.resource.model.AdminRoleAddOneInput\x1a(.pb.resource.model.AdminRoleAddOneOutput\x12j\n" +
 	"\vShowOneById\x12,.pb.resource.model.AdminRoleShowOneByIdInput\x1a-.pb.resource.model.AdminRoleShowOneByIdOutput\x12j\n" +
 	"\vEditOneById\x12,.pb.resource.model.AdminRoleEditOneByIdInput\x1a-.pb.resource.model.AdminRoleEditOneByIdOutput\x12p\n" +
-	"\rRemoveOneById\x12..pb.resource.model.AdminRoleRemoveOneByIdInput\x1a/.pb.resource.model.AdminRoleRemoveOneByIdOutput\x12\xbb\x01\n" +
+	"\rRemoveOneById\x12..pb.resource.model.AdminRoleRemoveOneByIdInput\x1a/.pb.resource.model.AdminRoleRemoveOneByIdOutput\x12a\n" +
+	"\bShowOnes\x12).pb.resource.model.AdminRoleShowOnesInput\x1a*.pb.resource.model.AdminRoleShowOnesOutput\x12\xbb\x01\n" +
 	"&ShowOnesByFiltersWithSortersPagination\x12G.pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput\x1aH.pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationOutput\x12s\n" +
 	"\x0eTotalByFilters\x12/.pb.resource.model.AdminRoleTotalByFiltersInput\x1a0.pb.resource.model.AdminRoleTotalByFiltersOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
 
@@ -687,7 +772,7 @@ func file_resource_model_admin_role_proto_rawDescGZIP() []byte {
 	return file_resource_model_admin_role_proto_rawDescData
 }
 
-var file_resource_model_admin_role_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_resource_model_admin_role_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_resource_model_admin_role_proto_goTypes = []any{
 	(*AdminRoleVariable)(nil),                                     // 0: pb.resource.model.AdminRoleVariable
 	(*AdminRoleAddOneInput)(nil),                                  // 1: pb.resource.model.AdminRoleAddOneInput
@@ -698,41 +783,46 @@ var file_resource_model_admin_role_proto_goTypes = []any{
 	(*AdminRoleEditOneByIdOutput)(nil),                            // 6: pb.resource.model.AdminRoleEditOneByIdOutput
 	(*AdminRoleRemoveOneByIdInput)(nil),                           // 7: pb.resource.model.AdminRoleRemoveOneByIdInput
 	(*AdminRoleRemoveOneByIdOutput)(nil),                          // 8: pb.resource.model.AdminRoleRemoveOneByIdOutput
-	(*AdminRoleShowOnesByFiltersWithSortersPaginationInput)(nil),  // 9: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput
-	(*AdminRoleShowOnesByFiltersWithSortersPaginationOutput)(nil), // 10: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationOutput
-	(*AdminRoleTotalByFiltersInput)(nil),                          // 11: pb.resource.model.AdminRoleTotalByFiltersInput
-	(*AdminRoleTotalByFiltersOutput)(nil),                         // 12: pb.resource.model.AdminRoleTotalByFiltersOutput
-	(*resource.AdminRole)(nil),                                    // 13: pb.resource.AdminRole
-	(*resource.Filter)(nil),                                       // 14: pb.resource.Filter
-	(*resource.Sorter)(nil),                                       // 15: pb.resource.Sorter
-	(*resource.Pagination)(nil),                                   // 16: pb.resource.Pagination
+	(*AdminRoleShowOnesInput)(nil),                                // 9: pb.resource.model.AdminRoleShowOnesInput
+	(*AdminRoleShowOnesOutput)(nil),                               // 10: pb.resource.model.AdminRoleShowOnesOutput
+	(*AdminRoleShowOnesByFiltersWithSortersPaginationInput)(nil),  // 11: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput
+	(*AdminRoleShowOnesByFiltersWithSortersPaginationOutput)(nil), // 12: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationOutput
+	(*AdminRoleTotalByFiltersInput)(nil),                          // 13: pb.resource.model.AdminRoleTotalByFiltersInput
+	(*AdminRoleTotalByFiltersOutput)(nil),                         // 14: pb.resource.model.AdminRoleTotalByFiltersOutput
+	(*resource.AdminRole)(nil),                                    // 15: pb.resource.AdminRole
+	(*resource.Filter)(nil),                                       // 16: pb.resource.Filter
+	(*resource.Sorter)(nil),                                       // 17: pb.resource.Sorter
+	(*resource.Pagination)(nil),                                   // 18: pb.resource.Pagination
 }
 var file_resource_model_admin_role_proto_depIdxs = []int32{
 	0,  // 0: pb.resource.model.AdminRoleAddOneInput.variable:type_name -> pb.resource.model.AdminRoleVariable
-	13, // 1: pb.resource.model.AdminRoleShowOneByIdOutput.admin_role:type_name -> pb.resource.AdminRole
+	15, // 1: pb.resource.model.AdminRoleShowOneByIdOutput.admin_role:type_name -> pb.resource.AdminRole
 	0,  // 2: pb.resource.model.AdminRoleEditOneByIdInput.variable:type_name -> pb.resource.model.AdminRoleVariable
-	14, // 3: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	15, // 4: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	16, // 5: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	13, // 6: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationOutput.admin_roles:type_name -> pb.resource.AdminRole
-	14, // 7: pb.resource.model.AdminRoleTotalByFiltersInput.filters:type_name -> pb.resource.Filter
-	1,  // 8: pb.resource.model.AdminRoleModel.AddOne:input_type -> pb.resource.model.AdminRoleAddOneInput
-	3,  // 9: pb.resource.model.AdminRoleModel.ShowOneById:input_type -> pb.resource.model.AdminRoleShowOneByIdInput
-	5,  // 10: pb.resource.model.AdminRoleModel.EditOneById:input_type -> pb.resource.model.AdminRoleEditOneByIdInput
-	7,  // 11: pb.resource.model.AdminRoleModel.RemoveOneById:input_type -> pb.resource.model.AdminRoleRemoveOneByIdInput
-	9,  // 12: pb.resource.model.AdminRoleModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput
-	11, // 13: pb.resource.model.AdminRoleModel.TotalByFilters:input_type -> pb.resource.model.AdminRoleTotalByFiltersInput
-	2,  // 14: pb.resource.model.AdminRoleModel.AddOne:output_type -> pb.resource.model.AdminRoleAddOneOutput
-	4,  // 15: pb.resource.model.AdminRoleModel.ShowOneById:output_type -> pb.resource.model.AdminRoleShowOneByIdOutput
-	6,  // 16: pb.resource.model.AdminRoleModel.EditOneById:output_type -> pb.resource.model.AdminRoleEditOneByIdOutput
-	8,  // 17: pb.resource.model.AdminRoleModel.RemoveOneById:output_type -> pb.resource.model.AdminRoleRemoveOneByIdOutput
-	10, // 18: pb.resource.model.AdminRoleModel.ShowOnesByFiltersWithSortersPagination:output_type -> pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationOutput
-	12, // 19: pb.resource.model.AdminRoleModel.TotalByFilters:output_type -> pb.resource.model.AdminRoleTotalByFiltersOutput
-	14, // [14:20] is the sub-list for method output_type
-	8,  // [8:14] is the sub-list for method input_type
-	8,  // [8:8] is the sub-list for extension type_name
-	8,  // [8:8] is the sub-list for extension extendee
-	0,  // [0:8] is the sub-list for field type_name
+	15, // 3: pb.resource.model.AdminRoleShowOnesOutput.admin_roles:type_name -> pb.resource.AdminRole
+	16, // 4: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
+	17, // 5: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	18, // 6: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
+	15, // 7: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationOutput.admin_roles:type_name -> pb.resource.AdminRole
+	16, // 8: pb.resource.model.AdminRoleTotalByFiltersInput.filters:type_name -> pb.resource.Filter
+	1,  // 9: pb.resource.model.AdminRoleModel.AddOne:input_type -> pb.resource.model.AdminRoleAddOneInput
+	3,  // 10: pb.resource.model.AdminRoleModel.ShowOneById:input_type -> pb.resource.model.AdminRoleShowOneByIdInput
+	5,  // 11: pb.resource.model.AdminRoleModel.EditOneById:input_type -> pb.resource.model.AdminRoleEditOneByIdInput
+	7,  // 12: pb.resource.model.AdminRoleModel.RemoveOneById:input_type -> pb.resource.model.AdminRoleRemoveOneByIdInput
+	9,  // 13: pb.resource.model.AdminRoleModel.ShowOnes:input_type -> pb.resource.model.AdminRoleShowOnesInput
+	11, // 14: pb.resource.model.AdminRoleModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput
+	13, // 15: pb.resource.model.AdminRoleModel.TotalByFilters:input_type -> pb.resource.model.AdminRoleTotalByFiltersInput
+	2,  // 16: pb.resource.model.AdminRoleModel.AddOne:output_type -> pb.resource.model.AdminRoleAddOneOutput
+	4,  // 17: pb.resource.model.AdminRoleModel.ShowOneById:output_type -> pb.resource.model.AdminRoleShowOneByIdOutput
+	6,  // 18: pb.resource.model.AdminRoleModel.EditOneById:output_type -> pb.resource.model.AdminRoleEditOneByIdOutput
+	8,  // 19: pb.resource.model.AdminRoleModel.RemoveOneById:output_type -> pb.resource.model.AdminRoleRemoveOneByIdOutput
+	10, // 20: pb.resource.model.AdminRoleModel.ShowOnes:output_type -> pb.resource.model.AdminRoleShowOnesOutput
+	12, // 21: pb.resource.model.AdminRoleModel.ShowOnesByFiltersWithSortersPagination:output_type -> pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationOutput
+	14, // 22: pb.resource.model.AdminRoleModel.TotalByFilters:output_type -> pb.resource.model.AdminRoleTotalByFiltersOutput
+	16, // [16:23] is the sub-list for method output_type
+	9,  // [9:16] is the sub-list for method input_type
+	9,  // [9:9] is the sub-list for extension type_name
+	9,  // [9:9] is the sub-list for extension extendee
+	0,  // [0:9] is the sub-list for field type_name
 }
 
 func init() { file_resource_model_admin_role_proto_init() }
@@ -747,7 +837,7 @@ func file_resource_model_admin_role_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_model_admin_role_proto_rawDesc), len(file_resource_model_admin_role_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   15,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

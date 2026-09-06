@@ -23,6 +23,7 @@ const (
 	AdminRoleModel_ShowOneById_FullMethodName                            = "/pb.resource.model.AdminRoleModel/ShowOneById"
 	AdminRoleModel_EditOneById_FullMethodName                            = "/pb.resource.model.AdminRoleModel/EditOneById"
 	AdminRoleModel_RemoveOneById_FullMethodName                          = "/pb.resource.model.AdminRoleModel/RemoveOneById"
+	AdminRoleModel_ShowOnes_FullMethodName                               = "/pb.resource.model.AdminRoleModel/ShowOnes"
 	AdminRoleModel_ShowOnesByFiltersWithSortersPagination_FullMethodName = "/pb.resource.model.AdminRoleModel/ShowOnesByFiltersWithSortersPagination"
 	AdminRoleModel_TotalByFilters_FullMethodName                         = "/pb.resource.model.AdminRoleModel/TotalByFilters"
 )
@@ -35,6 +36,7 @@ type AdminRoleModelClient interface {
 	ShowOneById(ctx context.Context, in *AdminRoleShowOneByIdInput, opts ...grpc.CallOption) (*AdminRoleShowOneByIdOutput, error)
 	EditOneById(ctx context.Context, in *AdminRoleEditOneByIdInput, opts ...grpc.CallOption) (*AdminRoleEditOneByIdOutput, error)
 	RemoveOneById(ctx context.Context, in *AdminRoleRemoveOneByIdInput, opts ...grpc.CallOption) (*AdminRoleRemoveOneByIdOutput, error)
+	ShowOnes(ctx context.Context, in *AdminRoleShowOnesInput, opts ...grpc.CallOption) (*AdminRoleShowOnesOutput, error)
 	ShowOnesByFiltersWithSortersPagination(ctx context.Context, in *AdminRoleShowOnesByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*AdminRoleShowOnesByFiltersWithSortersPaginationOutput, error)
 	TotalByFilters(ctx context.Context, in *AdminRoleTotalByFiltersInput, opts ...grpc.CallOption) (*AdminRoleTotalByFiltersOutput, error)
 }
@@ -87,6 +89,16 @@ func (c *adminRoleModelClient) RemoveOneById(ctx context.Context, in *AdminRoleR
 	return out, nil
 }
 
+func (c *adminRoleModelClient) ShowOnes(ctx context.Context, in *AdminRoleShowOnesInput, opts ...grpc.CallOption) (*AdminRoleShowOnesOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdminRoleShowOnesOutput)
+	err := c.cc.Invoke(ctx, AdminRoleModel_ShowOnes_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *adminRoleModelClient) ShowOnesByFiltersWithSortersPagination(ctx context.Context, in *AdminRoleShowOnesByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*AdminRoleShowOnesByFiltersWithSortersPaginationOutput, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AdminRoleShowOnesByFiltersWithSortersPaginationOutput)
@@ -115,6 +127,7 @@ type AdminRoleModelServer interface {
 	ShowOneById(context.Context, *AdminRoleShowOneByIdInput) (*AdminRoleShowOneByIdOutput, error)
 	EditOneById(context.Context, *AdminRoleEditOneByIdInput) (*AdminRoleEditOneByIdOutput, error)
 	RemoveOneById(context.Context, *AdminRoleRemoveOneByIdInput) (*AdminRoleRemoveOneByIdOutput, error)
+	ShowOnes(context.Context, *AdminRoleShowOnesInput) (*AdminRoleShowOnesOutput, error)
 	ShowOnesByFiltersWithSortersPagination(context.Context, *AdminRoleShowOnesByFiltersWithSortersPaginationInput) (*AdminRoleShowOnesByFiltersWithSortersPaginationOutput, error)
 	TotalByFilters(context.Context, *AdminRoleTotalByFiltersInput) (*AdminRoleTotalByFiltersOutput, error)
 	mustEmbedUnimplementedAdminRoleModelServer()
@@ -138,6 +151,9 @@ func (UnimplementedAdminRoleModelServer) EditOneById(context.Context, *AdminRole
 }
 func (UnimplementedAdminRoleModelServer) RemoveOneById(context.Context, *AdminRoleRemoveOneByIdInput) (*AdminRoleRemoveOneByIdOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method RemoveOneById not implemented")
+}
+func (UnimplementedAdminRoleModelServer) ShowOnes(context.Context, *AdminRoleShowOnesInput) (*AdminRoleShowOnesOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowOnes not implemented")
 }
 func (UnimplementedAdminRoleModelServer) ShowOnesByFiltersWithSortersPagination(context.Context, *AdminRoleShowOnesByFiltersWithSortersPaginationInput) (*AdminRoleShowOnesByFiltersWithSortersPaginationOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowOnesByFiltersWithSortersPagination not implemented")
@@ -238,6 +254,24 @@ func _AdminRoleModel_RemoveOneById_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AdminRoleModel_ShowOnes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminRoleShowOnesInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminRoleModelServer).ShowOnes(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminRoleModel_ShowOnes_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminRoleModelServer).ShowOnes(ctx, req.(*AdminRoleShowOnesInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AdminRoleModel_ShowOnesByFiltersWithSortersPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(AdminRoleShowOnesByFiltersWithSortersPaginationInput)
 	if err := dec(in); err != nil {
@@ -296,6 +330,10 @@ var AdminRoleModel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "RemoveOneById",
 			Handler:    _AdminRoleModel_RemoveOneById_Handler,
+		},
+		{
+			MethodName: "ShowOnes",
+			Handler:    _AdminRoleModel_ShowOnes_Handler,
 		},
 		{
 			MethodName: "ShowOnesByFiltersWithSortersPagination",

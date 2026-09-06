@@ -94,6 +94,23 @@ func (oSelf *AdminRoleModel) RemoveOneById(iId uint64) error {
 	return oErr
 }
 
+func (oSelf *AdminRoleModel) ShowOnes() ([]*domain.AdminRole, error) {
+
+	oResponse, oErr := oSelf.ResourceModelClient.AdminRole.ShowOnes(oSelf.Context, &pbResourceModel.AdminRoleShowOnesInput{})
+
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aAdminRoles := make([]*domain.AdminRole, 0, len(oResponse.GetAdminRoles()))
+	for _, oOne := range oResponse.GetAdminRoles() {
+		oAdminRole := protoAdminRoleToDomainAdminRole(oOne)
+		aAdminRoles = append(aAdminRoles, &oAdminRole)
+	}
+
+	return aAdminRoles, nil
+}
+
 func (oSelf *AdminRoleModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminRole, error) {
 
 	oRequest := &pbResourceModel.AdminRoleShowOnesByFiltersWithSortersPaginationInput{

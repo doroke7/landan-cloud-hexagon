@@ -101,6 +101,21 @@ func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroupById(oContext 
 	}, nil
 }
 
+func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroups(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsInput) (*pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsOutput, error) {
+
+	aAdminPermissionGroups, oErr := oSelf.LogicAdminPermissionGroupUsecase.ShowAdminPermissionGroups()
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aNodes := make([]*pbResource.AdminPermissionGroup, 0, len(aAdminPermissionGroups))
+	for _, oOne := range aAdminPermissionGroups {
+		aNodes = append(aNodes, domainAdminPermissionGroupToProtoAdminPermissionGroup(oOne))
+	}
+
+	return &pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsOutput{AdminPermissionGroups: aNodes}, nil
+}
+
 func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) (*pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput, error) {
 
 	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))

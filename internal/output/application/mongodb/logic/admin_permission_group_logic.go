@@ -76,6 +76,21 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64)
 	return &oAdminPermissionGroup, nil
 }
 
+func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroups() ([]*domain.AdminPermissionGroup, error) {
+	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{"deleted_at": oDeletedAtZero})
+	if oErr != nil {
+		return nil, oErr
+	}
+	defer oCursor.Close(oSelf.Context)
+
+	var aAdminPermissionGroups []*domain.AdminPermissionGroup
+	if oErr := oCursor.All(oSelf.Context, &aAdminPermissionGroups); oErr != nil {
+		return nil, oErr
+	}
+
+	return aAdminPermissionGroups, nil
+}
+
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, uint64, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
