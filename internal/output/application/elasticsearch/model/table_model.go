@@ -43,32 +43,6 @@ func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
 	return &oTable, nil
 }
 
-func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
-	sDeletedAtField := "deleted_at"
-	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
-
-	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, aSorters, oPagination)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	oResult, oErr := oSelf.SearchWithOptions(aOptions)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	aTables := make([]*domain.Table, len(oResult.Hits))
-	for i, oHit := range oResult.Hits {
-		var oTable domain.Table
-		if oErr := json.Unmarshal(oHit.Source, &oTable); oErr != nil {
-			return nil, oErr
-		}
-		aTables[i] = &oTable
-	}
-
-	return aTables, nil
-}
-
 func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 

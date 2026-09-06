@@ -12,6 +12,7 @@ import (
 
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
+	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
 	pkgInput "example/pkg/input"
 )
@@ -20,12 +21,14 @@ type TableHandler struct {
 	*inputApplicationResource.AbstractHandler
 	pbResourceModel.UnimplementedTableModelServer
 	ModelTableUsecase usecasePortAnyModel.TableUsecase
+	LogicTableUsecase usecasePortAnyLogic.TableUsecase
 }
 
-func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oTableUsecase usecasePortAnyModel.TableUsecase) *TableHandler {
+func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oTableUsecase usecasePortAnyModel.TableUsecase, oLogicTableUsecase usecasePortAnyLogic.TableUsecase) *TableHandler {
 	return &TableHandler{
 		AbstractHandler:   oAbstractHandler,
 		ModelTableUsecase: oTableUsecase,
+		LogicTableUsecase: oLogicTableUsecase,
 	}
 }
 
@@ -187,7 +190,7 @@ func (oSelf *TableHandler) ShowOnesByFiltersWithSortersPagination(oContext conte
 		Page: &iPage,
 	}
 
-	aTables, oErr := oSelf.ModelTableUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+	aTables, oErr := oSelf.LogicTableUsecase.ShowTablesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		return nil, status.Error(codes.NotFound, oErr.Error())

@@ -17,13 +17,6 @@ func NewTableUsecase(oTableModel outputPortAnyModel.TableModel) usecasePortAnyMo
 	}
 }
 
-func (oSelf *TableUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
-
-	aTables, oErr := oSelf.TableModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
-
-	return aTables, oErr
-}
-
 func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) error {
 
 	oErr := oSelf.TableModel.AddOne(oValue)

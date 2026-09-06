@@ -118,29 +118,6 @@ func (oSelf *TableModel) RemoveOneById(iId uint64) error {
 	return oErr
 }
 
-func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
-
-	oRequest := &pbResourceModel.TableShowOnesByFiltersWithSortersPaginationInput{
-		Filters:    oSelf.ToFilters(aFilters),
-		Sorters:    oSelf.ToSorters(aSorters),
-		Pagination: oSelf.ToPagination(oPagination),
-	}
-
-	oResponse, oErr := oSelf.ResourceModelClient.Table.ShowOnesByFiltersWithSortersPagination(oSelf.Context, oRequest)
-
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	aTables := make([]*domain.Table, 0, len(oResponse.GetTables()))
-	for _, oOne := range oResponse.GetTables() {
-		oTable := protoTableToDomainTable(oOne)
-		aTables = append(aTables, &oTable)
-	}
-
-	return aTables, nil
-}
-
 func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
 	oRequest := &pbResourceModel.TableTotalByFiltersInput{

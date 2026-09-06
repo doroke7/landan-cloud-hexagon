@@ -190,26 +190,6 @@ func (oSelf *TableModel) RemoveOneById(iId uint64) error {
 	return nil
 }
 
-func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
-	oFilter := oSelf.FiltersToFilter(aFilters)
-	oFilter["deleted_at"] = oDeletedAtZero
-
-	oFindOptions := oSelf.SortersPaginationToFindOptions(aSorters, oPagination)
-
-	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, oFilter, oFindOptions)
-	if oErr != nil {
-		return nil, oErr
-	}
-	defer oCursor.Close(oSelf.Context)
-
-	var aTables []*domain.Table
-	if oErr := oCursor.All(oSelf.Context, &aTables); oErr != nil {
-		return nil, oErr
-	}
-
-	return aTables, nil
-}
-
 func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero
