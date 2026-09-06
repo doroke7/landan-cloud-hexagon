@@ -7,7 +7,6 @@ import (
 
 type GameLogic interface {
 	ShowGameById(iId uint64) (*domain.Game, error)
-	ShowGameByKey(sKey string) (*domain.Game, error)
 
 	ShowGamesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error)
 

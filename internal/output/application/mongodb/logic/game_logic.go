@@ -92,24 +92,6 @@ func (oSelf *GameLogic) ShowGameById(iId uint64) (*domain.Game, error) {
 	return &oGame, nil
 }
 
-func (oSelf *GameLogic) ShowGameByKey(sKey string) (*domain.Game, error) {
-	var oGame domain.Game
-
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
-		"key":        sKey,
-		"deleted_at": oDeletedAtZero,
-	}).Decode(&oGame)
-
-	if oErr != nil {
-		if oErr == mongo.ErrNoDocuments {
-			return nil, nil
-		}
-		return nil, oErr
-	}
-
-	return &oGame, nil
-}
-
 func (oSelf *GameLogic) ShowGamesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
 	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{
 		"game_type_id": iGameTypeId,

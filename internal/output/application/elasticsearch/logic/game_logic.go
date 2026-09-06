@@ -68,42 +68,6 @@ func (oSelf *GameLogic) ShowGameById(iId uint64) (*domain.Game, error) {
 	return &oGame, nil
 }
 
-func (oSelf *GameLogic) ShowGameByKey(sKey string) (*domain.Game, error) {
-	sKeyField := "key"
-	sOperator := "eq"
-	sDeletedAtField := "deleted_at"
-
-	aFilters := []*pkgInput.Filter{
-		{Field: &sKeyField, Operator: &sOperator, Value: sKey},
-		{Field: &sDeletedAtField, Value: oDeletedAtZero},
-	}
-
-	iSize := uint(1)
-	iPage := uint(1)
-	oPagination := &pkgInput.Pagination{Size: &iSize, Page: &iPage}
-
-	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, nil, oPagination)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	oResult, oErr := oSelf.SearchWithOptions(aOptions)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	if len(oResult.Hits) == 0 {
-		return nil, nil
-	}
-
-	var oGame domain.Game
-	if oErr := json.Unmarshal(oResult.Hits[0].Source, &oGame); oErr != nil {
-		return nil, oErr
-	}
-
-	return &oGame, nil
-}
-
 func (oSelf *GameLogic) ShowGamesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
 	sGameTypeIdField := "game_type_id"
 	sOperator := "eq"

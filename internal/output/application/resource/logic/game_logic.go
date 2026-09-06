@@ -119,30 +119,6 @@ func (oSelf *GameLogic) ShowGameById(iId uint64) (*domain.Game, error) {
 	return aGames[0], nil
 }
 
-// ShowGameByKey proto GameLogic 沒有對應 rpc，改用既有的 list rpc 帶 key 過濾（size 1）。
-func (oSelf *GameLogic) ShowGameByKey(sKey string) (*domain.Game, error) {
-	sField := "key"
-	sOperator := "eq"
-	iSize := uint(1)
-	iPage := uint(1)
-
-	aFilters := []*pkgInput.Filter{
-		{Field: &sField, Operator: &sOperator, Value: sKey},
-	}
-	oPagination := &pkgInput.Pagination{Size: &iSize, Page: &iPage}
-
-	aGames, _, oErr := oSelf.ShowGamesTotalByFiltersWithSortersPagination(aFilters, nil, oPagination)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	if len(aGames) == 0 {
-		return nil, nil
-	}
-
-	return aGames[0], nil
-}
-
 // ShowGamesByGameTypeId proto GameLogic 沒有對應 rpc，改用既有的 list rpc 帶 game_type_id 過濾。
 func (oSelf *GameLogic) ShowGamesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
 	sField := "game_type_id"
