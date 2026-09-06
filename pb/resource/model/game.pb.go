@@ -357,7 +357,7 @@ func (x *GameShowOneByKeyOutput) GetGame() *resource.Game {
 type GameEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Variable      *GameVariable          `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint32                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -399,7 +399,7 @@ func (x *GameEditOneByIdInput) GetVariable() *GameVariable {
 	return nil
 }
 
-func (x *GameEditOneByIdInput) GetId() uint32 {
+func (x *GameEditOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -452,7 +452,7 @@ func (x *GameEditOneByIdOutput) GetStatus() bool {
 
 type GameRemoveOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -487,7 +487,7 @@ func (*GameRemoveOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *GameRemoveOneByIdInput) GetId() uint32 {
+func (x *GameRemoveOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -759,11 +759,11 @@ const file_resource_model_game_proto_rawDesc = "" +
 	"\x04game\x18\x01 \x01(\v2\x11.pb.resource.GameR\x04game\"c\n" +
 	"\x14GameEditOneByIdInput\x12;\n" +
 	"\bvariable\x18\x01 \x01(\v2\x1f.pb.resource.model.GameVariableR\bvariable\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\rR\x02id\"/\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"/\n" +
 	"\x15GameEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"(\n" +
 	"\x16GameRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"1\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"1\n" +
 	"\x17GameRemoveOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"\xc7\x01\n" +
 	".GameShowOnesByFiltersWithOrdersPaginationInput\x12-\n" +

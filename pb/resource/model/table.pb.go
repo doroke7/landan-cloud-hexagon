@@ -397,7 +397,7 @@ func (x *TableEditOneByIdOutput) GetStatus() bool {
 
 type TableRemoveOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -432,7 +432,7 @@ func (*TableRemoveOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *TableRemoveOneByIdInput) GetId() uint32 {
+func (x *TableRemoveOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -711,7 +711,7 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\x16TableEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\")\n" +
 	"\x17TableRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"2\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"2\n" +
 	"\x18TableRemoveOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"\xc9\x01\n" +
 	"0TableShowOnesByFiltersWithSortersPaginationInput\x12-\n" +

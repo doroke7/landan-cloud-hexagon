@@ -168,7 +168,7 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.GameEditOneByIdInput{
-		Id:       uint32(iId),
+		Id:       iId,
 		Variable: domainGameValueToProtoGameVariable(oGame),
 	}
 
@@ -181,7 +181,7 @@ func (oSelf *GameModel) RemoveOneById(iId uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.Game.RemoveOneById(
 		oSelf.Context,
-		&pbResourceModel.GameRemoveOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.GameRemoveOneByIdInput{Id: iId},
 	)
 
 	return oErr

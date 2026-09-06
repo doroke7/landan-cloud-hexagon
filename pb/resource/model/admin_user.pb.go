@@ -343,7 +343,7 @@ func (x *AdminUserAddOneOutput) GetStatus() bool {
 type AdminUserEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Variable      *AdminUserVariable     `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint32                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -385,7 +385,7 @@ func (x *AdminUserEditOneByIdInput) GetVariable() *AdminUserVariable {
 	return nil
 }
 
-func (x *AdminUserEditOneByIdInput) GetId() uint32 {
+func (x *AdminUserEditOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -438,7 +438,7 @@ func (x *AdminUserEditOneByIdOutput) GetStatus() bool {
 
 type AdminUserRemoveOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -473,7 +473,7 @@ func (*AdminUserRemoveOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *AdminUserRemoveOneByIdInput) GetId() uint32 {
+func (x *AdminUserRemoveOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -742,11 +742,11 @@ const file_resource_model_admin_user_proto_rawDesc = "" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"m\n" +
 	"\x19AdminUserEditOneByIdInput\x12@\n" +
 	"\bvariable\x18\x01 \x01(\v2$.pb.resource.model.AdminUserVariableR\bvariable\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\rR\x02id\"4\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"4\n" +
 	"\x1aAdminUserEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"-\n" +
 	"\x1bAdminUserRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"6\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"6\n" +
 	"\x1cAdminUserRemoveOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"\xcd\x01\n" +
 	"4AdminUserShowOnesByFiltersWithSortersPaginationInput\x12-\n" +

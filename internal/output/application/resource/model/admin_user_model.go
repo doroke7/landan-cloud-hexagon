@@ -125,7 +125,7 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {
 func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.AdminUserEditOneByIdInput{
-		Id: uint32(iId),
+		Id: iId,
 		Variable: &pbResourceModel.AdminUserVariable{
 			Name:     oAdminUser.Name,
 			Password: oAdminUser.Password,
@@ -141,7 +141,7 @@ func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.AdminUser.RemoveOneById(
 		oSelf.Context,
-		&pbResourceModel.AdminUserRemoveOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.AdminUserRemoveOneByIdInput{Id: iId},
 	)
 
 	return oErr

@@ -349,7 +349,7 @@ func (x *GameTypeEditOneByIdOutput) GetStatus() bool {
 // 數據模型直接對ID查找
 type GameTypeRemoveOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint32                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -384,7 +384,7 @@ func (*GameTypeRemoveOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_type_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *GameTypeRemoveOneByIdInput) GetId() uint32 {
+func (x *GameTypeRemoveOneByIdInput) GetId() uint64 {
 	if x != nil {
 		return x.Id
 	}
@@ -651,7 +651,7 @@ const file_resource_model_game_type_proto_rawDesc = "" +
 	"\x19GameTypeEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\",\n" +
 	"\x1aGameTypeRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\rR\x02id\"5\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"5\n" +
 	"\x1bGameTypeRemoveOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"\xcc\x01\n" +
 	"3GameTypeShowOnesByFiltersWithSortersPaginationInput\x127\n" +

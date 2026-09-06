@@ -113,7 +113,7 @@ func (oSelf *TableModel) RemoveOneById(iId uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.Table.RemoveOneById(
 		oSelf.Context,
-		&pbResourceModel.TableRemoveOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.TableRemoveOneByIdInput{Id: iId},
 	)
 
 	return oErr

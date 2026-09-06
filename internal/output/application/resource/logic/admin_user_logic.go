@@ -139,9 +139,8 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 	return oAdminUser, nil
 }
 
-// RemoveAdminUserById logic proto 沒有 remove rpc，改打 model client 的 AdminUser.RemoveOneById。
 func (oSelf *AdminUserLogic) RemoveAdminUserById(iId uint64) error {
-	oRequest := &pbResourceModel.AdminUserRemoveOneByIdInput{Id: uint32(iId)}
+	oRequest := &pbResourceModel.AdminUserRemoveOneByIdInput{Id: iId}
 
 	_, oErr := oSelf.ResourceModelClient.AdminUser.RemoveOneById(oSelf.Context, oRequest)
 

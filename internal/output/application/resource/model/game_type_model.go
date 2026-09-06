@@ -168,7 +168,7 @@ func (oSelf *GameTypeModel) RemoveOneById(iId uint64) error {
 
 	_, oErr := oSelf.ResourceModelClient.GameType.RemoveOneById(
 		oSelf.Context,
-		&pbResourceModel.GameTypeRemoveOneByIdInput{Id: uint32(iId)},
+		&pbResourceModel.GameTypeRemoveOneByIdInput{Id: iId},
 	)
 
 	return oErr
