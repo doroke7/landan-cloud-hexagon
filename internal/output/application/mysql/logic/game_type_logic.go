@@ -76,6 +76,7 @@ func (oSelf *GameTypeLogic) ShowGameTypeById(iId uint64) (*domain.GameType, erro
 }
 
 func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
+
 	aWheres := oSelf.FiltersToWheres(aFilters)
 	aOrders := oSelf.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)
@@ -142,4 +143,20 @@ func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFi
 	}
 
 	return aGameTypes, uint64(iTotal), nil
+}
+
+func (oSelf *GameTypeLogic) ShowGameTypes() ([]*domain.GameType, error) {
+
+	var aGameTypes []*domain.GameType
+
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
+		Preload("Parent").
+		Preload("Children").
+		Model(&domain.GameType{}).
+		Where("deleted_at = ?", "2038-01-19 03:14:07")
+
+	oErr := oQuery.
+		Find(&aGameTypes).Error
+
+	return aGameTypes, oErr
 }
