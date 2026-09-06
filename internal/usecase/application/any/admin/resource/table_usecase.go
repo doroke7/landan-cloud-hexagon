@@ -31,7 +31,7 @@ func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) error {
 }
 
 func (oSelf *TableUsecase) ShowOne(iId uint64) (*domain.Table, error) {
-	oTable, oErr := oSelf.TableLogic.ShowTableById(uint64(iId))
+	oTable, oErr := oSelf.TableLogic.ShowTableById(iId)
 	return oTable, oErr
 }
 
@@ -53,5 +53,5 @@ func (oSelf *TableUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkg
 
 	aTables, iTotal, oErr := oSelf.TableLogic.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	return aTables, uint64(iTotal), oErr
+	return aTables, iTotal, oErr
 }
