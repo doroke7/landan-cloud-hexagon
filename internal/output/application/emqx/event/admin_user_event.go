@@ -4,17 +4,16 @@ import (
 	"encoding/json"
 
 	domain "example/internal/domain"
-	outputApplicationEmqx "example/internal/output/application/emqx"
 	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
-	*outputApplicationEmqx.AbstractEmqx
+	*AbstractEvent
 }
 
-func NewAdminUserEvent(oAbstractEmqx *outputApplicationEmqx.AbstractEmqx) (outputPortAnyEvent.AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractEvent *AbstractEvent) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
-		AbstractEmqx: oAbstractEmqx,
+		AbstractEvent: oAbstractEvent,
 	}, nil
 }
 

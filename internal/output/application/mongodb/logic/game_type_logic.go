@@ -7,20 +7,19 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 
 	domain "example/internal/domain"
-	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type GameTypeLogic struct {
-	*outputApplicationMongodb.AbstractMongodb
+	*AbstractLogic
 	Collection *mongo.Collection
 }
 
-func NewGameTypeLogic(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyLogic.GameTypeLogic {
+func NewGameTypeLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
-		AbstractMongodb: oAbstractMongodb,
-		Collection:      oAbstractMongodb.Database.Collection("game_types"),
+		AbstractLogic: oAbstractLogic,
+		Collection:    oAbstractLogic.Database.Collection("game_types"),
 	}
 }
 

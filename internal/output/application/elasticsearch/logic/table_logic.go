@@ -4,20 +4,19 @@ import (
 	"encoding/json"
 
 	domain "example/internal/domain"
-	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type TableLogic struct {
-	*outputApplicationElasticsearch.AbstractElasticsearch
+	*AbstractLogic
 	Index string
 }
 
-func NewTableLogic(oAbstractLogic *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic {
 	return &TableLogic{
-		AbstractElasticsearch: oAbstractLogic,
-		Index:                 oAbstractLogic.IndexName("tables"),
+		AbstractLogic: oAbstractLogic,
+		Index:         oAbstractLogic.IndexName("tables"),
 	}
 }
 

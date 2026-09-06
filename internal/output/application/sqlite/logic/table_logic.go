@@ -5,18 +5,17 @@ import (
 	"sync"
 
 	domain "example/internal/domain"
-	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type TableLogic struct {
-	*outputApplicationSqlite.AbstractSqlite
+	*AbstractLogic
 }
 
-func NewTableLogic(oAbstractLogic *outputApplicationSqlite.AbstractSqlite) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic {
 	return &TableLogic{
-		AbstractSqlite: oAbstractLogic,
+		AbstractLogic: oAbstractLogic,
 	}
 }
 

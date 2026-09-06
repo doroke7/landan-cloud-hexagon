@@ -10,21 +10,20 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 
 	domain "example/internal/domain"
-	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type TableRecordModel struct {
-	*outputApplicationElasticsearch.AbstractElasticsearch
+	*AbstractModel
 	Index string
 }
 
-func NewTableRecordModel(oAbstractModel *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyModel.TableRecordModel {
+func NewTableRecordModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableRecordModel {
 	return &TableRecordModel{
-		AbstractElasticsearch: oAbstractModel,
-		Index:                 oAbstractModel.IndexName("table_records"),
+		AbstractModel: oAbstractModel,
+		Index:         oAbstractModel.IndexName("table_records"),
 	}
 }
 

@@ -10,19 +10,18 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 
 	domain "example/internal/domain"
-	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyModel "example/internal/output/port/any/model"
 )
 
 type AppUserModel struct {
-	*outputApplicationElasticsearch.AbstractElasticsearch
+	*AbstractModel
 	Index string
 }
 
-func NewAppUserModel(oAbstractModel *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyModel.AppUserModel {
+func NewAppUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AppUserModel {
 	return &AppUserModel{
-		AbstractElasticsearch: oAbstractModel,
-		Index:                 oAbstractModel.IndexName("app_users"),
+		AbstractModel: oAbstractModel,
+		Index:         oAbstractModel.IndexName("app_users"),
 	}
 }
 

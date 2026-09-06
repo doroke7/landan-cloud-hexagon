@@ -13,17 +13,16 @@ import (
 
 	bootstrap "example/bootstrap"
 	domain "example/internal/domain"
-	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyModel "example/internal/output/port/any/model"
 )
 
 type AdminUserModel struct {
-	*outputApplicationSqlite.AbstractSqlite
+	*AbstractModel
 }
 
-func NewAdminUserModel(oAbstractModel *outputApplicationSqlite.AbstractSqlite) outputPortAnyModel.AdminUserModel {
+func NewAdminUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminUserModel {
 	return &AdminUserModel{
-		AbstractSqlite: oAbstractModel,
+		AbstractModel: oAbstractModel,
 	}
 }
 

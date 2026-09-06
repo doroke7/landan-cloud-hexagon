@@ -10,21 +10,20 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 
 	domain "example/internal/domain"
-	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type GameTypeModel struct {
-	*outputApplicationElasticsearch.AbstractElasticsearch
+	*AbstractModel
 	Index string
 }
 
-func NewGameTypeModel(oAbstractModel *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyModel.GameTypeModel {
+func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameTypeModel {
 	return &GameTypeModel{
-		AbstractElasticsearch: oAbstractModel,
-		Index:                 oAbstractModel.IndexName("game_types"),
+		AbstractModel: oAbstractModel,
+		Index:         oAbstractModel.IndexName("game_types"),
 	}
 }
 

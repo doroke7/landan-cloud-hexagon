@@ -9,7 +9,6 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
 	domain "example/internal/domain"
-	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 )
@@ -19,17 +18,17 @@ import (
 var oDeletedAtZero = time.Date(2038, 1, 19, 3, 14, 7, 0, time.UTC)
 
 type GameModel struct {
-	*outputApplicationMongodb.AbstractMongodb
+	*AbstractModel
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
 // 索引跟 script/mongodb/resource.js 建的一致：key 唯一、
 // name+deleted_at、deleted_at、game_type_id+deleted_at 供查詢用。
-func NewGameModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.GameModel, error) {
-	oCollection := oAbstractMongodb.Database.Collection("games")
+func NewGameModel(oAbstractModel *AbstractModel) (outputPortAnyModel.GameModel, error) {
+	oCollection := oAbstractModel.Database.Collection("games")
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractMongodb.Context, []mongo.IndexModel{
+	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "key", Value: 1}},
 			Options: options.Index().SetUnique(true).SetName("games-k"),
@@ -51,9 +50,9 @@ func NewGameModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (o
 	}
 
 	return &GameModel{
-		AbstractMongodb: oAbstractMongodb,
-		Collection:      oCollection,
-		Counters:        oAbstractMongodb.Database.Collection("counters"),
+		AbstractModel: oAbstractModel,
+		Collection:    oCollection,
+		Counters:      oAbstractModel.Database.Collection("counters"),
 	}, nil
 }
 

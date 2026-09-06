@@ -4,17 +4,16 @@ import (
 	"encoding/json"
 
 	domain "example/internal/domain"
-	outputApplicationNats "example/internal/output/application/nats"
 	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
-	*outputApplicationNats.AbstractNats
+	*AbstractEvent
 }
 
-func NewAdminUserEvent(oAbstractNats *outputApplicationNats.AbstractNats) (outputPortAnyEvent.AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractEvent *AbstractEvent) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
-		AbstractNats: oAbstractNats,
+		AbstractEvent: oAbstractEvent,
 	}, nil
 }
 

@@ -9,22 +9,21 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
 	domain "example/internal/domain"
-	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 )
 
 type TableModel struct {
-	*outputApplicationMongodb.AbstractMongodb
+	*AbstractModel
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
 // 索引跟 script/mongodb/resource.js 建的一致：key 唯一、deleted_at、no+deleted_at 供查詢用。
-func NewTableModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.TableModel, error) {
-	oCollection := oAbstractMongodb.Database.Collection("tables")
+func NewTableModel(oAbstractModel *AbstractModel) (outputPortAnyModel.TableModel, error) {
+	oCollection := oAbstractModel.Database.Collection("tables")
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractMongodb.Context, []mongo.IndexModel{
+	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "key", Value: 1}},
 			Options: options.Index().SetUnique(true).SetName("tables-key"),
@@ -42,9 +41,9 @@ func NewTableModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (
 	}
 
 	return &TableModel{
-		AbstractMongodb: oAbstractMongodb,
-		Collection:      oCollection,
-		Counters:        oAbstractMongodb.Database.Collection("counters"),
+		AbstractModel: oAbstractModel,
+		Collection:    oCollection,
+		Counters:      oAbstractModel.Database.Collection("counters"),
 	}, nil
 }
 

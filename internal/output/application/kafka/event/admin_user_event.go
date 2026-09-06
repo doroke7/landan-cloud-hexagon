@@ -6,17 +6,16 @@ import (
 	"github.com/IBM/sarama"
 
 	domain "example/internal/domain"
-	outputApplicationKafka "example/internal/output/application/kafka"
 	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
-	*outputApplicationKafka.AbstractKafka
+	*AbstractEvent
 }
 
-func NewAdminUserEvent(oAbstractKafka *outputApplicationKafka.AbstractKafka) (outputPortAnyEvent.AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractEvent *AbstractEvent) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
-		AbstractKafka: oAbstractKafka,
+		AbstractEvent: oAbstractEvent,
 	}, nil
 }
 

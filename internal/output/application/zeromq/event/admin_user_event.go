@@ -6,17 +6,16 @@ import (
 	"github.com/go-zeromq/zmq4"
 
 	domain "example/internal/domain"
-	outputApplicationZeromq "example/internal/output/application/zeromq"
 	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
-	*outputApplicationZeromq.AbstractZeromq
+	*AbstractEvent
 }
 
-func NewAdminUserEvent(oAbstractZeromq *outputApplicationZeromq.AbstractZeromq) (outputPortAnyEvent.AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractEvent *AbstractEvent) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
-		AbstractZeromq: oAbstractZeromq,
+		AbstractEvent: oAbstractEvent,
 	}, nil
 }
 

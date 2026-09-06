@@ -9,22 +9,21 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
 	domain "example/internal/domain"
-	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 )
 
 type TableRecordModel struct {
-	*outputApplicationMongodb.AbstractMongodb
+	*AbstractModel
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
 // 索引跟 script/mongodb/resource.js 建的一致：no 唯一、table_id+game_id+no+deleted_at 供查詢用。
-func NewTableRecordModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.TableRecordModel, error) {
-	oCollection := oAbstractMongodb.Database.Collection("table_records")
+func NewTableRecordModel(oAbstractModel *AbstractModel) (outputPortAnyModel.TableRecordModel, error) {
+	oCollection := oAbstractModel.Database.Collection("table_records")
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractMongodb.Context, []mongo.IndexModel{
+	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "no", Value: 1}},
 			Options: options.Index().SetUnique(true).SetName("table_records-n"),
@@ -43,9 +42,9 @@ func NewTableRecordModel(oAbstractMongodb *outputApplicationMongodb.AbstractMong
 	}
 
 	return &TableRecordModel{
-		AbstractMongodb: oAbstractMongodb,
-		Collection:      oCollection,
-		Counters:        oAbstractMongodb.Database.Collection("counters"),
+		AbstractModel: oAbstractModel,
+		Collection:    oCollection,
+		Counters:      oAbstractModel.Database.Collection("counters"),
 	}, nil
 }
 

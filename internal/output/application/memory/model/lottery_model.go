@@ -8,19 +8,18 @@ import (
 	"time"
 
 	domain "example/internal/domain"
-	outputApplicationMemory "example/internal/output/application/memory"
 	outputPortAnyModel "example/internal/output/port/any/model"
 )
 
 type LotteryModel struct {
-	*outputApplicationMemory.AbstractMemory
+	*AbstractModel
 	startTime time.Time
 }
 
-func NewLotteryModel(oAbstractMemory *outputApplicationMemory.AbstractMemory) outputPortAnyModel.LotteryModel {
+func NewLotteryModel(oAbstractModel *AbstractModel) outputPortAnyModel.LotteryModel {
 	return &LotteryModel{
-		AbstractMemory: oAbstractMemory,
-		startTime:      time.Now(),
+		AbstractModel: oAbstractModel,
+		startTime:     time.Now(),
 	}
 }
 

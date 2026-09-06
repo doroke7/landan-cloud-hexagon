@@ -6,17 +6,16 @@ import (
 	"github.com/IBM/sarama"
 
 	domain "example/internal/domain"
-	outputApplicationRedpanda "example/internal/output/application/redpanda"
 	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
-	*outputApplicationRedpanda.AbstractRedpanda
+	*AbstractEvent
 }
 
-func NewAdminUserEvent(oAbstractRedpanda *outputApplicationRedpanda.AbstractRedpanda) (outputPortAnyEvent.AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractEvent *AbstractEvent) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
-		AbstractRedpanda: oAbstractRedpanda,
+		AbstractEvent: oAbstractEvent,
 	}, nil
 }
 

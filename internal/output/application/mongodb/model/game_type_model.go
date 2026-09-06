@@ -11,21 +11,20 @@ import (
 	pkgInput "example/pkg/input"
 
 	domain "example/internal/domain"
-	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyModel "example/internal/output/port/any/model"
 )
 
 type GameTypeModel struct {
-	*outputApplicationMongodb.AbstractMongodb
+	*AbstractModel
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
 // 索引跟 script/mongodb/resource.js 建的一致：key 唯一、name+deleted_at、deleted_at 供查詢用。
-func NewGameTypeModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.GameTypeModel, error) {
-	oCollection := oAbstractMongodb.Database.Collection("game_types")
+func NewGameTypeModel(oAbstractModel *AbstractModel) (outputPortAnyModel.GameTypeModel, error) {
+	oCollection := oAbstractModel.Database.Collection("game_types")
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractMongodb.Context, []mongo.IndexModel{
+	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "key", Value: 1}},
 			Options: options.Index().SetUnique(true).SetName("game_types-k"),
@@ -43,9 +42,9 @@ func NewGameTypeModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb
 	}
 
 	return &GameTypeModel{
-		AbstractMongodb: oAbstractMongodb,
-		Collection:      oCollection,
-		Counters:        oAbstractMongodb.Database.Collection("counters"),
+		AbstractModel: oAbstractModel,
+		Collection:    oCollection,
+		Counters:      oAbstractModel.Database.Collection("counters"),
 	}, nil
 }
 

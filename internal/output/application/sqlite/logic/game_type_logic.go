@@ -5,18 +5,17 @@ import (
 	"sync"
 
 	domain "example/internal/domain"
-	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type GameTypeLogic struct {
-	*outputApplicationSqlite.AbstractSqlite
+	*AbstractLogic
 }
 
-func NewGameTypeLogic(oAbstractLogic *outputApplicationSqlite.AbstractSqlite) outputPortAnyLogic.GameTypeLogic {
+func NewGameTypeLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
-		AbstractSqlite: oAbstractLogic,
+		AbstractLogic: oAbstractLogic,
 	}
 }
 

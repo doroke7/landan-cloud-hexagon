@@ -8,19 +8,18 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
-	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type GameModel struct {
-	*outputApplicationSqlite.AbstractSqlite
+	*AbstractModel
 }
 
-func NewGameModel(oAbstractModel *outputApplicationSqlite.AbstractSqlite) outputPortAnyModel.GameModel {
+func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
 	return &GameModel{
-		AbstractSqlite: oAbstractModel,
+		AbstractModel: oAbstractModel,
 	}
 }
 

@@ -6,20 +6,19 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 
 	domain "example/internal/domain"
-	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type TableLogic struct {
-	*outputApplicationMongodb.AbstractMongodb
+	*AbstractLogic
 	Collection *mongo.Collection
 }
 
-func NewTableLogic(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic {
 	return &TableLogic{
-		AbstractMongodb: oAbstractMongodb,
-		Collection:      oAbstractMongodb.Database.Collection("tables"),
+		AbstractLogic: oAbstractLogic,
+		Collection:    oAbstractLogic.Database.Collection("tables"),
 	}
 }
 

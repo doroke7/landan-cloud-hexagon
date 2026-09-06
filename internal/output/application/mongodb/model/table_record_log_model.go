@@ -8,22 +8,21 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
 	domain "example/internal/domain"
-	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 )
 
 type TableRecordLogModel struct {
-	*outputApplicationMongodb.AbstractMongodb
+	*AbstractModel
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
 // 索引跟 script/mongodb/resource.js 建的一致：table_record_id+game_id+state 供查詢用。
-func NewTableRecordLogModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.TableRecordLogModel, error) {
-	oCollection := oAbstractMongodb.Database.Collection("table_record_logs")
+func NewTableRecordLogModel(oAbstractModel *AbstractModel) (outputPortAnyModel.TableRecordLogModel, error) {
+	oCollection := oAbstractModel.Database.Collection("table_record_logs")
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractMongodb.Context, []mongo.IndexModel{
+	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
 		{
 			Keys: bson.D{
 				{Key: "table_record_id", Value: 1},
@@ -37,9 +36,9 @@ func NewTableRecordLogModel(oAbstractMongodb *outputApplicationMongodb.AbstractM
 	}
 
 	return &TableRecordLogModel{
-		AbstractMongodb: oAbstractMongodb,
-		Collection:      oCollection,
-		Counters:        oAbstractMongodb.Database.Collection("counters"),
+		AbstractModel: oAbstractModel,
+		Collection:    oCollection,
+		Counters:      oAbstractModel.Database.Collection("counters"),
 	}, nil
 }
 

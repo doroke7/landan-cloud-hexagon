@@ -6,17 +6,16 @@ import (
 	"github.com/apache/pulsar-client-go/pulsar"
 
 	domain "example/internal/domain"
-	outputApplicationPulsar "example/internal/output/application/pulsar"
 	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
-	*outputApplicationPulsar.AbstractPulsar
+	*AbstractEvent
 	Producer pulsar.Producer
 }
 
-func NewAdminUserEvent(oAbstractPulsar *outputApplicationPulsar.AbstractPulsar) (outputPortAnyEvent.AdminUserEvent, error) {
-	oProducer, err := oAbstractPulsar.Client.CreateProducer(pulsar.ProducerOptions{
+func NewAdminUserEvent(oAbstractEvent *AbstractEvent) (outputPortAnyEvent.AdminUserEvent, error) {
+	oProducer, err := oAbstractEvent.Client.CreateProducer(pulsar.ProducerOptions{
 		Topic: "/Queue/AdminUser.AddOne",
 	})
 	if err != nil {
@@ -24,8 +23,8 @@ func NewAdminUserEvent(oAbstractPulsar *outputApplicationPulsar.AbstractPulsar) 
 	}
 
 	return &AdminUserEvent{
-		AbstractPulsar: oAbstractPulsar,
-		Producer:       oProducer,
+		AbstractEvent: oAbstractEvent,
+		Producer:      oProducer,
 	}, nil
 }
 

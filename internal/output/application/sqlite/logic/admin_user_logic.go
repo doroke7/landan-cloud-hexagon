@@ -7,7 +7,6 @@ import (
 	"time"
 
 	domain "example/internal/domain"
-	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
@@ -16,12 +15,12 @@ import (
 )
 
 type AdminUserLogic struct {
-	*outputApplicationSqlite.AbstractSqlite
+	*AbstractLogic
 }
 
-func NewAdminUserLogic(oAbstractLogic *outputApplicationSqlite.AbstractSqlite) outputPortAnyLogic.AdminUserLogic {
+func NewAdminUserLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminUserLogic {
 	return &AdminUserLogic{
-		AbstractSqlite: oAbstractLogic,
+		AbstractLogic: oAbstractLogic,
 	}
 }
 

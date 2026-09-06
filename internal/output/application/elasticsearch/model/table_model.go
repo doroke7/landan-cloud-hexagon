@@ -13,19 +13,18 @@ import (
 	pkgUtility "example/pkg/utility"
 
 	domain "example/internal/domain"
-	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyModel "example/internal/output/port/any/model"
 )
 
 type TableModel struct {
-	*outputApplicationElasticsearch.AbstractElasticsearch
+	*AbstractModel
 	Index string
 }
 
-func NewTableModel(oAbstractModel *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyModel.TableModel {
+func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel {
 	return &TableModel{
-		AbstractElasticsearch: oAbstractModel,
-		Index:                 oAbstractModel.IndexName("tables"),
+		AbstractModel: oAbstractModel,
+		Index:         oAbstractModel.IndexName("tables"),
 	}
 }
 

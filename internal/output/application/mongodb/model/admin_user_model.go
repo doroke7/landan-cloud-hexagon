@@ -11,21 +11,20 @@ import (
 	pkgInput "example/pkg/input"
 
 	domain "example/internal/domain"
-	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyModel "example/internal/output/port/any/model"
 )
 
 type AdminUserModel struct {
-	*outputApplicationMongodb.AbstractMongodb
+	*AbstractModel
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
 // 索引跟 script/mongodb/resource.js 建的一致：name 唯一、deleted_at 供軟刪除過濾用。
-func NewAdminUserModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.AdminUserModel, error) {
-	oCollection := oAbstractMongodb.Database.Collection("admin_users")
+func NewAdminUserModel(oAbstractModel *AbstractModel) (outputPortAnyModel.AdminUserModel, error) {
+	oCollection := oAbstractModel.Database.Collection("admin_users")
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractMongodb.Context, []mongo.IndexModel{
+	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "name", Value: 1}},
 			Options: options.Index().SetUnique(true).SetName("admin_users-name"),
@@ -39,9 +38,9 @@ func NewAdminUserModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongod
 	}
 
 	return &AdminUserModel{
-		AbstractMongodb: oAbstractMongodb,
-		Collection:      oCollection,
-		Counters:        oAbstractMongodb.Database.Collection("counters"),
+		AbstractModel: oAbstractModel,
+		Collection:    oCollection,
+		Counters:      oAbstractModel.Database.Collection("counters"),
 	}, nil
 }
 
