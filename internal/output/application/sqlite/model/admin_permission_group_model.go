@@ -105,8 +105,8 @@ func (oSelf *AdminPermissionGroupModel) TotalByFilters(aFilters []*pkgInput.Filt
 	return uint64(iTotal), nil
 }
 
-func (oSelf *AdminPermissionGroupModel) AddOne(oAdminPermissionGroup *domain.AdminPermissionGroup) error {
-	oColumns := adminPermissionGroupColumns(oAdminPermissionGroup)
+func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupValue) error {
+	oColumns, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermissionGroup{}).
@@ -123,8 +123,8 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oAdminPermissionGroup *domain.Adm
 	return nil
 }
 
-func (oSelf *AdminPermissionGroupModel) EditOneById(oAdminPermissionGroup *domain.AdminPermissionGroup, iId uint64) error {
-	oColumns := adminPermissionGroupColumns(oAdminPermissionGroup)
+func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissionGroupValue, iId uint64) error {
+	oColumns, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermissionGroup{}).
@@ -158,19 +158,4 @@ func (oSelf *AdminPermissionGroupModel) RemoveOneById(iId uint64) error {
 	}
 
 	return nil
-}
-
-// adminPermissionGroupColumns 只留可寫欄位（parent_id / key / name），
-// id、時間欄、Parent／Children 關聯欄都拿掉。
-func adminPermissionGroupColumns(oAdminPermissionGroup *domain.AdminPermissionGroup) map[string]any {
-	oColumns, _ := pkgUtility.StructToMap(oAdminPermissionGroup)
-
-	delete(oColumns, "id")
-	delete(oColumns, "parent")
-	delete(oColumns, "children")
-	delete(oColumns, "created_at")
-	delete(oColumns, "updated_at")
-	delete(oColumns, "deleted_at")
-
-	return oColumns
 }

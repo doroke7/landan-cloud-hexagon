@@ -116,7 +116,7 @@ func (oSelf *AdminPermissionGroupModel) TotalByFilters(aFilters []*pkgInput.Filt
 	return uint64(iCount), nil
 }
 
-func (oSelf *AdminPermissionGroupModel) AddOne(oAdminPermissionGroup *domain.AdminPermissionGroup) error {
+func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupValue) error {
 	iId, oErr := oSelf.nextId()
 	if oErr != nil {
 		return oErr
@@ -125,12 +125,16 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oAdminPermissionGroup *domain.Adm
 	oNow := time.Now()
 	oNew := &domain.AdminPermissionGroup{
 		Id:        iId,
-		ParentId:  oAdminPermissionGroup.ParentId,
-		Key:       oAdminPermissionGroup.Key,
-		Name:      oAdminPermissionGroup.Name,
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
 		DeletedAt: oDeletedAtZero,
+	}
+
+	if oValue.Key != nil {
+		oNew.Key = *oValue.Key
+	}
+	if oValue.Name != nil {
+		oNew.Name = *oValue.Name
 	}
 
 	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
@@ -140,12 +144,14 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oAdminPermissionGroup *domain.Adm
 	return nil
 }
 
-func (oSelf *AdminPermissionGroupModel) EditOneById(oAdminPermissionGroup *domain.AdminPermissionGroup, iId uint64) error {
-	oSet := bson.M{
-		"parent_id":  oAdminPermissionGroup.ParentId,
-		"key":        oAdminPermissionGroup.Key,
-		"name":       oAdminPermissionGroup.Name,
-		"updated_at": time.Now(),
+func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissionGroupValue, iId uint64) error {
+	oSet := bson.M{"updated_at": time.Now()}
+
+	if oValue.Key != nil {
+		oSet["key"] = *oValue.Key
+	}
+	if oValue.Name != nil {
+		oSet["name"] = *oValue.Name
 	}
 
 	oResult, oErr := oSelf.Collection.UpdateOne(

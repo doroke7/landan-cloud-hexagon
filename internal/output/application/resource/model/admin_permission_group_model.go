@@ -45,13 +45,12 @@ func NewAdminPermissionGroupModel(oAbstractModel *AbstractModel) outputPortAnyMo
 	}
 }
 
-func (oSelf *AdminPermissionGroupModel) AddOne(oAdminPermissionGroup *domain.AdminPermissionGroup) error {
+func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupValue) error {
 
 	oRequest := &pbResourceModel.AdminPermissionGroupAddOneInput{
 		Variable: &pbResourceModel.AdminPermissionGroupVariable{
-			ParentId: oAdminPermissionGroup.ParentId,
-			Key:      oAdminPermissionGroup.Key,
-			Name:     oAdminPermissionGroup.Name,
+			Key:  oValue.Key,
+			Name: oValue.Name,
 		},
 	}
 
@@ -117,14 +116,13 @@ func (oSelf *AdminPermissionGroupModel) TotalByFilters(aFilters []*pkgInput.Filt
 	return iTotal, oErr
 }
 
-func (oSelf *AdminPermissionGroupModel) EditOneById(oAdminPermissionGroup *domain.AdminPermissionGroup, iId uint64) error {
+func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissionGroupValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.AdminPermissionGroupEditOneByIdInput{
 		Id: iId,
 		Variable: &pbResourceModel.AdminPermissionGroupVariable{
-			ParentId: oAdminPermissionGroup.ParentId,
-			Key:      oAdminPermissionGroup.Key,
-			Name:     oAdminPermissionGroup.Name,
+			Key:  oValue.Key,
+			Name: oValue.Name,
 		},
 	}
 

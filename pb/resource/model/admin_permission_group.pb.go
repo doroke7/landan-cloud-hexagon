@@ -24,9 +24,8 @@ const (
 
 type AdminPermissionGroupVariable struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	ParentId      uint64                 `protobuf:"varint,1,opt,name=parent_id,json=parentId,proto3" json:"parent_id,omitempty"`
-	Key           string                 `protobuf:"bytes,2,opt,name=key,proto3" json:"key,omitempty"`
-	Name          string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`
+	Key           *string                `protobuf:"bytes,1,opt,name=key,proto3,oneof" json:"key,omitempty"`
+	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -61,23 +60,16 @@ func (*AdminPermissionGroupVariable) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_group_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminPermissionGroupVariable) GetParentId() uint64 {
-	if x != nil {
-		return x.ParentId
-	}
-	return 0
-}
-
 func (x *AdminPermissionGroupVariable) GetKey() string {
-	if x != nil {
-		return x.Key
+	if x != nil && x.Key != nil {
+		return *x.Key
 	}
 	return ""
 }
 
 func (x *AdminPermissionGroupVariable) GetName() string {
-	if x != nil {
-		return x.Name
+	if x != nil && x.Name != nil {
+		return *x.Name
 	}
 	return ""
 }
@@ -638,11 +630,12 @@ var File_resource_model_admin_permission_group_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_permission_group_proto_rawDesc = "" +
 	"\n" +
-	"+resource/model/admin_permission_group.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"a\n" +
-	"\x1cAdminPermissionGroupVariable\x12\x1b\n" +
-	"\tparent_id\x18\x01 \x01(\x04R\bparentId\x12\x10\n" +
-	"\x03key\x18\x02 \x01(\tR\x03key\x12\x12\n" +
-	"\x04name\x18\x03 \x01(\tR\x04name\"n\n" +
+	"+resource/model/admin_permission_group.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"_\n" +
+	"\x1cAdminPermissionGroupVariable\x12\x15\n" +
+	"\x03key\x18\x01 \x01(\tH\x00R\x03key\x88\x01\x01\x12\x17\n" +
+	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01B\x06\n" +
+	"\x04_keyB\a\n" +
+	"\x05_name\"n\n" +
 	"\x1fAdminPermissionGroupAddOneInput\x12K\n" +
 	"\bvariable\x18\x01 \x01(\v2/.pb.resource.model.AdminPermissionGroupVariableR\bvariable\"{\n" +
 	" AdminPermissionGroupAddOneOutput\x12W\n" +
@@ -746,6 +739,7 @@ func file_resource_model_admin_permission_group_proto_init() {
 	if File_resource_model_admin_permission_group_proto != nil {
 		return
 	}
+	file_resource_model_admin_permission_group_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{

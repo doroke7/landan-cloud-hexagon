@@ -12,6 +12,7 @@ import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type AdminPermissionGroupModel struct {
@@ -116,7 +117,7 @@ func (oSelf *AdminPermissionGroupModel) TotalByFilters(aFilters []*pkgInput.Filt
 	return uint64(iTotal), oErr
 }
 
-func (oSelf *AdminPermissionGroupModel) AddOne(oAdminPermissionGroup *domain.AdminPermissionGroup) error {
+func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupValue) error {
 	iId, oErr := oSelf.NextId("admin_permission_group")
 	if oErr != nil {
 		return oErr
@@ -125,12 +126,16 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oAdminPermissionGroup *domain.Adm
 	oNow := time.Now()
 	oDoc := &domain.AdminPermissionGroup{
 		Id:        uint64(iId),
-		ParentId:  oAdminPermissionGroup.ParentId,
-		Key:       oAdminPermissionGroup.Key,
-		Name:      oAdminPermissionGroup.Name,
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
 		DeletedAt: oDeletedAtZero,
+	}
+
+	if oValue.Key != nil {
+		oDoc.Key = *oValue.Key
+	}
+	if oValue.Name != nil {
+		oDoc.Name = *oValue.Name
 	}
 
 	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
@@ -140,13 +145,12 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oAdminPermissionGroup *domain.Adm
 	return nil
 }
 
-func (oSelf *AdminPermissionGroupModel) EditOneById(oAdminPermissionGroup *domain.AdminPermissionGroup, iId uint64) error {
-	oColumns := map[string]any{
-		"parent_id":  oAdminPermissionGroup.ParentId,
-		"key":        oAdminPermissionGroup.Key,
-		"name":       oAdminPermissionGroup.Name,
-		"updated_at": time.Now(),
+func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissionGroupValue, iId uint64) error {
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
+	if oErr != nil {
+		return oErr
 	}
+	oColumns["updated_at"] = time.Now()
 
 	sId := strconv.FormatUint(iId, 10)
 
