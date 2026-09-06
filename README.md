@@ -91,6 +91,12 @@
 3. 刪除 resource + 其他output 的 model 方法，包含 proto
 
 
+## 如何拔掉 GameModel.ShowOneById
+1. 先把 output 的 resource 的 GameModel.ShowOneById 改為 return nil, nil
+2. 去掉 gRPC resource proto input
+3. 去掉 gRPC resource 的 usecase
+4. 去掉 output 的 port 去掉 GameModel ShowOneById
+
 ## 框架特點
 1. 六角框架，多彈性輸入，多彈性輸出
 2. 全局單例模組使用 DI 模式統一注入 一個唯一物件使用。

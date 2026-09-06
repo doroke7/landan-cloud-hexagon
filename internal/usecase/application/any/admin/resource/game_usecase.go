@@ -73,7 +73,7 @@ func (oSelf *GameUsecase) RemoveOne(iId uint) error {
 }
 
 func (oSelf *GameUsecase) ShowOne(iId uint64) (*domain.Game, error) {
-	oGame, oErr := oSelf.GameModel.ShowOneById(iId)
+	oGame, oErr := oSelf.GameLogic.ShowGameById(iId)
 
 	return oGame, oErr
 }
