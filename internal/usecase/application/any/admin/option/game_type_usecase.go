@@ -29,8 +29,9 @@ func (oSelf *GameTypeUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*
 	if oErr != nil {
 		return nil, 0, oErr
 	}
+	iLen := len(aGameTypes)
 
-	return aGameTypes, uint64(0), oErr
+	return aGameTypes, uint64(iLen), oErr
 }
 
 func (oSelf *GameTypeUsecase) ShowTree() ([]*domain.GameType, error) {
