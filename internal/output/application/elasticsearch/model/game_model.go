@@ -99,33 +99,6 @@ func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	return uint(iTotal), oErr
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
-	sDeletedAtField := "deleted_at"
-
-	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})
-
-	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, aSorters, oPagination)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	oResult, oErr := oSelf.SearchWithOptions(aOptions)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	aGames := make([]*domain.Game, len(oResult.Hits))
-	for i, oHit := range oResult.Hits {
-		var oGame domain.Game
-		if oErr := json.Unmarshal(oHit.Source, &oGame); oErr != nil {
-			return nil, oErr
-		}
-		aGames[i] = &oGame
-	}
-
-	return aGames, nil
-}
-
 func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 

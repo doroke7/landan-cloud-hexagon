@@ -115,29 +115,6 @@ func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	return uint(iTotal), oErr
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
-
-	oRequest := &pbResourceModel.GameShowOnesByFiltersWithSortersPaginationInput{
-		Filters:    oSelf.ToFilters(aFilters),
-		Sorters:    oSelf.ToSorters(aSorters),
-		Pagination: oSelf.ToPagination(oPagination),
-	}
-
-	oResponse, oErr := oSelf.ResourceModelClient.Game.ShowOnesByFiltersWithSortersPagination(oSelf.Context, oRequest)
-
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	aGames := make([]*domain.Game, 0, len(oResponse.GetGames()))
-	for _, oOne := range oResponse.GetGames() {
-		oGame := protoGameToDomainGame(oOne)
-		aGames = append(aGames, &oGame)
-	}
-
-	return aGames, nil
-}
-
 func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 
 	oRequest := &pbResourceModel.GameTotalByFiltersInput{

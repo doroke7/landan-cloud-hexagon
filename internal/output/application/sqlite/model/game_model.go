@@ -2,7 +2,6 @@ package outputApplicationSqliteModel
 
 import (
 	"errors"
-	"strings"
 	"time"
 
 	"gorm.io/gorm"
@@ -72,46 +71,6 @@ func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	}
 
 	return uint(iTotal), nil
-}
-
-func (oSelf *GameModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
-	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
-	aOrders := oSelf.AbstractSqlite.SortersToOrders(aSorters)
-	oLimit := oSelf.AbstractSqlite.PaginationToLimit(oPagination)
-
-	var aGames []*domain.Game
-
-	oQuery := oSelf.DB.WithContext(oSelf.Context).
-		Preload("GameType").
-		Preload("GameType.Parent").
-		Model(&domain.Game{}).
-		Where("deleted_at = ?", "2038-01-19 03:14:07")
-
-	for _, oWhere := range aWheres {
-		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
-	}
-
-	for _, oOrder := range aOrders {
-		if oOrder == nil || oOrder.Field == nil {
-			continue
-		}
-
-		sDirection := "ASC"
-		if oOrder.Value != nil && strings.EqualFold(*oOrder.Value, "desc") {
-			sDirection = "DESC"
-		}
-
-		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
-	}
-
-	if oErr := oQuery.
-		Limit(int(*oLimit.Count)).
-		Offset(int(*oLimit.Offset)).
-		Find(&aGames).Error; oErr != nil {
-		return nil, oErr
-	}
-
-	return aGames, nil
 }
 
 func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

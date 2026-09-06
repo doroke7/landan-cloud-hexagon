@@ -205,26 +205,6 @@ func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	return uint(iCount), nil
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
-	oFilter := oSelf.FiltersToFilter(aFilters)
-	oFilter["deleted_at"] = oDeletedAtZero
-
-	oFindOptions := oSelf.SortersPaginationToFindOptions(aSorters, oPagination)
-
-	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, oFilter, oFindOptions)
-	if oErr != nil {
-		return nil, oErr
-	}
-	defer oCursor.Close(oSelf.Context)
-
-	var aGames []*domain.Game
-	if oErr := oCursor.All(oSelf.Context, &aGames); oErr != nil {
-		return nil, oErr
-	}
-
-	return aGames, nil
-}
-
 func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero

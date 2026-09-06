@@ -33,13 +33,6 @@ func (oSelf *GameUsecase) ShowOneById(iId uint64) (*domain.Game, error) {
 	return oGame, oErr
 }
 
-func (oSelf *GameUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
-
-	aGames, oErr := oSelf.GameModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
-
-	return aGames, oErr
-}
-
 func (oSelf *GameUsecase) EditOneById(oEdit *domain.GameValue, iId uint64) error {
 
 	oErr := oSelf.GameModel.EditOneById(oEdit, iId)
