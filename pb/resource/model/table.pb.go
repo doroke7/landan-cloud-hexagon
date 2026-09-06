@@ -211,94 +211,6 @@ func (x *TableAddOneOutput) GetStatus() bool {
 	return false
 }
 
-type TableShowOneByIdInput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *TableShowOneByIdInput) Reset() {
-	*x = TableShowOneByIdInput{}
-	mi := &file_resource_model_table_proto_msgTypes[3]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *TableShowOneByIdInput) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TableShowOneByIdInput) ProtoMessage() {}
-
-func (x *TableShowOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[3]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TableShowOneByIdInput.ProtoReflect.Descriptor instead.
-func (*TableShowOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *TableShowOneByIdInput) GetId() uint64 {
-	if x != nil {
-		return x.Id
-	}
-	return 0
-}
-
-type TableShowOneByIdOutput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Table         *resource.Table        `protobuf:"bytes,1,opt,name=table,proto3" json:"table,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *TableShowOneByIdOutput) Reset() {
-	*x = TableShowOneByIdOutput{}
-	mi := &file_resource_model_table_proto_msgTypes[4]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *TableShowOneByIdOutput) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TableShowOneByIdOutput) ProtoMessage() {}
-
-func (x *TableShowOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[4]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TableShowOneByIdOutput.ProtoReflect.Descriptor instead.
-func (*TableShowOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{4}
-}
-
-func (x *TableShowOneByIdOutput) GetTable() *resource.Table {
-	if x != nil {
-		return x.Table
-	}
-	return nil
-}
-
 type TableEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Variable      *TableVariable         `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
@@ -309,7 +221,7 @@ type TableEditOneByIdInput struct {
 
 func (x *TableEditOneByIdInput) Reset() {
 	*x = TableEditOneByIdInput{}
-	mi := &file_resource_model_table_proto_msgTypes[5]
+	mi := &file_resource_model_table_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -321,7 +233,7 @@ func (x *TableEditOneByIdInput) String() string {
 func (*TableEditOneByIdInput) ProtoMessage() {}
 
 func (x *TableEditOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[5]
+	mi := &file_resource_model_table_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -334,7 +246,7 @@ func (x *TableEditOneByIdInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableEditOneByIdInput.ProtoReflect.Descriptor instead.
 func (*TableEditOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{5}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *TableEditOneByIdInput) GetVariable() *TableVariable {
@@ -360,7 +272,7 @@ type TableEditOneByIdOutput struct {
 
 func (x *TableEditOneByIdOutput) Reset() {
 	*x = TableEditOneByIdOutput{}
-	mi := &file_resource_model_table_proto_msgTypes[6]
+	mi := &file_resource_model_table_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -372,7 +284,7 @@ func (x *TableEditOneByIdOutput) String() string {
 func (*TableEditOneByIdOutput) ProtoMessage() {}
 
 func (x *TableEditOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[6]
+	mi := &file_resource_model_table_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -385,7 +297,7 @@ func (x *TableEditOneByIdOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableEditOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*TableEditOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{6}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *TableEditOneByIdOutput) GetStatus() bool {
@@ -404,7 +316,7 @@ type TableRemoveOneByIdInput struct {
 
 func (x *TableRemoveOneByIdInput) Reset() {
 	*x = TableRemoveOneByIdInput{}
-	mi := &file_resource_model_table_proto_msgTypes[7]
+	mi := &file_resource_model_table_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -416,7 +328,7 @@ func (x *TableRemoveOneByIdInput) String() string {
 func (*TableRemoveOneByIdInput) ProtoMessage() {}
 
 func (x *TableRemoveOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[7]
+	mi := &file_resource_model_table_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -429,7 +341,7 @@ func (x *TableRemoveOneByIdInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableRemoveOneByIdInput.ProtoReflect.Descriptor instead.
 func (*TableRemoveOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{7}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *TableRemoveOneByIdInput) GetId() uint64 {
@@ -448,7 +360,7 @@ type TableRemoveOneByIdOutput struct {
 
 func (x *TableRemoveOneByIdOutput) Reset() {
 	*x = TableRemoveOneByIdOutput{}
-	mi := &file_resource_model_table_proto_msgTypes[8]
+	mi := &file_resource_model_table_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -460,7 +372,7 @@ func (x *TableRemoveOneByIdOutput) String() string {
 func (*TableRemoveOneByIdOutput) ProtoMessage() {}
 
 func (x *TableRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[8]
+	mi := &file_resource_model_table_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -473,7 +385,7 @@ func (x *TableRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*TableRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{8}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *TableRemoveOneByIdOutput) GetStatus() bool {
@@ -481,110 +393,6 @@ func (x *TableRemoveOneByIdOutput) GetStatus() bool {
 		return x.Status
 	}
 	return false
-}
-
-type TableShowOnesByFiltersWithSortersPaginationInput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
-	Sorters       []*resource.Sorter     `protobuf:"bytes,3,rep,name=sorters,proto3" json:"sorters,omitempty"`
-	Pagination    *resource.Pagination   `protobuf:"bytes,2,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *TableShowOnesByFiltersWithSortersPaginationInput) Reset() {
-	*x = TableShowOnesByFiltersWithSortersPaginationInput{}
-	mi := &file_resource_model_table_proto_msgTypes[9]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *TableShowOnesByFiltersWithSortersPaginationInput) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TableShowOnesByFiltersWithSortersPaginationInput) ProtoMessage() {}
-
-func (x *TableShowOnesByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[9]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TableShowOnesByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
-func (*TableShowOnesByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *TableShowOnesByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
-	if x != nil {
-		return x.Filters
-	}
-	return nil
-}
-
-func (x *TableShowOnesByFiltersWithSortersPaginationInput) GetSorters() []*resource.Sorter {
-	if x != nil {
-		return x.Sorters
-	}
-	return nil
-}
-
-func (x *TableShowOnesByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
-	if x != nil {
-		return x.Pagination
-	}
-	return nil
-}
-
-type TableShowOnesByFiltersWithSortersPaginationOutput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Tables        []*resource.Table      `protobuf:"bytes,1,rep,name=tables,proto3" json:"tables,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *TableShowOnesByFiltersWithSortersPaginationOutput) Reset() {
-	*x = TableShowOnesByFiltersWithSortersPaginationOutput{}
-	mi := &file_resource_model_table_proto_msgTypes[10]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *TableShowOnesByFiltersWithSortersPaginationOutput) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*TableShowOnesByFiltersWithSortersPaginationOutput) ProtoMessage() {}
-
-func (x *TableShowOnesByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[10]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use TableShowOnesByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
-func (*TableShowOnesByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{10}
-}
-
-func (x *TableShowOnesByFiltersWithSortersPaginationOutput) GetTables() []*resource.Table {
-	if x != nil {
-		return x.Tables
-	}
-	return nil
 }
 
 type TableTotalByFiltersInput struct {
@@ -596,7 +404,7 @@ type TableTotalByFiltersInput struct {
 
 func (x *TableTotalByFiltersInput) Reset() {
 	*x = TableTotalByFiltersInput{}
-	mi := &file_resource_model_table_proto_msgTypes[11]
+	mi := &file_resource_model_table_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -608,7 +416,7 @@ func (x *TableTotalByFiltersInput) String() string {
 func (*TableTotalByFiltersInput) ProtoMessage() {}
 
 func (x *TableTotalByFiltersInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[11]
+	mi := &file_resource_model_table_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -621,7 +429,7 @@ func (x *TableTotalByFiltersInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableTotalByFiltersInput.ProtoReflect.Descriptor instead.
 func (*TableTotalByFiltersInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{11}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *TableTotalByFiltersInput) GetFilters() []*resource.Filter {
@@ -640,7 +448,7 @@ type TableTotalByFiltersOutput struct {
 
 func (x *TableTotalByFiltersOutput) Reset() {
 	*x = TableTotalByFiltersOutput{}
-	mi := &file_resource_model_table_proto_msgTypes[12]
+	mi := &file_resource_model_table_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -652,7 +460,7 @@ func (x *TableTotalByFiltersOutput) String() string {
 func (*TableTotalByFiltersOutput) ProtoMessage() {}
 
 func (x *TableTotalByFiltersOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_table_proto_msgTypes[12]
+	mi := &file_resource_model_table_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -665,7 +473,7 @@ func (x *TableTotalByFiltersOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableTotalByFiltersOutput.ProtoReflect.Descriptor instead.
 func (*TableTotalByFiltersOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_table_proto_rawDescGZIP(), []int{12}
+	return file_resource_model_table_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *TableTotalByFiltersOutput) GetTotal() uint64 {
@@ -700,11 +508,7 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\x10TableAddOneInput\x12<\n" +
 	"\bvariable\x18\x01 \x01(\v2 .pb.resource.model.TableVariableR\bvariable\"+\n" +
 	"\x11TableAddOneOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"'\n" +
-	"\x15TableShowOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"B\n" +
-	"\x16TableShowOneByIdOutput\x12(\n" +
-	"\x05table\x18\x01 \x01(\v2\x12.pb.resource.TableR\x05table\"e\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\"e\n" +
 	"\x15TableEditOneByIdInput\x12<\n" +
 	"\bvariable\x18\x01 \x01(\v2 .pb.resource.model.TableVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"0\n" +
@@ -713,26 +517,16 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\x17TableRemoveOneByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"2\n" +
 	"\x18TableRemoveOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"\xc9\x01\n" +
-	"0TableShowOnesByFiltersWithSortersPaginationInput\x12-\n" +
-	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
-	"\asorters\x18\x03 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
-	"\n" +
-	"pagination\x18\x02 \x01(\v2\x17.pb.resource.PaginationR\n" +
-	"pagination\"_\n" +
-	"1TableShowOnesByFiltersWithSortersPaginationOutput\x12*\n" +
-	"\x06tables\x18\x01 \x03(\v2\x12.pb.resource.TableR\x06tables\"I\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\"I\n" +
 	"\x18TableTotalByFiltersInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\"1\n" +
 	"\x19TableTotalByFiltersOutput\x12\x14\n" +
-	"\x05total\x18\x01 \x01(\x04R\x05total2\xb6\x05\n" +
+	"\x05total\x18\x01 \x01(\x04R\x05total2\x9c\x03\n" +
 	"\n" +
 	"TableModel\x12S\n" +
 	"\x06AddOne\x12#.pb.resource.model.TableAddOneInput\x1a$.pb.resource.model.TableAddOneOutput\x12b\n" +
-	"\vShowOneById\x12(.pb.resource.model.TableShowOneByIdInput\x1a).pb.resource.model.TableShowOneByIdOutput\x12b\n" +
 	"\vEditOneById\x12(.pb.resource.model.TableEditOneByIdInput\x1a).pb.resource.model.TableEditOneByIdOutput\x12h\n" +
-	"\rRemoveOneById\x12*.pb.resource.model.TableRemoveOneByIdInput\x1a+.pb.resource.model.TableRemoveOneByIdOutput\x12\xb3\x01\n" +
-	"&ShowOnesByFiltersWithSortersPagination\x12C.pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput\x1aD.pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput\x12k\n" +
+	"\rRemoveOneById\x12*.pb.resource.model.TableRemoveOneByIdInput\x1a+.pb.resource.model.TableRemoveOneByIdOutput\x12k\n" +
 	"\x0eTotalByFilters\x12+.pb.resource.model.TableTotalByFiltersInput\x1a,.pb.resource.model.TableTotalByFiltersOutputB\x15Z\x13./pb_resource_modelb\x06proto3"
 
 var (
@@ -747,55 +541,39 @@ func file_resource_model_table_proto_rawDescGZIP() []byte {
 	return file_resource_model_table_proto_rawDescData
 }
 
-var file_resource_model_table_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_resource_model_table_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_resource_model_table_proto_goTypes = []any{
-	(*TableVariable)(nil),                                     // 0: pb.resource.model.TableVariable
-	(*TableAddOneInput)(nil),                                  // 1: pb.resource.model.TableAddOneInput
-	(*TableAddOneOutput)(nil),                                 // 2: pb.resource.model.TableAddOneOutput
-	(*TableShowOneByIdInput)(nil),                             // 3: pb.resource.model.TableShowOneByIdInput
-	(*TableShowOneByIdOutput)(nil),                            // 4: pb.resource.model.TableShowOneByIdOutput
-	(*TableEditOneByIdInput)(nil),                             // 5: pb.resource.model.TableEditOneByIdInput
-	(*TableEditOneByIdOutput)(nil),                            // 6: pb.resource.model.TableEditOneByIdOutput
-	(*TableRemoveOneByIdInput)(nil),                           // 7: pb.resource.model.TableRemoveOneByIdInput
-	(*TableRemoveOneByIdOutput)(nil),                          // 8: pb.resource.model.TableRemoveOneByIdOutput
-	(*TableShowOnesByFiltersWithSortersPaginationInput)(nil),  // 9: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput
-	(*TableShowOnesByFiltersWithSortersPaginationOutput)(nil), // 10: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput
-	(*TableTotalByFiltersInput)(nil),                          // 11: pb.resource.model.TableTotalByFiltersInput
-	(*TableTotalByFiltersOutput)(nil),                         // 12: pb.resource.model.TableTotalByFiltersOutput
-	(*timestamppb.Timestamp)(nil),                             // 13: google.protobuf.Timestamp
-	(*resource.Table)(nil),                                    // 14: pb.resource.Table
-	(*resource.Filter)(nil),                                   // 15: pb.resource.Filter
-	(*resource.Sorter)(nil),                                   // 16: pb.resource.Sorter
-	(*resource.Pagination)(nil),                               // 17: pb.resource.Pagination
+	(*TableVariable)(nil),             // 0: pb.resource.model.TableVariable
+	(*TableAddOneInput)(nil),          // 1: pb.resource.model.TableAddOneInput
+	(*TableAddOneOutput)(nil),         // 2: pb.resource.model.TableAddOneOutput
+	(*TableEditOneByIdInput)(nil),     // 3: pb.resource.model.TableEditOneByIdInput
+	(*TableEditOneByIdOutput)(nil),    // 4: pb.resource.model.TableEditOneByIdOutput
+	(*TableRemoveOneByIdInput)(nil),   // 5: pb.resource.model.TableRemoveOneByIdInput
+	(*TableRemoveOneByIdOutput)(nil),  // 6: pb.resource.model.TableRemoveOneByIdOutput
+	(*TableTotalByFiltersInput)(nil),  // 7: pb.resource.model.TableTotalByFiltersInput
+	(*TableTotalByFiltersOutput)(nil), // 8: pb.resource.model.TableTotalByFiltersOutput
+	(*timestamppb.Timestamp)(nil),     // 9: google.protobuf.Timestamp
+	(*resource.Filter)(nil),           // 10: pb.resource.Filter
 }
 var file_resource_model_table_proto_depIdxs = []int32{
-	13, // 0: pb.resource.model.TableVariable.started_at:type_name -> google.protobuf.Timestamp
-	13, // 1: pb.resource.model.TableVariable.ended_at:type_name -> google.protobuf.Timestamp
+	9,  // 0: pb.resource.model.TableVariable.started_at:type_name -> google.protobuf.Timestamp
+	9,  // 1: pb.resource.model.TableVariable.ended_at:type_name -> google.protobuf.Timestamp
 	0,  // 2: pb.resource.model.TableAddOneInput.variable:type_name -> pb.resource.model.TableVariable
-	14, // 3: pb.resource.model.TableShowOneByIdOutput.table:type_name -> pb.resource.Table
-	0,  // 4: pb.resource.model.TableEditOneByIdInput.variable:type_name -> pb.resource.model.TableVariable
-	15, // 5: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	16, // 6: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	17, // 7: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	14, // 8: pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput.tables:type_name -> pb.resource.Table
-	15, // 9: pb.resource.model.TableTotalByFiltersInput.filters:type_name -> pb.resource.Filter
-	1,  // 10: pb.resource.model.TableModel.AddOne:input_type -> pb.resource.model.TableAddOneInput
-	3,  // 11: pb.resource.model.TableModel.ShowOneById:input_type -> pb.resource.model.TableShowOneByIdInput
-	5,  // 12: pb.resource.model.TableModel.EditOneById:input_type -> pb.resource.model.TableEditOneByIdInput
-	7,  // 13: pb.resource.model.TableModel.RemoveOneById:input_type -> pb.resource.model.TableRemoveOneByIdInput
-	9,  // 14: pb.resource.model.TableModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.TableShowOnesByFiltersWithSortersPaginationInput
-	11, // 15: pb.resource.model.TableModel.TotalByFilters:input_type -> pb.resource.model.TableTotalByFiltersInput
-	2,  // 16: pb.resource.model.TableModel.AddOne:output_type -> pb.resource.model.TableAddOneOutput
-	4,  // 17: pb.resource.model.TableModel.ShowOneById:output_type -> pb.resource.model.TableShowOneByIdOutput
-	6,  // 18: pb.resource.model.TableModel.EditOneById:output_type -> pb.resource.model.TableEditOneByIdOutput
-	8,  // 19: pb.resource.model.TableModel.RemoveOneById:output_type -> pb.resource.model.TableRemoveOneByIdOutput
-	10, // 20: pb.resource.model.TableModel.ShowOnesByFiltersWithSortersPagination:output_type -> pb.resource.model.TableShowOnesByFiltersWithSortersPaginationOutput
-	12, // 21: pb.resource.model.TableModel.TotalByFilters:output_type -> pb.resource.model.TableTotalByFiltersOutput
-	16, // [16:22] is the sub-list for method output_type
-	10, // [10:16] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
-	0,  // [0:10] is the sub-list for field type_name
+	0,  // 3: pb.resource.model.TableEditOneByIdInput.variable:type_name -> pb.resource.model.TableVariable
+	10, // 4: pb.resource.model.TableTotalByFiltersInput.filters:type_name -> pb.resource.Filter
+	1,  // 5: pb.resource.model.TableModel.AddOne:input_type -> pb.resource.model.TableAddOneInput
+	3,  // 6: pb.resource.model.TableModel.EditOneById:input_type -> pb.resource.model.TableEditOneByIdInput
+	5,  // 7: pb.resource.model.TableModel.RemoveOneById:input_type -> pb.resource.model.TableRemoveOneByIdInput
+	7,  // 8: pb.resource.model.TableModel.TotalByFilters:input_type -> pb.resource.model.TableTotalByFiltersInput
+	2,  // 9: pb.resource.model.TableModel.AddOne:output_type -> pb.resource.model.TableAddOneOutput
+	4,  // 10: pb.resource.model.TableModel.EditOneById:output_type -> pb.resource.model.TableEditOneByIdOutput
+	6,  // 11: pb.resource.model.TableModel.RemoveOneById:output_type -> pb.resource.model.TableRemoveOneByIdOutput
+	8,  // 12: pb.resource.model.TableModel.TotalByFilters:output_type -> pb.resource.model.TableTotalByFiltersOutput
+	9,  // [9:13] is the sub-list for method output_type
+	5,  // [5:9] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_resource_model_table_proto_init() }
@@ -810,7 +588,7 @@ func file_resource_model_table_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_model_table_proto_rawDesc), len(file_resource_model_table_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   9,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

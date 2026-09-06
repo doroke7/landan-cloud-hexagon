@@ -5,7 +5,6 @@ import (
 
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
 )
@@ -17,28 +16,6 @@ type TableModel struct {
 func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel {
 	return &TableModel{
 		AbstractModel: oAbstractModel,
-	}
-}
-
-func protoTableToDomainTable(oTable *pbResource.Table) domain.Table {
-	if oTable == nil {
-		return domain.Table{}
-	}
-
-	return domain.Table{
-		Id:          uint64(oTable.GetId()),
-		No:          oTable.GetNo(),
-		GameId:      uint64(oTable.GetGameId()),
-		Key:         oTable.GetKey(),
-		State:       uint8(oTable.GetState()),
-		Description: oTable.GetDescription(),
-		Result:      oTable.GetResult(),
-		StartedAt:   oTable.GetStartedAt().AsTime(),
-		EndedAt:     oTable.GetEndedAt().AsTime(),
-		CreatedAt:   oTable.GetCreatedAt().AsTime(),
-		UpdatedAt:   oTable.GetUpdatedAt().AsTime(),
-		DeletedAt:   oTable.GetDeletedAt().AsTime(),
-		Game:        protoGameToDomainGame(oTable.GetGame()),
 	}
 }
 
@@ -73,27 +50,6 @@ func domainTableValueToProtoTableVariable(oTable *domain.TableValue) *pbResource
 	}
 
 	return oVariable
-}
-
-func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
-
-	oResponse, oErr := oSelf.ResourceModelClient.Table.ShowOneById(
-		oSelf.Context,
-		&pbResourceModel.TableShowOneByIdInput{Id: uint64(iId)},
-	)
-
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	oProtoTable := oResponse.GetTable()
-	if oProtoTable.GetId() == 0 {
-		return nil, nil
-	}
-
-	oTable := protoTableToDomainTable(oProtoTable)
-
-	return &oTable, nil
 }
 
 func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) error {

@@ -4,8 +4,6 @@ import (
 	"errors"
 	"time"
 
-	"gorm.io/gorm"
-
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
@@ -20,25 +18,6 @@ func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel 
 	return &TableModel{
 		AbstractModel: oAbstractModel,
 	}
-}
-
-func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
-	var oTable domain.Table
-
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
-		Preload("Game").
-		Preload("Game.GameType").
-		Model(&oTable).
-		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oTable, iId).Error; oErr != nil {
-		if errors.Is(oErr, gorm.ErrRecordNotFound) {
-			return nil, nil
-		}
-
-		return nil, oErr
-	}
-
-	return &oTable, nil
 }
 
 func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) error {

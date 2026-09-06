@@ -111,24 +111,6 @@ func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {
 	return nil
 }
 
-func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
-	var oTable domain.Table
-
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
-		"_id":        iId,
-		"deleted_at": oDeletedAtZero,
-	}).Decode(&oTable)
-
-	if oErr != nil {
-		if oErr == mongo.ErrNoDocuments {
-			return nil, nil
-		}
-		return nil, oErr
-	}
-
-	return &oTable, nil
-}
-
 func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) error {
 	oSet := bson.M{"updated_at": time.Now()}
 

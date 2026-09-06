@@ -28,21 +28,6 @@ func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel 
 	}
 }
 
-func (oSelf *TableModel) ShowOneById(iId uint) (*domain.Table, error) {
-	var oTable domain.Table
-
-	bFound, oErr := oSelf.GetById(oSelf.Index, strconv.FormatUint(uint64(iId), 10), &oTable)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	if !bFound || !oTable.DeletedAt.Equal(oDeletedAtZero) {
-		return nil, nil
-	}
-
-	return &oTable, nil
-}
-
 func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
 	aFilterClauses := make([]map[string]any, 0, len(aFilters))
 

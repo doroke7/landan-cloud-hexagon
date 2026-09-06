@@ -5,14 +5,11 @@ import (
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/types/known/timestamppb"
 
-	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
-	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
 	pkgInput "example/pkg/input"
 )
@@ -21,36 +18,12 @@ type TableHandler struct {
 	*inputApplicationResource.AbstractHandler
 	pbResourceModel.UnimplementedTableModelServer
 	ModelTableUsecase usecasePortAnyModel.TableUsecase
-	LogicTableUsecase usecasePortAnyLogic.TableUsecase
 }
 
-func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oTableUsecase usecasePortAnyModel.TableUsecase, oLogicTableUsecase usecasePortAnyLogic.TableUsecase) *TableHandler {
+func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, oTableUsecase usecasePortAnyModel.TableUsecase) *TableHandler {
 	return &TableHandler{
 		AbstractHandler:   oAbstractHandler,
 		ModelTableUsecase: oTableUsecase,
-		LogicTableUsecase: oLogicTableUsecase,
-	}
-}
-
-func domainTableToProtoTable(oTable *domain.Table) *pbResource.Table {
-	if oTable == nil {
-		return nil
-	}
-
-	return &pbResource.Table{
-		Id:          uint64(oTable.Id),
-		No:          oTable.No,
-		GameId:      uint64(oTable.GameId),
-		Key:         oTable.Key,
-		State:       uint64(oTable.State),
-		Description: oTable.Description,
-		Result:      oTable.Result,
-		StartedAt:   timestamppb.New(oTable.StartedAt),
-		EndedAt:     timestamppb.New(oTable.EndedAt),
-		CreatedAt:   timestamppb.New(oTable.CreatedAt),
-		UpdatedAt:   timestamppb.New(oTable.UpdatedAt),
-		DeletedAt:   timestamppb.New(oTable.DeletedAt),
-		Game:        domainGameToProtoGame(&oTable.Game),
 	}
 }
 
@@ -93,22 +66,6 @@ func protoTableVariableToDomainTableValue(oVariable *pbResourceModel.TableVariab
 	return oValue
 }
 
-func (oSelf *TableHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.TableShowOneByIdInput) (*pbResourceModel.TableShowOneByIdOutput, error) {
-
-	oTable, oErr := oSelf.ModelTableUsecase.ShowOneById(uint64(oReq.Id))
-	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
-	}
-
-	if oTable == nil {
-		return nil, nil
-	}
-
-	return &pbResourceModel.TableShowOneByIdOutput{
-		Table: domainTableToProtoTable(oTable),
-	}, nil
-}
-
 func (oSelf *TableHandler) AddOne(oContext context.Context, oReq *pbResourceModel.TableAddOneInput) (*pbResourceModel.TableAddOneOutput, error) {
 
 	oTableValue := protoTableVariableToDomainTableValue(oReq.GetVariable())
@@ -149,60 +106,6 @@ func (oSelf *TableHandler) RemoveOneById(oContext context.Context, oReq *pbResou
 
 	return &pbResourceModel.TableRemoveOneByIdOutput{
 		Status: true,
-	}, nil
-}
-
-func (oSelf *TableHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.TableShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.TableShowOnesByFiltersWithSortersPaginationOutput, error) {
-
-	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
-	for _, oOne := range oReq.GetFilters() {
-		if oOne == nil {
-			continue
-		}
-
-		sField := oOne.GetField()
-		sOperator := oOne.GetOperator()
-		aFilters = append(aFilters, &pkgInput.Filter{
-			Field:    &sField,
-			Operator: &sOperator,
-			Value:    oOne.GetValue().AsInterface(),
-		})
-	}
-
-	aSorters := make([]*pkgInput.Sorter, 0, len(oReq.GetSorters()))
-	for _, oOne := range oReq.GetSorters() {
-		if oOne == nil {
-			continue
-		}
-
-		sField := oOne.GetField()
-		sOrder := oOne.GetOrder()
-		aSorters = append(aSorters, &pkgInput.Sorter{
-			Field: &sField,
-			Order: &sOrder,
-		})
-	}
-
-	iSize := uint(oReq.GetPagination().GetSize())
-	iPage := uint(oReq.GetPagination().GetPage())
-	oPagination := &pkgInput.Pagination{
-		Size: &iSize,
-		Page: &iPage,
-	}
-
-	aTables, oErr := oSelf.LogicTableUsecase.ShowTablesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
-
-	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
-	}
-
-	aProtoTables := make([]*pbResource.Table, 0, len(aTables))
-	for _, oTable := range aTables {
-		aProtoTables = append(aProtoTables, domainTableToProtoTable(oTable))
-	}
-
-	return &pbResourceModel.TableShowOnesByFiltersWithSortersPaginationOutput{
-		Tables: aProtoTables,
 	}, nil
 }
 

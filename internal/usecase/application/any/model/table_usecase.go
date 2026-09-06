@@ -24,13 +24,6 @@ func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) error {
 	return oErr
 }
 
-func (oSelf *TableUsecase) ShowOneById(iId uint64) (*domain.Table, error) {
-
-	oTable, oErr := oSelf.TableModel.ShowOneById(uint(iId))
-
-	return oTable, oErr
-}
-
 func (oSelf *TableUsecase) EditOneById(oValue *domain.TableValue, iId uint64) error {
 
 	oErr := oSelf.TableModel.EditOneById(oValue, iId)

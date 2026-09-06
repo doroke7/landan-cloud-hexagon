@@ -19,12 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	TableModel_AddOne_FullMethodName                                 = "/pb.resource.model.TableModel/AddOne"
-	TableModel_ShowOneById_FullMethodName                            = "/pb.resource.model.TableModel/ShowOneById"
-	TableModel_EditOneById_FullMethodName                            = "/pb.resource.model.TableModel/EditOneById"
-	TableModel_RemoveOneById_FullMethodName                          = "/pb.resource.model.TableModel/RemoveOneById"
-	TableModel_ShowOnesByFiltersWithSortersPagination_FullMethodName = "/pb.resource.model.TableModel/ShowOnesByFiltersWithSortersPagination"
-	TableModel_TotalByFilters_FullMethodName                         = "/pb.resource.model.TableModel/TotalByFilters"
+	TableModel_AddOne_FullMethodName         = "/pb.resource.model.TableModel/AddOne"
+	TableModel_EditOneById_FullMethodName    = "/pb.resource.model.TableModel/EditOneById"
+	TableModel_RemoveOneById_FullMethodName  = "/pb.resource.model.TableModel/RemoveOneById"
+	TableModel_TotalByFilters_FullMethodName = "/pb.resource.model.TableModel/TotalByFilters"
 )
 
 // TableModelClient is the client API for TableModel service.
@@ -32,10 +30,8 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TableModelClient interface {
 	AddOne(ctx context.Context, in *TableAddOneInput, opts ...grpc.CallOption) (*TableAddOneOutput, error)
-	ShowOneById(ctx context.Context, in *TableShowOneByIdInput, opts ...grpc.CallOption) (*TableShowOneByIdOutput, error)
 	EditOneById(ctx context.Context, in *TableEditOneByIdInput, opts ...grpc.CallOption) (*TableEditOneByIdOutput, error)
 	RemoveOneById(ctx context.Context, in *TableRemoveOneByIdInput, opts ...grpc.CallOption) (*TableRemoveOneByIdOutput, error)
-	ShowOnesByFiltersWithSortersPagination(ctx context.Context, in *TableShowOnesByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*TableShowOnesByFiltersWithSortersPaginationOutput, error)
 	TotalByFilters(ctx context.Context, in *TableTotalByFiltersInput, opts ...grpc.CallOption) (*TableTotalByFiltersOutput, error)
 }
 
@@ -51,16 +47,6 @@ func (c *tableModelClient) AddOne(ctx context.Context, in *TableAddOneInput, opt
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TableAddOneOutput)
 	err := c.cc.Invoke(ctx, TableModel_AddOne_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *tableModelClient) ShowOneById(ctx context.Context, in *TableShowOneByIdInput, opts ...grpc.CallOption) (*TableShowOneByIdOutput, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(TableShowOneByIdOutput)
-	err := c.cc.Invoke(ctx, TableModel_ShowOneById_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -87,16 +73,6 @@ func (c *tableModelClient) RemoveOneById(ctx context.Context, in *TableRemoveOne
 	return out, nil
 }
 
-func (c *tableModelClient) ShowOnesByFiltersWithSortersPagination(ctx context.Context, in *TableShowOnesByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*TableShowOnesByFiltersWithSortersPaginationOutput, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(TableShowOnesByFiltersWithSortersPaginationOutput)
-	err := c.cc.Invoke(ctx, TableModel_ShowOnesByFiltersWithSortersPagination_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *tableModelClient) TotalByFilters(ctx context.Context, in *TableTotalByFiltersInput, opts ...grpc.CallOption) (*TableTotalByFiltersOutput, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(TableTotalByFiltersOutput)
@@ -112,10 +88,8 @@ func (c *tableModelClient) TotalByFilters(ctx context.Context, in *TableTotalByF
 // for forward compatibility.
 type TableModelServer interface {
 	AddOne(context.Context, *TableAddOneInput) (*TableAddOneOutput, error)
-	ShowOneById(context.Context, *TableShowOneByIdInput) (*TableShowOneByIdOutput, error)
 	EditOneById(context.Context, *TableEditOneByIdInput) (*TableEditOneByIdOutput, error)
 	RemoveOneById(context.Context, *TableRemoveOneByIdInput) (*TableRemoveOneByIdOutput, error)
-	ShowOnesByFiltersWithSortersPagination(context.Context, *TableShowOnesByFiltersWithSortersPaginationInput) (*TableShowOnesByFiltersWithSortersPaginationOutput, error)
 	TotalByFilters(context.Context, *TableTotalByFiltersInput) (*TableTotalByFiltersOutput, error)
 	mustEmbedUnimplementedTableModelServer()
 }
@@ -130,17 +104,11 @@ type UnimplementedTableModelServer struct{}
 func (UnimplementedTableModelServer) AddOne(context.Context, *TableAddOneInput) (*TableAddOneOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method AddOne not implemented")
 }
-func (UnimplementedTableModelServer) ShowOneById(context.Context, *TableShowOneByIdInput) (*TableShowOneByIdOutput, error) {
-	return nil, status.Error(codes.Unimplemented, "method ShowOneById not implemented")
-}
 func (UnimplementedTableModelServer) EditOneById(context.Context, *TableEditOneByIdInput) (*TableEditOneByIdOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method EditOneById not implemented")
 }
 func (UnimplementedTableModelServer) RemoveOneById(context.Context, *TableRemoveOneByIdInput) (*TableRemoveOneByIdOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method RemoveOneById not implemented")
-}
-func (UnimplementedTableModelServer) ShowOnesByFiltersWithSortersPagination(context.Context, *TableShowOnesByFiltersWithSortersPaginationInput) (*TableShowOnesByFiltersWithSortersPaginationOutput, error) {
-	return nil, status.Error(codes.Unimplemented, "method ShowOnesByFiltersWithSortersPagination not implemented")
 }
 func (UnimplementedTableModelServer) TotalByFilters(context.Context, *TableTotalByFiltersInput) (*TableTotalByFiltersOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method TotalByFilters not implemented")
@@ -184,24 +152,6 @@ func _TableModel_AddOne_Handler(srv interface{}, ctx context.Context, dec func(i
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TableModel_ShowOneById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TableShowOneByIdInput)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TableModelServer).ShowOneById(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: TableModel_ShowOneById_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TableModelServer).ShowOneById(ctx, req.(*TableShowOneByIdInput))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _TableModel_EditOneById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TableEditOneByIdInput)
 	if err := dec(in); err != nil {
@@ -238,24 +188,6 @@ func _TableModel_RemoveOneById_Handler(srv interface{}, ctx context.Context, dec
 	return interceptor(ctx, in, info, handler)
 }
 
-func _TableModel_ShowOnesByFiltersWithSortersPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(TableShowOnesByFiltersWithSortersPaginationInput)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(TableModelServer).ShowOnesByFiltersWithSortersPagination(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: TableModel_ShowOnesByFiltersWithSortersPagination_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(TableModelServer).ShowOnesByFiltersWithSortersPagination(ctx, req.(*TableShowOnesByFiltersWithSortersPaginationInput))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _TableModel_TotalByFilters_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(TableTotalByFiltersInput)
 	if err := dec(in); err != nil {
@@ -286,20 +218,12 @@ var TableModel_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _TableModel_AddOne_Handler,
 		},
 		{
-			MethodName: "ShowOneById",
-			Handler:    _TableModel_ShowOneById_Handler,
-		},
-		{
 			MethodName: "EditOneById",
 			Handler:    _TableModel_EditOneById_Handler,
 		},
 		{
 			MethodName: "RemoveOneById",
 			Handler:    _TableModel_RemoveOneById_Handler,
-		},
-		{
-			MethodName: "ShowOnesByFiltersWithSortersPagination",
-			Handler:    _TableModel_ShowOnesByFiltersWithSortersPagination_Handler,
 		},
 		{
 			MethodName: "TotalByFilters",
