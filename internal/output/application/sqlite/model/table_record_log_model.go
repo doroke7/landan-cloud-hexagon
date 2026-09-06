@@ -81,9 +81,7 @@ func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (u
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 
 	var iTotal int64
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.TableRecordLog{})
 
 	for _, oWhere := range aWheres {
