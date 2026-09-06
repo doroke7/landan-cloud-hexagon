@@ -2,6 +2,7 @@ package outputApplicationElasticsearchLogic
 
 import (
 	"encoding/json"
+	"strconv"
 
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
@@ -68,6 +69,21 @@ func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGro
 	}
 
 	return aRoots, nil
+}
+
+func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64) (*domain.AdminPermissionGroup, error) {
+	var oAdminPermissionGroup domain.AdminPermissionGroup
+
+	bFound, oErr := oSelf.GetById(oSelf.Index, strconv.FormatUint(iId, 10), &oAdminPermissionGroup)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	if !bFound || !oAdminPermissionGroup.DeletedAt.Equal(oDeletedAtZero) {
+		return nil, nil
+	}
+
+	return &oAdminPermissionGroup, nil
 }
 
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, uint64, error) {

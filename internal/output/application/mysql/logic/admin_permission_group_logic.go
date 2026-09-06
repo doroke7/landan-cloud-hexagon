@@ -1,8 +1,11 @@
 package outputApplicationMysqlLogic
 
 import (
+	"errors"
 	"strings"
 	"sync"
+
+	"gorm.io/gorm"
 
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
@@ -53,6 +56,27 @@ func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGro
 	}
 
 	return aRoots, nil
+}
+
+func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64) (*domain.AdminPermissionGroup, error) {
+	var oAdminPermissionGroup domain.AdminPermissionGroup
+
+	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Model(&oAdminPermissionGroup).
+		Preload("Parent").
+		Preload("Children").
+		Where("deleted_at = ?", "2038-01-19 03:14:07").
+		First(&oAdminPermissionGroup, iId)
+
+	if oResult.Error != nil {
+		if errors.Is(oResult.Error, gorm.ErrRecordNotFound) {
+			return nil, nil
+		}
+
+		return nil, oResult.Error
+	}
+
+	return &oAdminPermissionGroup, nil
 }
 
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, uint64, error) {

@@ -59,6 +59,11 @@ func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGro
 	return aRoots, nil
 }
 
+// ShowAdminPermissionGroupById 尚未接 gRPC，先回 nil。
+func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64) (*domain.AdminPermissionGroup, error) {
+	return nil, nil
+}
+
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, uint64, error) {
 
 	oRequest := &pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput{
