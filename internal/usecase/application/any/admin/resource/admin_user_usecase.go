@@ -78,7 +78,7 @@ func (oSelf *AdminUserUsecase) RemoveOne(iId uint64) error {
 
 func (oSelf *AdminUserUsecase) ShowOne(iId uint64) (*domain.AdminUser, error) {
 
-	oAdminUser, oErr := oSelf.AdminUserModel.ShowOneById(iId)
+	oAdminUser, oErr := oSelf.AdminUserLogic.ShowAdminUserById(iId)
 
 	return oAdminUser, oErr
 }
