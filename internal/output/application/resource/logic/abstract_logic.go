@@ -9,7 +9,7 @@ import (
 
 // Context 是程序等級的全局 ctx（來源是 cmd/xx.go），跟 pkg.Aop、cache/memory 的
 // AbstractRepository 做法一致。
-// AbstractResource 內嵌進來，ToFilters / ToSorters / ToPagination 方法提升上去；
+// AbstractResource 由 container wire 注入，ToFilters / ToSorters / ToPagination 方法提升上去；
 // client 欄位保留在這裡。
 type AbstractLogic struct {
 	*outputApplicationResource.AbstractResource
@@ -19,9 +19,9 @@ type AbstractLogic struct {
 	ResourceEventClient *client.Event
 }
 
-func NewAbstractLogic(oContext context.Context, oResourceClient *client.ResourceClient) *AbstractLogic {
+func NewAbstractLogic(oContext context.Context, oResourceClient *client.ResourceClient, oAbstractResource *outputApplicationResource.AbstractResource) *AbstractLogic {
 	return &AbstractLogic{
-		AbstractResource:    outputApplicationResource.NewAbstractResource(),
+		AbstractResource:    oAbstractResource,
 		Context:             oContext,
 		ResourceLogicClient: oResourceClient.Logic,
 		ResourceModelClient: oResourceClient.Model,

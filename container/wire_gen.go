@@ -58,6 +58,7 @@ import (
 	"example/internal/output/application/mysql/model"
 	"example/internal/output/application/rabbitmq"
 	"example/internal/output/application/rabbitmq/event"
+	"example/internal/output/application/resource"
 	"example/internal/output/application/resource/logic"
 	"example/internal/output/application/resource/model"
 	"example/internal/output/port/any/event"
@@ -99,14 +100,15 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	event := client.NewEvent(clientConn)
 	resourceClient := client.NewResourceClient(clientConn, model, logic, event)
 	abstractHandler := inputApplicationHttp.NewAbstractHandler(response, aesHelper, jwtHelper)
-	abstractModel := outputApplicationResourceModel.NewAbstractModel(ctx, resourceClient)
+	abstractResource := outputApplicationResource.NewAbstractResource()
+	abstractModel := outputApplicationResourceModel.NewAbstractModel(ctx, resourceClient, abstractResource)
 	adminUserModel := outputApplicationResourceModel.NewAdminUserModel(abstractModel)
 	validatorHelper := helper.NewValiatorHelper(abstractHelper)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper, validatorHelper)
 	authenticatorUsecase := usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
 	authenticatorHandler := inputApplicationHttpAdminAuthentication.NewAuthenticatorHandler(abstractHandler, authenticatorUsecase)
 	gameModel := outputApplicationResourceModel.NewGameModel(abstractModel)
-	abstractLogic := outputApplicationResourceLogic.NewAbstractLogic(ctx, resourceClient)
+	abstractLogic := outputApplicationResourceLogic.NewAbstractLogic(ctx, resourceClient, abstractResource)
 	gameLogic := outputApplicationResourceLogic.NewGameLogic(abstractLogic)
 	gameUsecase := usecaseApplicationAnyAdminResource.NewGameUsecase(gameModel, gameLogic, abstractUsecase)
 	gameHandler := inputApplicationHttpAdminResource.NewGameHandler(abstractHandler, gameUsecase)
@@ -240,14 +242,15 @@ func InitFacadeContainer(ctx context.Context) (*FacadeContainer, error) {
 	abstractHandler := inputApplicationFacade.NewAbstractHandler(aesHelper)
 	scannerHandler := inputApplicationFacadeTable.NewScannerHandler(abstractHandler)
 	authenticatorHandler := inputApplicationFacadeRegister.NewAuthenticatorHandler(abstractHandler)
-	abstractModel := outputApplicationResourceModel.NewAbstractModel(ctx, resourceClient)
+	abstractResource := outputApplicationResource.NewAbstractResource()
+	abstractModel := outputApplicationResourceModel.NewAbstractModel(ctx, resourceClient, abstractResource)
 	adminUserModel := outputApplicationResourceModel.NewAdminUserModel(abstractModel)
 	validatorHelper := helper.NewValiatorHelper(abstractHelper)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper, validatorHelper)
 	authenticatorUsecase := usecaseApplicationAnyAdminAuthentication.NewAuthenticatorUsecase(adminUserModel, abstractUsecase)
 	inputApplicationFacadeAdminAuthenticationAuthenticatorHandler := inputApplicationFacadeAdminAuthentication.NewAuthenticatorHandler(authenticatorUsecase, abstractHandler)
 	gameModel := outputApplicationResourceModel.NewGameModel(abstractModel)
-	abstractLogic := outputApplicationResourceLogic.NewAbstractLogic(ctx, resourceClient)
+	abstractLogic := outputApplicationResourceLogic.NewAbstractLogic(ctx, resourceClient, abstractResource)
 	gameLogic := outputApplicationResourceLogic.NewGameLogic(abstractLogic)
 	gameUsecase := usecaseApplicationAnyAdminResource.NewGameUsecase(gameModel, gameLogic, abstractUsecase)
 	gameHandler := inputApplicationFacadeAdminResource.NewGameHandler(gameUsecase, abstractHandler)
@@ -491,7 +494,8 @@ func InitWebsocketContainer(ctx context.Context) (*WebsocketContainer, error) {
 	event := client.NewEvent(clientConn)
 	resourceClient := client.NewResourceClient(clientConn, model, logic, event)
 	abstractHandler := inputApplicationWebsocket.NewAbstractHandler(aesHelper)
-	abstractModel := outputApplicationResourceModel.NewAbstractModel(ctx, resourceClient)
+	abstractResource := outputApplicationResource.NewAbstractResource()
+	abstractModel := outputApplicationResourceModel.NewAbstractModel(ctx, resourceClient, abstractResource)
 	adminUserModel := outputApplicationResourceModel.NewAdminUserModel(abstractModel)
 	validatorHelper := helper.NewValiatorHelper(abstractHelper)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper, validatorHelper)
@@ -622,7 +626,8 @@ func InitTcpContainer(ctx context.Context) (*TcpContainer, error) {
 	event := client.NewEvent(clientConn)
 	resourceClient := client.NewResourceClient(clientConn, model, logic, event)
 	abstractHandler := inputApplicationTcp.NewAbstractHandler(aesHelper)
-	abstractModel := outputApplicationResourceModel.NewAbstractModel(ctx, resourceClient)
+	abstractResource := outputApplicationResource.NewAbstractResource()
+	abstractModel := outputApplicationResourceModel.NewAbstractModel(ctx, resourceClient, abstractResource)
 	adminUserModel := outputApplicationResourceModel.NewAdminUserModel(abstractModel)
 	validatorHelper := helper.NewValiatorHelper(abstractHelper)
 	abstractUsecase := usecaseApplicationAnyAdmin.NewAbstractUsecase(aesHelper, jwtHelper, validatorHelper)
