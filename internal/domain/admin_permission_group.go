@@ -32,3 +32,9 @@ type AdminPermissionGroupValue struct {
 	// UpdatedAt *time.Time `json:"updated_at"`
 	// DeletedAt *time.Time `json:"deleted_at"`
 }
+
+/*
+1. 定義 domain  internal/domain/admin_permission_group.go
+2. 定義 output
+
+*/

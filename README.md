@@ -60,7 +60,7 @@
 3. usecase *一套代碼*實現所有domain業務邏輯。
 4. 六角框架的也間接看出，後端的本質其實是在做*【消息傳遞】*，不論輸入輸出怎麼變
 
-## 如何利用這套框架 從 1到100 建立一個獨立 grpc服務端-服務
+## 如何利用這套框架 從 0到100 建立一個獨立 grpc服務端-服務
 
 1. proto基本文檔撰寫:
   建立獨立目錄的 proto/source/announcement/lottery.proto, 並生成
@@ -70,12 +70,6 @@
   建立 cmd/source.go 與 container tree 與 register
 4. input & handler 協議輸入代碼建立：
   建立 input/source/announcement/lottery.go 的服務類，並且綁定 pb， 並注入 container (記得注入 abstract 類)，並且註冊 register/
-5. usecase 業務邏輯建立：
-  - 5-1. 建立 usecase 包含 介面跟實作，（實作先簡單return 寫死 domain 數據），  
-  - 5-2. 並且注入 handler 與 container  (記得注入 abstract 類)，並且修改 input 使用 usecase 類
-6. output 資料輸出建立：
-  - 6-1. 建立 output 包含 介面跟實作，（實作先簡單return 寫死 domain 數據），  
-  - 6-2. 並且注入 usecase 與 container (記得注入 abstract 類), 並且修改 usecase 使用 repository 類
 
 ## 如何 建立一個獨立 grpc客戶端-連線 conn。
 
@@ -83,6 +77,12 @@
 2. config: 設定 config/clients.yaml  與 bootstrap/config.go
 3. bootstrap： bootstrap/source.go 基本客戶端連線（conn） + internal/client/source_client.go
 4. cmd ：建立 cmd/daemon.go 與 container tree 與 register/daemon.go
+
+## 如何利用這套框架 在已經存在的 gRPC服務加功能
+1. 建立 domain
+2. 建立 output port
+3. 請 AI 做其他實作，但是除了 resource
+
 
 
 ## 框架特點
