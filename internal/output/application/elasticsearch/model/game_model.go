@@ -31,21 +31,6 @@ func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
 	}
 }
 
-func (oSelf *GameModel) ShowOneById(iId uint64) (*domain.Game, error) {
-	var oGame domain.Game
-
-	bFound, oErr := oSelf.GetById(oSelf.Index, strconv.FormatUint(uint64(iId), 10), &oGame)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	if !bFound || !oGame.DeletedAt.Equal(oDeletedAtZero) {
-		return nil, nil
-	}
-
-	return &oGame, nil
-}
-
 func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	oBody := map[string]any{
 		"query": map[string]any{

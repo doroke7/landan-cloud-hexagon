@@ -93,26 +93,6 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel
 	}, nil
 }
 
-func (oSelf *GameHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.GameShowOneByIdInput) (*pbResourceModel.GameShowOneByIdOutput, error) {
-
-	oGame, oErr := oSelf.ModelGameUsecase.ShowOneById(uint64(oReq.Id))
-
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	if oGame == nil {
-		return nil, nil
-	}
-
-	oProtoGame := domainGameToProtoGame(oGame)
-
-	return &pbResourceModel.GameShowOneByIdOutput{
-		Game: oProtoGame,
-	}, nil
-
-}
-
 func (oSelf *GameHandler) ShowOneByKey(oContext context.Context, oReq *pbResourceModel.GameShowOneByKeyInput) (*pbResourceModel.GameShowOneByKeyOutput, error) {
 
 	oGame, oErr := oSelf.ModelGameUsecase.ShowOneByKey(oReq.Key)

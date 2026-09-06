@@ -26,13 +26,6 @@ func (oSelf *GameUsecase) AddOne(oAdd *domain.GameValue) error {
 	return oErr
 }
 
-func (oSelf *GameUsecase) ShowOneById(iId uint64) (*domain.Game, error) {
-
-	oGame, oErr := oSelf.GameModel.ShowOneById(iId)
-
-	return oGame, oErr
-}
-
 func (oSelf *GameUsecase) EditOneById(oEdit *domain.GameValue, iId uint64) error {
 
 	oErr := oSelf.GameModel.EditOneById(oEdit, iId)

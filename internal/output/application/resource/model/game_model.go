@@ -62,27 +62,6 @@ func (oSelf *GameModel) AddOne(oGameParm *domain.GameValue) error {
 	return oErr
 }
 
-func (oSelf *GameModel) ShowOneById(iId uint64) (*domain.Game, error) {
-
-	oResponse, oErr := oSelf.ResourceModelClient.Game.ShowOneById(
-		oSelf.Context,
-		&pbResourceModel.GameShowOneByIdInput{Id: uint64(iId)},
-	)
-
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	oProtoGame := oResponse.GetGame()
-	if oProtoGame.GetId() == 0 {
-		return nil, nil
-	}
-
-	oGame := protoGameToDomainGame(oProtoGame)
-
-	return &oGame, nil
-}
-
 func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 
 	oResponse, oErr := oSelf.ResourceModelClient.Game.ShowOneByKey(

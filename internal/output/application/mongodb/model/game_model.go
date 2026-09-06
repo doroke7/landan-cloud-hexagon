@@ -108,24 +108,6 @@ func (oSelf *GameModel) AddOne(oGame *domain.GameValue) error {
 	return nil
 }
 
-func (oSelf *GameModel) ShowOneById(iId uint64) (*domain.Game, error) {
-	var oGame domain.Game
-
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
-		"_id":        iId,
-		"deleted_at": oDeletedAtZero,
-	}).Decode(&oGame)
-
-	if oErr != nil {
-		if oErr == mongo.ErrNoDocuments {
-			return nil, nil
-		}
-		return nil, oErr
-	}
-
-	return &oGame, nil
-}
-
 func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	var oGame domain.Game
 
