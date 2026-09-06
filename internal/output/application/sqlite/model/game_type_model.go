@@ -53,7 +53,6 @@ func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
 	return aGameTypes, nil
 }
 
-// ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
 func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	var iTotal int64
 

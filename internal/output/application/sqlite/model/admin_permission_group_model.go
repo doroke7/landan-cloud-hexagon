@@ -49,9 +49,7 @@ func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(a
 
 	var aAdminPermissionGroups []*domain.AdminPermissionGroup
 
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
 		Preload("Parent").
 		Preload("Children").
 		Model(&domain.AdminPermissionGroup{}).
@@ -88,9 +86,7 @@ func (oSelf *AdminPermissionGroupModel) TotalByFilters(aFilters []*pkgInput.Filt
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 
 	var iTotal int64
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermissionGroup{})
 
 	for _, oWhere := range aWheres {
