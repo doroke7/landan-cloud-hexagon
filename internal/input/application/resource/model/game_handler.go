@@ -133,7 +133,7 @@ func (oSelf *GameHandler) ShowOneByKey(oContext context.Context, oReq *pbResourc
 
 }
 
-func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context.Context, oReq *pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationInput) (*pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationOutput, error) {
+func (oSelf *GameHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.GameShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.GameShowOnesByFiltersWithSortersPaginationOutput, error) {
 
 	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
 	for _, oOne := range oReq.GetFilters() {
@@ -171,7 +171,7 @@ func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context
 		Page: &iPage,
 	}
 
-	aGames, oErr := oSelf.ModelGameUsecase.ShowOnesByFiltersWithOrdersPagination(aFilters, aSorters, oPagination)
+	aGames, oErr := oSelf.ModelGameUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
 		return nil, oErr
@@ -182,7 +182,7 @@ func (oSelf *GameHandler) ShowOnesByFiltersWithOrdersPagination(oContext context
 		aPbGames = append(aPbGames, domainGameToProtoGame(oGame))
 	}
 
-	return &pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationOutput{
+	return &pbResourceModel.GameShowOnesByFiltersWithSortersPaginationOutput{
 		Games: aPbGames,
 	}, nil
 

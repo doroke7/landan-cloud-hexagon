@@ -33,9 +33,9 @@ func (oSelf *GameUsecase) ShowOneById(iId uint64) (*domain.Game, error) {
 	return oGame, oErr
 }
 
-func (oSelf *GameUsecase) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
+func (oSelf *GameUsecase) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 
-	aGames, oErr := oSelf.GameModel.ShowOnesByFiltersWithOrdersPagination(aFilters, aSorters, oPagination)
+	aGames, oErr := oSelf.GameModel.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	return aGames, oErr
 }

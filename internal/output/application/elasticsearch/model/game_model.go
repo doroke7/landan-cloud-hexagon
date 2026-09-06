@@ -99,7 +99,7 @@ func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	return uint(iTotal), oErr
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 	sDeletedAtField := "deleted_at"
 
 	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})

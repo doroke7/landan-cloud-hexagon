@@ -115,15 +115,15 @@ func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	return uint(iTotal), oErr
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 
-	oRequest := &pbResourceModel.GameShowOnesByFiltersWithOrdersPaginationInput{
+	oRequest := &pbResourceModel.GameShowOnesByFiltersWithSortersPaginationInput{
 		Filters:    oSelf.ToFilters(aFilters),
 		Sorters:    oSelf.ToSorters(aSorters),
 		Pagination: oSelf.ToPagination(oPagination),
 	}
 
-	oResponse, oErr := oSelf.ResourceModelClient.Game.ShowOnesByFiltersWithOrdersPagination(oSelf.Context, oRequest)
+	oResponse, oErr := oSelf.ResourceModelClient.Game.ShowOnesByFiltersWithSortersPagination(oSelf.Context, oRequest)
 
 	if oErr != nil {
 		return nil, oErr

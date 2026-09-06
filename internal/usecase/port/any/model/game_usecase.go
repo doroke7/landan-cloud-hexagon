@@ -12,5 +12,5 @@ type GameUsecase interface {
 	EditOneById(oValue *domain.GameValue, iId uint64) error
 	RemoveOneById(iId uint64) error
 	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
-	ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error)
+	ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error)
 }

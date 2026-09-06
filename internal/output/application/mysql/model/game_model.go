@@ -76,7 +76,7 @@ func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	return uint(iTotal), nil
 }
 
-func (oSelf *GameModel) ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
+func (oSelf *GameModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error) {
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractMysql.PaginationToLimit(oPagination)

@@ -13,6 +13,6 @@ type GameModel interface {
 	RemoveOneById(iId uint64) error
 	TotalByGameTypeId(iGameTypeId uint64) (uint, error)
 
-	ShowOnesByFiltersWithOrdersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error)
+	ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, error)
 	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
 }
