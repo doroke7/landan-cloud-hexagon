@@ -39,3 +39,10 @@ func (oSelf *AdminUserUsecase) EditAdminUserById(oValue *domain.AdminUserValue, 
 
 	return oErr
 }
+
+func (oSelf *AdminUserUsecase) RemoveAdminUserById(iId uint64) error {
+
+	oErr := oSelf.AdminUserLogic.RemoveAdminUserById(iId)
+
+	return oErr
+}

@@ -141,3 +141,10 @@ func (oSelf *AdminUserHandler) EditAdminUserById(oContext context.Context, oReq 
 
 	return &pbResourceLogic.AdminUserEditAdminUserByIdOutput{}, oErr
 }
+
+func (oSelf *AdminUserHandler) RemoveAdminUserById(oContext context.Context, oReq *pbResourceLogic.AdminUserRemoveAdminUserByIdInput) (*pbResourceLogic.AdminUserRemoveAdminUserByIdOutput, error) {
+
+	oErr := oSelf.LogicAdminUserUsecase.RemoveAdminUserById(oReq.GetId())
+
+	return &pbResourceLogic.AdminUserRemoveAdminUserByIdOutput{}, oErr
+}

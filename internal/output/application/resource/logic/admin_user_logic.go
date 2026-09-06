@@ -8,7 +8,6 @@ import (
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
-	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
 )
 
@@ -113,7 +112,6 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 	return oErr
 }
 
-// ShowAdminUserById proto 沒有對應 rpc，改用既有的 list rpc 帶 id 過濾、size=1 取第一筆。
 func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, error) {
 	sField := "id"
 	sOperator := "eq"
@@ -140,9 +138,9 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 }
 
 func (oSelf *AdminUserLogic) RemoveAdminUserById(iId uint64) error {
-	oRequest := &pbResourceModel.AdminUserRemoveOneByIdInput{Id: iId}
+	oRequest := &pbResourceLogic.AdminUserRemoveAdminUserByIdInput{Id: iId}
 
-	_, oErr := oSelf.ResourceModelClient.AdminUser.RemoveOneById(oSelf.Context, oRequest)
+	_, oErr := oSelf.ResourceLogicClient.AdminUser.RemoveAdminUserById(oSelf.Context, oRequest)
 
 	return oErr
 }
