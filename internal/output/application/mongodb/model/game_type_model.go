@@ -66,7 +66,6 @@ func (oSelf *GameTypeModel) nextId() (uint, error) {
 	return oCounter.Seq, nil
 }
 
-// ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
 func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	iCount, oErr := oSelf.Collection.CountDocuments(oSelf.Context, bson.M{
 		"parent_id":  iParentId,
@@ -77,44 +76,6 @@ func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	}
 
 	return uint64(iCount), nil
-}
-
-func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint64) ([]*domain.GameType, error) {
-	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{
-		"parent_id":  iParentId,
-		"deleted_at": oDeletedAtZero,
-	})
-	if oErr != nil {
-		return nil, oErr
-	}
-	defer oCursor.Close(oSelf.Context)
-
-	var aGameTypes []*domain.GameType
-	if oErr := oCursor.All(oSelf.Context, &aGameTypes); oErr != nil {
-		return nil, oErr
-	}
-
-	return aGameTypes, nil
-}
-
-func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error) {
-	oFilter := oSelf.FiltersToFilter(aFilters)
-	oFilter["deleted_at"] = oDeletedAtZero
-
-	oFindOptions := oSelf.SortersPaginationToFindOptions(aSorters, oPagination)
-
-	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, oFilter, oFindOptions)
-	if oErr != nil {
-		return nil, oErr
-	}
-	defer oCursor.Close(oSelf.Context)
-
-	var aGameTypes []*domain.GameType
-	if oErr := oCursor.All(oSelf.Context, &aGameTypes); oErr != nil {
-		return nil, oErr
-	}
-
-	return aGameTypes, nil
 }
 
 func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

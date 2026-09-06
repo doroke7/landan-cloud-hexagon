@@ -2,7 +2,6 @@ package outputApplicationSqliteModel
 
 import (
 	"errors"
-	"strings"
 	"time"
 
 	domain "example/internal/domain"
@@ -33,59 +32,6 @@ func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	}
 
 	return uint64(iTotal), nil
-}
-
-func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint64) ([]*domain.GameType, error) {
-	var aGameTypes []*domain.GameType
-
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.GameType{}).
-		Where("parent_id = ?", iParentId).
-		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		Find(&aGameTypes).Error; oErr != nil {
-		return nil, oErr
-	}
-
-	return aGameTypes, nil
-}
-
-func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error) {
-
-	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
-	aOrders := oSelf.AbstractSqlite.SortersToOrders(aSorters)
-	oLimit := oSelf.AbstractSqlite.PaginationToLimit(oPagination)
-
-	var aGameTypes []*domain.GameType
-
-	oQuery := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.GameType{}).
-		Where("deleted_at = ?", "2038-01-19 03:14:07")
-
-	for _, oWhere := range aWheres {
-		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
-	}
-
-	for _, oOrder := range aOrders {
-		if oOrder == nil || oOrder.Field == nil {
-			continue
-		}
-
-		sDirection := "ASC"
-		if oOrder.Value != nil && strings.EqualFold(*oOrder.Value, "desc") {
-			sDirection = "DESC"
-		}
-
-		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
-	}
-
-	if oErr := oQuery.
-		Limit(int(*oLimit.Count)).
-		Offset(int(*oLimit.Offset)).
-		Find(&aGameTypes).Error; oErr != nil {
-		return nil, oErr
-	}
-
-	return aGameTypes, nil
 }
 
 func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {

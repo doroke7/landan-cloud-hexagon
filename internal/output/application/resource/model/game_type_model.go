@@ -59,8 +59,6 @@ func (oSelf *GameTypeModel) AddOne(oGameTypeParm *domain.GameTypeValue) error {
 	return oErr
 }
 
-// ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
-// 走既有的 filters 查詢，實際的 deleted_at 過濾由 gRPC 後端底層的持久化 adapter 負責。
 func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	sField := "parent_id"
 	sOperator := "eq"
@@ -70,42 +68,6 @@ func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 
 	iTotal, oErr := oSelf.TotalByFilters(aFilters)
 	return iTotal, oErr
-}
-
-func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint64) ([]*domain.GameType, error) {
-	sField := "parent_id"
-	sOperator := "eq"
-	aFilters := []*pkgInput.Filter{
-		{Field: &sField, Operator: &sOperator, Value: iParentId},
-	}
-
-	iSize := uint(10000)
-	iPage := uint(1)
-	return oSelf.ShowOnesByFiltersWithSortersPagination(aFilters, nil, &pkgInput.Pagination{Size: &iSize, Page: &iPage})
-}
-
-func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error) {
-
-	oRequest := &pbResourceModel.GameTypeShowOnesByFiltersWithSortersPaginationInput{
-		Filters:    oSelf.ToFilters(aFilters),
-		Sorters:    oSelf.ToSorters(aSorters),
-		Pagination: oSelf.ToPagination(oPagination),
-	}
-
-	oResponse, oErr := oSelf.ResourceModelClient.GameType.ShowOnesByFiltersWithSortersPagination(oSelf.Context, oRequest)
-
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	aGameTypes := make([]*domain.GameType, 0, len(oResponse.GetGameTypes()))
-
-	for _, oProtoGameType := range oResponse.GetGameTypes() {
-		oGameType := protoGameTypeToDomainGameType(oProtoGameType)
-		aGameTypes = append(aGameTypes, &oGameType)
-	}
-
-	return aGameTypes, nil
 }
 
 func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {

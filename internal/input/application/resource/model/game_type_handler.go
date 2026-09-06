@@ -84,60 +84,6 @@ func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceM
 	}, nil
 }
 
-func (oSelf *GameTypeHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.GameTypeShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.GameTypeShowOnesByFiltersWithSortersPaginationOutput, error) {
-
-	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
-	for _, oOne := range oReq.GetFilters() {
-		if oOne == nil {
-			continue
-		}
-
-		sField := oOne.GetField()
-		sOperator := oOne.GetOperator()
-		aFilters = append(aFilters, &pkgInput.Filter{
-			Field:    &sField,
-			Operator: &sOperator,
-			Value:    oOne.GetValue().AsInterface(),
-		})
-	}
-
-	aSorters := make([]*pkgInput.Sorter, 0, len(oReq.GetSorters()))
-	for _, oOne := range oReq.GetSorters() {
-		if oOne == nil {
-			continue
-		}
-
-		sField := oOne.GetField()
-		sOrder := oOne.GetOrder()
-		aSorters = append(aSorters, &pkgInput.Sorter{
-			Field: &sField,
-			Order: &sOrder,
-		})
-	}
-
-	iSize := uint(oReq.GetPagination().GetSize())
-	iPage := uint(oReq.GetPagination().GetPage())
-	oPagination := &pkgInput.Pagination{
-		Size: &iSize,
-		Page: &iPage,
-	}
-
-	aGameTypes, oErr := oSelf.ModelGameTypeUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
-
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	aPbGameTypes := make([]*pbResource.GameType, 0, len(aGameTypes))
-	for _, oGameType := range aGameTypes {
-		aPbGameTypes = append(aPbGameTypes, domainGameTypeToProtoGameType(oGameType))
-	}
-
-	return &pbResourceModel.GameTypeShowOnesByFiltersWithSortersPaginationOutput{
-		GameTypes: aPbGameTypes,
-	}, nil
-}
-
 func (oSelf *GameTypeHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.GameTypeEditOneByIdInput) (*pbResourceModel.GameTypeEditOneByIdOutput, error) {
 
 	oVariable := oReq.GetVariable()

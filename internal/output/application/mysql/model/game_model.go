@@ -83,9 +83,7 @@ func (oSelf *GameModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgIn
 
 	var aGames []*domain.Game
 
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
 		Preload("GameType").
 		Preload("GameType.Parent").
 		Model(&domain.Game{}).
@@ -122,9 +120,7 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.Game{})
 
 	for _, oWhere := range aWheres {
