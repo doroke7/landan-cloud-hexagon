@@ -6,7 +6,6 @@ import (
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminAuthentication "example/internal/usecase/port/any/admin/authentication"
 	pkgUtility "example/pkg/utility"
-	"fmt"
 )
 
 type AuthenticatorUsecase struct {
@@ -60,8 +59,6 @@ func (oSelf *AuthenticatorUsecase) Refresh(sJwt string, sSecret string) (string,
 		return "", pkgUtility.NewDefaultError("JWT must not be empty", -1, 200)
 	}
 
-	fmt.Println("sJwt=", sJwt)
-
 	oClaims, err := oSelf.JwtHelper.Parse(sJwt)
 	if err != nil {
 		return "", pkgUtility.NewDefaultError("invalid JWT", -2, 200)
@@ -69,7 +66,6 @@ func (oSelf *AuthenticatorUsecase) Refresh(sJwt string, sSecret string) (string,
 
 	iId := uint64(oClaims.AdminUserId)
 	oAdminUser, err := oSelf.AdminUserModel.ShowOneById(iId)
-	fmt.Println("err=", err)
 
 	if err != nil {
 		return "", err
