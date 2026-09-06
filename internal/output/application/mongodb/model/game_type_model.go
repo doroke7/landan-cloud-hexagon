@@ -66,21 +66,6 @@ func (oSelf *GameTypeModel) nextId() (uint, error) {
 	return oCounter.Seq, nil
 }
 
-func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
-	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{"deleted_at": oDeletedAtZero})
-	if oErr != nil {
-		return nil, oErr
-	}
-	defer oCursor.Close(oSelf.Context)
-
-	var aGameTypes []*domain.GameType
-	if oErr := oCursor.All(oSelf.Context, &aGameTypes); oErr != nil {
-		return nil, oErr
-	}
-
-	return aGameTypes, nil
-}
-
 // ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
 func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	iCount, oErr := oSelf.Collection.CountDocuments(oSelf.Context, bson.M{

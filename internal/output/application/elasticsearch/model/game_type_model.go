@@ -27,12 +27,6 @@ func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameType
 	}
 }
 
-func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
-	iSize := uint(10000)
-	iPage := uint(1)
-	return oSelf.ShowOnesByFiltersWithSortersPagination(nil, nil, &pkgInput.Pagination{Size: &iSize, Page: &iPage})
-}
-
 // ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
 // 走既有的 filters 查詢，deleted_at 的過濾由 ShowOnesByFiltersWithSortersPagination 內部補上。
 func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {

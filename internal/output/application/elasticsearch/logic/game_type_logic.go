@@ -106,36 +106,6 @@ func (oSelf *GameTypeLogic) ShowGameTypeById(iId uint64) (*domain.GameType, erro
 	return &oGameType, nil
 }
 
-func (oSelf *GameTypeLogic) ShowGameTypes() ([]*domain.GameType, error) {
-	sDeletedAtField := "deleted_at"
-	aFilters := []*pkgInput.Filter{{Field: &sDeletedAtField, Value: oDeletedAtZero}}
-
-	iSize := uint(10000)
-	iPage := uint(1)
-	oPagination := &pkgInput.Pagination{Size: &iSize, Page: &iPage}
-
-	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.Index, aFilters, nil, oPagination)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	oResult, oErr := oSelf.SearchWithOptions(aOptions)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	aGameTypes := make([]*domain.GameType, 0, len(oResult.Hits))
-	for _, oHit := range oResult.Hits {
-		var oGameType domain.GameType
-		if oErr := json.Unmarshal(oHit.Source, &oGameType); oErr != nil {
-			return nil, oErr
-		}
-		aGameTypes = append(aGameTypes, &oGameType)
-	}
-
-	return aGameTypes, nil
-}
-
 func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
 	sDeletedAtField := "deleted_at"
 	aFilters = append(aFilters, &pkgInput.Filter{Field: &sDeletedAtField, Value: oDeletedAtZero})

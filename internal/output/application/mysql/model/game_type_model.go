@@ -21,21 +21,6 @@ func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameType
 	}
 }
 
-func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
-	var aGameTypes []*domain.GameType
-
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.GameType{}).
-		Preload("Parent").
-		Preload("Children").
-		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		Find(&aGameTypes).Error; oErr != nil {
-		return nil, oErr
-	}
-
-	return aGameTypes, nil
-}
-
 // ShowOnesByParentId 撈出指定父類型底下、尚未刪除的子類型（給刪除前的擋關檢查用）。
 func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	var iTotal int64
@@ -68,6 +53,7 @@ func (oSelf *GameTypeModel) ShowOnesByParentId(iParentId uint64) ([]*domain.Game
 }
 
 func (oSelf *GameTypeModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error) {
+
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractMysql.PaginationToLimit(oPagination)
@@ -147,6 +133,7 @@ func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint64
 }
 
 func (oSelf *GameTypeModel) RemoveOneById(iId uint64) error {
+
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.GameType{}).
 		Where("id = ?", iId).
@@ -165,12 +152,11 @@ func (oSelf *GameTypeModel) RemoveOneById(iId uint64) error {
 }
 
 func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.GameType{})
 
 	for _, oWhere := range aWheres {

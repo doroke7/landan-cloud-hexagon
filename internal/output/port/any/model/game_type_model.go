@@ -12,8 +12,6 @@ type GameTypeModel interface {
 	ShowOnesByParentId(iParentId uint64) ([]*domain.GameType, error)
 	TotalByParentId(iParentId uint64) (uint64, error)
 
-	ShowOnes() ([]*domain.GameType, error)
-
 	ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, error)
 	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
 }

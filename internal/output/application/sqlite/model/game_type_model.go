@@ -21,19 +21,6 @@ func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameType
 	}
 }
 
-func (oSelf *GameTypeModel) ShowOnes() ([]*domain.GameType, error) {
-	var aGameTypes []*domain.GameType
-
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.GameType{}).
-		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		Find(&aGameTypes).Error; oErr != nil {
-		return nil, oErr
-	}
-
-	return aGameTypes, nil
-}
-
 func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	var iTotal int64
 

@@ -21,7 +21,6 @@ const _ = grpc.SupportPackageIsVersion9
 const (
 	GameTypeLogic_ShowTree_FullMethodName                                         = "/pb.resource.logic.GameTypeLogic/ShowTree"
 	GameTypeLogic_ShowGameTypeById_FullMethodName                                 = "/pb.resource.logic.GameTypeLogic/ShowGameTypeById"
-	GameTypeLogic_ShowGameTypes_FullMethodName                                    = "/pb.resource.logic.GameTypeLogic/ShowGameTypes"
 	GameTypeLogic_ShowGameTypesTotalByFiltersWithSortersPagination_FullMethodName = "/pb.resource.logic.GameTypeLogic/ShowGameTypesTotalByFiltersWithSortersPagination"
 )
 
@@ -31,7 +30,6 @@ const (
 type GameTypeLogicClient interface {
 	ShowTree(ctx context.Context, in *GameTypeShowTreeInput, opts ...grpc.CallOption) (*GameTypeShowTreeOutput, error)
 	ShowGameTypeById(ctx context.Context, in *GameTypeShowGameTypeByIdInput, opts ...grpc.CallOption) (*GameTypeShowGameTypeByIdOutput, error)
-	ShowGameTypes(ctx context.Context, in *GameTypeShowGameTypesInput, opts ...grpc.CallOption) (*GameTypeShowGameTypesOutput, error)
 	ShowGameTypesTotalByFiltersWithSortersPagination(ctx context.Context, in *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput, error)
 }
 
@@ -63,16 +61,6 @@ func (c *gameTypeLogicClient) ShowGameTypeById(ctx context.Context, in *GameType
 	return out, nil
 }
 
-func (c *gameTypeLogicClient) ShowGameTypes(ctx context.Context, in *GameTypeShowGameTypesInput, opts ...grpc.CallOption) (*GameTypeShowGameTypesOutput, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GameTypeShowGameTypesOutput)
-	err := c.cc.Invoke(ctx, GameTypeLogic_ShowGameTypes_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *gameTypeLogicClient) ShowGameTypesTotalByFiltersWithSortersPagination(ctx context.Context, in *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput)
@@ -89,7 +77,6 @@ func (c *gameTypeLogicClient) ShowGameTypesTotalByFiltersWithSortersPagination(c
 type GameTypeLogicServer interface {
 	ShowTree(context.Context, *GameTypeShowTreeInput) (*GameTypeShowTreeOutput, error)
 	ShowGameTypeById(context.Context, *GameTypeShowGameTypeByIdInput) (*GameTypeShowGameTypeByIdOutput, error)
-	ShowGameTypes(context.Context, *GameTypeShowGameTypesInput) (*GameTypeShowGameTypesOutput, error)
 	ShowGameTypesTotalByFiltersWithSortersPagination(context.Context, *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput, error)
 	mustEmbedUnimplementedGameTypeLogicServer()
 }
@@ -106,9 +93,6 @@ func (UnimplementedGameTypeLogicServer) ShowTree(context.Context, *GameTypeShowT
 }
 func (UnimplementedGameTypeLogicServer) ShowGameTypeById(context.Context, *GameTypeShowGameTypeByIdInput) (*GameTypeShowGameTypeByIdOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowGameTypeById not implemented")
-}
-func (UnimplementedGameTypeLogicServer) ShowGameTypes(context.Context, *GameTypeShowGameTypesInput) (*GameTypeShowGameTypesOutput, error) {
-	return nil, status.Error(codes.Unimplemented, "method ShowGameTypes not implemented")
 }
 func (UnimplementedGameTypeLogicServer) ShowGameTypesTotalByFiltersWithSortersPagination(context.Context, *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowGameTypesTotalByFiltersWithSortersPagination not implemented")
@@ -170,24 +154,6 @@ func _GameTypeLogic_ShowGameTypeById_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _GameTypeLogic_ShowGameTypes_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GameTypeShowGameTypesInput)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(GameTypeLogicServer).ShowGameTypes(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: GameTypeLogic_ShowGameTypes_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(GameTypeLogicServer).ShowGameTypes(ctx, req.(*GameTypeShowGameTypesInput))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _GameTypeLogic_ShowGameTypesTotalByFiltersWithSortersPagination_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput)
 	if err := dec(in); err != nil {
@@ -220,10 +186,6 @@ var GameTypeLogic_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ShowGameTypeById",
 			Handler:    _GameTypeLogic_ShowGameTypeById_Handler,
-		},
-		{
-			MethodName: "ShowGameTypes",
-			Handler:    _GameTypeLogic_ShowGameTypes_Handler,
 		},
 		{
 			MethodName: "ShowGameTypesTotalByFiltersWithSortersPagination",

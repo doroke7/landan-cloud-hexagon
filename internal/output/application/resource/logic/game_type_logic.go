@@ -78,24 +78,6 @@ func (oSelf *GameTypeLogic) ShowGameTypeById(iId uint64) (*domain.GameType, erro
 	return &oGameType, nil
 }
 
-func (oSelf *GameTypeLogic) ShowGameTypes() ([]*domain.GameType, error) {
-	oResponse, oErr := oSelf.ResourceLogicClient.GameType.ShowGameTypes(
-		oSelf.Context,
-		&pbResourceLogic.GameTypeShowGameTypesInput{},
-	)
-	if oErr != nil {
-		return nil, oErr
-	}
-
-	aGameTypes := make([]*domain.GameType, 0, len(oResponse.GetGameTypes()))
-	for _, oOne := range oResponse.GetGameTypes() {
-		oGameType := protoGameTypeToDomainGameType(oOne)
-		aGameTypes = append(aGameTypes, &oGameType)
-	}
-
-	return aGameTypes, nil
-}
-
 func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.GameType, uint64, error) {
 
 	oRequest := &pbResourceLogic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput{
