@@ -13,9 +13,9 @@ import (
 )
 
 type Table struct {
-	Id          uint      `json:"id" bson:"_id"`
+	Id          uint64    `json:"id" bson:"_id"`
 	No          string    `json:"no" bson:"no"`
-	GameId      uint      `json:"game_id" bson:"game_id"`
+	GameId      uint64    `json:"game_id" bson:"game_id"`
 	Key         string    `json:"key" bson:"key"`
 	State       uint8     `json:"state" bson:"state"`
 	Description string    `json:"description" bson:"description"`
@@ -30,7 +30,7 @@ type Table struct {
 
 type TableValue struct {
 	No          *string    `json:"no,omitempty"`
-	GameId      *uint      `json:"game_id,omitempty"`
+	GameId      *uint64    `json:"game_id,omitempty"`
 	Key         *string    `json:"key,omitempty"`
 	State       *uint8     `json:"state,omitempty"`
 	Description *string    `json:"description,omitempty"`
@@ -40,13 +40,4 @@ type TableValue struct {
 	// CreatedAt   *time.Time       `json:"created_at"`
 	// UpdatedAt   *time.Time       `json:"updated_at"`
 	// DeletedAt   *time.Time       `json:"deleted_at"`
-}
-
-type TableFilter struct {
-	Id     *uint `json:"id,omitempty"`
-	GameId *uint `json:"game_id,omitempty"`
-}
-
-type TableWhere struct {
-	GameId *uint
 }

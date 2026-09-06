@@ -69,7 +69,7 @@ func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogV
 
 	oNow := time.Now()
 	oNew := &domain.TableRecordLog{
-		Id:        iId,
+		Id:        uint64(iId),
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
 		DeletedAt: oDeletedAtZero,

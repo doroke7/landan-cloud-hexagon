@@ -30,8 +30,8 @@ func protoGameToDomainGame(oProtoGame *pbResource.Game) domain.Game {
 	}
 
 	return domain.Game{
-		Id:          uint(oProtoGame.GetId()),
-		GameTypeId:  uint(oProtoGame.GetGameTypeId()),
+		Id:          uint64(oProtoGame.GetId()),
+		GameTypeId:  uint64(oProtoGame.GetGameTypeId()),
 		Key:         oProtoGame.GetKey(),
 		Name:        oProtoGame.GetName(),
 		Description: oProtoGame.GetDescription(),

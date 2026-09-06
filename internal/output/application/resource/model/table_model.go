@@ -27,9 +27,9 @@ func protoTableToDomainTable(oTable *pbResource.Table) domain.Table {
 	}
 
 	return domain.Table{
-		Id:          uint(oTable.GetId()),
+		Id:          uint64(oTable.GetId()),
 		No:          oTable.GetNo(),
-		GameId:      uint(oTable.GetGameId()),
+		GameId:      uint64(oTable.GetGameId()),
 		Key:         oTable.GetKey(),
 		State:       uint8(oTable.GetState()),
 		Description: oTable.GetDescription(),

@@ -55,7 +55,7 @@ func (oSelf *GameUsecase) EditOne(oValue *domain.GameValue, iId uint64) error {
 			return oErr
 		}
 
-		if oGameByKey != nil && oGameByKey.Id != uint(iId) {
+		if oGameByKey != nil && oGameByKey.Id != iId {
 			return pkgUtility.NewDefaultError("key="+*oValue.Key+" already exists", -2, 500)
 		}
 	}

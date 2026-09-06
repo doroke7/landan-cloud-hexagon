@@ -13,7 +13,7 @@ import (
 )
 
 type AdminRole struct {
-	Id               uint              `json:"id" bson:"_id"`
+	Id               uint64            `json:"id" bson:"_id"`
 	Key              string            `json:"key" bson:"key"`
 	Name             string            `json:"name" bson:"name"`
 	CreatedAt        time.Time         `json:"created_at" bson:"created_at"`

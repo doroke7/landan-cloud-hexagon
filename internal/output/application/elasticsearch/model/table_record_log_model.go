@@ -34,7 +34,7 @@ func (oSelf *TableRecordLogModel) AddOne(oValue *domain.TableRecordLogValue) err
 
 	oNow := time.Now()
 	oDoc := &domain.TableRecordLog{
-		Id:        iId,
+		Id:        uint64(iId),
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
 		DeletedAt: oDeletedAtZero,

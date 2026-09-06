@@ -15,8 +15,8 @@ func protoGameTypeToDomainGameType(oProtoGameType *pbResource.GameType) domain.G
 	}
 
 	oGameType := domain.GameType{
-		Id:        uint(oProtoGameType.GetId()),
-		ParentId:  uint(oProtoGameType.GetParentId()),
+		Id:        uint64(oProtoGameType.GetId()),
+		ParentId:  uint64(oProtoGameType.GetParentId()),
 		Key:       oProtoGameType.GetKey(),
 		Name:      oProtoGameType.GetName(),
 		CreatedAt: oProtoGameType.GetCreatedAt().AsTime(),

@@ -25,8 +25,8 @@ func protoGameTypeToDomainGameType(oProtoGameType *pbResource.GameType) domain.G
 	}
 
 	oGameType := domain.GameType{
-		Id:        uint(oProtoGameType.GetId()),
-		ParentId:  uint(oProtoGameType.GetParentId()),
+		Id:        uint64(oProtoGameType.GetId()),
+		ParentId:  uint64(oProtoGameType.GetParentId()),
 		Key:       oProtoGameType.GetKey(),
 		Name:      oProtoGameType.GetName(),
 		CreatedAt: oProtoGameType.GetCreatedAt().AsTime(),
@@ -52,8 +52,8 @@ func protoGameToDomainGame(oProtoGame *pbResource.Game) domain.Game {
 	}
 
 	return domain.Game{
-		Id:          uint(oProtoGame.GetId()),
-		GameTypeId:  uint(oProtoGame.GetGameTypeId()),
+		Id:          uint64(oProtoGame.GetId()),
+		GameTypeId:  uint64(oProtoGame.GetGameTypeId()),
 		Key:         oProtoGame.GetKey(),
 		Name:        oProtoGame.GetName(),
 		Description: oProtoGame.GetDescription(),
@@ -80,8 +80,8 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 	aGames := make([]*domain.Game, 0, len(oResponse.GetGames()))
 	for _, oOne := range oResponse.GetGames() {
 		aGames = append(aGames, &domain.Game{
-			Id:          uint(oOne.GetId()),
-			GameTypeId:  uint(oOne.GetGameTypeId()),
+			Id:          uint64(oOne.GetId()),
+			GameTypeId:  uint64(oOne.GetGameTypeId()),
 			Key:         oOne.GetKey(),
 			Name:        oOne.GetName(),
 			Description: oOne.GetDescription(),

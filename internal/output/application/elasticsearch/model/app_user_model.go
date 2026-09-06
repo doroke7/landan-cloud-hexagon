@@ -39,7 +39,7 @@ func (oSelf *AppUserModel) IncreaseBalance(iId uint, iAmount uint64) error {
 
 	sId := strconv.FormatUint(uint64(iId), 10)
 	oPartial := map[string]any{
-		"balance":    oAppUser.Balance + uint(iAmount),
+		"balance":    oAppUser.Balance + iAmount,
 		"updated_at": time.Now(),
 	}
 
@@ -106,7 +106,7 @@ func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) error {
 		return oErr
 	}
 
-	oDoc := &domain.AppUser{Id: iId}
+	oDoc := &domain.AppUser{Id: uint64(iId)}
 
 	if oValue.Name != nil {
 		oDoc.Name = *oValue.Name

@@ -25,7 +25,7 @@ func protoAdminRoleToDomainAdminRole(oProto *pbResource.AdminRole) domain.AdminR
 	}
 
 	return domain.AdminRole{
-		Id:        uint(oProto.GetId()),
+		Id:        uint64(oProto.GetId()),
 		Key:       oProto.GetKey(),
 		Name:      oProto.GetName(),
 		CreatedAt: oProto.GetCreatedAt().AsTime(),

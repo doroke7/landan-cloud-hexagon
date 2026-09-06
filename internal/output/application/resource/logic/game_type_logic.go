@@ -29,8 +29,8 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 	aFlat := make([]*domain.GameType, 0, len(oResponse.GetGameTypes()))
 	for _, oOne := range oResponse.GetGameTypes() {
 		aFlat = append(aFlat, &domain.GameType{
-			Id:        uint(oOne.GetId()),
-			ParentId:  uint(oOne.GetParentId()),
+			Id:        uint64(oOne.GetId()),
+			ParentId:  uint64(oOne.GetParentId()),
 			Key:       oOne.GetKey(),
 			Name:      oOne.GetName(),
 			CreatedAt: oOne.GetCreatedAt().AsTime(),
@@ -39,7 +39,7 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 		})
 	}
 
-	aByParent := make(map[uint][]*domain.GameType, len(aFlat))
+	aByParent := make(map[uint64][]*domain.GameType, len(aFlat))
 	for _, oOne := range aFlat {
 		aByParent[oOne.ParentId] = append(aByParent[oOne.ParentId], oOne)
 	}
@@ -79,8 +79,8 @@ func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFi
 	aGameTypes := make([]*domain.GameType, 0, len(oResponse.GetGameTypes()))
 	for _, oOne := range oResponse.GetGameTypes() {
 		aGameTypes = append(aGameTypes, &domain.GameType{
-			Id:        uint(oOne.GetId()),
-			ParentId:  uint(oOne.GetParentId()),
+			Id:        uint64(oOne.GetId()),
+			ParentId:  uint64(oOne.GetParentId()),
 			Key:       oOne.GetKey(),
 			Name:      oOne.GetName(),
 			CreatedAt: oOne.GetCreatedAt().AsTime(),

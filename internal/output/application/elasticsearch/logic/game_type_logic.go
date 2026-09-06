@@ -50,7 +50,7 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 		aFlat = append(aFlat, &oGameType)
 	}
 
-	aByParent := make(map[uint][]*domain.GameType, len(aFlat))
+	aByParent := make(map[uint64][]*domain.GameType, len(aFlat))
 	for _, oOne := range aFlat {
 		aByParent[oOne.ParentId] = append(aByParent[oOne.ParentId], oOne)
 	}

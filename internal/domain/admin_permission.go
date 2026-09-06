@@ -13,7 +13,7 @@ import (
 )
 
 type AdminPermission struct {
-	Id        uint      `json:"id" bson:"_id"`
+	Id        uint64    `json:"id" bson:"_id"`
 	Type      uint8     `json:"type" bson:"type"` // 1=菜單 2=頁面 3=接口
 	Key       string    `json:"key" bson:"key"`
 	Name      string    `json:"name" bson:"name"`

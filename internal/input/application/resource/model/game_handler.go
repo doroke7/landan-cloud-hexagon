@@ -41,7 +41,7 @@ func protoGameVariableToDomainGameValue(oVariable *pbResourceModel.GameVariable)
 	oValue.Description = oVariable.Description
 
 	if oVariable.GameTypeId != nil {
-		iGameTypeId := uint(*oVariable.GameTypeId)
+		iGameTypeId := uint64(*oVariable.GameTypeId)
 		oValue.GameTypeId = &iGameTypeId
 	}
 

@@ -41,9 +41,9 @@ func (oSelf *LotteryModel) WatchOneByKey(sKey string) (*domain.Lottery, error) {
 	sNumbers := strings.Join(aNumbers, ",")
 
 	return &domain.Lottery{
-		Id:      iId,
+		Id:      uint64(iId),
 		Round:   fmt.Sprintf("2026-%04d", iId),
-		Time:    time.Now().UnixNano(),
+		Time:    uint64(time.Now().UnixNano()),
 		Numbers: sNumbers,
 	}, nil
 

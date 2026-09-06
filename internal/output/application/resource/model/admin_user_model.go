@@ -20,7 +20,7 @@ func protoAdminUserToDomainAdminUser(oProto *pbResource.AdminUser) domain.AdminU
 	}
 
 	return domain.AdminUser{
-		Id:         uint(oProto.GetId()),
+		Id:         uint64(oProto.GetId()),
 		Name:       oProto.GetName(),
 		Password:   oProto.GetPassword(),
 		CreatedAt:  oProto.GetCreatedAt().AsTime(),

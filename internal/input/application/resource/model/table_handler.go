@@ -63,7 +63,7 @@ func protoTableVariableToDomainTableValue(oVariable *pbResourceModel.TableVariab
 	oValue.Description = oVariable.Description
 
 	if oVariable.GameId != nil {
-		iGameId := uint(*oVariable.GameId)
+		iGameId := uint64(*oVariable.GameId)
 		oValue.GameId = &iGameId
 	}
 

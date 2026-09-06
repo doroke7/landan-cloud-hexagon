@@ -62,7 +62,7 @@ func (oSelf *LotteryHandler) Watch(oReq *pbSourceAnnouncement.LotteryWatchReques
 			oResponse := &pbSourceAnnouncement.LotteryWatchResponse{
 				Id:      int64(oLottert.Id),
 				Round:   oLottert.Round,
-				Time:    oLottert.Time,
+				Time:    int64(oLottert.Time),
 				Numbers: aNumbers,
 			}
 

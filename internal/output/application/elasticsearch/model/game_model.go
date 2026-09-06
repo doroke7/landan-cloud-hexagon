@@ -223,7 +223,7 @@ func (oSelf *GameModel) AddOne(oValue *domain.GameValue) error {
 
 	oNow := time.Now()
 	oDoc := &domain.Game{
-		Id:        iId,
+		Id:        uint64(iId),
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
 		DeletedAt: oDeletedAtZero,

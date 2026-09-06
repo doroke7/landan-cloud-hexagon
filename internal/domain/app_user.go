@@ -9,14 +9,14 @@ package domain
 */
 
 type AppUser struct {
-	Id       uint   `json:"id"`
+	Id       uint64 `json:"id"`
 	Name     string `json:"name"`
 	Password string `json:"password"`
-	Balance  uint   `json:"balance"`
+	Balance  uint64 `json:"balance"`
 }
 
 type AppUserValue struct {
 	Name     *string `json:"name,omitempty"`
 	Password *string `json:"password,omitempty"`
-	Balance  *uint   `json:"balance,omitempty"`
+	Balance  *uint64 `json:"balance,omitempty"`
 }

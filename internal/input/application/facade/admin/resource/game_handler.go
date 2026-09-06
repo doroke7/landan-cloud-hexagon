@@ -103,7 +103,7 @@ func protoGameValueToDomainGameValue(oValue *pbFacadeAdminResource.GameValue) *d
 	}
 
 	if oValue.GameTypeId != nil {
-		iGameTypeId := uint(oValue.GetGameTypeId())
+		iGameTypeId := uint64(oValue.GetGameTypeId())
 		oDomain.GameTypeId = &iGameTypeId
 	}
 

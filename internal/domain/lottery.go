@@ -9,14 +9,14 @@ package domain
 */
 
 type Lottery struct {
-	Id      uint   `json:"id"`
+	Id      uint64 `json:"id"`
 	Round   string `json:"round"`
-	Time    int64  `json:"time"`
+	Time    uint64 `json:"time"`
 	Numbers string `json:"numbers"`
 }
 
 type LotteryValue struct {
 	Round   *string `json:"round,omitempty"`
-	Time    *int64  `json:"time,omitempty"`
+	Time    *uint64 `json:"time,omitempty"`
 	Numbers *string `json:"numbers,omitempty"`
 }

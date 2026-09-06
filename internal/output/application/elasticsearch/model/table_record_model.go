@@ -152,7 +152,7 @@ func (oSelf *TableRecordModel) AddOne(oValue *domain.TableRecordValue) error {
 
 	oNow := time.Now()
 	oDoc := &domain.TableRecord{
-		Id:        iId,
+		Id:        uint64(iId),
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
 		DeletedAt: oDeletedAtZero,

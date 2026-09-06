@@ -180,7 +180,7 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {
 
 	oNow := time.Now()
 	oNew := &domain.AdminUser{
-		Id:        iId,
+		Id:        uint64(iId),
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
 		DeletedAt: oDeletedAtZero,

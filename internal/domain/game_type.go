@@ -14,8 +14,8 @@ import (
 )
 
 type GameType struct {
-	Id        uint       `json:"id" bson:"_id"`
-	ParentId  uint       `json:"parent_id" bson:"parent_id"`
+	Id        uint64     `json:"id" bson:"_id"`
+	ParentId  uint64     `json:"parent_id" bson:"parent_id"`
 	Key       string     `json:"key" bson:"key"`
 	Name      string     `json:"name" bson:"name"`
 	CreatedAt time.Time  `json:"created_at" bson:"created_at"`
@@ -42,7 +42,7 @@ func (oSelf GameType) MarshalJSON() ([]byte, error) {
 
 type GameTypeValue struct {
 	Key      *string `json:"key,omitempty"`
-	ParentId *uint   `json:"parent_id,omitempty"`
+	ParentId *uint64 `json:"parent_id,omitempty"`
 	Name     *string `json:"name,omitempty"`
 	// CreatedAt *time.Time `json:"created_at"`
 	// UpdatedAt *time.Time `json:"updated_at"`

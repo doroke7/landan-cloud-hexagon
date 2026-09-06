@@ -18,7 +18,7 @@ func protoAdminRoleToDomainAdminRole(oProto *pbResource.AdminRole) domain.AdminR
 	}
 
 	return domain.AdminRole{
-		Id:        uint(oProto.GetId()),
+		Id:        uint64(oProto.GetId()),
 		Key:       oProto.GetKey(),
 		Name:      oProto.GetName(),
 		CreatedAt: oProto.GetCreatedAt().AsTime(),
@@ -58,7 +58,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 		}
 
 		aAdminUsers = append(aAdminUsers, &domain.AdminUser{
-			Id:         uint(oOne.GetId()),
+			Id:         uint64(oOne.GetId()),
 			Name:       oOne.GetName(),
 			Password:   oOne.GetPassword(),
 			CreatedAt:  oOne.GetCreatedAt().AsTime(),

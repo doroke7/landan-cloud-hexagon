@@ -13,8 +13,8 @@ import (
 )
 
 type Game struct {
-	Id          uint      `json:"id" bson:"_id"`
-	GameTypeId  uint      `json:"game_type_id" bson:"game_type_id"`
+	Id          uint64    `json:"id" bson:"_id"`
+	GameTypeId  uint64    `json:"game_type_id" bson:"game_type_id"`
 	Key         string    `json:"key" bson:"key"`
 	Name        string    `json:"name" bson:"name"`
 	Description string    `json:"description" gorm:"default:''" bson:"description"`
@@ -25,7 +25,7 @@ type Game struct {
 }
 
 type GameValue struct {
-	GameTypeId  *uint   `json:"game_type_id,omitempty"`
+	GameTypeId  *uint64 `json:"game_type_id,omitempty"`
 	Key         *string `json:"key,omitempty"`
 	Name        *string `json:"name,omitempty"`
 	Description *string `json:"description,omitempty"` // json:"XXXX,omitempty" 的  omitempty 是告訴 json.Marsal, 如果是 nil 就不解析了

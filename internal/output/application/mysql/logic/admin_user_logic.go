@@ -143,8 +143,8 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 		aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
 		for _, iAdminRoleId := range oValue.AdminRoleIds {
 			aRelations = append(aRelations, domain.AdminUsersToAdminRole{
-				AdminUserId: uint(iAdminUserId),
-				AdminRoleId: uint(iAdminRoleId),
+				AdminUserId: iAdminUserId,
+				AdminRoleId: iAdminRoleId,
 			})
 		}
 
@@ -195,8 +195,8 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 			aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
 			for _, iAdminRoleId := range oValue.AdminRoleIds {
 				aRelations = append(aRelations, domain.AdminUsersToAdminRole{
-					AdminUserId: uint(iId),
-					AdminRoleId: uint(iAdminRoleId),
+					AdminUserId: iId,
+					AdminRoleId: iAdminRoleId,
 				})
 			}
 
@@ -264,9 +264,12 @@ func (oSelf *AdminUserLogic) RemoveAdminUserById(iId uint64) error {
 				return errors.New("0 rows deleted")
 			}
 
-			oDeleteErr := oTx.Where("admin_user_id = ?", iId).Delete(&domain.AdminUsersToAdminRole{}).Error
+			oError := oTx.
+				Where("admin_user_id = ?", iId).
+				Delete(&domain.AdminUsersToAdminRole{}).
+				Error
 
-			return oDeleteErr
+			return oError
 		})
 
 		return oTxErr

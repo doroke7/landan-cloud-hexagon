@@ -34,9 +34,9 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 	aTables := make([]*domain.Table, 0, len(oResponse.GetTables()))
 	for _, oOne := range oResponse.GetTables() {
 		aTables = append(aTables, &domain.Table{
-			Id:          uint(oOne.GetId()),
+			Id:          uint64(oOne.GetId()),
 			No:          oOne.GetNo(),
-			GameId:      uint(oOne.GetGameId()),
+			GameId:      uint64(oOne.GetGameId()),
 			Key:         oOne.GetKey(),
 			State:       uint8(oOne.GetState()),
 			Description: oOne.GetDescription(),

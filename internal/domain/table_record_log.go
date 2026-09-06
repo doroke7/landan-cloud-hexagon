@@ -13,9 +13,9 @@ import (
 )
 
 type TableRecordLog struct {
-	Id            uint      `json:"id" bson:"_id"`
-	GameId        uint      `json:"game_id" bson:"game_id"`
-	TableRecordId uint      `json:"table_record_id" bson:"table_record_id"`
+	Id            uint64    `json:"id" bson:"_id"`
+	GameId        uint64    `json:"game_id" bson:"game_id"`
+	TableRecordId uint64    `json:"table_record_id" bson:"table_record_id"`
 	State         uint8     `json:"state" bson:"state"`
 	Text          string    `json:"text" bson:"text"`
 	Image         string    `json:"image" bson:"image"`
@@ -25,8 +25,8 @@ type TableRecordLog struct {
 }
 
 type TableRecordLogValue struct {
-	GameId        *uint   `json:"game_id,omitempty"`
-	TableRecordId *uint   `json:"table_record_id,omitempty"`
+	GameId        *uint64 `json:"game_id,omitempty"`
+	TableRecordId *uint64 `json:"table_record_id,omitempty"`
 	State         *uint8  `json:"state,omitempty"`
 	Text          *string `json:"text,omitempty"`
 	Image         *string `json:"image,omitempty"`

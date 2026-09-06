@@ -171,7 +171,7 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {
 
 	oNow := time.Now()
 	oNew := &domain.GameType{
-		Id:        iId,
+		Id:        uint64(iId),
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
 		DeletedAt: oDeletedAtZero,

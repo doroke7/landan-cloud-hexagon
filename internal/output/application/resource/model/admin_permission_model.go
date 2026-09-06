@@ -25,7 +25,7 @@ func protoAdminPermissionToDomainAdminPermission(oProto *pbResource.AdminPermiss
 	}
 
 	return domain.AdminPermission{
-		Id:        uint(oProto.GetId()),
+		Id:        uint64(oProto.GetId()),
 		Type:      uint8(oProto.GetType()),
 		Key:       oProto.GetKey(),
 		Name:      oProto.GetName(),

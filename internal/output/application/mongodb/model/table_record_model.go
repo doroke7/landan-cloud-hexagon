@@ -75,7 +75,7 @@ func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) err
 
 	oNow := time.Now()
 	oNew := &domain.TableRecord{
-		Id:        iId,
+		Id:        uint64(iId),
 		CreatedAt: oNow,
 		UpdatedAt: oNow,
 		DeletedAt: oDeletedAtZero,

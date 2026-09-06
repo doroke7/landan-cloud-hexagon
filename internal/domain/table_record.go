@@ -13,10 +13,10 @@ import (
 )
 
 type TableRecord struct {
-	Id        uint      `json:"id" bson:"_id"`
+	Id        uint64    `json:"id" bson:"_id"`
 	No        string    `json:"no" bson:"no"` // 年-月日-桌號-局號-期號
-	GameId    uint      `json:"game_id" bson:"game_id"`
-	TableId   uint      `json:"table_id" bson:"table_id"`
+	GameId    uint64    `json:"game_id" bson:"game_id"`
+	TableId   uint64    `json:"table_id" bson:"table_id"`
 	State     uint8     `json:"state" bson:"state"`
 	Text      string    `json:"text" bson:"text"`
 	Image     string    `json:"image" bson:"image"`
@@ -30,8 +30,8 @@ type TableRecord struct {
 
 type TableRecordValue struct {
 	No        *string    `json:"no,omitempty"` // 年-月日-桌號-局號-期號
-	GameId    *uint      `json:"game_id,omitempty"`
-	TableId   *uint      `json:"table_id,omitempty"`
+	GameId    *uint64    `json:"game_id,omitempty"`
+	TableId   *uint64    `json:"table_id,omitempty"`
 	State     *uint8     `json:"state,omitempty"`
 	Text      *string    `json:"text,omitempty"`
 	Image     *string    `json:"image,omitempty"`

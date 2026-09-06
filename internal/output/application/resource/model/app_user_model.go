@@ -44,10 +44,10 @@ func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) 
 	oProtoAppUser := oResp.GetAppUser()
 
 	return &domain.AppUser{
-		Id:       uint(oProtoAppUser.GetId()),
+		Id:       uint64(oProtoAppUser.GetId()),
 		Name:     oProtoAppUser.GetName(),
 		Password: oProtoAppUser.GetPassword(),
-		Balance:  uint(oProtoAppUser.GetBalance()),
+		Balance:  uint64(oProtoAppUser.GetBalance()),
 	}, nil
 }
 
@@ -64,10 +64,10 @@ func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 	oProtoAppUser := oResp.GetAppUser()
 
 	return &domain.AppUser{
-		Id:       uint(oProtoAppUser.GetId()),
+		Id:       uint64(oProtoAppUser.GetId()),
 		Name:     oProtoAppUser.GetName(),
 		Password: oProtoAppUser.GetPassword(),
-		Balance:  uint(oProtoAppUser.GetBalance()),
+		Balance:  uint64(oProtoAppUser.GetBalance()),
 	}, nil
 }
 

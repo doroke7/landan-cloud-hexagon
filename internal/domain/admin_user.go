@@ -13,7 +13,7 @@ import (
 )
 
 type AdminUser struct {
-	Id         uint        `json:"id" bson:"_id"`
+	Id         uint64      `json:"id" bson:"_id"`
 	Name       string      `json:"name" bson:"name"`
 	Password   string      `json:"password" bson:"password"`
 	CreatedAt  time.Time   `json:"created_at" bson:"created_at"`
@@ -23,9 +23,9 @@ type AdminUser struct {
 }
 
 type AdminUserValue struct {
-	Name         *string `json:"name,omitempty" validate:"omitempty,min=4"`
-	Password     *string `json:"password,omitempty" validate:"omitempty,min=8"`
-	AdminRoleIds []int   `json:"admin_role_ids,omitempty" validate:"omitempty,dive,gt=0"`
+	Name         *string  `json:"name,omitempty" validate:"omitempty,min=4"`
+	Password     *string  `json:"password,omitempty" validate:"omitempty,min=8"`
+	AdminRoleIds []uint64 `json:"admin_role_ids,omitempty" validate:"omitempty,dive,gt=0"`
 	// CreatedAt *time.Time `json:"created_at"`
 	// UpdatedAt *time.Time `json:"updated_at"`
 	// DeletedAt *time.Time `json:"deleted_at"`
