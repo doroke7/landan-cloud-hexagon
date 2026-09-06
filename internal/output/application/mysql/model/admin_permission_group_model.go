@@ -45,6 +45,7 @@ func (oSelf *AdminPermissionGroupModel) ShowOneById(iId uint64) (*domain.AdminPe
 }
 
 func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, error) {
+
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractMysql.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractMysql.PaginationToLimit(oPagination)
@@ -89,20 +90,18 @@ func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(a
 }
 
 func (oSelf *AdminPermissionGroupModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error) {
+
 	aWheres := oSelf.AbstractMysql.FiltersToWheres(aFilters)
 
 	var iTotal int64
-	oQuery := oSelf.
-		DB.
-		WithContext(oSelf.Context).
+	oQuery := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermissionGroup{})
 
 	for _, oWhere := range aWheres {
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
 
-	oResult := oQuery.
-		Count(&iTotal)
+	oResult := oQuery.Count(&iTotal)
 
 	if oResult.Error != nil {
 		return 0, oResult.Error
@@ -149,6 +148,7 @@ func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissi
 }
 
 func (oSelf *AdminPermissionGroupModel) RemoveOneById(iId uint64) error {
+
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermissionGroup{}).
 		Where("id = ?", iId).
