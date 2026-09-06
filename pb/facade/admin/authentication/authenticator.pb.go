@@ -22,17 +22,68 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type AdminUserVariable struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Password      *string                `protobuf:"bytes,2,opt,name=password,proto3,oneof" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserVariable) Reset() {
+	*x = AdminUserVariable{}
+	mi := &file_facade_admin_authentication_authenticator_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserVariable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserVariable) ProtoMessage() {}
+
+func (x *AdminUserVariable) ProtoReflect() protoreflect.Message {
+	mi := &file_facade_admin_authentication_authenticator_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserVariable.ProtoReflect.Descriptor instead.
+func (*AdminUserVariable) Descriptor() ([]byte, []int) {
+	return file_facade_admin_authentication_authenticator_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *AdminUserVariable) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *AdminUserVariable) GetPassword() string {
+	if x != nil && x.Password != nil {
+		return *x.Password
+	}
+	return ""
+}
+
 type AuthenticatorSignInRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Password      string                 `protobuf:"bytes,2,opt,name=password,proto3" json:"password,omitempty"`
+	Variable      *AdminUserVariable     `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AuthenticatorSignInRequest) Reset() {
 	*x = AuthenticatorSignInRequest{}
-	mi := &file_facade_admin_authentication_authenticator_proto_msgTypes[0]
+	mi := &file_facade_admin_authentication_authenticator_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -44,7 +95,7 @@ func (x *AuthenticatorSignInRequest) String() string {
 func (*AuthenticatorSignInRequest) ProtoMessage() {}
 
 func (x *AuthenticatorSignInRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_authentication_authenticator_proto_msgTypes[0]
+	mi := &file_facade_admin_authentication_authenticator_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -57,21 +108,14 @@ func (x *AuthenticatorSignInRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthenticatorSignInRequest.ProtoReflect.Descriptor instead.
 func (*AuthenticatorSignInRequest) Descriptor() ([]byte, []int) {
-	return file_facade_admin_authentication_authenticator_proto_rawDescGZIP(), []int{0}
+	return file_facade_admin_authentication_authenticator_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AuthenticatorSignInRequest) GetName() string {
+func (x *AuthenticatorSignInRequest) GetVariable() *AdminUserVariable {
 	if x != nil {
-		return x.Name
+		return x.Variable
 	}
-	return ""
-}
-
-func (x *AuthenticatorSignInRequest) GetPassword() string {
-	if x != nil {
-		return x.Password
-	}
-	return ""
+	return nil
 }
 
 type AuthenticatorSignInResponse struct {
@@ -82,7 +126,7 @@ type AuthenticatorSignInResponse struct {
 
 func (x *AuthenticatorSignInResponse) Reset() {
 	*x = AuthenticatorSignInResponse{}
-	mi := &file_facade_admin_authentication_authenticator_proto_msgTypes[1]
+	mi := &file_facade_admin_authentication_authenticator_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -94,7 +138,7 @@ func (x *AuthenticatorSignInResponse) String() string {
 func (*AuthenticatorSignInResponse) ProtoMessage() {}
 
 func (x *AuthenticatorSignInResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_admin_authentication_authenticator_proto_msgTypes[1]
+	mi := &file_facade_admin_authentication_authenticator_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -107,7 +151,7 @@ func (x *AuthenticatorSignInResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthenticatorSignInResponse.ProtoReflect.Descriptor instead.
 func (*AuthenticatorSignInResponse) Descriptor() ([]byte, []int) {
-	return file_facade_admin_authentication_authenticator_proto_rawDescGZIP(), []int{1}
+	return file_facade_admin_authentication_authenticator_proto_rawDescGZIP(), []int{2}
 }
 
 var file_facade_admin_authentication_authenticator_proto_extTypes = []protoimpl.ExtensionInfo{
@@ -131,10 +175,14 @@ var File_facade_admin_authentication_authenticator_proto protoreflect.FileDescri
 
 const file_facade_admin_authentication_authenticator_proto_rawDesc = "" +
 	"\n" +
-	"/facade/admin/authentication/authenticator.proto\x12\x1epb.facade.admin.authentication\x1a google/protobuf/descriptor.proto\"R\n" +
-	"\x1aAuthenticatorSignInRequest\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\x12 \n" +
-	"\bpassword\x18\x02 \x01(\tB\x04\x88\xb5\x18\x01R\bpassword\"\x1d\n" +
+	"/facade/admin/authentication/authenticator.proto\x12\x1epb.facade.admin.authentication\x1a google/protobuf/descriptor.proto\"i\n" +
+	"\x11AdminUserVariable\x12\x17\n" +
+	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12%\n" +
+	"\bpassword\x18\x02 \x01(\tB\x04\x88\xb5\x18\x01H\x01R\bpassword\x88\x01\x01B\a\n" +
+	"\x05_nameB\v\n" +
+	"\t_password\"k\n" +
+	"\x1aAuthenticatorSignInRequest\x12M\n" +
+	"\bvariable\x18\x01 \x01(\v21.pb.facade.admin.authentication.AdminUserVariableR\bvariable\"\x1d\n" +
 	"\x1bAuthenticatorSignInResponse2\x9d\x01\n" +
 	"\x17AuthenticatorController\x12\x81\x01\n" +
 	"\x06SignIn\x12:.pb.facade.admin.authentication.AuthenticatorSignInRequest\x1a;.pb.facade.admin.authentication.AuthenticatorSignInResponse:=\n" +
@@ -152,21 +200,23 @@ func file_facade_admin_authentication_authenticator_proto_rawDescGZIP() []byte {
 	return file_facade_admin_authentication_authenticator_proto_rawDescData
 }
 
-var file_facade_admin_authentication_authenticator_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
+var file_facade_admin_authentication_authenticator_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
 var file_facade_admin_authentication_authenticator_proto_goTypes = []any{
-	(*AuthenticatorSignInRequest)(nil),  // 0: pb.facade.admin.authentication.AuthenticatorSignInRequest
-	(*AuthenticatorSignInResponse)(nil), // 1: pb.facade.admin.authentication.AuthenticatorSignInResponse
-	(*descriptorpb.FieldOptions)(nil),   // 2: google.protobuf.FieldOptions
+	(*AdminUserVariable)(nil),           // 0: pb.facade.admin.authentication.AdminUserVariable
+	(*AuthenticatorSignInRequest)(nil),  // 1: pb.facade.admin.authentication.AuthenticatorSignInRequest
+	(*AuthenticatorSignInResponse)(nil), // 2: pb.facade.admin.authentication.AuthenticatorSignInResponse
+	(*descriptorpb.FieldOptions)(nil),   // 3: google.protobuf.FieldOptions
 }
 var file_facade_admin_authentication_authenticator_proto_depIdxs = []int32{
-	2, // 0: pb.facade.admin.authentication.encrypted:extendee -> google.protobuf.FieldOptions
-	0, // 1: pb.facade.admin.authentication.AuthenticatorController.SignIn:input_type -> pb.facade.admin.authentication.AuthenticatorSignInRequest
-	1, // 2: pb.facade.admin.authentication.AuthenticatorController.SignIn:output_type -> pb.facade.admin.authentication.AuthenticatorSignInResponse
-	2, // [2:3] is the sub-list for method output_type
-	1, // [1:2] is the sub-list for method input_type
-	1, // [1:1] is the sub-list for extension type_name
-	0, // [0:1] is the sub-list for extension extendee
-	0, // [0:0] is the sub-list for field type_name
+	0, // 0: pb.facade.admin.authentication.AuthenticatorSignInRequest.variable:type_name -> pb.facade.admin.authentication.AdminUserVariable
+	3, // 1: pb.facade.admin.authentication.encrypted:extendee -> google.protobuf.FieldOptions
+	1, // 2: pb.facade.admin.authentication.AuthenticatorController.SignIn:input_type -> pb.facade.admin.authentication.AuthenticatorSignInRequest
+	2, // 3: pb.facade.admin.authentication.AuthenticatorController.SignIn:output_type -> pb.facade.admin.authentication.AuthenticatorSignInResponse
+	3, // [3:4] is the sub-list for method output_type
+	2, // [2:3] is the sub-list for method input_type
+	2, // [2:2] is the sub-list for extension type_name
+	1, // [1:2] is the sub-list for extension extendee
+	0, // [0:1] is the sub-list for field type_name
 }
 
 func init() { file_facade_admin_authentication_authenticator_proto_init() }
@@ -174,13 +224,14 @@ func file_facade_admin_authentication_authenticator_proto_init() {
 	if File_facade_admin_authentication_authenticator_proto != nil {
 		return
 	}
+	file_facade_admin_authentication_authenticator_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_facade_admin_authentication_authenticator_proto_rawDesc), len(file_facade_admin_authentication_authenticator_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   2,
+			NumMessages:   3,
 			NumExtensions: 1,
 			NumServices:   1,
 		},

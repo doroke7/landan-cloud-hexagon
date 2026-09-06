@@ -28,7 +28,9 @@ func NewAuthenticatorHandler(oAuthenticatorUsecase usecasePortAnyAdminAuthentica
 
 func (oSelf *AuthenticatorHandler) SignIn(oContext context.Context, oRequest *pbFacadeAdminAuthentication.AuthenticatorSignInRequest) (*pbFacadeAdminAuthentication.AuthenticatorSignInResponse, error) {
 
-	sAuthorization, oErr := oSelf.AdminAuthenticationAuthenticatorUsecase.SignIn(oRequest.Name, oRequest.Password, bootstrap.CONFIG.SERVICES.FACADE.ADMIN.JWT.SECRET)
+	oVariable := oRequest.GetVariable()
+
+	sAuthorization, oErr := oSelf.AdminAuthenticationAuthenticatorUsecase.SignIn(oVariable.GetName(), oVariable.GetPassword(), bootstrap.CONFIG.SERVICES.FACADE.ADMIN.JWT.SECRET)
 
 	if oErr != nil {
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {

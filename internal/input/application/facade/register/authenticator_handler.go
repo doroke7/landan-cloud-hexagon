@@ -21,6 +21,6 @@ func NewAuthenticatorHandler(oAbstractHandler *inputApplicationFacade.AbstractHa
 func (oSelf *AuthenticatorHandler) SingUp(oContext context.Context, oRequest *pbFacadeRegister.AuthenticatorSignInRequest) (*pbFacadeRegister.AuthenticatorSignInResponse, error) {
 
 	return &pbFacadeRegister.AuthenticatorSignInResponse{
-		Name: "AA",
+		Authorization: "AA",
 	}, nil
 }

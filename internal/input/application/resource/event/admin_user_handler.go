@@ -24,10 +24,12 @@ func NewAdminUserHandler(oAbstractHandler *inputApplicationResource.AbstractHand
 
 func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResourceEvent.AdminUserEventAddOneInput) (*pbResourceEvent.AdminUserEventAddOneOutput, error) {
 
+	oValue := oReq.GetValue()
+
 	oErr := oSelf.EventAdminUserUsecase.AddOne(&domain.AdminUser{
-		Id:       uint64(oReq.GetId()),
-		Name:     oReq.GetName(),
-		Password: oReq.GetPassword(),
+		Id:       oValue.GetId(),
+		Name:     oValue.GetName(),
+		Password: oValue.GetPassword(),
 	})
 	if oErr != nil {
 		return nil, oErr
