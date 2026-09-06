@@ -83,6 +83,7 @@ func (oSelf *TableModel) RemoveOneById(iId uint64) error {
 }
 
 func (oSelf *TableModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
+
 	aWheres := oSelf.AbstractSqlite.FiltersToWheres(aFilters)
 	aOrders := oSelf.AbstractSqlite.SortersToOrders(aSorters)
 	oLimit := oSelf.AbstractSqlite.PaginationToLimit(oPagination)

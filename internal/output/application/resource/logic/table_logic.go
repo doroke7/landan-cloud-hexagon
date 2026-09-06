@@ -52,3 +52,10 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 	iTotal := uint64(oResponse.GetTotal())
 	return aTables, iTotal, oErr
 }
+
+// ShowTablesByFiltersWithSortersPagination 直接複用 logic rpc（ShowTablesTotalBy…），把 total 丟掉。
+func (oSelf *TableLogic) ShowTablesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, error) {
+	aTables, _, oErr := oSelf.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
+
+	return aTables, oErr
+}
