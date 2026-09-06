@@ -51,20 +51,14 @@ func (oSelf *AdminPermissionGroupUsecase) ShowOne(iId uint64) (*domain.AdminPerm
 	return oAdminPermissionGroup, oErr
 }
 
-// ShowTree 回一個虛擬 root，Children 掛所有頂層 admin permission group（整棵樹）。
-func (oSelf *AdminPermissionGroupUsecase) ShowTree() (*domain.AdminPermissionGroup, error) {
+func (oSelf *AdminPermissionGroupUsecase) ShowTree() ([]*domain.AdminPermissionGroup, error) {
 
-	aRoots, oErr := oSelf.AdminPermissionGroupLogic.ShowTree()
+	aAdminPermissionGroups, oErr := oSelf.AdminPermissionGroupLogic.ShowTree()
 	if oErr != nil {
 		return nil, oErr
 	}
 
-	oRoot := &domain.AdminPermissionGroup{}
-	for _, oOne := range aRoots {
-		oRoot.Children = append(oRoot.Children, *oOne)
-	}
-
-	return oRoot, nil
+	return aAdminPermissionGroups, nil
 }
 
 func (oSelf *AdminPermissionGroupUsecase) ShowOnes(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, uint64, error) {
