@@ -12,19 +12,20 @@ import (
 	"time"
 )
 
-type AdminPermission struct {
-	Id        uint64    `json:"id" bson:"_id"`
-	ParentId  uint64    `json:"parent_id" bson:"parent_id"`
-	Type      uint8     `json:"type" bson:"type"` // 1=菜單 2=頁面 3=接口
-	Key       string    `json:"key" bson:"key"`
-	Name      string    `json:"name" bson:"name"`
+type AdminPermissionGroup struct {
+	Id       uint64                 `json:"id" bson:"_id"`
+	ParentId uint64                 `json:"parent_id" bson:"parent_id"`
+	Key      string                 `json:"key" bson:"key"`
+	Name     string                 `json:"name" bson:"name"`
+	Parent   *AdminPermissionGroup  `json:"parent,omitempty" bson:"-" gorm:"foreignKey:ParentId;references:Id"`
+	Children []AdminPermissionGroup `json:"children" bson:"-" gorm:"foreignKey:ParentId"`
+
 	CreatedAt time.Time `json:"created_at" bson:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
 	DeletedAt time.Time `json:"deleted_at" bson:"deleted_at"`
 }
 
-type AdminPermissionValue struct {
-	Type *uint8  `json:"type,omitempty"`
+type AdminPermissionGroupValue struct {
 	Key  *string `json:"key,omitempty"`
 	Name *string `json:"name,omitempty"`
 	// CreatedAt *time.Time `json:"created_at"`

@@ -135,6 +135,7 @@ type HttpContainer struct {
 	HttpAdminResourceGameType            *inputApplicationHttpAdminResource.GameTypeHandler
 	HttpAdminOptionGameType              *inputApplicationHttpAdminOption.GameTypeHandler
 	HttpAdminOptionAdminRole             *inputApplicationHttpAdminOption.AdminRoleHandler
+	HttpAdminOptionAdminPermission       *inputApplicationHttpAdminOption.AdminPermissionHandler
 	HttpGameAuthenticationAuthenticator  *inputApplicationHttpGameAuthentication.AuthenticatorHandler
 
 	// HTTP server -Middleware
@@ -222,6 +223,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		usecaseApplicationAnyAdminResource.NewGameTypeUsecase,
 		usecaseApplicationAnyAdminOption.NewGameTypeUsecase,
 		usecaseApplicationAnyAdminOption.NewAdminRoleUsecase,
+		usecaseApplicationAnyAdminOption.NewAdminPermissionUsecase,
 
 		// client
 		client.NewModel,
@@ -242,6 +244,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		inputApplicationHttpAdminResource.NewGameTypeHandler,
 		inputApplicationHttpAdminOption.NewGameTypeHandler,
 		inputApplicationHttpAdminOption.NewAdminRoleHandler,
+		inputApplicationHttpAdminOption.NewAdminPermissionHandler,
 
 		// Middleware 部分
 		middlewareHttpAdmin.NewAbstractMiddleware,
