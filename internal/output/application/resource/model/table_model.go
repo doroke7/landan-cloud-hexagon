@@ -19,8 +19,8 @@ func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel 
 	}
 }
 
-func domainTableValueToProtoTableVariable(oTable *domain.TableValue) *pbResourceModel.TableVariable {
-	oVariable := &pbResourceModel.TableVariable{
+func domainTableValueToProtoTableValue(oTable *domain.TableValue) *pbResourceModel.TableValue {
+	oValue := &pbResourceModel.TableValue{
 		No:          oTable.No,
 		Key:         oTable.Key,
 		Description: oTable.Description,
@@ -28,35 +28,35 @@ func domainTableValueToProtoTableVariable(oTable *domain.TableValue) *pbResource
 
 	if oTable.GameId != nil {
 		iGameId := uint64(*oTable.GameId)
-		oVariable.GameId = &iGameId
+		oValue.GameId = &iGameId
 	}
 
 	if oTable.State != nil {
 		iState := uint64(*oTable.State)
-		oVariable.State = &iState
+		oValue.State = &iState
 	}
 
 	if oTable.Result != nil {
 		sResult := *oTable.Result
-		oVariable.Result = &sResult
+		oValue.Result = &sResult
 	}
 
 	if oTable.StartedAt != nil {
-		oVariable.StartedAt = timestamppb.New(*oTable.StartedAt)
+		oValue.StartedAt = timestamppb.New(*oTable.StartedAt)
 	}
 
 	if oTable.EndedAt != nil {
-		oVariable.EndedAt = timestamppb.New(*oTable.EndedAt)
+		oValue.EndedAt = timestamppb.New(*oTable.EndedAt)
 	}
 
-	return oVariable
+	return oValue
 }
 
 func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.TableEditOneByIdInput{
-		Id:       uint64(iId),
-		Variable: domainTableValueToProtoTableVariable(oTable),
+		Id:    uint64(iId),
+		Value: domainTableValueToProtoTableValue(oTable),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Table.EditOneById(oSelf.Context, oRequest)
@@ -90,7 +90,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {
 
 	oRequest := &pbResourceModel.TableAddOneInput{
-		Variable: domainTableValueToProtoTableVariable(oTable),
+		Value: domainTableValueToProtoTableValue(oTable),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Table.AddOne(oSelf.Context, oRequest)

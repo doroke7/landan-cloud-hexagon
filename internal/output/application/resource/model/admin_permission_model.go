@@ -34,8 +34,8 @@ func protoAdminPermissionToDomainAdminPermission(oProto *pbResource.AdminPermiss
 	}
 }
 
-func domainAdminPermissionValueToProtoAdminPermissionVariable(oValue *domain.AdminPermissionValue) *pbResourceModel.AdminPermissionVariable {
-	oVariable := &pbResourceModel.AdminPermissionVariable{
+func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminPermissionValue) *pbResourceModel.AdminPermissionValue {
+	oVariable := &pbResourceModel.AdminPermissionValue{
 		Key:  oValue.Key,
 		Name: oValue.Name,
 	}
@@ -51,7 +51,7 @@ func domainAdminPermissionValueToProtoAdminPermissionVariable(oValue *domain.Adm
 func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissionValue) error {
 
 	oRequest := &pbResourceModel.AdminPermissionAddOneInput{
-		Variable: domainAdminPermissionValueToProtoAdminPermissionVariable(oAdminPermission),
+		Value: domainAdminPermissionValueToProtoAdminPermissionValue(oAdminPermission),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.AdminPermission.AddOne(oSelf.Context, oRequest)
@@ -83,8 +83,8 @@ func (oSelf *AdminPermissionModel) ShowOneById(iId uint64) (*domain.AdminPermiss
 func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.AdminPermissionEditOneByIdInput{
-		Id:       uint64(iId),
-		Variable: domainAdminPermissionValueToProtoAdminPermissionVariable(oAdminPermission),
+		Id:    uint64(iId),
+		Value: domainAdminPermissionValueToProtoAdminPermissionValue(oAdminPermission),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.AdminPermission.EditOneById(oSelf.Context, oRequest)

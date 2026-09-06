@@ -22,7 +22,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type AdminPermissionGroupVariable struct {
+type AdminPermissionGroupValue struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Key           *string                `protobuf:"bytes,1,opt,name=key,proto3,oneof" json:"key,omitempty"`
 	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
@@ -30,20 +30,20 @@ type AdminPermissionGroupVariable struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AdminPermissionGroupVariable) Reset() {
-	*x = AdminPermissionGroupVariable{}
+func (x *AdminPermissionGroupValue) Reset() {
+	*x = AdminPermissionGroupValue{}
 	mi := &file_resource_model_admin_permission_group_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AdminPermissionGroupVariable) String() string {
+func (x *AdminPermissionGroupValue) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AdminPermissionGroupVariable) ProtoMessage() {}
+func (*AdminPermissionGroupValue) ProtoMessage() {}
 
-func (x *AdminPermissionGroupVariable) ProtoReflect() protoreflect.Message {
+func (x *AdminPermissionGroupValue) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_admin_permission_group_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -55,19 +55,19 @@ func (x *AdminPermissionGroupVariable) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AdminPermissionGroupVariable.ProtoReflect.Descriptor instead.
-func (*AdminPermissionGroupVariable) Descriptor() ([]byte, []int) {
+// Deprecated: Use AdminPermissionGroupValue.ProtoReflect.Descriptor instead.
+func (*AdminPermissionGroupValue) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_group_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminPermissionGroupVariable) GetKey() string {
+func (x *AdminPermissionGroupValue) GetKey() string {
 	if x != nil && x.Key != nil {
 		return *x.Key
 	}
 	return ""
 }
 
-func (x *AdminPermissionGroupVariable) GetName() string {
+func (x *AdminPermissionGroupValue) GetName() string {
 	if x != nil && x.Name != nil {
 		return *x.Name
 	}
@@ -75,8 +75,8 @@ func (x *AdminPermissionGroupVariable) GetName() string {
 }
 
 type AdminPermissionGroupAddOneInput struct {
-	state         protoimpl.MessageState        `protogen:"open.v1"`
-	Variable      *AdminPermissionGroupVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Value         *AdminPermissionGroupValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -111,9 +111,9 @@ func (*AdminPermissionGroupAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_group_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AdminPermissionGroupAddOneInput) GetVariable() *AdminPermissionGroupVariable {
+func (x *AdminPermissionGroupAddOneInput) GetValue() *AdminPermissionGroupValue {
 	if x != nil {
-		return x.Variable
+		return x.Value
 	}
 	return nil
 }
@@ -163,9 +163,9 @@ func (x *AdminPermissionGroupAddOneOutput) GetAdminPermissionGroup() *resource.A
 }
 
 type AdminPermissionGroupEditOneByIdInput struct {
-	state         protoimpl.MessageState        `protogen:"open.v1"`
-	Variable      *AdminPermissionGroupVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint64                        `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Value         *AdminPermissionGroupValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Id            uint64                     `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -200,9 +200,9 @@ func (*AdminPermissionGroupEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_group_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AdminPermissionGroupEditOneByIdInput) GetVariable() *AdminPermissionGroupVariable {
+func (x *AdminPermissionGroupEditOneByIdInput) GetValue() *AdminPermissionGroupValue {
 	if x != nil {
-		return x.Variable
+		return x.Value
 	}
 	return nil
 }
@@ -542,18 +542,18 @@ var File_resource_model_admin_permission_group_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_permission_group_proto_rawDesc = "" +
 	"\n" +
-	"+resource/model/admin_permission_group.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"_\n" +
-	"\x1cAdminPermissionGroupVariable\x12\x15\n" +
+	"+resource/model/admin_permission_group.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"\\\n" +
+	"\x19AdminPermissionGroupValue\x12\x15\n" +
 	"\x03key\x18\x01 \x01(\tH\x00R\x03key\x88\x01\x01\x12\x17\n" +
 	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01B\x06\n" +
 	"\x04_keyB\a\n" +
-	"\x05_name\"n\n" +
-	"\x1fAdminPermissionGroupAddOneInput\x12K\n" +
-	"\bvariable\x18\x01 \x01(\v2/.pb.resource.model.AdminPermissionGroupVariableR\bvariable\"{\n" +
+	"\x05_name\"e\n" +
+	"\x1fAdminPermissionGroupAddOneInput\x12B\n" +
+	"\x05value\x18\x01 \x01(\v2,.pb.resource.model.AdminPermissionGroupValueR\x05value\"{\n" +
 	" AdminPermissionGroupAddOneOutput\x12W\n" +
-	"\x16admin_permission_group\x18\x01 \x01(\v2!.pb.resource.AdminPermissionGroupR\x14adminPermissionGroup\"\x83\x01\n" +
-	"$AdminPermissionGroupEditOneByIdInput\x12K\n" +
-	"\bvariable\x18\x01 \x01(\v2/.pb.resource.model.AdminPermissionGroupVariableR\bvariable\x12\x0e\n" +
+	"\x16admin_permission_group\x18\x01 \x01(\v2!.pb.resource.AdminPermissionGroupR\x14adminPermissionGroup\"z\n" +
+	"$AdminPermissionGroupEditOneByIdInput\x12B\n" +
+	"\x05value\x18\x01 \x01(\v2,.pb.resource.model.AdminPermissionGroupValueR\x05value\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"?\n" +
 	"%AdminPermissionGroupEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"8\n" +
@@ -594,7 +594,7 @@ func file_resource_model_admin_permission_group_proto_rawDescGZIP() []byte {
 
 var file_resource_model_admin_permission_group_proto_msgTypes = make([]protoimpl.MessageInfo, 11)
 var file_resource_model_admin_permission_group_proto_goTypes = []any{
-	(*AdminPermissionGroupVariable)(nil),                                     // 0: pb.resource.model.AdminPermissionGroupVariable
+	(*AdminPermissionGroupValue)(nil),                                        // 0: pb.resource.model.AdminPermissionGroupValue
 	(*AdminPermissionGroupAddOneInput)(nil),                                  // 1: pb.resource.model.AdminPermissionGroupAddOneInput
 	(*AdminPermissionGroupAddOneOutput)(nil),                                 // 2: pb.resource.model.AdminPermissionGroupAddOneOutput
 	(*AdminPermissionGroupEditOneByIdInput)(nil),                             // 3: pb.resource.model.AdminPermissionGroupEditOneByIdInput
@@ -611,9 +611,9 @@ var file_resource_model_admin_permission_group_proto_goTypes = []any{
 	(*resource.Sorter)(nil),                                                  // 14: pb.resource.Sorter
 }
 var file_resource_model_admin_permission_group_proto_depIdxs = []int32{
-	0,  // 0: pb.resource.model.AdminPermissionGroupAddOneInput.variable:type_name -> pb.resource.model.AdminPermissionGroupVariable
+	0,  // 0: pb.resource.model.AdminPermissionGroupAddOneInput.value:type_name -> pb.resource.model.AdminPermissionGroupValue
 	11, // 1: pb.resource.model.AdminPermissionGroupAddOneOutput.admin_permission_group:type_name -> pb.resource.AdminPermissionGroup
-	0,  // 2: pb.resource.model.AdminPermissionGroupEditOneByIdInput.variable:type_name -> pb.resource.model.AdminPermissionGroupVariable
+	0,  // 2: pb.resource.model.AdminPermissionGroupEditOneByIdInput.value:type_name -> pb.resource.model.AdminPermissionGroupValue
 	12, // 3: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
 	13, // 4: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
 	14, // 5: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter

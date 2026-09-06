@@ -53,12 +53,12 @@ func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbResource.GameT
 
 func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceModel.GameTypeAddOneInput) (*pbResourceModel.GameTypeAddOneOutput, error) {
 
-	oVariable := oReq.GetVariable()
+	oValue := oReq.GetValue()
 
 	var oGameTypeValue domain.GameTypeValue
-	if oVariable != nil {
-		oGameTypeValue.Key = oVariable.Key
-		oGameTypeValue.Name = oVariable.Name
+	if oValue != nil {
+		oGameTypeValue.Key = oValue.Key
+		oGameTypeValue.Name = oValue.Name
 	}
 
 	oErr := oSelf.ModelGameTypeUsecase.AddOne(&oGameTypeValue)
@@ -86,12 +86,12 @@ func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceM
 
 func (oSelf *GameTypeHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.GameTypeEditOneByIdInput) (*pbResourceModel.GameTypeEditOneByIdOutput, error) {
 
-	oVariable := oReq.GetVariable()
+	oValue := oReq.GetValue()
 
 	var oGameTypeValue domain.GameTypeValue
-	if oVariable != nil {
-		oGameTypeValue.Key = oVariable.Key
-		oGameTypeValue.Name = oVariable.Name
+	if oValue != nil {
+		oGameTypeValue.Key = oValue.Key
+		oGameTypeValue.Name = oValue.Name
 	}
 
 	oErr := oSelf.ModelGameTypeUsecase.EditOneById(&oGameTypeValue, uint64(oReq.Id))

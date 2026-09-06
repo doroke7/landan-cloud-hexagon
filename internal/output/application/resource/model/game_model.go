@@ -8,8 +8,8 @@ import (
 	pkgInput "example/pkg/input"
 )
 
-func domainGameValueToProtoGameVariable(oGame *domain.GameValue) *pbResourceModel.GameVariable {
-	oVariable := &pbResourceModel.GameVariable{
+func domainGameValueToProtoGameValue(oGame *domain.GameValue) *pbResourceModel.GameValue {
+	oValue := &pbResourceModel.GameValue{
 		Key:         oGame.Key,
 		Name:        oGame.Name,
 		Description: oGame.Description,
@@ -17,10 +17,10 @@ func domainGameValueToProtoGameVariable(oGame *domain.GameValue) *pbResourceMode
 
 	if oGame.GameTypeId != nil {
 		iGameTypeId := uint64(*oGame.GameTypeId)
-		oVariable.GameTypeId = &iGameTypeId
+		oValue.GameTypeId = &iGameTypeId
 	}
 
-	return oVariable
+	return oValue
 }
 
 func protoGameToDomainGame(oProtoGame *pbResource.Game) domain.Game {
@@ -54,7 +54,7 @@ func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
 func (oSelf *GameModel) AddOne(oGameParm *domain.GameValue) error {
 
 	oRequest := &pbResourceModel.GameAddOneInput{
-		Variable: domainGameValueToProtoGameVariable(oGameParm),
+		Value: domainGameValueToProtoGameValue(oGameParm),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Game.AddOne(oSelf.Context, oRequest)
@@ -110,8 +110,8 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint64) error {
 
 	oRequest := &pbResourceModel.GameEditOneByIdInput{
-		Id:       iId,
-		Variable: domainGameValueToProtoGameVariable(oGame),
+		Id:    iId,
+		Value: domainGameValueToProtoGameValue(oGame),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Game.EditOneById(oSelf.Context, oRequest)

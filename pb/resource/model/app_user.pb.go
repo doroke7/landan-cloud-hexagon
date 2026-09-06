@@ -22,7 +22,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type AppUserVariable struct {
+type AppUserValue struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
 	Password      *string                `protobuf:"bytes,2,opt,name=password,proto3,oneof" json:"password,omitempty"`
@@ -30,20 +30,20 @@ type AppUserVariable struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *AppUserVariable) Reset() {
-	*x = AppUserVariable{}
+func (x *AppUserValue) Reset() {
+	*x = AppUserValue{}
 	mi := &file_resource_model_app_user_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *AppUserVariable) String() string {
+func (x *AppUserValue) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*AppUserVariable) ProtoMessage() {}
+func (*AppUserValue) ProtoMessage() {}
 
-func (x *AppUserVariable) ProtoReflect() protoreflect.Message {
+func (x *AppUserValue) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_app_user_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -55,19 +55,19 @@ func (x *AppUserVariable) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use AppUserVariable.ProtoReflect.Descriptor instead.
-func (*AppUserVariable) Descriptor() ([]byte, []int) {
+// Deprecated: Use AppUserValue.ProtoReflect.Descriptor instead.
+func (*AppUserValue) Descriptor() ([]byte, []int) {
 	return file_resource_model_app_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AppUserVariable) GetName() string {
+func (x *AppUserValue) GetName() string {
 	if x != nil && x.Name != nil {
 		return *x.Name
 	}
 	return ""
 }
 
-func (x *AppUserVariable) GetPassword() string {
+func (x *AppUserValue) GetPassword() string {
 	if x != nil && x.Password != nil {
 		return *x.Password
 	}
@@ -76,7 +76,7 @@ func (x *AppUserVariable) GetPassword() string {
 
 type AppUserAddOneInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Variable      *AppUserVariable       `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Value         *AppUserValue          `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -111,9 +111,9 @@ func (*AppUserAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_app_user_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AppUserAddOneInput) GetVariable() *AppUserVariable {
+func (x *AppUserAddOneInput) GetValue() *AppUserValue {
 	if x != nil {
-		return x.Variable
+		return x.Value
 	}
 	return nil
 }
@@ -438,14 +438,14 @@ var File_resource_model_app_user_proto protoreflect.FileDescriptor
 
 const file_resource_model_app_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1dresource/model/app_user.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"a\n" +
-	"\x0fAppUserVariable\x12\x17\n" +
+	"\x1dresource/model/app_user.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"^\n" +
+	"\fAppUserValue\x12\x17\n" +
 	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
 	"\bpassword\x18\x02 \x01(\tH\x01R\bpassword\x88\x01\x01B\a\n" +
 	"\x05_nameB\v\n" +
-	"\t_password\"T\n" +
-	"\x12AppUserAddOneInput\x12>\n" +
-	"\bvariable\x18\x01 \x01(\v2\".pb.resource.model.AppUserVariableR\bvariable\")\n" +
+	"\t_password\"K\n" +
+	"\x12AppUserAddOneInput\x125\n" +
+	"\x05value\x18\x01 \x01(\v2\x1f.pb.resource.model.AppUserValueR\x05value\")\n" +
 	"\x13AppUserAddOneOutput\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"/\n" +
 	"\x19AppUserShowOneByNameInput\x12\x12\n" +
@@ -482,7 +482,7 @@ func file_resource_model_app_user_proto_rawDescGZIP() []byte {
 
 var file_resource_model_app_user_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_resource_model_app_user_proto_goTypes = []any{
-	(*AppUserVariable)(nil),              // 0: pb.resource.model.AppUserVariable
+	(*AppUserValue)(nil),                 // 0: pb.resource.model.AppUserValue
 	(*AppUserAddOneInput)(nil),           // 1: pb.resource.model.AppUserAddOneInput
 	(*AppUserAddOneOutput)(nil),          // 2: pb.resource.model.AppUserAddOneOutput
 	(*AppUserShowOneByNameInput)(nil),    // 3: pb.resource.model.AppUserShowOneByNameInput
@@ -494,7 +494,7 @@ var file_resource_model_app_user_proto_goTypes = []any{
 	(*resource.AppUser)(nil),             // 9: pb.resource.AppUser
 }
 var file_resource_model_app_user_proto_depIdxs = []int32{
-	0, // 0: pb.resource.model.AppUserAddOneInput.variable:type_name -> pb.resource.model.AppUserVariable
+	0, // 0: pb.resource.model.AppUserAddOneInput.value:type_name -> pb.resource.model.AppUserValue
 	9, // 1: pb.resource.model.AppUserShowOneByNameOutput.app_user:type_name -> pb.resource.AppUser
 	9, // 2: pb.resource.model.AppUserShowOneByIdOutput.app_user:type_name -> pb.resource.AppUser
 	1, // 3: pb.resource.model.AppUserModel.AddAppUser:input_type -> pb.resource.model.AppUserAddOneInput

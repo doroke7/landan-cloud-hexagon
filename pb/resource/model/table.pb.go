@@ -23,7 +23,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type TableVariable struct {
+type TableValue struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	No            *string                `protobuf:"bytes,1,opt,name=no,proto3,oneof" json:"no,omitempty"`
 	GameId        *uint64                `protobuf:"varint,2,opt,name=game_id,json=gameId,proto3,oneof" json:"game_id,omitempty"`
@@ -37,20 +37,20 @@ type TableVariable struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *TableVariable) Reset() {
-	*x = TableVariable{}
+func (x *TableValue) Reset() {
+	*x = TableValue{}
 	mi := &file_resource_model_table_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *TableVariable) String() string {
+func (x *TableValue) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*TableVariable) ProtoMessage() {}
+func (*TableValue) ProtoMessage() {}
 
-func (x *TableVariable) ProtoReflect() protoreflect.Message {
+func (x *TableValue) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_table_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -62,61 +62,61 @@ func (x *TableVariable) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use TableVariable.ProtoReflect.Descriptor instead.
-func (*TableVariable) Descriptor() ([]byte, []int) {
+// Deprecated: Use TableValue.ProtoReflect.Descriptor instead.
+func (*TableValue) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *TableVariable) GetNo() string {
+func (x *TableValue) GetNo() string {
 	if x != nil && x.No != nil {
 		return *x.No
 	}
 	return ""
 }
 
-func (x *TableVariable) GetGameId() uint64 {
+func (x *TableValue) GetGameId() uint64 {
 	if x != nil && x.GameId != nil {
 		return *x.GameId
 	}
 	return 0
 }
 
-func (x *TableVariable) GetKey() string {
+func (x *TableValue) GetKey() string {
 	if x != nil && x.Key != nil {
 		return *x.Key
 	}
 	return ""
 }
 
-func (x *TableVariable) GetState() uint64 {
+func (x *TableValue) GetState() uint64 {
 	if x != nil && x.State != nil {
 		return *x.State
 	}
 	return 0
 }
 
-func (x *TableVariable) GetDescription() string {
+func (x *TableValue) GetDescription() string {
 	if x != nil && x.Description != nil {
 		return *x.Description
 	}
 	return ""
 }
 
-func (x *TableVariable) GetResult() string {
+func (x *TableValue) GetResult() string {
 	if x != nil && x.Result != nil {
 		return *x.Result
 	}
 	return ""
 }
 
-func (x *TableVariable) GetStartedAt() *timestamppb.Timestamp {
+func (x *TableValue) GetStartedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.StartedAt
 	}
 	return nil
 }
 
-func (x *TableVariable) GetEndedAt() *timestamppb.Timestamp {
+func (x *TableValue) GetEndedAt() *timestamppb.Timestamp {
 	if x != nil {
 		return x.EndedAt
 	}
@@ -125,7 +125,7 @@ func (x *TableVariable) GetEndedAt() *timestamppb.Timestamp {
 
 type TableAddOneInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Variable      *TableVariable         `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Value         *TableValue            `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -160,9 +160,9 @@ func (*TableAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *TableAddOneInput) GetVariable() *TableVariable {
+func (x *TableAddOneInput) GetValue() *TableValue {
 	if x != nil {
-		return x.Variable
+		return x.Value
 	}
 	return nil
 }
@@ -213,7 +213,7 @@ func (x *TableAddOneOutput) GetStatus() bool {
 
 type TableEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Variable      *TableVariable         `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Value         *TableValue            `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -249,9 +249,9 @@ func (*TableEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *TableEditOneByIdInput) GetVariable() *TableVariable {
+func (x *TableEditOneByIdInput) GetValue() *TableValue {
 	if x != nil {
-		return x.Variable
+		return x.Value
 	}
 	return nil
 }
@@ -487,8 +487,9 @@ var File_resource_model_table_proto protoreflect.FileDescriptor
 
 const file_resource_model_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15resource/common.proto\"\xea\x02\n" +
-	"\rTableVariable\x12\x13\n" +
+	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x15resource/common.proto\"\xe7\x02\n" +
+	"\n" +
+	"TableValue\x12\x13\n" +
 	"\x02no\x18\x01 \x01(\tH\x00R\x02no\x88\x01\x01\x12\x1c\n" +
 	"\agame_id\x18\x02 \x01(\x04H\x01R\x06gameId\x88\x01\x01\x12\x15\n" +
 	"\x03key\x18\x03 \x01(\tH\x02R\x03key\x88\x01\x01\x12\x19\n" +
@@ -504,13 +505,13 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\x04_keyB\b\n" +
 	"\x06_stateB\x0e\n" +
 	"\f_descriptionB\t\n" +
-	"\a_result\"P\n" +
-	"\x10TableAddOneInput\x12<\n" +
-	"\bvariable\x18\x01 \x01(\v2 .pb.resource.model.TableVariableR\bvariable\"+\n" +
+	"\a_result\"G\n" +
+	"\x10TableAddOneInput\x123\n" +
+	"\x05value\x18\x01 \x01(\v2\x1d.pb.resource.model.TableValueR\x05value\"+\n" +
 	"\x11TableAddOneOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"e\n" +
-	"\x15TableEditOneByIdInput\x12<\n" +
-	"\bvariable\x18\x01 \x01(\v2 .pb.resource.model.TableVariableR\bvariable\x12\x0e\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\"\\\n" +
+	"\x15TableEditOneByIdInput\x123\n" +
+	"\x05value\x18\x01 \x01(\v2\x1d.pb.resource.model.TableValueR\x05value\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"0\n" +
 	"\x16TableEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\")\n" +
@@ -543,7 +544,7 @@ func file_resource_model_table_proto_rawDescGZIP() []byte {
 
 var file_resource_model_table_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_resource_model_table_proto_goTypes = []any{
-	(*TableVariable)(nil),             // 0: pb.resource.model.TableVariable
+	(*TableValue)(nil),                // 0: pb.resource.model.TableValue
 	(*TableAddOneInput)(nil),          // 1: pb.resource.model.TableAddOneInput
 	(*TableAddOneOutput)(nil),         // 2: pb.resource.model.TableAddOneOutput
 	(*TableEditOneByIdInput)(nil),     // 3: pb.resource.model.TableEditOneByIdInput
@@ -556,10 +557,10 @@ var file_resource_model_table_proto_goTypes = []any{
 	(*resource.Filter)(nil),           // 10: pb.resource.Filter
 }
 var file_resource_model_table_proto_depIdxs = []int32{
-	9,  // 0: pb.resource.model.TableVariable.started_at:type_name -> google.protobuf.Timestamp
-	9,  // 1: pb.resource.model.TableVariable.ended_at:type_name -> google.protobuf.Timestamp
-	0,  // 2: pb.resource.model.TableAddOneInput.variable:type_name -> pb.resource.model.TableVariable
-	0,  // 3: pb.resource.model.TableEditOneByIdInput.variable:type_name -> pb.resource.model.TableVariable
+	9,  // 0: pb.resource.model.TableValue.started_at:type_name -> google.protobuf.Timestamp
+	9,  // 1: pb.resource.model.TableValue.ended_at:type_name -> google.protobuf.Timestamp
+	0,  // 2: pb.resource.model.TableAddOneInput.value:type_name -> pb.resource.model.TableValue
+	0,  // 3: pb.resource.model.TableEditOneByIdInput.value:type_name -> pb.resource.model.TableValue
 	10, // 4: pb.resource.model.TableTotalByFiltersInput.filters:type_name -> pb.resource.Filter
 	1,  // 5: pb.resource.model.TableModel.AddOne:input_type -> pb.resource.model.TableAddOneInput
 	3,  // 6: pb.resource.model.TableModel.EditOneById:input_type -> pb.resource.model.TableEditOneByIdInput

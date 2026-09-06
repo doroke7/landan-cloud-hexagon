@@ -29,12 +29,12 @@ func NewAppUserHandler(oAbstractHandler *inputApplicationResource.AbstractHandle
 
 func (oSelf *AppUserHandler) AddAppUser(oContext context.Context, oReq *pbResourceModel.AppUserAddOneInput) (*pbResourceModel.AppUserAddOneOutput, error) {
 
-	oVariable := oReq.GetVariable()
+	oValue := oReq.GetValue()
 
 	oAppUserValue := domain.AppUserValue{}
-	if oVariable != nil {
-		oAppUserValue.Name = oVariable.Name
-		oAppUserValue.Password = oVariable.Password
+	if oValue != nil {
+		oAppUserValue.Name = oValue.Name
+		oAppUserValue.Password = oValue.Password
 	}
 
 	if oErr := oSelf.ModelAppUserUsecase.AddOne(&oAppUserValue); oErr != nil {

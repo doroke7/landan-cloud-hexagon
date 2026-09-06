@@ -22,7 +22,7 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type GameTypeVariable struct {
+type GameTypeValue struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Key           *string                `protobuf:"bytes,1,opt,name=key,proto3,oneof" json:"key,omitempty"`
 	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
@@ -30,20 +30,20 @@ type GameTypeVariable struct {
 	sizeCache     protoimpl.SizeCache
 }
 
-func (x *GameTypeVariable) Reset() {
-	*x = GameTypeVariable{}
+func (x *GameTypeValue) Reset() {
+	*x = GameTypeValue{}
 	mi := &file_resource_model_game_type_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
 
-func (x *GameTypeVariable) String() string {
+func (x *GameTypeValue) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*GameTypeVariable) ProtoMessage() {}
+func (*GameTypeValue) ProtoMessage() {}
 
-func (x *GameTypeVariable) ProtoReflect() protoreflect.Message {
+func (x *GameTypeValue) ProtoReflect() protoreflect.Message {
 	mi := &file_resource_model_game_type_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -55,19 +55,19 @@ func (x *GameTypeVariable) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use GameTypeVariable.ProtoReflect.Descriptor instead.
-func (*GameTypeVariable) Descriptor() ([]byte, []int) {
+// Deprecated: Use GameTypeValue.ProtoReflect.Descriptor instead.
+func (*GameTypeValue) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_type_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GameTypeVariable) GetKey() string {
+func (x *GameTypeValue) GetKey() string {
 	if x != nil && x.Key != nil {
 		return *x.Key
 	}
 	return ""
 }
 
-func (x *GameTypeVariable) GetName() string {
+func (x *GameTypeValue) GetName() string {
 	if x != nil && x.Name != nil {
 		return *x.Name
 	}
@@ -76,7 +76,7 @@ func (x *GameTypeVariable) GetName() string {
 
 type GameTypeAddOneInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Variable      *GameTypeVariable      `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Value         *GameTypeValue         `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -111,9 +111,9 @@ func (*GameTypeAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_type_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GameTypeAddOneInput) GetVariable() *GameTypeVariable {
+func (x *GameTypeAddOneInput) GetValue() *GameTypeValue {
 	if x != nil {
-		return x.Variable
+		return x.Value
 	}
 	return nil
 }
@@ -164,7 +164,7 @@ func (x *GameTypeAddOneOutput) GetGameType() *resource.GameType {
 
 type GameTypeEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Variable      *GameTypeVariable      `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Value         *GameTypeValue         `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -200,9 +200,9 @@ func (*GameTypeEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_type_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GameTypeEditOneByIdInput) GetVariable() *GameTypeVariable {
+func (x *GameTypeEditOneByIdInput) GetValue() *GameTypeValue {
 	if x != nil {
-		return x.Variable
+		return x.Value
 	}
 	return nil
 }
@@ -439,18 +439,18 @@ var File_resource_model_game_type_proto protoreflect.FileDescriptor
 
 const file_resource_model_game_type_proto_rawDesc = "" +
 	"\n" +
-	"\x1eresource/model/game_type.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"S\n" +
-	"\x10GameTypeVariable\x12\x15\n" +
+	"\x1eresource/model/game_type.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"P\n" +
+	"\rGameTypeValue\x12\x15\n" +
 	"\x03key\x18\x01 \x01(\tH\x00R\x03key\x88\x01\x01\x12\x17\n" +
 	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01B\x06\n" +
 	"\x04_keyB\a\n" +
-	"\x05_name\"V\n" +
-	"\x13GameTypeAddOneInput\x12?\n" +
-	"\bvariable\x18\x01 \x01(\v2#.pb.resource.model.GameTypeVariableR\bvariable\"J\n" +
+	"\x05_name\"M\n" +
+	"\x13GameTypeAddOneInput\x126\n" +
+	"\x05value\x18\x01 \x01(\v2 .pb.resource.model.GameTypeValueR\x05value\"J\n" +
 	"\x14GameTypeAddOneOutput\x122\n" +
-	"\tgame_type\x18\x01 \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"k\n" +
-	"\x18GameTypeEditOneByIdInput\x12?\n" +
-	"\bvariable\x18\x01 \x01(\v2#.pb.resource.model.GameTypeVariableR\bvariable\x12\x0e\n" +
+	"\tgame_type\x18\x01 \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"b\n" +
+	"\x18GameTypeEditOneByIdInput\x126\n" +
+	"\x05value\x18\x01 \x01(\v2 .pb.resource.model.GameTypeValueR\x05value\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"3\n" +
 	"\x19GameTypeEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\",\n" +
@@ -482,7 +482,7 @@ func file_resource_model_game_type_proto_rawDescGZIP() []byte {
 
 var file_resource_model_game_type_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_resource_model_game_type_proto_goTypes = []any{
-	(*GameTypeVariable)(nil),             // 0: pb.resource.model.GameTypeVariable
+	(*GameTypeValue)(nil),                // 0: pb.resource.model.GameTypeValue
 	(*GameTypeAddOneInput)(nil),          // 1: pb.resource.model.GameTypeAddOneInput
 	(*GameTypeAddOneOutput)(nil),         // 2: pb.resource.model.GameTypeAddOneOutput
 	(*GameTypeEditOneByIdInput)(nil),     // 3: pb.resource.model.GameTypeEditOneByIdInput
@@ -495,9 +495,9 @@ var file_resource_model_game_type_proto_goTypes = []any{
 	(*resource.Filter)(nil),              // 10: pb.resource.Filter
 }
 var file_resource_model_game_type_proto_depIdxs = []int32{
-	0,  // 0: pb.resource.model.GameTypeAddOneInput.variable:type_name -> pb.resource.model.GameTypeVariable
+	0,  // 0: pb.resource.model.GameTypeAddOneInput.value:type_name -> pb.resource.model.GameTypeValue
 	9,  // 1: pb.resource.model.GameTypeAddOneOutput.game_type:type_name -> pb.resource.GameType
-	0,  // 2: pb.resource.model.GameTypeEditOneByIdInput.variable:type_name -> pb.resource.model.GameTypeVariable
+	0,  // 2: pb.resource.model.GameTypeEditOneByIdInput.value:type_name -> pb.resource.model.GameTypeValue
 	10, // 3: pb.resource.model.GameTypeTotalByFiltersInput.filters:type_name -> pb.resource.Filter
 	1,  // 4: pb.resource.model.GameTypeModel.AddOne:input_type -> pb.resource.model.GameTypeAddOneInput
 	3,  // 5: pb.resource.model.GameTypeModel.EditOneById:input_type -> pb.resource.model.GameTypeEditOneByIdInput

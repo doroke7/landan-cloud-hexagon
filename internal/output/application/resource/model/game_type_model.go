@@ -48,7 +48,7 @@ func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameType
 func (oSelf *GameTypeModel) AddOne(oGameTypeParm *domain.GameTypeValue) error {
 
 	oRequest := &pbResourceModel.GameTypeAddOneInput{
-		Variable: &pbResourceModel.GameTypeVariable{
+		Value: &pbResourceModel.GameTypeValue{
 			Key:  oGameTypeParm.Key,
 			Name: oGameTypeParm.Name,
 		},
@@ -87,7 +87,7 @@ func (oSelf *GameTypeModel) EditOneById(oGameType *domain.GameTypeValue, iId uin
 
 	oRequest := &pbResourceModel.GameTypeEditOneByIdInput{
 		Id: uint64(iId),
-		Variable: &pbResourceModel.GameTypeVariable{
+		Value: &pbResourceModel.GameTypeValue{
 			Key:  oGameType.Key,
 			Name: oGameType.Name,
 		},

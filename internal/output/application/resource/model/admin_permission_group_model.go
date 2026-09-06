@@ -48,7 +48,7 @@ func NewAdminPermissionGroupModel(oAbstractModel *AbstractModel) outputPortAnyMo
 func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupValue) error {
 
 	oRequest := &pbResourceModel.AdminPermissionGroupAddOneInput{
-		Variable: &pbResourceModel.AdminPermissionGroupVariable{
+		Value: &pbResourceModel.AdminPermissionGroupValue{
 			Key:  oValue.Key,
 			Name: oValue.Name,
 		},
@@ -99,7 +99,7 @@ func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissi
 
 	oRequest := &pbResourceModel.AdminPermissionGroupEditOneByIdInput{
 		Id: iId,
-		Variable: &pbResourceModel.AdminPermissionGroupVariable{
+		Value: &pbResourceModel.AdminPermissionGroupValue{
 			Key:  oValue.Key,
 			Name: oValue.Name,
 		},

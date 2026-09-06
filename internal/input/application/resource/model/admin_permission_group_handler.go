@@ -51,7 +51,7 @@ func domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup
 	return oPb
 }
 
-func protoAdminPermissionGroupVariableToDomainAdminPermissionGroupValue(oVariable *pbResourceModel.AdminPermissionGroupVariable) domain.AdminPermissionGroupValue {
+func protoAdminPermissionGroupValueToDomainAdminPermissionGroupValue(oVariable *pbResourceModel.AdminPermissionGroupValue) domain.AdminPermissionGroupValue {
 	var oValue domain.AdminPermissionGroupValue
 	if oVariable == nil {
 		return oValue
@@ -65,7 +65,7 @@ func protoAdminPermissionGroupVariableToDomainAdminPermissionGroupValue(oVariabl
 
 func (oSelf *AdminPermissionGroupHandler) AddOne(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupAddOneInput) (*pbResourceModel.AdminPermissionGroupAddOneOutput, error) {
 
-	oValue := protoAdminPermissionGroupVariableToDomainAdminPermissionGroupValue(oReq.GetVariable())
+	oValue := protoAdminPermissionGroupValueToDomainAdminPermissionGroupValue(oReq.GetValue())
 
 	oErr := oSelf.ModelAdminPermissionGroupUsecase.AddOne(&oValue)
 
@@ -142,7 +142,7 @@ func (oSelf *AdminPermissionGroupHandler) ShowOnesByFiltersWithSortersPagination
 
 func (oSelf *AdminPermissionGroupHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupEditOneByIdInput) (*pbResourceModel.AdminPermissionGroupEditOneByIdOutput, error) {
 
-	oValue := protoAdminPermissionGroupVariableToDomainAdminPermissionGroupValue(oReq.GetVariable())
+	oValue := protoAdminPermissionGroupValueToDomainAdminPermissionGroupValue(oReq.GetValue())
 
 	oErr := oSelf.ModelAdminPermissionGroupUsecase.EditOneById(&oValue, oReq.GetId())
 	if oErr != nil {

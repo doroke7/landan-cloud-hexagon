@@ -45,7 +45,7 @@ func domainAdminPermissionToProtoAdminPermission(oAdminPermission *domain.AdminP
 	}
 }
 
-func protoAdminPermissionVariableToDomainAdminPermissionValue(oVariable *pbResourceModel.AdminPermissionVariable) domain.AdminPermissionValue {
+func protoAdminPermissionValueToDomainAdminPermissionValue(oVariable *pbResourceModel.AdminPermissionValue) domain.AdminPermissionValue {
 	var oValue domain.AdminPermissionValue
 	if oVariable == nil {
 		return oValue
@@ -64,7 +64,7 @@ func protoAdminPermissionVariableToDomainAdminPermissionValue(oVariable *pbResou
 
 func (oSelf *AdminPermissionHandler) AddOne(oContext context.Context, oReq *pbResourceModel.AdminPermissionAddOneInput) (*pbResourceModel.AdminPermissionAddOneOutput, error) {
 
-	oAdminPermissionValue := protoAdminPermissionVariableToDomainAdminPermissionValue(oReq.GetVariable())
+	oAdminPermissionValue := protoAdminPermissionValueToDomainAdminPermissionValue(oReq.GetValue())
 
 	oErr := oSelf.ModelAdminPermissionUsecase.AddOne(&oAdminPermissionValue)
 
@@ -95,7 +95,7 @@ func (oSelf *AdminPermissionHandler) ShowOneById(oContext context.Context, oReq 
 
 func (oSelf *AdminPermissionHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionEditOneByIdInput) (*pbResourceModel.AdminPermissionEditOneByIdOutput, error) {
 
-	oAdminPermissionValue := protoAdminPermissionVariableToDomainAdminPermissionValue(oReq.GetVariable())
+	oAdminPermissionValue := protoAdminPermissionValueToDomainAdminPermissionValue(oReq.GetValue())
 
 	oErr := oSelf.ModelAdminPermissionUsecase.EditOneById(&oAdminPermissionValue, uint64(oReq.Id))
 

@@ -29,8 +29,8 @@ func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, 
 	}
 }
 
-// protoGameVariableToDomainGameValue 把 gRPC 帶進來的 variable 攤成 domain.GameValue（指標欄位可選）。
-func protoGameVariableToDomainGameValue(oVariable *pbResourceModel.GameVariable) domain.GameValue {
+// protoGameValueToDomainGameValue 把 gRPC 帶進來的 variable 攤成 domain.GameValue（指標欄位可選）。
+func protoGameValueToDomainGameValue(oVariable *pbResourceModel.GameValue) domain.GameValue {
 	var oValue domain.GameValue
 	if oVariable == nil {
 		return oValue
@@ -65,7 +65,7 @@ func domainGameToProtoGame(oGame *domain.Game) *pbResource.Game {
 func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel.GameAddOneInput) (*pbResourceModel.GameAddOneOutput, error) {
 	fmt.Println(runtime.Caller(0))
 
-	oGameValue := protoGameVariableToDomainGameValue(oReq.GetVariable())
+	oGameValue := protoGameValueToDomainGameValue(oReq.GetValue())
 
 	oErr := oSelf.ModelGameUsecase.AddOne(&oGameValue)
 
@@ -115,7 +115,7 @@ func (oSelf *GameHandler) ShowOneByKey(oContext context.Context, oReq *pbResourc
 
 func (oSelf *GameHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.GameEditOneByIdInput) (*pbResourceModel.GameEditOneByIdOutput, error) {
 
-	oGameValue := protoGameVariableToDomainGameValue(oReq.GetVariable())
+	oGameValue := protoGameValueToDomainGameValue(oReq.GetValue())
 
 	oErr := oSelf.ModelGameUsecase.EditOneById(&oGameValue, uint64(oReq.Id))
 	if oErr != nil {
