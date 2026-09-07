@@ -20,6 +20,7 @@ const _ = grpc.SupportPackageIsVersion9
 
 const (
 	AdminPermissionGroupModel_AddOne_FullMethodName                                 = "/pb.resource.model.AdminPermissionGroupModel/AddOne"
+	AdminPermissionGroupModel_ShowOnesByParentId_FullMethodName                     = "/pb.resource.model.AdminPermissionGroupModel/ShowOnesByParentId"
 	AdminPermissionGroupModel_ShowOnesByFiltersWithSortersPagination_FullMethodName = "/pb.resource.model.AdminPermissionGroupModel/ShowOnesByFiltersWithSortersPagination"
 	AdminPermissionGroupModel_EditOneById_FullMethodName                            = "/pb.resource.model.AdminPermissionGroupModel/EditOneById"
 	AdminPermissionGroupModel_RemoveOneById_FullMethodName                          = "/pb.resource.model.AdminPermissionGroupModel/RemoveOneById"
@@ -31,6 +32,7 @@ const (
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AdminPermissionGroupModelClient interface {
 	AddOne(ctx context.Context, in *AdminPermissionGroupAddOneInput, opts ...grpc.CallOption) (*AdminPermissionGroupAddOneOutput, error)
+	ShowOnesByParentId(ctx context.Context, in *AdminPermissionGroupShowOnesByParentIdInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowOnesByParentIdOutput, error)
 	ShowOnesByFiltersWithSortersPagination(ctx context.Context, in *AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowOnesByFiltersWithSortersPaginationOutput, error)
 	EditOneById(ctx context.Context, in *AdminPermissionGroupEditOneByIdInput, opts ...grpc.CallOption) (*AdminPermissionGroupEditOneByIdOutput, error)
 	RemoveOneById(ctx context.Context, in *AdminPermissionGroupRemoveOneByIdInput, opts ...grpc.CallOption) (*AdminPermissionGroupRemoveOneByIdOutput, error)
@@ -49,6 +51,16 @@ func (c *adminPermissionGroupModelClient) AddOne(ctx context.Context, in *AdminP
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(AdminPermissionGroupAddOneOutput)
 	err := c.cc.Invoke(ctx, AdminPermissionGroupModel_AddOne_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *adminPermissionGroupModelClient) ShowOnesByParentId(ctx context.Context, in *AdminPermissionGroupShowOnesByParentIdInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowOnesByParentIdOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdminPermissionGroupShowOnesByParentIdOutput)
+	err := c.cc.Invoke(ctx, AdminPermissionGroupModel_ShowOnesByParentId_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -100,6 +112,7 @@ func (c *adminPermissionGroupModelClient) TotalByFilters(ctx context.Context, in
 // for forward compatibility.
 type AdminPermissionGroupModelServer interface {
 	AddOne(context.Context, *AdminPermissionGroupAddOneInput) (*AdminPermissionGroupAddOneOutput, error)
+	ShowOnesByParentId(context.Context, *AdminPermissionGroupShowOnesByParentIdInput) (*AdminPermissionGroupShowOnesByParentIdOutput, error)
 	ShowOnesByFiltersWithSortersPagination(context.Context, *AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput) (*AdminPermissionGroupShowOnesByFiltersWithSortersPaginationOutput, error)
 	EditOneById(context.Context, *AdminPermissionGroupEditOneByIdInput) (*AdminPermissionGroupEditOneByIdOutput, error)
 	RemoveOneById(context.Context, *AdminPermissionGroupRemoveOneByIdInput) (*AdminPermissionGroupRemoveOneByIdOutput, error)
@@ -116,6 +129,9 @@ type UnimplementedAdminPermissionGroupModelServer struct{}
 
 func (UnimplementedAdminPermissionGroupModelServer) AddOne(context.Context, *AdminPermissionGroupAddOneInput) (*AdminPermissionGroupAddOneOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method AddOne not implemented")
+}
+func (UnimplementedAdminPermissionGroupModelServer) ShowOnesByParentId(context.Context, *AdminPermissionGroupShowOnesByParentIdInput) (*AdminPermissionGroupShowOnesByParentIdOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method ShowOnesByParentId not implemented")
 }
 func (UnimplementedAdminPermissionGroupModelServer) ShowOnesByFiltersWithSortersPagination(context.Context, *AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput) (*AdminPermissionGroupShowOnesByFiltersWithSortersPaginationOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowOnesByFiltersWithSortersPagination not implemented")
@@ -165,6 +181,24 @@ func _AdminPermissionGroupModel_AddOne_Handler(srv interface{}, ctx context.Cont
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AdminPermissionGroupModelServer).AddOne(ctx, req.(*AdminPermissionGroupAddOneInput))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AdminPermissionGroupModel_ShowOnesByParentId_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminPermissionGroupShowOnesByParentIdInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminPermissionGroupModelServer).ShowOnesByParentId(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminPermissionGroupModel_ShowOnesByParentId_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminPermissionGroupModelServer).ShowOnesByParentId(ctx, req.(*AdminPermissionGroupShowOnesByParentIdInput))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -251,6 +285,10 @@ var AdminPermissionGroupModel_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddOne",
 			Handler:    _AdminPermissionGroupModel_AddOne_Handler,
+		},
+		{
+			MethodName: "ShowOnesByParentId",
+			Handler:    _AdminPermissionGroupModel_ShowOnesByParentId_Handler,
 		},
 		{
 			MethodName: "ShowOnesByFiltersWithSortersPagination",

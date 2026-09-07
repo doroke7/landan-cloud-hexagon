@@ -66,6 +66,24 @@ func (oSelf *AdminPermissionGroupModel) nextId() (uint64, error) {
 	return oCounter.Seq, nil
 }
 
+func (oSelf *AdminPermissionGroupModel) ShowOnesByParentId(iParentId uint64) ([]*domain.AdminPermissionGroup, error) {
+	oCursor, oErr := oSelf.Collection.Find(oSelf.Context, bson.M{
+		"parent_id":  iParentId,
+		"deleted_at": oDeletedAtZero,
+	})
+	if oErr != nil {
+		return nil, oErr
+	}
+	defer oCursor.Close(oSelf.Context)
+
+	var aAdminPermissionGroups []*domain.AdminPermissionGroup
+	if oErr := oCursor.All(oSelf.Context, &aAdminPermissionGroups); oErr != nil {
+		return nil, oErr
+	}
+
+	return aAdminPermissionGroups, nil
+}
+
 func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, error) {
 	oFilter := oSelf.FiltersToFilter(aFilters)
 	oFilter["deleted_at"] = oDeletedAtZero

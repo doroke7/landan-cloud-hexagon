@@ -39,6 +39,8 @@ func (oSelf *AdminPermissionGroupUsecase) EditOne(oValue *domain.AdminPermission
 
 func (oSelf *AdminPermissionGroupUsecase) RemoveOne(iId uint64) error {
 
+	// TY oSelf.AdminPermissionGroupModel
+
 	oErr := oSelf.AdminPermissionGroupModel.RemoveOneById(iId)
 
 	return oErr

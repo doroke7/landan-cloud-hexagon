@@ -59,6 +59,26 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGro
 	return oErr
 }
 
+func (oSelf *AdminPermissionGroupModel) ShowOnesByParentId(iParentId uint64) ([]*domain.AdminPermissionGroup, error) {
+
+	oResponse, oErr := oSelf.ResourceModelClient.AdminPermissionGroup.ShowOnesByParentId(
+		oSelf.Context,
+		&pbResourceModel.AdminPermissionGroupShowOnesByParentIdInput{ParentId: iParentId},
+	)
+
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aAdminPermissionGroups := make([]*domain.AdminPermissionGroup, 0, len(oResponse.GetAdminPermissionGroups()))
+	for _, oProto := range oResponse.GetAdminPermissionGroups() {
+		oAdminPermissionGroup := protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto)
+		aAdminPermissionGroups = append(aAdminPermissionGroups, &oAdminPermissionGroup)
+	}
+
+	return aAdminPermissionGroups, nil
+}
+
 func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, error) {
 
 	oRequest := &pbResourceModel.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput{
