@@ -22,8 +22,6 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 	}
 }
 
-// ShowTree 先把所有未刪除的 admin_permission_group 一次撈成平的，再用 ParentId 掛 Children，
-// 回傳 ParentId == 0 的 root。
 func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGroup, error) {
 	var aFlat []*domain.AdminPermissionGroup
 
@@ -83,6 +81,8 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroups() ([]*domain.A
 	var aAdminPermissionGroups []*domain.AdminPermissionGroup
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Preload("Parent").
+		Preload("Children").
 		Model(&domain.AdminPermissionGroup{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		Order("id ASC").
@@ -96,6 +96,7 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroups() ([]*domain.A
 }
 
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminPermissionGroup, uint64, error) {
+
 	aWheres := oSelf.FiltersToWheres(aFilters)
 	aOrders := oSelf.SortersToOrders(aSorters)
 	oLimit := oSelf.PaginationToLimit(oPagination)

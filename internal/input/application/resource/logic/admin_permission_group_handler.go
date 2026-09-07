@@ -36,26 +36,8 @@ func (oSelf *AdminPermissionGroupHandler) ShowTree(oContext context.Context, oRe
 	}
 
 	aNodes := make([]*pbResource.AdminPermissionGroup, 0, len(aRoots))
-
-	var fnFlatten func(oNode domain.AdminPermissionGroup)
-	fnFlatten = func(oNode domain.AdminPermissionGroup) {
-		aNodes = append(aNodes, &pbResource.AdminPermissionGroup{
-			Id:        uint64(oNode.Id),
-			ParentId:  uint64(oNode.ParentId),
-			Key:       oNode.Key,
-			Name:      oNode.Name,
-			CreatedAt: timestamppb.New(oNode.CreatedAt),
-			UpdatedAt: timestamppb.New(oNode.UpdatedAt),
-			DeletedAt: timestamppb.New(oNode.DeletedAt),
-		})
-
-		for _, oChild := range oNode.Children {
-			fnFlatten(oChild)
-		}
-	}
-
 	for _, oRoot := range aRoots {
-		fnFlatten(*oRoot)
+		aNodes = append(aNodes, domainAdminPermissionGroupToProtoAdminPermissionGroup(oRoot))
 	}
 
 	return &pbResourceLogic.AdminPermissionGroupShowTreeOutput{AdminPermissionGroups: aNodes}, nil

@@ -18,43 +18,17 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 	}
 }
 
-// ShowTree 走 gRPC 拿回「平的」全部 admin_permission_group，再自己用 ParentId 掛 Children，
-// 回傳 ParentId == 0 的 root（組 tree 每個 adapter 各寫一份）。
+// ShowTree gRPC 回來就是巢狀好的 tree（每個節點帶 Children），直接遞迴轉成 domain。
 func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGroup, error) {
 	oResponse, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.ShowTree(oSelf.Context, &pbResourceLogic.AdminPermissionGroupShowTreeInput{})
 	if oErr != nil {
 		return nil, oErr
 	}
 
-	aFlat := make([]*domain.AdminPermissionGroup, 0, len(oResponse.GetAdminPermissionGroups()))
+	aRoots := make([]*domain.AdminPermissionGroup, 0, len(oResponse.GetAdminPermissionGroups()))
 	for _, oOne := range oResponse.GetAdminPermissionGroups() {
-		aFlat = append(aFlat, &domain.AdminPermissionGroup{
-			Id:        uint64(oOne.GetId()),
-			ParentId:  uint64(oOne.GetParentId()),
-			Key:       oOne.GetKey(),
-			Name:      oOne.GetName(),
-			CreatedAt: oOne.GetCreatedAt().AsTime(),
-			UpdatedAt: oOne.GetUpdatedAt().AsTime(),
-			DeletedAt: oOne.GetDeletedAt().AsTime(),
-		})
-	}
-
-	aByParent := make(map[uint64][]*domain.AdminPermissionGroup, len(aFlat))
-	for _, oOne := range aFlat {
-		aByParent[oOne.ParentId] = append(aByParent[oOne.ParentId], oOne)
-	}
-
-	var fnAttach func(oNode *domain.AdminPermissionGroup)
-	fnAttach = func(oNode *domain.AdminPermissionGroup) {
-		for _, oChild := range aByParent[oNode.Id] {
-			fnAttach(oChild)
-			oNode.Children = append(oNode.Children, *oChild)
-		}
-	}
-
-	aRoots := aByParent[0]
-	for _, oRoot := range aRoots {
-		fnAttach(oRoot)
+		oRoot := protoAdminPermissionGroupToDomainAdminPermissionGroup(oOne)
+		aRoots = append(aRoots, &oRoot)
 	}
 
 	return aRoots, nil
@@ -73,6 +47,8 @@ func protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto *pbResource.Ad
 		CreatedAt: oProto.GetCreatedAt().AsTime(),
 		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
 		DeletedAt: oProto.GetDeletedAt().AsTime(),
+		// 沒有子節點時也回 []（非 nil），避免 JSON 出現 children: null
+		Children: make([]domain.AdminPermissionGroup, 0, len(oProto.GetChildren())),
 	}
 
 	if oParent := oProto.GetParent(); oParent != nil {
@@ -107,6 +83,7 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64)
 }
 
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroups() ([]*domain.AdminPermissionGroup, error) {
+
 	oResponse, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.ShowAdminPermissionGroups(
 		oSelf.Context,
 		&pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsInput{},
@@ -142,15 +119,8 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersW
 
 	aAdminPermissionGroups := make([]*domain.AdminPermissionGroup, 0, len(oResponse.GetAdminPermissionGroups()))
 	for _, oOne := range oResponse.GetAdminPermissionGroups() {
-		aAdminPermissionGroups = append(aAdminPermissionGroups, &domain.AdminPermissionGroup{
-			Id:        uint64(oOne.GetId()),
-			ParentId:  uint64(oOne.GetParentId()),
-			Key:       oOne.GetKey(),
-			Name:      oOne.GetName(),
-			CreatedAt: oOne.GetCreatedAt().AsTime(),
-			UpdatedAt: oOne.GetUpdatedAt().AsTime(),
-			DeletedAt: oOne.GetDeletedAt().AsTime(),
-		})
+		oAdminPermissionGroup := protoAdminPermissionGroupToDomainAdminPermissionGroup(oOne)
+		aAdminPermissionGroups = append(aAdminPermissionGroups, &oAdminPermissionGroup)
 	}
 
 	iTotal := uint64(oResponse.GetTotal())
