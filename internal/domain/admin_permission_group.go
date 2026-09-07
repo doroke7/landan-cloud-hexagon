@@ -13,12 +13,13 @@ import (
 )
 
 type AdminPermissionGroup struct {
-	Id       uint64                 `json:"id" bson:"_id"`
-	ParentId uint64                 `json:"parent_id" bson:"parent_id"`
-	Key      string                 `json:"key" bson:"key"`
-	Name     string                 `json:"name" bson:"name"`
-	Parent   *AdminPermissionGroup  `json:"parent,omitempty" bson:"-" gorm:"foreignKey:ParentId;references:Id"`
-	Children []AdminPermissionGroup `json:"children" bson:"-" gorm:"foreignKey:ParentId"`
+	Id               uint64                 `json:"id" bson:"_id"`
+	ParentId         uint64                 `json:"parent_id" bson:"parent_id"`
+	Key              string                 `json:"key" bson:"key"`
+	Name             string                 `json:"name" bson:"name"`
+	Parent           *AdminPermissionGroup  `json:"parent,omitempty" bson:"-" gorm:"foreignKey:ParentId;references:Id"`
+	Children         []AdminPermissionGroup `json:"children" bson:"-" gorm:"foreignKey:ParentId"`
+	AdminPermissions []*AdminPermission     `json:"admin_permissions" bson:"-" gorm:"foreignKey:AdminPermissionGroupId"`
 
 	CreatedAt time.Time `json:"created_at" bson:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" bson:"updated_at"`
@@ -26,8 +27,9 @@ type AdminPermissionGroup struct {
 }
 
 type AdminPermissionGroupValue struct {
-	Key  *string `json:"key,omitempty"`
-	Name *string `json:"name,omitempty"`
+	Key              *string                 `json:"key,omitempty"`
+	Name             *string                 `json:"name,omitempty"`
+	AdminPermissions []*AdminPermissionValue `json:"admin_permissions" bson:"-" `
 	// CreatedAt *time.Time `json:"created_at"`
 	// UpdatedAt *time.Time `json:"updated_at"`
 	// DeletedAt *time.Time `json:"deleted_at"`

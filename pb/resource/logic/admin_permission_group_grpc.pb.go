@@ -19,6 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
+	AdminPermissionGroupLogic_AddAdminPermissionGroup_FullMethodName                                      = "/pb.resource.logic.AdminPermissionGroupLogic/AddAdminPermissionGroup"
 	AdminPermissionGroupLogic_ShowTree_FullMethodName                                                     = "/pb.resource.logic.AdminPermissionGroupLogic/ShowTree"
 	AdminPermissionGroupLogic_ShowAdminPermissionGroupById_FullMethodName                                 = "/pb.resource.logic.AdminPermissionGroupLogic/ShowAdminPermissionGroupById"
 	AdminPermissionGroupLogic_ShowAdminPermissionGroups_FullMethodName                                    = "/pb.resource.logic.AdminPermissionGroupLogic/ShowAdminPermissionGroups"
@@ -29,6 +30,7 @@ const (
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type AdminPermissionGroupLogicClient interface {
+	AddAdminPermissionGroup(ctx context.Context, in *AdminPermissionGroupAddAdminPermissionGroupInput, opts ...grpc.CallOption) (*AdminPermissionGroupAddAdminPermissionGroupOutput, error)
 	ShowTree(ctx context.Context, in *AdminPermissionGroupShowTreeInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowTreeOutput, error)
 	ShowAdminPermissionGroupById(ctx context.Context, in *AdminPermissionGroupShowAdminPermissionGroupByIdInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowAdminPermissionGroupByIdOutput, error)
 	ShowAdminPermissionGroups(ctx context.Context, in *AdminPermissionGroupShowAdminPermissionGroupsInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowAdminPermissionGroupsOutput, error)
@@ -41,6 +43,16 @@ type adminPermissionGroupLogicClient struct {
 
 func NewAdminPermissionGroupLogicClient(cc grpc.ClientConnInterface) AdminPermissionGroupLogicClient {
 	return &adminPermissionGroupLogicClient{cc}
+}
+
+func (c *adminPermissionGroupLogicClient) AddAdminPermissionGroup(ctx context.Context, in *AdminPermissionGroupAddAdminPermissionGroupInput, opts ...grpc.CallOption) (*AdminPermissionGroupAddAdminPermissionGroupOutput, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AdminPermissionGroupAddAdminPermissionGroupOutput)
+	err := c.cc.Invoke(ctx, AdminPermissionGroupLogic_AddAdminPermissionGroup_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *adminPermissionGroupLogicClient) ShowTree(ctx context.Context, in *AdminPermissionGroupShowTreeInput, opts ...grpc.CallOption) (*AdminPermissionGroupShowTreeOutput, error) {
@@ -87,6 +99,7 @@ func (c *adminPermissionGroupLogicClient) ShowAdminPermissionGroupsTotalByFilter
 // All implementations must embed UnimplementedAdminPermissionGroupLogicServer
 // for forward compatibility.
 type AdminPermissionGroupLogicServer interface {
+	AddAdminPermissionGroup(context.Context, *AdminPermissionGroupAddAdminPermissionGroupInput) (*AdminPermissionGroupAddAdminPermissionGroupOutput, error)
 	ShowTree(context.Context, *AdminPermissionGroupShowTreeInput) (*AdminPermissionGroupShowTreeOutput, error)
 	ShowAdminPermissionGroupById(context.Context, *AdminPermissionGroupShowAdminPermissionGroupByIdInput) (*AdminPermissionGroupShowAdminPermissionGroupByIdOutput, error)
 	ShowAdminPermissionGroups(context.Context, *AdminPermissionGroupShowAdminPermissionGroupsInput) (*AdminPermissionGroupShowAdminPermissionGroupsOutput, error)
@@ -101,6 +114,9 @@ type AdminPermissionGroupLogicServer interface {
 // pointer dereference when methods are called.
 type UnimplementedAdminPermissionGroupLogicServer struct{}
 
+func (UnimplementedAdminPermissionGroupLogicServer) AddAdminPermissionGroup(context.Context, *AdminPermissionGroupAddAdminPermissionGroupInput) (*AdminPermissionGroupAddAdminPermissionGroupOutput, error) {
+	return nil, status.Error(codes.Unimplemented, "method AddAdminPermissionGroup not implemented")
+}
 func (UnimplementedAdminPermissionGroupLogicServer) ShowTree(context.Context, *AdminPermissionGroupShowTreeInput) (*AdminPermissionGroupShowTreeOutput, error) {
 	return nil, status.Error(codes.Unimplemented, "method ShowTree not implemented")
 }
@@ -133,6 +149,24 @@ func RegisterAdminPermissionGroupLogicServer(s grpc.ServiceRegistrar, srv AdminP
 		t.testEmbeddedByValue()
 	}
 	s.RegisterService(&AdminPermissionGroupLogic_ServiceDesc, srv)
+}
+
+func _AdminPermissionGroupLogic_AddAdminPermissionGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AdminPermissionGroupAddAdminPermissionGroupInput)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AdminPermissionGroupLogicServer).AddAdminPermissionGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AdminPermissionGroupLogic_AddAdminPermissionGroup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AdminPermissionGroupLogicServer).AddAdminPermissionGroup(ctx, req.(*AdminPermissionGroupAddAdminPermissionGroupInput))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _AdminPermissionGroupLogic_ShowTree_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -214,6 +248,10 @@ var AdminPermissionGroupLogic_ServiceDesc = grpc.ServiceDesc{
 	ServiceName: "pb.resource.logic.AdminPermissionGroupLogic",
 	HandlerType: (*AdminPermissionGroupLogicServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "AddAdminPermissionGroup",
+			Handler:    _AdminPermissionGroupLogic_AddAdminPermissionGroup_Handler,
+		},
 		{
 			MethodName: "ShowTree",
 			Handler:    _AdminPermissionGroupLogic_ShowTree_Handler,

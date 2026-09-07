@@ -26,6 +26,24 @@ func NewAdminPermissionGroupHandler(oAbstractHandler *inputApplicationResource.A
 	}
 }
 
+func (oSelf *AdminPermissionGroupHandler) AddAdminPermissionGroup(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupAddAdminPermissionGroupInput) (*pbResourceLogic.AdminPermissionGroupAddAdminPermissionGroupOutput, error) {
+
+	var oValue domain.AdminPermissionGroupValue
+	if oVariable := oReq.GetValue(); oVariable != nil {
+		oValue.Key = oVariable.Key
+		oValue.Name = oVariable.Name
+	}
+
+	oErr := oSelf.LogicAdminPermissionGroupUsecase.AddAdminPermissionGroup(&oValue)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	return &pbResourceLogic.AdminPermissionGroupAddAdminPermissionGroupOutput{
+		Status: true,
+	}, nil
+}
+
 // ShowTree 從 usecase 拿到組好的 tree，攤平成平的 AdminPermissionGroup 回傳，
 // client 端再自己組回 tree（組 tree 每個 adapter 各寫一份）。
 func (oSelf *AdminPermissionGroupHandler) ShowTree(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupShowTreeInput) (*pbResourceLogic.AdminPermissionGroupShowTreeOutput, error) {

@@ -24,6 +24,7 @@ type AdminPermission struct {
 }
 
 type AdminPermissionValue struct {
+	Id   *uint64 `json:"id,omitempty"`
 	Type *uint8  `json:"type,omitempty"`
 	Key  *string `json:"key,omitempty"`
 	Name *string `json:"name,omitempty"`

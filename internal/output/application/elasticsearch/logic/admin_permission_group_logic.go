@@ -3,6 +3,7 @@ package outputApplicationElasticsearchLogic
 import (
 	"encoding/json"
 	"strconv"
+	"time"
 
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
@@ -19,6 +20,34 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 		AbstractLogic: oAbstractLogic,
 		Index:         oAbstractLogic.IndexName("admin_permission_groups"),
 	}
+}
+
+func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupValue) error {
+	iId, oErr := oSelf.NextId("admin_permission_group")
+	if oErr != nil {
+		return oErr
+	}
+
+	oNow := time.Now()
+	oDoc := &domain.AdminPermissionGroup{
+		Id:        uint64(iId),
+		CreatedAt: oNow,
+		UpdatedAt: oNow,
+		DeletedAt: oDeletedAtZero,
+	}
+
+	if oValue.Key != nil {
+		oDoc.Key = *oValue.Key
+	}
+	if oValue.Name != nil {
+		oDoc.Name = *oValue.Name
+	}
+
+	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
+		return oErr
+	}
+
+	return nil
 }
 
 // ShowTree 先把所有未刪除的 admin_permission_group 一次撈成平的，再用 ParentId 掛 Children，

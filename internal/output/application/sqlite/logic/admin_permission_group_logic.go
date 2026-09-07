@@ -10,6 +10,7 @@ import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type AdminPermissionGroupLogic struct {
@@ -20,6 +21,27 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 	return &AdminPermissionGroupLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+}
+
+func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupValue) error {
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
+	if oErr != nil {
+		return oErr
+	}
+
+	oResult := oSelf.DB.WithContext(oSelf.Context).
+		Model(&domain.AdminPermissionGroup{}).
+		Create(oColumns)
+
+	if oResult.Error != nil {
+		return oResult.Error
+	}
+
+	if oResult.RowsAffected == 0 {
+		return errors.New("0 rows inserted")
+	}
+
+	return nil
 }
 
 // ShowTree 先把所有未刪除的 admin_permission_group 一次撈成平的，再用 ParentId 掛 Children，

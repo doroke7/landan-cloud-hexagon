@@ -2,9 +2,11 @@ package outputApplicationMongodbLogic
 
 import (
 	"sync"
+	"time"
 
 	"go.mongodb.org/mongo-driver/v2/bson"
 	"go.mongodb.org/mongo-driver/v2/mongo"
+	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
@@ -14,13 +16,61 @@ import (
 type AdminPermissionGroupLogic struct {
 	*AbstractLogic
 	Collection *mongo.Collection
+	Counters   *mongo.Collection
 }
 
 func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminPermissionGroupLogic {
 	return &AdminPermissionGroupLogic{
 		AbstractLogic: oAbstractLogic,
 		Collection:    oAbstractLogic.Database.Collection("admin_permission_groups"),
+		Counters:      oAbstractLogic.Database.Collection("counters"),
 	}
+}
+
+func (oSelf *AdminPermissionGroupLogic) nextId() (uint64, error) {
+	oResult := oSelf.Counters.FindOneAndUpdate(
+		oSelf.Context,
+		bson.M{"_id": "admin_permission_group"},
+		bson.M{"$inc": bson.M{"seq": 1}},
+		options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After),
+	)
+
+	var oCounter struct {
+		Seq uint64 `bson:"seq"`
+	}
+	if oErr := oResult.Decode(&oCounter); oErr != nil {
+		return 0, oErr
+	}
+
+	return oCounter.Seq, nil
+}
+
+func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupValue) error {
+	iId, oErr := oSelf.nextId()
+	if oErr != nil {
+		return oErr
+	}
+
+	oNow := time.Now()
+	oNew := &domain.AdminPermissionGroup{
+		Id:        iId,
+		CreatedAt: oNow,
+		UpdatedAt: oNow,
+		DeletedAt: oDeletedAtZero,
+	}
+
+	if oValue.Key != nil {
+		oNew.Key = *oValue.Key
+	}
+	if oValue.Name != nil {
+		oNew.Name = *oValue.Name
+	}
+
+	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
+		return oErr
+	}
+
+	return nil
 }
 
 // ShowTree 先把所有未刪除的 admin_permission_group 一次撈成平的，再用 ParentId 掛 Children，

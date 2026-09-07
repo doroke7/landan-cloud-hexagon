@@ -1,6 +1,9 @@
 package inputApplicationHttpAdminResource
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"github.com/gin-gonic/gin"
 
 	pkgGin "example/pkg/gin"
@@ -34,6 +37,16 @@ func (oSelf *AdminPermissionGroupHandler) AddOne(oContext *gin.Context) {
 		_ = oContext.Error(pkgUtility.NewDefaultError("request format error", -1, 200))
 		return
 	}
+
+	fmt.Println("oValue=", oValue)
+
+	aByteValue, err := json.Marshal(oValue)
+	if err != nil {
+		panic(err)
+	}
+
+	sValue := string(aByteValue)
+	fmt.Println("sValue=", sValue)
 
 	oErr := oSelf.AdminResourceAdminPermissionGroupUsecase.AddOne(oValue)
 
