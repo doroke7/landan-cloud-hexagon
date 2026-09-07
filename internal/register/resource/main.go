@@ -18,8 +18,6 @@ func resourceInterceptors(oContainer *container.ResourceContainer) grpc.UnarySer
 
 	oRouter := pkgGrpc.NewGrpcRouter()
 
-	// pb.resource.model.* / pb.resource.logic.* 兩個 gRPC 服務各自獨立的
-	// error + logger + Basic Auth 攔截器，互不共用；error 放外層才能包住其他攔截器一起處理。
 	oRouter.Group("pb.resource.model",
 		oContainer.ResourceModelErrorInterceptor.Handle(),
 		oContainer.ResourceModelLoggerInterceptor.Handle(),

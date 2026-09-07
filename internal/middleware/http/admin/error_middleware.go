@@ -126,6 +126,13 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 
 						}
 
+						if oStatus.Code() != codes.Aborted && oStatus.Code() != codes.Unavailable {
+							sLog = "resource 其他錯誤"
+							iCode = -4
+							sMessage = "resource other error"
+
+						}
+
 						pkgUtility.Logger(pkgUtility.HttpAdminMiddleware).Warn(
 							sLog,
 							zap.String("error", oLastErr.Error()),

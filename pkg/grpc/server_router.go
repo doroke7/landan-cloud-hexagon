@@ -51,7 +51,9 @@ func ChainInterceptors(aInterceptors ...grpc.UnaryServerInterceptor) grpc.UnaryS
 			}
 		}
 
-		return fnNextHandler(oContext, oRequest)
+		oResponse, oError := fnNextHandler(oContext, oRequest)
+
+		return oResponse, oError
 	}
 }
 func tokenize(sPath string) []string {
@@ -81,6 +83,7 @@ func (oSelf *GrpcRouter) Group(sPrefix string, aInterceptors ...grpc.UnaryServer
 func (oSelf *GrpcRouter) Build() grpc.UnaryServerInterceptor {
 	return func(oContex context.Context, oRequest any, oServerInfo *grpc.UnaryServerInfo, fnHandler grpc.UnaryHandler) (any, error) {
 		var aInterceptors []grpc.UnaryServerInterceptor
+
 		oNode := oSelf.root
 		if oNode.registered {
 			aInterceptors = append(aInterceptors, oNode.interceptors...)
