@@ -7,6 +7,7 @@ import (
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
 	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type AdminPermissionGroupUsecase struct {
@@ -39,9 +40,17 @@ func (oSelf *AdminPermissionGroupUsecase) EditOne(oValue *domain.AdminPermission
 
 func (oSelf *AdminPermissionGroupUsecase) RemoveOne(iId uint64) error {
 
-	// TY oSelf.AdminPermissionGroupModel
+	aAdminPermissionGroups, oErr := oSelf.AdminPermissionGroupModel.ShowOnesByParentId(iId)
 
-	oErr := oSelf.AdminPermissionGroupModel.RemoveOneById(iId)
+	if oErr != nil {
+		return oErr
+	}
+
+	if len(aAdminPermissionGroups) >= 1 {
+		return pkgUtility.NewDefaultError("Cannot delete because this group still has child groups", -2, 200)
+	}
+
+	oErr = oSelf.AdminPermissionGroupModel.RemoveOneById(iId)
 
 	return oErr
 }

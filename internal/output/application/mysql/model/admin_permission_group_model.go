@@ -25,8 +25,6 @@ func (oSelf *AdminPermissionGroupModel) ShowOnesByParentId(iParentId uint64) ([]
 	var aAdminPermissionGroups []*domain.AdminPermissionGroup
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Preload("Parent").
-		Preload("Children").
 		Model(&domain.AdminPermissionGroup{}).
 		Where("parent_id = ?", iParentId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").

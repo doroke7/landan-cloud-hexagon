@@ -107,12 +107,31 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						break
 					}
 
-					if oStatus, bOk := status.FromError(oLastErr.Err); bOk && oStatus.Code() == codes.Unavailable {
+					if oStatus, bOk := status.FromError(oLastErr.Err); bOk {
+						sLog := "resource **異常"
+						iCode := -3
+						sMessage := oStatus.Message()
+
+						if oStatus.Code() == codes.Aborted {
+							sLog = "resource 業務異常"
+							iCode = -3
+							sMessage = oStatus.Message()
+
+						}
+
+						if oStatus.Code() == codes.Unavailable {
+							sLog = "resource 系統錯誤"
+							iCode = -4
+							sMessage = "resource system error"
+
+						}
+
 						pkgUtility.Logger(pkgUtility.HttpAdminMiddleware).Warn(
-							"resource 系統錯誤",
+							sLog,
 							zap.String("error", oLastErr.Error()),
 						)
-						oSelf.Response.Set(oContext, 200, -4, "resource system error", struct{}{}, 0, "")
+
+						oSelf.Response.Set(oContext, 200, iCode, sMessage, struct{}{}, 0, "")
 						break
 					}
 
