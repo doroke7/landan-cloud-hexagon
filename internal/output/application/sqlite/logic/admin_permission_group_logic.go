@@ -24,24 +24,70 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 }
 
 func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupValue) error {
-	oColumns, oErr := pkgUtility.StructToMap(oValue)
+	oAdminPermissionGroupColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr
 	}
 
-	oResult := oSelf.DB.WithContext(oSelf.Context).
-		Model(&domain.AdminPermissionGroup{}).
-		Create(oColumns)
+	// admin_permissions 不是 admin_permission_groups 的欄位，拆出來另外插
+	delete(oAdminPermissionGroupColumns, "admin_permissions")
 
-	if oResult.Error != nil {
-		return oResult.Error
-	}
+	oError := oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
 
-	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows inserted")
-	}
+		// 1. 先插 admin_permission_group
+		oResult := oTx.
+			Model(&domain.AdminPermissionGroup{}).
+			Create(oAdminPermissionGroupColumns)
 
-	return nil
+		if oResult.Error != nil {
+			return oResult.Error
+		}
+
+		if oResult.RowsAffected == 0 {
+			return errors.New("0 rows inserted")
+		}
+
+		var iAdminPermissionGroupId uint64
+		oResult = oTx.Raw("SELECT last_insert_rowid()").Scan(&iAdminPermissionGroupId)
+
+		if oResult.Error != nil {
+			return oResult.Error
+		}
+
+		// 2. 沒帶 admin_permissions 就結束
+		if len(oValue.AdminPermissions) == 0 {
+			return nil
+		}
+
+		// 3. 逐筆組成 map，掛上 admin_permission_group_id 後批次插 admin_permissions
+		aAdminPermissionColumns := make([]map[string]any, 0, len(oValue.AdminPermissions))
+		for _, oAdminPermissionValue := range oValue.AdminPermissions {
+			if oAdminPermissionValue == nil {
+				continue
+			}
+
+			oAdminPermissionColumns, oErr := pkgUtility.StructToMap(oAdminPermissionValue)
+			if oErr != nil {
+				return oErr
+			}
+
+			delete(oAdminPermissionColumns, "id")
+			oAdminPermissionColumns["admin_permission_group_id"] = iAdminPermissionGroupId
+
+			aAdminPermissionColumns = append(aAdminPermissionColumns, oAdminPermissionColumns)
+		}
+
+		if len(aAdminPermissionColumns) == 0 {
+			return nil
+		}
+
+		oResult = oTx.Model(&domain.AdminPermission{}).Create(aAdminPermissionColumns)
+		oInsertError := oResult.Error
+
+		return oInsertError
+	})
+
+	return oError
 }
 
 // ShowTree 先把所有未刪除的 admin_permission_group 一次撈成平的，再用 ParentId 掛 Children，

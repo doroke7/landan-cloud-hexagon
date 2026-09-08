@@ -523,3 +523,11 @@ B. 屬於關係(Person 屬於 Nation), nation_id 在 person 裡面。可以直�
 C. 擁有關係(AppUser 擁有 AppUserOrder), app_user_id 在 AppUserOrder 裡面。刪除AppUser 一筆之前，需要把旗下的 AppUserOrder 都刪除
    如：Menu 跟 Menu，GameType 跟 GameType，
 D. 多對多關係(AdminUser <-> AdminRole)。刪除 AdminUser 一筆之前，先把 admin_users_to_admin_roles 旗 admin_user 的關係刪掉，資料不動。
+
+
+## 關於變量縮寫的問題
+1. 傾向於不縮寫，因為不同的人，不同的時間縮寫習慣不同。會造成代碼翻譯的問題shang s4
+2. 1990年代以前 IDE 不成熟，沒有自動 lint, 電腦屏幕窄，沒有git，只有 vim，語言多為低階語言，使用全拼寫撰寫的成本較高
+3. 現在IDE 的ui 成熟，自動補全機制，電腦可寬，語言高階，有 git， 有AI。使用短命名的成本較高
+4. 這麼喜歡短命名怎麼不用 abcd 命名
+5. 有共識的資料可以縮寫，譬如 API JSON DOM

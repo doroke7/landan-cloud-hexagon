@@ -26,7 +26,7 @@ func NewAdminPermissionGroupUsecase(oAdminPermissionGroupModel outputPortAnyMode
 
 func (oSelf *AdminPermissionGroupUsecase) AddOne(oValue *domain.AdminPermissionGroupValue) error {
 
-	oErr := oSelf.AdminPermissionGroupModel.AddOne(oValue)
+	oErr := oSelf.AdminPermissionGroupLogic.AddAdminPermissionGroup(oValue)
 
 	return oErr
 }
