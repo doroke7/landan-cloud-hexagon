@@ -78,14 +78,16 @@ CREATE TABLE `tx-admin_permissions` (
   `parent_id` int unsigned NOT NULL DEFAULT '0',
   `type` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '1=菜單 2=頁面 3=接口',
   `key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `active_type_key` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (if((`deleted_at` = _utf8mb4'2038-01-19 03:14:07'),concat(`type`,_utf8mb4'-',`key`),NULL)) STORED COMMENT '包含soft-delete 的唯一 (type,key)',
   `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `t-k` (`type`,`key`),
+  UNIQUE KEY `atk` (`active_type_key`),
   KEY `n-da` (`name`,`deleted_at`),
   KEY `t-da` (`type`,`deleted_at`),
+  KEY `t-k` (`type`,`key`),
   KEY `da` (`deleted_at`),
   KEY `pi` (`parent_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -100,12 +102,14 @@ DROP TABLE IF EXISTS `tx-admin_roles`;
 CREATE TABLE `tx-admin_roles` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `active_key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (if((`deleted_at` = _utf8mb4'2038-01-19 03:14:07'),`key`,NULL)) STORED COMMENT '包含soft-delete 的唯一key',
   `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `k` (`key`),
+  UNIQUE KEY `ak` (`active_key`),
+  KEY `k-da` (`key`,`deleted_at`),
   KEY `n-da` (`name`,`deleted_at`),
   KEY `da` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -187,12 +191,14 @@ DROP TABLE IF EXISTS `tx-admin_users`;
 CREATE TABLE `tx-admin_users` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `active_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (if((`deleted_at` = _utf8mb4'2038-01-19 03:14:07'),`name`,NULL)) STORED COMMENT '包含soft-delete 的唯一name',
   `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `an` (`active_name`),
+  KEY `n-da` (`name`,`deleted_at`),
   KEY `da` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -254,12 +260,14 @@ DROP TABLE IF EXISTS `tx-app_users`;
 CREATE TABLE `tx-app_users` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `active_name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (if((`deleted_at` = _utf8mb4'2038-01-19 03:14:07'),`name`,NULL)) STORED COMMENT '包含soft-delete 的唯一name',
   `password` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `name` (`name`),
+  UNIQUE KEY `an` (`active_name`),
+  KEY `n-da` (`name`,`deleted_at`),
   KEY `da` (`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -283,12 +291,14 @@ CREATE TABLE `tx-game_types` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` int unsigned DEFAULT '0',
   `key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `active_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (if((`deleted_at` = _utf8mb4'2038-01-19 03:14:07'),`key`,NULL)) STORED COMMENT '包含soft-delete 的唯一key',
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `k` (`key`),
+  UNIQUE KEY `ak` (`active_key`),
+  KEY `k-da` (`key`,`deleted_at`),
   KEY `n-da` (`name`,`deleted_at`),
   KEY `da` (`deleted_at`),
   KEY `gti-da` (`deleted_at`)
@@ -358,13 +368,15 @@ CREATE TABLE `tx-games` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `game_type_id` int unsigned NOT NULL,
   `key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `active_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (if((`deleted_at` = _utf8mb4'2038-01-19 03:14:07'),`key`,NULL)) STORED COMMENT '包含soft-delete 的唯一key',
   `name` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `description` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `k` (`key`),
+  UNIQUE KEY `ak` (`active_key`),
+  KEY `k-da` (`key`,`deleted_at`),
   KEY `da` (`deleted_at`),
   KEY `gti-da` (`game_type_id`,`deleted_at`),
   KEY `n-da` (`name`,`deleted_at`)
@@ -558,6 +570,7 @@ CREATE TABLE `tx-tables` (
   `no` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '2026-0322-0101-0000-0000-0001' COMMENT '年-月日-桌號-遊戲號-局號-期號',
   `game_id` int unsigned NOT NULL DEFAULT '0',
   `key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `active_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (if((`deleted_at` = _utf8mb4'2038-01-19 03:14:07'),`key`,NULL)) STORED COMMENT '包含soft-delete 的唯一key',
   `state` tinyint unsigned NOT NULL DEFAULT '0',
   `description` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `result` json NOT NULL,
@@ -567,7 +580,8 @@ CREATE TABLE `tx-tables` (
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `key` (`key`),
+  UNIQUE KEY `ak` (`active_key`),
+  KEY `k-da` (`key`,`deleted_at`),
   KEY `da` (`deleted_at`),
   KEY `n-da` (`no`,`deleted_at`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
