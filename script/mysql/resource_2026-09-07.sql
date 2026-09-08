@@ -7,7 +7,7 @@
 #
 # 主機: 127.0.0.1 (MySQL 8.0.46)
 # 資料庫: resource
-# 產生時間: 2026-09-07 02:01:23 +0000
+# 產生時間: 2026-09-08 09:30:36 +0000
 # ************************************************************
 
 
@@ -29,12 +29,13 @@ CREATE TABLE `tx-admin_permission_groups` (
   `id` bigint unsigned NOT NULL AUTO_INCREMENT,
   `parent_id` bigint unsigned NOT NULL DEFAULT '0' COMMENT '父節點 id，0 = 頂層',
   `key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `active_key` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci GENERATED ALWAYS AS (if((`deleted_at` = _utf8mb4'2038-01-19 03:14:07'),`key`,NULL)) STORED COMMENT '包含soft-delete 的唯一key',
   `name` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `deleted_at` timestamp NOT NULL DEFAULT '2038-01-19 03:14:07',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `k` (`key`),
+  UNIQUE KEY `ak` (`active_key`),
   KEY `pi-da` (`parent_id`,`deleted_at`),
   KEY `n-da` (`name`,`deleted_at`),
   KEY `da` (`deleted_at`)
@@ -50,7 +51,7 @@ VALUES
 	(3,0,'permission','權限','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
 	(4,0,'system','系統','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
 	(5,1,'game.type','遊戲類型','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
-	(6,1,'game.list','遊戲清單','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(6,1,'game.list','遊戲清單','2026-01-01 09:00:00','2026-09-07 03:02:51','2026-09-07 03:02:51'),
 	(7,2,'table.list','桌台清單','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
 	(8,2,'table.record','桌台紀錄','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
 	(9,3,'permission.admin_user','後台帳號','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
@@ -60,7 +61,7 @@ VALUES
 	(13,4,'system.config','參數設定','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
 	(14,4,'system.log','操作日誌','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
 	(15,5,'game.type.detail','遊戲類型-詳情','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
-	(16,5,'game.type.edit','遊戲類型-編輯','2026-01-01 09:00:00','2026-01-01 09:00:00','2038-01-19 03:14:07'),
+	(16,5,'game.type.edit','遊戲類型-編輯','2026-01-01 09:00:00','2026-09-08 09:26:25','2026-06-01 09:00:00'),
 	(17,4,'system.deprecated','已停用分類','2026-01-01 09:00:00','2026-06-01 09:00:00','2026-06-01 09:00:00');
 
 /*!40000 ALTER TABLE `tx-admin_permission_groups` ENABLE KEYS */;

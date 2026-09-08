@@ -60,6 +60,7 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 		}
 
 		// 3. 逐筆組成 map，掛上 admin_permission_group_id 後批次插 admin_permissions
+		//    admin_permissions 的 (type, key) 是唯一索引，後端已存在同筆就會在 Create 時報錯、整個 transaction rollback
 		aAdminPermissionColumns := make([]map[string]any, 0, len(oValue.AdminPermissions))
 		for _, oAdminPermissionValue := range oValue.AdminPermissions {
 			if oAdminPermissionValue == nil {
