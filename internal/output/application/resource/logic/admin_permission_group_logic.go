@@ -20,16 +20,50 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 
 func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupValue) error {
 
+	aAdminPermissions := make([]*pbResourceLogic.AdminPermissionValue, 0, len(oValue.AdminPermissions))
+	for _, oAdminPermissionValue := range oValue.AdminPermissions {
+		oProtoAdminPermissionValue := domainAdminPermissionValueToProtoAdminPermissionValue(oAdminPermissionValue)
+		if oProtoAdminPermissionValue == nil {
+			continue
+		}
+
+		aAdminPermissions = append(aAdminPermissions, oProtoAdminPermissionValue)
+	}
+
+	oProtoValue := &pbResourceLogic.AdminPermissionGroupValue{
+		Key:              oValue.Key,
+		Name:             oValue.Name,
+		AdminPermissions: aAdminPermissions,
+	}
+
 	oRequest := &pbResourceLogic.AdminPermissionGroupAddAdminPermissionGroupInput{
-		Value: &pbResourceLogic.AdminPermissionGroupValue{
-			Key:  oValue.Key,
-			Name: oValue.Name,
-		},
+		Value: oProtoValue,
 	}
 
 	_, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.AddAdminPermissionGroup(oSelf.Context, oRequest)
 
 	return oErr
+}
+
+func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminPermissionValue) *pbResourceLogic.AdminPermissionValue {
+	if oValue == nil {
+		return nil
+	}
+
+	var oType *uint64
+	if oValue.Type != nil {
+		iType := uint64(*oValue.Type)
+		oType = &iType
+	}
+
+	oProtoAdminPermissionValue := &pbResourceLogic.AdminPermissionValue{
+		Id:   oValue.Id,
+		Type: oType,
+		Key:  oValue.Key,
+		Name: oValue.Name,
+	}
+
+	return oProtoAdminPermissionValue
 }
 
 // ShowTree gRPC 回來就是巢狀好的 tree（每個節點帶 Children），直接遞迴轉成 domain。

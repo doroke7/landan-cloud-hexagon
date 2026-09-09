@@ -39,6 +39,7 @@ func NewSqlite() (*gorm.DB, error) {
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix: CONFIG.SQLITE.PREFIX,
 		},
+		TranslateError: true, // 把 driver 專屬錯誤（如 UNIQUE constraint failed）轉成 gorm.ErrDuplicatedKey 等
 	})
 	if err != nil {
 		return nil, err

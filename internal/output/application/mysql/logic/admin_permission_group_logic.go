@@ -2,6 +2,7 @@ package outputApplicationMysqlLogic
 
 import (
 	"errors"
+	"fmt"
 	"strings"
 	"sync"
 
@@ -28,18 +29,28 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 	if oErr != nil {
 		return oErr
 	}
+	fmt.Println("oAdminPermissionGroupColumns=", oAdminPermissionGroupColumns)
 
-	// admin_permissions 不是 admin_permission_groups 的欄位，拆出來另外插
 	delete(oAdminPermissionGroupColumns, "admin_permissions")
 
 	oError := oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
 
 		// 1. 先插 admin_permission_group
-		oResult := oTx.
-			Model(&domain.AdminPermissionGroup{}).
-			Create(oAdminPermissionGroupColumns)
+		oResult := oTx.Model(&domain.AdminPermissionGroup{}).Create(oAdminPermissionGroupColumns)
 
 		if oResult.Error != nil {
+			if errors.Is(oResult.Error, gorm.ErrDuplicatedKey) {
+				var sKey string
+				if oValue.Key != nil {
+					sKey = *oValue.Key
+				}
+				sError := fmt.Sprintf("admin_permission_group key=%s already exists", sKey)
+
+				oDuplicateError := pkgUtility.NewDefaultError(sError, -2, 200)
+
+				return oDuplicateError
+			}
+
 			return oResult.Error
 		}
 
@@ -59,9 +70,7 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 			return nil
 		}
 
-		// 3. 逐筆組成 map，掛上 admin_permission_group_id 後批次插 admin_permissions
-		//    admin_permissions 的 (type, key) 是唯一索引，後端已存在同筆就會在 Create 時報錯、整個 transaction rollback
-		aAdminPermissionColumns := make([]map[string]any, 0, len(oValue.AdminPermissions))
+		// 逐筆插 admin_permissions（不用批次，撞唯一索引時才能指出是哪個 type / key）
 		for _, oAdminPermissionValue := range oValue.AdminPermissions {
 
 			if oAdminPermissionValue == nil {
@@ -76,17 +85,31 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 			delete(oAdminPermissionColumns, "id")
 			oAdminPermissionColumns["admin_permission_group_id"] = iAdminPermissionGroupId
 
-			aAdminPermissionColumns = append(aAdminPermissionColumns, oAdminPermissionColumns)
+			oResult = oTx.Model(&domain.AdminPermission{}).Create(oAdminPermissionColumns)
+
+			if oResult.Error != nil {
+				if errors.Is(oResult.Error, gorm.ErrDuplicatedKey) {
+					var iType uint8
+					if oAdminPermissionValue.Type != nil {
+						iType = *oAdminPermissionValue.Type
+					}
+
+					var sKey string
+					if oAdminPermissionValue.Key != nil {
+						sKey = *oAdminPermissionValue.Key
+					}
+					sError := fmt.Sprintf("admin_permission type=%d key=%s already exists", iType, sKey)
+
+					oDuplicateError := pkgUtility.NewDefaultError(sError, -2, 200)
+
+					return oDuplicateError
+				}
+
+				return oResult.Error
+			}
 		}
 
-		if len(aAdminPermissionColumns) == 0 {
-			return nil
-		}
-
-		oResult = oTx.Model(&domain.AdminPermission{}).Create(aAdminPermissionColumns)
-		oInsertError := oResult.Error
-
-		return oInsertError
+		return nil
 	})
 
 	return oError

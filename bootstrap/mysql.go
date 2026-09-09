@@ -55,6 +55,7 @@ func NewMysql() (*gorm.DB, error) {
 		NamingStrategy: schema.NamingStrategy{
 			TablePrefix: CONFIG.MYSQL.PREFIX,
 		},
+		TranslateError: true, // 把 driver 專屬錯誤（如 MySQL 1062）轉成 gorm.ErrDuplicatedKey 等
 	})
 	if err != nil {
 		return nil, err
