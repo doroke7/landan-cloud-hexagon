@@ -14,7 +14,6 @@ import (
 	pbFacadeAdminResource "example/pb/facade/admin/resource"
 	pkgInput "example/pkg/input"
 	pkgProtoToDomain "example/pkg/proto_to_domain"
-	pkgUtility "example/pkg/utility"
 )
 
 // GameHandler 是 http admin resource GameHandler 的 gRPC facade 版本，
@@ -30,21 +29,6 @@ func NewGameHandler(oGameUsecase usecasePortAnyAdminResource.GameUsecase, oAbstr
 		AbstractHandler:          oAbstractHandler,
 		AdminResourceGameUsecase: oGameUsecase,
 	}
-}
-
-// toStatusError DefaultError（業務錯誤）用 Aborted，其餘用 Internal。
-func toStatusError(oErr error) error {
-	if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-		sDefaultError := oDefaultError.Error()
-		oStatusError := status.Error(codes.Aborted, sDefaultError)
-
-		return oStatusError
-	}
-
-	sError := oErr.Error()
-	oStatusError := status.Error(codes.Internal, sError)
-
-	return oStatusError
 }
 
 // domainGameTypeToProtoGameType 遞迴帶出 Parent / Children。
@@ -90,26 +74,6 @@ func domainGameToProtoGame(oGame *domain.Game) *pb.Game {
 	}
 }
 
-// idFromFilters 從 filters[0]（field 必須是 "id"）取出 id，比照 http admin resource handler 的做法。
-func idFromFilters(aFilters []*pb.Filter) (uint, error) {
-	if len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].GetField() != "id" {
-		oStatusError := status.Error(codes.InvalidArgument, "filter position error")
-
-		return 0, oStatusError
-	}
-
-	oValue := aFilters[0].GetValue()
-	oInterfaceValue := oValue.AsInterface()
-	fId, bOk := oInterfaceValue.(float64)
-	if !bOk {
-		oStatusError := status.Error(codes.InvalidArgument, "filter.id format error")
-
-		return 0, oStatusError
-	}
-
-	return uint(fId), nil
-}
-
 func (oSelf *GameHandler) AddOne(oContext context.Context, oRequest *pbFacadeAdminResource.GameAddOneRequest) (*pbFacadeAdminResource.GameAddOneResponse, error) {
 
 	oRequestVariable := oRequest.GetVariable()
@@ -117,8 +81,7 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oRequest *pbFacadeAdm
 	oValue := &oDomainGameVariable
 
 	if oErr := oSelf.AdminResourceGameUsecase.AddOne(oValue); oErr != nil {
-		oStatusErr := toStatusError(oErr)
-		return nil, oStatusErr
+		return nil, oErr
 	}
 
 	return &pbFacadeAdminResource.GameAddOneResponse{}, nil
@@ -127,18 +90,28 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oRequest *pbFacadeAdm
 func (oSelf *GameHandler) EditOne(oContext context.Context, oRequest *pbFacadeAdminResource.GameEditOneRequest) (*pbFacadeAdminResource.GameEditOneResponse, error) {
 
 	aRequestFilters := oRequest.GetFilters()
-	iId, oErr := idFromFilters(aRequestFilters)
-	if oErr != nil {
-		return nil, oErr
+
+	if len(aRequestFilters) == 0 || aRequestFilters[0] == nil || aRequestFilters[0].GetField() != "id" {
+
+		return nil, status.Error(codes.InvalidArgument, "filter position error")
 	}
+
+	oFilterValue := aRequestFilters[0].GetValue()
+	oInterfaceValue := oFilterValue.AsInterface()
+	fId, bOk := oInterfaceValue.(float64)
+	if !bOk {
+
+		return nil, status.Error(codes.InvalidArgument, "filter.id format error")
+	}
+
+	iId := uint(fId)
 
 	oRequestVariable := oRequest.GetVariable()
 	oDomainGameVariable := pkgProtoToDomain.GameVariable(oRequestVariable)
 	oValue := &oDomainGameVariable
 
 	if oErr := oSelf.AdminResourceGameUsecase.EditOne(oValue, uint64(iId)); oErr != nil {
-		oStatusErr := toStatusError(oErr)
-		return nil, oStatusErr
+		return nil, oErr
 	}
 
 	return &pbFacadeAdminResource.GameEditOneResponse{}, nil
@@ -147,14 +120,26 @@ func (oSelf *GameHandler) EditOne(oContext context.Context, oRequest *pbFacadeAd
 func (oSelf *GameHandler) RemoveOne(oContext context.Context, oRequest *pbFacadeAdminResource.GameRemoveOneRequest) (*pbFacadeAdminResource.GameRemoveOneResponse, error) {
 
 	aRequestFilters := oRequest.GetFilters()
-	iId, oErr := idFromFilters(aRequestFilters)
-	if oErr != nil {
-		return nil, oErr
+
+	if len(aRequestFilters) == 0 || aRequestFilters[0] == nil || aRequestFilters[0].GetField() != "id" {
+		oStatusError := status.Error(codes.InvalidArgument, "filter position error")
+
+		return nil, oStatusError
 	}
 
+	oFilterValue := aRequestFilters[0].GetValue()
+	oInterfaceValue := oFilterValue.AsInterface()
+	fId, bOk := oInterfaceValue.(float64)
+	if !bOk {
+		oStatusError := status.Error(codes.InvalidArgument, "filter.id format error")
+
+		return nil, oStatusError
+	}
+
+	iId := uint(fId)
+
 	if oErr := oSelf.AdminResourceGameUsecase.RemoveOne(iId); oErr != nil {
-		oStatusErr := toStatusError(oErr)
-		return nil, oStatusErr
+		return nil, oErr
 	}
 
 	return &pbFacadeAdminResource.GameRemoveOneResponse{}, nil
@@ -170,8 +155,7 @@ func (oSelf *GameHandler) ShowOne(oContext context.Context, oRequest *pbFacadeAd
 
 	oGame, oErr := oSelf.AdminResourceGameUsecase.ShowOne(uint64(iId))
 	if oErr != nil {
-		oStatusErr := toStatusError(oErr)
-		return nil, oStatusErr
+		return nil, oErr
 	}
 
 	oProtoGame := domainGameToProtoGame(oGame)
@@ -227,8 +211,7 @@ func (oSelf *GameHandler) ShowOnes(oContext context.Context, oRequest *pbFacadeA
 
 	aGames, iTotal, oErr := oSelf.AdminResourceGameUsecase.ShowOnes(aFilters, aSorters, oPagination)
 	if oErr != nil {
-		oStatusErr := toStatusError(oErr)
-		return nil, oStatusErr
+		return nil, oErr
 	}
 
 	aProtoGames := make([]*pb.Game, 0, len(aGames))

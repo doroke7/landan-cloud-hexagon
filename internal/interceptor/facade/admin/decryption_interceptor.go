@@ -91,6 +91,7 @@ func (oSelf *DecryptionInterceptor) Handle() grpc.UnaryServerInterceptor {
 			fmt.Println("sNormalized ", sNormalized)
 
 			sDecrypted, oErr := oSelf.AesHelper.Decrypt(sNormalized, oKeys.Key, oKeys.Iv)
+
 			if oErr != nil {
 				return nil, status.Error(codes.InvalidArgument, "content decryption failed")
 			}
