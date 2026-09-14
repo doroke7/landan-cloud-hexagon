@@ -13,3 +13,12 @@ proto/resource/event/admin_user.proto
 的 XXXXValue 也移動到  proto/resource/common.proto， 其中 XXXX 是名字
 
 4. proto/resource/model 底下的 XXXXValue 也移動到 proto/resource/common.proto
+
+5. proto/facade/admin/authentication/authenticator.proto 的 AdminUserVariable 
+移動到  proto/facade/common.proto
+
+6. proto/facade/admin/resource/game.proto 的 XXXVariable 
+移動到  proto/facade/common.proto
+
+7. proto/facade/register/authenticator.proto XXXVariable 
+移動到  proto/facade/common.proto
