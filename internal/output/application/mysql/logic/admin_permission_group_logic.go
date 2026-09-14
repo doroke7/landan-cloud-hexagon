@@ -100,7 +100,20 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 					if oAdminPermissionValue.Key != nil {
 						sKey = *oAdminPermissionValue.Key
 					}
-					sError := fmt.Sprintf("admin_permission type=%d key=%s already exists", iType, sKey)
+
+					var oDuplicatedAdminPermission domain.AdminPermission
+					oDuplicatedResult := oTx.
+						Model(&domain.AdminPermission{}).
+						Where("type = ?", iType).
+						Where("key = ?", sKey).
+						Where("deleted_at = ?", "2038-01-19 03:14:07").
+						First(&oDuplicatedAdminPermission)
+
+					if oDuplicatedResult.Error != nil {
+						return oDuplicatedResult.Error
+					}
+
+					sError := fmt.Sprintf("admin_permission_group_id=%d type=%d key=%s already exists", oDuplicatedAdminPermission.AdminPermissionGroupId, iType, sKey)
 
 					oDuplicateError := pkgUtility.NewDefaultError(sError, -2, 200)
 
@@ -178,33 +191,70 @@ func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *dom
 
 			delete(oAdminPermissionColumns, "id")
 
+			var iType uint8
+			if oAdminPermissionValue.Type != nil {
+				iType = *oAdminPermissionValue.Type
+			}
+
+			var sKey string
+			if oAdminPermissionValue.Key != nil {
+				sKey = *oAdminPermissionValue.Key
+			}
+
 			if oAdminPermissionValue.Id == nil {
 				oAdminPermissionColumns["admin_permission_group_id"] = iId
 
 				oResult = oTx.Model(&domain.AdminPermission{}).Create(oAdminPermissionColumns)
+
+				if oResult.Error != nil {
+					if errors.Is(oResult.Error, gorm.ErrDuplicatedKey) {
+						var oDuplicatedAdminPermission domain.AdminPermission
+						oDuplicatedResult := oTx.
+							Model(&domain.AdminPermission{}).
+							Where("type = ?", iType).
+							Where("key = ?", sKey).
+							Where("deleted_at = ?", "2038-01-19 03:14:07").
+							First(&oDuplicatedAdminPermission)
+
+						if oDuplicatedResult.Error != nil {
+							return oDuplicatedResult.Error
+						}
+
+						sError := fmt.Sprintf("admin_permission_group_id=%d type=%d key=%s already exists", oDuplicatedAdminPermission.AdminPermissionGroupId, iType, sKey)
+
+						oDuplicateError := pkgUtility.NewDefaultError(sError, -2, 200)
+
+						return oDuplicateError
+					}
+
+					return oResult.Error
+				}
+
+				continue
 			}
 
-			if oAdminPermissionValue.Id != nil {
-				iAdminPermissionId := *oAdminPermissionValue.Id
+			iAdminPermissionId := *oAdminPermissionValue.Id
 
-				oResult = oTx.
-					Model(&domain.AdminPermission{}).
-					Where("id = ?", iAdminPermissionId).
-					UpdateColumns(oAdminPermissionColumns)
-			}
+			oResult = oTx.
+				Model(&domain.AdminPermission{}).
+				Where("id = ?", iAdminPermissionId).
+				UpdateColumns(oAdminPermissionColumns)
 
 			if oResult.Error != nil {
 				if errors.Is(oResult.Error, gorm.ErrDuplicatedKey) {
-					var iType uint8
-					if oAdminPermissionValue.Type != nil {
-						iType = *oAdminPermissionValue.Type
+					var oDuplicatedAdminPermission domain.AdminPermission
+					oDuplicatedResult := oTx.
+						Model(&domain.AdminPermission{}).
+						Where("type = ?", iType).
+						Where("key = ?", sKey).
+						Where("deleted_at = ?", "2038-01-19 03:14:07").
+						First(&oDuplicatedAdminPermission)
+
+					if oDuplicatedResult.Error != nil {
+						return oDuplicatedResult.Error
 					}
 
-					var sKey string
-					if oAdminPermissionValue.Key != nil {
-						sKey = *oAdminPermissionValue.Key
-					}
-					sError := fmt.Sprintf("admin_permission type=%d key=%s already exists", iType, sKey)
+					sError := fmt.Sprintf("admin_permission_group_id=%d type=%d key=%s already exists", oDuplicatedAdminPermission.AdminPermissionGroupId, iType, sKey)
 
 					oDuplicateError := pkgUtility.NewDefaultError(sError, -2, 200)
 

@@ -48,26 +48,27 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 
 	return oErr
 }
-func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
+func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oDomainAdminPermissionGroupVariable *domain.AdminPermissionGroupVariable, iId uint64) error {
 
-	aAdminPermissions := make([]*pb.AdminPermissionVariable, 0, len(oValue.AdminPermissions))
-	for _, oAdminPermissionValue := range oValue.AdminPermissions {
-		oProtoAdminPermissionValue := pkgDomainToProto.AdminPermissionVariable(oAdminPermissionValue)
-		if oProtoAdminPermissionValue == nil {
+	aProtoAdminPermissions := make([]*pb.AdminPermissionVariable, 0, len(oDomainAdminPermissionGroupVariable.AdminPermissions))
+
+	for _, oDomainAdminPermissionVariable := range oDomainAdminPermissionGroupVariable.AdminPermissions {
+		oProtoAdminPermissionVariable := pkgDomainToProto.AdminPermissionVariable(oDomainAdminPermissionVariable)
+		if oProtoAdminPermissionVariable == nil {
 			continue
 		}
 
-		aAdminPermissions = append(aAdminPermissions, oProtoAdminPermissionValue)
+		aProtoAdminPermissions = append(aProtoAdminPermissions, oProtoAdminPermissionVariable)
 	}
 
-	oProtoValue := &pb.AdminPermissionGroupVariable{
-		Key:              oValue.Key,
-		Name:             oValue.Name,
-		AdminPermissions: aAdminPermissions,
+	oProtoAdminPermissionGroupVariable := &pb.AdminPermissionGroupVariable{
+		Key:              oDomainAdminPermissionGroupVariable.Key,
+		Name:             oDomainAdminPermissionGroupVariable.Name,
+		AdminPermissions: aProtoAdminPermissions,
 	}
 
 	oRequest := &pbResourceLogic.AdminPermissionGroupEditAdminPermissionGroupByIdInput{
-		Variable: oProtoValue,
+		Variable: oProtoAdminPermissionGroupVariable,
 		Id:       iId,
 	}
 

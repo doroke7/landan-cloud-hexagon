@@ -33,7 +33,7 @@ func (oSelf *AdminPermissionGroupUsecase) AddOne(oVariable *domain.AdminPermissi
 
 func (oSelf *AdminPermissionGroupUsecase) EditOne(oVariable *domain.AdminPermissionGroupVariable, iId uint64) error {
 
-	oErr := oSelf.AdminPermissionGroupModel.EditOneById(oVariable, iId)
+	oErr := oSelf.AdminPermissionGroupLogic.EditAdminPermissionGroupById(oVariable, iId)
 
 	return oErr
 }
