@@ -3,9 +3,6 @@ package inputApplicationResourceModel
 import (
 	"context"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
@@ -74,7 +71,7 @@ func (oSelf *TableHandler) AddOne(oContext context.Context, oReq *pbResourceMode
 	oErr := oSelf.ModelTableUsecase.AddOne(&oTableValue)
 
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.TableAddOneOutput{}, nil
@@ -87,7 +84,7 @@ func (oSelf *TableHandler) EditOneById(oContext context.Context, oReq *pbResourc
 	oErr := oSelf.ModelTableUsecase.EditOneById(&oTableValue, uint64(oReq.Id))
 
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.TableEditOneByIdOutput{}, nil
@@ -98,7 +95,7 @@ func (oSelf *TableHandler) RemoveOneById(oContext context.Context, oReq *pbResou
 	oErr := oSelf.ModelTableUsecase.RemoveOneById(uint64(oReq.Id))
 
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.TableRemoveOneByIdOutput{}, nil
@@ -123,7 +120,7 @@ func (oSelf *TableHandler) TotalByFilters(oContext context.Context, oReq *pbReso
 
 	iTotal, oErr := oSelf.ModelTableUsecase.TotalByFilters(aFilters)
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.TableTotalByFiltersOutput{

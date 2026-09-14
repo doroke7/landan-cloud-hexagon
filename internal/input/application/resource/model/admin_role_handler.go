@@ -3,9 +3,6 @@ package inputApplicationResourceModel
 import (
 	"context"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
@@ -46,9 +43,8 @@ func (oSelf *AdminRoleHandler) AddOne(oContext context.Context, oReq *pbResource
 	oAdminRoleValue := protoAdminRoleValueToDomainAdminRoleValue(oReq.GetVariable())
 
 	oErr := oSelf.ModelAdminRoleUsecase.AddOne(&oAdminRoleValue)
-
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminRoleAddOneOutput{}, nil
@@ -58,7 +54,7 @@ func (oSelf *AdminRoleHandler) ShowOneById(oContext context.Context, oReq *pbRes
 
 	oAdminRole, oErr := oSelf.ModelAdminRoleUsecase.ShowOneById(uint(oReq.Id))
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		return nil, oErr
 	}
 
 	if oAdminRole == nil {
@@ -79,7 +75,7 @@ func (oSelf *AdminRoleHandler) EditOneById(oContext context.Context, oReq *pbRes
 	oErr := oSelf.ModelAdminRoleUsecase.EditOneById(&oAdminRoleValue, uint64(oReq.Id))
 
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminRoleEditOneByIdOutput{}, nil
@@ -90,7 +86,7 @@ func (oSelf *AdminRoleHandler) RemoveOneById(oContext context.Context, oReq *pbR
 	oErr := oSelf.ModelAdminRoleUsecase.RemoveOneById(uint64(oReq.Id))
 
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminRoleRemoveOneByIdOutput{}, nil
@@ -101,7 +97,7 @@ func (oSelf *AdminRoleHandler) ShowOnes(oContext context.Context, oReq *pbResour
 	aAdminRoles, oErr := oSelf.ModelAdminRoleUsecase.ShowOnes()
 
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		return nil, oErr
 	}
 
 	aProtoAdminRoles := make([]*pb.AdminRole, 0, len(aAdminRoles))
@@ -156,7 +152,7 @@ func (oSelf *AdminRoleHandler) ShowOnesByFiltersWithSortersPagination(oContext c
 	aAdminRoles, oErr := oSelf.ModelAdminRoleUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		return nil, oErr
 	}
 
 	aProtoAdminRoles := make([]*pb.AdminRole, 0, len(aAdminRoles))
@@ -189,7 +185,7 @@ func (oSelf *AdminRoleHandler) TotalByFilters(oContext context.Context, oReq *pb
 
 	iTotal, oErr := oSelf.ModelAdminRoleUsecase.TotalByFilters(aFilters)
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminRoleTotalByFiltersOutput{

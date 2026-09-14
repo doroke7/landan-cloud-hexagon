@@ -51,6 +51,18 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 
 		if oErr != nil {
 
+			// 1. handler 直接回的 *DefaultError（業務錯誤）
+			if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
+				pkgUtility.Logger(pkgUtility.ResourceLogicInterceptor).Warn(
+					"resource 業務異常",
+					zap.String("method", oServerInfo.FullMethod),
+					zap.String("message", oDefaultError.Message),
+					zap.Int16("code", oDefaultError.Code),
+				)
+
+				return nil, status.Error(codes.Aborted, oDefaultError.Message)
+			}
+
 			oStatus, bOk := status.FromError(oErr)
 
 			// 如果是 gRPC error 就打印 並且回傳 error 到前級 Http或Facade

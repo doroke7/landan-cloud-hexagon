@@ -3,8 +3,6 @@ package inputApplicationResourceModel
 import (
 	"context"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
 	pb "example/pb"
@@ -55,10 +53,7 @@ func (oSelf *AdminPermissionHandler) AddOne(oContext context.Context, oReq *pbRe
 	oErr := oSelf.ModelAdminPermissionUsecase.AddOne(&oAdminPermissionValue)
 
 	if oErr != nil {
-		sError := oErr.Error()
-		oStatusError := status.Error(codes.Aborted, sError)
-
-		return nil, oStatusError
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminPermissionAddOneOutput{
@@ -70,10 +65,7 @@ func (oSelf *AdminPermissionHandler) ShowOneById(oContext context.Context, oReq 
 
 	oAdminPermission, oErr := oSelf.ModelAdminPermissionUsecase.ShowOneById(uint64(oReq.Id))
 	if oErr != nil {
-		sError := oErr.Error()
-		oStatusError := status.Error(codes.NotFound, sError)
-
-		return nil, oStatusError
+		return nil, oErr
 	}
 
 	if oAdminPermission == nil {
@@ -95,10 +87,7 @@ func (oSelf *AdminPermissionHandler) EditOneById(oContext context.Context, oReq 
 	oErr := oSelf.ModelAdminPermissionUsecase.EditOneById(&oAdminPermissionValue, uint64(oReq.Id))
 
 	if oErr != nil {
-		sError := oErr.Error()
-		oStatusError := status.Error(codes.Aborted, sError)
-
-		return nil, oStatusError
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminPermissionEditOneByIdOutput{}, nil
@@ -109,10 +98,7 @@ func (oSelf *AdminPermissionHandler) RemoveOneById(oContext context.Context, oRe
 	oErr := oSelf.ModelAdminPermissionUsecase.RemoveOneById(uint64(oReq.Id))
 
 	if oErr != nil {
-		sError := oErr.Error()
-		oStatusError := status.Error(codes.Aborted, sError)
-
-		return nil, oStatusError
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminPermissionRemoveOneByIdOutput{}, nil
@@ -165,10 +151,7 @@ func (oSelf *AdminPermissionHandler) ShowOnesByFiltersWithSortersPagination(oCon
 	aAdminPermissions, oErr := oSelf.ModelAdminPermissionUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
-		sError := oErr.Error()
-		oStatusError := status.Error(codes.NotFound, sError)
-
-		return nil, oStatusError
+		return nil, oErr
 	}
 
 	aProtoAdminPermissions := make([]*pb.AdminPermission, 0, len(aAdminPermissions))
@@ -204,10 +187,7 @@ func (oSelf *AdminPermissionHandler) TotalByFilters(oContext context.Context, oR
 
 	iTotal, oErr := oSelf.ModelAdminPermissionUsecase.TotalByFilters(aFilters)
 	if oErr != nil {
-		sError := oErr.Error()
-		oStatusError := status.Error(codes.NotFound, sError)
-
-		return nil, oStatusError
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminPermissionTotalByFiltersOutput{

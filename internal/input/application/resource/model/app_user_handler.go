@@ -3,9 +3,6 @@ package inputApplicationResourceModel
 import (
 	"context"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
@@ -37,8 +34,10 @@ func (oSelf *AppUserHandler) AddAppUser(oContext context.Context, oReq *pbResour
 		oAppUserValue.Password = oValue.Password
 	}
 
-	if oErr := oSelf.ModelAppUserUsecase.AddOne(&oAppUserValue); oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+	oErr := oSelf.ModelAppUserUsecase.AddOne(&oAppUserValue)
+
+	if oErr != nil {
+		return nil, oErr
 	}
 
 	var sName string
@@ -55,7 +54,7 @@ func (oSelf *AppUserHandler) ShowOneByName(oContext context.Context, oReq *pbRes
 
 	oAppUser, oErr := oSelf.ModelAppUserUsecase.ShowOneByName(oReq.Name)
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AppUserShowOneByNameOutput{
@@ -72,7 +71,7 @@ func (oSelf *AppUserHandler) ShowOneById(oContext context.Context, oReq *pbResou
 
 	oAppUser, oErr := oSelf.ModelAppUserUsecase.ShowOneById(uint(oReq.Id))
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AppUserShowOneByIdOutput{
@@ -89,7 +88,7 @@ func (oSelf *AppUserHandler) IncreaseBalance(oContext context.Context, oReq *pbR
 
 	oErr := oSelf.ModelAppUserUsecase.IncreaseBalance(uint64(oReq.Id), uint64(oReq.Amount))
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AppUserIncreaseBalanceOutput{}, nil

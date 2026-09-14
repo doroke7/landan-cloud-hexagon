@@ -33,7 +33,7 @@ func (oSelf *AdminUserHandler) ShowOneByName(oContext context.Context, oReq *pbR
 
 	oAdminUser, err := oSelf.ModelAdminUserUsecase.ShowOneByName(oReq.Name)
 	if err != nil {
-		return nil, status.Error(codes.NotFound, err.Error())
+		return nil, err
 	}
 
 	oProtoAdminUser := pkgDomainToProto.AdminUser(oAdminUser)
@@ -48,7 +48,7 @@ func (oSelf *AdminUserHandler) ShowOneById(oContext context.Context, oReq *pbRes
 
 	oAdminUser, err := oSelf.ModelAdminUserUsecase.ShowOneById(uint64(oReq.Id))
 	if err != nil {
-		return nil, status.Error(codes.NotFound, err.Error())
+		return nil, err
 	}
 
 	oProtoAdminUser := pkgDomainToProto.AdminUser(oAdminUser)
@@ -72,7 +72,7 @@ func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResource
 	oErr := oSelf.ModelAdminUserUsecase.AddOne(&oAdminUserValue)
 
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminUserAddOneOutput{}, nil
@@ -91,7 +91,7 @@ func (oSelf *AdminUserHandler) EditOneById(oContext context.Context, oReq *pbRes
 	oErr := oSelf.ModelAdminUserUsecase.EditOneById(&oAdminUserValue, uint64(oReq.Id))
 
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminUserEditOneByIdOutput{}, nil
@@ -102,7 +102,7 @@ func (oSelf *AdminUserHandler) RemoveOneById(oContext context.Context, oReq *pbR
 	oErr := oSelf.ModelAdminUserUsecase.RemoveOneById(uint64(oReq.Id))
 
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminUserRemoveOneByIdOutput{}, nil
@@ -148,7 +148,7 @@ func (oSelf *AdminUserHandler) ShowOnesByFiltersWithSortersPagination(oContext c
 
 	aAdminUsers, oErr := oSelf.ModelAdminUserUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		return nil, oErr
 	}
 
 	aProtoAdminUsers := make([]*pb.AdminUser, 0, len(aAdminUsers))
@@ -181,7 +181,7 @@ func (oSelf *AdminUserHandler) TotalByFilters(oContext context.Context, oReq *pb
 
 	iTotal, oErr := oSelf.ModelAdminUserUsecase.TotalByFilters(aFilters)
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		return nil, oErr
 	}
 
 	return &pbResourceModel.AdminUserTotalByFiltersOutput{
