@@ -3,43 +3,11 @@ package outputApplicationResourceModel
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
-
-func domainGameValueToProtoGameValue(oGame *domain.GameVariable) *pbResource.GameValue {
-	oValue := &pbResource.GameValue{
-		Key:         oGame.Key,
-		Name:        oGame.Name,
-		Description: oGame.Description,
-	}
-
-	if oGame.GameTypeId != nil {
-		iGameTypeId := uint64(*oGame.GameTypeId)
-		oValue.GameTypeId = &iGameTypeId
-	}
-
-	return oValue
-}
-
-func protoGameToDomainGame(oProtoGame *pbResource.Game) domain.Game {
-	if oProtoGame == nil {
-		return domain.Game{}
-	}
-
-	return domain.Game{
-		Id:          uint64(oProtoGame.GetId()),
-		GameTypeId:  uint64(oProtoGame.GetGameTypeId()),
-		Key:         oProtoGame.GetKey(),
-		Name:        oProtoGame.GetName(),
-		Description: oProtoGame.GetDescription(),
-		CreatedAt:   oProtoGame.GetCreatedAt().AsTime(),
-		UpdatedAt:   oProtoGame.GetUpdatedAt().AsTime(),
-		DeletedAt:   oProtoGame.GetDeletedAt().AsTime(),
-		GameType:    protoGameTypeToDomainGameType(oProtoGame.GetGameType()),
-	}
-}
 
 type GameModel struct {
 	*AbstractModel
@@ -54,7 +22,7 @@ func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
 func (oSelf *GameModel) AddOne(oGameParm *domain.GameVariable) error {
 
 	oRequest := &pbResourceModel.GameAddOneInput{
-		Value: domainGameValueToProtoGameValue(oGameParm),
+		Value: pkgDomainToProto.GameValue(oGameParm),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Game.AddOne(oSelf.Context, oRequest)
@@ -78,7 +46,7 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 		return nil, nil
 	}
 
-	oGame := protoGameToDomainGame(oProtoGame)
+	oGame := pkgProtoToDomain.Game(oProtoGame)
 
 	return &oGame, nil
 }
@@ -111,7 +79,7 @@ func (oSelf *GameModel) EditOneById(oGame *domain.GameVariable, iId uint64) erro
 
 	oRequest := &pbResourceModel.GameEditOneByIdInput{
 		Id:    iId,
-		Value: domainGameValueToProtoGameValue(oGame),
+		Value: pkgDomainToProto.GameValue(oGame),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Game.EditOneById(oSelf.Context, oRequest)

@@ -3,9 +3,9 @@ package outputApplicationResourceLogic
 import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
-	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 type GameLogic struct {
@@ -18,55 +18,6 @@ func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
 	}
 
 	return oLogic
-}
-
-func protoGameTypeToDomainGameType(oProtoGameType *pbResource.GameType) domain.GameType {
-	if oProtoGameType == nil {
-		return domain.GameType{}
-	}
-
-	oGameType := domain.GameType{
-		Id:        uint64(oProtoGameType.GetId()),
-		ParentId:  uint64(oProtoGameType.GetParentId()),
-		Key:       oProtoGameType.GetKey(),
-		Name:      oProtoGameType.GetName(),
-		CreatedAt: oProtoGameType.GetCreatedAt().AsTime(),
-		UpdatedAt: oProtoGameType.GetUpdatedAt().AsTime(),
-		DeletedAt: oProtoGameType.GetDeletedAt().AsTime(),
-	}
-
-	if oParent := oProtoGameType.GetParent(); oParent != nil {
-		oParentDomain := protoGameTypeToDomainGameType(oParent)
-		oGameType.Parent = &oParentDomain
-	}
-
-	for _, oChild := range oProtoGameType.GetChildren() {
-		oChildDomain := protoGameTypeToDomainGameType(oChild)
-		oGameType.Children = append(oGameType.Children, oChildDomain)
-	}
-
-	return oGameType
-}
-
-func protoGameToDomainGame(oProtoGame *pbResource.Game) domain.Game {
-	if oProtoGame == nil {
-		return domain.Game{}
-	}
-
-	oGameType := protoGameTypeToDomainGameType(oProtoGame.GetGameType())
-	oGame := domain.Game{
-		Id:          uint64(oProtoGame.GetId()),
-		GameTypeId:  uint64(oProtoGame.GetGameTypeId()),
-		Key:         oProtoGame.GetKey(),
-		Name:        oProtoGame.GetName(),
-		Description: oProtoGame.GetDescription(),
-		CreatedAt:   oProtoGame.GetCreatedAt().AsTime(),
-		UpdatedAt:   oProtoGame.GetUpdatedAt().AsTime(),
-		DeletedAt:   oProtoGame.GetDeletedAt().AsTime(),
-		GameType:    oGameType,
-	}
-
-	return oGame
 }
 
 func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error) {
@@ -84,7 +35,7 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 
 	aGames := make([]*domain.Game, 0, len(oResponse.GetGames()))
 	for _, oOne := range oResponse.GetGames() {
-		oGameType := protoGameTypeToDomainGameType(oOne.GetGameType())
+		oGameType := pkgProtoToDomain.GameType(oOne.GetGameType())
 		oGame := &domain.Game{
 			Id:          uint64(oOne.GetId()),
 			GameTypeId:  uint64(oOne.GetGameTypeId()),

@@ -6,6 +6,7 @@ import (
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 type AdminRoleModel struct {
@@ -18,23 +19,6 @@ func NewAdminRoleModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminRo
 	}
 
 	return oModel
-}
-
-func protoAdminRoleToDomainAdminRole(oProto *pbResource.AdminRole) domain.AdminRole {
-	if oProto == nil {
-		return domain.AdminRole{}
-	}
-
-	oAdminRole := domain.AdminRole{
-		Id:        uint64(oProto.GetId()),
-		Key:       oProto.GetKey(),
-		Name:      oProto.GetName(),
-		CreatedAt: oProto.GetCreatedAt().AsTime(),
-		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
-		DeletedAt: oProto.GetDeletedAt().AsTime(),
-	}
-
-	return oAdminRole
 }
 
 func domainAdminRoleValueToProtoAdminRoleValue(oValue *domain.AdminRoleVariable) *pbResource.AdminRoleValue {
@@ -73,7 +57,7 @@ func (oSelf *AdminRoleModel) ShowOneById(iId uint64) (*domain.AdminRole, error) 
 		return nil, nil
 	}
 
-	oAdminRole := protoAdminRoleToDomainAdminRole(oProtoAdminRole)
+	oAdminRole := pkgProtoToDomain.AdminRole(oProtoAdminRole)
 
 	return &oAdminRole, nil
 }
@@ -110,7 +94,7 @@ func (oSelf *AdminRoleModel) ShowOnes() ([]*domain.AdminRole, error) {
 
 	aAdminRoles := make([]*domain.AdminRole, 0, len(oResponse.GetAdminRoles()))
 	for _, oOne := range oResponse.GetAdminRoles() {
-		oAdminRole := protoAdminRoleToDomainAdminRole(oOne)
+		oAdminRole := pkgProtoToDomain.AdminRole(oOne)
 		aAdminRoles = append(aAdminRoles, &oAdminRole)
 	}
 
@@ -133,7 +117,7 @@ func (oSelf *AdminRoleModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 
 	aAdminRoles := make([]*domain.AdminRole, 0, len(oResponse.GetAdminRoles()))
 	for _, oOne := range oResponse.GetAdminRoles() {
-		oAdminRole := protoAdminRoleToDomainAdminRole(oOne)
+		oAdminRole := pkgProtoToDomain.AdminRole(oOne)
 		aAdminRoles = append(aAdminRoles, &oAdminRole)
 	}
 

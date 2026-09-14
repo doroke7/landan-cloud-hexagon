@@ -6,6 +6,7 @@ import (
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 func protoAdminUserToDomainAdminUser(oProto *pbResource.AdminUser) domain.AdminUser {
@@ -15,7 +16,7 @@ func protoAdminUserToDomainAdminUser(oProto *pbResource.AdminUser) domain.AdminU
 
 	aAdminRoles := make([]domain.AdminRole, 0, len(oProto.GetAdminRoles()))
 	for _, oProtoAdminRole := range oProto.GetAdminRoles() {
-		aAdminRoles = append(aAdminRoles, protoAdminRoleToDomainAdminRole(oProtoAdminRole))
+		aAdminRoles = append(aAdminRoles, pkgProtoToDomain.AdminRole(oProtoAdminRole))
 	}
 
 	return domain.AdminUser{

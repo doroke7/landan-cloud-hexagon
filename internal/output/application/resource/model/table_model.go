@@ -1,12 +1,10 @@
 package outputApplicationResourceModel
 
 import (
-	"google.golang.org/protobuf/types/known/timestamppb"
-
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
 )
 
@@ -20,44 +18,11 @@ func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel 
 	}
 }
 
-func domainTableValueToProtoTableValue(oTable *domain.TableVariable) *pbResource.TableValue {
-	oValue := &pbResource.TableValue{
-		No:          oTable.No,
-		Key:         oTable.Key,
-		Description: oTable.Description,
-	}
-
-	if oTable.GameId != nil {
-		iGameId := uint64(*oTable.GameId)
-		oValue.GameId = &iGameId
-	}
-
-	if oTable.State != nil {
-		iState := uint64(*oTable.State)
-		oValue.State = &iState
-	}
-
-	if oTable.Result != nil {
-		sResult := *oTable.Result
-		oValue.Result = &sResult
-	}
-
-	if oTable.StartedAt != nil {
-		oValue.StartedAt = timestamppb.New(*oTable.StartedAt)
-	}
-
-	if oTable.EndedAt != nil {
-		oValue.EndedAt = timestamppb.New(*oTable.EndedAt)
-	}
-
-	return oValue
-}
-
 func (oSelf *TableModel) EditOneById(oTable *domain.TableVariable, iId uint64) error {
 
 	oRequest := &pbResourceModel.TableEditOneByIdInput{
 		Id:    uint64(iId),
-		Value: domainTableValueToProtoTableValue(oTable),
+		Value: pkgDomainToProto.TableValue(oTable),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Table.EditOneById(oSelf.Context, oRequest)
@@ -91,7 +56,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 func (oSelf *TableModel) AddOne(oTable *domain.TableVariable) error {
 
 	oRequest := &pbResourceModel.TableAddOneInput{
-		Value: domainTableValueToProtoTableValue(oTable),
+		Value: pkgDomainToProto.TableValue(oTable),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Table.AddOne(oSelf.Context, oRequest)

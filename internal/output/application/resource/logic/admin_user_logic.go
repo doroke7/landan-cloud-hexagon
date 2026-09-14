@@ -8,24 +8,8 @@ import (
 	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
-
-func protoAdminRoleToDomainAdminRole(oProto *pbResource.AdminRole) domain.AdminRole {
-	if oProto == nil {
-		return domain.AdminRole{}
-	}
-
-	oAdminRole := domain.AdminRole{
-		Id:        uint64(oProto.GetId()),
-		Key:       oProto.GetKey(),
-		Name:      oProto.GetName(),
-		CreatedAt: oProto.GetCreatedAt().AsTime(),
-		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
-		DeletedAt: oProto.GetDeletedAt().AsTime(),
-	}
-
-	return oAdminRole
-}
 
 type AdminUserLogic struct {
 	*AbstractLogic
@@ -56,7 +40,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 	for _, oOne := range oResponse.GetAdminUsers() {
 		aAdminRoles := make([]domain.AdminRole, 0, len(oOne.GetAdminRoles()))
 		for _, oProtoAdminRole := range oOne.GetAdminRoles() {
-			aAdminRoles = append(aAdminRoles, protoAdminRoleToDomainAdminRole(oProtoAdminRole))
+			aAdminRoles = append(aAdminRoles, pkgProtoToDomain.AdminRole(oProtoAdminRole))
 		}
 
 		oAdminUser := &domain.AdminUser{
@@ -132,7 +116,7 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 
 	aAdminRoles := make([]domain.AdminRole, 0, len(oOne.GetAdminRoles()))
 	for _, oProtoAdminRole := range oOne.GetAdminRoles() {
-		aAdminRoles = append(aAdminRoles, protoAdminRoleToDomainAdminRole(oProtoAdminRole))
+		aAdminRoles = append(aAdminRoles, pkgProtoToDomain.AdminRole(oProtoAdminRole))
 	}
 
 	oAdminUser := &domain.AdminUser{

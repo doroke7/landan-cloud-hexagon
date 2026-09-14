@@ -3,9 +3,9 @@ package outputApplicationResourceLogic
 import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
-	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 type TableLogic struct {
@@ -18,31 +18,6 @@ func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic 
 	}
 
 	return oLogic
-}
-
-func protoTableToDomainTable(oProtoTable *pbResource.Table) domain.Table {
-	if oProtoTable == nil {
-		return domain.Table{}
-	}
-
-	oGame := protoGameToDomainGame(oProtoTable.GetGame())
-	oTable := domain.Table{
-		Id:          uint64(oProtoTable.GetId()),
-		No:          oProtoTable.GetNo(),
-		GameId:      uint64(oProtoTable.GetGameId()),
-		Key:         oProtoTable.GetKey(),
-		State:       uint8(oProtoTable.GetState()),
-		Description: oProtoTable.GetDescription(),
-		Result:      oProtoTable.GetResult(),
-		StartedAt:   oProtoTable.GetStartedAt().AsTime(),
-		EndedAt:     oProtoTable.GetEndedAt().AsTime(),
-		CreatedAt:   oProtoTable.GetCreatedAt().AsTime(),
-		UpdatedAt:   oProtoTable.GetUpdatedAt().AsTime(),
-		DeletedAt:   oProtoTable.GetDeletedAt().AsTime(),
-		Game:        oGame,
-	}
-
-	return oTable
 }
 
 func (oSelf *TableLogic) ShowTableById(iId uint64) (*domain.Table, error) {
@@ -59,7 +34,7 @@ func (oSelf *TableLogic) ShowTableById(iId uint64) (*domain.Table, error) {
 		return nil, nil
 	}
 
-	oTable := protoTableToDomainTable(oProtoTable)
+	oTable := pkgProtoToDomain.Table(oProtoTable)
 
 	return &oTable, nil
 }
@@ -79,7 +54,7 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 
 	aTables := make([]*domain.Table, 0, len(oResponse.GetTables()))
 	for _, oOne := range oResponse.GetTables() {
-		oGame := protoGameToDomainGame(oOne.GetGame())
+		oGame := pkgProtoToDomain.Game(oOne.GetGame())
 		oTable := &domain.Table{
 			Id:          uint64(oOne.GetId()),
 			No:          oOne.GetNo(),

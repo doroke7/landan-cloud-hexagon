@@ -3,7 +3,6 @@ package outputApplicationResourceModel
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
@@ -20,20 +19,6 @@ func NewAdminPermissionModel(oAbstractModel *AbstractModel) outputPortAnyModel.A
 	}
 
 	return oModel
-}
-
-func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminPermissionVariable) *pbResource.AdminPermissionValue {
-	oVariable := &pbResource.AdminPermissionValue{
-		Key:  oValue.Key,
-		Name: oValue.Name,
-	}
-
-	if oValue.Type != nil {
-		iType := uint64(*oValue.Type)
-		oVariable.Type = &iType
-	}
-
-	return oVariable
 }
 
 func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissionVariable) error {

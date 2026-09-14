@@ -6,7 +6,12 @@ import (
 )
 
 func AdminPermissionValue(oDomainAdminPermissionValue *domain.AdminPermissionVariable) *pbResource.AdminPermissionValue {
+	if oDomainAdminPermissionValue == nil {
+		return nil
+	}
+
 	oProtoAdminPermissionValue := &pbResource.AdminPermissionValue{
+		Id:   oDomainAdminPermissionValue.Id,
 		Key:  oDomainAdminPermissionValue.Key,
 		Name: oDomainAdminPermissionValue.Name,
 	}

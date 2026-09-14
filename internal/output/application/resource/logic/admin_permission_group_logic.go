@@ -5,9 +5,9 @@ import (
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
 	pkgProtoToDomain "example/pkg/proto_to_domain"
-	// pkgDomainToProto "example/pkg/domain_to_proto"
 )
 
 type AdminPermissionGroupLogic struct {
@@ -26,7 +26,7 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 
 	aAdminPermissions := make([]*pbResource.AdminPermissionValue, 0, len(oValue.AdminPermissions))
 	for _, oAdminPermissionValue := range oValue.AdminPermissions {
-		oProtoAdminPermissionValue := domainAdminPermissionValueToProtoAdminPermissionValue(oAdminPermissionValue)
+		oProtoAdminPermissionValue := pkgDomainToProto.AdminPermissionValue(oAdminPermissionValue)
 		if oProtoAdminPermissionValue == nil {
 			continue
 		}
@@ -52,27 +52,6 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 // EditAdminPermissionGroupById resource logic proto 目前還沒有對應的 EditOneById RPC，先回傳 nil。
 func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
 	return nil
-}
-
-func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminPermissionVariable) *pbResource.AdminPermissionValue {
-	if oValue == nil {
-		return nil
-	}
-
-	var oType *uint64
-	if oValue.Type != nil {
-		iType := uint64(*oValue.Type)
-		oType = &iType
-	}
-
-	oProtoAdminPermissionValue := &pbResource.AdminPermissionValue{
-		Id:   oValue.Id,
-		Type: oType,
-		Key:  oValue.Key,
-		Name: oValue.Name,
-	}
-
-	return oProtoAdminPermissionValue
 }
 
 // ShowTree gRPC 回來就是巢狀好的 tree（每個節點帶 Children），直接遞迴轉成 domain。

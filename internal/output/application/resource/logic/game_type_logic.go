@@ -5,6 +5,7 @@ import (
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 type GameTypeLogic struct {
@@ -74,7 +75,7 @@ func (oSelf *GameTypeLogic) ShowGameTypeById(iId uint64) (*domain.GameType, erro
 		return nil, nil
 	}
 
-	oGameType := protoGameTypeToDomainGameType(oProtoGameType)
+	oGameType := pkgProtoToDomain.GameType(oProtoGameType)
 
 	return &oGameType, nil
 }
@@ -90,7 +91,7 @@ func (oSelf *GameTypeLogic) ShowGameTypes() ([]*domain.GameType, error) {
 
 	aGameTypes := make([]*domain.GameType, 0, len(oResponse.GetGameTypes()))
 	for _, oOne := range oResponse.GetGameTypes() {
-		oGameType := protoGameTypeToDomainGameType(oOne)
+		oGameType := pkgProtoToDomain.GameType(oOne)
 		aGameTypes = append(aGameTypes, &oGameType)
 	}
 
