@@ -3,9 +3,9 @@ package outputApplicationResourceLogic
 import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
-	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 type AdminPermissionGroupLogic struct {
@@ -77,41 +77,11 @@ func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGro
 
 	aRoots := make([]*domain.AdminPermissionGroup, 0, len(oResponse.GetAdminPermissionGroups()))
 	for _, oOne := range oResponse.GetAdminPermissionGroups() {
-		oRoot := protoAdminPermissionGroupToDomainAdminPermissionGroup(oOne)
+		oRoot := pkgProtoToDomain.AdminPermissionGroup(oOne)
 		aRoots = append(aRoots, &oRoot)
 	}
 
 	return aRoots, nil
-}
-
-func protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto *pbResource.AdminPermissionGroup) domain.AdminPermissionGroup {
-	if oProto == nil {
-		return domain.AdminPermissionGroup{}
-	}
-
-	oAdminPermissionGroup := domain.AdminPermissionGroup{
-		Id:        uint64(oProto.GetId()),
-		ParentId:  uint64(oProto.GetParentId()),
-		Key:       oProto.GetKey(),
-		Name:      oProto.GetName(),
-		CreatedAt: oProto.GetCreatedAt().AsTime(),
-		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
-		DeletedAt: oProto.GetDeletedAt().AsTime(),
-		// 沒有子節點時也回 []（非 nil），避免 JSON 出現 children: null
-		Children: make([]domain.AdminPermissionGroup, 0, len(oProto.GetChildren())),
-	}
-
-	if oParent := oProto.GetParent(); oParent != nil {
-		oParentDomain := protoAdminPermissionGroupToDomainAdminPermissionGroup(oParent)
-		oAdminPermissionGroup.Parent = &oParentDomain
-	}
-
-	for _, oChild := range oProto.GetChildren() {
-		oChildDomain := protoAdminPermissionGroupToDomainAdminPermissionGroup(oChild)
-		oAdminPermissionGroup.Children = append(oAdminPermissionGroup.Children, oChildDomain)
-	}
-
-	return oAdminPermissionGroup
 }
 
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64) (*domain.AdminPermissionGroup, error) {
@@ -127,7 +97,7 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64)
 		return nil, nil
 	}
 
-	oAdminPermissionGroup := protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto)
+	oAdminPermissionGroup := pkgProtoToDomain.AdminPermissionGroup(oProto)
 
 	return &oAdminPermissionGroup, nil
 }
@@ -144,7 +114,7 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroups() ([]*domain.A
 
 	aAdminPermissionGroups := make([]*domain.AdminPermissionGroup, 0, len(oResponse.GetAdminPermissionGroups()))
 	for _, oOne := range oResponse.GetAdminPermissionGroups() {
-		oAdminPermissionGroup := protoAdminPermissionGroupToDomainAdminPermissionGroup(oOne)
+		oAdminPermissionGroup := pkgProtoToDomain.AdminPermissionGroup(oOne)
 		aAdminPermissionGroups = append(aAdminPermissionGroups, &oAdminPermissionGroup)
 	}
 
@@ -169,7 +139,7 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupsTotalByFiltersW
 
 	aAdminPermissionGroups := make([]*domain.AdminPermissionGroup, 0, len(oResponse.GetAdminPermissionGroups()))
 	for _, oOne := range oResponse.GetAdminPermissionGroups() {
-		oAdminPermissionGroup := protoAdminPermissionGroupToDomainAdminPermissionGroup(oOne)
+		oAdminPermissionGroup := pkgProtoToDomain.AdminPermissionGroup(oOne)
 		aAdminPermissionGroups = append(aAdminPermissionGroups, &oAdminPermissionGroup)
 	}
 
