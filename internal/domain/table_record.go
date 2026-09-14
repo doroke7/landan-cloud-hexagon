@@ -28,7 +28,7 @@ type TableRecord struct {
 	DeletedAt time.Time `json:"deleted_at" bson:"deleted_at"`
 }
 
-type TableRecordValue struct {
+type TableRecordVariable struct {
 	No        *string    `json:"no,omitempty"` // 年-月日-桌號-局號-期號
 	GameId    *uint64    `json:"game_id,omitempty"`
 	TableId   *uint64    `json:"table_id,omitempty"`

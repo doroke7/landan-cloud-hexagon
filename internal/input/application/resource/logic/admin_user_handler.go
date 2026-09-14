@@ -113,7 +113,7 @@ func (oSelf *AdminUserHandler) AddAminUser(oContext context.Context, oReq *pbRes
 		aAdminRoleIds = append(aAdminRoleIds, uint64(iAdminRoleId))
 	}
 
-	oValue := &domain.AdminUserValue{
+	oValue := &domain.AdminUserVariable{
 		Name:         oReq.GetValue().Name,
 		Password:     oReq.GetValue().Password,
 		AdminRoleIds: aAdminRoleIds,
@@ -131,7 +131,7 @@ func (oSelf *AdminUserHandler) EditAdminUserById(oContext context.Context, oReq 
 		aAdminRoleIds = append(aAdminRoleIds, uint64(iAdminRoleId))
 	}
 
-	oValue := &domain.AdminUserValue{
+	oValue := &domain.AdminUserVariable{
 		Name:         oReq.GetValue().Name,
 		Password:     oReq.GetValue().Password,
 		AdminRoleIds: aAdminRoleIds,

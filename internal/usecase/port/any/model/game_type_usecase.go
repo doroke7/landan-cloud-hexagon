@@ -6,8 +6,8 @@ import (
 )
 
 type GameTypeUsecase interface {
-	AddOne(oValue *domain.GameTypeValue) error
-	EditOneById(oValue *domain.GameTypeValue, iId uint64) error
+	AddOne(oValue *domain.GameTypeVariable) error
+	EditOneById(oValue *domain.GameTypeVariable, iId uint64) error
 	RemoveOneById(iId uint64) error
 	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
 }

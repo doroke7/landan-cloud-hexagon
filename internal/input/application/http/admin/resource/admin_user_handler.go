@@ -29,7 +29,7 @@ func (oSelf *AdminUserHandler) AddOne(oContext *gin.Context) {
 
 	oRequest := &pkgGin.Request{Context: oContext}
 
-	oValue := &domain.AdminUserValue{}
+	oValue := &domain.AdminUserVariable{}
 	if oErr := oRequest.Bind("variable", oValue); oErr != nil {
 		_ = oContext.Error(pkgUtility.NewDefaultError("request format error", -1, 200))
 		return
@@ -67,7 +67,7 @@ func (oSelf *AdminUserHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	oValue := &domain.AdminUserValue{}
+	oValue := &domain.AdminUserVariable{}
 	if oErr := oRequest.Bind("variable", oValue); oErr != nil {
 		_ = oContext.Error(pkgUtility.NewDefaultError("value format error", -1, 200))
 		return

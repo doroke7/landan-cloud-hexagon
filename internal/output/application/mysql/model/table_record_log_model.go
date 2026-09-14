@@ -102,7 +102,7 @@ func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (u
 	return uint64(iTotal), nil
 }
 
-func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogValue) error {
+func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogVariable) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTableRecordLog)
 	if oErr != nil {
 		return oErr

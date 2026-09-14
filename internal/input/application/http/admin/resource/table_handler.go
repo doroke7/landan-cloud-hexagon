@@ -29,7 +29,7 @@ func (oSelf *TableHandler) AddOne(oContext *gin.Context) {
 
 	oRequest := &pkgGin.Request{Context: oContext}
 
-	oValue := &domain.TableValue{}
+	oValue := &domain.TableVariable{}
 	if oErr := oRequest.Bind("variable", oValue); oErr != nil {
 		_ = oContext.Error(pkgUtility.NewDefaultError("value format error", -1, 200))
 		return
@@ -102,7 +102,7 @@ func (oSelf *TableHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	oValue := &domain.TableValue{}
+	oValue := &domain.TableVariable{}
 	if oErr := oRequest.Bind("variable", oValue); oErr != nil {
 		_ = oContext.Error(pkgUtility.NewDefaultError("value format error", -1, 200))
 		return

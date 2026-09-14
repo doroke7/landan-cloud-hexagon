@@ -56,7 +56,7 @@ func (oSelf *AnnouncementLotteryHandler) Watch(oStream grpc.ServerStreamingClien
 		iTime := uint64(oReply.Time)
 		sNumbers := strings.Join(aNumbers, ",")
 
-		oLotteryValue := &domain.LotteryValue{
+		oLotteryValue := &domain.LotteryVariable{
 			Round:   &sRound,
 			Time:    &iTime,
 			Numbers: &sNumbers,

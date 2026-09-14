@@ -5,5 +5,5 @@ import (
 )
 
 type AppUserLogic interface {
-	AddAppUser(oAppUser *domain.AppUserValue) (*domain.AppUser, error)
+	AddAppUser(oAppUser *domain.AppUserVariable) (*domain.AppUser, error)
 }

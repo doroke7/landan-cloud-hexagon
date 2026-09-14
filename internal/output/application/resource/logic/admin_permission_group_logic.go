@@ -22,7 +22,7 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 	return oLogic
 }
 
-func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupValue) error {
+func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupVariable) error {
 
 	aAdminPermissions := make([]*pbResource.AdminPermissionValue, 0, len(oValue.AdminPermissions))
 	for _, oAdminPermissionValue := range oValue.AdminPermissions {
@@ -49,7 +49,7 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 	return oErr
 }
 
-func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminPermissionValue) *pbResource.AdminPermissionValue {
+func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminPermissionVariable) *pbResource.AdminPermissionValue {
 	if oValue == nil {
 		return nil
 	}

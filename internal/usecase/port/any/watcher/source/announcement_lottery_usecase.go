@@ -5,5 +5,5 @@ import (
 )
 
 type AnnouncementLotteryUsecase interface {
-	Watch(oLottery *domain.LotteryValue) error
+	Watch(oLottery *domain.LotteryVariable) error
 }

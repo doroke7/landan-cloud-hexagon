@@ -31,7 +31,7 @@ func (oSelf *AppUserHandler) AddAppUser(oContext context.Context, oReq *pbResour
 
 	oValue := oReq.GetValue()
 
-	oAppUserValue := domain.AppUserValue{}
+	oAppUserValue := domain.AppUserVariable{}
 	if oValue != nil {
 		oAppUserValue.Name = oValue.Name
 		oAppUserValue.Password = oValue.Password

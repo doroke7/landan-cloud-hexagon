@@ -19,7 +19,7 @@ func AdminPermissionGroup(oProto *pbResource.AdminPermissionGroup) domain.AdminP
 		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
 		DeletedAt: oProto.GetDeletedAt().AsTime(),
 		// 沒有子節點時也回 []（非 nil），避免 JSON 出現 children: null
-		Children: make([]domain.AdminPermissionGroup, 0, len(oProto.GetChildren())),
+		Children: make([]*domain.AdminPermissionGroup, 0, len(oProto.GetChildren())),
 	}
 
 	if oParent := oProto.GetParent(); oParent != nil {
@@ -29,7 +29,7 @@ func AdminPermissionGroup(oProto *pbResource.AdminPermissionGroup) domain.AdminP
 
 	for _, oChild := range oProto.GetChildren() {
 		oChildDomain := AdminPermissionGroup(oChild)
-		oAdminPermissionGroup.Children = append(oAdminPermissionGroup.Children, oChildDomain)
+		oAdminPermissionGroup.Children = append(oAdminPermissionGroup.Children, &oChildDomain)
 	}
 
 	return oAdminPermissionGroup

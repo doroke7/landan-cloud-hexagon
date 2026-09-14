@@ -95,7 +95,7 @@ func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
 	return nil
 }
 
-func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId uint64) error {
+func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserVariable, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminUser)
 	if oErr != nil {
 		return oErr
@@ -214,7 +214,7 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 	return uint64(iTotal), oErr
 }
 
-func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {
+func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserVariable) error {
 	iId, oErr := oSelf.NextId("admin_user")
 	if oErr != nil {
 		return oErr

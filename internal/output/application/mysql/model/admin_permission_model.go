@@ -23,7 +23,7 @@ func NewAdminPermissionModel(oAbstractModel *AbstractModel) outputPortAnyModel.A
 	}
 }
 
-func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissionValue) error {
+func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissionVariable) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminPermission)
 	if oErr != nil {
 		return oErr
@@ -62,7 +62,7 @@ func (oSelf *AdminPermissionModel) ShowOneById(iId uint64) (*domain.AdminPermiss
 	return &oAdminPermission, nil
 }
 
-func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint64) error {
+func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionVariable, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminPermission)
 	if oErr != nil {
 		return oErr

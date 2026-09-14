@@ -29,9 +29,9 @@ func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, 
 	}
 }
 
-// protoGameValueToDomainGameValue 把 gRPC 帶進來的 variable 攤成 domain.GameValue（指標欄位可選）。
-func protoGameValueToDomainGameValue(oVariable *pbResource.GameValue) domain.GameValue {
-	var oValue domain.GameValue
+// protoGameValueToDomainGameValue 把 gRPC 帶進來的 variable 攤成 domain.GameVariable（指標欄位可選）。
+func protoGameValueToDomainGameValue(oVariable *pbResource.GameValue) domain.GameVariable {
+	var oValue domain.GameVariable
 	if oVariable == nil {
 		return oValue
 	}

@@ -23,7 +23,7 @@ type AdminPermission struct {
 	DeletedAt              time.Time `json:"deleted_at" bson:"deleted_at"`
 }
 
-type AdminPermissionValue struct {
+type AdminPermissionVariable struct {
 	Id   *uint64 `json:"id,omitempty"`
 	Type *uint8  `json:"type,omitempty"`
 	Key  *string `json:"key,omitempty"`

@@ -28,9 +28,9 @@ func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler,
 	}
 }
 
-// protoTableValueToDomainTableValue 把 gRPC 帶進來的 variable 攤成 domain.TableValue（指標欄位可選）。
-func protoTableValueToDomainTableValue(oVariable *pbResource.TableValue) domain.TableValue {
-	var oValue domain.TableValue
+// protoTableValueToDomainTableValue 把 gRPC 帶進來的 variable 攤成 domain.TableVariable（指標欄位可選）。
+func protoTableValueToDomainTableValue(oVariable *pbResource.TableValue) domain.TableVariable {
+	var oValue domain.TableVariable
 	if oVariable == nil {
 		return oValue
 	}

@@ -6,8 +6,8 @@ import (
 )
 
 type AdminPermissionGroupUsecase interface {
-	AddOne(oValue *domain.AdminPermissionGroupValue) error
-	EditOneById(oValue *domain.AdminPermissionGroupValue, iId uint64) error
+	AddOne(oValue *domain.AdminPermissionGroupVariable) error
+	EditOneById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error
 	RemoveOneById(iId uint64) error
 	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
 	ShowOnesByParentId(iParentId uint64) ([]*domain.AdminPermissionGroup, error)

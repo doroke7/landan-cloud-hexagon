@@ -109,7 +109,7 @@ func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64,
 	return uint64(iCount), nil
 }
 
-func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {
+func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeVariable) error {
 	iId, oErr := oSelf.nextId()
 	if oErr != nil {
 		return oErr
@@ -137,7 +137,7 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {
 	return nil
 }
 
-func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint64) error {
+func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeVariable, iId uint64) error {
 	oSet := bson.M{"updated_at": time.Now()}
 
 	if oValue.Key != nil {

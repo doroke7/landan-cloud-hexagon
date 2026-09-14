@@ -6,9 +6,9 @@ import (
 )
 
 type AdminRoleModel interface {
-	AddOne(oAdminRole *domain.AdminRoleValue) error
+	AddOne(oAdminRole *domain.AdminRoleVariable) error
 	ShowOneById(iId uint64) (*domain.AdminRole, error)
-	EditOneById(oAdminRole *domain.AdminRoleValue, iId uint64) error
+	EditOneById(oAdminRole *domain.AdminRoleVariable, iId uint64) error
 	RemoveOneById(iId uint64) error
 	ShowOnes() ([]*domain.AdminRole, error)
 	ShowOnesByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminRole, error)

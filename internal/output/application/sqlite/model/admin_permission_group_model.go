@@ -101,7 +101,7 @@ func (oSelf *AdminPermissionGroupModel) TotalByFilters(aFilters []*pkgInput.Filt
 	return uint64(iTotal), nil
 }
 
-func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupValue) error {
+func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupVariable) error {
 	oColumns, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
@@ -121,7 +121,7 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGro
 	return nil
 }
 
-func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissionGroupValue, iId uint64) error {
+func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
 	oColumns, _ := pkgUtility.StructToMap(oValue)
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).

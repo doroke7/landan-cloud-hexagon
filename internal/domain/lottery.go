@@ -15,7 +15,7 @@ type Lottery struct {
 	Numbers string `json:"numbers"`
 }
 
-type LotteryValue struct {
+type LotteryVariable struct {
 	Round   *string `json:"round,omitempty"`
 	Time    *uint64 `json:"time,omitempty"`
 	Numbers *string `json:"numbers,omitempty"`

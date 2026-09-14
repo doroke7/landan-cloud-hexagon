@@ -19,7 +19,7 @@ func NewAdminPermissionUsecase(oAdminPermissionModel outputPortAnyModel.AdminPer
 	}
 }
 
-func (oSelf *AdminPermissionUsecase) AddOne(oAdminPermission *domain.AdminPermissionValue) error {
+func (oSelf *AdminPermissionUsecase) AddOne(oAdminPermission *domain.AdminPermissionVariable) error {
 
 	oErr := oSelf.AdminPermissionModel.AddOne(oAdminPermission)
 
@@ -33,7 +33,7 @@ func (oSelf *AdminPermissionUsecase) ShowOneById(iId uint64) (*domain.AdminPermi
 	return oAdminPermission, oErr
 }
 
-func (oSelf *AdminPermissionUsecase) EditOneById(oAdminPermission *domain.AdminPermissionValue, iId uint64) error {
+func (oSelf *AdminPermissionUsecase) EditOneById(oAdminPermission *domain.AdminPermissionVariable, iId uint64) error {
 
 	oErr := oSelf.AdminPermissionModel.EditOneById(oAdminPermission, iId)
 

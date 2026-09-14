@@ -138,7 +138,7 @@ func (oSelf *AdminPermissionGroupModel) TotalByFilters(aFilters []*pkgInput.Filt
 	return uint64(iTotal), oErr
 }
 
-func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupValue) error {
+func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupVariable) error {
 	iId, oErr := oSelf.NextId("admin_permission_group")
 	if oErr != nil {
 		return oErr
@@ -166,7 +166,7 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGro
 	return nil
 }
 
-func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissionGroupValue, iId uint64) error {
+func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr

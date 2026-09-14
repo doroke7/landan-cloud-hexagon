@@ -103,7 +103,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 	return aAdminUsers, uint64(iTotal), nil
 }
 
-func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
+func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserVariable) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr
@@ -165,7 +165,7 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 	return oError
 }
 
-func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iId uint64) error {
+func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserVariable, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr

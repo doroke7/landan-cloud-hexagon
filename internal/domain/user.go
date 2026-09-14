@@ -13,6 +13,6 @@ type User struct {
 	Name string `json:"name"`
 }
 
-type UserValue struct {
+type UserVariable struct {
 	Name *string `json:"name,omitempty"`
 }

@@ -32,7 +32,7 @@ func (oSelf *AppUserUsecase) ShowOneById(iId uint) (*domain.AppUser, error) {
 	return oAppUser, err
 }
 
-func (oSelf *AppUserUsecase) AddOne(oAppUser *domain.AppUserValue) error {
+func (oSelf *AppUserUsecase) AddOne(oAppUser *domain.AppUserVariable) error {
 
 	oErr := oSelf.AppUserModel.AddOne(oAppUser)
 

@@ -40,7 +40,7 @@ func (oSelf GameType) MarshalJSON() ([]byte, error) {
 	return aBytes, oErr
 }
 
-type GameTypeValue struct {
+type GameTypeVariable struct {
 	Key      *string `json:"key,omitempty"`
 	ParentId *uint64 `json:"parent_id,omitempty"`
 	Name     *string `json:"name,omitempty"`

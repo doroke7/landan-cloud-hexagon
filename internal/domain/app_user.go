@@ -15,7 +15,7 @@ type AppUser struct {
 	Balance  uint64 `json:"balance"`
 }
 
-type AppUserValue struct {
+type AppUserVariable struct {
 	Name     *string `json:"name,omitempty"`
 	Password *string `json:"password,omitempty"`
 	Balance  *uint64 `json:"balance,omitempty"`

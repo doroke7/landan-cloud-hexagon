@@ -72,7 +72,7 @@ func (oSelf *TableRecordLogModel) nextId() (uint, error) {
 	return oCounter.Seq, nil
 }
 
-func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogValue) error {
+func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogVariable) error {
 	iId, oErr := oSelf.nextId()
 	if oErr != nil {
 		return oErr

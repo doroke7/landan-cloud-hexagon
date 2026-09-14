@@ -17,7 +17,7 @@ func NewAppUserLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AppUserLo
 	return oLogic
 }
 
-func (oSelf *AppUserLogic) AddAppUser(oAppUserValue *domain.AppUserValue) (*domain.AppUser, error) {
+func (oSelf *AppUserLogic) AddAppUser(oAppUserValue *domain.AppUserVariable) (*domain.AppUser, error) {
 
 	oAppUser := &domain.AppUser{
 		Id:       1,

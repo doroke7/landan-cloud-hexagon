@@ -84,7 +84,7 @@ func (oSelf *TableModel) nextId() (uint, error) {
 	return oCounter.Seq, nil
 }
 
-func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {
+func (oSelf *TableModel) AddOne(oTable *domain.TableVariable) error {
 	iId, oErr := oSelf.nextId()
 	if oErr != nil {
 		return oErr
@@ -130,7 +130,7 @@ func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {
 	return nil
 }
 
-func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) error {
+func (oSelf *TableModel) EditOneById(oTable *domain.TableVariable, iId uint64) error {
 	oSet := bson.M{"updated_at": time.Now()}
 
 	if oTable.No != nil {

@@ -24,7 +24,7 @@ type TableRecordLog struct {
 	DeletedAt     time.Time `json:"deleted_at" bson:"deleted_at"`
 }
 
-type TableRecordLogValue struct {
+type TableRecordLogVariable struct {
 	GameId        *uint64 `json:"game_id,omitempty"`
 	TableRecordId *uint64 `json:"table_record_id,omitempty"`
 	State         *uint8  `json:"state,omitempty"`

@@ -5,7 +5,7 @@ import (
 	pbResource "example/pb/resource"
 )
 
-func AdminPermissionValue(oDomainAdminPermissionValue *domain.AdminPermissionValue) *pbResource.AdminPermissionValue {
+func AdminPermissionValue(oDomainAdminPermissionValue *domain.AdminPermissionVariable) *pbResource.AdminPermissionValue {
 	oProtoAdminPermissionValue := &pbResource.AdminPermissionValue{
 		Key:  oDomainAdminPermissionValue.Key,
 		Name: oDomainAdminPermissionValue.Name,

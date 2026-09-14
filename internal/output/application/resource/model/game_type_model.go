@@ -45,7 +45,7 @@ func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameType
 	}
 }
 
-func (oSelf *GameTypeModel) AddOne(oGameTypeParm *domain.GameTypeValue) error {
+func (oSelf *GameTypeModel) AddOne(oGameTypeParm *domain.GameTypeVariable) error {
 
 	oRequest := &pbResourceModel.GameTypeAddOneInput{
 		Value: &pbResource.GameTypeValue{
@@ -83,7 +83,7 @@ func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64,
 	return iTotal, oErr
 }
 
-func (oSelf *GameTypeModel) EditOneById(oGameType *domain.GameTypeValue, iId uint64) error {
+func (oSelf *GameTypeModel) EditOneById(oGameType *domain.GameTypeVariable, iId uint64) error {
 
 	oRequest := &pbResourceModel.GameTypeEditOneByIdInput{
 		Id: uint64(iId),

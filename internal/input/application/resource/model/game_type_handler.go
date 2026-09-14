@@ -55,7 +55,7 @@ func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceM
 
 	oValue := oReq.GetValue()
 
-	var oGameTypeValue domain.GameTypeValue
+	var oGameTypeValue domain.GameTypeVariable
 	if oValue != nil {
 		oGameTypeValue.Key = oValue.Key
 		oGameTypeValue.Name = oValue.Name
@@ -88,7 +88,7 @@ func (oSelf *GameTypeHandler) EditOneById(oContext context.Context, oReq *pbReso
 
 	oValue := oReq.GetValue()
 
-	var oGameTypeValue domain.GameTypeValue
+	var oGameTypeValue domain.GameTypeVariable
 	if oValue != nil {
 		oGameTypeValue.Key = oValue.Key
 		oGameTypeValue.Name = oValue.Name

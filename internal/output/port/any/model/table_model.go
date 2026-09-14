@@ -6,8 +6,8 @@ import (
 )
 
 type TableModel interface {
-	AddOne(oTable *domain.TableValue) error
-	EditOneById(oTable *domain.TableValue, iId uint64) error
+	AddOne(oTable *domain.TableVariable) error
+	EditOneById(oTable *domain.TableVariable, iId uint64) error
 	RemoveOneById(iId uint64) error
 	TotalByFilters(aFilters []*pkgInput.Filter) (uint64, error)
 }

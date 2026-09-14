@@ -80,7 +80,7 @@ func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResource
 
 	oValue := oReq.GetValue()
 
-	oAdminUserValue := domain.AdminUserValue{}
+	oAdminUserValue := domain.AdminUserVariable{}
 	if oValue != nil {
 		oAdminUserValue.Name = oValue.Name
 		oAdminUserValue.Password = oValue.Password
@@ -101,7 +101,7 @@ func (oSelf *AdminUserHandler) EditOneById(oContext context.Context, oReq *pbRes
 
 	oValue := oReq.GetValue()
 
-	oAdminUserValue := domain.AdminUserValue{}
+	oAdminUserValue := domain.AdminUserVariable{}
 	if oValue != nil {
 		oAdminUserValue.Name = oValue.Name
 		oAdminUserValue.Password = oValue.Password

@@ -99,7 +99,7 @@ func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 	return &oAppUser, nil
 }
 
-func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) error {
+func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserVariable) error {
 	iId, oErr := oSelf.NextId("app_user")
 	if oErr != nil {
 		return oErr

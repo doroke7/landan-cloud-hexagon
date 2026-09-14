@@ -159,7 +159,7 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 	return uint64(iTotal), oErr
 }
 
-func (oSelf *GameModel) AddOne(oValue *domain.GameValue) error {
+func (oSelf *GameModel) AddOne(oValue *domain.GameVariable) error {
 	iId, oErr := oSelf.NextId("game")
 	if oErr != nil {
 		return oErr
@@ -193,7 +193,7 @@ func (oSelf *GameModel) AddOne(oValue *domain.GameValue) error {
 	return nil
 }
 
-func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint64) error {
+func (oSelf *GameModel) EditOneById(oValue *domain.GameVariable, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr

@@ -23,7 +23,7 @@ func NewAdminRoleModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminRo
 	}
 }
 
-func (oSelf *AdminRoleModel) AddOne(oAdminRole *domain.AdminRoleValue) error {
+func (oSelf *AdminRoleModel) AddOne(oAdminRole *domain.AdminRoleVariable) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminRole)
 	if oErr != nil {
 		return oErr
@@ -77,7 +77,7 @@ func (oSelf *AdminRoleModel) ShowOnes() ([]*domain.AdminRole, error) {
 	return aAdminRoles, nil
 }
 
-func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint64) error {
+func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleVariable, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oAdminRole)
 	if oErr != nil {
 		return oErr

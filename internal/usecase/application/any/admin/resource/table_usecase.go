@@ -23,7 +23,7 @@ func NewTableUsecase(oTableModel outputPortAnyModel.TableModel, oTableLogic outp
 	}
 }
 
-func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) error {
+func (oSelf *TableUsecase) AddOne(oValue *domain.TableVariable) error {
 
 	oErr := oSelf.TableModel.AddOne(oValue)
 
@@ -35,7 +35,7 @@ func (oSelf *TableUsecase) ShowOne(iId uint64) (*domain.Table, error) {
 	return oTable, oErr
 }
 
-func (oSelf *TableUsecase) EditOne(oValue *domain.TableValue, iId uint64) error {
+func (oSelf *TableUsecase) EditOne(oValue *domain.TableVariable, iId uint64) error {
 
 	oErr := oSelf.TableModel.EditOneById(oValue, iId)
 

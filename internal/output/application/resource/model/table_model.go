@@ -20,7 +20,7 @@ func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel 
 	}
 }
 
-func domainTableValueToProtoTableValue(oTable *domain.TableValue) *pbResource.TableValue {
+func domainTableValueToProtoTableValue(oTable *domain.TableVariable) *pbResource.TableValue {
 	oValue := &pbResource.TableValue{
 		No:          oTable.No,
 		Key:         oTable.Key,
@@ -53,7 +53,7 @@ func domainTableValueToProtoTableValue(oTable *domain.TableValue) *pbResource.Ta
 	return oValue
 }
 
-func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) error {
+func (oSelf *TableModel) EditOneById(oTable *domain.TableVariable, iId uint64) error {
 
 	oRequest := &pbResourceModel.TableEditOneByIdInput{
 		Id:    uint64(iId),
@@ -88,7 +88,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 	return iTotal, oErr
 }
 
-func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {
+func (oSelf *TableModel) AddOne(oTable *domain.TableVariable) error {
 
 	oRequest := &pbResourceModel.TableAddOneInput{
 		Value: domainTableValueToProtoTableValue(oTable),

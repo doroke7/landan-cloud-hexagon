@@ -6,9 +6,9 @@ import (
 )
 
 type GameModel interface {
-	AddOne(oGame *domain.GameValue) error
+	AddOne(oGame *domain.GameVariable) error
 	ShowOneByKey(sKey string) (*domain.Game, error)
-	EditOneById(oGame *domain.GameValue, iId uint64) error
+	EditOneById(oGame *domain.GameVariable, iId uint64) error
 	RemoveOneById(iId uint64) error
 	TotalByGameTypeId(iGameTypeId uint64) (uint, error)
 

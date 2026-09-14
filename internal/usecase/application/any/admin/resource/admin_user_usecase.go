@@ -25,7 +25,7 @@ func NewAdminUserUsecase(oAdminUserModel outputPortAnyModel.AdminUserModel, oAdm
 	}
 }
 
-func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) error {
+func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserVariable) error {
 
 	oErr := oSelf.ValidatorHelper.Valiate(oAdminUser)
 
@@ -38,7 +38,7 @@ func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) error {
 	return oErr
 }
 
-func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId uint64) error {
+func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserVariable, iId uint64) error {
 
 	// oAdminUser.  相當 *oAdminUser.
 	// *oAdminUser.Name 相當 (*(oAdminUser).Name)

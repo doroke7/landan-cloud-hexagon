@@ -109,8 +109,8 @@ func idFromFilters(aFilters []*pbFacade.Filter) (uint, error) {
 	return uint(fId), nil
 }
 
-func protoGameVariableToDomainGameValue(oVariable *pbFacade.GameVariable) *domain.GameValue {
-	oDomain := &domain.GameValue{}
+func protoGameVariableToDomainGameValue(oVariable *pbFacade.GameVariable) *domain.GameVariable {
+	oDomain := &domain.GameVariable{}
 	if oVariable == nil {
 		return oDomain
 	}

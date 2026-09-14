@@ -33,14 +33,14 @@ func (oSelf *AdminUserUsecase) ShowAdminUserById(iId uint64) (*domain.AdminUser,
 	return oAdminUser, oErr
 }
 
-func (oSelf *AdminUserUsecase) AddAminUser(oValue *domain.AdminUserValue) error {
+func (oSelf *AdminUserUsecase) AddAminUser(oValue *domain.AdminUserVariable) error {
 
 	oErr := oSelf.AdminUserLogic.AddAminUser(oValue)
 
 	return oErr
 }
 
-func (oSelf *AdminUserUsecase) EditAdminUserById(oValue *domain.AdminUserValue, iId uint64) error {
+func (oSelf *AdminUserUsecase) EditAdminUserById(oValue *domain.AdminUserVariable, iId uint64) error {
 
 	oErr := oSelf.AdminUserLogic.EditAdminUserById(oValue, iId)
 

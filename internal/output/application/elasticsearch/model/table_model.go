@@ -103,7 +103,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 	return uint64(iTotal), oErr
 }
 
-func (oSelf *TableModel) AddOne(oValue *domain.TableValue) error {
+func (oSelf *TableModel) AddOne(oValue *domain.TableVariable) error {
 	iId, oErr := oSelf.NextId("table")
 	if oErr != nil {
 		return oErr
@@ -149,7 +149,7 @@ func (oSelf *TableModel) AddOne(oValue *domain.TableValue) error {
 	return nil
 }
 
-func (oSelf *TableModel) EditOneById(oValue *domain.TableValue, iId uint64) error {
+func (oSelf *TableModel) EditOneById(oValue *domain.TableVariable, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr

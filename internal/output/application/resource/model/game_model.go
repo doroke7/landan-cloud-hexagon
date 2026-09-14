@@ -8,7 +8,7 @@ import (
 	pkgInput "example/pkg/input"
 )
 
-func domainGameValueToProtoGameValue(oGame *domain.GameValue) *pbResource.GameValue {
+func domainGameValueToProtoGameValue(oGame *domain.GameVariable) *pbResource.GameValue {
 	oValue := &pbResource.GameValue{
 		Key:         oGame.Key,
 		Name:        oGame.Name,
@@ -51,7 +51,7 @@ func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
 	}
 }
 
-func (oSelf *GameModel) AddOne(oGameParm *domain.GameValue) error {
+func (oSelf *GameModel) AddOne(oGameParm *domain.GameVariable) error {
 
 	oRequest := &pbResourceModel.GameAddOneInput{
 		Value: domainGameValueToProtoGameValue(oGameParm),
@@ -107,7 +107,7 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 	return iTotal, oErr
 }
 
-func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint64) error {
+func (oSelf *GameModel) EditOneById(oGame *domain.GameVariable, iId uint64) error {
 
 	oRequest := &pbResourceModel.GameEditOneByIdInput{
 		Id:    iId,

@@ -19,7 +19,7 @@ func NewAdminRoleUsecase(oAdminRoleModel outputPortAnyModel.AdminRoleModel, oAbs
 	}
 }
 
-func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleValue) error {
+func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleVariable) error {
 
 	oErr := oSelf.AdminRoleModel.AddOne(oAdminRole)
 
@@ -33,7 +33,7 @@ func (oSelf *AdminRoleUsecase) ShowOneById(iId uint) (*domain.AdminRole, error) 
 	return oAdminRole, oErr
 }
 
-func (oSelf *AdminRoleUsecase) EditOneById(oAdminRole *domain.AdminRoleValue, iId uint64) error {
+func (oSelf *AdminRoleUsecase) EditOneById(oAdminRole *domain.AdminRoleVariable, iId uint64) error {
 
 	oErr := oSelf.AdminRoleModel.EditOneById(oAdminRole, iId)
 

@@ -28,7 +28,7 @@ type Table struct {
 	Game        Game      `json:"game" gorm:"foreignKey:GameId;references:Id" bson:"-"`
 }
 
-type TableValue struct {
+type TableVariable struct {
 	No          *string    `json:"no,omitempty"`
 	GameId      *uint64    `json:"game_id,omitempty"`
 	Key         *string    `json:"key,omitempty"`

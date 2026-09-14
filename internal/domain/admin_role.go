@@ -22,7 +22,7 @@ type AdminRole struct {
 	AdminPermissions []AdminPermission `json:"admin_permissions,omitempty" bson:"-" gorm:"many2many:admin_roles_to_admin_permissions"`
 }
 
-type AdminRoleValue struct {
+type AdminRoleVariable struct {
 	Key  *string `json:"key,omitempty"`
 	Name *string `json:"name,omitempty"`
 	// CreatedAt *time.Time `json:"created_at"`

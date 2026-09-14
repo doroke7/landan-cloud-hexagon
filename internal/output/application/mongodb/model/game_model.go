@@ -96,7 +96,7 @@ func (oSelf *GameModel) nextId() (uint, error) {
 	return oCounter.Seq, nil
 }
 
-func (oSelf *GameModel) AddOne(oGame *domain.GameValue) error {
+func (oSelf *GameModel) AddOne(oGame *domain.GameVariable) error {
 	iId, oErr := oSelf.nextId()
 	if oErr != nil {
 		return oErr
@@ -149,7 +149,7 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	return &oGame, nil
 }
 
-func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint64) error {
+func (oSelf *GameModel) EditOneById(oGame *domain.GameVariable, iId uint64) error {
 	oSet := bson.M{"updated_at": time.Now()}
 
 	if oGame.GameTypeId != nil {

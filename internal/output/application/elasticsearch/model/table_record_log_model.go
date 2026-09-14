@@ -25,7 +25,7 @@ func NewTableRecordLogModel(oAbstractModel *AbstractModel) outputPortAnyModel.Ta
 	}
 }
 
-func (oSelf *TableRecordLogModel) AddOne(oValue *domain.TableRecordLogValue) error {
+func (oSelf *TableRecordLogModel) AddOne(oValue *domain.TableRecordLogVariable) error {
 	iId, oErr := oSelf.NextId("table_record_log")
 	if oErr != nil {
 		return oErr

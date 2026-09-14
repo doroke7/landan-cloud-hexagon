@@ -26,7 +26,7 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 	return oLogic
 }
 
-func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupValue) error {
+func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupVariable) error {
 	oAdminPermissionGroupColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr
@@ -139,7 +139,7 @@ func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGro
 	fnAttach = func(oNode *domain.AdminPermissionGroup) {
 		for _, oChild := range aByParent[oNode.Id] {
 			fnAttach(oChild)
-			oNode.Children = append(oNode.Children, *oChild)
+			oNode.Children = append(oNode.Children, oChild)
 		}
 	}
 

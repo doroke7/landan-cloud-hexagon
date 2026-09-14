@@ -32,7 +32,7 @@ func (oSelf *AdminPermissionGroupHandler) AddOne(oContext *gin.Context) {
 
 	oRequest := &pkgGin.Request{Context: oContext}
 
-	oValue := &domain.AdminPermissionGroupValue{}
+	oValue := &domain.AdminPermissionGroupVariable{}
 	if oErr := oRequest.Bind("variable", oValue); oErr != nil {
 		_ = oContext.Error(pkgUtility.NewDefaultError("request format error", -1, 200))
 		return
@@ -80,7 +80,7 @@ func (oSelf *AdminPermissionGroupHandler) EditOne(oContext *gin.Context) {
 		return
 	}
 
-	oValue := &domain.AdminPermissionGroupValue{}
+	oValue := &domain.AdminPermissionGroupVariable{}
 	if oErr := oRequest.Bind("variable", oValue); oErr != nil {
 		_ = oContext.Error(pkgUtility.NewDefaultError("value format error", -1, 200))
 		return

@@ -24,7 +24,7 @@ func NewAnnouncementLotteryUsecase(oAbstractUsecase *usecaseApplicationAnyWatche
 }
 
 // Watch 收到一筆開獎資料，用 Round 當 key 落地存起來。
-func (oSelf *AnnouncementLotteryUsecase) Watch(oValue *domain.LotteryValue) error {
+func (oSelf *AnnouncementLotteryUsecase) Watch(oValue *domain.LotteryVariable) error {
 
 	var oLottery domain.Lottery
 

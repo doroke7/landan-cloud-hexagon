@@ -20,7 +20,7 @@ func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel 
 	}
 }
 
-func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) error {
+func (oSelf *TableModel) EditOneById(oTable *domain.TableVariable, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTable)
 	if oErr != nil {
 		return oErr
@@ -81,7 +81,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 	return uint64(iTotal), nil
 }
 
-func (oSelf *TableModel) AddOne(oTable *domain.TableValue) error {
+func (oSelf *TableModel) AddOne(oTable *domain.TableVariable) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTable)
 	if oErr != nil {
 		return oErr

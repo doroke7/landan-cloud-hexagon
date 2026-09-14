@@ -19,14 +19,14 @@ func NewGameUsecase(oGameModel outputPortAnyModel.GameModel, oAbstractUsecase *A
 	}
 }
 
-func (oSelf *GameUsecase) AddOne(oAdd *domain.GameValue) error {
+func (oSelf *GameUsecase) AddOne(oAdd *domain.GameVariable) error {
 
 	oErr := oSelf.GameModel.AddOne(oAdd)
 
 	return oErr
 }
 
-func (oSelf *GameUsecase) EditOneById(oEdit *domain.GameValue, iId uint64) error {
+func (oSelf *GameUsecase) EditOneById(oEdit *domain.GameVariable, iId uint64) error {
 
 	oErr := oSelf.GameModel.EditOneById(oEdit, iId)
 

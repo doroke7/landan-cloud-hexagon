@@ -35,14 +35,14 @@ func (oSelf *AdminUserUsecase) ShowOneById(iId uint64) (*domain.AdminUser, error
 	return oAdminUser, oErr
 }
 
-func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserValue) error {
+func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserVariable) error {
 
 	oErr := oSelf.AdminUserModel.AddOne(oAdminUser)
 
 	return oErr
 }
 
-func (oSelf *AdminUserUsecase) EditOneById(oAdminUser *domain.AdminUserValue, iId uint64) error {
+func (oSelf *AdminUserUsecase) EditOneById(oAdminUser *domain.AdminUserVariable, iId uint64) error {
 
 	oErr := oSelf.AdminUserModel.EditOneById(oAdminUser, iId)
 

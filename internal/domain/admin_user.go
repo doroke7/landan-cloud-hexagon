@@ -22,7 +22,7 @@ type AdminUser struct {
 	AdminRoles []AdminRole `json:"admin_roles,omitempty" bson:"-" gorm:"many2many:admin_users_to_admin_roles"`
 }
 
-type AdminUserValue struct {
+type AdminUserVariable struct {
 	Name         *string  `json:"name,omitempty" validate:"omitempty,min=4"`
 	Password     *string  `json:"password,omitempty" validate:"omitempty,min=8"`
 	AdminRoleIds []uint64 `json:"admin_role_ids,omitempty" validate:"omitempty,dive,gt=0"`

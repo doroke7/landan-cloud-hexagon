@@ -45,8 +45,8 @@ func domainAdminPermissionToProtoAdminPermission(oAdminPermission *domain.AdminP
 	}
 }
 
-func protoAdminPermissionValueToDomainAdminPermissionValue(oVariable *pbResource.AdminPermissionValue) domain.AdminPermissionValue {
-	var oValue domain.AdminPermissionValue
+func protoAdminPermissionValueToDomainAdminPermissionValue(oVariable *pbResource.AdminPermissionValue) domain.AdminPermissionVariable {
+	var oValue domain.AdminPermissionVariable
 	if oVariable == nil {
 		return oValue
 	}

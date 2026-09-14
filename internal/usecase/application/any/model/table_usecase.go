@@ -17,14 +17,14 @@ func NewTableUsecase(oTableModel outputPortAnyModel.TableModel) usecasePortAnyMo
 	}
 }
 
-func (oSelf *TableUsecase) AddOne(oValue *domain.TableValue) error {
+func (oSelf *TableUsecase) AddOne(oValue *domain.TableVariable) error {
 
 	oErr := oSelf.TableModel.AddOne(oValue)
 
 	return oErr
 }
 
-func (oSelf *TableUsecase) EditOneById(oValue *domain.TableValue, iId uint64) error {
+func (oSelf *TableUsecase) EditOneById(oValue *domain.TableVariable, iId uint64) error {
 
 	oErr := oSelf.TableModel.EditOneById(oValue, iId)
 

@@ -27,7 +27,7 @@ func NewGameUsecase(oGameModel outputPortAnyModel.GameModel, oGameLogic outputPo
 	}
 }
 
-func (oSelf *GameUsecase) AddOne(oValue *domain.GameValue) error {
+func (oSelf *GameUsecase) AddOne(oValue *domain.GameVariable) error {
 
 	if oValue.Key != nil {
 		oGameByKey, oErr := oSelf.GameModel.ShowOneByKey(*oValue.Key)
@@ -48,7 +48,7 @@ func (oSelf *GameUsecase) AddOne(oValue *domain.GameValue) error {
 	return oErr
 }
 
-func (oSelf *GameUsecase) EditOne(oValue *domain.GameValue, iId uint64) error {
+func (oSelf *GameUsecase) EditOne(oValue *domain.GameVariable, iId uint64) error {
 
 	if oValue.Key != nil {
 		oGameByKey, oErr := oSelf.GameModel.ShowOneByKey(*oValue.Key)

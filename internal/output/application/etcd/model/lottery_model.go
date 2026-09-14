@@ -28,7 +28,7 @@ func (oSelf *LotteryModel) WatchOneByKey(sKey string) (*domain.Lottery, error) {
 }
 
 // EditOneByKey 是寫：把呼叫端給的 oValue 寫進 etcd。
-func (oSelf *LotteryModel) EditOneByKey(oValue *domain.LotteryValue, sKey string) error {
+func (oSelf *LotteryModel) EditOneByKey(oValue *domain.LotteryVariable, sKey string) error {
 
 	var oLottery domain.Lottery
 

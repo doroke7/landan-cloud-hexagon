@@ -19,7 +19,7 @@ func NewAdminPermissionGroupUsecase(oAdminPermissionGroupModel outputPortAnyMode
 	}
 }
 
-func (oSelf *AdminPermissionGroupUsecase) AddOne(oValue *domain.AdminPermissionGroupValue) error {
+func (oSelf *AdminPermissionGroupUsecase) AddOne(oValue *domain.AdminPermissionGroupVariable) error {
 
 	oErr := oSelf.AdminPermissionGroupModel.AddOne(oValue)
 
@@ -33,7 +33,7 @@ func (oSelf *AdminPermissionGroupUsecase) ShowOnesByFiltersWithSortersPagination
 	return aAdminPermissionGroups, oErr
 }
 
-func (oSelf *AdminPermissionGroupUsecase) EditOneById(oValue *domain.AdminPermissionGroupValue, iId uint64) error {
+func (oSelf *AdminPermissionGroupUsecase) EditOneById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
 
 	oErr := oSelf.AdminPermissionGroupModel.EditOneById(oValue, iId)
 

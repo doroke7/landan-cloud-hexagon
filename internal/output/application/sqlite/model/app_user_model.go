@@ -68,7 +68,7 @@ func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 	return &oAppUser, nil
 }
 
-func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) error {
+func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserVariable) error {
 	oColumns, oErr := pkgUtility.StructToMap(oValue)
 	if oErr != nil {
 		return oErr

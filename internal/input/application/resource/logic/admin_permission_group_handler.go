@@ -14,7 +14,7 @@ import (
 	pkgInput "example/pkg/input"
 )
 
-func protoAdminPermissionValueToDomainAdminPermissionValue(oProto *pbResource.AdminPermissionValue) *domain.AdminPermissionValue {
+func protoAdminPermissionValueToDomainAdminPermissionValue(oProto *pbResource.AdminPermissionValue) *domain.AdminPermissionVariable {
 	if oProto == nil {
 		return nil
 	}
@@ -25,7 +25,7 @@ func protoAdminPermissionValueToDomainAdminPermissionValue(oProto *pbResource.Ad
 		oType = &iType
 	}
 
-	oAdminPermissionValue := &domain.AdminPermissionValue{
+	oAdminPermissionValue := &domain.AdminPermissionVariable{
 		Id:   oProto.Id,
 		Type: oType,
 		Key:  oProto.Key,
@@ -50,12 +50,12 @@ func NewAdminPermissionGroupHandler(oAbstractHandler *inputApplicationResource.A
 
 func (oSelf *AdminPermissionGroupHandler) AddAdminPermissionGroup(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupAddAdminPermissionGroupInput) (*pbResourceLogic.AdminPermissionGroupAddAdminPermissionGroupOutput, error) {
 
-	var oValue domain.AdminPermissionGroupValue
+	var oValue domain.AdminPermissionGroupVariable
 	if oVariable := oReq.GetValue(); oVariable != nil {
 		oValue.Key = oVariable.Key
 		oValue.Name = oVariable.Name
 
-		aAdminPermissions := make([]*domain.AdminPermissionValue, 0, len(oVariable.GetAdminPermissions()))
+		aAdminPermissions := make([]*domain.AdminPermissionVariable, 0, len(oVariable.GetAdminPermissions()))
 		for _, oProtoAdminPermissionValue := range oVariable.GetAdminPermissions() {
 			oAdminPermissionValue := protoAdminPermissionValueToDomainAdminPermissionValue(oProtoAdminPermissionValue)
 			if oAdminPermissionValue == nil {

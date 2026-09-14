@@ -36,7 +36,7 @@ func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	return uint64(iTotal), nil
 }
 
-func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {
+func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeVariable) error {
 
 	oGameType, _ := pkgUtility.StructToMap(oValue)
 
@@ -57,7 +57,7 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {
 	return nil
 }
 
-func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint64) error {
+func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeVariable, iId uint64) error {
 
 	oGameType, _ := pkgUtility.StructToMap(oValue)
 

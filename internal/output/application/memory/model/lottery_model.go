@@ -57,6 +57,6 @@ func (oSelf *LotteryModel) WatchOneByKey(sKey string) (*domain.Lottery, error) {
 
 // EditOneByKey 是寫，但 memory 沒有真的儲存空間可以落地，
 // 這裡只是回傳成功，不做任何持久化（demo 用途）。
-func (oSelf *LotteryModel) EditOneByKey(oValue *domain.LotteryValue, sKey string) error {
+func (oSelf *LotteryModel) EditOneByKey(oValue *domain.LotteryVariable, sKey string) error {
 	return nil
 }

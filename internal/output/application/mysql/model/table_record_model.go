@@ -42,7 +42,7 @@ func (oSelf *TableRecordModel) ShowOneById(iId uint64) (*domain.TableRecord, err
 	return &oTableRecord, nil
 }
 
-func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue, iId uint64) error {
+func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordVariable, iId uint64) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTableRecord)
 	if oErr != nil {
 		return oErr
@@ -145,7 +145,7 @@ func (oSelf *TableRecordModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint
 	return uint64(iTotal), nil
 }
 
-func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) error {
+func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordVariable) error {
 	oColumns, oErr := pkgUtility.StructToMap(oTableRecord)
 	if oErr != nil {
 		return oErr
