@@ -2,10 +2,10 @@ package protoToDomain
 
 import (
 	domain "example/internal/domain"
-	pbResourceLogic "example/pb/resource/logic"
+	pbResource "example/pb/resource"
 )
 
-func AdminPermissionValue(oProto *pbResourceLogic.AdminPermissionValue) *domain.AdminPermissionValue {
+func AdminPermissionValue(oProto *pbResource.AdminPermissionValue) *domain.AdminPermissionValue {
 	if oProto == nil {
 		return nil
 	}

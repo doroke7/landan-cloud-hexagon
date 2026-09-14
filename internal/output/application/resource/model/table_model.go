@@ -5,6 +5,7 @@ import (
 
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
 )
@@ -19,8 +20,8 @@ func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel 
 	}
 }
 
-func domainTableValueToProtoTableValue(oTable *domain.TableValue) *pbResourceModel.TableValue {
-	oValue := &pbResourceModel.TableValue{
+func domainTableValueToProtoTableValue(oTable *domain.TableValue) *pbResource.TableValue {
+	oValue := &pbResource.TableValue{
 		No:          oTable.No,
 		Key:         oTable.Key,
 		Description: oTable.Description,

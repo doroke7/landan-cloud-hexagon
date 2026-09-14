@@ -7,6 +7,7 @@
 package pb_facade_register
 
 import (
+	facade "example/pb/facade"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -21,60 +22,16 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type StaffUserVariable struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *StaffUserVariable) Reset() {
-	*x = StaffUserVariable{}
-	mi := &file_facade_register_authenticator_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *StaffUserVariable) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*StaffUserVariable) ProtoMessage() {}
-
-func (x *StaffUserVariable) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_register_authenticator_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use StaffUserVariable.ProtoReflect.Descriptor instead.
-func (*StaffUserVariable) Descriptor() ([]byte, []int) {
-	return file_facade_register_authenticator_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *StaffUserVariable) GetName() string {
-	if x != nil {
-		return x.Name
-	}
-	return ""
-}
-
 type AuthenticatorSignInRequest struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Variable      *StaffUserVariable     `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Variable      *facade.StaffUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AuthenticatorSignInRequest) Reset() {
 	*x = AuthenticatorSignInRequest{}
-	mi := &file_facade_register_authenticator_proto_msgTypes[1]
+	mi := &file_facade_register_authenticator_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -86,7 +43,7 @@ func (x *AuthenticatorSignInRequest) String() string {
 func (*AuthenticatorSignInRequest) ProtoMessage() {}
 
 func (x *AuthenticatorSignInRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_register_authenticator_proto_msgTypes[1]
+	mi := &file_facade_register_authenticator_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -99,10 +56,10 @@ func (x *AuthenticatorSignInRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthenticatorSignInRequest.ProtoReflect.Descriptor instead.
 func (*AuthenticatorSignInRequest) Descriptor() ([]byte, []int) {
-	return file_facade_register_authenticator_proto_rawDescGZIP(), []int{1}
+	return file_facade_register_authenticator_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AuthenticatorSignInRequest) GetVariable() *StaffUserVariable {
+func (x *AuthenticatorSignInRequest) GetVariable() *facade.StaffUserVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -118,7 +75,7 @@ type AuthenticatorSignInResponse struct {
 
 func (x *AuthenticatorSignInResponse) Reset() {
 	*x = AuthenticatorSignInResponse{}
-	mi := &file_facade_register_authenticator_proto_msgTypes[2]
+	mi := &file_facade_register_authenticator_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -130,7 +87,7 @@ func (x *AuthenticatorSignInResponse) String() string {
 func (*AuthenticatorSignInResponse) ProtoMessage() {}
 
 func (x *AuthenticatorSignInResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_register_authenticator_proto_msgTypes[2]
+	mi := &file_facade_register_authenticator_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -143,7 +100,7 @@ func (x *AuthenticatorSignInResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AuthenticatorSignInResponse.ProtoReflect.Descriptor instead.
 func (*AuthenticatorSignInResponse) Descriptor() ([]byte, []int) {
-	return file_facade_register_authenticator_proto_rawDescGZIP(), []int{2}
+	return file_facade_register_authenticator_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *AuthenticatorSignInResponse) GetAuthorization() string {
@@ -157,11 +114,9 @@ var File_facade_register_authenticator_proto protoreflect.FileDescriptor
 
 const file_facade_register_authenticator_proto_rawDesc = "" +
 	"\n" +
-	"#facade/register/authenticator.proto\x12\x12pb.facade.register\"'\n" +
-	"\x11StaffUserVariable\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"_\n" +
-	"\x1aAuthenticatorSignInRequest\x12A\n" +
-	"\bvariable\x18\x01 \x01(\v2%.pb.facade.register.StaffUserVariableR\bvariable\"C\n" +
+	"#facade/register/authenticator.proto\x12\x12pb.facade.register\x1a\x13facade/common.proto\"V\n" +
+	"\x1aAuthenticatorSignInRequest\x128\n" +
+	"\bvariable\x18\x01 \x01(\v2\x1c.pb.facade.StaffUserVariableR\bvariable\"C\n" +
 	"\x1bAuthenticatorSignInResponse\x12$\n" +
 	"\rauthorization\x18\x01 \x01(\tR\rauthorization2\x84\x01\n" +
 	"\x17AuthenticatorController\x12i\n" +
@@ -179,16 +134,16 @@ func file_facade_register_authenticator_proto_rawDescGZIP() []byte {
 	return file_facade_register_authenticator_proto_rawDescData
 }
 
-var file_facade_register_authenticator_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_facade_register_authenticator_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_facade_register_authenticator_proto_goTypes = []any{
-	(*StaffUserVariable)(nil),           // 0: pb.facade.register.StaffUserVariable
-	(*AuthenticatorSignInRequest)(nil),  // 1: pb.facade.register.AuthenticatorSignInRequest
-	(*AuthenticatorSignInResponse)(nil), // 2: pb.facade.register.AuthenticatorSignInResponse
+	(*AuthenticatorSignInRequest)(nil),  // 0: pb.facade.register.AuthenticatorSignInRequest
+	(*AuthenticatorSignInResponse)(nil), // 1: pb.facade.register.AuthenticatorSignInResponse
+	(*facade.StaffUserVariable)(nil),    // 2: pb.facade.StaffUserVariable
 }
 var file_facade_register_authenticator_proto_depIdxs = []int32{
-	0, // 0: pb.facade.register.AuthenticatorSignInRequest.variable:type_name -> pb.facade.register.StaffUserVariable
-	1, // 1: pb.facade.register.AuthenticatorController.SignIn:input_type -> pb.facade.register.AuthenticatorSignInRequest
-	2, // 2: pb.facade.register.AuthenticatorController.SignIn:output_type -> pb.facade.register.AuthenticatorSignInResponse
+	2, // 0: pb.facade.register.AuthenticatorSignInRequest.variable:type_name -> pb.facade.StaffUserVariable
+	0, // 1: pb.facade.register.AuthenticatorController.SignIn:input_type -> pb.facade.register.AuthenticatorSignInRequest
+	1, // 2: pb.facade.register.AuthenticatorController.SignIn:output_type -> pb.facade.register.AuthenticatorSignInResponse
 	2, // [2:3] is the sub-list for method output_type
 	1, // [1:2] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
@@ -207,7 +162,7 @@ func file_facade_register_authenticator_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_facade_register_authenticator_proto_rawDesc), len(file_facade_register_authenticator_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

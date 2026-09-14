@@ -14,7 +14,7 @@ import (
 	pkgInput "example/pkg/input"
 )
 
-func protoAdminPermissionValueToDomainAdminPermissionValue(oProto *pbResourceLogic.AdminPermissionValue) *domain.AdminPermissionValue {
+func protoAdminPermissionValueToDomainAdminPermissionValue(oProto *pbResource.AdminPermissionValue) *domain.AdminPermissionValue {
 	if oProto == nil {
 		return nil
 	}

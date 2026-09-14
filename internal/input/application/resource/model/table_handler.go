@@ -6,6 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
@@ -28,7 +29,7 @@ func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler,
 }
 
 // protoTableValueToDomainTableValue 把 gRPC 帶進來的 variable 攤成 domain.TableValue（指標欄位可選）。
-func protoTableValueToDomainTableValue(oVariable *pbResourceModel.TableValue) domain.TableValue {
+func protoTableValueToDomainTableValue(oVariable *pbResource.TableValue) domain.TableValue {
 	var oValue domain.TableValue
 	if oVariable == nil {
 		return oValue

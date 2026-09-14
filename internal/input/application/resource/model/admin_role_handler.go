@@ -44,7 +44,7 @@ func domainAdminRoleToProtoAdminRole(oAdminRole *domain.AdminRole) *pbResource.A
 	}
 }
 
-func protoAdminRoleValueToDomainAdminRoleValue(oVariable *pbResourceModel.AdminRoleValue) domain.AdminRoleValue {
+func protoAdminRoleValueToDomainAdminRoleValue(oVariable *pbResource.AdminRoleValue) domain.AdminRoleValue {
 	var oValue domain.AdminRoleValue
 	if oVariable == nil {
 		return oValue

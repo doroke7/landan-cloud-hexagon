@@ -3,6 +3,7 @@ package outputApplicationResourceLogic
 import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
+	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
 	pkgProtoToDomain "example/pkg/proto_to_domain"
@@ -23,7 +24,7 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 
 func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupValue) error {
 
-	aAdminPermissions := make([]*pbResourceLogic.AdminPermissionValue, 0, len(oValue.AdminPermissions))
+	aAdminPermissions := make([]*pbResource.AdminPermissionValue, 0, len(oValue.AdminPermissions))
 	for _, oAdminPermissionValue := range oValue.AdminPermissions {
 		oProtoAdminPermissionValue := domainAdminPermissionValueToProtoAdminPermissionValue(oAdminPermissionValue)
 		if oProtoAdminPermissionValue == nil {
@@ -33,7 +34,7 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 		aAdminPermissions = append(aAdminPermissions, oProtoAdminPermissionValue)
 	}
 
-	oProtoValue := &pbResourceLogic.AdminPermissionGroupValue{
+	oProtoValue := &pbResource.AdminPermissionGroupValue{
 		Key:              oValue.Key,
 		Name:             oValue.Name,
 		AdminPermissions: aAdminPermissions,
@@ -48,7 +49,7 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 	return oErr
 }
 
-func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminPermissionValue) *pbResourceLogic.AdminPermissionValue {
+func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminPermissionValue) *pbResource.AdminPermissionValue {
 	if oValue == nil {
 		return nil
 	}
@@ -59,7 +60,7 @@ func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminP
 		oType = &iType
 	}
 
-	oProtoAdminPermissionValue := &pbResourceLogic.AdminPermissionValue{
+	oProtoAdminPermissionValue := &pbResource.AdminPermissionValue{
 		Id:   oValue.Id,
 		Type: oType,
 		Key:  oValue.Key,

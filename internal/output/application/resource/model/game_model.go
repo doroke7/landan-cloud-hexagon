@@ -8,8 +8,8 @@ import (
 	pkgInput "example/pkg/input"
 )
 
-func domainGameValueToProtoGameValue(oGame *domain.GameValue) *pbResourceModel.GameValue {
-	oValue := &pbResourceModel.GameValue{
+func domainGameValueToProtoGameValue(oGame *domain.GameValue) *pbResource.GameValue {
+	oValue := &pbResource.GameValue{
 		Key:         oGame.Key,
 		Name:        oGame.Name,
 		Description: oGame.Description,

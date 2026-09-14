@@ -22,76 +22,16 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type AdminPermissionValue struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Type          *uint64                `protobuf:"varint,1,opt,name=type,proto3,oneof" json:"type,omitempty"`
-	Key           *string                `protobuf:"bytes,2,opt,name=key,proto3,oneof" json:"key,omitempty"`
-	Name          *string                `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AdminPermissionValue) Reset() {
-	*x = AdminPermissionValue{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AdminPermissionValue) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AdminPermissionValue) ProtoMessage() {}
-
-func (x *AdminPermissionValue) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AdminPermissionValue.ProtoReflect.Descriptor instead.
-func (*AdminPermissionValue) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *AdminPermissionValue) GetType() uint64 {
-	if x != nil && x.Type != nil {
-		return *x.Type
-	}
-	return 0
-}
-
-func (x *AdminPermissionValue) GetKey() string {
-	if x != nil && x.Key != nil {
-		return *x.Key
-	}
-	return ""
-}
-
-func (x *AdminPermissionValue) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
-	}
-	return ""
-}
-
 type AdminPermissionAddOneInput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Value         *AdminPermissionValue  `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	state         protoimpl.MessageState         `protogen:"open.v1"`
+	Value         *resource.AdminPermissionValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AdminPermissionAddOneInput) Reset() {
 	*x = AdminPermissionAddOneInput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[1]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -103,7 +43,7 @@ func (x *AdminPermissionAddOneInput) String() string {
 func (*AdminPermissionAddOneInput) ProtoMessage() {}
 
 func (x *AdminPermissionAddOneInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[1]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -116,10 +56,10 @@ func (x *AdminPermissionAddOneInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminPermissionAddOneInput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionAddOneInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{1}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminPermissionAddOneInput) GetValue() *AdminPermissionValue {
+func (x *AdminPermissionAddOneInput) GetValue() *resource.AdminPermissionValue {
 	if x != nil {
 		return x.Value
 	}
@@ -135,7 +75,7 @@ type AdminPermissionAddOneOutput struct {
 
 func (x *AdminPermissionAddOneOutput) Reset() {
 	*x = AdminPermissionAddOneOutput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[2]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -147,7 +87,7 @@ func (x *AdminPermissionAddOneOutput) String() string {
 func (*AdminPermissionAddOneOutput) ProtoMessage() {}
 
 func (x *AdminPermissionAddOneOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[2]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -160,7 +100,7 @@ func (x *AdminPermissionAddOneOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminPermissionAddOneOutput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionAddOneOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{2}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *AdminPermissionAddOneOutput) GetStatus() bool {
@@ -179,7 +119,7 @@ type AdminPermissionShowOneByIdInput struct {
 
 func (x *AdminPermissionShowOneByIdInput) Reset() {
 	*x = AdminPermissionShowOneByIdInput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[3]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -191,7 +131,7 @@ func (x *AdminPermissionShowOneByIdInput) String() string {
 func (*AdminPermissionShowOneByIdInput) ProtoMessage() {}
 
 func (x *AdminPermissionShowOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[3]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -204,7 +144,7 @@ func (x *AdminPermissionShowOneByIdInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminPermissionShowOneByIdInput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionShowOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{3}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *AdminPermissionShowOneByIdInput) GetId() uint64 {
@@ -223,7 +163,7 @@ type AdminPermissionShowOneByIdOutput struct {
 
 func (x *AdminPermissionShowOneByIdOutput) Reset() {
 	*x = AdminPermissionShowOneByIdOutput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[4]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -235,7 +175,7 @@ func (x *AdminPermissionShowOneByIdOutput) String() string {
 func (*AdminPermissionShowOneByIdOutput) ProtoMessage() {}
 
 func (x *AdminPermissionShowOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[4]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -248,7 +188,7 @@ func (x *AdminPermissionShowOneByIdOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminPermissionShowOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionShowOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{4}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *AdminPermissionShowOneByIdOutput) GetAdminPermission() *resource.AdminPermission {
@@ -259,16 +199,16 @@ func (x *AdminPermissionShowOneByIdOutput) GetAdminPermission() *resource.AdminP
 }
 
 type AdminPermissionEditOneByIdInput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Value         *AdminPermissionValue  `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState         `protogen:"open.v1"`
+	Value         *resource.AdminPermissionValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Id            uint64                         `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AdminPermissionEditOneByIdInput) Reset() {
 	*x = AdminPermissionEditOneByIdInput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[5]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -280,7 +220,7 @@ func (x *AdminPermissionEditOneByIdInput) String() string {
 func (*AdminPermissionEditOneByIdInput) ProtoMessage() {}
 
 func (x *AdminPermissionEditOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[5]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -293,10 +233,10 @@ func (x *AdminPermissionEditOneByIdInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminPermissionEditOneByIdInput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionEditOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{5}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *AdminPermissionEditOneByIdInput) GetValue() *AdminPermissionValue {
+func (x *AdminPermissionEditOneByIdInput) GetValue() *resource.AdminPermissionValue {
 	if x != nil {
 		return x.Value
 	}
@@ -319,7 +259,7 @@ type AdminPermissionEditOneByIdOutput struct {
 
 func (x *AdminPermissionEditOneByIdOutput) Reset() {
 	*x = AdminPermissionEditOneByIdOutput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[6]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -331,7 +271,7 @@ func (x *AdminPermissionEditOneByIdOutput) String() string {
 func (*AdminPermissionEditOneByIdOutput) ProtoMessage() {}
 
 func (x *AdminPermissionEditOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[6]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -344,7 +284,7 @@ func (x *AdminPermissionEditOneByIdOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminPermissionEditOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionEditOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{6}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *AdminPermissionEditOneByIdOutput) GetStatus() bool {
@@ -363,7 +303,7 @@ type AdminPermissionRemoveOneByIdInput struct {
 
 func (x *AdminPermissionRemoveOneByIdInput) Reset() {
 	*x = AdminPermissionRemoveOneByIdInput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[7]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -375,7 +315,7 @@ func (x *AdminPermissionRemoveOneByIdInput) String() string {
 func (*AdminPermissionRemoveOneByIdInput) ProtoMessage() {}
 
 func (x *AdminPermissionRemoveOneByIdInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[7]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -388,7 +328,7 @@ func (x *AdminPermissionRemoveOneByIdInput) ProtoReflect() protoreflect.Message 
 
 // Deprecated: Use AdminPermissionRemoveOneByIdInput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionRemoveOneByIdInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{7}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *AdminPermissionRemoveOneByIdInput) GetId() uint64 {
@@ -407,7 +347,7 @@ type AdminPermissionRemoveOneByIdOutput struct {
 
 func (x *AdminPermissionRemoveOneByIdOutput) Reset() {
 	*x = AdminPermissionRemoveOneByIdOutput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[8]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[7]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -419,7 +359,7 @@ func (x *AdminPermissionRemoveOneByIdOutput) String() string {
 func (*AdminPermissionRemoveOneByIdOutput) ProtoMessage() {}
 
 func (x *AdminPermissionRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[8]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[7]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -432,7 +372,7 @@ func (x *AdminPermissionRemoveOneByIdOutput) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use AdminPermissionRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{8}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{7}
 }
 
 func (x *AdminPermissionRemoveOneByIdOutput) GetStatus() bool {
@@ -453,7 +393,7 @@ type AdminPermissionShowOnesByFiltersWithSortersPaginationInput struct {
 
 func (x *AdminPermissionShowOnesByFiltersWithSortersPaginationInput) Reset() {
 	*x = AdminPermissionShowOnesByFiltersWithSortersPaginationInput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[9]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[8]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -465,7 +405,7 @@ func (x *AdminPermissionShowOnesByFiltersWithSortersPaginationInput) String() st
 func (*AdminPermissionShowOnesByFiltersWithSortersPaginationInput) ProtoMessage() {}
 
 func (x *AdminPermissionShowOnesByFiltersWithSortersPaginationInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[9]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[8]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -478,7 +418,7 @@ func (x *AdminPermissionShowOnesByFiltersWithSortersPaginationInput) ProtoReflec
 
 // Deprecated: Use AdminPermissionShowOnesByFiltersWithSortersPaginationInput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionShowOnesByFiltersWithSortersPaginationInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{9}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{8}
 }
 
 func (x *AdminPermissionShowOnesByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
@@ -511,7 +451,7 @@ type AdminPermissionShowOnesByFiltersWithSortersPaginationOutput struct {
 
 func (x *AdminPermissionShowOnesByFiltersWithSortersPaginationOutput) Reset() {
 	*x = AdminPermissionShowOnesByFiltersWithSortersPaginationOutput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[10]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[9]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -523,7 +463,7 @@ func (x *AdminPermissionShowOnesByFiltersWithSortersPaginationOutput) String() s
 func (*AdminPermissionShowOnesByFiltersWithSortersPaginationOutput) ProtoMessage() {}
 
 func (x *AdminPermissionShowOnesByFiltersWithSortersPaginationOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[10]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[9]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -536,7 +476,7 @@ func (x *AdminPermissionShowOnesByFiltersWithSortersPaginationOutput) ProtoRefle
 
 // Deprecated: Use AdminPermissionShowOnesByFiltersWithSortersPaginationOutput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionShowOnesByFiltersWithSortersPaginationOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{10}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{9}
 }
 
 func (x *AdminPermissionShowOnesByFiltersWithSortersPaginationOutput) GetAdminPermissions() []*resource.AdminPermission {
@@ -555,7 +495,7 @@ type AdminPermissionTotalByFiltersInput struct {
 
 func (x *AdminPermissionTotalByFiltersInput) Reset() {
 	*x = AdminPermissionTotalByFiltersInput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[11]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -567,7 +507,7 @@ func (x *AdminPermissionTotalByFiltersInput) String() string {
 func (*AdminPermissionTotalByFiltersInput) ProtoMessage() {}
 
 func (x *AdminPermissionTotalByFiltersInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[11]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -580,7 +520,7 @@ func (x *AdminPermissionTotalByFiltersInput) ProtoReflect() protoreflect.Message
 
 // Deprecated: Use AdminPermissionTotalByFiltersInput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionTotalByFiltersInput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{11}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *AdminPermissionTotalByFiltersInput) GetFilters() []*resource.Filter {
@@ -599,7 +539,7 @@ type AdminPermissionTotalByFiltersOutput struct {
 
 func (x *AdminPermissionTotalByFiltersOutput) Reset() {
 	*x = AdminPermissionTotalByFiltersOutput{}
-	mi := &file_resource_model_admin_permission_proto_msgTypes[12]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -611,7 +551,7 @@ func (x *AdminPermissionTotalByFiltersOutput) String() string {
 func (*AdminPermissionTotalByFiltersOutput) ProtoMessage() {}
 
 func (x *AdminPermissionTotalByFiltersOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_model_admin_permission_proto_msgTypes[12]
+	mi := &file_resource_model_admin_permission_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -624,7 +564,7 @@ func (x *AdminPermissionTotalByFiltersOutput) ProtoReflect() protoreflect.Messag
 
 // Deprecated: Use AdminPermissionTotalByFiltersOutput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionTotalByFiltersOutput) Descriptor() ([]byte, []int) {
-	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{12}
+	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *AdminPermissionTotalByFiltersOutput) GetTotal() uint64 {
@@ -638,24 +578,17 @@ var File_resource_model_admin_permission_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_permission_proto_rawDesc = "" +
 	"\n" +
-	"%resource/model/admin_permission.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"y\n" +
-	"\x14AdminPermissionValue\x12\x17\n" +
-	"\x04type\x18\x01 \x01(\x04H\x00R\x04type\x88\x01\x01\x12\x15\n" +
-	"\x03key\x18\x02 \x01(\tH\x01R\x03key\x88\x01\x01\x12\x17\n" +
-	"\x04name\x18\x03 \x01(\tH\x02R\x04name\x88\x01\x01B\a\n" +
-	"\x05_typeB\x06\n" +
-	"\x04_keyB\a\n" +
-	"\x05_name\"[\n" +
-	"\x1aAdminPermissionAddOneInput\x12=\n" +
-	"\x05value\x18\x01 \x01(\v2'.pb.resource.model.AdminPermissionValueR\x05value\"5\n" +
+	"%resource/model/admin_permission.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"U\n" +
+	"\x1aAdminPermissionAddOneInput\x127\n" +
+	"\x05value\x18\x01 \x01(\v2!.pb.resource.AdminPermissionValueR\x05value\"5\n" +
 	"\x1bAdminPermissionAddOneOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"1\n" +
 	"\x1fAdminPermissionShowOneByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"k\n" +
 	" AdminPermissionShowOneByIdOutput\x12G\n" +
-	"\x10admin_permission\x18\x01 \x01(\v2\x1c.pb.resource.AdminPermissionR\x0fadminPermission\"p\n" +
-	"\x1fAdminPermissionEditOneByIdInput\x12=\n" +
-	"\x05value\x18\x01 \x01(\v2'.pb.resource.model.AdminPermissionValueR\x05value\x12\x0e\n" +
+	"\x10admin_permission\x18\x01 \x01(\v2\x1c.pb.resource.AdminPermissionR\x0fadminPermission\"j\n" +
+	"\x1fAdminPermissionEditOneByIdInput\x127\n" +
+	"\x05value\x18\x01 \x01(\v2!.pb.resource.AdminPermissionValueR\x05value\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\":\n" +
 	" AdminPermissionEditOneByIdOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"3\n" +
@@ -695,47 +628,47 @@ func file_resource_model_admin_permission_proto_rawDescGZIP() []byte {
 	return file_resource_model_admin_permission_proto_rawDescData
 }
 
-var file_resource_model_admin_permission_proto_msgTypes = make([]protoimpl.MessageInfo, 13)
+var file_resource_model_admin_permission_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_resource_model_admin_permission_proto_goTypes = []any{
-	(*AdminPermissionValue)(nil),                                        // 0: pb.resource.model.AdminPermissionValue
-	(*AdminPermissionAddOneInput)(nil),                                  // 1: pb.resource.model.AdminPermissionAddOneInput
-	(*AdminPermissionAddOneOutput)(nil),                                 // 2: pb.resource.model.AdminPermissionAddOneOutput
-	(*AdminPermissionShowOneByIdInput)(nil),                             // 3: pb.resource.model.AdminPermissionShowOneByIdInput
-	(*AdminPermissionShowOneByIdOutput)(nil),                            // 4: pb.resource.model.AdminPermissionShowOneByIdOutput
-	(*AdminPermissionEditOneByIdInput)(nil),                             // 5: pb.resource.model.AdminPermissionEditOneByIdInput
-	(*AdminPermissionEditOneByIdOutput)(nil),                            // 6: pb.resource.model.AdminPermissionEditOneByIdOutput
-	(*AdminPermissionRemoveOneByIdInput)(nil),                           // 7: pb.resource.model.AdminPermissionRemoveOneByIdInput
-	(*AdminPermissionRemoveOneByIdOutput)(nil),                          // 8: pb.resource.model.AdminPermissionRemoveOneByIdOutput
-	(*AdminPermissionShowOnesByFiltersWithSortersPaginationInput)(nil),  // 9: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationInput
-	(*AdminPermissionShowOnesByFiltersWithSortersPaginationOutput)(nil), // 10: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationOutput
-	(*AdminPermissionTotalByFiltersInput)(nil),                          // 11: pb.resource.model.AdminPermissionTotalByFiltersInput
-	(*AdminPermissionTotalByFiltersOutput)(nil),                         // 12: pb.resource.model.AdminPermissionTotalByFiltersOutput
+	(*AdminPermissionAddOneInput)(nil),                                  // 0: pb.resource.model.AdminPermissionAddOneInput
+	(*AdminPermissionAddOneOutput)(nil),                                 // 1: pb.resource.model.AdminPermissionAddOneOutput
+	(*AdminPermissionShowOneByIdInput)(nil),                             // 2: pb.resource.model.AdminPermissionShowOneByIdInput
+	(*AdminPermissionShowOneByIdOutput)(nil),                            // 3: pb.resource.model.AdminPermissionShowOneByIdOutput
+	(*AdminPermissionEditOneByIdInput)(nil),                             // 4: pb.resource.model.AdminPermissionEditOneByIdInput
+	(*AdminPermissionEditOneByIdOutput)(nil),                            // 5: pb.resource.model.AdminPermissionEditOneByIdOutput
+	(*AdminPermissionRemoveOneByIdInput)(nil),                           // 6: pb.resource.model.AdminPermissionRemoveOneByIdInput
+	(*AdminPermissionRemoveOneByIdOutput)(nil),                          // 7: pb.resource.model.AdminPermissionRemoveOneByIdOutput
+	(*AdminPermissionShowOnesByFiltersWithSortersPaginationInput)(nil),  // 8: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationInput
+	(*AdminPermissionShowOnesByFiltersWithSortersPaginationOutput)(nil), // 9: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationOutput
+	(*AdminPermissionTotalByFiltersInput)(nil),                          // 10: pb.resource.model.AdminPermissionTotalByFiltersInput
+	(*AdminPermissionTotalByFiltersOutput)(nil),                         // 11: pb.resource.model.AdminPermissionTotalByFiltersOutput
+	(*resource.AdminPermissionValue)(nil),                               // 12: pb.resource.AdminPermissionValue
 	(*resource.AdminPermission)(nil),                                    // 13: pb.resource.AdminPermission
 	(*resource.Filter)(nil),                                             // 14: pb.resource.Filter
 	(*resource.Sorter)(nil),                                             // 15: pb.resource.Sorter
 	(*resource.Pagination)(nil),                                         // 16: pb.resource.Pagination
 }
 var file_resource_model_admin_permission_proto_depIdxs = []int32{
-	0,  // 0: pb.resource.model.AdminPermissionAddOneInput.value:type_name -> pb.resource.model.AdminPermissionValue
+	12, // 0: pb.resource.model.AdminPermissionAddOneInput.value:type_name -> pb.resource.AdminPermissionValue
 	13, // 1: pb.resource.model.AdminPermissionShowOneByIdOutput.admin_permission:type_name -> pb.resource.AdminPermission
-	0,  // 2: pb.resource.model.AdminPermissionEditOneByIdInput.value:type_name -> pb.resource.model.AdminPermissionValue
+	12, // 2: pb.resource.model.AdminPermissionEditOneByIdInput.value:type_name -> pb.resource.AdminPermissionValue
 	14, // 3: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
 	15, // 4: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
 	16, // 5: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
 	13, // 6: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationOutput.admin_permissions:type_name -> pb.resource.AdminPermission
 	14, // 7: pb.resource.model.AdminPermissionTotalByFiltersInput.filters:type_name -> pb.resource.Filter
-	1,  // 8: pb.resource.model.AdminPermissionModel.AddOne:input_type -> pb.resource.model.AdminPermissionAddOneInput
-	3,  // 9: pb.resource.model.AdminPermissionModel.ShowOneById:input_type -> pb.resource.model.AdminPermissionShowOneByIdInput
-	5,  // 10: pb.resource.model.AdminPermissionModel.EditOneById:input_type -> pb.resource.model.AdminPermissionEditOneByIdInput
-	7,  // 11: pb.resource.model.AdminPermissionModel.RemoveOneById:input_type -> pb.resource.model.AdminPermissionRemoveOneByIdInput
-	9,  // 12: pb.resource.model.AdminPermissionModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationInput
-	11, // 13: pb.resource.model.AdminPermissionModel.TotalByFilters:input_type -> pb.resource.model.AdminPermissionTotalByFiltersInput
-	2,  // 14: pb.resource.model.AdminPermissionModel.AddOne:output_type -> pb.resource.model.AdminPermissionAddOneOutput
-	4,  // 15: pb.resource.model.AdminPermissionModel.ShowOneById:output_type -> pb.resource.model.AdminPermissionShowOneByIdOutput
-	6,  // 16: pb.resource.model.AdminPermissionModel.EditOneById:output_type -> pb.resource.model.AdminPermissionEditOneByIdOutput
-	8,  // 17: pb.resource.model.AdminPermissionModel.RemoveOneById:output_type -> pb.resource.model.AdminPermissionRemoveOneByIdOutput
-	10, // 18: pb.resource.model.AdminPermissionModel.ShowOnesByFiltersWithSortersPagination:output_type -> pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationOutput
-	12, // 19: pb.resource.model.AdminPermissionModel.TotalByFilters:output_type -> pb.resource.model.AdminPermissionTotalByFiltersOutput
+	0,  // 8: pb.resource.model.AdminPermissionModel.AddOne:input_type -> pb.resource.model.AdminPermissionAddOneInput
+	2,  // 9: pb.resource.model.AdminPermissionModel.ShowOneById:input_type -> pb.resource.model.AdminPermissionShowOneByIdInput
+	4,  // 10: pb.resource.model.AdminPermissionModel.EditOneById:input_type -> pb.resource.model.AdminPermissionEditOneByIdInput
+	6,  // 11: pb.resource.model.AdminPermissionModel.RemoveOneById:input_type -> pb.resource.model.AdminPermissionRemoveOneByIdInput
+	8,  // 12: pb.resource.model.AdminPermissionModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationInput
+	10, // 13: pb.resource.model.AdminPermissionModel.TotalByFilters:input_type -> pb.resource.model.AdminPermissionTotalByFiltersInput
+	1,  // 14: pb.resource.model.AdminPermissionModel.AddOne:output_type -> pb.resource.model.AdminPermissionAddOneOutput
+	3,  // 15: pb.resource.model.AdminPermissionModel.ShowOneById:output_type -> pb.resource.model.AdminPermissionShowOneByIdOutput
+	5,  // 16: pb.resource.model.AdminPermissionModel.EditOneById:output_type -> pb.resource.model.AdminPermissionEditOneByIdOutput
+	7,  // 17: pb.resource.model.AdminPermissionModel.RemoveOneById:output_type -> pb.resource.model.AdminPermissionRemoveOneByIdOutput
+	9,  // 18: pb.resource.model.AdminPermissionModel.ShowOnesByFiltersWithSortersPagination:output_type -> pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationOutput
+	11, // 19: pb.resource.model.AdminPermissionModel.TotalByFilters:output_type -> pb.resource.model.AdminPermissionTotalByFiltersOutput
 	14, // [14:20] is the sub-list for method output_type
 	8,  // [8:14] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name
@@ -748,14 +681,13 @@ func file_resource_model_admin_permission_proto_init() {
 	if File_resource_model_admin_permission_proto != nil {
 		return
 	}
-	file_resource_model_admin_permission_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_model_admin_permission_proto_rawDesc), len(file_resource_model_admin_permission_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   13,
+			NumMessages:   12,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

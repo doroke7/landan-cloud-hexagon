@@ -22,68 +22,16 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
-type AppUserValue struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
-	Password      *string                `protobuf:"bytes,2,opt,name=password,proto3,oneof" json:"password,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
-}
-
-func (x *AppUserValue) Reset() {
-	*x = AppUserValue{}
-	mi := &file_resource_logic_app_user_proto_msgTypes[0]
-	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-	ms.StoreMessageInfo(mi)
-}
-
-func (x *AppUserValue) String() string {
-	return protoimpl.X.MessageStringOf(x)
-}
-
-func (*AppUserValue) ProtoMessage() {}
-
-func (x *AppUserValue) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_app_user_proto_msgTypes[0]
-	if x != nil {
-		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
-		if ms.LoadMessageInfo() == nil {
-			ms.StoreMessageInfo(mi)
-		}
-		return ms
-	}
-	return mi.MessageOf(x)
-}
-
-// Deprecated: Use AppUserValue.ProtoReflect.Descriptor instead.
-func (*AppUserValue) Descriptor() ([]byte, []int) {
-	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{0}
-}
-
-func (x *AppUserValue) GetName() string {
-	if x != nil && x.Name != nil {
-		return *x.Name
-	}
-	return ""
-}
-
-func (x *AppUserValue) GetPassword() string {
-	if x != nil && x.Password != nil {
-		return *x.Password
-	}
-	return ""
-}
-
 type AppUserAddAppUserInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Value         *AppUserValue          `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Value         *resource.AppUserValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *AppUserAddAppUserInput) Reset() {
 	*x = AppUserAddAppUserInput{}
-	mi := &file_resource_logic_app_user_proto_msgTypes[1]
+	mi := &file_resource_logic_app_user_proto_msgTypes[0]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -95,7 +43,7 @@ func (x *AppUserAddAppUserInput) String() string {
 func (*AppUserAddAppUserInput) ProtoMessage() {}
 
 func (x *AppUserAddAppUserInput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_app_user_proto_msgTypes[1]
+	mi := &file_resource_logic_app_user_proto_msgTypes[0]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -108,10 +56,10 @@ func (x *AppUserAddAppUserInput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppUserAddAppUserInput.ProtoReflect.Descriptor instead.
 func (*AppUserAddAppUserInput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{1}
+	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AppUserAddAppUserInput) GetValue() *AppUserValue {
+func (x *AppUserAddAppUserInput) GetValue() *resource.AppUserValue {
 	if x != nil {
 		return x.Value
 	}
@@ -127,7 +75,7 @@ type AppUserAddAppUserOutput struct {
 
 func (x *AppUserAddAppUserOutput) Reset() {
 	*x = AppUserAddAppUserOutput{}
-	mi := &file_resource_logic_app_user_proto_msgTypes[2]
+	mi := &file_resource_logic_app_user_proto_msgTypes[1]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -139,7 +87,7 @@ func (x *AppUserAddAppUserOutput) String() string {
 func (*AppUserAddAppUserOutput) ProtoMessage() {}
 
 func (x *AppUserAddAppUserOutput) ProtoReflect() protoreflect.Message {
-	mi := &file_resource_logic_app_user_proto_msgTypes[2]
+	mi := &file_resource_logic_app_user_proto_msgTypes[1]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -152,7 +100,7 @@ func (x *AppUserAddAppUserOutput) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppUserAddAppUserOutput.ProtoReflect.Descriptor instead.
 func (*AppUserAddAppUserOutput) Descriptor() ([]byte, []int) {
-	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{2}
+	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{1}
 }
 
 func (x *AppUserAddAppUserOutput) GetAppUser() *resource.AppUser {
@@ -166,14 +114,9 @@ var File_resource_logic_app_user_proto protoreflect.FileDescriptor
 
 const file_resource_logic_app_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1dresource/logic/app_user.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"^\n" +
-	"\fAppUserValue\x12\x17\n" +
-	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
-	"\bpassword\x18\x02 \x01(\tH\x01R\bpassword\x88\x01\x01B\a\n" +
-	"\x05_nameB\v\n" +
-	"\t_password\"O\n" +
-	"\x16AppUserAddAppUserInput\x125\n" +
-	"\x05value\x18\x01 \x01(\v2\x1f.pb.resource.logic.AppUserValueR\x05value\"J\n" +
+	"\x1dresource/logic/app_user.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"I\n" +
+	"\x16AppUserAddAppUserInput\x12/\n" +
+	"\x05value\x18\x01 \x01(\v2\x19.pb.resource.AppUserValueR\x05value\"J\n" +
 	"\x17AppUserAddAppUserOutput\x12/\n" +
 	"\bapp_user\x18\x01 \x01(\v2\x14.pb.resource.AppUserR\aappUser2s\n" +
 	"\fAppUserModel\x12c\n" +
@@ -192,18 +135,18 @@ func file_resource_logic_app_user_proto_rawDescGZIP() []byte {
 	return file_resource_logic_app_user_proto_rawDescData
 }
 
-var file_resource_logic_app_user_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_resource_logic_app_user_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_resource_logic_app_user_proto_goTypes = []any{
-	(*AppUserValue)(nil),            // 0: pb.resource.logic.AppUserValue
-	(*AppUserAddAppUserInput)(nil),  // 1: pb.resource.logic.AppUserAddAppUserInput
-	(*AppUserAddAppUserOutput)(nil), // 2: pb.resource.logic.AppUserAddAppUserOutput
+	(*AppUserAddAppUserInput)(nil),  // 0: pb.resource.logic.AppUserAddAppUserInput
+	(*AppUserAddAppUserOutput)(nil), // 1: pb.resource.logic.AppUserAddAppUserOutput
+	(*resource.AppUserValue)(nil),   // 2: pb.resource.AppUserValue
 	(*resource.AppUser)(nil),        // 3: pb.resource.AppUser
 }
 var file_resource_logic_app_user_proto_depIdxs = []int32{
-	0, // 0: pb.resource.logic.AppUserAddAppUserInput.value:type_name -> pb.resource.logic.AppUserValue
+	2, // 0: pb.resource.logic.AppUserAddAppUserInput.value:type_name -> pb.resource.AppUserValue
 	3, // 1: pb.resource.logic.AppUserAddAppUserOutput.app_user:type_name -> pb.resource.AppUser
-	1, // 2: pb.resource.logic.AppUserModel.AddAppUser:input_type -> pb.resource.logic.AppUserAddAppUserInput
-	2, // 3: pb.resource.logic.AppUserModel.AddAppUser:output_type -> pb.resource.logic.AppUserAddAppUserOutput
+	0, // 2: pb.resource.logic.AppUserModel.AddAppUser:input_type -> pb.resource.logic.AppUserAddAppUserInput
+	1, // 3: pb.resource.logic.AppUserModel.AddAppUser:output_type -> pb.resource.logic.AppUserAddAppUserOutput
 	3, // [3:4] is the sub-list for method output_type
 	2, // [2:3] is the sub-list for method input_type
 	2, // [2:2] is the sub-list for extension type_name
@@ -216,14 +159,13 @@ func file_resource_logic_app_user_proto_init() {
 	if File_resource_logic_app_user_proto != nil {
 		return
 	}
-	file_resource_logic_app_user_proto_msgTypes[0].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_resource_logic_app_user_proto_rawDesc), len(file_resource_logic_app_user_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   2,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

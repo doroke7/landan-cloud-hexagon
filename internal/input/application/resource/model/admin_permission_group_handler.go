@@ -52,7 +52,7 @@ func domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup
 	return oPb
 }
 
-func protoAdminPermissionGroupValueToDomainAdminPermissionGroupValue(oVariable *pbResourceModel.AdminPermissionGroupValue) domain.AdminPermissionGroupValue {
+func protoAdminPermissionGroupValueToDomainAdminPermissionGroupValue(oVariable *pbResource.AdminPermissionGroupValue) domain.AdminPermissionGroupValue {
 	var oValue domain.AdminPermissionGroupValue
 	if oVariable == nil {
 		return oValue

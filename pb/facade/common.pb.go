@@ -9,6 +9,7 @@ package pb_facade
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	descriptorpb "google.golang.org/protobuf/types/descriptorpb"
 	structpb "google.golang.org/protobuf/types/known/structpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
@@ -23,6 +24,102 @@ const (
 	_ = protoimpl.EnforceVersion(protoimpl.MaxVersion - 20)
 )
 
+type AdminUserVariable struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          *string                `protobuf:"bytes,1,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Password      *string                `protobuf:"bytes,2,opt,name=password,proto3,oneof" json:"password,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *AdminUserVariable) Reset() {
+	*x = AdminUserVariable{}
+	mi := &file_facade_common_proto_msgTypes[0]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *AdminUserVariable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*AdminUserVariable) ProtoMessage() {}
+
+func (x *AdminUserVariable) ProtoReflect() protoreflect.Message {
+	mi := &file_facade_common_proto_msgTypes[0]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use AdminUserVariable.ProtoReflect.Descriptor instead.
+func (*AdminUserVariable) Descriptor() ([]byte, []int) {
+	return file_facade_common_proto_rawDescGZIP(), []int{0}
+}
+
+func (x *AdminUserVariable) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *AdminUserVariable) GetPassword() string {
+	if x != nil && x.Password != nil {
+		return *x.Password
+	}
+	return ""
+}
+
+type StaffUserVariable struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StaffUserVariable) Reset() {
+	*x = StaffUserVariable{}
+	mi := &file_facade_common_proto_msgTypes[1]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StaffUserVariable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StaffUserVariable) ProtoMessage() {}
+
+func (x *StaffUserVariable) ProtoReflect() protoreflect.Message {
+	mi := &file_facade_common_proto_msgTypes[1]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StaffUserVariable.ProtoReflect.Descriptor instead.
+func (*StaffUserVariable) Descriptor() ([]byte, []int) {
+	return file_facade_common_proto_rawDescGZIP(), []int{1}
+}
+
+func (x *StaffUserVariable) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 type Filter struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Field         string                 `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`
@@ -34,7 +131,7 @@ type Filter struct {
 
 func (x *Filter) Reset() {
 	*x = Filter{}
-	mi := &file_facade_common_proto_msgTypes[0]
+	mi := &file_facade_common_proto_msgTypes[2]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -46,7 +143,7 @@ func (x *Filter) String() string {
 func (*Filter) ProtoMessage() {}
 
 func (x *Filter) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_common_proto_msgTypes[0]
+	mi := &file_facade_common_proto_msgTypes[2]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -59,7 +156,7 @@ func (x *Filter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Filter.ProtoReflect.Descriptor instead.
 func (*Filter) Descriptor() ([]byte, []int) {
-	return file_facade_common_proto_rawDescGZIP(), []int{0}
+	return file_facade_common_proto_rawDescGZIP(), []int{2}
 }
 
 func (x *Filter) GetField() string {
@@ -93,7 +190,7 @@ type Sorter struct {
 
 func (x *Sorter) Reset() {
 	*x = Sorter{}
-	mi := &file_facade_common_proto_msgTypes[1]
+	mi := &file_facade_common_proto_msgTypes[3]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -105,7 +202,7 @@ func (x *Sorter) String() string {
 func (*Sorter) ProtoMessage() {}
 
 func (x *Sorter) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_common_proto_msgTypes[1]
+	mi := &file_facade_common_proto_msgTypes[3]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -118,7 +215,7 @@ func (x *Sorter) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Sorter.ProtoReflect.Descriptor instead.
 func (*Sorter) Descriptor() ([]byte, []int) {
-	return file_facade_common_proto_rawDescGZIP(), []int{1}
+	return file_facade_common_proto_rawDescGZIP(), []int{3}
 }
 
 func (x *Sorter) GetField() string {
@@ -145,7 +242,7 @@ type Pagination struct {
 
 func (x *Pagination) Reset() {
 	*x = Pagination{}
-	mi := &file_facade_common_proto_msgTypes[2]
+	mi := &file_facade_common_proto_msgTypes[4]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -157,7 +254,7 @@ func (x *Pagination) String() string {
 func (*Pagination) ProtoMessage() {}
 
 func (x *Pagination) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_common_proto_msgTypes[2]
+	mi := &file_facade_common_proto_msgTypes[4]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -170,7 +267,7 @@ func (x *Pagination) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Pagination.ProtoReflect.Descriptor instead.
 func (*Pagination) Descriptor() ([]byte, []int) {
-	return file_facade_common_proto_rawDescGZIP(), []int{2}
+	return file_facade_common_proto_rawDescGZIP(), []int{4}
 }
 
 func (x *Pagination) GetSize() uint64 {
@@ -204,7 +301,7 @@ type GameType struct {
 
 func (x *GameType) Reset() {
 	*x = GameType{}
-	mi := &file_facade_common_proto_msgTypes[3]
+	mi := &file_facade_common_proto_msgTypes[5]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -216,7 +313,7 @@ func (x *GameType) String() string {
 func (*GameType) ProtoMessage() {}
 
 func (x *GameType) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_common_proto_msgTypes[3]
+	mi := &file_facade_common_proto_msgTypes[5]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -229,7 +326,7 @@ func (x *GameType) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameType.ProtoReflect.Descriptor instead.
 func (*GameType) Descriptor() ([]byte, []int) {
-	return file_facade_common_proto_rawDescGZIP(), []int{3}
+	return file_facade_common_proto_rawDescGZIP(), []int{5}
 }
 
 func (x *GameType) GetId() uint64 {
@@ -312,7 +409,7 @@ type Game struct {
 
 func (x *Game) Reset() {
 	*x = Game{}
-	mi := &file_facade_common_proto_msgTypes[4]
+	mi := &file_facade_common_proto_msgTypes[6]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -324,7 +421,7 @@ func (x *Game) String() string {
 func (*Game) ProtoMessage() {}
 
 func (x *Game) ProtoReflect() protoreflect.Message {
-	mi := &file_facade_common_proto_msgTypes[4]
+	mi := &file_facade_common_proto_msgTypes[6]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -337,7 +434,7 @@ func (x *Game) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Game.ProtoReflect.Descriptor instead.
 func (*Game) Descriptor() ([]byte, []int) {
-	return file_facade_common_proto_rawDescGZIP(), []int{4}
+	return file_facade_common_proto_rawDescGZIP(), []int{6}
 }
 
 func (x *Game) GetId() uint64 {
@@ -403,11 +500,103 @@ func (x *Game) GetGameType() *GameType {
 	return nil
 }
 
+type GameVariable struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	GameTypeId    *uint64                `protobuf:"varint,1,opt,name=game_type_id,json=gameTypeId,proto3,oneof" json:"game_type_id,omitempty"`
+	Key           *string                `protobuf:"bytes,2,opt,name=key,proto3,oneof" json:"key,omitempty"`
+	Name          *string                `protobuf:"bytes,3,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Description   *string                `protobuf:"bytes,4,opt,name=description,proto3,oneof" json:"description,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GameVariable) Reset() {
+	*x = GameVariable{}
+	mi := &file_facade_common_proto_msgTypes[7]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GameVariable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GameVariable) ProtoMessage() {}
+
+func (x *GameVariable) ProtoReflect() protoreflect.Message {
+	mi := &file_facade_common_proto_msgTypes[7]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GameVariable.ProtoReflect.Descriptor instead.
+func (*GameVariable) Descriptor() ([]byte, []int) {
+	return file_facade_common_proto_rawDescGZIP(), []int{7}
+}
+
+func (x *GameVariable) GetGameTypeId() uint64 {
+	if x != nil && x.GameTypeId != nil {
+		return *x.GameTypeId
+	}
+	return 0
+}
+
+func (x *GameVariable) GetKey() string {
+	if x != nil && x.Key != nil {
+		return *x.Key
+	}
+	return ""
+}
+
+func (x *GameVariable) GetName() string {
+	if x != nil && x.Name != nil {
+		return *x.Name
+	}
+	return ""
+}
+
+func (x *GameVariable) GetDescription() string {
+	if x != nil && x.Description != nil {
+		return *x.Description
+	}
+	return ""
+}
+
+var file_facade_common_proto_extTypes = []protoimpl.ExtensionInfo{
+	{
+		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
+		ExtensionType: (*bool)(nil),
+		Field:         50001,
+		Name:          "pb.facade.encrypted",
+		Tag:           "varint,50001,opt,name=encrypted",
+		Filename:      "facade/common.proto",
+	},
+}
+
+// Extension fields to descriptorpb.FieldOptions.
+var (
+	// optional bool encrypted = 50001;
+	E_Encrypted = &file_facade_common_proto_extTypes[0]
+)
+
 var File_facade_common_proto protoreflect.FileDescriptor
 
 const file_facade_common_proto_rawDesc = "" +
 	"\n" +
-	"\x13facade/common.proto\x12\tpb.facade\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\"h\n" +
+	"\x13facade/common.proto\x12\tpb.facade\x1a\x1fgoogle/protobuf/timestamp.proto\x1a\x1cgoogle/protobuf/struct.proto\x1a google/protobuf/descriptor.proto\"i\n" +
+	"\x11AdminUserVariable\x12\x17\n" +
+	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12%\n" +
+	"\bpassword\x18\x02 \x01(\tB\x04\x88\xb5\x18\x01H\x01R\bpassword\x88\x01\x01B\a\n" +
+	"\x05_nameB\v\n" +
+	"\t_password\"'\n" +
+	"\x11StaffUserVariable\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"h\n" +
 	"\x06Filter\x12\x14\n" +
 	"\x05field\x18\x01 \x01(\tR\x05field\x12\x1a\n" +
 	"\boperator\x18\x02 \x01(\tR\boperator\x12,\n" +
@@ -445,7 +634,18 @@ const file_facade_common_proto_rawDesc = "" +
 	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
 	"deleted_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x120\n" +
-	"\tgame_type\x18\t \x01(\v2\x13.pb.facade.GameTypeR\bgameTypeB\x1dZ\x1bexample/pb/facade;pb_facadeb\x06proto3"
+	"\tgame_type\x18\t \x01(\v2\x13.pb.facade.GameTypeR\bgameType\"\xbe\x01\n" +
+	"\fGameVariable\x12%\n" +
+	"\fgame_type_id\x18\x01 \x01(\x04H\x00R\n" +
+	"gameTypeId\x88\x01\x01\x12\x15\n" +
+	"\x03key\x18\x02 \x01(\tH\x01R\x03key\x88\x01\x01\x12\x17\n" +
+	"\x04name\x18\x03 \x01(\tH\x02R\x04name\x88\x01\x01\x12%\n" +
+	"\vdescription\x18\x04 \x01(\tH\x03R\vdescription\x88\x01\x01B\x0f\n" +
+	"\r_game_type_idB\x06\n" +
+	"\x04_keyB\a\n" +
+	"\x05_nameB\x0e\n" +
+	"\f_description:=\n" +
+	"\tencrypted\x12\x1d.google.protobuf.FieldOptions\x18ц\x03 \x01(\bR\tencryptedB\x1dZ\x1bexample/pb/facade;pb_facadeb\x06proto3"
 
 var (
 	file_facade_common_proto_rawDescOnce sync.Once
@@ -459,31 +659,36 @@ func file_facade_common_proto_rawDescGZIP() []byte {
 	return file_facade_common_proto_rawDescData
 }
 
-var file_facade_common_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
+var file_facade_common_proto_msgTypes = make([]protoimpl.MessageInfo, 8)
 var file_facade_common_proto_goTypes = []any{
-	(*Filter)(nil),                // 0: pb.facade.Filter
-	(*Sorter)(nil),                // 1: pb.facade.Sorter
-	(*Pagination)(nil),            // 2: pb.facade.Pagination
-	(*GameType)(nil),              // 3: pb.facade.GameType
-	(*Game)(nil),                  // 4: pb.facade.Game
-	(*structpb.Value)(nil),        // 5: google.protobuf.Value
-	(*timestamppb.Timestamp)(nil), // 6: google.protobuf.Timestamp
+	(*AdminUserVariable)(nil),         // 0: pb.facade.AdminUserVariable
+	(*StaffUserVariable)(nil),         // 1: pb.facade.StaffUserVariable
+	(*Filter)(nil),                    // 2: pb.facade.Filter
+	(*Sorter)(nil),                    // 3: pb.facade.Sorter
+	(*Pagination)(nil),                // 4: pb.facade.Pagination
+	(*GameType)(nil),                  // 5: pb.facade.GameType
+	(*Game)(nil),                      // 6: pb.facade.Game
+	(*GameVariable)(nil),              // 7: pb.facade.GameVariable
+	(*structpb.Value)(nil),            // 8: google.protobuf.Value
+	(*timestamppb.Timestamp)(nil),     // 9: google.protobuf.Timestamp
+	(*descriptorpb.FieldOptions)(nil), // 10: google.protobuf.FieldOptions
 }
 var file_facade_common_proto_depIdxs = []int32{
-	5,  // 0: pb.facade.Filter.value:type_name -> google.protobuf.Value
-	6,  // 1: pb.facade.GameType.created_at:type_name -> google.protobuf.Timestamp
-	6,  // 2: pb.facade.GameType.updated_at:type_name -> google.protobuf.Timestamp
-	6,  // 3: pb.facade.GameType.deleted_at:type_name -> google.protobuf.Timestamp
-	3,  // 4: pb.facade.GameType.parent:type_name -> pb.facade.GameType
-	3,  // 5: pb.facade.GameType.children:type_name -> pb.facade.GameType
-	6,  // 6: pb.facade.Game.created_at:type_name -> google.protobuf.Timestamp
-	6,  // 7: pb.facade.Game.updated_at:type_name -> google.protobuf.Timestamp
-	6,  // 8: pb.facade.Game.deleted_at:type_name -> google.protobuf.Timestamp
-	3,  // 9: pb.facade.Game.game_type:type_name -> pb.facade.GameType
-	10, // [10:10] is the sub-list for method output_type
-	10, // [10:10] is the sub-list for method input_type
-	10, // [10:10] is the sub-list for extension type_name
-	10, // [10:10] is the sub-list for extension extendee
+	8,  // 0: pb.facade.Filter.value:type_name -> google.protobuf.Value
+	9,  // 1: pb.facade.GameType.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 2: pb.facade.GameType.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 3: pb.facade.GameType.deleted_at:type_name -> google.protobuf.Timestamp
+	5,  // 4: pb.facade.GameType.parent:type_name -> pb.facade.GameType
+	5,  // 5: pb.facade.GameType.children:type_name -> pb.facade.GameType
+	9,  // 6: pb.facade.Game.created_at:type_name -> google.protobuf.Timestamp
+	9,  // 7: pb.facade.Game.updated_at:type_name -> google.protobuf.Timestamp
+	9,  // 8: pb.facade.Game.deleted_at:type_name -> google.protobuf.Timestamp
+	5,  // 9: pb.facade.Game.game_type:type_name -> pb.facade.GameType
+	10, // 10: pb.facade.encrypted:extendee -> google.protobuf.FieldOptions
+	11, // [11:11] is the sub-list for method output_type
+	11, // [11:11] is the sub-list for method input_type
+	11, // [11:11] is the sub-list for extension type_name
+	10, // [10:11] is the sub-list for extension extendee
 	0,  // [0:10] is the sub-list for field type_name
 }
 
@@ -492,19 +697,22 @@ func file_facade_common_proto_init() {
 	if File_facade_common_proto != nil {
 		return
 	}
+	file_facade_common_proto_msgTypes[0].OneofWrappers = []any{}
+	file_facade_common_proto_msgTypes[7].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_facade_common_proto_rawDesc), len(file_facade_common_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   5,
-			NumExtensions: 0,
+			NumMessages:   8,
+			NumExtensions: 1,
 			NumServices:   0,
 		},
 		GoTypes:           file_facade_common_proto_goTypes,
 		DependencyIndexes: file_facade_common_proto_depIdxs,
 		MessageInfos:      file_facade_common_proto_msgTypes,
+		ExtensionInfos:    file_facade_common_proto_extTypes,
 	}.Build()
 	File_facade_common_proto = out.File
 	file_facade_common_proto_goTypes = nil

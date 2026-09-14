@@ -3,6 +3,7 @@ package outputApplicationResourceModel
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
+	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 )
 
@@ -19,7 +20,7 @@ func NewAppUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AppUserMo
 func (oSelf *AppUserModel) AddOne(oAppUser *domain.AppUserValue) error {
 
 	oRequest := &pbResourceModel.AppUserAddOneInput{
-		Value: &pbResourceModel.AppUserValue{
+		Value: &pbResource.AppUserValue{
 			Name:     oAppUser.Name,
 			Password: oAppUser.Password,
 		},

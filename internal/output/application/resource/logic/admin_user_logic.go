@@ -83,7 +83,7 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 	}
 
 	oRequest := &pbResourceLogic.AdminUserAddAminUserInput{
-		Value: &pbResourceLogic.AdminUserValue{
+		Value: &pbResource.AdminUserValue{
 			Name:         oValue.Name,
 			Password:     oValue.Password,
 			AdminRoleIds: aAdminRoleIds,
@@ -103,7 +103,7 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 	}
 
 	oRequest := &pbResourceLogic.AdminUserEditAdminUserByIdInput{
-		Value: &pbResourceLogic.AdminUserValue{
+		Value: &pbResource.AdminUserValue{
 			Name:         oValue.Name,
 			Password:     oValue.Password,
 			AdminRoleIds: aAdminRoleIds,
