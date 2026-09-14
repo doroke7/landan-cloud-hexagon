@@ -56,6 +56,7 @@ func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *dom
 
 // ShowTree gRPC 回來就是巢狀好的 tree（每個節點帶 Children），直接遞迴轉成 domain。
 func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGroup, error) {
+
 	oResponse, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.ShowTree(oSelf.Context, &pbResourceLogic.AdminPermissionGroupShowTreeInput{})
 	if oErr != nil {
 		return nil, oErr
