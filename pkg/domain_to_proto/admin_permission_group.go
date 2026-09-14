@@ -24,8 +24,8 @@ func AdminPermissionGroup(oDomain *domain.AdminPermissionGroup) *pbResource.Admi
 		Parent:    AdminPermissionGroup(oDomain.Parent),
 	}
 
-	for i := range oDomain.Children {
-		oChildPb := AdminPermissionGroup(&oDomain.Children[i])
+	for iIndex := range oDomain.Children {
+		oChildPb := AdminPermissionGroup(&oDomain.Children[iIndex])
 		oProto.Children = append(oProto.Children, oChildPb)
 	}
 
