@@ -22,11 +22,19 @@ type TableRecordModel struct {
 // 索引跟 script/mongodb/resource.js 建的一致：no 唯一、table_id+game_id+no+deleted_at 供查詢用。
 func NewTableRecordModel(oAbstractModel *AbstractModel) (outputPortAnyModel.TableRecordModel, error) {
 	oCollection := oAbstractModel.Database.Collection("table_records")
+	oIndexView := oCollection.Indexes()
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
+	oNoIndexOptions := options.Index()
+	oNoIndexOptions.SetUnique(true)
+	oNoIndexOptions.SetName("table_records-n")
+
+	oTableIdGameIdNoDeletedAtIndexOptions := options.Index()
+	oTableIdGameIdNoDeletedAtIndexOptions.SetName("table_records-ti-gi-n-da")
+
+	aIndexModels := []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "no", Value: 1}},
-			Options: options.Index().SetUnique(true).SetName("table_records-n"),
+			Options: oNoIndexOptions,
 		},
 		{
 			Keys: bson.D{
@@ -35,25 +43,33 @@ func NewTableRecordModel(oAbstractModel *AbstractModel) (outputPortAnyModel.Tabl
 				{Key: "no", Value: 1},
 				{Key: "deleted_at", Value: 1},
 			},
-			Options: options.Index().SetName("table_records-ti-gi-n-da"),
+			Options: oTableIdGameIdNoDeletedAtIndexOptions,
 		},
-	}); oErr != nil {
+	}
+
+	if _, oErr := oIndexView.CreateMany(oAbstractModel.Context, aIndexModels); oErr != nil {
 		return nil, oErr
 	}
+
+	oCounters := oAbstractModel.Database.Collection("counters")
 
 	return &TableRecordModel{
 		AbstractModel: oAbstractModel,
 		Collection:    oCollection,
-		Counters:      oAbstractModel.Database.Collection("counters"),
+		Counters:      oCounters,
 	}, nil
 }
 
 func (oSelf *TableRecordModel) nextId() (uint, error) {
+	oUpdateOptions := options.FindOneAndUpdate()
+	oUpdateOptions.SetUpsert(true)
+	oUpdateOptions.SetReturnDocument(options.After)
+
 	oResult := oSelf.Counters.FindOneAndUpdate(
 		oSelf.Context,
 		bson.M{"_id": "table_record"},
 		bson.M{"$inc": bson.M{"seq": 1}},
-		options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After),
+		oUpdateOptions,
 	)
 
 	var oCounter struct {
@@ -118,10 +134,11 @@ func (oSelf *TableRecordModel) AddOne(oTableRecord *domain.TableRecordValue) err
 func (oSelf *TableRecordModel) ShowOneById(iId uint64) (*domain.TableRecord, error) {
 	var oTableRecord domain.TableRecord
 
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
+	oResult := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oTableRecord)
+	})
+	oErr := oResult.Decode(&oTableRecord)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
@@ -181,10 +198,11 @@ func (oSelf *TableRecordModel) EditOneById(oTableRecord *domain.TableRecordValue
 }
 
 func (oSelf *TableRecordModel) RemoveOneById(iId uint64) error {
+	oNow := time.Now()
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
-		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
+		bson.M{"$set": bson.M{"deleted_at": oNow}},
 	)
 	if oErr != nil {
 		return oErr

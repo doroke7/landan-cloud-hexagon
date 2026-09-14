@@ -35,11 +35,15 @@ func (oSelf *LotteryHandler) Watch(oReq *pbSourceAnnouncement.LotteryWatchReques
 
 	var iCount int32 = 1
 
+	oStreamContext := oStream.Context()
+
 	for {
 		select {
 		// 情境 A：Client 斷線或 Cancel 請求
-		case <-oStream.Context().Done():
-			return oStream.Context().Err()
+		case <-oStreamContext.Done():
+			oContextErr := oStreamContext.Err()
+
+			return oContextErr
 
 		// 情境 B：時間到，準備發送資料
 		case <-oTicker.C:

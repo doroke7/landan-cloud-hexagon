@@ -15,7 +15,7 @@ func protoAdminRoleToDomainAdminRole(oProto *pbResource.AdminRole) domain.AdminR
 		return domain.AdminRole{}
 	}
 
-	return domain.AdminRole{
+	oAdminRole := domain.AdminRole{
 		Id:        uint64(oProto.GetId()),
 		Key:       oProto.GetKey(),
 		Name:      oProto.GetName(),
@@ -23,6 +23,8 @@ func protoAdminRoleToDomainAdminRole(oProto *pbResource.AdminRole) domain.AdminR
 		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
 		DeletedAt: oProto.GetDeletedAt().AsTime(),
 	}
+
+	return oAdminRole
 }
 
 type AdminUserLogic struct {
@@ -30,9 +32,11 @@ type AdminUserLogic struct {
 }
 
 func NewAdminUserLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminUserLogic {
-	return &AdminUserLogic{
+	oLogic := &AdminUserLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+
+	return oLogic
 }
 
 func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
@@ -55,7 +59,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 			aAdminRoles = append(aAdminRoles, protoAdminRoleToDomainAdminRole(oProtoAdminRole))
 		}
 
-		aAdminUsers = append(aAdminUsers, &domain.AdminUser{
+		oAdminUser := &domain.AdminUser{
 			Id:         uint64(oOne.GetId()),
 			Name:       oOne.GetName(),
 			Password:   oOne.GetPassword(),
@@ -63,7 +67,8 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 			UpdatedAt:  oOne.GetUpdatedAt().AsTime(),
 			DeletedAt:  oOne.GetDeletedAt().AsTime(),
 			AdminRoles: aAdminRoles,
-		})
+		}
+		aAdminUsers = append(aAdminUsers, oAdminUser)
 	}
 
 	iTotal := uint64(oResponse.GetTotal())

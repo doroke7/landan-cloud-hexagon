@@ -21,33 +21,45 @@ type TableRecordLogModel struct {
 // 索引跟 script/mongodb/resource.js 建的一致：table_record_id+game_id+state 供查詢用。
 func NewTableRecordLogModel(oAbstractModel *AbstractModel) (outputPortAnyModel.TableRecordLogModel, error) {
 	oCollection := oAbstractModel.Database.Collection("table_record_logs")
+	oIndexView := oCollection.Indexes()
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
+	oTableRecordIdGameIdStateIndexOptions := options.Index()
+	oTableRecordIdGameIdStateIndexOptions.SetName("table_record_logs-tri-gi-s")
+
+	aIndexModels := []mongo.IndexModel{
 		{
 			Keys: bson.D{
 				{Key: "table_record_id", Value: 1},
 				{Key: "game_id", Value: 1},
 				{Key: "state", Value: 1},
 			},
-			Options: options.Index().SetName("table_record_logs-tri-gi-s"),
+			Options: oTableRecordIdGameIdStateIndexOptions,
 		},
-	}); oErr != nil {
+	}
+
+	if _, oErr := oIndexView.CreateMany(oAbstractModel.Context, aIndexModels); oErr != nil {
 		return nil, oErr
 	}
+
+	oCounters := oAbstractModel.Database.Collection("counters")
 
 	return &TableRecordLogModel{
 		AbstractModel: oAbstractModel,
 		Collection:    oCollection,
-		Counters:      oAbstractModel.Database.Collection("counters"),
+		Counters:      oCounters,
 	}, nil
 }
 
 func (oSelf *TableRecordLogModel) nextId() (uint, error) {
+	oUpdateOptions := options.FindOneAndUpdate()
+	oUpdateOptions.SetUpsert(true)
+	oUpdateOptions.SetReturnDocument(options.After)
+
 	oResult := oSelf.Counters.FindOneAndUpdate(
 		oSelf.Context,
 		bson.M{"_id": "table_record_log"},
 		bson.M{"$inc": bson.M{"seq": 1}},
-		options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After),
+		oUpdateOptions,
 	)
 
 	var oCounter struct {
@@ -100,10 +112,11 @@ func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogV
 func (oSelf *TableRecordLogModel) ShowOneById(iId uint64) (*domain.TableRecordLog, error) {
 	var oTableRecordLog domain.TableRecordLog
 
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
+	oResult := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oTableRecordLog)
+	})
+	oErr := oResult.Decode(&oTableRecordLog)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {

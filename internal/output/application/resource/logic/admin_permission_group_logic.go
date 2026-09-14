@@ -13,9 +13,11 @@ type AdminPermissionGroupLogic struct {
 }
 
 func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminPermissionGroupLogic {
-	return &AdminPermissionGroupLogic{
+	oLogic := &AdminPermissionGroupLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+
+	return oLogic
 }
 
 func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupValue) error {
@@ -105,7 +107,8 @@ func protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto *pbResource.Ad
 	}
 
 	for _, oChild := range oProto.GetChildren() {
-		oAdminPermissionGroup.Children = append(oAdminPermissionGroup.Children, protoAdminPermissionGroupToDomainAdminPermissionGroup(oChild))
+		oChildDomain := protoAdminPermissionGroupToDomainAdminPermissionGroup(oChild)
+		oAdminPermissionGroup.Children = append(oAdminPermissionGroup.Children, oChildDomain)
 	}
 
 	return oAdminPermissionGroup
@@ -113,10 +116,8 @@ func protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto *pbResource.Ad
 
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64) (*domain.AdminPermissionGroup, error) {
 
-	oResponse, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.ShowAdminPermissionGroupById(
-		oSelf.Context,
-		&pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdInput{Id: iId},
-	)
+	oRequest := &pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdInput{Id: iId}
+	oResponse, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.ShowAdminPermissionGroupById(oSelf.Context, oRequest)
 	if oErr != nil {
 		return nil, oErr
 	}

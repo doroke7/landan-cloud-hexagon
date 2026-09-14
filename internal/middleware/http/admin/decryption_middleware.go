@@ -32,9 +32,10 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 		sHeaderK := oContext.GetHeader("K")
 		sHeaderA := oContext.GetHeader("A")
 
-		sQueryF := oContext.Request.URL.Query().Get("f")
-		sQueryS := oContext.Request.URL.Query().Get("s")
-		sQueryP := oContext.Request.URL.Query().Get("p")
+		oQuery := oContext.Request.URL.Query()
+		sQueryF := oQuery.Get("f")
+		sQueryS := oQuery.Get("s")
+		sQueryP := oQuery.Get("p")
 
 		var oRequestBody types.HttpRequestBody
 
@@ -59,7 +60,8 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkgUtility.NewDefaultError("key decryption failed", -1, 400))
+			oError := pkgUtility.NewDefaultError("key decryption failed", -1, 400)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 			return
 		}
@@ -88,7 +90,8 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkgUtility.NewDefaultError("pagination decryption failed", -1, 400))
+			oError := pkgUtility.NewDefaultError("pagination decryption failed", -1, 400)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 
 			return
@@ -110,7 +113,8 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkgUtility.NewDefaultError("sorter decryption failed", -1, 400))
+			oError := pkgUtility.NewDefaultError("sorter decryption failed", -1, 400)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 
 			return
@@ -132,7 +136,8 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkgUtility.NewDefaultError("filter decryption failed", -1, 400))
+			oError := pkgUtility.NewDefaultError("filter decryption failed", -1, 400)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 
 			return
@@ -154,7 +159,8 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkgUtility.NewDefaultError("value decryption failed", -1, 400))
+			oError := pkgUtility.NewDefaultError("value decryption failed", -1, 400)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 
 			return
@@ -177,7 +183,8 @@ func (oSelf *DecryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
 
-			_ = oContext.Error(pkgUtility.NewDefaultError("Authorization decryption failed", -1, 400))
+			oError := pkgUtility.NewDefaultError("Authorization decryption failed", -1, 400)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 
 			return

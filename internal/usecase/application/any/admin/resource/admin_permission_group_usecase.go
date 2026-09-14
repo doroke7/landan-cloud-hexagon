@@ -47,7 +47,9 @@ func (oSelf *AdminPermissionGroupUsecase) RemoveOne(iId uint64) error {
 	}
 
 	if len(aAdminPermissionGroups) >= 1 {
-		return pkgUtility.NewDefaultError("Cannot delete because this group still has child groups", -2, 200)
+		oHasChildrenError := pkgUtility.NewDefaultError("Cannot delete because this group still has child groups", -2, 200)
+
+		return oHasChildrenError
 	}
 
 	oErr = oSelf.AdminPermissionGroupModel.RemoveOneById(iId)

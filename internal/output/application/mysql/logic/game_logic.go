@@ -17,9 +17,11 @@ type GameLogic struct {
 }
 
 func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
-	return &GameLogic{
+	oLogic := &GameLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+
+	return oLogic
 }
 
 func (oSelf *GameLogic) ShowGameById(iId uint64) (*domain.Game, error) {

@@ -64,12 +64,16 @@ func protoAdminPermissionValueToDomainAdminPermissionValue(oVariable *pbResource
 
 func (oSelf *AdminPermissionHandler) AddOne(oContext context.Context, oReq *pbResourceModel.AdminPermissionAddOneInput) (*pbResourceModel.AdminPermissionAddOneOutput, error) {
 
-	oAdminPermissionValue := protoAdminPermissionValueToDomainAdminPermissionValue(oReq.GetValue())
+	oReqValue := oReq.GetValue()
+	oAdminPermissionValue := protoAdminPermissionValueToDomainAdminPermissionValue(oReqValue)
 
 	oErr := oSelf.ModelAdminPermissionUsecase.AddOne(&oAdminPermissionValue)
 
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		sError := oErr.Error()
+		oStatusError := status.Error(codes.Aborted, sError)
+
+		return nil, oStatusError
 	}
 
 	return &pbResourceModel.AdminPermissionAddOneOutput{
@@ -81,26 +85,35 @@ func (oSelf *AdminPermissionHandler) ShowOneById(oContext context.Context, oReq 
 
 	oAdminPermission, oErr := oSelf.ModelAdminPermissionUsecase.ShowOneById(uint64(oReq.Id))
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		sError := oErr.Error()
+		oStatusError := status.Error(codes.NotFound, sError)
+
+		return nil, oStatusError
 	}
 
 	if oAdminPermission == nil {
 		return nil, nil
 	}
 
+	oProtoAdminPermission := domainAdminPermissionToProtoAdminPermission(oAdminPermission)
+
 	return &pbResourceModel.AdminPermissionShowOneByIdOutput{
-		AdminPermission: domainAdminPermissionToProtoAdminPermission(oAdminPermission),
+		AdminPermission: oProtoAdminPermission,
 	}, nil
 }
 
 func (oSelf *AdminPermissionHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionEditOneByIdInput) (*pbResourceModel.AdminPermissionEditOneByIdOutput, error) {
 
-	oAdminPermissionValue := protoAdminPermissionValueToDomainAdminPermissionValue(oReq.GetValue())
+	oReqValue := oReq.GetValue()
+	oAdminPermissionValue := protoAdminPermissionValueToDomainAdminPermissionValue(oReqValue)
 
 	oErr := oSelf.ModelAdminPermissionUsecase.EditOneById(&oAdminPermissionValue, uint64(oReq.Id))
 
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		sError := oErr.Error()
+		oStatusError := status.Error(codes.Aborted, sError)
+
+		return nil, oStatusError
 	}
 
 	return &pbResourceModel.AdminPermissionEditOneByIdOutput{
@@ -113,7 +126,10 @@ func (oSelf *AdminPermissionHandler) RemoveOneById(oContext context.Context, oRe
 	oErr := oSelf.ModelAdminPermissionUsecase.RemoveOneById(uint64(oReq.Id))
 
 	if oErr != nil {
-		return nil, status.Error(codes.Aborted, oErr.Error())
+		sError := oErr.Error()
+		oStatusError := status.Error(codes.Aborted, sError)
+
+		return nil, oStatusError
 	}
 
 	return &pbResourceModel.AdminPermissionRemoveOneByIdOutput{
@@ -123,37 +139,43 @@ func (oSelf *AdminPermissionHandler) RemoveOneById(oContext context.Context, oRe
 
 func (oSelf *AdminPermissionHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.AdminPermissionShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.AdminPermissionShowOnesByFiltersWithSortersPaginationOutput, error) {
 
-	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
-	for _, oOne := range oReq.GetFilters() {
+	aFiltersInput := oReq.GetFilters()
+	aFilters := make([]*pkgInput.Filter, 0, len(aFiltersInput))
+	for _, oOne := range aFiltersInput {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aFilters = append(aFilters, &pkgInput.Filter{
+		oValue := oOne.GetValue().AsInterface()
+		oFilter := &pkgInput.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
-			Value:    oOne.GetValue().AsInterface(),
-		})
+			Value:    oValue,
+		}
+		aFilters = append(aFilters, oFilter)
 	}
 
-	aSorters := make([]*pkgInput.Sorter, 0, len(oReq.GetSorters()))
-	for _, oOne := range oReq.GetSorters() {
+	aSortersInput := oReq.GetSorters()
+	aSorters := make([]*pkgInput.Sorter, 0, len(aSortersInput))
+	for _, oOne := range aSortersInput {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOrder := oOne.GetOrder()
-		aSorters = append(aSorters, &pkgInput.Sorter{
+		oSorter := &pkgInput.Sorter{
 			Field: &sField,
 			Order: &sOrder,
-		})
+		}
+		aSorters = append(aSorters, oSorter)
 	}
 
-	iSize := uint(oReq.GetPagination().GetSize())
-	iPage := uint(oReq.GetPagination().GetPage())
+	oPaginationInput := oReq.GetPagination()
+	iSize := uint(oPaginationInput.GetSize())
+	iPage := uint(oPaginationInput.GetPage())
 	oPagination := &pkgInput.Pagination{
 		Size: &iSize,
 		Page: &iPage,
@@ -162,12 +184,16 @@ func (oSelf *AdminPermissionHandler) ShowOnesByFiltersWithSortersPagination(oCon
 	aAdminPermissions, oErr := oSelf.ModelAdminPermissionUsecase.ShowOnesByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		sError := oErr.Error()
+		oStatusError := status.Error(codes.NotFound, sError)
+
+		return nil, oStatusError
 	}
 
 	aProtoAdminPermissions := make([]*pbResource.AdminPermission, 0, len(aAdminPermissions))
 	for _, oAdminPermission := range aAdminPermissions {
-		aProtoAdminPermissions = append(aProtoAdminPermissions, domainAdminPermissionToProtoAdminPermission(oAdminPermission))
+		oProtoAdminPermission := domainAdminPermissionToProtoAdminPermission(oAdminPermission)
+		aProtoAdminPermissions = append(aProtoAdminPermissions, oProtoAdminPermission)
 	}
 
 	return &pbResourceModel.AdminPermissionShowOnesByFiltersWithSortersPaginationOutput{
@@ -177,24 +203,30 @@ func (oSelf *AdminPermissionHandler) ShowOnesByFiltersWithSortersPagination(oCon
 
 func (oSelf *AdminPermissionHandler) TotalByFilters(oContext context.Context, oReq *pbResourceModel.AdminPermissionTotalByFiltersInput) (*pbResourceModel.AdminPermissionTotalByFiltersOutput, error) {
 
-	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
-	for _, oOne := range oReq.GetFilters() {
+	aFiltersInput := oReq.GetFilters()
+	aFilters := make([]*pkgInput.Filter, 0, len(aFiltersInput))
+	for _, oOne := range aFiltersInput {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aFilters = append(aFilters, &pkgInput.Filter{
+		oValue := oOne.GetValue().AsInterface()
+		oFilter := &pkgInput.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
-			Value:    oOne.GetValue().AsInterface(),
-		})
+			Value:    oValue,
+		}
+		aFilters = append(aFilters, oFilter)
 	}
 
 	iTotal, oErr := oSelf.ModelAdminPermissionUsecase.TotalByFilters(aFilters)
 	if oErr != nil {
-		return nil, status.Error(codes.NotFound, oErr.Error())
+		sError := oErr.Error()
+		oStatusError := status.Error(codes.NotFound, sError)
+
+		return nil, oStatusError
 	}
 
 	return &pbResourceModel.AdminPermissionTotalByFiltersOutput{

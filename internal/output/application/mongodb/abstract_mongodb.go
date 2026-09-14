@@ -23,10 +23,12 @@ type AbstractMongodb struct {
 }
 
 func NewAbstractMongodb(oContext context.Context, oClient *mongo.Client) *AbstractMongodb {
+	oDatabase := oClient.Database(bootstrap.CONFIG.MONGODB.NAME)
+
 	return &AbstractMongodb{
 		Context:  oContext,
 		Client:   oClient,
-		Database: oClient.Database(bootstrap.CONFIG.MONGODB.NAME),
+		Database: oDatabase,
 	}
 }
 
@@ -147,7 +149,8 @@ func (oSelf *AbstractMongodb) SortersPaginationToFindOptions(aSorters []*pkgInpu
 			iPage = *oPagination.Page
 		}
 	}
-	oFindOptions.SetLimit(int64(iSize)).SetSkip(int64((iPage - 1) * iSize))
+	oFindOptions.SetLimit(int64(iSize))
+	oFindOptions.SetSkip(int64((iPage - 1) * iSize))
 
 	return oFindOptions
 }

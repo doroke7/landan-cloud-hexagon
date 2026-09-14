@@ -13,11 +13,13 @@ func Init(oContainer *container.CronContainer) *cron.Cron {
 
 	// 這裡 oContainer.CronAdminResourceAppUser.IncreaseBalance 是，閉包，還沒執行，所以啟動不會連 mysql
 	if _, err := oCron.AddFunc("* * * * *", oContainer.CronAdminResourceAppUser.IncreaseBalance); err != nil {
-		pkgUtility.Logger(pkgUtility.Cron).Fatal("cron: failed to register CronAppUser.IncreaseBalance job", zap.Error(err))
+		oLogger := pkgUtility.Logger(pkgUtility.Cron)
+		oLogger.Fatal("cron: failed to register CronAppUser.IncreaseBalance job", zap.Error(err))
 	}
 
 	if _, err := oCron.AddFunc("* * * * *", oContainer.CronAdminAuthenticationAuthenticator.SignIn); err != nil {
-		pkgUtility.Logger(pkgUtility.Cron).Fatal("cron: failed to register CronAdminAuthenticationAuthenticator.SignIn job", zap.Error(err))
+		oLogger := pkgUtility.Logger(pkgUtility.Cron)
+		oLogger.Fatal("cron: failed to register CronAdminAuthenticationAuthenticator.SignIn job", zap.Error(err))
 	}
 
 	return oCron

@@ -13,9 +13,11 @@ type TableLogic struct {
 }
 
 func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic {
-	return &TableLogic{
+	oLogic := &TableLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+
+	return oLogic
 }
 
 func protoTableToDomainTable(oProtoTable *pbResource.Table) domain.Table {
@@ -23,7 +25,8 @@ func protoTableToDomainTable(oProtoTable *pbResource.Table) domain.Table {
 		return domain.Table{}
 	}
 
-	return domain.Table{
+	oGame := protoGameToDomainGame(oProtoTable.GetGame())
+	oTable := domain.Table{
 		Id:          uint64(oProtoTable.GetId()),
 		No:          oProtoTable.GetNo(),
 		GameId:      uint64(oProtoTable.GetGameId()),
@@ -36,8 +39,10 @@ func protoTableToDomainTable(oProtoTable *pbResource.Table) domain.Table {
 		CreatedAt:   oProtoTable.GetCreatedAt().AsTime(),
 		UpdatedAt:   oProtoTable.GetUpdatedAt().AsTime(),
 		DeletedAt:   oProtoTable.GetDeletedAt().AsTime(),
-		Game:        protoGameToDomainGame(oProtoTable.GetGame()),
+		Game:        oGame,
 	}
+
+	return oTable
 }
 
 func (oSelf *TableLogic) ShowTableById(iId uint64) (*domain.Table, error) {
@@ -74,7 +79,8 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 
 	aTables := make([]*domain.Table, 0, len(oResponse.GetTables()))
 	for _, oOne := range oResponse.GetTables() {
-		aTables = append(aTables, &domain.Table{
+		oGame := protoGameToDomainGame(oOne.GetGame())
+		oTable := &domain.Table{
 			Id:          uint64(oOne.GetId()),
 			No:          oOne.GetNo(),
 			GameId:      uint64(oOne.GetGameId()),
@@ -87,8 +93,9 @@ func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters 
 			CreatedAt:   oOne.GetCreatedAt().AsTime(),
 			UpdatedAt:   oOne.GetUpdatedAt().AsTime(),
 			DeletedAt:   oOne.GetDeletedAt().AsTime(),
-			Game:        protoGameToDomainGame(oOne.GetGame()),
-		})
+			Game:        oGame,
+		}
+		aTables = append(aTables, oTable)
 	}
 
 	iTotal := uint64(oResponse.GetTotal())

@@ -37,7 +37,9 @@ func (oSelf *GameUsecase) AddOne(oValue *domain.GameValue) error {
 		}
 
 		if oGameByKey != nil {
-			return errors.New("key already used by another game")
+			oKeyUsedError := errors.New("key already used by another game")
+
+			return oKeyUsedError
 		}
 	}
 
@@ -56,7 +58,10 @@ func (oSelf *GameUsecase) EditOne(oValue *domain.GameValue, iId uint64) error {
 		}
 
 		if oGameByKey != nil && oGameByKey.Id != iId {
-			return pkgUtility.NewDefaultError("key="+*oValue.Key+" already exists", -2, 500)
+			sMessage := "key=" + *oValue.Key + " already exists"
+			oKeyExistsError := pkgUtility.NewDefaultError(sMessage, -2, 500)
+
+			return oKeyExistsError
 		}
 	}
 

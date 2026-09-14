@@ -34,11 +34,14 @@ func (oSelf *AuthenticatorHandler) SignIn(oConn types.WebsocketConn, oReq types.
 
 	sAuthorization, err := oSelf.AdminAuthenticationAuthenticatorUsecase.SignIn(oParam.Name, oParam.Password, bootstrap.CONFIG.SERVICES.WEBSOCKET.ADMIN.JWT.SECRET)
 	if err != nil {
-		return types.WebsocketResponse{Event: "normal", Code: -1, Message: err.Error()}
+		sError := err.Error()
+
+		return types.WebsocketResponse{Event: "normal", Code: -1, Message: sError}
 	}
 
 	if oConn != nil {
-		_ = oConn.Push("Admin.Authentication.Authenticator.SignIn.Welcome", map[string]any{"name": oParam.Name})
+		oPushData := map[string]any{"name": oParam.Name}
+		_ = oConn.Push("Admin.Authentication.Authenticator.SignIn.Welcome", oPushData)
 	}
 
 	// sAuthorization 是 string，json.Marshal 一個 string 不會出錯，可以放心略過 err。

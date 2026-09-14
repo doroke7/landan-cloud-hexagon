@@ -8,9 +8,11 @@ import (
 
 func NewAnnouncement(oClientConn *grpc.ClientConn) *Announcement {
 
-	return &Announcement{
+	oAnnouncement := &Announcement{
 		Lottery: pbResourceAnnouncement.NewLotteryControllerClient(oClientConn),
 	}
+
+	return oAnnouncement
 }
 
 type Announcement struct {
@@ -31,5 +33,7 @@ type SourceClient struct {
 }
 
 func (oClient *SourceClient) Close() error {
-	return oClient.conn.Close()
+	oErr := oClient.conn.Close()
+
+	return oErr
 }

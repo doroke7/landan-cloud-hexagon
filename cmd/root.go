@@ -21,5 +21,6 @@ func Execute() {
 // 只要該 package 被初始化，這個 package 內所有檔案中的 init() 都會執行一次。
 func init() {
 	// 在這裡可以定義全局 Flag，例如 --config  ww222
-	oRootCommand.PersistentFlags().StringP("config", "c", "config.yaml", "配置文件路徑")
+	oPersistentFlags := oRootCommand.PersistentFlags()
+	oPersistentFlags.StringP("config", "c", "config.yaml", "配置文件路徑")
 }

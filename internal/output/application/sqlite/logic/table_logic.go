@@ -25,12 +25,14 @@ func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic 
 func (oSelf *TableLogic) ShowTableById(iId uint64) (*domain.Table, error) {
 	var oTable domain.Table
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oErr := oSelf.DB.WithContext(oSelf.Context).
 		Preload("Game").
 		Preload("Game.GameType").
 		Model(&oTable).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oTable, iId).Error; oErr != nil {
+		First(&oTable, iId).Error
+
+	if oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
@@ -135,10 +137,12 @@ func (oSelf *TableLogic) ShowTablesByFiltersWithSortersPagination(aFilters []*pk
 		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 	}
 
-	if oErr := oQuery.
+	oErr := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aTables).Error; oErr != nil {
+		Find(&aTables).Error
+
+	if oErr != nil {
 		return nil, oErr
 	}
 

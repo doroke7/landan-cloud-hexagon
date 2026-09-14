@@ -9,7 +9,7 @@ import (
 )
 
 func NewModel(oClientConn *grpc.ClientConn) *Model {
-	return &Model{
+	oModel := &Model{
 		AdminUser:            pbResourceModel.NewAdminUserModelClient(oClientConn),
 		AppUser:              pbResourceModel.NewAppUserModelClient(oClientConn),
 		Game:                 pbResourceModel.NewGameModelClient(oClientConn),
@@ -19,22 +19,28 @@ func NewModel(oClientConn *grpc.ClientConn) *Model {
 		AdminPermission:      pbResourceModel.NewAdminPermissionModelClient(oClientConn),
 		AdminPermissionGroup: pbResourceModel.NewAdminPermissionGroupModelClient(oClientConn),
 	}
+
+	return oModel
 }
 
 func NewLogic(oClientConn *grpc.ClientConn) *Logic {
-	return &Logic{
+	oLogic := &Logic{
 		AdminUser:            pbResourceLogic.NewAdminUserLogicClient(oClientConn),
 		AdminPermissionGroup: pbResourceLogic.NewAdminPermissionGroupLogicClient(oClientConn),
 		Game:                 pbResourceLogic.NewGameLogicClient(oClientConn),
 		Table:                pbResourceLogic.NewTableLogicClient(oClientConn),
 		GameType:             pbResourceLogic.NewGameTypeLogicClient(oClientConn),
 	}
+
+	return oLogic
 }
 
 func NewEvent(oClientConn *grpc.ClientConn) *Event {
-	return &Event{
+	oEvent := &Event{
 		AdminUser: pbResourceEvent.NewAdminUserEventClient(oClientConn),
 	}
+
+	return oEvent
 }
 
 type Model struct {
@@ -91,5 +97,7 @@ type ResourceClient struct {
 }
 
 func (oClient *ResourceClient) Close() error {
-	return oClient.conn.Close()
+	oErr := oClient.conn.Close()
+
+	return oErr
 }

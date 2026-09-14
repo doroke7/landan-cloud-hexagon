@@ -19,7 +19,8 @@ func NewLotteryModel(oAbstractModel *AbstractModel) outputPortAnyModel.LotteryMo
 // WatchOneByKey 是讀：直接讀 etcd，沒有就回傳錯誤（不再自己生資料）。
 func (oSelf *LotteryModel) WatchOneByKey(sKey string) (*domain.Lottery, error) {
 	var oLottery domain.Lottery
-	if oErr := oSelf.EtcdHelper.ReadCache(oSelf.cacheKey(sKey), &oLottery); oErr != nil {
+	sCacheKey := oSelf.cacheKey(sKey)
+	if oErr := oSelf.EtcdHelper.ReadCache(sCacheKey, &oLottery); oErr != nil {
 		return nil, oErr
 	}
 
@@ -43,7 +44,8 @@ func (oSelf *LotteryModel) EditOneByKey(oValue *domain.LotteryValue, sKey string
 		oLottery.Numbers = *oValue.Numbers
 	}
 
-	if oErr := oSelf.EtcdHelper.WriteCache(oSelf.cacheKey(sKey), &oLottery); oErr != nil {
+	sCacheKey := oSelf.cacheKey(sKey)
+	if oErr := oSelf.EtcdHelper.WriteCache(sCacheKey, &oLottery); oErr != nil {
 		return oErr
 	}
 

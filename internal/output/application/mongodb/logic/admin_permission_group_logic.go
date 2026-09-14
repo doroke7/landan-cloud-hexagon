@@ -20,19 +20,26 @@ type AdminPermissionGroupLogic struct {
 }
 
 func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminPermissionGroupLogic {
+	oCollection := oAbstractLogic.Database.Collection("admin_permission_groups")
+	oCounters := oAbstractLogic.Database.Collection("counters")
+
 	return &AdminPermissionGroupLogic{
 		AbstractLogic: oAbstractLogic,
-		Collection:    oAbstractLogic.Database.Collection("admin_permission_groups"),
-		Counters:      oAbstractLogic.Database.Collection("counters"),
+		Collection:    oCollection,
+		Counters:      oCounters,
 	}
 }
 
 func (oSelf *AdminPermissionGroupLogic) nextId() (uint64, error) {
+	oUpdateOptions := options.FindOneAndUpdate()
+	oUpdateOptions.SetUpsert(true)
+	oUpdateOptions.SetReturnDocument(options.After)
+
 	oResult := oSelf.Counters.FindOneAndUpdate(
 		oSelf.Context,
 		bson.M{"_id": "admin_permission_group"},
 		bson.M{"$inc": bson.M{"seq": 1}},
-		options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After),
+		oUpdateOptions,
 	)
 
 	var oCounter struct {
@@ -111,10 +118,11 @@ func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGro
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64) (*domain.AdminPermissionGroup, error) {
 	var oAdminPermissionGroup domain.AdminPermissionGroup
 
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
+	oResult := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oAdminPermissionGroup)
+	})
+	oErr := oResult.Decode(&oAdminPermissionGroup)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {

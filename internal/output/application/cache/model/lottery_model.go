@@ -19,7 +19,8 @@ func NewLotteryModel(oAbstractModel *AbstractModel) outputPortAnyModel.LotteryMo
 // WatchOneByKey 是讀：直接讀 redis，沒有就回傳錯誤（不再自己生資料）。
 func (oSelf *LotteryModel) WatchOneByKey(sKey string) (*domain.Lottery, error) {
 	var oLottery domain.Lottery
-	if err := oSelf.CacheHelper.ReadCache(oSelf.cacheKey(sKey), &oLottery); err != nil {
+	sCacheKey := oSelf.cacheKey(sKey)
+	if err := oSelf.CacheHelper.ReadCache(sCacheKey, &oLottery); err != nil {
 		return nil, err
 	}
 
@@ -43,7 +44,8 @@ func (oSelf *LotteryModel) EditOneByKey(oValue *domain.LotteryValue, sKey string
 		oLottery.Numbers = *oValue.Numbers
 	}
 
-	if err := oSelf.CacheHelper.WriteCache(oSelf.cacheKey(sKey), &oLottery); err != nil {
+	sCacheKey := oSelf.cacheKey(sKey)
+	if err := oSelf.CacheHelper.WriteCache(sCacheKey, &oLottery); err != nil {
 		return err
 	}
 

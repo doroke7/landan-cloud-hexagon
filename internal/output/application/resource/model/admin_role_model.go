@@ -13,9 +13,11 @@ type AdminRoleModel struct {
 }
 
 func NewAdminRoleModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminRoleModel {
-	return &AdminRoleModel{
+	oModel := &AdminRoleModel{
 		AbstractModel: oAbstractModel,
 	}
+
+	return oModel
 }
 
 func protoAdminRoleToDomainAdminRole(oProto *pbResource.AdminRole) domain.AdminRole {
@@ -23,7 +25,7 @@ func protoAdminRoleToDomainAdminRole(oProto *pbResource.AdminRole) domain.AdminR
 		return domain.AdminRole{}
 	}
 
-	return domain.AdminRole{
+	oAdminRole := domain.AdminRole{
 		Id:        uint64(oProto.GetId()),
 		Key:       oProto.GetKey(),
 		Name:      oProto.GetName(),
@@ -31,13 +33,17 @@ func protoAdminRoleToDomainAdminRole(oProto *pbResource.AdminRole) domain.AdminR
 		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
 		DeletedAt: oProto.GetDeletedAt().AsTime(),
 	}
+
+	return oAdminRole
 }
 
 func domainAdminRoleValueToProtoAdminRoleValue(oValue *domain.AdminRoleValue) *pbResourceModel.AdminRoleValue {
-	return &pbResourceModel.AdminRoleValue{
+	oAdminRoleValue := &pbResourceModel.AdminRoleValue{
 		Key:  oValue.Key,
 		Name: oValue.Name,
 	}
+
+	return oAdminRoleValue
 }
 
 func (oSelf *AdminRoleModel) AddOne(oAdminRole *domain.AdminRoleValue) error {

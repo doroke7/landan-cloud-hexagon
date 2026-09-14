@@ -17,9 +17,11 @@ type TableLogic struct {
 }
 
 func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic {
-	return &TableLogic{
+	oLogic := &TableLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+
+	return oLogic
 }
 
 func (oSelf *TableLogic) ShowTablesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Table, uint64, error) {

@@ -36,7 +36,9 @@ func NewRedis() (redis.UniversalClient, error) {
 		})
 	}
 
-	if err := oRedisConnectionPool.Ping(context.Background()).Err(); err != nil {
+	oBackgroundContext := context.Background()
+	oPingResult := oRedisConnectionPool.Ping(oBackgroundContext)
+	if err := oPingResult.Err(); err != nil {
 		return nil, err
 	}
 

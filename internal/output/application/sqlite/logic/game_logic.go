@@ -25,12 +25,14 @@ func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
 func (oSelf *GameLogic) ShowGameById(iId uint64) (*domain.Game, error) {
 	var oGame domain.Game
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oErr := oSelf.DB.WithContext(oSelf.Context).
 		Preload("GameType").
 		Preload("GameType.Parent").
 		Model(&oGame).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oGame, iId).Error; oErr != nil {
+		First(&oGame, iId).Error
+
+	if oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
@@ -44,13 +46,15 @@ func (oSelf *GameLogic) ShowGameById(iId uint64) (*domain.Game, error) {
 func (oSelf *GameLogic) ShowGamesByGameTypeId(iGameTypeId uint64) ([]*domain.Game, error) {
 	var aGames []*domain.Game
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oErr := oSelf.DB.WithContext(oSelf.Context).
 		Preload("GameType").
 		Preload("GameType.Parent").
 		Model(&domain.Game{}).
 		Where("game_type_id = ?", iGameTypeId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		Find(&aGames).Error; oErr != nil {
+		Find(&aGames).Error
+
+	if oErr != nil {
 		return nil, oErr
 	}
 

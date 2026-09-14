@@ -12,9 +12,11 @@ type GameTypeLogic struct {
 }
 
 func NewGameTypeLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameTypeLogic {
-	return &GameTypeLogic{
+	oLogic := &GameTypeLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+
+	return oLogic
 }
 
 // ShowTree 走 gRPC 拿回「平的」全部 game_type，再自己用 ParentId 掛 Children，
@@ -27,7 +29,7 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 
 	aFlat := make([]*domain.GameType, 0, len(oResponse.GetGameTypes()))
 	for _, oOne := range oResponse.GetGameTypes() {
-		aFlat = append(aFlat, &domain.GameType{
+		oGameType := &domain.GameType{
 			Id:        uint64(oOne.GetId()),
 			ParentId:  uint64(oOne.GetParentId()),
 			Key:       oOne.GetKey(),
@@ -35,7 +37,8 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 			CreatedAt: oOne.GetCreatedAt().AsTime(),
 			UpdatedAt: oOne.GetUpdatedAt().AsTime(),
 			DeletedAt: oOne.GetDeletedAt().AsTime(),
-		})
+		}
+		aFlat = append(aFlat, oGameType)
 	}
 
 	aByParent := make(map[uint64][]*domain.GameType, len(aFlat))
@@ -60,10 +63,8 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 }
 
 func (oSelf *GameTypeLogic) ShowGameTypeById(iId uint64) (*domain.GameType, error) {
-	oResponse, oErr := oSelf.ResourceLogicClient.GameType.ShowGameTypeById(
-		oSelf.Context,
-		&pbResourceLogic.GameTypeShowGameTypeByIdInput{Id: iId},
-	)
+	oRequest := &pbResourceLogic.GameTypeShowGameTypeByIdInput{Id: iId}
+	oResponse, oErr := oSelf.ResourceLogicClient.GameType.ShowGameTypeById(oSelf.Context, oRequest)
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -114,7 +115,7 @@ func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFi
 
 	aGameTypes := make([]*domain.GameType, 0, len(oResponse.GetGameTypes()))
 	for _, oOne := range oResponse.GetGameTypes() {
-		aGameTypes = append(aGameTypes, &domain.GameType{
+		oGameType := &domain.GameType{
 			Id:        uint64(oOne.GetId()),
 			ParentId:  uint64(oOne.GetParentId()),
 			Key:       oOne.GetKey(),
@@ -122,7 +123,8 @@ func (oSelf *GameTypeLogic) ShowGameTypesTotalByFiltersWithSortersPagination(aFi
 			CreatedAt: oOne.GetCreatedAt().AsTime(),
 			UpdatedAt: oOne.GetUpdatedAt().AsTime(),
 			DeletedAt: oOne.GetDeletedAt().AsTime(),
-		})
+		}
+		aGameTypes = append(aGameTypes, oGameType)
 	}
 
 	iTotal := uint64(oResponse.GetTotal())

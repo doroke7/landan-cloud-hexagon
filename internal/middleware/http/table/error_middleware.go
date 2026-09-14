@@ -54,7 +54,8 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 
 				switch oErrorType := oError.(type) {
 				case *pkgUtility.DefaultError: // 需要用 *指標， 因為 controller 是用 指標
-					pkgUtility.Logger(pkgUtility.HttpTableMiddleware).Warn(
+					oLogger := pkgUtility.Logger(pkgUtility.HttpTableMiddleware)
+					oLogger.Warn(
 						"http 業務異常",
 						zap.Any("error", oError),
 						zap.Any("stack", aByteStack[:iLen]),
@@ -65,7 +66,8 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 					iLen := runtime.Stack(aByteStack, false)
 					// Logger.Fatal 會再觸發 panic
 
-					pkgUtility.Logger(pkgUtility.HttpTableMiddleware).Error(
+					oLogger := pkgUtility.Logger(pkgUtility.HttpTableMiddleware)
+					oLogger.Error(
 						"http 系統錯誤",
 						zap.Any("error", oError),
 						zap.Any("stack", aByteStack[:iLen]),
@@ -91,7 +93,8 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 				switch oErrorType := oLastErr.Err.(type) {
 				case *pkgUtility.DefaultError:
 					// 本進程內產生的業務錯誤（沒過 gRPC）
-					pkgUtility.Logger(pkgUtility.HttpTableMiddleware).Warn(
+					oLogger := pkgUtility.Logger(pkgUtility.HttpTableMiddleware)
+					oLogger.Warn(
 						"http 業務異常",
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
@@ -101,7 +104,8 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 				default:
 					// 從 resource gRPC 來的：codes.Aborted = 業務錯誤，其餘 = 系統錯誤
 					if oStatus, bOk := status.FromError(oLastErr.Err); bOk && oStatus.Code() == codes.Aborted {
-						pkgUtility.Logger(pkgUtility.HttpTableMiddleware).Warn(
+						oLogger := pkgUtility.Logger(pkgUtility.HttpTableMiddleware)
+						oLogger.Warn(
 							"resource 業務異常",
 							zap.String("error", oLastErr.Error()),
 						)
@@ -110,7 +114,8 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 					}
 
 					if oStatus, bOk := status.FromError(oLastErr.Err); bOk && oStatus.Code() == codes.Unavailable {
-						pkgUtility.Logger(pkgUtility.HttpTableMiddleware).Warn(
+						oLogger := pkgUtility.Logger(pkgUtility.HttpTableMiddleware)
+						oLogger.Warn(
 							"resource 系統錯誤",
 							zap.String("error", oLastErr.Error()),
 						)
@@ -118,7 +123,8 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 						break
 					}
 
-					pkgUtility.Logger(pkgUtility.HttpTableMiddleware).Error(
+					oLogger := pkgUtility.Logger(pkgUtility.HttpTableMiddleware)
+					oLogger.Error(
 						"http 系統錯誤",
 						zap.String("error", oLastErr.Error()),
 						zap.Any("stack", aByteStack[:iLen]),
@@ -162,7 +168,9 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 			}
 			sKeys, _ := pkgUtility.JsonEncode(oKeys)
 
-			sTime := strconv.FormatInt(oSelf.clock.Now().Unix(), 10)
+			oNow := oSelf.clock.Now()
+			iUnix := oNow.Unix()
+			sTime := strconv.FormatInt(iUnix, 10)
 			sResultJson, _ := pkgUtility.JsonEncode(mResult)
 
 			sR, _ := oSelf.aesHelper.Encrypt(sResultJson, sKey, sIv)
@@ -171,8 +179,8 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 			sT, _ := oSelf.aesHelper.Encrypt("0", sKey, sIv)
 
 			aStrings := []string{sKeys, sTime, sC, sM, sR, bootstrap.CONFIG.SERVICES.HTTP.TABLE.SALT}
-			sHeaderSignature := pkgUtility.Md5(strings.Join(aStrings, ","))
-
+			sJoinedStrings := strings.Join(aStrings, ",")
+			sHeaderSignature := pkgUtility.Md5(sJoinedStrings)
 			oJson := gin.H{
 				"c": sC,
 				"m": sM,
@@ -186,9 +194,10 @@ func (oSelf *ErrorMiddleware) Handle() gin.HandlerFunc {
 				oJson["total"] = 0
 
 			}
-			oContext.Writer.Header().Set("Authorization", "")
-			oContext.Writer.Header().Set("Time", sTime)
-			oContext.Writer.Header().Set("Signature", sHeaderSignature)
+			oHeader := oContext.Writer.Header()
+			oHeader.Set("Authorization", "")
+			oHeader.Set("Time", sTime)
+			oHeader.Set("Signature", sHeaderSignature)
 
 			oContext.JSON(iStatus, oJson)
 

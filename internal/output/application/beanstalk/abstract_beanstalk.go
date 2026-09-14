@@ -24,5 +24,7 @@ func NewAbstractBeanstalk(oContext context.Context, oConn *beanstalk.Conn) *Abst
 }
 
 func (oSelf *AbstractBeanstalk) Tube(sName string) *beanstalk.Tube {
-	return beanstalkd.NewTube(oSelf.Conn, sName)
+	oTube := beanstalkd.NewTube(oSelf.Conn, sName)
+
+	return oTube
 }

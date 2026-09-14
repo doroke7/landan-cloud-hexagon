@@ -13,7 +13,9 @@ import (
 type AbstractResource struct{}
 
 func NewAbstractResource() *AbstractResource {
-	return &AbstractResource{}
+	oResource := &AbstractResource{}
+
+	return oResource
 }
 
 func (oSelf *AbstractResource) ToFilters(aFilters []*pkgInput.Filter) []*pbResource.Filter {
@@ -51,10 +53,11 @@ func (oSelf *AbstractResource) ToSorters(aSorters []*pkgInput.Sorter) []*pbResou
 			continue
 		}
 
-		aPbSorters = append(aPbSorters, &pbResource.Sorter{
+		oPbSorter := &pbResource.Sorter{
 			Field: *oSorter.Field,
 			Order: *oSorter.Order,
-		})
+		}
+		aPbSorters = append(aPbSorters, oPbSorter)
 	}
 
 	return aPbSorters

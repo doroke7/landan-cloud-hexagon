@@ -28,7 +28,8 @@ func (oSelf *EtcdHelper) WriteCache(sKey string, value any) error {
 		return oErr
 	}
 
-	_, oErr = oSelf.etcd.Put(context.Background(), sKey, string(sData))
+	oContext := context.Background()
+	_, oErr = oSelf.etcd.Put(oContext, sKey, string(sData))
 
 	return oErr
 }
@@ -36,13 +37,16 @@ func (oSelf *EtcdHelper) WriteCache(sKey string, value any) error {
 // ReadCache 從 etcd 讀出 JSON 並解到 dest（傳指標進來），
 // 一樣只負責通用的「怎麼讀」，key 格式跟目標型別都由呼叫端決定。
 func (oSelf *EtcdHelper) ReadCache(sKey string, dest any) error {
-	oResponse, oErr := oSelf.etcd.Get(context.Background(), sKey)
+	oContext := context.Background()
+	oResponse, oErr := oSelf.etcd.Get(oContext, sKey)
 	if oErr != nil {
 		return oErr
 	}
 
 	if len(oResponse.Kvs) == 0 {
-		return errors.New("key not found")
+		oNotFoundErr := errors.New("key not found")
+
+		return oNotFoundErr
 	}
 
 	oErr = json.Unmarshal(oResponse.Kvs[0].Value, dest)
@@ -53,7 +57,8 @@ func (oSelf *EtcdHelper) ReadCache(sKey string, dest any) error {
 // EvictCache 把 key 從 etcd 刪掉，用在寫入之後讓下一次讀取重新從來源撈最新資料，
 // 避免寫入端自己組的資料跟實際落地的資料不一致。
 func (oSelf *EtcdHelper) EvictCache(sKey string) error {
-	_, oErr := oSelf.etcd.Delete(context.Background(), sKey)
+	oContext := context.Background()
+	_, oErr := oSelf.etcd.Delete(oContext, sKey)
 
 	return oErr
 }

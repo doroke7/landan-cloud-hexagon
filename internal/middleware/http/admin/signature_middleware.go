@@ -39,9 +39,10 @@ func (oSelf *SignatureMiddleware) Handle() gin.HandlerFunc {
 		// 方法會觸發 gin 的 queryCache/formCache 快取，之後 DecryptionMiddleware 改寫
 		// RawQuery/PostForm 時就得反過來清快取。直接讀 c.Request.URL.Query()（每次都是
 		// 現剖析 RawQuery，不會被 gin 快取）就完全不會有這個問題。
-		sF := oContext.Request.URL.Query().Get("f")
-		sS := oContext.Request.URL.Query().Get("s")
-		sP := oContext.Request.URL.Query().Get("p")
+		oQuery := oContext.Request.URL.Query()
+		sF := oQuery.Get("f")
+		sS := oQuery.Get("s")
+		sP := oQuery.Get("p")
 
 		var oRequestPayload types.HttpRequestBody
 
@@ -70,7 +71,8 @@ func (oSelf *SignatureMiddleware) Handle() gin.HandlerFunc {
 					   3-1. 這個會 Abort + Error + 寫入 http-status
 					   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 				*/
-				_ = oContext.Error(pkgUtility.NewDefaultError("signature verification failed", -3, 406))
+				oError := pkgUtility.NewDefaultError("signature verification failed", -3, 406)
+				_ = oContext.Error(oError)
 				oContext.Abort()
 				return
 			}

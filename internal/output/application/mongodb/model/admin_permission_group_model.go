@@ -23,37 +23,56 @@ type AdminPermissionGroupModel struct {
 // 索引跟 script/mongodb/resource.js 建的一致：key 唯一、name+deleted_at、deleted_at 供查詢用。
 func NewAdminPermissionGroupModel(oAbstractModel *AbstractModel) (outputPortAnyModel.AdminPermissionGroupModel, error) {
 	oCollection := oAbstractModel.Database.Collection("admin_permission_groups")
+	oIndexView := oCollection.Indexes()
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
+	oKeyIndexOptions := options.Index()
+	oKeyIndexOptions.SetUnique(true)
+	oKeyIndexOptions.SetName("admin_permission_groups-k")
+
+	oNameDeletedAtIndexOptions := options.Index()
+	oNameDeletedAtIndexOptions.SetName("admin_permission_groups-n-da")
+
+	oDeletedAtIndexOptions := options.Index()
+	oDeletedAtIndexOptions.SetName("admin_permission_groups-da")
+
+	aIndexModels := []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "key", Value: 1}},
-			Options: options.Index().SetUnique(true).SetName("admin_permission_groups-k"),
+			Options: oKeyIndexOptions,
 		},
 		{
 			Keys:    bson.D{{Key: "name", Value: 1}, {Key: "deleted_at", Value: 1}},
-			Options: options.Index().SetName("admin_permission_groups-n-da"),
+			Options: oNameDeletedAtIndexOptions,
 		},
 		{
 			Keys:    bson.D{{Key: "deleted_at", Value: 1}},
-			Options: options.Index().SetName("admin_permission_groups-da"),
+			Options: oDeletedAtIndexOptions,
 		},
-	}); oErr != nil {
+	}
+
+	if _, oErr := oIndexView.CreateMany(oAbstractModel.Context, aIndexModels); oErr != nil {
 		return nil, oErr
 	}
+
+	oCounters := oAbstractModel.Database.Collection("counters")
 
 	return &AdminPermissionGroupModel{
 		AbstractModel: oAbstractModel,
 		Collection:    oCollection,
-		Counters:      oAbstractModel.Database.Collection("counters"),
+		Counters:      oCounters,
 	}, nil
 }
 
 func (oSelf *AdminPermissionGroupModel) nextId() (uint64, error) {
+	oUpdateOptions := options.FindOneAndUpdate()
+	oUpdateOptions.SetUpsert(true)
+	oUpdateOptions.SetReturnDocument(options.After)
+
 	oResult := oSelf.Counters.FindOneAndUpdate(
 		oSelf.Context,
 		bson.M{"_id": "admin_permission_group"},
 		bson.M{"$inc": bson.M{"seq": 1}},
-		options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After),
+		oUpdateOptions,
 	)
 
 	var oCounter struct {
@@ -171,10 +190,11 @@ func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissi
 }
 
 func (oSelf *AdminPermissionGroupModel) RemoveOneById(iId uint64) error {
+	oNow := time.Now()
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
-		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
+		bson.M{"$set": bson.M{"deleted_at": oNow}},
 	)
 	if oErr != nil {
 		return oErr

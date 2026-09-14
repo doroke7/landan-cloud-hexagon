@@ -45,7 +45,8 @@ func domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup
 	}
 
 	for i := range oAdminPermissionGroup.Children {
-		oPb.Children = append(oPb.Children, domainAdminPermissionGroupToProtoAdminPermissionGroup(&oAdminPermissionGroup.Children[i]))
+		oChildPb := domainAdminPermissionGroupToProtoAdminPermissionGroup(&oAdminPermissionGroup.Children[i])
+		oPb.Children = append(oPb.Children, oChildPb)
 	}
 
 	return oPb
@@ -65,7 +66,8 @@ func protoAdminPermissionGroupValueToDomainAdminPermissionGroupValue(oVariable *
 
 func (oSelf *AdminPermissionGroupHandler) AddOne(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupAddOneInput) (*pbResourceModel.AdminPermissionGroupAddOneOutput, error) {
 
-	oValue := protoAdminPermissionGroupValueToDomainAdminPermissionGroupValue(oReq.GetValue())
+	oReqValue := oReq.GetValue()
+	oValue := protoAdminPermissionGroupValueToDomainAdminPermissionGroupValue(oReqValue)
 
 	oErr := oSelf.ModelAdminPermissionGroupUsecase.AddOne(&oValue)
 
@@ -88,7 +90,8 @@ func (oSelf *AdminPermissionGroupHandler) AddOne(oContext context.Context, oReq 
 
 func (oSelf *AdminPermissionGroupHandler) ShowOnesByParentId(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupShowOnesByParentIdInput) (*pbResourceModel.AdminPermissionGroupShowOnesByParentIdOutput, error) {
 
-	aAdminPermissionGroups, oErr := oSelf.ModelAdminPermissionGroupUsecase.ShowOnesByParentId(oReq.GetParentId())
+	iParentId := oReq.GetParentId()
+	aAdminPermissionGroups, oErr := oSelf.ModelAdminPermissionGroupUsecase.ShowOnesByParentId(iParentId)
 
 	if oErr != nil {
 		return nil, oErr
@@ -96,7 +99,8 @@ func (oSelf *AdminPermissionGroupHandler) ShowOnesByParentId(oContext context.Co
 
 	aPbAdminPermissionGroups := make([]*pbResource.AdminPermissionGroup, 0, len(aAdminPermissionGroups))
 	for _, oAdminPermissionGroup := range aAdminPermissionGroups {
-		aPbAdminPermissionGroups = append(aPbAdminPermissionGroups, domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup))
+		oPbAdminPermissionGroup := domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup)
+		aPbAdminPermissionGroups = append(aPbAdminPermissionGroups, oPbAdminPermissionGroup)
 	}
 
 	return &pbResourceModel.AdminPermissionGroupShowOnesByParentIdOutput{
@@ -106,37 +110,43 @@ func (oSelf *AdminPermissionGroupHandler) ShowOnesByParentId(oContext context.Co
 
 func (oSelf *AdminPermissionGroupHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationOutput, error) {
 
-	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
-	for _, oOne := range oReq.GetFilters() {
+	aFiltersInput := oReq.GetFilters()
+	aFilters := make([]*pkgInput.Filter, 0, len(aFiltersInput))
+	for _, oOne := range aFiltersInput {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aFilters = append(aFilters, &pkgInput.Filter{
+		oValue := oOne.GetValue().AsInterface()
+		oFilter := &pkgInput.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
-			Value:    oOne.GetValue().AsInterface(),
-		})
+			Value:    oValue,
+		}
+		aFilters = append(aFilters, oFilter)
 	}
 
-	aSorters := make([]*pkgInput.Sorter, 0, len(oReq.GetSorters()))
-	for _, oOne := range oReq.GetSorters() {
+	aSortersInput := oReq.GetSorters()
+	aSorters := make([]*pkgInput.Sorter, 0, len(aSortersInput))
+	for _, oOne := range aSortersInput {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOrder := oOne.GetOrder()
-		aSorters = append(aSorters, &pkgInput.Sorter{
+		oSorter := &pkgInput.Sorter{
 			Field: &sField,
 			Order: &sOrder,
-		})
+		}
+		aSorters = append(aSorters, oSorter)
 	}
 
-	iSize := uint(oReq.GetPagination().GetSize())
-	iPage := uint(oReq.GetPagination().GetPage())
+	oPaginationInput := oReq.GetPagination()
+	iSize := uint(oPaginationInput.GetSize())
+	iPage := uint(oPaginationInput.GetPage())
 	oPagination := &pkgInput.Pagination{
 		Size: &iSize,
 		Page: &iPage,
@@ -150,7 +160,8 @@ func (oSelf *AdminPermissionGroupHandler) ShowOnesByFiltersWithSortersPagination
 
 	aPbAdminPermissionGroups := make([]*pbResource.AdminPermissionGroup, 0, len(aAdminPermissionGroups))
 	for _, oAdminPermissionGroup := range aAdminPermissionGroups {
-		aPbAdminPermissionGroups = append(aPbAdminPermissionGroups, domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup))
+		oPbAdminPermissionGroup := domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup)
+		aPbAdminPermissionGroups = append(aPbAdminPermissionGroups, oPbAdminPermissionGroup)
 	}
 
 	return &pbResourceModel.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationOutput{
@@ -160,9 +171,11 @@ func (oSelf *AdminPermissionGroupHandler) ShowOnesByFiltersWithSortersPagination
 
 func (oSelf *AdminPermissionGroupHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupEditOneByIdInput) (*pbResourceModel.AdminPermissionGroupEditOneByIdOutput, error) {
 
-	oValue := protoAdminPermissionGroupValueToDomainAdminPermissionGroupValue(oReq.GetValue())
+	oReqValue := oReq.GetValue()
+	oValue := protoAdminPermissionGroupValueToDomainAdminPermissionGroupValue(oReqValue)
 
-	oErr := oSelf.ModelAdminPermissionGroupUsecase.EditOneById(&oValue, oReq.GetId())
+	iId := oReq.GetId()
+	oErr := oSelf.ModelAdminPermissionGroupUsecase.EditOneById(&oValue, iId)
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -174,7 +187,8 @@ func (oSelf *AdminPermissionGroupHandler) EditOneById(oContext context.Context, 
 
 func (oSelf *AdminPermissionGroupHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupRemoveOneByIdInput) (*pbResourceModel.AdminPermissionGroupRemoveOneByIdOutput, error) {
 
-	oErr := oSelf.ModelAdminPermissionGroupUsecase.RemoveOneById(oReq.GetId())
+	iId := oReq.GetId()
+	oErr := oSelf.ModelAdminPermissionGroupUsecase.RemoveOneById(iId)
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -186,19 +200,22 @@ func (oSelf *AdminPermissionGroupHandler) RemoveOneById(oContext context.Context
 
 func (oSelf *AdminPermissionGroupHandler) TotalByFilters(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupTotalByFiltersInput) (*pbResourceModel.AdminPermissionGroupTotalByFiltersOutput, error) {
 
-	aFilters := make([]*pkgInput.Filter, 0, len(oReq.GetFilters()))
-	for _, oOne := range oReq.GetFilters() {
+	aFiltersInput := oReq.GetFilters()
+	aFilters := make([]*pkgInput.Filter, 0, len(aFiltersInput))
+	for _, oOne := range aFiltersInput {
 		if oOne == nil {
 			continue
 		}
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aFilters = append(aFilters, &pkgInput.Filter{
+		oValue := oOne.GetValue().AsInterface()
+		oFilter := &pkgInput.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
-			Value:    oOne.GetValue().AsInterface(),
-		})
+			Value:    oValue,
+		}
+		aFilters = append(aFilters, oFilter)
 	}
 
 	iTotal, oErr := oSelf.ModelAdminPermissionGroupUsecase.TotalByFilters(aFilters)

@@ -36,8 +36,7 @@ func NewResource(oContext context.Context) *grpc.ClientConn {
 	oResolverBuilder := manual.NewBuilderWithScheme("resource-static")
 	oResolverBuilder.InitialState(resolver.State{Addresses: aAddrs})
 
-	// gRPC 本身支持 多路復用， 不建議做連結池
-	oConnection, oErr := grpc.NewClient(oResolverBuilder.Scheme()+":///resource", grpc.WithResolvers(oResolverBuilder), grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`), grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithChainUnaryInterceptor(func(
+	oUnaryInterceptor := func(
 		ctx context.Context,
 		method string,
 		req, reply any,
@@ -49,27 +48,41 @@ func NewResource(oContext context.Context) *grpc.ClientConn {
 		sUser := CONFIG.CLIENTS.RESOURCE.USERNAME
 		sPassword := CONFIG.CLIENTS.RESOURCE.PASSWORD
 
-		sAuthorization := "Basic " + pkgUtility.Base64Encode(
-			sUser+":"+sPassword,
+		sEncodedCredential := pkgUtility.Base64Encode(
+			sUser + ":" + sPassword,
 		)
-		ctx = metadata.NewOutgoingContext(ctx, metadata.Pairs("authorization", sAuthorization))
-		return invoker(ctx, method, req, reply, cc, opts...)
-	}),
-		grpc.WithConnectParams(grpc.ConnectParams{
-			Backoff: backoff.Config{
-				BaseDelay:  1.0 * time.Second, // 第一次斷線後，等 1.0 秒再嘗試重連
-				Multiplier: 1.6,               // 每次重連失敗，等待時間乘以 1.6 (1s -> 1.6s -> 2.56s)
-				Jitter:     0.2,               // 加上 20% 的隨機抖動誤差，把大量 Client 的重連時間錯開
-				MaxDelay:   10 * time.Second,  // 不管失敗幾次，最長只等 30 秒，避免時間被無限拉長
-			},
-			MinConnectTimeout: 3 * time.Second, // 每次嘗試建立 TCP 握手時，最少給底層 3 秒的超時時間
-		}),
-		grpc.WithKeepaliveParams(keepalive.ClientParameters{
-			Time:                10 * time.Second, // 每 10 秒偷偷送一次 PING 保活、防止被防火牆剪斷
-			Timeout:             3 * time.Second,  // PING 出去後 3 秒內 Server 沒回應，直接判定斷線，立刻觸發上面的 Backoff 流程
-			PermitWithoutStream: true,             // 關鍵：就算現在業務沒請求、沒有 Stream，也要送 PING
-		}),
-	)
+		sAuthorization := "Basic " + sEncodedCredential
+		oMetadataPairs := metadata.Pairs("authorization", sAuthorization)
+		ctx = metadata.NewOutgoingContext(ctx, oMetadataPairs)
+		oErr := invoker(ctx, method, req, reply, cc, opts...)
+
+		return oErr
+	}
+
+	sScheme := oResolverBuilder.Scheme()
+	sTarget := sScheme + ":///resource"
+	oResolversOption := grpc.WithResolvers(oResolverBuilder)
+	oServiceConfigOption := grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"round_robin"}`)
+	oCredentials := insecure.NewCredentials()
+	oTransportCredentialsOption := grpc.WithTransportCredentials(oCredentials)
+	oChainUnaryInterceptorOption := grpc.WithChainUnaryInterceptor(oUnaryInterceptor)
+	oConnectParamsOption := grpc.WithConnectParams(grpc.ConnectParams{
+		Backoff: backoff.Config{
+			BaseDelay:  1.0 * time.Second, // 第一次斷線後，等 1.0 秒再嘗試重連
+			Multiplier: 1.6,               // 每次重連失敗，等待時間乘以 1.6 (1s -> 1.6s -> 2.56s)
+			Jitter:     0.2,               // 加上 20% 的隨機抖動誤差，把大量 Client 的重連時間錯開
+			MaxDelay:   10 * time.Second,  // 不管失敗幾次，最長只等 30 秒，避免時間被無限拉長
+		},
+		MinConnectTimeout: 3 * time.Second, // 每次嘗試建立 TCP 握手時，最少給底層 3 秒的超時時間
+	})
+	oKeepaliveParamsOption := grpc.WithKeepaliveParams(keepalive.ClientParameters{
+		Time:                10 * time.Second, // 每 10 秒偷偷送一次 PING 保活、防止被防火牆剪斷
+		Timeout:             3 * time.Second,  // PING 出去後 3 秒內 Server 沒回應，直接判定斷線，立刻觸發上面的 Backoff 流程
+		PermitWithoutStream: true,             // 關鍵：就算現在業務沒請求、沒有 Stream，也要送 PING
+	})
+
+	// gRPC 本身支持 多路復用， 不建議做連結池
+	oConnection, oErr := grpc.NewClient(sTarget, oResolversOption, oServiceConfigOption, oTransportCredentialsOption, oChainUnaryInterceptorOption, oConnectParamsOption, oKeepaliveParamsOption)
 	if oErr != nil {
 		return nil
 	}
@@ -105,7 +118,8 @@ func NewResource(oContext context.Context) *grpc.ClientConn {
 	for iIndex, oAddr := range aAddrs {
 		aAddrStrings[iIndex] = oAddr.Addr
 	}
-	log.Info("[INFO] RESOURCE 連線完成.", "addr", strings.Join(aAddrStrings, ","))
+	sAddrString := strings.Join(aAddrStrings, ",")
+	log.Info("[INFO] RESOURCE 連線完成.", "addr", sAddrString)
 
 	return oConnection
 }

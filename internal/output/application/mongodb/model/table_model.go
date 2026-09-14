@@ -22,37 +22,56 @@ type TableModel struct {
 // 索引跟 script/mongodb/resource.js 建的一致：key 唯一、deleted_at、no+deleted_at 供查詢用。
 func NewTableModel(oAbstractModel *AbstractModel) (outputPortAnyModel.TableModel, error) {
 	oCollection := oAbstractModel.Database.Collection("tables")
+	oIndexView := oCollection.Indexes()
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
+	oKeyIndexOptions := options.Index()
+	oKeyIndexOptions.SetUnique(true)
+	oKeyIndexOptions.SetName("tables-key")
+
+	oDeletedAtIndexOptions := options.Index()
+	oDeletedAtIndexOptions.SetName("tables-da")
+
+	oNoDeletedAtIndexOptions := options.Index()
+	oNoDeletedAtIndexOptions.SetName("tables-n-da")
+
+	aIndexModels := []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "key", Value: 1}},
-			Options: options.Index().SetUnique(true).SetName("tables-key"),
+			Options: oKeyIndexOptions,
 		},
 		{
 			Keys:    bson.D{{Key: "deleted_at", Value: 1}},
-			Options: options.Index().SetName("tables-da"),
+			Options: oDeletedAtIndexOptions,
 		},
 		{
 			Keys:    bson.D{{Key: "no", Value: 1}, {Key: "deleted_at", Value: 1}},
-			Options: options.Index().SetName("tables-n-da"),
+			Options: oNoDeletedAtIndexOptions,
 		},
-	}); oErr != nil {
+	}
+
+	if _, oErr := oIndexView.CreateMany(oAbstractModel.Context, aIndexModels); oErr != nil {
 		return nil, oErr
 	}
+
+	oCounters := oAbstractModel.Database.Collection("counters")
 
 	return &TableModel{
 		AbstractModel: oAbstractModel,
 		Collection:    oCollection,
-		Counters:      oAbstractModel.Database.Collection("counters"),
+		Counters:      oCounters,
 	}, nil
 }
 
 func (oSelf *TableModel) nextId() (uint, error) {
+	oUpdateOptions := options.FindOneAndUpdate()
+	oUpdateOptions.SetUpsert(true)
+	oUpdateOptions.SetReturnDocument(options.After)
+
 	oResult := oSelf.Counters.FindOneAndUpdate(
 		oSelf.Context,
 		bson.M{"_id": "table"},
 		bson.M{"$inc": bson.M{"seq": 1}},
-		options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After),
+		oUpdateOptions,
 	)
 
 	var oCounter struct {
@@ -156,10 +175,11 @@ func (oSelf *TableModel) EditOneById(oTable *domain.TableValue, iId uint64) erro
 }
 
 func (oSelf *TableModel) RemoveOneById(iId uint64) error {
+	oNow := time.Now()
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
-		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
+		bson.M{"$set": bson.M{"deleted_at": oNow}},
 	)
 	if oErr != nil {
 		return oErr

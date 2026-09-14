@@ -23,37 +23,56 @@ type GameTypeModel struct {
 // 索引跟 script/mongodb/resource.js 建的一致：key 唯一、name+deleted_at、deleted_at 供查詢用。
 func NewGameTypeModel(oAbstractModel *AbstractModel) (outputPortAnyModel.GameTypeModel, error) {
 	oCollection := oAbstractModel.Database.Collection("game_types")
+	oIndexView := oCollection.Indexes()
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
+	oKeyIndexOptions := options.Index()
+	oKeyIndexOptions.SetUnique(true)
+	oKeyIndexOptions.SetName("game_types-k")
+
+	oNameDeletedAtIndexOptions := options.Index()
+	oNameDeletedAtIndexOptions.SetName("game_types-n-da")
+
+	oDeletedAtIndexOptions := options.Index()
+	oDeletedAtIndexOptions.SetName("game_types-da")
+
+	aIndexModels := []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "key", Value: 1}},
-			Options: options.Index().SetUnique(true).SetName("game_types-k"),
+			Options: oKeyIndexOptions,
 		},
 		{
 			Keys:    bson.D{{Key: "name", Value: 1}, {Key: "deleted_at", Value: 1}},
-			Options: options.Index().SetName("game_types-n-da"),
+			Options: oNameDeletedAtIndexOptions,
 		},
 		{
 			Keys:    bson.D{{Key: "deleted_at", Value: 1}},
-			Options: options.Index().SetName("game_types-da"),
+			Options: oDeletedAtIndexOptions,
 		},
-	}); oErr != nil {
+	}
+
+	if _, oErr := oIndexView.CreateMany(oAbstractModel.Context, aIndexModels); oErr != nil {
 		return nil, oErr
 	}
+
+	oCounters := oAbstractModel.Database.Collection("counters")
 
 	return &GameTypeModel{
 		AbstractModel: oAbstractModel,
 		Collection:    oCollection,
-		Counters:      oAbstractModel.Database.Collection("counters"),
+		Counters:      oCounters,
 	}, nil
 }
 
 func (oSelf *GameTypeModel) nextId() (uint, error) {
+	oUpdateOptions := options.FindOneAndUpdate()
+	oUpdateOptions.SetUpsert(true)
+	oUpdateOptions.SetReturnDocument(options.After)
+
 	oResult := oSelf.Counters.FindOneAndUpdate(
 		oSelf.Context,
 		bson.M{"_id": "game_type"},
 		bson.M{"$inc": bson.M{"seq": 1}},
-		options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After),
+		oUpdateOptions,
 	)
 
 	var oCounter struct {
@@ -145,10 +164,11 @@ func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint64
 }
 
 func (oSelf *GameTypeModel) RemoveOneById(iId uint64) error {
+	oNow := time.Now()
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
-		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
+		bson.M{"$set": bson.M{"deleted_at": oNow}},
 	)
 	if oErr != nil {
 		return oErr

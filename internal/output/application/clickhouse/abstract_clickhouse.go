@@ -74,11 +74,12 @@ func (oSelf *AbstractClickhouse) FiltersToWheres(aFilters []*pkgInput.Filter) []
 
 		// ClickHouse 的識別字用反引號，跟 mysql 一樣。
 		sField := "`" + *oFilter.Field + "`"
-		aWheres = append(aWheres, &pkgClickhouse.ClickhouseWhere{
+		oWhere := &pkgClickhouse.ClickhouseWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,
-		})
+		}
+		aWheres = append(aWheres, oWhere)
 	}
 
 	return aWheres
@@ -98,10 +99,11 @@ func (oSelf *AbstractClickhouse) SortersToOrders(aSorters []*pkgInput.Sorter) []
 		}
 
 		sField := "`" + *oSorter.Field + "`"
-		aOrders = append(aOrders, &pkgClickhouse.ClickhouseOrder{
+		oOrder := &pkgClickhouse.ClickhouseOrder{
 			Field: &sField,
 			Value: &sDirection,
-		})
+		}
+		aOrders = append(aOrders, oOrder)
 	}
 
 	return aOrders

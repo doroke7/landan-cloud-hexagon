@@ -36,13 +36,15 @@ func (oSelf *AuthenticationMiddleware) Handle() gin.HandlerFunc {
 		sJwt := sAuthorization
 
 		if sJwt == "" {
-			_ = oContext.Error(pkgUtility.NewDefaultError("missing jwt", -2, 200))
+			oError := pkgUtility.NewDefaultError("missing jwt", -2, 200)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 			return
 		}
 
 		if _, oErr := oSelf.jwtHelper.Parse(sJwt); oErr != nil {
-			_ = oContext.Error(pkgUtility.NewDefaultError("authentication failed", -2, 200))
+			oError := pkgUtility.NewDefaultError("authentication failed", -2, 200)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 			return
 		}

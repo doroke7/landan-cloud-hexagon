@@ -69,10 +69,12 @@ func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(a
 		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 	}
 
-	if oErr := oQuery.
+	oErr := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aAdminPermissionGroups).Error; oErr != nil {
+		Find(&aAdminPermissionGroups).Error
+
+	if oErr != nil {
 		return nil, oErr
 	}
 
@@ -90,8 +92,9 @@ func (oSelf *AdminPermissionGroupModel) TotalByFilters(aFilters []*pkgInput.Filt
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
 
-	if oErr := oQuery.
-		Count(&iTotal).Error; oErr != nil {
+	oErr := oQuery.Count(&iTotal).Error
+
+	if oErr != nil {
 		return 0, oErr
 	}
 
@@ -110,7 +113,9 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGro
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows inserted")
+		oZeroRowsError := errors.New("0 rows inserted")
+
+		return oZeroRowsError
 	}
 
 	return nil
@@ -129,25 +134,31 @@ func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissi
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows updated")
+		oZeroRowsError := errors.New("0 rows updated")
+
+		return oZeroRowsError
 	}
 
 	return nil
 }
 
 func (oSelf *AdminPermissionGroupModel) RemoveOneById(iId uint64) error {
+	oNow := time.Now()
+
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermissionGroup{}).
 		Where("id = ?", iId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		UpdateColumn("deleted_at", time.Now())
+		UpdateColumn("deleted_at", oNow)
 
 	if oResult.Error != nil {
 		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows deleted")
+		oZeroRowsError := errors.New("0 rows deleted")
+
+		return oZeroRowsError
 	}
 
 	return nil

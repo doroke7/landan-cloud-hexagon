@@ -25,10 +25,12 @@ func NewTableRecordLogModel(oAbstractModel *AbstractModel) outputPortAnyModel.Ta
 func (oSelf *TableRecordLogModel) ShowOneById(iId uint64) (*domain.TableRecordLog, error) {
 	var oTableRecordLog domain.TableRecordLog
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oErr := oSelf.DB.WithContext(oSelf.Context).
 		Model(&oTableRecordLog).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		First(&oTableRecordLog, iId).Error; oErr != nil {
+		First(&oTableRecordLog, iId).Error
+
+	if oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
@@ -67,10 +69,12 @@ func (oSelf *TableRecordLogModel) ShowOnesByFiltersWithSortersPagination(aFilter
 		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 	}
 
-	if oErr := oQuery.
+	oErr := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aTableRecordLogs).Error; oErr != nil {
+		Find(&aTableRecordLogs).Error
+
+	if oErr != nil {
 		return nil, oErr
 	}
 
@@ -88,8 +92,9 @@ func (oSelf *TableRecordLogModel) TotalByFilters(aFilters []*pkgInput.Filter) (u
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
 
-	if oErr := oQuery.
-		Count(&iTotal).Error; oErr != nil {
+	oErr := oQuery.Count(&iTotal).Error
+
+	if oErr != nil {
 		return 0, oErr
 	}
 
@@ -111,7 +116,9 @@ func (oSelf *TableRecordLogModel) AddOne(oTableRecordLog *domain.TableRecordLogV
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows inserted")
+		oZeroRowsError := errors.New("0 rows inserted")
+
+		return oZeroRowsError
 	}
 
 	return nil

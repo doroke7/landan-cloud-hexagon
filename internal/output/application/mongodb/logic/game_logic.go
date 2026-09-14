@@ -22,9 +22,11 @@ type GameLogic struct {
 }
 
 func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
+	oCollection := oAbstractLogic.Database.Collection("games")
+
 	return &GameLogic{
 		AbstractLogic: oAbstractLogic,
-		Collection:    oAbstractLogic.Database.Collection("games"),
+		Collection:    oCollection,
 	}
 }
 
@@ -77,10 +79,11 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 func (oSelf *GameLogic) ShowGameById(iId uint64) (*domain.Game, error) {
 	var oGame domain.Game
 
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
+	oResult := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oGame)
+	})
+	oErr := oResult.Decode(&oGame)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {

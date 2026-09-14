@@ -23,11 +23,13 @@ func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameType
 func (oSelf *GameTypeModel) TotalByParentId(iParentId uint64) (uint64, error) {
 	var iTotal int64
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oErr := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.GameType{}).
 		Where("parent_id = ?", iParentId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		Count(&iTotal).Error; oErr != nil {
+		Count(&iTotal).Error
+
+	if oErr != nil {
 		return 0, oErr
 	}
 
@@ -47,7 +49,9 @@ func (oSelf *GameTypeModel) AddOne(oValue *domain.GameTypeValue) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows inserted")
+		oZeroRowsError := errors.New("0 rows inserted")
+
+		return oZeroRowsError
 	}
 
 	return nil
@@ -67,7 +71,9 @@ func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint64
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows updated")
+		oZeroRowsError := errors.New("0 rows updated")
+
+		return oZeroRowsError
 	}
 
 	return nil
@@ -75,18 +81,22 @@ func (oSelf *GameTypeModel) EditOneById(oValue *domain.GameTypeValue, iId uint64
 
 func (oSelf *GameTypeModel) RemoveOneById(iId uint64) error {
 
+	oNow := time.Now()
+
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.GameType{}).
 		Where("id = ?", iId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		UpdateColumn("deleted_at", time.Now())
+		UpdateColumn("deleted_at", oNow)
 
 	if oResult.Error != nil {
 		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows deleted")
+		oZeroRowsError := errors.New("0 rows deleted")
+
+		return oZeroRowsError
 	}
 
 	return nil
@@ -103,8 +113,9 @@ func (oSelf *GameTypeModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64,
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
 
-	if oErr := oQuery.
-		Count(&iTotal).Error; oErr != nil {
+	oErr := oQuery.Count(&iTotal).Error
+
+	if oErr != nil {
 		return 0, oErr
 	}
 

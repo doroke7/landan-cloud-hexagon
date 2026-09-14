@@ -69,7 +69,8 @@ func (oSelf *AesHelper) Decrypt(sText string, sKey string, sIv string) (string, 
 
 	// IMPORTANT: 前端進來的 加密 base64 ， 先 ”統一“ 把它強制轉換 成 url-base64， 再動作
 	sText = strings.TrimRight(sText, "=")
-	sText = strings.NewReplacer("+", "-", "/", "_").Replace(sText)
+	oReplacer := strings.NewReplacer("+", "-", "/", "_")
+	sText = oReplacer.Replace(sText)
 	sUrlBase64 := sText
 
 	aByteText, oDecodeErr := base64.RawURLEncoding.DecodeString(sUrlBase64)
@@ -99,8 +100,11 @@ func (oSelf *AesHelper) Decrypt(sText string, sKey string, sIv string) (string, 
 
 func (oSelf *AesHelper) pKCS7Padding(ciphertext []byte) []byte {
 	padding := aes.BlockSize - len(ciphertext)%aes.BlockSize
-	padtext := bytes.Repeat([]byte{byte(padding)}, padding)
-	return append(ciphertext, padtext...)
+	aPadding := []byte{byte(padding)}
+	padtext := bytes.Repeat(aPadding, padding)
+	aResult := append(ciphertext, padtext...)
+
+	return aResult
 }
 
 func (oSelf *AesHelper) pKCS7UnPadding(plantText []byte) []byte {

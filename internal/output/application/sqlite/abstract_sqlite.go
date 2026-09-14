@@ -74,11 +74,12 @@ func (oSelf *AbstractSqlite) FiltersToWheres(aFilters []*pkgInput.Filter) []*pkg
 
 		// SQLite 的識別字用雙引號，跟 postgres 一樣是 ANSI 標準寫法。
 		sField := `"` + *oFilter.Field + `"`
-		aWheres = append(aWheres, &pkgSqlite.SqliteWhere{
+		oWhere := &pkgSqlite.SqliteWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,
-		})
+		}
+		aWheres = append(aWheres, oWhere)
 	}
 
 	return aWheres
@@ -98,10 +99,11 @@ func (oSelf *AbstractSqlite) SortersToOrders(aSorters []*pkgInput.Sorter) []*pkg
 		}
 
 		sField := `"` + *oSorter.Field + `"`
-		aOrders = append(aOrders, &pkgSqlite.SqliteOrder{
+		oOrder := &pkgSqlite.SqliteOrder{
 			Field: &sField,
 			Value: &sDirection,
-		})
+		}
+		aOrders = append(aOrders, oOrder)
 	}
 
 	return aOrders

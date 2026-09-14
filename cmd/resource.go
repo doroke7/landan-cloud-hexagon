@@ -24,18 +24,23 @@ var oResourceCommand = &cobra.Command{
 		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
+		oLogger := pkgUtility.Logger(pkgUtility.Resource)
+
 		oContainer, err := container.InitResourceContainer(oCtx)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Resource).Fatal("初始化 resource container 失敗", zap.Error(err))
+			oErrorField := zap.Error(err)
+			oLogger.Fatal("初始化 resource container 失敗", oErrorField)
 		}
 
 		oResourceServer := registerResource.Init(oContainer)
 
-		oListener, err := net.Listen("tcp", ":"+bootstrap.CONFIG.SERVICES.RESOURCE.PORT)
+		sAddress := ":" + bootstrap.CONFIG.SERVICES.RESOURCE.PORT
+		oListener, err := net.Listen("tcp", sAddress)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Resource).Fatal("監聽 RESOURCE port 失敗", zap.Error(err))
+			oErrorField := zap.Error(err)
+			oLogger.Fatal("監聽 RESOURCE port 失敗", oErrorField)
 		}
-		pkgUtility.Logger(pkgUtility.Resource).Info("啟動 RESOURCE 服務。 port: " + bootstrap.CONFIG.SERVICES.RESOURCE.PORT)
+		oLogger.Info("啟動 RESOURCE 服務。 port: " + bootstrap.CONFIG.SERVICES.RESOURCE.PORT)
 
 		// 收到中斷/終止訊號時 oCtx 會被取消，主動 GracefulStop，讓 gRPC 停止 accept 新連線、
 		// 關掉 listener，Serve() 才會正常返回並釋放 port，
@@ -46,7 +51,8 @@ var oResourceCommand = &cobra.Command{
 		}()
 
 		if err := oResourceServer.Serve(oListener); err != nil {
-			pkgUtility.Logger(pkgUtility.Resource).Fatal("RESOURCE server 異常結束", zap.Error(err))
+			oErrorField := zap.Error(err)
+			oLogger.Fatal("RESOURCE server 異常結束", oErrorField)
 		}
 	},
 }

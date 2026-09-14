@@ -21,17 +21,21 @@ var oDaemonCommand = &cobra.Command{
 		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
+		oLogger := pkgUtility.Logger(pkgUtility.Deamon)
+
 		oContainer, err := container.InitDaemonContainer(oCtx)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Deamon).Fatal("初始化 daemon container 失敗", zap.Error(err))
+			oErrorField := zap.Error(err)
+			oLogger.Fatal("初始化 daemon container 失敗", oErrorField)
 		}
 
 		oDaemonRouter := registerDaemon.Init(oContainer)
 
-		pkgUtility.Logger(pkgUtility.Deamon).Info("啟動 DAEMON 服務。")
+		oLogger.Info("啟動 DAEMON 服務。")
 
 		if err := oDaemonRouter.Serve(oCtx); err != nil {
-			pkgUtility.Logger(pkgUtility.Deamon).Error("DAEMON 服務已停止", zap.Error(err))
+			oErrorField := zap.Error(err)
+			oLogger.Error("DAEMON 服務已停止", oErrorField)
 		}
 	},
 }

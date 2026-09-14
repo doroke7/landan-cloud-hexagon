@@ -28,7 +28,9 @@ func NewRsaHelper(oAbstractHelper *AbstractHelper) *RsaHelper {
 func (oSelf *RsaHelper) Encrypt(sInput, sPublicKey string) (string, error) {
 	oPubKey, oErr := parsePublicKey(sPublicKey)
 	if oErr != nil {
-		return "", fmt.Errorf("rsa encrypt: %w", oErr)
+		oWrappedErr := fmt.Errorf("rsa encrypt: %w", oErr)
+
+		return "", oWrappedErr
 	}
 
 	byInput := []byte(sInput)
@@ -43,25 +45,34 @@ func (oSelf *RsaHelper) Encrypt(sInput, sPublicKey string) (string, error) {
 
 		byChunk, oErr := rsa.EncryptPKCS1v15(rand.Reader, oPubKey, byInput[i:iEnd])
 		if oErr != nil {
-			return "", fmt.Errorf("rsa encrypt chunk: %w", oErr)
+			oWrappedErr := fmt.Errorf("rsa encrypt chunk: %w", oErr)
+
+			return "", oWrappedErr
 		}
 
 		byEncrypted = append(byEncrypted, byChunk...)
 	}
 
-	return base64.RawURLEncoding.EncodeToString(byEncrypted), nil
+	sEncrypted := base64.RawURLEncoding.EncodeToString(byEncrypted)
+
+	return sEncrypted, nil
 }
 
 // Decrypt decrypts base64-encoded sInput with the provided PEM private key (chunked by key size).
 func (oSelf *RsaHelper) Decrypt(sInput, sPrivateKey string) (string, error) {
 	oPrivKey, oErr := parsePrivateKey(sPrivateKey)
 	if oErr != nil {
-		return "", fmt.Errorf("rsa decrypt: %w", oErr)
+		oWrappedErr := fmt.Errorf("rsa decrypt: %w", oErr)
+
+		return "", oWrappedErr
 	}
 
-	byInput, oErr := base64.RawURLEncoding.DecodeString(strings.TrimRight(sInput, "="))
+	sTrimmedInput := strings.TrimRight(sInput, "=")
+	byInput, oErr := base64.RawURLEncoding.DecodeString(sTrimmedInput)
 	if oErr != nil {
-		return "", fmt.Errorf("rsa decrypt base64: %w", oErr)
+		oWrappedErr := fmt.Errorf("rsa decrypt base64: %w", oErr)
+
+		return "", oWrappedErr
 	}
 
 	iChunkSize := oPrivKey.Size()
@@ -75,7 +86,9 @@ func (oSelf *RsaHelper) Decrypt(sInput, sPrivateKey string) (string, error) {
 
 		byChunk, oErr := rsa.DecryptPKCS1v15(rand.Reader, oPrivKey, byInput[i:iEnd])
 		if oErr != nil {
-			return "", fmt.Errorf("rsa decrypt chunk: %w", oErr)
+			oWrappedErr := fmt.Errorf("rsa decrypt chunk: %w", oErr)
+
+			return "", oWrappedErr
 		}
 
 		byDecrypted = append(byDecrypted, byChunk...)
@@ -87,17 +100,23 @@ func (oSelf *RsaHelper) Decrypt(sInput, sPrivateKey string) (string, error) {
 func parsePublicKey(sPem string) (*rsa.PublicKey, error) {
 	oBlock, _ := pem.Decode([]byte(sPem))
 	if oBlock == nil {
-		return nil, errors.New("failed to parse PEM block for public key")
+		oErr := errors.New("failed to parse PEM block for public key")
+
+		return nil, oErr
 	}
 
 	oPub, oErr := x509.ParsePKIXPublicKey(oBlock.Bytes)
 	if oErr != nil {
-		return nil, fmt.Errorf("parse public key: %w", oErr)
+		oWrappedErr := fmt.Errorf("parse public key: %w", oErr)
+
+		return nil, oWrappedErr
 	}
 
 	oRsaPub, bOk := oPub.(*rsa.PublicKey)
 	if !bOk {
-		return nil, errors.New("key is not RSA public key")
+		oErr := errors.New("key is not RSA public key")
+
+		return nil, oErr
 	}
 
 	return oRsaPub, nil
@@ -106,7 +125,9 @@ func parsePublicKey(sPem string) (*rsa.PublicKey, error) {
 func parsePrivateKey(sPem string) (*rsa.PrivateKey, error) {
 	oBlock, _ := pem.Decode([]byte(sPem))
 	if oBlock == nil {
-		return nil, errors.New("failed to parse PEM block for private key")
+		oErr := errors.New("failed to parse PEM block for private key")
+
+		return nil, oErr
 	}
 
 	oPriv, oErr := x509.ParsePKCS8PrivateKey(oBlock.Bytes)
@@ -114,14 +135,19 @@ func parsePrivateKey(sPem string) (*rsa.PrivateKey, error) {
 		// Fallback to PKCS1
 		oPrivPkcs1, oErrPkcs1 := x509.ParsePKCS1PrivateKey(oBlock.Bytes)
 		if oErrPkcs1 != nil {
-			return nil, fmt.Errorf("parse private key: %w (pkcs1: %w)", oErr, oErrPkcs1)
+			oWrappedErr := fmt.Errorf("parse private key: %w (pkcs1: %w)", oErr, oErrPkcs1)
+
+			return nil, oWrappedErr
 		}
+
 		return oPrivPkcs1, nil
 	}
 
 	oRsaPriv, bOk := oPriv.(*rsa.PrivateKey)
 	if !bOk {
-		return nil, errors.New("key is not RSA private key")
+		oErr := errors.New("key is not RSA private key")
+
+		return nil, oErr
 	}
 
 	return oRsaPriv, nil

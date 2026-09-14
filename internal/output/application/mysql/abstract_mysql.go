@@ -37,11 +37,13 @@ type AbstractMysql struct {
 
 func NewAbstractMysql(oContext context.Context, oDb *gorm.DB, oAop *pkgCache.Aop) *AbstractMysql {
 
-	return &AbstractMysql{
+	oAbstractMysql := &AbstractMysql{
 		DB:      oDb,
 		Context: oContext,
 		Aop:     oAop,
 	}
+
+	return oAbstractMysql
 }
 
 func (oSelf *AbstractMysql) FiltersToWheres(aFilters []*pkgInput.Filter) []*pkgMysql.MysqlWhere {
@@ -73,11 +75,12 @@ func (oSelf *AbstractMysql) FiltersToWheres(aFilters []*pkgInput.Filter) []*pkgM
 		}
 
 		sField := "`" + *oFilter.Field + "`"
-		aWheres = append(aWheres, &pkgMysql.MysqlWhere{
+		oWhere := &pkgMysql.MysqlWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,
-		})
+		}
+		aWheres = append(aWheres, oWhere)
 	}
 
 	return aWheres
@@ -97,10 +100,11 @@ func (oSelf *AbstractMysql) SortersToOrders(aSorters []*pkgInput.Sorter) []*pkgM
 		}
 
 		sField := "`" + *oSorter.Field + "`"
-		aOrders = append(aOrders, &pkgMysql.MysqlOrder{
+		oOrder := &pkgMysql.MysqlOrder{
 			Field: &sField,
 			Value: &sDirection,
-		})
+		}
+		aOrders = append(aOrders, oOrder)
 	}
 
 	return aOrders
@@ -120,8 +124,10 @@ func (oSelf *AbstractMysql) PaginationToLimit(oPagination *pkgInput.Pagination) 
 
 	iOffset := (iPage - 1) * iSize
 
-	return &pkgMysql.MysqlLimit{
+	oLimit := &pkgMysql.MysqlLimit{
 		Offset: &iOffset,
 		Count:  &iSize,
 	}
+
+	return oLimit
 }

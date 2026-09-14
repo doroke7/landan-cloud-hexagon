@@ -11,7 +11,9 @@ type AbstractLogic struct {
 }
 
 func NewAbstractLogic(oAbstractMysql *outputApplicationMysql.AbstractMysql) *AbstractLogic {
-	return &AbstractLogic{
+	oLogic := &AbstractLogic{
 		AbstractMysql: oAbstractMysql,
 	}
+
+	return oLogic
 }

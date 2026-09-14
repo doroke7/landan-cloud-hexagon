@@ -18,9 +18,11 @@ type AbstractModel struct {
 }
 
 func NewAbstractModel(oContext context.Context, oResourceClient *client.ResourceClient, oAbstractResource *outputApplicationResource.AbstractResource) *AbstractModel {
-	return &AbstractModel{
+	oModel := &AbstractModel{
 		AbstractResource:    oAbstractResource,
 		Context:             oContext,
 		ResourceModelClient: oResourceClient.Model,
 	}
+
+	return oModel
 }

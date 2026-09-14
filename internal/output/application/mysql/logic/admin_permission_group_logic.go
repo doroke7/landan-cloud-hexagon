@@ -19,9 +19,11 @@ type AdminPermissionGroupLogic struct {
 }
 
 func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminPermissionGroupLogic {
-	return &AdminPermissionGroupLogic{
+	oLogic := &AdminPermissionGroupLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+
+	return oLogic
 }
 
 func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupValue) error {

@@ -35,9 +35,13 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 
 	var oAdminUser domain.AdminUser
 
-	if err := oSelf.DB.WithContext(oCurrentContext).Where("name = ?", sName).First(&oAdminUser).Error; err != nil {
+	err := oSelf.DB.WithContext(oCurrentContext).Where("name = ?", sName).First(&oAdminUser).Error
+
+	if err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
-			return nil, errors.New("record not found")
+			oNotFoundError := errors.New("record not found")
+
+			return nil, oNotFoundError
 		}
 		return nil, err
 	}
@@ -59,9 +63,13 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) 
 		defer cCancel()
 
 		var oAdminUser domain.AdminUser
-		if err := oSelf.DB.WithContext(oThisContext).First(&oAdminUser, iId).Error; err != nil {
+		err := oSelf.DB.WithContext(oThisContext).First(&oAdminUser, iId).Error
+
+		if err != nil {
 			if errors.Is(err, gorm.ErrRecordNotFound) {
-				return nil, errors.New("record not found")
+				oNotFoundError := errors.New("record not found")
+
+				return nil, oNotFoundError
 			}
 			return nil, err
 		}
@@ -72,18 +80,22 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) 
 }
 
 func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
+	oNow := time.Now()
+
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminUser{}).
 		Where("id = ?", iId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		UpdateColumn("deleted_at", time.Now())
+		UpdateColumn("deleted_at", oNow)
 
 	if oResult.Error != nil {
 		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows deleted")
+		oZeroRowsError := errors.New("0 rows deleted")
+
+		return oZeroRowsError
 	}
 
 	return nil
@@ -105,7 +117,9 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserValue, iId 
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows updated")
+		oZeroRowsError := errors.New("0 rows updated")
+
+		return oZeroRowsError
 	}
 
 	return nil
@@ -138,10 +152,12 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 		oQuery = oQuery.Order(*oOrder.Field + " " + sDirection)
 	}
 
-	if oErr := oQuery.
+	oErr := oQuery.
 		Limit(int(*oLimit.Count)).
 		Offset(int(*oLimit.Offset)).
-		Find(&aAdminUsers).Error; oErr != nil {
+		Find(&aAdminUsers).Error
+
+	if oErr != nil {
 		return nil, oErr
 	}
 
@@ -160,7 +176,9 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 		oQuery = oQuery.Where(*oWhere.Field+" "+*oWhere.Operator+" ?", oWhere.Value)
 	}
 
-	if oErr := oQuery.Count(&iTotal).Error; oErr != nil {
+	oErr := oQuery.Count(&iTotal).Error
+
+	if oErr != nil {
 		return 0, oErr
 	}
 
@@ -182,7 +200,9 @@ func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserValue) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows inserted")
+		oZeroRowsError := errors.New("0 rows inserted")
+
+		return oZeroRowsError
 	}
 
 	return nil

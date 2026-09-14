@@ -41,15 +41,19 @@ var oSocketioCommand = &cobra.Command{
 			Handler: oMux,
 		}
 
+		oLogger := pkgUtility.Logger(pkgUtility.Socketio)
+
 		go func() {
 			<-oCtx.Done()
-			oSocketioServer.Shutdown(context.Background())
+			oBackgroundContext := context.Background()
+			oSocketioServer.Shutdown(oBackgroundContext)
 		}()
 
-		pkgUtility.Logger(pkgUtility.Socketio).Info("啟動 SOCKETIO 服務。 port: " + bootstrap.CONFIG.SERVICES.SOCKETIO.PORT)
+		oLogger.Info("啟動 SOCKETIO 服務。 port: " + bootstrap.CONFIG.SERVICES.SOCKETIO.PORT)
 
 		if err := oSocketioServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			pkgUtility.Logger(pkgUtility.Socketio).Fatal("SOCKETIO server 異常結束", zap.Error(err))
+			oErrorField := zap.Error(err)
+			oLogger.Fatal("SOCKETIO server 異常結束", oErrorField)
 		}
 	},
 }

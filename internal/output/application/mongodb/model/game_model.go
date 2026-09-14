@@ -27,41 +27,63 @@ type GameModel struct {
 // name+deleted_at、deleted_at、game_type_id+deleted_at 供查詢用。
 func NewGameModel(oAbstractModel *AbstractModel) (outputPortAnyModel.GameModel, error) {
 	oCollection := oAbstractModel.Database.Collection("games")
+	oIndexView := oCollection.Indexes()
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
+	oKeyIndexOptions := options.Index()
+	oKeyIndexOptions.SetUnique(true)
+	oKeyIndexOptions.SetName("games-k")
+
+	oNameDeletedAtIndexOptions := options.Index()
+	oNameDeletedAtIndexOptions.SetName("games-n-da")
+
+	oDeletedAtIndexOptions := options.Index()
+	oDeletedAtIndexOptions.SetName("games-da")
+
+	oGameTypeIdDeletedAtIndexOptions := options.Index()
+	oGameTypeIdDeletedAtIndexOptions.SetName("games-gti-da")
+
+	aIndexModels := []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "key", Value: 1}},
-			Options: options.Index().SetUnique(true).SetName("games-k"),
+			Options: oKeyIndexOptions,
 		},
 		{
 			Keys:    bson.D{{Key: "name", Value: 1}, {Key: "deleted_at", Value: 1}},
-			Options: options.Index().SetName("games-n-da"),
+			Options: oNameDeletedAtIndexOptions,
 		},
 		{
 			Keys:    bson.D{{Key: "deleted_at", Value: 1}},
-			Options: options.Index().SetName("games-da"),
+			Options: oDeletedAtIndexOptions,
 		},
 		{
 			Keys:    bson.D{{Key: "game_type_id", Value: 1}, {Key: "deleted_at", Value: 1}},
-			Options: options.Index().SetName("games-gti-da"),
+			Options: oGameTypeIdDeletedAtIndexOptions,
 		},
-	}); oErr != nil {
+	}
+
+	if _, oErr := oIndexView.CreateMany(oAbstractModel.Context, aIndexModels); oErr != nil {
 		return nil, oErr
 	}
+
+	oCounters := oAbstractModel.Database.Collection("counters")
 
 	return &GameModel{
 		AbstractModel: oAbstractModel,
 		Collection:    oCollection,
-		Counters:      oAbstractModel.Database.Collection("counters"),
+		Counters:      oCounters,
 	}, nil
 }
 
 func (oSelf *GameModel) nextId() (uint, error) {
+	oUpdateOptions := options.FindOneAndUpdate()
+	oUpdateOptions.SetUpsert(true)
+	oUpdateOptions.SetReturnDocument(options.After)
+
 	oResult := oSelf.Counters.FindOneAndUpdate(
 		oSelf.Context,
 		bson.M{"_id": "game"},
 		bson.M{"$inc": bson.M{"seq": 1}},
-		options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After),
+		oUpdateOptions,
 	)
 
 	var oCounter struct {
@@ -111,10 +133,11 @@ func (oSelf *GameModel) AddOne(oGame *domain.GameValue) error {
 func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	var oGame domain.Game
 
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
+	oResult := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"key":        sKey,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oGame)
+	})
+	oErr := oResult.Decode(&oGame)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
@@ -159,10 +182,11 @@ func (oSelf *GameModel) EditOneById(oGame *domain.GameValue, iId uint64) error {
 }
 
 func (oSelf *GameModel) RemoveOneById(iId uint64) error {
+	oNow := time.Now()
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
-		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
+		bson.M{"$set": bson.M{"deleted_at": oNow}},
 	)
 	if oErr != nil {
 		return oErr

@@ -29,15 +29,23 @@ func NewAuthenticatorHandler(oAuthenticatorUsecase usecasePortAnyAdminAuthentica
 func (oSelf *AuthenticatorHandler) SignIn(oContext context.Context, oRequest *pbFacadeAdminAuthentication.AuthenticatorSignInRequest) (*pbFacadeAdminAuthentication.AuthenticatorSignInResponse, error) {
 
 	oVariable := oRequest.GetVariable()
+	sName := oVariable.GetName()
+	sPassword := oVariable.GetPassword()
 
-	sAuthorization, oErr := oSelf.AdminAuthenticationAuthenticatorUsecase.SignIn(oVariable.GetName(), oVariable.GetPassword(), bootstrap.CONFIG.SERVICES.FACADE.ADMIN.JWT.SECRET)
+	sAuthorization, oErr := oSelf.AdminAuthenticationAuthenticatorUsecase.SignIn(sName, sPassword, bootstrap.CONFIG.SERVICES.FACADE.ADMIN.JWT.SECRET)
 
 	if oErr != nil {
 		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
-			return nil, status.Error(codes.Aborted, oDefaultError.Error())
+			sDefaultError := oDefaultError.Error()
+			oStatusError := status.Error(codes.Aborted, sDefaultError)
+
+			return nil, oStatusError
 		}
 
-		return nil, status.Error(codes.Internal, oErr.Error())
+		sError := oErr.Error()
+		oStatusError := status.Error(codes.Internal, sError)
+
+		return nil, oStatusError
 	}
 
 	if oAuthorization, bOk := oContext.Value("a").(*string); bOk {

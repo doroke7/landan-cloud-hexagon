@@ -59,18 +59,24 @@ func NewTcpConn() (*TcpConn, error) {
 		return nil, err
 	}
 
-	return &TcpConn{
+	oTcpConn := &TcpConn{
 		conn:   oConn,
 		reader: bufio.NewReader(oConn),
-	}, nil
+	}
+
+	return oTcpConn, nil
 }
 
 func (oSelf *TcpConn) Write(aBuf []byte) (int, error) {
-	return oSelf.conn.Write(aBuf)
+	iBytesWritten, oErr := oSelf.conn.Write(aBuf)
+
+	return iBytesWritten, oErr
 }
 
 func (oSelf *TcpConn) Close() error {
-	return oSelf.conn.Close()
+	oErr := oSelf.conn.Close()
+
+	return oErr
 }
 
 // TcpPoolClient 自帶連線池：外部呼叫端不需要知道底層借了哪條連線，呼叫 method 時
@@ -84,9 +90,11 @@ type TcpPoolClient struct {
 // bootstrap.CONFIG.CLIENTS.TCP.POOL；連線是真正要用時才現撥（見 NewTcpConn），
 // 不會一開始就撥滿。
 func NewTcpPoolClient() *TcpPoolClient {
-	return &TcpPoolClient{
+	oTcpPoolClient := &TcpPoolClient{
 		pool: make(chan *TcpConn, bootstrap.CONFIG.CLIENTS.TCP.POOL),
 	}
+
+	return oTcpPoolClient
 }
 
 // get 借一條連線：池子裡有現成的就直接拿，沒有的話（池子空或已達上限被借光）就現撥一條新的，
@@ -96,7 +104,9 @@ func (oSelf *TcpPoolClient) get() (*TcpConn, error) {
 	case oConn := <-oSelf.pool: // 如果channel 有連結變量，就從channel 拿
 		return oConn, nil
 	default:
-		return NewTcpConn() // 如果channel 無連結變量，就重新建立
+		oTcpConn, oErr := NewTcpConn() // 如果channel 無連結變量，就重新建立
+
+		return oTcpConn, oErr
 	}
 }
 
@@ -132,10 +142,11 @@ func (oSelf *TcpPoolClient) AdminAuthenticationAuthenticatorSignIn(sName string,
 
 	var oResp types.TcpResponse
 	err := oSelf.do(func(oTcpConn *TcpConn) error {
-		aFrame, err := oSelf.EncodeFrame(types.TcpRequest{
+		oRequest := types.TcpRequest{
 			Method: "Admin.Authentication.Authenticator.SignIn",
 			Param:  sName + ":" + sPassword,
-		})
+		}
+		aFrame, err := oSelf.EncodeFrame(oRequest)
 		if err != nil {
 			log.Println("tcp client: encode failed:", err)
 			return err
@@ -165,12 +176,16 @@ func (oSelf *TcpPoolClient) EncodeFrame(oPayload any) ([]byte, error) {
 	oBuf.Reset()
 	defer tcpEncodeBufferPool.Put(oBuf)
 
-	if err := json.NewEncoder(oBuf).Encode(oPayload); err != nil {
+	oEncoder := json.NewEncoder(oBuf)
+
+	err := oEncoder.Encode(oPayload)
+	if err != nil {
 		return nil, err
 	}
 
 	// json.Encoder.Encode 會多寫一個結尾的 \n，這裡要去掉，行為才會跟 json.Marshal 一致
-	aBody := bytes.TrimRight(oBuf.Bytes(), "\n")
+	aBufBytes := oBuf.Bytes()
+	aBody := bytes.TrimRight(aBufBytes, "\n")
 
 	if len(aBody) > tcpMaxBodyLength {
 		return nil, ErrTcpBodyTooLarge
@@ -202,5 +217,7 @@ func (oSelf *TcpPoolClient) DecodeFrame(oReader *bufio.Reader, oPayload any) err
 		return err
 	}
 
-	return json.Unmarshal(aBody, oPayload)
+	oErr := json.Unmarshal(aBody, oPayload)
+
+	return oErr
 }

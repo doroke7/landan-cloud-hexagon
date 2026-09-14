@@ -24,9 +24,12 @@ var oHttpCommand = &cobra.Command{
 		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
+		oLogger := pkgUtility.Logger(pkgUtility.Http)
+
 		oContainer, err := container.InitHttpContainer(oCtx)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Http).Fatal("初始化 http container 失敗", zap.Error(err))
+			oErrorField := zap.Error(err)
+			oLogger.Fatal("初始化 http container 失敗", oErrorField)
 		}
 		oGin := gin.Default()
 
@@ -42,13 +45,15 @@ var oHttpCommand = &cobra.Command{
 
 		go func() {
 			<-oCtx.Done()
-			oHttpServer.Shutdown(context.Background())
+			oBackgroundContext := context.Background()
+			oHttpServer.Shutdown(oBackgroundContext)
 		}()
 
-		pkgUtility.Logger(pkgUtility.Http).Info("啟動 HTTP 服務。 port: " + bootstrap.CONFIG.SERVICES.HTTP.PORT)
+		oLogger.Info("啟動 HTTP 服務。 port: " + bootstrap.CONFIG.SERVICES.HTTP.PORT)
 
 		if err := oHttpServer.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			pkgUtility.Logger(pkgUtility.Http).Fatal("HTTP server 異常結束", zap.Error(err))
+			oErrorField := zap.Error(err)
+			oLogger.Fatal("HTTP server 異常結束", oErrorField)
 		}
 	},
 }

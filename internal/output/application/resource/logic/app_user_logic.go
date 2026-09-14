@@ -10,16 +10,20 @@ type AppUserLogic struct {
 }
 
 func NewAppUserLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AppUserLogic {
-	return &AppUserLogic{
+	oLogic := &AppUserLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+
+	return oLogic
 }
 
 func (oSelf *AppUserLogic) AddAppUser(oAppUserValue *domain.AppUserValue) (*domain.AppUser, error) {
 
-	return &domain.AppUser{
+	oAppUser := &domain.AppUser{
 		Id:       1,
 		Name:     "11",
 		Password: "222222",
-	}, nil
+	}
+
+	return oAppUser, nil
 }

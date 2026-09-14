@@ -21,9 +21,13 @@ func NewAppUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AppUserMo
 }
 
 func (oSelf *AppUserModel) IncreaseBalance(id uint, amount uint64) error {
-	if err := oSelf.DB.WithContext(oSelf.Context).Model(&domain.AppUser{}).
+	oExpr := gorm.Expr("balance + ?", amount)
+
+	err := oSelf.DB.WithContext(oSelf.Context).Model(&domain.AppUser{}).
 		Where("id = ?", id).
-		UpdateColumn("balance", gorm.Expr("balance + ?", amount)).Error; err != nil {
+		UpdateColumn("balance", oExpr).Error
+
+	if err != nil {
 		return err
 	}
 
@@ -33,9 +37,13 @@ func (oSelf *AppUserModel) IncreaseBalance(id uint, amount uint64) error {
 func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) {
 	var oAppUser domain.AppUser
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).Where("name = ?", sName).First(&oAppUser).Error; oErr != nil {
+	oErr := oSelf.DB.WithContext(oSelf.Context).Where("name = ?", sName).First(&oAppUser).Error
+
+	if oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
-			return nil, errors.New("record not found")
+			oNotFoundError := errors.New("record not found")
+
+			return nil, oNotFoundError
 		}
 		return nil, oErr
 	}
@@ -46,9 +54,13 @@ func (oSelf *AppUserModel) ShowOneByName(sName string) (*domain.AppUser, error) 
 func (oSelf *AppUserModel) ShowOneById(iId uint) (*domain.AppUser, error) {
 	var oAppUser domain.AppUser
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).First(&oAppUser, iId).Error; oErr != nil {
+	oErr := oSelf.DB.WithContext(oSelf.Context).First(&oAppUser, iId).Error
+
+	if oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
-			return nil, errors.New("record not found")
+			oNotFoundError := errors.New("record not found")
+
+			return nil, oNotFoundError
 		}
 		return nil, oErr
 	}
@@ -68,7 +80,9 @@ func (oSelf *AppUserModel) AddOne(oValue *domain.AppUserValue) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows inserted")
+		oZeroRowsError := errors.New("0 rows inserted")
+
+		return oZeroRowsError
 	}
 
 	return nil

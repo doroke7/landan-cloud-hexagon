@@ -17,10 +17,12 @@ type ValidatorHelper struct {
 }
 
 func NewValiatorHelper(oAbstractHelper *AbstractHelper) *ValidatorHelper {
-	return &ValidatorHelper{
+	oValidatorHelper := &ValidatorHelper{
 		AbstractHelper: oAbstractHelper,
 		validator:      validator.New(),
 	}
+
+	return oValidatorHelper
 }
 
 func (oSelf *ValidatorHelper) Struct(oStruct any) error {
@@ -35,8 +37,13 @@ func (oSelf *ValidatorHelper) Valiate(oStruct any) error {
 		oErrors := oError.(validator.ValidationErrors)
 		oError := oErrors[0]
 
-		sMessage := oError.Field() + " requires " + oError.Tag() + " " + oError.Param()
-		return pkgUtility.NewDefaultError(sMessage, -1, 200)
+		sField := oError.Field()
+		sTag := oError.Tag()
+		sParam := oError.Param()
+		sMessage := sField + " requires " + sTag + " " + sParam
+		oDefaultError := pkgUtility.NewDefaultError(sMessage, -1, 200)
+
+		return oDefaultError
 
 	}
 

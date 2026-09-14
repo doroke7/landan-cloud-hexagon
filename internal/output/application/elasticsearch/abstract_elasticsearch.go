@@ -109,42 +109,56 @@ func (oSelf *AbstractElasticsearch) FiltersToMustFilter(aFilters []*pkgInput.Fil
 
 		switch sOperator {
 		case "ne":
-			aFilterClauses = append(aFilterClauses, map[string]any{"bool": map[string]any{"must_not": map[string]any{"term": map[string]any{sField: oValue}}}})
+			oFilterClause := map[string]any{"bool": map[string]any{"must_not": map[string]any{"term": map[string]any{sField: oValue}}}}
+			aFilterClauses = append(aFilterClauses, oFilterClause)
 		case "gt", "gte", "lt", "lte":
-			aFilterClauses = append(aFilterClauses, map[string]any{"range": map[string]any{sField: map[string]any{sOperator: oValue}}})
+			oFilterClause := map[string]any{"range": map[string]any{sField: map[string]any{sOperator: oValue}}}
+			aFilterClauses = append(aFilterClauses, oFilterClause)
 		case "contains":
 			if sValue, bOk := oValue.(string); bOk {
-				aFilterClauses = append(aFilterClauses, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}})
+				sPattern := "*" + sValue + "*"
+				oFilterClause := map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": sPattern, "case_insensitive": true}}}
+				aFilterClauses = append(aFilterClauses, oFilterClause)
 			}
 		case "notContains":
 			if sValue, bOk := oValue.(string); bOk {
-				aFilterClauses = append(aFilterClauses, map[string]any{"bool": map[string]any{"must_not": map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue + "*", "case_insensitive": true}}}}})
+				sPattern := "*" + sValue + "*"
+				oFilterClause := map[string]any{"bool": map[string]any{"must_not": map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": sPattern, "case_insensitive": true}}}}}
+				aFilterClauses = append(aFilterClauses, oFilterClause)
 			}
 		case "startsWith":
 			if sValue, bOk := oValue.(string); bOk {
-				aFilterClauses = append(aFilterClauses, map[string]any{"prefix": map[string]any{sField: map[string]any{"value": sValue, "case_insensitive": true}}})
+				oFilterClause := map[string]any{"prefix": map[string]any{sField: map[string]any{"value": sValue, "case_insensitive": true}}}
+				aFilterClauses = append(aFilterClauses, oFilterClause)
 			}
 		case "endsWith":
 			if sValue, bOk := oValue.(string); bOk {
 				// match     = 按照文字意思 搜尋
 				// wildcard  = 按照字串格式 搜尋
-				aFilterClauses = append(aFilterClauses, map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": "*" + sValue, "case_insensitive": true}}})
+				sPattern := "*" + sValue
+				oFilterClause := map[string]any{"wildcard": map[string]any{sField: map[string]any{"value": sPattern, "case_insensitive": true}}}
+				aFilterClauses = append(aFilterClauses, oFilterClause)
 			}
 		case "in":
-			aFilterClauses = append(aFilterClauses, map[string]any{"terms": map[string]any{sField: oValue}})
+			oFilterClause := map[string]any{"terms": map[string]any{sField: oValue}}
+			aFilterClauses = append(aFilterClauses, oFilterClause)
 		case "notIn":
-			aFilterClauses = append(aFilterClauses, map[string]any{"bool": map[string]any{"must_not": map[string]any{"terms": map[string]any{sField: oValue}}}})
+			oFilterClause := map[string]any{"bool": map[string]any{"must_not": map[string]any{"terms": map[string]any{sField: oValue}}}}
+			aFilterClauses = append(aFilterClauses, oFilterClause)
 		case "between":
 			if aRange, bOk := oValue.([]any); bOk && len(aRange) == 2 {
-				aFilterClauses = append(aFilterClauses, map[string]any{"range": map[string]any{sField: map[string]any{"gte": aRange[0], "lte": aRange[1]}}})
+				oFilterClause := map[string]any{"range": map[string]any{sField: map[string]any{"gte": aRange[0], "lte": aRange[1]}}}
+				aFilterClauses = append(aFilterClauses, oFilterClause)
 			}
 		case "match":
 
 			if sValue, bOk := oValue.(string); bOk {
-				aMustClauses = append(aMustClauses, map[string]any{"match": map[string]any{sField: sValue}})
+				oMustClause := map[string]any{"match": map[string]any{sField: sValue}}
+				aMustClauses = append(aMustClauses, oMustClause)
 			}
 		default:
-			aFilterClauses = append(aFilterClauses, map[string]any{"term": map[string]any{sField: oValue}})
+			oFilterClause := map[string]any{"term": map[string]any{sField: oValue}}
+			aFilterClauses = append(aFilterClauses, oFilterClause)
 		}
 	}
 

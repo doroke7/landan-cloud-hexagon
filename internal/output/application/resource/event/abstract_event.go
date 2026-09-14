@@ -18,9 +18,11 @@ type AbstractEvent struct {
 }
 
 func NewAbstractEvent(oContext context.Context, oResourceClient *client.ResourceClient, oAbstractResource *outputApplicationResource.AbstractResource) *AbstractEvent {
-	return &AbstractEvent{
+	oEvent := &AbstractEvent{
 		AbstractResource:    oAbstractResource,
 		Context:             oContext,
 		ResourceEventClient: oResourceClient.Event,
 	}
+
+	return oEvent
 }

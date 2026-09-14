@@ -29,7 +29,8 @@ func protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto *pbResource.Ad
 	}
 
 	for _, oChild := range oProto.GetChildren() {
-		oAdminPermissionGroup.Children = append(oAdminPermissionGroup.Children, protoAdminPermissionGroupToDomainAdminPermissionGroup(oChild))
+		oChildDomain := protoAdminPermissionGroupToDomainAdminPermissionGroup(oChild)
+		oAdminPermissionGroup.Children = append(oAdminPermissionGroup.Children, oChildDomain)
 	}
 
 	return oAdminPermissionGroup
@@ -40,9 +41,11 @@ type AdminPermissionGroupModel struct {
 }
 
 func NewAdminPermissionGroupModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminPermissionGroupModel {
-	return &AdminPermissionGroupModel{
+	oModel := &AdminPermissionGroupModel{
 		AbstractModel: oAbstractModel,
 	}
+
+	return oModel
 }
 
 func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupValue) error {
@@ -61,10 +64,8 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGro
 
 func (oSelf *AdminPermissionGroupModel) ShowOnesByParentId(iParentId uint64) ([]*domain.AdminPermissionGroup, error) {
 
-	oResponse, oErr := oSelf.ResourceModelClient.AdminPermissionGroup.ShowOnesByParentId(
-		oSelf.Context,
-		&pbResourceModel.AdminPermissionGroupShowOnesByParentIdInput{ParentId: iParentId},
-	)
+	oRequest := &pbResourceModel.AdminPermissionGroupShowOnesByParentIdInput{ParentId: iParentId}
+	oResponse, oErr := oSelf.ResourceModelClient.AdminPermissionGroup.ShowOnesByParentId(oSelf.Context, oRequest)
 
 	if oErr != nil {
 		return nil, oErr
@@ -132,10 +133,8 @@ func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissi
 
 func (oSelf *AdminPermissionGroupModel) RemoveOneById(iId uint64) error {
 
-	_, oErr := oSelf.ResourceModelClient.AdminPermissionGroup.RemoveOneById(
-		oSelf.Context,
-		&pbResourceModel.AdminPermissionGroupRemoveOneByIdInput{Id: iId},
-	)
+	oRequest := &pbResourceModel.AdminPermissionGroupRemoveOneByIdInput{Id: iId}
+	_, oErr := oSelf.ResourceModelClient.AdminPermissionGroup.RemoveOneById(oSelf.Context, oRequest)
 
 	return oErr
 }

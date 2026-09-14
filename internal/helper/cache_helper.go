@@ -27,22 +27,34 @@ func (oSelf *CacheHelper) WriteCache(sKey string, value any) error {
 		return err
 	}
 
-	return oSelf.redis.Set(context.Background(), sKey, sData, 0).Err()
+	oContext := context.Background()
+	oResult := oSelf.redis.Set(oContext, sKey, sData, 0)
+	oErr := oResult.Err()
+
+	return oErr
 }
 
 // ReadCache 從 redis 讀出 JSON 並解到 dest（傳指標進來），
 // 一樣只負責通用的「怎麼讀」，key 格式跟目標型別都由呼叫端決定。
 func (oSelf *CacheHelper) ReadCache(sKey string, dest any) error {
-	sData, err := oSelf.redis.Get(context.Background(), sKey).Result()
+	oContext := context.Background()
+	oResult := oSelf.redis.Get(oContext, sKey)
+	sData, err := oResult.Result()
 	if err != nil {
 		return err
 	}
 
-	return json.Unmarshal([]byte(sData), dest)
+	oErr := json.Unmarshal([]byte(sData), dest)
+
+	return oErr
 }
 
 // EvictCache 把 key 從 redis 刪掉，用在寫入之後讓下一次讀取重新從來源撈最新資料，
 // 避免寫入端自己組的資料跟實際落地的資料不一致（例如 auto increment ID 沒帶回來）。
 func (oSelf *CacheHelper) EvictCache(sKey string) error {
-	return oSelf.redis.Del(context.Background(), sKey).Err()
+	oContext := context.Background()
+	oResult := oSelf.redis.Del(oContext, sKey)
+	oErr := oResult.Err()
+
+	return oErr
 }

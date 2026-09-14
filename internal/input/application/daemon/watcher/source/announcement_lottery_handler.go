@@ -48,7 +48,8 @@ func (oSelf *AnnouncementLotteryHandler) Watch(oStream grpc.ServerStreamingClien
 
 		aNumbers := make([]string, 0, len(oReply.Numbers))
 		for _, iNumber := range oReply.Numbers {
-			aNumbers = append(aNumbers, strconv.Itoa(int(iNumber)))
+			sNumber := strconv.Itoa(int(iNumber))
+			aNumbers = append(aNumbers, sNumber)
 		}
 
 		sRound := oReply.Round

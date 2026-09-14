@@ -23,24 +23,36 @@ type AdminUserModel struct {
 // 索引跟 script/mongodb/resource.js 建的一致：name 唯一、deleted_at 供軟刪除過濾用。
 func NewAdminUserModel(oAbstractModel *AbstractModel) (outputPortAnyModel.AdminUserModel, error) {
 	oCollection := oAbstractModel.Database.Collection("admin_users")
+	oIndexView := oCollection.Indexes()
 
-	if _, oErr := oCollection.Indexes().CreateMany(oAbstractModel.Context, []mongo.IndexModel{
+	oNameIndexOptions := options.Index()
+	oNameIndexOptions.SetUnique(true)
+	oNameIndexOptions.SetName("admin_users-name")
+
+	oDeletedAtIndexOptions := options.Index()
+	oDeletedAtIndexOptions.SetName("admin_users-da")
+
+	aIndexModels := []mongo.IndexModel{
 		{
 			Keys:    bson.D{{Key: "name", Value: 1}},
-			Options: options.Index().SetUnique(true).SetName("admin_users-name"),
+			Options: oNameIndexOptions,
 		},
 		{
 			Keys:    bson.D{{Key: "deleted_at", Value: 1}},
-			Options: options.Index().SetName("admin_users-da"),
+			Options: oDeletedAtIndexOptions,
 		},
-	}); oErr != nil {
+	}
+
+	if _, oErr := oIndexView.CreateMany(oAbstractModel.Context, aIndexModels); oErr != nil {
 		return nil, oErr
 	}
+
+	oCounters := oAbstractModel.Database.Collection("counters")
 
 	return &AdminUserModel{
 		AbstractModel: oAbstractModel,
 		Collection:    oCollection,
-		Counters:      oAbstractModel.Database.Collection("counters"),
+		Counters:      oCounters,
 	}, nil
 }
 
@@ -51,11 +63,15 @@ MongoDB 不會讓它們拿到同一個 seq。
 */
 
 func (oSelf *AdminUserModel) nextId() (uint, error) {
+	oUpdateOptions := options.FindOneAndUpdate()
+	oUpdateOptions.SetUpsert(true)
+	oUpdateOptions.SetReturnDocument(options.After)
+
 	oResult := oSelf.Counters.FindOneAndUpdate(
 		oSelf.Context,
 		bson.M{"_id": "admin_user"},
 		bson.M{"$inc": bson.M{"seq": 1}},
-		options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After),
+		oUpdateOptions,
 	)
 
 	var oCounter struct {
@@ -71,7 +87,8 @@ func (oSelf *AdminUserModel) nextId() (uint, error) {
 func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, error) {
 	var oAdminUser domain.AdminUser
 
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{"name": sName}).Decode(&oAdminUser)
+	oResult := oSelf.Collection.FindOne(oSelf.Context, bson.M{"name": sName})
+	oErr := oResult.Decode(&oAdminUser)
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
 			return nil, errors.New("record not found")
@@ -85,7 +102,8 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) {
 	var oAdminUser domain.AdminUser
 
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{"_id": iId}).Decode(&oAdminUser)
+	oResult := oSelf.Collection.FindOne(oSelf.Context, bson.M{"_id": iId})
+	oErr := oResult.Decode(&oAdminUser)
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {
 			return nil, errors.New("record not found")
@@ -97,10 +115,11 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) 
 }
 
 func (oSelf *AdminUserModel) RemoveOneById(iId uint64) error {
+	oNow := time.Now()
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
-		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
+		bson.M{"$set": bson.M{"deleted_at": oNow}},
 	)
 	if oErr != nil {
 		return oErr

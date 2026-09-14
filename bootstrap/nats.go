@@ -16,7 +16,8 @@ func NewNats() (*nats.Conn, error) {
 	}
 
 	if CONFIG.NATS.USERNAME != "" {
-		aOptions = append(aOptions, nats.UserInfo(CONFIG.NATS.USERNAME, CONFIG.NATS.PASSWORD))
+		oUserInfoOption := nats.UserInfo(CONFIG.NATS.USERNAME, CONFIG.NATS.PASSWORD)
+		aOptions = append(aOptions, oUserInfoOption)
 	}
 
 	oConn, oErr := nats.Connect(sURL, aOptions...)

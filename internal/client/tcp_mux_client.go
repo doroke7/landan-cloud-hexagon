@@ -98,7 +98,8 @@ func (oSelf *TcpMuxClient) failAllPending(err error) {
 }
 
 func (oSelf *TcpMuxClient) call(oReq types.TcpRequest) (*types.TcpResponse, error) {
-	sId := strconv.FormatUint(oSelf.nextId.Add(1), 10)
+	iNextId := oSelf.nextId.Add(1)
+	sId := strconv.FormatUint(iNextId, 10)
 	oReq.RequestId = sId
 
 	oChan := make(chan tcpMuxResult, 1)
@@ -132,8 +133,11 @@ func (oSelf *TcpMuxClient) call(oReq types.TcpRequest) (*types.TcpResponse, erro
 }
 
 func (oSelf *TcpMuxClient) AdminAuthenticationAuthenticatorSignIn(sName string, sPassword string) (*types.TcpResponse, error) {
-	return oSelf.call(types.TcpRequest{
+	oRequest := types.TcpRequest{
 		Method: "Admin.Authentication.Authenticator.SignIn",
 		Param:  sName + ":" + sPassword,
-	})
+	}
+	oResponse, oErr := oSelf.call(oRequest)
+
+	return oResponse, oErr
 }

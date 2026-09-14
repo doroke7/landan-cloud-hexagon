@@ -21,6 +21,8 @@ func NewRequestMiddleware(oAbstractMiddleware *AbstractMiddleware) *RequestMiddl
 // 這裡的空實作是刻意維持的最終狀態，不是還沒補上的骨架。
 func (oSelf *RequestMiddleware) Handle() types.WebsocketMiddlewareFunc {
 	return func(oConn types.WebsocketConn, oReq types.WebsocketRequest, fnNext types.WebsocketNextFunc) types.WebsocketResponse {
-		return fnNext(oConn, oReq)
+		oResp := fnNext(oConn, oReq)
+
+		return oResp
 	}
 }

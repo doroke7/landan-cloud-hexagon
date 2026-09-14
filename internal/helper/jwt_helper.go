@@ -31,10 +31,15 @@ type JwtClaims struct {
 // sSecret 由呼叫端決定要用哪個 carrier 的 SERVICES.<CARRIER>.ADMIN.JWT.SECRET，
 // JwtHelper 本身不綁定任何一個 carrier。
 func (oSelf *JwtHelper) Generate(nAdminUserId int64, nAppUserId int64, oPayload map[string]any, sSecret string) (string, error) {
+	oNow := time.Now()
+	oExpiresAtTime := oNow.Add(24 * time.Hour)
+	oIssuedAt := jwt.NewNumericDate(oNow)
+	oExpiresAt := jwt.NewNumericDate(oExpiresAtTime)
+
 	oClaims := JwtClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
-			IssuedAt:  jwt.NewNumericDate(time.Now()),
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(24 * time.Hour)),
+			IssuedAt:  oIssuedAt,
+			ExpiresAt: oExpiresAt,
 		},
 		AdminUserId: nAdminUserId,
 		AppUserId:   nAppUserId,
@@ -55,7 +60,9 @@ func (oSelf *JwtHelper) Parse(sJwt string) (*JwtClaims, error) {
 
 	oToken, oErr := jwt.ParseWithClaims(sJwt, &JwtClaims{}, func(oT *jwt.Token) (any, error) {
 		if _, bOk := oT.Method.(*jwt.SigningMethodHMAC); !bOk {
-			return nil, errors.New("unexpected signing method")
+			oErr := errors.New("unexpected signing method")
+
+			return nil, oErr
 		}
 		return []byte(bootstrap.CONFIG.SERVICES.HTTP.ADMIN.JWT.SECRET), nil
 	})
@@ -65,7 +72,9 @@ func (oSelf *JwtHelper) Parse(sJwt string) (*JwtClaims, error) {
 
 	oClaims, bOk := oToken.Claims.(*JwtClaims)
 	if !bOk || !oToken.Valid {
-		return nil, errors.New("invalid token")
+		oErr := errors.New("invalid token")
+
+		return nil, oErr
 	}
 
 	return oClaims, nil
@@ -78,5 +87,7 @@ func (oSelf *JwtHelper) Refresh(sToken string, sSecret string) (string, error) {
 		return "", oErr
 	}
 
-	return oSelf.Generate(oClaims.AdminUserId, oClaims.AppUserId, oClaims.Payload, sSecret)
+	sNewToken, oGenerateErr := oSelf.Generate(oClaims.AdminUserId, oClaims.AppUserId, oClaims.Payload, sSecret)
+
+	return sNewToken, oGenerateErr
 }

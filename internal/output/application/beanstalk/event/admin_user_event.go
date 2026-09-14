@@ -24,7 +24,8 @@ func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 		return err
 	}
 
-	_, err = oSelf.AbstractBeanstalk.Tube("/Queue/AdminUser.AddOne").Put(aByteBody, 1, 0, 10*time.Second)
+	oTube := oSelf.AbstractBeanstalk.Tube("/Queue/AdminUser.AddOne")
+	_, err = oTube.Put(aByteBody, 1, 0, 10*time.Second)
 
 	return err
 }

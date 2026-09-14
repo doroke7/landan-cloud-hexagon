@@ -13,9 +13,11 @@ type GameLogic struct {
 }
 
 func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
-	return &GameLogic{
+	oLogic := &GameLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+
+	return oLogic
 }
 
 func protoGameTypeToDomainGameType(oProtoGameType *pbResource.GameType) domain.GameType {
@@ -39,7 +41,8 @@ func protoGameTypeToDomainGameType(oProtoGameType *pbResource.GameType) domain.G
 	}
 
 	for _, oChild := range oProtoGameType.GetChildren() {
-		oGameType.Children = append(oGameType.Children, protoGameTypeToDomainGameType(oChild))
+		oChildDomain := protoGameTypeToDomainGameType(oChild)
+		oGameType.Children = append(oGameType.Children, oChildDomain)
 	}
 
 	return oGameType
@@ -50,7 +53,8 @@ func protoGameToDomainGame(oProtoGame *pbResource.Game) domain.Game {
 		return domain.Game{}
 	}
 
-	return domain.Game{
+	oGameType := protoGameTypeToDomainGameType(oProtoGame.GetGameType())
+	oGame := domain.Game{
 		Id:          uint64(oProtoGame.GetId()),
 		GameTypeId:  uint64(oProtoGame.GetGameTypeId()),
 		Key:         oProtoGame.GetKey(),
@@ -59,8 +63,10 @@ func protoGameToDomainGame(oProtoGame *pbResource.Game) domain.Game {
 		CreatedAt:   oProtoGame.GetCreatedAt().AsTime(),
 		UpdatedAt:   oProtoGame.GetUpdatedAt().AsTime(),
 		DeletedAt:   oProtoGame.GetDeletedAt().AsTime(),
-		GameType:    protoGameTypeToDomainGameType(oProtoGame.GetGameType()),
+		GameType:    oGameType,
 	}
+
+	return oGame
 }
 
 func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.Game, uint64, error) {
@@ -78,7 +84,8 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 
 	aGames := make([]*domain.Game, 0, len(oResponse.GetGames()))
 	for _, oOne := range oResponse.GetGames() {
-		aGames = append(aGames, &domain.Game{
+		oGameType := protoGameTypeToDomainGameType(oOne.GetGameType())
+		oGame := &domain.Game{
 			Id:          uint64(oOne.GetId()),
 			GameTypeId:  uint64(oOne.GetGameTypeId()),
 			Key:         oOne.GetKey(),
@@ -87,8 +94,9 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 			CreatedAt:   oOne.GetCreatedAt().AsTime(),
 			UpdatedAt:   oOne.GetUpdatedAt().AsTime(),
 			DeletedAt:   oOne.GetDeletedAt().AsTime(),
-			GameType:    protoGameTypeToDomainGameType(oOne.GetGameType()),
-		})
+			GameType:    oGameType,
+		}
+		aGames = append(aGames, oGame)
 	}
 
 	iTotal := uint64(oResponse.GetTotal())

@@ -74,11 +74,12 @@ func (oSelf *AbstractGaussdb) FiltersToWheres(aFilters []*pkgInput.Filter) []*pk
 
 		// GaussDB 源自 PostgreSQL，識別字一樣用雙引號。
 		sField := `"` + *oFilter.Field + `"`
-		aWheres = append(aWheres, &pkgGaussdb.GaussdbWhere{
+		oWhere := &pkgGaussdb.GaussdbWhere{
 			Field:    &sField,
 			Operator: &sOperator,
 			Value:    oValue,
-		})
+		}
+		aWheres = append(aWheres, oWhere)
 	}
 
 	return aWheres
@@ -98,10 +99,11 @@ func (oSelf *AbstractGaussdb) SortersToOrders(aSorters []*pkgInput.Sorter) []*pk
 		}
 
 		sField := `"` + *oSorter.Field + `"`
-		aOrders = append(aOrders, &pkgGaussdb.GaussdbOrder{
+		oOrder := &pkgGaussdb.GaussdbOrder{
 			Field: &sField,
 			Value: &sDirection,
-		})
+		}
+		aOrders = append(aOrders, oOrder)
 	}
 
 	return aOrders

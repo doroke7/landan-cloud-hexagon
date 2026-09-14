@@ -17,9 +17,11 @@ type GameTypeLogic struct {
 }
 
 func NewGameTypeLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameTypeLogic {
-	return &GameTypeLogic{
+	oLogic := &GameTypeLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+
+	return oLogic
 }
 
 // ShowTree 先把所有未刪除的 game_type 一次撈成平的，再用 ParentId 掛 Children，

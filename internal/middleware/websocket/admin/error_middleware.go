@@ -31,11 +31,15 @@ func (oSelf *ErrorMiddleware) Handle() types.WebsocketMiddlewareFunc {
 			case *pkgUtility.DefaultError:
 				oResp = types.WebsocketResponse{Code: int(oErrorType.Code), Message: oErrorType.Message}
 			default:
-				pkgUtility.Logger(pkgUtility.WebsocketMiddleware).Sugar().Errorf("panic: %v", oError)
+				oLogger := pkgUtility.Logger(pkgUtility.WebsocketMiddleware)
+				oSugarLogger := oLogger.Sugar()
+				oSugarLogger.Errorf("panic: %v", oError)
 				oResp = types.WebsocketResponse{Code: -4, Message: "系統錯誤"}
 			}
 		}()
 
-		return fnNext(oConn, oReq)
+		oResp = fnNext(oConn, oReq)
+
+		return oResp
 	}
 }

@@ -44,8 +44,9 @@ func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId ui
 	// *oAdminUser.Name 相當 (*(oAdminUser).Name)
 
 	if (*oAdminUser).Name != nil && *oAdminUser.Name != "" {
-		return pkgUtility.NewDefaultError("name can not be modified", -1, 200)
+		oNameModifiedError := pkgUtility.NewDefaultError("name can not be modified", -1, 200)
 
+		return oNameModifiedError
 	}
 
 	oErr := oSelf.ValidatorHelper.Valiate(oAdminUser)
@@ -67,8 +68,9 @@ func (oSelf *AdminUserUsecase) EditOne(oAdminUser *domain.AdminUserValue, iId ui
 func (oSelf *AdminUserUsecase) RemoveOne(iId uint64) error {
 
 	if iId == 1 {
-		return pkgUtility.NewDefaultError("AdminUser.Id=1 cannot be deleted", -1, 200)
+		oCannotDeleteError := pkgUtility.NewDefaultError("AdminUser.Id=1 cannot be deleted", -1, 200)
 
+		return oCannotDeleteError
 	}
 
 	oErr := oSelf.AdminUserLogic.RemoveAdminUserById(iId)

@@ -13,9 +13,11 @@ type AdminPermissionModel struct {
 }
 
 func NewAdminPermissionModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminPermissionModel {
-	return &AdminPermissionModel{
+	oModel := &AdminPermissionModel{
 		AbstractModel: oAbstractModel,
 	}
+
+	return oModel
 }
 
 func protoAdminPermissionToDomainAdminPermission(oProto *pbResource.AdminPermission) domain.AdminPermission {
@@ -23,7 +25,7 @@ func protoAdminPermissionToDomainAdminPermission(oProto *pbResource.AdminPermiss
 		return domain.AdminPermission{}
 	}
 
-	return domain.AdminPermission{
+	oAdminPermission := domain.AdminPermission{
 		Id:        uint64(oProto.GetId()),
 		Type:      uint8(oProto.GetType()),
 		Key:       oProto.GetKey(),
@@ -32,6 +34,8 @@ func protoAdminPermissionToDomainAdminPermission(oProto *pbResource.AdminPermiss
 		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
 		DeletedAt: oProto.GetDeletedAt().AsTime(),
 	}
+
+	return oAdminPermission
 }
 
 func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminPermissionValue) *pbResourceModel.AdminPermissionValue {
@@ -61,10 +65,8 @@ func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissi
 
 func (oSelf *AdminPermissionModel) ShowOneById(iId uint64) (*domain.AdminPermission, error) {
 
-	oResponse, oErr := oSelf.ResourceModelClient.AdminPermission.ShowOneById(
-		oSelf.Context,
-		&pbResourceModel.AdminPermissionShowOneByIdInput{Id: uint64(iId)},
-	)
+	oRequest := &pbResourceModel.AdminPermissionShowOneByIdInput{Id: uint64(iId)}
+	oResponse, oErr := oSelf.ResourceModelClient.AdminPermission.ShowOneById(oSelf.Context, oRequest)
 
 	if oErr != nil {
 		return nil, oErr
@@ -94,10 +96,8 @@ func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPer
 
 func (oSelf *AdminPermissionModel) RemoveOneById(iId uint64) error {
 
-	_, oErr := oSelf.ResourceModelClient.AdminPermission.RemoveOneById(
-		oSelf.Context,
-		&pbResourceModel.AdminPermissionRemoveOneByIdInput{Id: uint64(iId)},
-	)
+	oRequest := &pbResourceModel.AdminPermissionRemoveOneByIdInput{Id: uint64(iId)}
+	_, oErr := oSelf.ResourceModelClient.AdminPermission.RemoveOneById(oSelf.Context, oRequest)
 
 	return oErr
 }

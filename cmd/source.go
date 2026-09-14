@@ -23,18 +23,23 @@ var oSourceCommand = &cobra.Command{
 		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
+		oLogger := pkgUtility.Logger(pkgUtility.Source)
+
 		oContainer, err := container.InitSourceContainer(oCtx)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Source).Fatal("初始化 source container 失敗", zap.Error(err))
+			oErrorField := zap.Error(err)
+			oLogger.Fatal("初始化 source container 失敗", oErrorField)
 		}
 
 		oResourceServer := registerSource.Init(oContainer)
 
-		oListener, err := net.Listen("tcp", ":"+bootstrap.CONFIG.SERVICES.SOURCE.PORT)
+		sAddress := ":" + bootstrap.CONFIG.SERVICES.SOURCE.PORT
+		oListener, err := net.Listen("tcp", sAddress)
 		if err != nil {
-			pkgUtility.Logger(pkgUtility.Source).Fatal("監聽 SOURCE port 失敗", zap.Error(err))
+			oErrorField := zap.Error(err)
+			oLogger.Fatal("監聽 SOURCE port 失敗", oErrorField)
 		}
-		pkgUtility.Logger(pkgUtility.Source).Info("啟動 SOURCE 服務。 port: " + bootstrap.CONFIG.SERVICES.SOURCE.PORT)
+		oLogger.Info("啟動 SOURCE 服務。 port: " + bootstrap.CONFIG.SERVICES.SOURCE.PORT)
 
 		// 收到中斷/終止訊號時 oCtx 會被取消，主動 GracefulStop，讓 gRPC 停止 accept 新連線、
 		// 關掉 listener，Serve() 才會正常返回並釋放 port，
@@ -45,7 +50,8 @@ var oSourceCommand = &cobra.Command{
 		}()
 
 		if err := oResourceServer.Serve(oListener); err != nil {
-			pkgUtility.Logger(pkgUtility.Source).Fatal("SOURCE server 異常結束", zap.Error(err))
+			oErrorField := zap.Error(err)
+			oLogger.Fatal("SOURCE server 異常結束", oErrorField)
 		}
 	},
 }

@@ -30,7 +30,7 @@ func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 		return err
 	}
 
-	return oSelf.Channel.Publish(
+	err = oSelf.Channel.Publish(
 		"",
 		"/Queue/AdminUser.AddOne",
 		false,
@@ -40,6 +40,8 @@ func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 			Body:        aByteBody,
 		},
 	)
+
+	return err
 }
 
 func (oSelf *AdminUserEvent) Close() error {

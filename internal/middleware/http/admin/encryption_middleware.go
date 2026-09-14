@@ -52,7 +52,9 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 
 		sMessage := mMessage.(string)
 
-		sTime := strconv.FormatInt(oSelf.clock.Now().Unix(), 10)
+		oNow := oSelf.clock.Now()
+		iUnix := oNow.Unix()
+		sTime := strconv.FormatInt(iUnix, 10)
 		sResult, _ := pkgUtility.JsonEncode(mResult)
 
 		sR, oErr := oSelf.aesHelper.Encrypt(sResult, sKey, sIv)
@@ -71,7 +73,8 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkgUtility.NewDefaultError("encryption failed", -4, 500))
+			oError := pkgUtility.NewDefaultError("encryption failed", -4, 500)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 
 			return
@@ -92,7 +95,8 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkgUtility.NewDefaultError("encryption failed", -4, 500))
+			oError := pkgUtility.NewDefaultError("encryption failed", -4, 500)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 
 			return
@@ -113,7 +117,8 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkgUtility.NewDefaultError("encryption failed", -4, 500))
+			oError := pkgUtility.NewDefaultError("encryption failed", -4, 500)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 
 			return
@@ -134,7 +139,8 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 				   3-1. 這個會 Abort + Error + 寫入 http-status
 				   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 			*/
-			_ = oContext.Error(pkgUtility.NewDefaultError("encryption failed", -4, 500))
+			oError := pkgUtility.NewDefaultError("encryption failed", -4, 500)
+			_ = oContext.Error(oError)
 			oContext.Abort()
 
 			return
@@ -158,7 +164,8 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 					   3-1. 這個會 Abort + Error + 寫入 http-status
 					   3-2. 但是 會使得 ErrorMiddleware 無法修改 http 響應了
 				*/
-				_ = oContext.Error(pkgUtility.NewDefaultError("encryption failed", -4, 500))
+				oError := pkgUtility.NewDefaultError("encryption failed", -4, 500)
+				_ = oContext.Error(oError)
 				oContext.Abort()
 
 				return
@@ -172,8 +179,9 @@ func (oSelf *EncryptionMiddleware) Handle() gin.HandlerFunc {
 
 		sHeaderSignature := pkgUtility.Md5(sString)
 
-		oContext.Writer.Header().Set("Time", sTime)
-		oContext.Writer.Header().Set("Signature", sHeaderSignature)
+		oHeader := oContext.Writer.Header()
+		oHeader.Set("Time", sTime)
+		oHeader.Set("Signature", sHeaderSignature)
 
 		oContext.Set("a", sA)
 		oContext.Set("c", sC)

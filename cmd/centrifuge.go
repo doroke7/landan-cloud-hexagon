@@ -24,9 +24,12 @@ var oCentrifugeCommand = &cobra.Command{
 		oCtx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM)
 		defer stop()
 
+		oLogger := pkgUtility.Logger(pkgUtility.Centrifuge)
+
 		oContainer, oErr := container.InitCentrifugeContainer(oCtx)
 		if oErr != nil {
-			pkgUtility.Logger(pkgUtility.Centrifuge).Fatal("初始化 centrifuge container 失敗", zap.Error(oErr))
+			oErrorField := zap.Error(oErr)
+			oLogger.Fatal("初始化 centrifuge container 失敗", oErrorField)
 		}
 		defer oContainer.Nats.Close()
 
@@ -39,14 +42,16 @@ var oCentrifugeCommand = &cobra.Command{
 
 		go func() {
 			<-oCtx.Done()
-			oNode.Shutdown(context.Background())
-			oCentrifugeServer.Shutdown(context.Background())
+			oBackgroundContext := context.Background()
+			oNode.Shutdown(oBackgroundContext)
+			oCentrifugeServer.Shutdown(oBackgroundContext)
 		}()
 
-		pkgUtility.Logger(pkgUtility.Centrifuge).Info("啟動 CENTRIFUGE 服務。 port: " + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT)
+		oLogger.Info("啟動 CENTRIFUGE 服務。 port: " + bootstrap.CONFIG.SERVICES.CENTRIFUGE.PORT)
 
 		if oErr := oCentrifugeServer.ListenAndServe(); oErr != nil && oErr != http.ErrServerClosed {
-			pkgUtility.Logger(pkgUtility.Centrifuge).Fatal("CENTRIFUGE server 異常結束", zap.Error(oErr))
+			oErrorField := zap.Error(oErr)
+			oLogger.Fatal("CENTRIFUGE server 異常結束", oErrorField)
 		}
 	},
 }

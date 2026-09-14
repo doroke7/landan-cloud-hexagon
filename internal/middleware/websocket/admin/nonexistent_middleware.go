@@ -21,6 +21,8 @@ func NewNonexistentMiddleware(oAbstractMiddleware *AbstractMiddleware) *Nonexist
 // 或換一套對外訊息，都可以直接在這裡加，不用動 pkg.WebsocketRouter。
 func (oSelf *NonexistentMiddleware) Handle() types.WebsocketMiddlewareFunc {
 	return func(oConn types.WebsocketConn, oReq types.WebsocketRequest, fnNext types.WebsocketNextFunc) types.WebsocketResponse {
-		return fnNext(oConn, oReq)
+		oResp := fnNext(oConn, oReq)
+
+		return oResp
 	}
 }

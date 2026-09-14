@@ -34,21 +34,26 @@ func NewTcpClient() (*TcpClient, error) {
 		return nil, err
 	}
 
-	return &TcpClient{
+	oTcpClient := &TcpClient{
 		conn:   oConn,
 		reader: bufio.NewReader(oConn),
-	}, nil
+	}
+
+	return oTcpClient, nil
 }
 
 func (oSelf *TcpClient) Close() error {
-	return oSelf.conn.Close()
+	oErr := oSelf.conn.Close()
+
+	return oErr
 }
 
 func (oSelf *TcpClient) AdminAuthenticationAuthenticatorSignIn(sName string, sPassword string) (*types.TcpResponse, error) {
-	aFrame, err := oSelf.EncodeFrame(types.TcpRequest{
+	oRequest := types.TcpRequest{
 		Method: "Admin.Authentication.Authenticator.SignIn",
 		Param:  sName + ":" + sPassword,
-	})
+	}
+	aFrame, err := oSelf.EncodeFrame(oRequest)
 	if err != nil {
 		log.Println("tcp client: encode failed:", err)
 		return nil, err
@@ -73,12 +78,16 @@ func (oSelf *TcpClient) EncodeFrame(oPayload any) ([]byte, error) {
 	oBuf.Reset()
 	defer tcpEncodeBufferPool.Put(oBuf)
 
-	if err := json.NewEncoder(oBuf).Encode(oPayload); err != nil {
+	oEncoder := json.NewEncoder(oBuf)
+
+	err := oEncoder.Encode(oPayload)
+	if err != nil {
 		return nil, err
 	}
 
 	// json.Encoder.Encode 會多寫一個結尾的 \n，這裡要去掉，行為才會跟 json.Marshal 一致
-	aBody := bytes.TrimRight(oBuf.Bytes(), "\n")
+	aBufBytes := oBuf.Bytes()
+	aBody := bytes.TrimRight(aBufBytes, "\n")
 
 	if len(aBody) > tcpMaxBodyLength {
 		return nil, ErrTcpBodyTooLarge
@@ -110,5 +119,7 @@ func (oSelf *TcpClient) DecodeFrame(oReader *bufio.Reader, oPayload any) error {
 		return err
 	}
 
-	return json.Unmarshal(aBody, oPayload)
+	oErr := json.Unmarshal(aBody, oPayload)
+
+	return oErr
 }

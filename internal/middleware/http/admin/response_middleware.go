@@ -72,7 +72,8 @@ func (oSelf *ResponseMiddleware) Handle() gin.HandlerFunc {
 			}
 			aByteStack := make([]byte, 4096)
 			iLen := runtime.Stack(aByteStack, false)
-			pkgUtility.Logger(pkgUtility.HttpAdminMiddleware).Log(
+			oLogger := pkgUtility.Logger(pkgUtility.HttpAdminMiddleware)
+			oLogger.Log(
 				iLevel,
 				"前級系統錯誤4",
 				zap.Any("message", sMessage),
@@ -94,10 +95,12 @@ func (oSelf *ResponseMiddleware) Handle() gin.HandlerFunc {
 				oJson["result"] = mResult
 				oJson["total"] = iTotal
 
-				oContext.Writer.Header().Set("Authorization", sAuthorization)
+				oHeader := oContext.Writer.Header()
+				oHeader.Set("Authorization", sAuthorization)
 
 			}
-			oContext.Writer.Header().Set("A", sA)
+			oHeader := oContext.Writer.Header()
+			oHeader.Set("A", sA)
 			oContext.JSON(iStatus, oJson)
 		}
 

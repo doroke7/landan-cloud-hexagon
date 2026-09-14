@@ -25,7 +25,8 @@ func (oSelf *LoggerMiddleware) Handle() types.WebsocketMiddlewareFunc {
 	return func(oConn types.WebsocketConn, oReq types.WebsocketRequest, fnNext types.WebsocketNextFunc) types.WebsocketResponse {
 		oStart := time.Now()
 
-		pkgUtility.Logger(pkgUtility.WebsocketAdminMiddleware).Info(
+		oLogger := pkgUtility.Logger(pkgUtility.WebsocketAdminMiddleware)
+		oLogger.Info(
 			"進入 websocket",
 			zap.String("method", oReq.Method),
 			zap.ByteString("value", oReq.Value),
@@ -33,10 +34,11 @@ func (oSelf *LoggerMiddleware) Handle() types.WebsocketMiddlewareFunc {
 
 		oResp := fnNext(oConn, oReq)
 
-		pkgUtility.Logger(pkgUtility.WebsocketAdminMiddleware).Info(
+		oElapsed := time.Since(oStart)
+		oLogger.Info(
 			"結束 websocket",
 			zap.String("method", oReq.Method),
-			zap.Duration("經過時間", time.Since(oStart)),
+			zap.Duration("經過時間", oElapsed),
 		)
 
 		return oResp

@@ -25,10 +25,13 @@ func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 		return err
 	}
 
-	return oSelf.Socket.SendMulti(zmq4.NewMsgFrom(
+	oMsg := zmq4.NewMsgFrom(
 		[]byte("/Queue/AdminUser.AddOne"),
 		aByteBody,
-	))
+	)
+	err = oSelf.Socket.SendMulti(oMsg)
+
+	return err
 }
 
 func (oSelf *AdminUserEvent) Close() error {

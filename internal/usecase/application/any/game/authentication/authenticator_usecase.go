@@ -24,11 +24,15 @@ func NewAuthenticatorUsecase(oAppUserRepository outputPortAnyModel.AppUserModel,
 func (oSelf *AuthenticatorUsecase) LogIn(sName string, sPassword string, sSecret string) (string, error) {
 
 	if sName == "" {
-		return "", pkgUtility.NewDefaultError("name must not be empty", -1, 200)
+		oNameEmptyError := pkgUtility.NewDefaultError("name must not be empty", -1, 200)
+
+		return "", oNameEmptyError
 	}
 
 	if sPassword == "" {
-		return "", pkgUtility.NewDefaultError("password must not be empty", -1, 200)
+		oPasswordEmptyError := pkgUtility.NewDefaultError("password must not be empty", -1, 200)
+
+		return "", oPasswordEmptyError
 	}
 
 	oAppUser, oErr := oSelf.AppUserModel.ShowOneByName(sName)
@@ -36,18 +40,25 @@ func (oSelf *AuthenticatorUsecase) LogIn(sName string, sPassword string, sSecret
 		return "", oErr
 	}
 	if oAppUser == nil {
-		return "", pkgUtility.NewDefaultError(sName+" does not exist", -2, 200)
+		sNotExistMessage := sName + " does not exist"
+		oNotExistError := pkgUtility.NewDefaultError(sNotExistMessage, -2, 200)
+
+		return "", oNotExistError
 	}
 
 	sMd5 := pkgUtility.Md5(sPassword + bootstrap.CONFIG.TABLE.APP_USER.PASSWORD)
 	fmt.Println("sMd5=", sMd5)
 	if oAppUser.Password != sMd5 {
-		return "", pkgUtility.NewDefaultError("incorrect password", -2, 200)
+		oIncorrectPasswordError := pkgUtility.NewDefaultError("incorrect password", -2, 200)
+
+		return "", oIncorrectPasswordError
 	}
 
 	sAuthorization, oErr := oSelf.JwtHelper.Generate(0, int64(oAppUser.Id), map[string]any{}, sSecret)
 	if oErr != nil {
-		return "", pkgUtility.NewDefaultError("JWT generation failed", -2, 200)
+		oGenerateError := pkgUtility.NewDefaultError("JWT generation failed", -2, 200)
+
+		return "", oGenerateError
 	}
 
 	return sAuthorization, nil
@@ -56,12 +67,16 @@ func (oSelf *AuthenticatorUsecase) LogIn(sName string, sPassword string, sSecret
 func (oSelf *AuthenticatorUsecase) Refresh(sJwt string, sSecret string) (string, error) {
 
 	if sJwt == "" {
-		return "", pkgUtility.NewDefaultError("JWT must not be empty", -1, 200)
+		oJwtEmptyError := pkgUtility.NewDefaultError("JWT must not be empty", -1, 200)
+
+		return "", oJwtEmptyError
 	}
 
 	oClaims, oErr := oSelf.JwtHelper.Parse(sJwt)
 	if oErr != nil {
-		return "", pkgUtility.NewDefaultError("invalid JWT", -2, 200)
+		oInvalidJwtError := pkgUtility.NewDefaultError("invalid JWT", -2, 200)
+
+		return "", oInvalidJwtError
 	}
 
 	iId := uint(oClaims.AppUserId)
@@ -70,12 +85,16 @@ func (oSelf *AuthenticatorUsecase) Refresh(sJwt string, sSecret string) (string,
 		return "", oErr
 	}
 	if oAppUser == nil {
-		return "", pkgUtility.NewDefaultError("AppUser does not exist", -2, 200)
+		oNotExistError := pkgUtility.NewDefaultError("AppUser does not exist", -2, 200)
+
+		return "", oNotExistError
 	}
 
 	sAuthorization, oErr := oSelf.JwtHelper.Generate(oClaims.AdminUserId, oClaims.AppUserId, oClaims.Payload, sSecret)
 	if oErr != nil {
-		return "", pkgUtility.NewDefaultError("JWT generation failed", -2, 200)
+		oGenerateError := pkgUtility.NewDefaultError("JWT generation failed", -2, 200)
+
+		return "", oGenerateError
 	}
 
 	return sAuthorization, nil

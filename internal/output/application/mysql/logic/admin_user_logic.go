@@ -19,9 +19,11 @@ type AdminUserLogic struct {
 }
 
 func NewAdminUserLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminUserLogic {
-	return &AdminUserLogic{
+	oLogic := &AdminUserLogic{
 		AbstractLogic: oAbstractLogic,
 	}
+
+	return oLogic
 }
 
 func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters []*pkgInput.Filter, aSorters []*pkgInput.Sorter, oPagination *pkgInput.Pagination) ([]*domain.AdminUser, uint64, error) {
@@ -147,10 +149,11 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 
 		aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
 		for _, iAdminRoleId := range oValue.AdminRoleIds {
-			aRelations = append(aRelations, domain.AdminUsersToAdminRole{
+			oRelation := domain.AdminUsersToAdminRole{
 				AdminUserId: iAdminUserId,
 				AdminRoleId: iAdminRoleId,
-			})
+			}
+			aRelations = append(aRelations, oRelation)
 		}
 
 		oResult = oTx.Create(&aRelations)
@@ -202,10 +205,11 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 
 			aRelations := make([]domain.AdminUsersToAdminRole, 0, len(oValue.AdminRoleIds))
 			for _, iAdminRoleId := range oValue.AdminRoleIds {
-				aRelations = append(aRelations, domain.AdminUsersToAdminRole{
+				oRelation := domain.AdminUsersToAdminRole{
 					AdminUserId: iId,
 					AdminRoleId: iAdminRoleId,
-				})
+				}
+				aRelations = append(aRelations, oRelation)
 			}
 
 			oResult = oTx.Create(&aRelations)

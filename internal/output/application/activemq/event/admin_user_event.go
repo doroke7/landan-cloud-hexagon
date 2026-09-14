@@ -23,7 +23,9 @@ func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 		return err
 	}
 
-	return oSelf.Conn.Send("/Queue/AdminUser.AddOne", "application/json", aByteBody)
+	err = oSelf.Conn.Send("/Queue/AdminUser.AddOne", "application/json", aByteBody)
+
+	return err
 }
 
 // Close 是空實作：Conn 現在是從 AbstractActivemq 注入的共用資源，

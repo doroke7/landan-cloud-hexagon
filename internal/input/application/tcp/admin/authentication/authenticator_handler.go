@@ -32,7 +32,9 @@ func (oSelf *AuthenticatorHandler) SignIn(oReq types.TcpRequest) types.TcpRespon
 	// NOTE: tcp carrier 目前沒有自己的 services.tcp.admin.jwt 設定，先借用 http 那組 secret。
 	sAuthorization, err := oSelf.AdminAuthenticationAuthenticatorUsecase.SignIn(aParts[0], aParts[1], bootstrap.CONFIG.SERVICES.HTTP.ADMIN.JWT.SECRET)
 	if err != nil {
-		return types.TcpResponse{Code: -1, Message: err.Error()}
+		sError := err.Error()
+
+		return types.TcpResponse{Code: -1, Message: sError}
 	}
 
 	return types.TcpResponse{Code: 1, Message: "成功登入", Result: sAuthorization}

@@ -38,7 +38,8 @@ func (oSelf *AuthenticatorHandler) SignIn(oContext *gin.Context) {
 	}{}
 
 	if oErr := oRequest.Bind("variable", oValue); oErr != nil {
-		_ = oContext.Error(pkgUtility.NewDefaultError("pagination format error", -1, 200))
+		oDefaultError := pkgUtility.NewDefaultError("pagination format error", -1, 200)
+		_ = oContext.Error(oDefaultError)
 		return
 	}
 

@@ -17,19 +17,22 @@ type TableLogic struct {
 }
 
 func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic {
+	oCollection := oAbstractLogic.Database.Collection("tables")
+
 	return &TableLogic{
 		AbstractLogic: oAbstractLogic,
-		Collection:    oAbstractLogic.Database.Collection("tables"),
+		Collection:    oCollection,
 	}
 }
 
 func (oSelf *TableLogic) ShowTableById(iId uint64) (*domain.Table, error) {
 	var oTable domain.Table
 
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
+	oResult := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oTable)
+	})
+	oErr := oResult.Decode(&oTable)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {

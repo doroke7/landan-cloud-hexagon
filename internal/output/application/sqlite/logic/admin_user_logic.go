@@ -111,7 +111,9 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserValue) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows inserted")
+		oZeroRowsError := errors.New("0 rows inserted")
+
+		return oZeroRowsError
 	}
 
 	return nil
@@ -135,7 +137,9 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows updated")
+		oZeroRowsError := errors.New("0 rows updated")
+
+		return oZeroRowsError
 	}
 
 	return nil
@@ -150,7 +154,9 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 		First(&oAdminUser, iId).Error
 
 	if errors.Is(oErr, gorm.ErrRecordNotFound) {
-		return nil, errors.New("record not found")
+		oNotFoundError := errors.New("record not found")
+
+		return nil, oNotFoundError
 	}
 
 	if oErr != nil {
@@ -161,18 +167,22 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 }
 
 func (oSelf *AdminUserLogic) RemoveAdminUserById(iId uint64) error {
+	oNow := time.Now()
+
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminUser{}).
 		Where("id = ?", iId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		UpdateColumn("deleted_at", time.Now())
+		UpdateColumn("deleted_at", oNow)
 
 	if oResult.Error != nil {
 		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows deleted")
+		oZeroRowsError := errors.New("0 rows deleted")
+
+		return oZeroRowsError
 	}
 
 	return nil

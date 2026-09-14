@@ -11,9 +11,11 @@ type AdminUserEvent struct {
 }
 
 func NewAdminUserEvent(oAbstractEvent *AbstractEvent) (outputPortAnyEvent.AdminUserEvent, error) {
-	return &AdminUserEvent{
+	oEvent := &AdminUserEvent{
 		AbstractEvent: oAbstractEvent,
-	}, nil
+	}
+
+	return oEvent, nil
 }
 
 // AddOne 打 resource gRPC 的 AdminUserEvent.AddOne；event port 只回 error。
@@ -22,13 +24,15 @@ func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 	sName := oAdminUser.Name
 	sPassword := oAdminUser.Password
 
-	_, oErr := oSelf.ResourceEventClient.AdminUser.AddOne(oSelf.Context, &pbResourceEvent.AdminUserEventAddOneInput{
-		Value: &pbResourceEvent.AppUserValue{
-			Id:       &iId,
-			Name:     &sName,
-			Password: &sPassword,
-		},
-	})
+	oValue := &pbResourceEvent.AppUserValue{
+		Id:       &iId,
+		Name:     &sName,
+		Password: &sPassword,
+	}
+	oRequest := &pbResourceEvent.AdminUserEventAddOneInput{
+		Value: oValue,
+	}
+	_, oErr := oSelf.ResourceEventClient.AdminUser.AddOne(oSelf.Context, oRequest)
 
 	return oErr
 }

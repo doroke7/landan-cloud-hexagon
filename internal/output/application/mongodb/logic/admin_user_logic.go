@@ -21,19 +21,26 @@ type AdminUserLogic struct {
 }
 
 func NewAdminUserLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminUserLogic {
+	oCollection := oAbstractLogic.Database.Collection("admin_users")
+	oCounters := oAbstractLogic.Database.Collection("counters")
+
 	return &AdminUserLogic{
 		AbstractLogic: oAbstractLogic,
-		Collection:    oAbstractLogic.Database.Collection("admin_users"),
-		Counters:      oAbstractLogic.Database.Collection("counters"),
+		Collection:    oCollection,
+		Counters:      oCounters,
 	}
 }
 
 func (oSelf *AdminUserLogic) nextId() (uint, error) {
+	oUpdateOptions := options.FindOneAndUpdate()
+	oUpdateOptions.SetUpsert(true)
+	oUpdateOptions.SetReturnDocument(options.After)
+
 	oResult := oSelf.Counters.FindOneAndUpdate(
 		oSelf.Context,
 		bson.M{"_id": "admin_user"},
 		bson.M{"$inc": bson.M{"seq": 1}},
-		options.FindOneAndUpdate().SetUpsert(true).SetReturnDocument(options.After),
+		oUpdateOptions,
 	)
 
 	var oCounter struct {
@@ -149,10 +156,11 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserValue, iI
 func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, error) {
 	var oAdminUser domain.AdminUser
 
-	oErr := oSelf.Collection.FindOne(
+	oResult := oSelf.Collection.FindOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
-	).Decode(&oAdminUser)
+	)
+	oErr := oResult.Decode(&oAdminUser)
 
 	if errors.Is(oErr, mongo.ErrNoDocuments) {
 		return nil, errors.New("record not found")
@@ -166,10 +174,11 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 }
 
 func (oSelf *AdminUserLogic) RemoveAdminUserById(iId uint64) error {
+	oNow := time.Now()
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,
 		bson.M{"_id": iId, "deleted_at": oDeletedAtZero},
-		bson.M{"$set": bson.M{"deleted_at": time.Now()}},
+		bson.M{"$set": bson.M{"deleted_at": oNow}},
 	)
 	if oErr != nil {
 		return oErr

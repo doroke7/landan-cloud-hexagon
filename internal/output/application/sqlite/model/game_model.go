@@ -25,11 +25,13 @@ func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
 func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 	var oGame domain.Game
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oErr := oSelf.DB.WithContext(oSelf.Context).
 		Model(&oGame).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		Where(map[string]any{"key": sKey}).
-		First(&oGame).Error; oErr != nil {
+		First(&oGame).Error
+
+	if oErr != nil {
 		if errors.Is(oErr, gorm.ErrRecordNotFound) {
 			return nil, nil
 		}
@@ -43,11 +45,13 @@ func (oSelf *GameModel) ShowOneByKey(sKey string) (*domain.Game, error) {
 func (oSelf *GameModel) TotalByGameTypeId(iGameTypeId uint64) (uint, error) {
 	var iTotal int64
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oErr := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.Game{}).
 		Where("game_type_id = ?", iGameTypeId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		Count(&iTotal).Error; oErr != nil {
+		Count(&iTotal).Error
+
+	if oErr != nil {
 		return 0, oErr
 	}
 
@@ -68,8 +72,9 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 	}
 
 	// Go 很常先在外面宣告變數，然後把它的 pointer 傳進函數，讓函數可以直接修改原本的變數。
-	if oErr := oQuery.
-		Count(&iTotal).Error; oErr != nil {
+	oErr := oQuery.Count(&iTotal).Error
+
+	if oErr != nil {
 		return 0, oErr
 	}
 
@@ -89,8 +94,9 @@ func (oSelf *GameModel) AddOne(oValue *domain.GameValue) error {
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows inserted")
+		oZeroRowsError := errors.New("0 rows inserted")
 
+		return oZeroRowsError
 	}
 
 	return nil
@@ -109,27 +115,31 @@ func (oSelf *GameModel) EditOneById(oValue *domain.GameValue, iId uint64) error 
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows updated")
+		oZeroRowsError := errors.New("0 rows updated")
 
+		return oZeroRowsError
 	}
 
 	return nil
 }
 
 func (oSelf *GameModel) RemoveOneById(iId uint64) error {
+	oNow := time.Now()
+
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.Game{}).
 		Where("id = ?", iId).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
-		UpdateColumn("deleted_at", time.Now())
+		UpdateColumn("deleted_at", oNow)
 
 	if oResult.Error != nil {
 		return oResult.Error
 	}
 
 	if oResult.RowsAffected == 0 {
-		return errors.New("0 rows deleted")
+		oZeroRowsError := errors.New("0 rows deleted")
 
+		return oZeroRowsError
 	}
 
 	return nil

@@ -30,7 +30,8 @@ func (oSelf *LoggerMiddleware) Handle() gin.HandlerFunc {
 		sRawQuery := oContext.Request.URL.RawQuery
 		oMapHeaders := oContext.Request.Header
 		if bootstrap.CONFIG.LOGGERS.MIDDLEWARE.STATUS {
-			pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Info(
+			oLogger := pkgUtility.Logger(pkgUtility.HttpGameMiddleware)
+			oLogger.Info(
 				"進入 http",
 				zap.String("path", sPath),
 				zap.String("query", sRawQuery),
@@ -42,7 +43,8 @@ func (oSelf *LoggerMiddleware) Handle() gin.HandlerFunc {
 		iTime2 := pkgUtility.Time[int](true)
 
 		if bootstrap.CONFIG.LOGGERS.MIDDLEWARE.STATUS {
-			pkgUtility.Logger(pkgUtility.HttpGameMiddleware).Info(
+			oLogger := pkgUtility.Logger(pkgUtility.HttpGameMiddleware)
+			oLogger.Info(
 				"結束 http",
 				zap.String("path", sPath),
 				zap.String("query", sRawQuery),

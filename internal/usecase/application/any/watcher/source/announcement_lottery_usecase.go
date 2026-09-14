@@ -40,8 +40,10 @@ func (oSelf *AnnouncementLotteryUsecase) Watch(oValue *domain.LotteryValue) erro
 		oLottery.Numbers = *oValue.Numbers
 	}
 
+	oLogger := pkgUtility.Logger(pkgUtility.Client)
+
 	if err := oSelf.LotteryModel.EditOneByKey(oValue, oLottery.Round); err != nil {
-		pkgUtility.Logger(pkgUtility.Client).Error("儲存開獎資料失敗",
+		oLogger.Error("儲存開獎資料失敗",
 			zap.Uint64("id", oLottery.Id),
 			zap.String("round", oLottery.Round),
 			zap.Error(err),
@@ -49,7 +51,7 @@ func (oSelf *AnnouncementLotteryUsecase) Watch(oValue *domain.LotteryValue) erro
 		return err
 	}
 
-	pkgUtility.Logger(pkgUtility.Client).Info("收到開獎資料",
+	oLogger.Info("收到開獎資料",
 		zap.Uint64("id", oLottery.Id),
 		zap.String("round", oLottery.Round),
 		zap.String("numbers", oLottery.Numbers),

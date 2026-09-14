@@ -23,7 +23,9 @@ func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 		return err
 	}
 
-	return oSelf.Conn.Publish("/Queue/AdminUser.AddOne", aByteBody)
+	err = oSelf.Conn.Publish("/Queue/AdminUser.AddOne", aByteBody)
+
+	return err
 }
 
 func (oSelf *AdminUserEvent) Close() error {

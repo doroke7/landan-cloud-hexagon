@@ -17,9 +17,11 @@ type GameTypeLogic struct {
 }
 
 func NewGameTypeLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameTypeLogic {
+	oCollection := oAbstractLogic.Database.Collection("game_types")
+
 	return &GameTypeLogic{
 		AbstractLogic: oAbstractLogic,
-		Collection:    oAbstractLogic.Database.Collection("game_types"),
+		Collection:    oCollection,
 	}
 }
 
@@ -61,10 +63,11 @@ func (oSelf *GameTypeLogic) ShowTree() ([]*domain.GameType, error) {
 func (oSelf *GameTypeLogic) ShowGameTypeById(iId uint64) (*domain.GameType, error) {
 	var oGameType domain.GameType
 
-	oErr := oSelf.Collection.FindOne(oSelf.Context, bson.M{
+	oResult := oSelf.Collection.FindOne(oSelf.Context, bson.M{
 		"_id":        iId,
 		"deleted_at": oDeletedAtZero,
-	}).Decode(&oGameType)
+	})
+	oErr := oResult.Decode(&oGameType)
 
 	if oErr != nil {
 		if oErr == mongo.ErrNoDocuments {

@@ -57,7 +57,9 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 		}
 
 		if oResult.RowsAffected == 0 {
-			return errors.New("0 rows inserted")
+			oZeroRowsError := errors.New("0 rows inserted")
+
+			return oZeroRowsError
 		}
 
 		var iAdminPermissionGroupId uint64
@@ -122,11 +124,13 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGroup, error) {
 	var aFlat []*domain.AdminPermissionGroup
 
-	if oErr := oSelf.DB.WithContext(oSelf.Context).
+	oErr := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermissionGroup{}).
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		Order("id ASC").
-		Find(&aFlat).Error; oErr != nil {
+		Find(&aFlat).Error
+
+	if oErr != nil {
 		return nil, oErr
 	}
 
