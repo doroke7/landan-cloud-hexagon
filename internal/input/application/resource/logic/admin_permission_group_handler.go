@@ -10,8 +10,8 @@ import (
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
 	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
-	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 func protoAdminPermissionValueToDomainAdminPermissionValue(oProto *pbResourceLogic.AdminPermissionValue) *domain.AdminPermissionValue {
@@ -82,18 +82,18 @@ func (oSelf *AdminPermissionGroupHandler) AddAdminPermissionGroup(oContext conte
 // client 端再自己組回 tree（組 tree 每個 adapter 各寫一份）。
 func (oSelf *AdminPermissionGroupHandler) ShowTree(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupShowTreeInput) (*pbResourceLogic.AdminPermissionGroupShowTreeOutput, error) {
 
-	aRoots, oErr := oSelf.LogicAdminPermissionGroupUsecase.ShowTree()
+	aTrees, oErr := oSelf.LogicAdminPermissionGroupUsecase.ShowTree()
 	if oErr != nil {
 		return nil, oErr
 	}
 
-	aNodes := make([]*pbResource.AdminPermissionGroup, 0, len(aRoots))
-	for _, oRoot := range aRoots {
-		oNode := pkgProtoToDomain.AdminPermissionGroup(oRoot)
-		aNodes = append(aNodes, oNode)
+	aProtoAdminPermissionGroups := make([]*pbResource.AdminPermissionGroup, 0, len(aTrees))
+	for _, oAdminPermissionGroup := range aTrees {
+		oProtoAdminPermissionGroup := pkgDomainToProto.AdminPermissionGroup(oAdminPermissionGroup)
+		aProtoAdminPermissionGroups = append(aProtoAdminPermissionGroups, oProtoAdminPermissionGroup)
 	}
 
-	return &pbResourceLogic.AdminPermissionGroupShowTreeOutput{AdminPermissionGroups: aNodes}, nil
+	return &pbResourceLogic.AdminPermissionGroupShowTreeOutput{AdminPermissionGroups: aProtoAdminPermissionGroups}, nil
 }
 
 func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroupById(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdInput) (*pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput, error) {
@@ -108,10 +108,10 @@ func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroupById(oContext 
 		return nil, nil
 	}
 
-	oAdminPermissionGroupPb := pkgProtoToDomain.AdminPermissionGroup(oAdminPermissionGroup)
+	oProtoAdminPermissionGroup := pkgDomainToProto.AdminPermissionGroup(oAdminPermissionGroup)
 
 	return &pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput{
-		AdminPermissionGroup: oAdminPermissionGroupPb,
+		AdminPermissionGroup: oProtoAdminPermissionGroup,
 	}, nil
 }
 
@@ -124,7 +124,7 @@ func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroups(oContext con
 
 	aNodes := make([]*pbResource.AdminPermissionGroup, 0, len(aAdminPermissionGroups))
 	for _, oOne := range aAdminPermissionGroups {
-		oNode := pkgProtoToDomain.AdminPermissionGroup(oOne)
+		oNode := pkgDomainToProto.AdminPermissionGroup(oOne)
 		aNodes = append(aNodes, oNode)
 	}
 
