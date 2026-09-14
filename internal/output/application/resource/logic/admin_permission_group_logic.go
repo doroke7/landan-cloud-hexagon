@@ -38,6 +38,7 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 		Key:              oValue.Key,
 		Name:             oValue.Name,
 		AdminPermissions: aAdminPermissions,
+		ParentId:         oValue.ParentId,
 	}
 
 	oRequest := &pbResourceLogic.AdminPermissionGroupAddAdminPermissionGroupInput{

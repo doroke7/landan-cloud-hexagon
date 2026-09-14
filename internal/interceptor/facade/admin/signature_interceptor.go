@@ -6,9 +6,7 @@ import (
 	"strings"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 
 	bootstrap "example/bootstrap"
 	pkgUtility "example/pkg/utility"
@@ -62,7 +60,9 @@ func (oSelf *SignatureInterceptor) Handle() grpc.UnaryServerInterceptor {
 		sMd5Signature := pkgUtility.Md5(sStrings)
 
 		if bootstrap.CONFIG.SERVICES.FACADE.ADMIN.SIGNATURE && sMd5Signature != sHeaderSignature {
-			return nil, status.Error(codes.Unauthenticated, "signature verification failed")
+			oSignatureError := pkgUtility.NewDefaultError("signature verification failed", -3, 406)
+
+			return nil, oSignatureError
 		}
 
 		return fnHandler(oContext, oRequest)

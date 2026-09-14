@@ -98,6 +98,9 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 	if oValue.Name != nil {
 		oNew.Name = *oValue.Name
 	}
+	if oValue.ParentId != nil {
+		oNew.ParentId = *oValue.ParentId
+	}
 
 	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
 		return oErr

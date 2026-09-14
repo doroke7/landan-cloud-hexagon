@@ -5,9 +5,9 @@ import (
 	"strings"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
+
+	pkgUtility "example/pkg/utility"
 )
 
 type contextKey string
@@ -29,19 +29,25 @@ func (oSelf *AuthenticationInterceptor) Handle() grpc.UnaryServerInterceptor {
 
 		oMd, bOk := metadata.FromIncomingContext(oContext)
 		if !bOk {
-			return nil, status.Error(codes.Unauthenticated, "missing authentication info")
+			oMissingAuthenticationInfoError := pkgUtility.NewDefaultError("missing authentication info", -2, 200)
+
+			return nil, oMissingAuthenticationInfoError
 		}
 
 		aValues := oMd.Get("authorization")
 		if len(aValues) == 0 {
-			return nil, status.Error(codes.Unauthenticated, "missing authorization header")
+			oMissingAuthorizationHeaderError := pkgUtility.NewDefaultError("missing authorization header", -2, 200)
+
+			return nil, oMissingAuthorizationHeaderError
 		}
 
 		sToken := strings.TrimPrefix(aValues[0], "Bearer ")
 
 		oClaims, oErr := oSelf.JwtHelper.Parse(sToken)
 		if oErr != nil {
-			return nil, status.Error(codes.Unauthenticated, "invalid or expired token")
+			oInvalidTokenError := pkgUtility.NewDefaultError("invalid or expired token", -2, 200)
+
+			return nil, oInvalidTokenError
 		}
 
 		oContext = context.WithValue(oContext, AdminUserIDKey, oClaims.AdminUserId)

@@ -49,6 +49,7 @@ type AdminPermissionGroupVariable struct {
 	Key              *string                    `json:"key,omitempty"`
 	Name             *string                    `json:"name,omitempty"`
 	AdminPermissions []*AdminPermissionVariable `json:"admin_permissions" bson:"-" `
+	ParentId         *uint64                    `json:"parent_id,omitempty"`
 	// CreatedAt *time.Time `json:"created_at"`
 	// UpdatedAt *time.Time `json:"updated_at"`
 	// DeletedAt *time.Time `json:"deleted_at"`

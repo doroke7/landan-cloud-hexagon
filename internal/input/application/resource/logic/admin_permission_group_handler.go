@@ -30,10 +30,11 @@ func NewAdminPermissionGroupHandler(oAbstractHandler *inputApplicationResource.A
 
 func (oSelf *AdminPermissionGroupHandler) AddAdminPermissionGroup(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupAddAdminPermissionGroupInput) (*pbResourceLogic.AdminPermissionGroupAddAdminPermissionGroupOutput, error) {
 
-	var oValue domain.AdminPermissionGroupVariable
+	var oDomainAdminPermissionGroupVariable domain.AdminPermissionGroupVariable
 	if oVariable := oReq.GetVariable(); oVariable != nil {
-		oValue.Key = oVariable.Key
-		oValue.Name = oVariable.Name
+		oDomainAdminPermissionGroupVariable.Key = oVariable.Key
+		oDomainAdminPermissionGroupVariable.Name = oVariable.Name
+		oDomainAdminPermissionGroupVariable.ParentId = oVariable.ParentId
 
 		aAdminPermissions := make([]*domain.AdminPermissionVariable, 0, len(oVariable.GetAdminPermissions()))
 		for _, oProtoAdminPermissionValue := range oVariable.GetAdminPermissions() {
@@ -45,10 +46,11 @@ func (oSelf *AdminPermissionGroupHandler) AddAdminPermissionGroup(oContext conte
 			aAdminPermissions = append(aAdminPermissions, &oAdminPermissionValue)
 		}
 
-		oValue.AdminPermissions = aAdminPermissions
+		oDomainAdminPermissionGroupVariable.AdminPermissions = aAdminPermissions
 	}
 
-	oErr := oSelf.LogicAdminPermissionGroupUsecase.AddAdminPermissionGroup(&oValue)
+	oErr := oSelf.LogicAdminPermissionGroupUsecase.AddAdminPermissionGroup(&oDomainAdminPermissionGroupVariable)
+
 	if oErr != nil {
 		return nil, oErr
 	}

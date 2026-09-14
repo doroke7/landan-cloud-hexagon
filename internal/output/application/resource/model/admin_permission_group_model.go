@@ -25,8 +25,9 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGro
 
 	oRequest := &pbResourceModel.AdminPermissionGroupAddOneInput{
 		Variable: &pb.AdminPermissionGroupVariable{
-			Key:  oValue.Key,
-			Name: oValue.Name,
+			Key:      oValue.Key,
+			Name:     oValue.Name,
+			ParentId: oValue.ParentId,
 		},
 	}
 

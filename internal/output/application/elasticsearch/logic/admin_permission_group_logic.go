@@ -46,6 +46,9 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 	if oValue.Name != nil {
 		oDoc.Name = *oValue.Name
 	}
+	if oValue.ParentId != nil {
+		oDoc.ParentId = *oValue.ParentId
+	}
 
 	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
 		return oErr

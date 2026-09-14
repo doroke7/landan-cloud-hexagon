@@ -155,6 +155,9 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGro
 	if oValue.Name != nil {
 		oNew.Name = *oValue.Name
 	}
+	if oValue.ParentId != nil {
+		oNew.ParentId = *oValue.ParentId
+	}
 
 	if _, oErr := oSelf.Collection.InsertOne(oSelf.Context, oNew); oErr != nil {
 		return oErr

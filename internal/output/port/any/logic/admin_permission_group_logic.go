@@ -6,8 +6,8 @@ import (
 )
 
 type AdminPermissionGroupLogic interface {
-	AddAdminPermissionGroup(oAdminPermissionGroupValue *domain.AdminPermissionGroupVariable) error
-	EditAdminPermissionGroupById(oAdminPermissionGroupValue *domain.AdminPermissionGroupVariable, iId uint64) error
+	AddAdminPermissionGroup(oAdminPermissionGroupVariable *domain.AdminPermissionGroupVariable) error
+	EditAdminPermissionGroupById(oAdminPermissionGroupVariable *domain.AdminPermissionGroupVariable, iId uint64) error
 	ShowTree() ([]*domain.AdminPermissionGroup, error)
 	ShowAdminPermissionGroupById(iId uint64) (*domain.AdminPermissionGroup, error)
 	ShowAdminPermissionGroups() ([]*domain.AdminPermissionGroup, error)
