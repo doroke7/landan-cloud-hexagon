@@ -3,6 +3,7 @@ package protoToDomain
 import (
 	domain "example/internal/domain"
 	pbResource "example/pb/resource"
+	"fmt"
 )
 
 func AdminPermissionGroup(oProto *pbResource.AdminPermissionGroup) domain.AdminPermissionGroup {
@@ -10,7 +11,7 @@ func AdminPermissionGroup(oProto *pbResource.AdminPermissionGroup) domain.AdminP
 		return domain.AdminPermissionGroup{}
 	}
 
-	oAdminPermissionGroup := domain.AdminPermissionGroup{
+	oDomainAdminPermissionGroup := domain.AdminPermissionGroup{
 		Id:        uint64(oProto.GetId()),
 		ParentId:  uint64(oProto.GetParentId()),
 		Key:       oProto.GetKey(),
@@ -22,15 +23,21 @@ func AdminPermissionGroup(oProto *pbResource.AdminPermissionGroup) domain.AdminP
 		Children: make([]*domain.AdminPermissionGroup, 0, len(oProto.GetChildren())),
 	}
 
-	if oParent := oProto.GetParent(); oParent != nil {
-		oParentDomain := AdminPermissionGroup(oParent)
-		oAdminPermissionGroup.Parent = &oParentDomain
+	if oProtoParent := oProto.GetParent(); oProtoParent != nil {
+		oDomainParent := AdminPermissionGroup(oProtoParent)
+		oDomainAdminPermissionGroup.Parent = &oDomainParent
 	}
 
-	for _, oChild := range oProto.GetChildren() {
-		oChildDomain := AdminPermissionGroup(oChild)
-		oAdminPermissionGroup.Children = append(oAdminPermissionGroup.Children, &oChildDomain)
+	for _, oProtoChild := range oProto.GetChildren() {
+		oDomainChild := AdminPermissionGroup(oProtoChild)
+		oDomainAdminPermissionGroup.Children = append(oDomainAdminPermissionGroup.Children, &oDomainChild)
 	}
 
-	return oAdminPermissionGroup
+	for _, oProtoAdminPermission := range oProto.GetAdminPermissions() {
+		fmt.Println("oProtoAdminPermission=", oProtoAdminPermission)
+		oDomainAdminPermission := AdminPermission(oProtoAdminPermission)
+		oDomainAdminPermissionGroup.AdminPermissions = append(oDomainAdminPermissionGroup.AdminPermissions, &oDomainAdminPermission)
+	}
+
+	return oDomainAdminPermissionGroup
 }
