@@ -8,9 +8,7 @@ import (
 	pkgUtility "example/pkg/utility"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 )
 
 type AuthenticationInterceptor struct {
@@ -38,7 +36,9 @@ func (oSelf *AuthenticationInterceptor) Handle() grpc.UnaryServerInterceptor {
 			sAuthotization := "Basic " + pkgUtility.Base64Encode(sUser+":"+sPassword)
 
 			if sAuthotizations != sAuthotization {
-				return nil, status.Error(codes.PermissionDenied, "resource incorrect password")
+				oIncorrectPasswordError := pkgUtility.NewDefaultError("resource incorrect password", -2, 200)
+
+				return nil, oIncorrectPasswordError
 			}
 		}
 

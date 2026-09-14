@@ -40,14 +40,14 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 
 				// Logger.Fatal 會再觸發 panic
 				pkgUtility.Logger(pkgUtility.FacadeAdminInterceptor).Error(
-					"upstream system error",
+					"resource system error",
 					zap.Any("panic", oPanic),
 					zap.String("method", oServerIno.FullMethod),
 					zap.String("stack", string(oByteStack[:iLen])),
 				)
 
 				oResponse = nil
-				oErr = status.Error(codes.Unavailable, "upstream system error")
+				oErr = status.Error(codes.Unavailable, "resource system error")
 			}
 		}()
 

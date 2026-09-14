@@ -148,10 +148,23 @@ func (oSelf *GameHandler) RemoveOne(oContext context.Context, oRequest *pbFacade
 func (oSelf *GameHandler) ShowOne(oContext context.Context, oRequest *pbFacadeAdminResource.GameShowOneRequest) (*pbFacadeAdminResource.GameShowOneResponse, error) {
 
 	aRequestFilters := oRequest.GetFilters()
-	iId, oErr := idFromFilters(aRequestFilters)
-	if oErr != nil {
-		return nil, oErr
+
+	if len(aRequestFilters) == 0 || aRequestFilters[0] == nil || aRequestFilters[0].GetField() != "id" {
+		oStatusError := status.Error(codes.InvalidArgument, "filter position error")
+
+		return nil, oStatusError
 	}
+
+	oFilterValue := aRequestFilters[0].GetValue()
+	oInterfaceValue := oFilterValue.AsInterface()
+	fId, bOk := oInterfaceValue.(float64)
+	if !bOk {
+		oStatusError := status.Error(codes.InvalidArgument, "filter.id format error")
+
+		return nil, oStatusError
+	}
+
+	iId := uint(fId)
 
 	oGame, oErr := oSelf.AdminResourceGameUsecase.ShowOne(uint64(iId))
 	if oErr != nil {
