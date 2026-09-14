@@ -6,9 +6,7 @@ import (
 	"strings"
 
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/reflect/protoreflect"
 	"google.golang.org/protobuf/types/descriptorpb"
@@ -59,12 +57,13 @@ func (oSelf *DecryptionInterceptor) Handle() grpc.UnaryServerInterceptor {
 			sK = aValues[0]
 		}
 		if sK == "" {
-			return nil, status.Error(codes.InvalidArgument, "missing k header")
+			return nil, pkgUtility.NewDefaultError("missing k header", -1, 400)
+
 		}
 
 		sKeys, oErr := oSelf.RsaHelper.Decrypt(sK, bootstrap.CONFIG.SERVICES.FACADE.ADMIN.PRIVATE_KEY)
 		if oErr != nil {
-			return nil, status.Error(codes.InvalidArgument, "key decryption failed")
+			return nil, pkgUtility.NewDefaultError("key decryption failed", -1, 400)
 		}
 
 		oKeys, oErr := pkgUtility.JsonDecode[struct {
@@ -72,7 +71,7 @@ func (oSelf *DecryptionInterceptor) Handle() grpc.UnaryServerInterceptor {
 			Iv  string `json:"iv"`
 		}](sKeys)
 		if oErr != nil {
-			return nil, status.Error(codes.InvalidArgument, "key format error")
+			return nil, pkgUtility.NewDefaultError("key format error", -1, 400)
 		}
 
 		for _, oField := range aEncryptedFields {
@@ -93,7 +92,7 @@ func (oSelf *DecryptionInterceptor) Handle() grpc.UnaryServerInterceptor {
 			sDecrypted, oErr := oSelf.AesHelper.Decrypt(sNormalized, oKeys.Key, oKeys.Iv)
 
 			if oErr != nil {
-				return nil, status.Error(codes.InvalidArgument, "content decryption failed")
+				return nil, pkgUtility.NewDefaultError("content decryption failed", -1, 400)
 			}
 
 			oReflect.Set(oField, protoreflect.ValueOfString(sDecrypted))

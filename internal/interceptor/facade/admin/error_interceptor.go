@@ -54,9 +54,42 @@ func (oSelf *ErrorInterceptor) Handle() grpc.UnaryServerInterceptor {
 		oResponse, oErr = fnHandler(oContext, oReqeust)
 		fmt.Println("After ErrorInterceptor...")
 
-		// after
+		if oErr == nil {
+			return oResponse, nil
+		}
 
-		return oResponse, oErr
+		// 1. handler 直接回的 *DefaultError（業務錯誤）
+		if oDefaultError, bOk := oErr.(*pkgUtility.DefaultError); bOk {
+			pkgUtility.Logger(pkgUtility.FacadeAdminInterceptor).Warn(
+				"facade admin 業務異常",
+				zap.String("method", oServerIno.FullMethod),
+				zap.String("message", oDefaultError.Message),
+				zap.Int16("code", oDefaultError.Code),
+			)
+
+			return nil, status.Error(codes.Aborted, oDefaultError.Message)
+		}
+
+		// 2. handler 用 status.Error 回的（也當業務錯誤）
+		if oStatus, bOk := status.FromError(oErr); bOk {
+			pkgUtility.Logger(pkgUtility.FacadeAdminInterceptor).Warn(
+				"facade admin 業務異常",
+				zap.String("method", oServerIno.FullMethod),
+				zap.String("message", oStatus.Message()),
+				zap.Int32("code", int32(oStatus.Code())),
+			)
+
+			return nil, status.Error(codes.Aborted, oStatus.Message())
+		}
+
+		// 3. 其他原生錯誤（MYSQL / Redis 等）
+		pkgUtility.Logger(pkgUtility.FacadeAdminInterceptor).Error(
+			"facade admin 系統錯誤",
+			zap.String("method", oServerIno.FullMethod),
+			zap.Error(oErr),
+		)
+
+		return nil, status.Error(codes.Unavailable, "facade admin system error")
 	}
 
 }
