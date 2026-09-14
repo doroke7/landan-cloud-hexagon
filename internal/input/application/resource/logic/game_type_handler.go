@@ -10,6 +10,7 @@ import (
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
 	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
 )
 
@@ -72,8 +73,10 @@ func (oSelf *GameTypeHandler) ShowGameTypeById(oContext context.Context, oReq *p
 		return nil, nil
 	}
 
+	oProtoGameType := pkgDomainToProto.GameType(oGameType)
+
 	return &pbResourceLogic.GameTypeShowGameTypeByIdOutput{
-		GameType: domainGameTypeToProtoGameType(oGameType),
+		GameType: oProtoGameType,
 	}, nil
 }
 
@@ -86,7 +89,8 @@ func (oSelf *GameTypeHandler) ShowGameTypes(oContext context.Context, oReq *pbRe
 
 	aNodes := make([]*pbResource.GameType, 0, len(aGameTypes))
 	for _, oOne := range aGameTypes {
-		aNodes = append(aNodes, domainGameTypeToProtoGameType(oOne))
+		oProtoGameType := pkgDomainToProto.GameType(oOne)
+		aNodes = append(aNodes, oProtoGameType)
 	}
 
 	return &pbResourceLogic.GameTypeShowGameTypesOutput{GameTypes: aNodes}, nil

@@ -5,14 +5,13 @@ import (
 	"fmt"
 	"runtime"
 
-	"google.golang.org/protobuf/types/known/timestamppb"
-
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
 )
 
@@ -46,20 +45,6 @@ func protoGameValueToDomainGameValue(oVariable *pbResource.GameValue) domain.Gam
 	}
 
 	return oValue
-}
-
-func domainGameToProtoGame(oGame *domain.Game) *pbResource.Game {
-	return &pbResource.Game{
-		Id:          uint64(oGame.Id),
-		GameTypeId:  uint64(oGame.GameTypeId),
-		Key:         oGame.Key,
-		Name:        oGame.Name,
-		Description: oGame.Description,
-		CreatedAt:   timestamppb.New(oGame.CreatedAt),
-		UpdatedAt:   timestamppb.New(oGame.UpdatedAt),
-		DeletedAt:   timestamppb.New(oGame.DeletedAt),
-		GameType:    domainGameTypeToProtoGameType(&oGame.GameType),
-	}
 }
 
 func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel.GameAddOneInput) (*pbResourceModel.GameAddOneOutput, error) {
@@ -105,7 +90,7 @@ func (oSelf *GameHandler) ShowOneByKey(oContext context.Context, oReq *pbResourc
 		return nil, nil
 	}
 
-	oProtoGame := domainGameToProtoGame(oGame)
+	oProtoGame := pkgDomainToProto.Game(oGame)
 
 	return &pbResourceModel.GameShowOneByKeyOutput{
 		Game: oProtoGame,

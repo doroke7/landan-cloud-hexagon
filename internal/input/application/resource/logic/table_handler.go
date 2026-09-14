@@ -10,6 +10,7 @@ import (
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
 	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
 )
 
@@ -31,6 +32,8 @@ func domainTableToProtoTable(oTable *domain.Table) *pbResource.Table {
 		return nil
 	}
 
+	oProtoGame := pkgDomainToProto.Game(&oTable.Game)
+
 	return &pbResource.Table{
 		Id:          uint64(oTable.Id),
 		No:          oTable.No,
@@ -44,7 +47,7 @@ func domainTableToProtoTable(oTable *domain.Table) *pbResource.Table {
 		CreatedAt:   timestamppb.New(oTable.CreatedAt),
 		UpdatedAt:   timestamppb.New(oTable.UpdatedAt),
 		DeletedAt:   timestamppb.New(oTable.DeletedAt),
-		Game:        domainGameToProtoGame(&oTable.Game),
+		Game:        oProtoGame,
 	}
 }
 
@@ -106,7 +109,9 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 
 	aPbTables := make([]*pbResource.Table, 0, len(aTables))
 	for _, oTable := range aTables {
-		aPbTables = append(aPbTables, &pbResource.Table{
+		oProtoGame := pkgDomainToProto.Game(&oTable.Game)
+
+		oProtoTable := &pbResource.Table{
 			Id:          uint64(oTable.Id),
 			No:          oTable.No,
 			GameId:      uint64(oTable.GameId),
@@ -119,8 +124,10 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 			CreatedAt:   timestamppb.New(oTable.CreatedAt),
 			UpdatedAt:   timestamppb.New(oTable.UpdatedAt),
 			DeletedAt:   timestamppb.New(oTable.DeletedAt),
-			Game:        domainGameToProtoGame(&oTable.Game),
-		})
+			Game:        oProtoGame,
+		}
+
+		aPbTables = append(aPbTables, oProtoTable)
 	}
 
 	return &pbResourceLogic.TableShowTablesTotalByFiltersWithSortersPaginationOutput{

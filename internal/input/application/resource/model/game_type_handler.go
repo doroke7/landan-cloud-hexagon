@@ -3,8 +3,6 @@ package inputApplicationResourceModel
 import (
 	"context"
 
-	"google.golang.org/protobuf/types/known/timestamppb"
-
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
@@ -25,30 +23,6 @@ func NewGameTypeHandler(oAbstractHandler *inputApplicationResource.AbstractHandl
 		AbstractHandler:      oAbstractHandler,
 		ModelGameTypeUsecase: oGameTypeUsecase,
 	}
-}
-
-// domainGameTypeToProtoGameType 遞迴帶出 Parent / Children，讓巢狀的 game type 一起過 gRPC。
-func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbResource.GameType {
-	if oGameType == nil {
-		return nil
-	}
-
-	oPb := &pbResource.GameType{
-		Id:        uint64(oGameType.Id),
-		ParentId:  uint64(oGameType.ParentId),
-		Key:       oGameType.Key,
-		Name:      oGameType.Name,
-		CreatedAt: timestamppb.New(oGameType.CreatedAt),
-		UpdatedAt: timestamppb.New(oGameType.UpdatedAt),
-		DeletedAt: timestamppb.New(oGameType.DeletedAt),
-		Parent:    domainGameTypeToProtoGameType(oGameType.Parent),
-	}
-
-	for i := range oGameType.Children {
-		oPb.Children = append(oPb.Children, domainGameTypeToProtoGameType(&oGameType.Children[i]))
-	}
-
-	return oPb
 }
 
 func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceModel.GameTypeAddOneInput) (*pbResourceModel.GameTypeAddOneOutput, error) {

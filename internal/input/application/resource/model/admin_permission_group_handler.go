@@ -3,14 +3,13 @@ package inputApplicationResourceModel
 import (
 	"context"
 
-	"google.golang.org/protobuf/types/known/timestamppb"
-
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
 )
 
@@ -25,31 +24,6 @@ func NewAdminPermissionGroupHandler(oAbstractHandler *inputApplicationResource.A
 		AbstractHandler:                  oAbstractHandler,
 		ModelAdminPermissionGroupUsecase: oAdminPermissionGroupUsecase,
 	}
-}
-
-// domainAdminPermissionGroupToProtoAdminPermissionGroup 遞迴帶出 Parent / Children。
-func domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup *domain.AdminPermissionGroup) *pbResource.AdminPermissionGroup {
-	if oAdminPermissionGroup == nil {
-		return nil
-	}
-
-	oPb := &pbResource.AdminPermissionGroup{
-		Id:        uint64(oAdminPermissionGroup.Id),
-		ParentId:  uint64(oAdminPermissionGroup.ParentId),
-		Key:       oAdminPermissionGroup.Key,
-		Name:      oAdminPermissionGroup.Name,
-		CreatedAt: timestamppb.New(oAdminPermissionGroup.CreatedAt),
-		UpdatedAt: timestamppb.New(oAdminPermissionGroup.UpdatedAt),
-		DeletedAt: timestamppb.New(oAdminPermissionGroup.DeletedAt),
-		Parent:    domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup.Parent),
-	}
-
-	for _, oChild := range oAdminPermissionGroup.Children {
-		oChildPb := domainAdminPermissionGroupToProtoAdminPermissionGroup(oChild)
-		oPb.Children = append(oPb.Children, oChildPb)
-	}
-
-	return oPb
 }
 
 func protoAdminPermissionGroupValueToDomainAdminPermissionGroupVariable(oVariable *pbResource.AdminPermissionGroupValue) domain.AdminPermissionGroupVariable {
@@ -99,7 +73,7 @@ func (oSelf *AdminPermissionGroupHandler) ShowOnesByParentId(oContext context.Co
 
 	aPbAdminPermissionGroups := make([]*pbResource.AdminPermissionGroup, 0, len(aAdminPermissionGroups))
 	for _, oAdminPermissionGroup := range aAdminPermissionGroups {
-		oPbAdminPermissionGroup := domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup)
+		oPbAdminPermissionGroup := pkgDomainToProto.AdminPermissionGroup(oAdminPermissionGroup)
 		aPbAdminPermissionGroups = append(aPbAdminPermissionGroups, oPbAdminPermissionGroup)
 	}
 
@@ -160,7 +134,7 @@ func (oSelf *AdminPermissionGroupHandler) ShowOnesByFiltersWithSortersPagination
 
 	aPbAdminPermissionGroups := make([]*pbResource.AdminPermissionGroup, 0, len(aAdminPermissionGroups))
 	for _, oAdminPermissionGroup := range aAdminPermissionGroups {
-		oPbAdminPermissionGroup := domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup)
+		oPbAdminPermissionGroup := pkgDomainToProto.AdminPermissionGroup(oAdminPermissionGroup)
 		aPbAdminPermissionGroups = append(aPbAdminPermissionGroups, oPbAdminPermissionGroup)
 	}
 

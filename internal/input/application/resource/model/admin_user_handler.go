@@ -5,7 +5,6 @@ import (
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/types/known/timestamppb"
 
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
@@ -13,6 +12,7 @@ import (
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
 )
 
@@ -29,27 +29,6 @@ func NewAdminUserHandler(oAbstractHandler *inputApplicationResource.AbstractHand
 	}
 }
 
-func domainAdminUserToProtoAdminUser(oAdminUser *domain.AdminUser) *pbResource.AdminUser {
-	if oAdminUser == nil {
-		return nil
-	}
-
-	aAdminRoles := make([]*pbResource.AdminRole, 0, len(oAdminUser.AdminRoles))
-	for i := range oAdminUser.AdminRoles {
-		aAdminRoles = append(aAdminRoles, domainAdminRoleToProtoAdminRole(&oAdminUser.AdminRoles[i]))
-	}
-
-	return &pbResource.AdminUser{
-		Id:         uint64(oAdminUser.Id),
-		Name:       oAdminUser.Name,
-		Password:   oAdminUser.Password,
-		CreatedAt:  timestamppb.New(oAdminUser.CreatedAt),
-		UpdatedAt:  timestamppb.New(oAdminUser.UpdatedAt),
-		DeletedAt:  timestamppb.New(oAdminUser.DeletedAt),
-		AdminRoles: aAdminRoles,
-	}
-}
-
 func (oSelf *AdminUserHandler) ShowOneByName(oContext context.Context, oReq *pbResourceModel.AdminUserShowOneByNameInput) (*pbResourceModel.AdminUserShowOneByNameOutput, error) {
 
 	oAdminUser, err := oSelf.ModelAdminUserUsecase.ShowOneByName(oReq.Name)
@@ -57,8 +36,10 @@ func (oSelf *AdminUserHandler) ShowOneByName(oContext context.Context, oReq *pbR
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
 
+	oProtoAdminUser := pkgDomainToProto.AdminUser(oAdminUser)
+
 	return &pbResourceModel.AdminUserShowOneByNameOutput{
-		AdminUser: domainAdminUserToProtoAdminUser(oAdminUser),
+		AdminUser: oProtoAdminUser,
 	}, nil
 
 }
@@ -70,8 +51,10 @@ func (oSelf *AdminUserHandler) ShowOneById(oContext context.Context, oReq *pbRes
 		return nil, status.Error(codes.NotFound, err.Error())
 	}
 
+	oProtoAdminUser := pkgDomainToProto.AdminUser(oAdminUser)
+
 	return &pbResourceModel.AdminUserShowOneByIdOutput{
-		AdminUser: domainAdminUserToProtoAdminUser(oAdminUser),
+		AdminUser: oProtoAdminUser,
 	}, nil
 
 }
@@ -170,7 +153,7 @@ func (oSelf *AdminUserHandler) ShowOnesByFiltersWithSortersPagination(oContext c
 
 	aProtoAdminUsers := make([]*pbResource.AdminUser, 0, len(aAdminUsers))
 	for _, oAdminUser := range aAdminUsers {
-		oProtoAdminUser := domainAdminUserToProtoAdminUser(oAdminUser)
+		oProtoAdminUser := pkgDomainToProto.AdminUser(oAdminUser)
 		aProtoAdminUsers = append(aProtoAdminUsers, oProtoAdminUser)
 	}
 

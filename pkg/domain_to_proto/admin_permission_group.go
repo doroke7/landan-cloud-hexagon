@@ -30,7 +30,7 @@ func AdminPermissionGroup(oDomain *domain.AdminPermissionGroup) *pbResource.Admi
 	}
 
 	for _, oAdminPermission := range oDomain.AdminPermissions {
-		oAdminPermissionPb := adminPermission(oAdminPermission)
+		oAdminPermissionPb := AdminPermission(oAdminPermission)
 		oProto.AdminPermissions = append(oProto.AdminPermissions, oAdminPermissionPb)
 	}
 

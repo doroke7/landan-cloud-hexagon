@@ -3,13 +3,11 @@ package inputApplicationResourceLogic
 import (
 	"context"
 
-	"google.golang.org/protobuf/types/known/timestamppb"
-
-	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
 	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
 )
 
@@ -23,44 +21,6 @@ func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, 
 	return &GameHandler{
 		AbstractHandler:  oAbstractHandler,
 		LogicGameUsecase: oGameUsecase,
-	}
-}
-
-// domainGameTypeToProtoGameType 遞迴帶出 Parent / Children，讓巢狀的 game type 一起過 gRPC。
-func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbResource.GameType {
-	if oGameType == nil {
-		return nil
-	}
-
-	oPb := &pbResource.GameType{
-		Id:        uint64(oGameType.Id),
-		ParentId:  uint64(oGameType.ParentId),
-		Key:       oGameType.Key,
-		Name:      oGameType.Name,
-		CreatedAt: timestamppb.New(oGameType.CreatedAt),
-		UpdatedAt: timestamppb.New(oGameType.UpdatedAt),
-		DeletedAt: timestamppb.New(oGameType.DeletedAt),
-		Parent:    domainGameTypeToProtoGameType(oGameType.Parent),
-	}
-
-	for i := range oGameType.Children {
-		oPb.Children = append(oPb.Children, domainGameTypeToProtoGameType(&oGameType.Children[i]))
-	}
-
-	return oPb
-}
-
-func domainGameToProtoGame(oGame *domain.Game) *pbResource.Game {
-	return &pbResource.Game{
-		Id:          uint64(oGame.Id),
-		GameTypeId:  uint64(oGame.GameTypeId),
-		Key:         oGame.Key,
-		Name:        oGame.Name,
-		Description: oGame.Description,
-		CreatedAt:   timestamppb.New(oGame.CreatedAt),
-		UpdatedAt:   timestamppb.New(oGame.UpdatedAt),
-		DeletedAt:   timestamppb.New(oGame.DeletedAt),
-		GameType:    domainGameTypeToProtoGameType(&oGame.GameType),
 	}
 }
 
@@ -106,7 +66,8 @@ func (oSelf *GameHandler) ShowGamesTotalByFiltersWithSortersPagination(oContext 
 
 	aPbGames := make([]*pbResource.Game, 0, len(aGames))
 	for _, oGame := range aGames {
-		aPbGames = append(aPbGames, domainGameToProtoGame(oGame))
+		oProtoGame := pkgDomainToProto.Game(oGame)
+		aPbGames = append(aPbGames, oProtoGame)
 	}
 
 	return &pbResourceLogic.GameShowGamesTotalByFiltersWithSortersPaginationOutput{

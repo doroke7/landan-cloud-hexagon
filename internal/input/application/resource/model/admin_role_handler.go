@@ -5,7 +5,6 @@ import (
 
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/types/known/timestamppb"
 
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
@@ -13,6 +12,7 @@ import (
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
 )
 
@@ -26,21 +26,6 @@ func NewAdminRoleHandler(oAbstractHandler *inputApplicationResource.AbstractHand
 	return &AdminRoleHandler{
 		AbstractHandler:       oAbstractHandler,
 		ModelAdminRoleUsecase: oAdminRoleUsecase,
-	}
-}
-
-func domainAdminRoleToProtoAdminRole(oAdminRole *domain.AdminRole) *pbResource.AdminRole {
-	if oAdminRole == nil {
-		return nil
-	}
-
-	return &pbResource.AdminRole{
-		Id:        uint64(oAdminRole.Id),
-		Key:       oAdminRole.Key,
-		Name:      oAdminRole.Name,
-		CreatedAt: timestamppb.New(oAdminRole.CreatedAt),
-		UpdatedAt: timestamppb.New(oAdminRole.UpdatedAt),
-		DeletedAt: timestamppb.New(oAdminRole.DeletedAt),
 	}
 }
 
@@ -80,8 +65,10 @@ func (oSelf *AdminRoleHandler) ShowOneById(oContext context.Context, oReq *pbRes
 		return nil, nil
 	}
 
+	oProtoAdminRole := pkgDomainToProto.AdminRole(oAdminRole)
+
 	return &pbResourceModel.AdminRoleShowOneByIdOutput{
-		AdminRole: domainAdminRoleToProtoAdminRole(oAdminRole),
+		AdminRole: oProtoAdminRole,
 	}, nil
 }
 
@@ -119,7 +106,8 @@ func (oSelf *AdminRoleHandler) ShowOnes(oContext context.Context, oReq *pbResour
 
 	aProtoAdminRoles := make([]*pbResource.AdminRole, 0, len(aAdminRoles))
 	for _, oAdminRole := range aAdminRoles {
-		aProtoAdminRoles = append(aProtoAdminRoles, domainAdminRoleToProtoAdminRole(oAdminRole))
+		oProtoAdminRole := pkgDomainToProto.AdminRole(oAdminRole)
+		aProtoAdminRoles = append(aProtoAdminRoles, oProtoAdminRole)
 	}
 
 	return &pbResourceModel.AdminRoleShowOnesOutput{
@@ -173,7 +161,8 @@ func (oSelf *AdminRoleHandler) ShowOnesByFiltersWithSortersPagination(oContext c
 
 	aProtoAdminRoles := make([]*pbResource.AdminRole, 0, len(aAdminRoles))
 	for _, oAdminRole := range aAdminRoles {
-		aProtoAdminRoles = append(aProtoAdminRoles, domainAdminRoleToProtoAdminRole(oAdminRole))
+		oProtoAdminRole := pkgDomainToProto.AdminRole(oAdminRole)
+		aProtoAdminRoles = append(aProtoAdminRoles, oProtoAdminRole)
 	}
 
 	return &pbResourceModel.AdminRoleShowOnesByFiltersWithSortersPaginationOutput{

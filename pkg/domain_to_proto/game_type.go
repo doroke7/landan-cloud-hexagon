@@ -8,19 +8,24 @@ import (
 	pbResource "example/pb/resource"
 )
 
-func AdminPermission(oDomain *domain.AdminPermission) *pbResource.AdminPermission {
+func GameType(oDomain *domain.GameType) *pbResource.GameType {
 	if oDomain == nil {
 		return nil
 	}
 
-	oProto := &pbResource.AdminPermission{
+	oProto := &pbResource.GameType{
 		Id:        oDomain.Id,
-		Type:      uint64(oDomain.Type),
+		ParentId:  oDomain.ParentId,
 		Key:       oDomain.Key,
 		Name:      oDomain.Name,
 		CreatedAt: timestamppb.New(oDomain.CreatedAt),
 		UpdatedAt: timestamppb.New(oDomain.UpdatedAt),
 		DeletedAt: timestamppb.New(oDomain.DeletedAt),
+		Parent:    GameType(oDomain.Parent),
+	}
+
+	for i := range oDomain.Children {
+		oProto.Children = append(oProto.Children, GameType(&oDomain.Children[i]))
 	}
 
 	return oProto

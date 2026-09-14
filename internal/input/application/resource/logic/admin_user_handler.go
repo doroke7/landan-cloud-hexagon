@@ -3,13 +3,12 @@ package inputApplicationResourceLogic
 import (
 	"context"
 
-	"google.golang.org/protobuf/types/known/timestamppb"
-
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
 	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
 )
 
@@ -23,34 +22,6 @@ func NewAdminUserHandler(oAbstractHandler *inputApplicationResource.AbstractHand
 	return &AdminUserHandler{
 		AbstractHandler:       oAbstractHandler,
 		LogicAdminUserUsecase: oAdminUserUsecase,
-	}
-}
-
-func domainAdminRoleToProtoAdminRole(oAdminRole *domain.AdminRole) *pbResource.AdminRole {
-	return &pbResource.AdminRole{
-		Id:        uint64(oAdminRole.Id),
-		Key:       oAdminRole.Key,
-		Name:      oAdminRole.Name,
-		CreatedAt: timestamppb.New(oAdminRole.CreatedAt),
-		UpdatedAt: timestamppb.New(oAdminRole.UpdatedAt),
-		DeletedAt: timestamppb.New(oAdminRole.DeletedAt),
-	}
-}
-
-func domainAdminUserToProtoAdminUser(oAdminUser *domain.AdminUser) *pbResource.AdminUser {
-	aAdminRoles := make([]*pbResource.AdminRole, 0, len(oAdminUser.AdminRoles))
-	for i := range oAdminUser.AdminRoles {
-		aAdminRoles = append(aAdminRoles, domainAdminRoleToProtoAdminRole(&oAdminUser.AdminRoles[i]))
-	}
-
-	return &pbResource.AdminUser{
-		Id:         uint64(oAdminUser.Id),
-		Name:       oAdminUser.Name,
-		Password:   oAdminUser.Password,
-		CreatedAt:  timestamppb.New(oAdminUser.CreatedAt),
-		UpdatedAt:  timestamppb.New(oAdminUser.UpdatedAt),
-		DeletedAt:  timestamppb.New(oAdminUser.DeletedAt),
-		AdminRoles: aAdminRoles,
 	}
 }
 
@@ -96,7 +67,7 @@ func (oSelf *AdminUserHandler) ShowAdminUsersTotalByFiltersWithSortersPagination
 
 	aPbAdminUsers := make([]*pbResource.AdminUser, 0, len(aAdminUsers))
 	for _, oAdminUser := range aAdminUsers {
-		oProtoAdminUser := domainAdminUserToProtoAdminUser(oAdminUser)
+		oProtoAdminUser := pkgDomainToProto.AdminUser(oAdminUser)
 		aPbAdminUsers = append(aPbAdminUsers, oProtoAdminUser)
 	}
 
@@ -158,7 +129,8 @@ func (oSelf *AdminUserHandler) ShowAdminUserById(oContext context.Context, oReq 
 
 	aPbAdminUsers := make([]*pbResource.AdminUser, 0, 1)
 	if oAdminUser != nil {
-		aPbAdminUsers = append(aPbAdminUsers, domainAdminUserToProtoAdminUser(oAdminUser))
+		oProtoAdminUser := pkgDomainToProto.AdminUser(oAdminUser)
+		aPbAdminUsers = append(aPbAdminUsers, oProtoAdminUser)
 	}
 
 	oOutput := &pbResourceLogic.AdminUserShowAdminUserByIdOutput{
