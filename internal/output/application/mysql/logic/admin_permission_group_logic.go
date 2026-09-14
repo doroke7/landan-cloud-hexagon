@@ -156,6 +156,7 @@ func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64)
 		Model(&oAdminPermissionGroup).
 		Preload("Parent").
 		Preload("Children").
+		Preload("AdminPermissions").
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		First(&oAdminPermissionGroup, iId)
 

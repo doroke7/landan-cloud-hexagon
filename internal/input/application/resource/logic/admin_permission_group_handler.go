@@ -13,6 +13,51 @@ import (
 	pkgInput "example/pkg/input"
 )
 
+func protoAdminPermissionValueToDomainAdminPermissionValue(oProto *pbResourceLogic.AdminPermissionValue) *domain.AdminPermissionValue {
+	if oProto == nil {
+		return nil
+	}
+
+	var oType *uint8
+	if oProto.Type != nil {
+		iType := uint8(*oProto.Type)
+		oType = &iType
+	}
+
+	oAdminPermissionValue := &domain.AdminPermissionValue{
+		Id:   oProto.Id,
+		Type: oType,
+		Key:  oProto.Key,
+		Name: oProto.Name,
+	}
+
+	return oAdminPermissionValue
+}
+
+// domainAdminPermissionGroupToProtoAdminPermissionGroup 遞迴帶出 Parent / Children。
+func domainAdminPermissionGroupToProtoAdminPermissionGroup(oNode *domain.AdminPermissionGroup) *pbResource.AdminPermissionGroup {
+	if oNode == nil {
+		return nil
+	}
+
+	oPb := &pbResource.AdminPermissionGroup{
+		Id:        uint64(oNode.Id),
+		ParentId:  uint64(oNode.ParentId),
+		Key:       oNode.Key,
+		Name:      oNode.Name,
+		CreatedAt: timestamppb.New(oNode.CreatedAt),
+		UpdatedAt: timestamppb.New(oNode.UpdatedAt),
+		DeletedAt: timestamppb.New(oNode.DeletedAt),
+		Parent:    domainAdminPermissionGroupToProtoAdminPermissionGroup(oNode.Parent),
+	}
+
+	for i := range oNode.Children {
+		oPb.Children = append(oPb.Children, domainAdminPermissionGroupToProtoAdminPermissionGroup(&oNode.Children[i]))
+	}
+
+	return oPb
+}
+
 type AdminPermissionGroupHandler struct {
 	*inputApplicationResource.AbstractHandler
 	pbResourceLogic.UnimplementedAdminPermissionGroupLogicServer
@@ -56,27 +101,6 @@ func (oSelf *AdminPermissionGroupHandler) AddAdminPermissionGroup(oContext conte
 	}, nil
 }
 
-func protoAdminPermissionValueToDomainAdminPermissionValue(oProto *pbResourceLogic.AdminPermissionValue) *domain.AdminPermissionValue {
-	if oProto == nil {
-		return nil
-	}
-
-	var oType *uint8
-	if oProto.Type != nil {
-		iType := uint8(*oProto.Type)
-		oType = &iType
-	}
-
-	oAdminPermissionValue := &domain.AdminPermissionValue{
-		Id:   oProto.Id,
-		Type: oType,
-		Key:  oProto.Key,
-		Name: oProto.Name,
-	}
-
-	return oAdminPermissionValue
-}
-
 // ShowTree 從 usecase 拿到組好的 tree，攤平成平的 AdminPermissionGroup 回傳，
 // client 端再自己組回 tree（組 tree 每個 adapter 各寫一份）。
 func (oSelf *AdminPermissionGroupHandler) ShowTree(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupShowTreeInput) (*pbResourceLogic.AdminPermissionGroupShowTreeOutput, error) {
@@ -92,30 +116,6 @@ func (oSelf *AdminPermissionGroupHandler) ShowTree(oContext context.Context, oRe
 	}
 
 	return &pbResourceLogic.AdminPermissionGroupShowTreeOutput{AdminPermissionGroups: aNodes}, nil
-}
-
-// domainAdminPermissionGroupToProtoAdminPermissionGroup 遞迴帶出 Parent / Children。
-func domainAdminPermissionGroupToProtoAdminPermissionGroup(oNode *domain.AdminPermissionGroup) *pbResource.AdminPermissionGroup {
-	if oNode == nil {
-		return nil
-	}
-
-	oPb := &pbResource.AdminPermissionGroup{
-		Id:        uint64(oNode.Id),
-		ParentId:  uint64(oNode.ParentId),
-		Key:       oNode.Key,
-		Name:      oNode.Name,
-		CreatedAt: timestamppb.New(oNode.CreatedAt),
-		UpdatedAt: timestamppb.New(oNode.UpdatedAt),
-		DeletedAt: timestamppb.New(oNode.DeletedAt),
-		Parent:    domainAdminPermissionGroupToProtoAdminPermissionGroup(oNode.Parent),
-	}
-
-	for i := range oNode.Children {
-		oPb.Children = append(oPb.Children, domainAdminPermissionGroupToProtoAdminPermissionGroup(&oNode.Children[i]))
-	}
-
-	return oPb
 }
 
 func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroupById(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdInput) (*pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput, error) {

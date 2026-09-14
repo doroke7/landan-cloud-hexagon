@@ -16,6 +16,7 @@ require (
 	github.com/elastic/go-elasticsearch/v8 v8.19.7
 	github.com/gin-gonic/gin v1.12.0
 	github.com/go-pkgz/syncs v1.3.2
+	github.com/go-playground/validator/v10 v10.30.1
 	github.com/go-redis/redis_rate/v10 v10.0.1
 	github.com/go-stomp/stomp/v3 v3.1.5
 	github.com/go-zeromq/zmq4 v0.17.0
@@ -95,7 +96,6 @@ require (
 	github.com/go-logr/stdr v1.2.2 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect
-	github.com/go-playground/validator/v10 v10.30.1 // indirect
 	github.com/go-sql-driver/mysql v1.8.1 // indirect
 	github.com/go-viper/mapstructure/v2 v2.4.0 // indirect
 	github.com/go-zeromq/goczmq/v4 v4.2.2 // indirect

@@ -112,6 +112,7 @@ func protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto *pbResource.Ad
 }
 
 func (oSelf *AdminPermissionGroupLogic) ShowAdminPermissionGroupById(iId uint64) (*domain.AdminPermissionGroup, error) {
+
 	oResponse, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.ShowAdminPermissionGroupById(
 		oSelf.Context,
 		&pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdInput{Id: iId},
