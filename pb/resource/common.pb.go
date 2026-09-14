@@ -828,16 +828,17 @@ func (x *AdminRoleValue) GetName() string {
 }
 
 type AdminPermission struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
-	Type          uint64                 `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`
-	Key           string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
-	Name          string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	DeletedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state                  protoimpl.MessageState `protogen:"open.v1"`
+	Id                     uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Type                   uint64                 `protobuf:"varint,2,opt,name=type,proto3" json:"type,omitempty"`
+	Key                    string                 `protobuf:"bytes,3,opt,name=key,proto3" json:"key,omitempty"`
+	Name                   string                 `protobuf:"bytes,4,opt,name=name,proto3" json:"name,omitempty"`
+	CreatedAt              *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt              *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	DeletedAt              *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
+	AdminPermissionGroupId uint64                 `protobuf:"varint,8,opt,name=admin_permission_group_id,json=adminPermissionGroupId,proto3" json:"admin_permission_group_id,omitempty"`
+	unknownFields          protoimpl.UnknownFields
+	sizeCache              protoimpl.SizeCache
 }
 
 func (x *AdminPermission) Reset() {
@@ -917,6 +918,13 @@ func (x *AdminPermission) GetDeletedAt() *timestamppb.Timestamp {
 		return x.DeletedAt
 	}
 	return nil
+}
+
+func (x *AdminPermission) GetAdminPermissionGroupId() uint64 {
+	if x != nil {
+		return x.AdminPermissionGroupId
+	}
+	return 0
 }
 
 type AppUser struct {
@@ -1606,7 +1614,7 @@ const file_resource_common_proto_rawDesc = "" +
 	"\x03key\x18\x01 \x01(\tH\x00R\x03key\x88\x01\x01\x12\x17\n" +
 	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01B\x06\n" +
 	"\x04_keyB\a\n" +
-	"\x05_name\"\x8c\x02\n" +
+	"\x05_name\"\xc7\x02\n" +
 	"\x0fAdminPermission\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
 	"\x04type\x18\x02 \x01(\x04R\x04type\x12\x10\n" +
@@ -1617,7 +1625,8 @@ const file_resource_common_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
-	"deleted_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\"c\n" +
+	"deleted_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x129\n" +
+	"\x19admin_permission_group_id\x18\b \x01(\x04R\x16adminPermissionGroupId\"c\n" +
 	"\aAppUser\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +

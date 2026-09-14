@@ -14,13 +14,14 @@ func AdminPermission(oDomain *domain.AdminPermission) *pbResource.AdminPermissio
 	}
 
 	oProto := &pbResource.AdminPermission{
-		Id:        oDomain.Id,
-		Type:      uint64(oDomain.Type),
-		Key:       oDomain.Key,
-		Name:      oDomain.Name,
-		CreatedAt: timestamppb.New(oDomain.CreatedAt),
-		UpdatedAt: timestamppb.New(oDomain.UpdatedAt),
-		DeletedAt: timestamppb.New(oDomain.DeletedAt),
+		Id:                     oDomain.Id,
+		Type:                   uint64(oDomain.Type),
+		Key:                    oDomain.Key,
+		Name:                   oDomain.Name,
+		CreatedAt:              timestamppb.New(oDomain.CreatedAt),
+		UpdatedAt:              timestamppb.New(oDomain.UpdatedAt),
+		DeletedAt:              timestamppb.New(oDomain.DeletedAt),
+		AdminPermissionGroupId: oDomain.AdminPermissionGroupId,
 	}
 
 	return oProto

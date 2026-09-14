@@ -3,7 +3,6 @@ package protoToDomain
 import (
 	domain "example/internal/domain"
 	pbResource "example/pb/resource"
-	"fmt"
 )
 
 func AdminPermissionGroup(oProto *pbResource.AdminPermissionGroup) domain.AdminPermissionGroup {
@@ -34,7 +33,6 @@ func AdminPermissionGroup(oProto *pbResource.AdminPermissionGroup) domain.AdminP
 	}
 
 	for _, oProtoAdminPermission := range oProto.GetAdminPermissions() {
-		fmt.Println("oProtoAdminPermission=", oProtoAdminPermission)
 		oDomainAdminPermission := AdminPermission(oProtoAdminPermission)
 		oDomainAdminPermissionGroup.AdminPermissions = append(oDomainAdminPermissionGroup.AdminPermissions, &oDomainAdminPermission)
 	}

@@ -11,13 +11,14 @@ func AdminPermission(oProtoAdminPermission *pbResource.AdminPermission) domain.A
 	}
 
 	oDomainAdminPermission := domain.AdminPermission{
-		Id:        uint64(oProtoAdminPermission.GetId()),
-		Type:      uint8(oProtoAdminPermission.GetType()),
-		Key:       oProtoAdminPermission.GetKey(),
-		Name:      oProtoAdminPermission.GetName(),
-		CreatedAt: oProtoAdminPermission.GetCreatedAt().AsTime(),
-		UpdatedAt: oProtoAdminPermission.GetUpdatedAt().AsTime(),
-		DeletedAt: oProtoAdminPermission.GetDeletedAt().AsTime(),
+		Id:                     uint64(oProtoAdminPermission.GetId()),
+		AdminPermissionGroupId: uint64(oProtoAdminPermission.GetAdminPermissionGroupId()),
+		Type:                   uint8(oProtoAdminPermission.GetType()),
+		Key:                    oProtoAdminPermission.GetKey(),
+		Name:                   oProtoAdminPermission.GetName(),
+		CreatedAt:              oProtoAdminPermission.GetCreatedAt().AsTime(),
+		UpdatedAt:              oProtoAdminPermission.GetUpdatedAt().AsTime(),
+		DeletedAt:              oProtoAdminPermission.GetDeletedAt().AsTime(),
 	}
 
 	return oDomainAdminPermission
