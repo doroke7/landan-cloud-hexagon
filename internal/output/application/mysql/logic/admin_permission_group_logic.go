@@ -105,7 +105,7 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 					oDuplicatedResult := oTx.
 						Model(&domain.AdminPermission{}).
 						Where("type = ?", iType).
-						Where("key = ?", sKey).
+						Where("`key` = ?", sKey).
 						Where("deleted_at = ?", "2038-01-19 03:14:07").
 						First(&oDuplicatedAdminPermission)
 
@@ -130,8 +130,6 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 	return oError
 }
 
-// EditAdminPermissionGroupById 更新 group 本身欄位，並同步 admin_permissions：
-// 傳進來沒帶 id 的就新增，帶 id 的就修改；db 裡面現有、但沒出現在傳進來 id 清單裡的就刪除。
 func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
 
 	oAdminPermissionGroupColumns, oErr := pkgUtility.StructToMap(oValue)
@@ -212,7 +210,7 @@ func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *dom
 						oDuplicatedResult := oTx.
 							Model(&domain.AdminPermission{}).
 							Where("type = ?", iType).
-							Where("key = ?", sKey).
+							Where("`key` = ?", sKey).
 							Where("deleted_at = ?", "2038-01-19 03:14:07").
 							First(&oDuplicatedAdminPermission)
 
