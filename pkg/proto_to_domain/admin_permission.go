@@ -1,11 +1,11 @@
 package protoToDomain
 
 import (
+	"google.golang.org/protobuf/types/known/timestamppb"
+
 	"example/internal/domain"
 
 	pbResource "example/pb/resource"
-
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 func adminPermission(oDomain *domain.AdminPermission) *pbResource.AdminPermission {
