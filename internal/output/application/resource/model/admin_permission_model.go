@@ -3,9 +3,9 @@ package outputApplicationResourceModel
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 type AdminPermissionModel struct {
@@ -18,24 +18,6 @@ func NewAdminPermissionModel(oAbstractModel *AbstractModel) outputPortAnyModel.A
 	}
 
 	return oModel
-}
-
-func protoAdminPermissionToDomainAdminPermission(oProto *pbResource.AdminPermission) domain.AdminPermission {
-	if oProto == nil {
-		return domain.AdminPermission{}
-	}
-
-	oAdminPermission := domain.AdminPermission{
-		Id:        uint64(oProto.GetId()),
-		Type:      uint8(oProto.GetType()),
-		Key:       oProto.GetKey(),
-		Name:      oProto.GetName(),
-		CreatedAt: oProto.GetCreatedAt().AsTime(),
-		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
-		DeletedAt: oProto.GetDeletedAt().AsTime(),
-	}
-
-	return oAdminPermission
 }
 
 func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminPermissionValue) *pbResourceModel.AdminPermissionValue {
@@ -77,7 +59,7 @@ func (oSelf *AdminPermissionModel) ShowOneById(iId uint64) (*domain.AdminPermiss
 		return nil, nil
 	}
 
-	oAdminPermission := protoAdminPermissionToDomainAdminPermission(oProtoAdminPermission)
+	oAdminPermission := pkgProtoToDomain.AdminPermission(oProtoAdminPermission)
 
 	return &oAdminPermission, nil
 }
@@ -118,7 +100,7 @@ func (oSelf *AdminPermissionModel) ShowOnesByFiltersWithSortersPagination(aFilte
 
 	aAdminPermissions := make([]*domain.AdminPermission, 0, len(oResponse.GetAdminPermissions()))
 	for _, oOne := range oResponse.GetAdminPermissions() {
-		oAdminPermission := protoAdminPermissionToDomainAdminPermission(oOne)
+		oAdminPermission := pkgProtoToDomain.AdminPermission(oOne)
 		aAdminPermissions = append(aAdminPermissions, &oAdminPermission)
 	}
 
