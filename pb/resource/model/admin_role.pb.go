@@ -7,7 +7,7 @@
 package pb_resource_model
 
 import (
-	resource "example/pb/resource"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -23,8 +23,8 @@ const (
 )
 
 type AdminRoleAddOneInput struct {
-	state         protoimpl.MessageState      `protogen:"open.v1"`
-	Variable      *resource.AdminRoleVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.AdminRoleVariable  `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,7 +59,7 @@ func (*AdminRoleAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminRoleAddOneInput) GetVariable() *resource.AdminRoleVariable {
+func (x *AdminRoleAddOneInput) GetVariable() *pb.AdminRoleVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -148,7 +148,7 @@ func (x *AdminRoleShowOneByIdInput) GetId() uint64 {
 
 type AdminRoleShowOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AdminRole     *resource.AdminRole    `protobuf:"bytes,1,opt,name=admin_role,json=adminRole,proto3" json:"admin_role,omitempty"`
+	AdminRole     *pb.AdminRole          `protobuf:"bytes,1,opt,name=admin_role,json=adminRole,proto3" json:"admin_role,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -183,7 +183,7 @@ func (*AdminRoleShowOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AdminRoleShowOneByIdOutput) GetAdminRole() *resource.AdminRole {
+func (x *AdminRoleShowOneByIdOutput) GetAdminRole() *pb.AdminRole {
 	if x != nil {
 		return x.AdminRole
 	}
@@ -191,9 +191,9 @@ func (x *AdminRoleShowOneByIdOutput) GetAdminRole() *resource.AdminRole {
 }
 
 type AdminRoleEditOneByIdInput struct {
-	state         protoimpl.MessageState      `protogen:"open.v1"`
-	Variable      *resource.AdminRoleVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint64                      `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.AdminRoleVariable  `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -228,7 +228,7 @@ func (*AdminRoleEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *AdminRoleEditOneByIdInput) GetVariable() *resource.AdminRoleVariable {
+func (x *AdminRoleEditOneByIdInput) GetVariable() *pb.AdminRoleVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -396,7 +396,7 @@ func (*AdminRoleShowOnesInput) Descriptor() ([]byte, []int) {
 
 type AdminRoleShowOnesOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AdminRoles    []*resource.AdminRole  `protobuf:"bytes,1,rep,name=admin_roles,json=adminRoles,proto3" json:"admin_roles,omitempty"`
+	AdminRoles    []*pb.AdminRole        `protobuf:"bytes,1,rep,name=admin_roles,json=adminRoles,proto3" json:"admin_roles,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -431,7 +431,7 @@ func (*AdminRoleShowOnesOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *AdminRoleShowOnesOutput) GetAdminRoles() []*resource.AdminRole {
+func (x *AdminRoleShowOnesOutput) GetAdminRoles() []*pb.AdminRole {
 	if x != nil {
 		return x.AdminRoles
 	}
@@ -440,9 +440,9 @@ func (x *AdminRoleShowOnesOutput) GetAdminRoles() []*resource.AdminRole {
 
 type AdminRoleShowOnesByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
-	Sorters       []*resource.Sorter     `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
-	Pagination    *resource.Pagination   `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*pb.Sorter           `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *pb.Pagination         `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -477,21 +477,21 @@ func (*AdminRoleShowOnesByFiltersWithSortersPaginationInput) Descriptor() ([]byt
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
+func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) GetSorters() []*resource.Sorter {
+func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) GetSorters() []*pb.Sorter {
 	if x != nil {
 		return x.Sorters
 	}
 	return nil
 }
 
-func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
+func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) GetPagination() *pb.Pagination {
 	if x != nil {
 		return x.Pagination
 	}
@@ -500,7 +500,7 @@ func (x *AdminRoleShowOnesByFiltersWithSortersPaginationInput) GetPagination() *
 
 type AdminRoleShowOnesByFiltersWithSortersPaginationOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AdminRoles    []*resource.AdminRole  `protobuf:"bytes,1,rep,name=admin_roles,json=adminRoles,proto3" json:"admin_roles,omitempty"`
+	AdminRoles    []*pb.AdminRole        `protobuf:"bytes,1,rep,name=admin_roles,json=adminRoles,proto3" json:"admin_roles,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -535,7 +535,7 @@ func (*AdminRoleShowOnesByFiltersWithSortersPaginationOutput) Descriptor() ([]by
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *AdminRoleShowOnesByFiltersWithSortersPaginationOutput) GetAdminRoles() []*resource.AdminRole {
+func (x *AdminRoleShowOnesByFiltersWithSortersPaginationOutput) GetAdminRoles() []*pb.AdminRole {
 	if x != nil {
 		return x.AdminRoles
 	}
@@ -544,7 +544,7 @@ func (x *AdminRoleShowOnesByFiltersWithSortersPaginationOutput) GetAdminRoles() 
 
 type AdminRoleTotalByFiltersInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -579,7 +579,7 @@ func (*AdminRoleTotalByFiltersInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *AdminRoleTotalByFiltersInput) GetFilters() []*resource.Filter {
+func (x *AdminRoleTotalByFiltersInput) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
@@ -634,7 +634,7 @@ var File_resource_model_admin_role_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_role_proto_rawDesc = "" +
 	"\n" +
-	"\x1fresource/model/admin_role.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"R\n" +
+	"\x1fresource/model/admin_role.proto\x12\x11pb.resource.model\x1a\fcommon.proto\"R\n" +
 	"\x14AdminRoleAddOneInput\x12:\n" +
 	"\bvariable\x18\x01 \x01(\v2\x1e.pb.resource.AdminRoleVariableR\bvariable\"\x17\n" +
 	"\x15AdminRoleAddOneOutput\"+\n" +
@@ -704,11 +704,11 @@ var file_resource_model_admin_role_proto_goTypes = []any{
 	(*AdminRoleShowOnesByFiltersWithSortersPaginationOutput)(nil), // 11: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationOutput
 	(*AdminRoleTotalByFiltersInput)(nil),                          // 12: pb.resource.model.AdminRoleTotalByFiltersInput
 	(*AdminRoleTotalByFiltersOutput)(nil),                         // 13: pb.resource.model.AdminRoleTotalByFiltersOutput
-	(*resource.AdminRoleVariable)(nil),                            // 14: pb.resource.AdminRoleVariable
-	(*resource.AdminRole)(nil),                                    // 15: pb.resource.AdminRole
-	(*resource.Filter)(nil),                                       // 16: pb.resource.Filter
-	(*resource.Sorter)(nil),                                       // 17: pb.resource.Sorter
-	(*resource.Pagination)(nil),                                   // 18: pb.resource.Pagination
+	(*pb.AdminRoleVariable)(nil),                                  // 14: pb.resource.AdminRoleVariable
+	(*pb.AdminRole)(nil),                                          // 15: pb.resource.AdminRole
+	(*pb.Filter)(nil),                                             // 16: pb.resource.Filter
+	(*pb.Sorter)(nil),                                             // 17: pb.resource.Sorter
+	(*pb.Pagination)(nil),                                         // 18: pb.resource.Pagination
 }
 var file_resource_model_admin_role_proto_depIdxs = []int32{
 	14, // 0: pb.resource.model.AdminRoleAddOneInput.variable:type_name -> pb.resource.AdminRoleVariable

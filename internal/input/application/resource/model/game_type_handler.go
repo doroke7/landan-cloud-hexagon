@@ -3,7 +3,7 @@ package inputApplicationResourceModel
 import (
 	"context"
 
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"

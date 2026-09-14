@@ -8,7 +8,7 @@ import (
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"

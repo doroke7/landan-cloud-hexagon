@@ -7,7 +7,7 @@
 package pb_resource_logic
 
 import (
-	resource "example/pb/resource"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -68,7 +68,7 @@ func (x *TableShowTableByIdInput) GetId() uint64 {
 
 type TableShowTableByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Table         *resource.Table        `protobuf:"bytes,1,opt,name=table,proto3" json:"table,omitempty"`
+	Table         *pb.Table              `protobuf:"bytes,1,opt,name=table,proto3" json:"table,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -103,7 +103,7 @@ func (*TableShowTableByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_table_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *TableShowTableByIdOutput) GetTable() *resource.Table {
+func (x *TableShowTableByIdOutput) GetTable() *pb.Table {
 	if x != nil {
 		return x.Table
 	}
@@ -112,9 +112,9 @@ func (x *TableShowTableByIdOutput) GetTable() *resource.Table {
 
 type TableShowTablesTotalByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
-	Sorters       []*resource.Sorter     `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
-	Pagination    *resource.Pagination   `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*pb.Sorter           `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *pb.Pagination         `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -149,21 +149,21 @@ func (*TableShowTablesTotalByFiltersWithSortersPaginationInput) Descriptor() ([]
 	return file_resource_logic_table_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
+func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) GetSorters() []*resource.Sorter {
+func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) GetSorters() []*pb.Sorter {
 	if x != nil {
 		return x.Sorters
 	}
 	return nil
 }
 
-func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
+func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) GetPagination() *pb.Pagination {
 	if x != nil {
 		return x.Pagination
 	}
@@ -172,7 +172,7 @@ func (x *TableShowTablesTotalByFiltersWithSortersPaginationInput) GetPagination(
 
 type TableShowTablesTotalByFiltersWithSortersPaginationOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Tables        []*resource.Table      `protobuf:"bytes,1,rep,name=tables,proto3" json:"tables,omitempty"`
+	Tables        []*pb.Table            `protobuf:"bytes,1,rep,name=tables,proto3" json:"tables,omitempty"`
 	Total         uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -208,7 +208,7 @@ func (*TableShowTablesTotalByFiltersWithSortersPaginationOutput) Descriptor() ([
 	return file_resource_logic_table_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *TableShowTablesTotalByFiltersWithSortersPaginationOutput) GetTables() []*resource.Table {
+func (x *TableShowTablesTotalByFiltersWithSortersPaginationOutput) GetTables() []*pb.Table {
 	if x != nil {
 		return x.Tables
 	}
@@ -226,7 +226,7 @@ var File_resource_logic_table_proto protoreflect.FileDescriptor
 
 const file_resource_logic_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aresource/logic/table.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\")\n" +
+	"\x1aresource/logic/table.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\")\n" +
 	"\x17TableShowTableByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"D\n" +
 	"\x18TableShowTableByIdOutput\x12(\n" +
@@ -263,10 +263,10 @@ var file_resource_logic_table_proto_goTypes = []any{
 	(*TableShowTableByIdOutput)(nil),                                 // 1: pb.resource.logic.TableShowTableByIdOutput
 	(*TableShowTablesTotalByFiltersWithSortersPaginationInput)(nil),  // 2: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput
 	(*TableShowTablesTotalByFiltersWithSortersPaginationOutput)(nil), // 3: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutput
-	(*resource.Table)(nil),                                           // 4: pb.resource.Table
-	(*resource.Filter)(nil),                                          // 5: pb.resource.Filter
-	(*resource.Sorter)(nil),                                          // 6: pb.resource.Sorter
-	(*resource.Pagination)(nil),                                      // 7: pb.resource.Pagination
+	(*pb.Table)(nil),      // 4: pb.resource.Table
+	(*pb.Filter)(nil),     // 5: pb.resource.Filter
+	(*pb.Sorter)(nil),     // 6: pb.resource.Sorter
+	(*pb.Pagination)(nil), // 7: pb.resource.Pagination
 }
 var file_resource_logic_table_proto_depIdxs = []int32{
 	4, // 0: pb.resource.logic.TableShowTableByIdOutput.table:type_name -> pb.resource.Table

@@ -5,7 +5,7 @@ import (
 
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
 	pkgProtoToDomain "example/pkg/proto_to_domain"

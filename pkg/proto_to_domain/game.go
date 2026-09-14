@@ -2,7 +2,7 @@ package protoToDomain
 
 import (
 	domain "example/internal/domain"
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 )
 
 func Game(oProtoGame *pbResource.Game) domain.Game {

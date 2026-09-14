@@ -3,7 +3,7 @@ package outputApplicationResourceModel
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 	pbResourceModel "example/pb/resource/model"
 )
 

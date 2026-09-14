@@ -5,7 +5,7 @@ import (
 
 	domain "example/internal/domain"
 
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 )
 
 func AdminUser(oDomain *domain.AdminUser) *pbResource.AdminUser {

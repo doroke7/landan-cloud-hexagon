@@ -2,7 +2,7 @@ package domainToProto
 
 import (
 	domain "example/internal/domain"
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 )
 
 func AdminPermissionVariable(oDomainAdminPermissionValue *domain.AdminPermissionVariable) *pbResource.AdminPermissionVariable {

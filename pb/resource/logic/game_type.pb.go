@@ -7,7 +7,7 @@
 package pb_resource_logic
 
 import (
-	resource "example/pb/resource"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -60,7 +60,7 @@ func (*GameTypeShowTreeInput) Descriptor() ([]byte, []int) {
 
 type GameTypeShowTreeOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameTypes     []*resource.GameType   `protobuf:"bytes,1,rep,name=game_types,json=gameTypes,proto3" json:"game_types,omitempty"`
+	GameTypes     []*pb.GameType         `protobuf:"bytes,1,rep,name=game_types,json=gameTypes,proto3" json:"game_types,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -95,7 +95,7 @@ func (*GameTypeShowTreeOutput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GameTypeShowTreeOutput) GetGameTypes() []*resource.GameType {
+func (x *GameTypeShowTreeOutput) GetGameTypes() []*pb.GameType {
 	if x != nil {
 		return x.GameTypes
 	}
@@ -148,7 +148,7 @@ func (x *GameTypeShowGameTypeByIdInput) GetId() uint64 {
 
 type GameTypeShowGameTypeByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameType      *resource.GameType     `protobuf:"bytes,1,opt,name=game_type,json=gameType,proto3" json:"game_type,omitempty"`
+	GameType      *pb.GameType           `protobuf:"bytes,1,opt,name=game_type,json=gameType,proto3" json:"game_type,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -183,7 +183,7 @@ func (*GameTypeShowGameTypeByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GameTypeShowGameTypeByIdOutput) GetGameType() *resource.GameType {
+func (x *GameTypeShowGameTypeByIdOutput) GetGameType() *pb.GameType {
 	if x != nil {
 		return x.GameType
 	}
@@ -228,7 +228,7 @@ func (*GameTypeShowGameTypesInput) Descriptor() ([]byte, []int) {
 
 type GameTypeShowGameTypesOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameTypes     []*resource.GameType   `protobuf:"bytes,1,rep,name=game_types,json=gameTypes,proto3" json:"game_types,omitempty"`
+	GameTypes     []*pb.GameType         `protobuf:"bytes,1,rep,name=game_types,json=gameTypes,proto3" json:"game_types,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -263,7 +263,7 @@ func (*GameTypeShowGameTypesOutput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *GameTypeShowGameTypesOutput) GetGameTypes() []*resource.GameType {
+func (x *GameTypeShowGameTypesOutput) GetGameTypes() []*pb.GameType {
 	if x != nil {
 		return x.GameTypes
 	}
@@ -272,9 +272,9 @@ func (x *GameTypeShowGameTypesOutput) GetGameTypes() []*resource.GameType {
 
 type GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
-	Sorters       []*resource.Sorter     `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
-	Pagination    *resource.Pagination   `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*pb.Sorter           `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *pb.Pagination         `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -309,21 +309,21 @@ func (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) Descriptor
 	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) GetSorters() []*resource.Sorter {
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) GetSorters() []*pb.Sorter {
 	if x != nil {
 		return x.Sorters
 	}
 	return nil
 }
 
-func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) GetPagination() *pb.Pagination {
 	if x != nil {
 		return x.Pagination
 	}
@@ -332,7 +332,7 @@ func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput) GetPagin
 
 type GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	GameTypes     []*resource.GameType   `protobuf:"bytes,1,rep,name=game_types,json=gameTypes,proto3" json:"game_types,omitempty"`
+	GameTypes     []*pb.GameType         `protobuf:"bytes,1,rep,name=game_types,json=gameTypes,proto3" json:"game_types,omitempty"`
 	Total         uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -368,7 +368,7 @@ func (*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput) Descripto
 	return file_resource_logic_game_type_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput) GetGameTypes() []*resource.GameType {
+func (x *GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput) GetGameTypes() []*pb.GameType {
 	if x != nil {
 		return x.GameTypes
 	}
@@ -386,7 +386,7 @@ var File_resource_logic_game_type_proto protoreflect.FileDescriptor
 
 const file_resource_logic_game_type_proto_rawDesc = "" +
 	"\n" +
-	"\x1eresource/logic/game_type.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"\x17\n" +
+	"\x1eresource/logic/game_type.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"\x17\n" +
 	"\x15GameTypeShowTreeInput\"N\n" +
 	"\x16GameTypeShowTreeOutput\x124\n" +
 	"\n" +
@@ -437,10 +437,10 @@ var file_resource_logic_game_type_proto_goTypes = []any{
 	(*GameTypeShowGameTypesOutput)(nil),                                    // 5: pb.resource.logic.GameTypeShowGameTypesOutput
 	(*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput)(nil),  // 6: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput
 	(*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput)(nil), // 7: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput
-	(*resource.GameType)(nil),                                              // 8: pb.resource.GameType
-	(*resource.Filter)(nil),                                                // 9: pb.resource.Filter
-	(*resource.Sorter)(nil),                                                // 10: pb.resource.Sorter
-	(*resource.Pagination)(nil),                                            // 11: pb.resource.Pagination
+	(*pb.GameType)(nil),                                                    // 8: pb.resource.GameType
+	(*pb.Filter)(nil),                                                      // 9: pb.resource.Filter
+	(*pb.Sorter)(nil),                                                      // 10: pb.resource.Sorter
+	(*pb.Pagination)(nil),                                                  // 11: pb.resource.Pagination
 }
 var file_resource_logic_game_type_proto_depIdxs = []int32{
 	8,  // 0: pb.resource.logic.GameTypeShowTreeOutput.game_types:type_name -> pb.resource.GameType

@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"

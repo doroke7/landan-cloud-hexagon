@@ -5,7 +5,7 @@ import (
 
 	domain "example/internal/domain"
 
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 )
 
 func GameType(oDomain *domain.GameType) *pbResource.GameType {

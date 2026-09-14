@@ -7,7 +7,7 @@
 package pb_resource_logic
 
 import (
-	resource "example/pb/resource"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -24,9 +24,9 @@ const (
 
 type AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
-	Sorters       []*resource.Sorter     `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
-	Pagination    *resource.Pagination   `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*pb.Sorter           `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *pb.Pagination         `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -61,21 +61,21 @@ func (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) Descript
 	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
+func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) GetSorters() []*resource.Sorter {
+func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) GetSorters() []*pb.Sorter {
 	if x != nil {
 		return x.Sorters
 	}
 	return nil
 }
 
-func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
+func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) GetPagination() *pb.Pagination {
 	if x != nil {
 		return x.Pagination
 	}
@@ -84,7 +84,7 @@ func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput) GetPag
 
 type AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AdminUsers    []*resource.AdminUser  `protobuf:"bytes,1,rep,name=admin_users,json=adminUsers,proto3" json:"admin_users,omitempty"`
+	AdminUsers    []*pb.AdminUser        `protobuf:"bytes,1,rep,name=admin_users,json=adminUsers,proto3" json:"admin_users,omitempty"`
 	Total         uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -120,7 +120,7 @@ func (*AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput) Descrip
 	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput) GetAdminUsers() []*resource.AdminUser {
+func (x *AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput) GetAdminUsers() []*pb.AdminUser {
 	if x != nil {
 		return x.AdminUsers
 	}
@@ -180,7 +180,7 @@ func (x *AdminUserShowAdminUserByIdInput) GetId() uint64 {
 
 type AdminUserShowAdminUserByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AdminUsers    []*resource.AdminUser  `protobuf:"bytes,1,rep,name=admin_users,json=adminUsers,proto3" json:"admin_users,omitempty"`
+	AdminUsers    []*pb.AdminUser        `protobuf:"bytes,1,rep,name=admin_users,json=adminUsers,proto3" json:"admin_users,omitempty"`
 	Total         uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -216,7 +216,7 @@ func (*AdminUserShowAdminUserByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AdminUserShowAdminUserByIdOutput) GetAdminUsers() []*resource.AdminUser {
+func (x *AdminUserShowAdminUserByIdOutput) GetAdminUsers() []*pb.AdminUser {
 	if x != nil {
 		return x.AdminUsers
 	}
@@ -231,8 +231,8 @@ func (x *AdminUserShowAdminUserByIdOutput) GetTotal() uint64 {
 }
 
 type AdminUserAddAminUserInput struct {
-	state         protoimpl.MessageState      `protogen:"open.v1"`
-	Variable      *resource.AdminUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.AdminUserVariable  `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -267,7 +267,7 @@ func (*AdminUserAddAminUserInput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *AdminUserAddAminUserInput) GetVariable() *resource.AdminUserVariable {
+func (x *AdminUserAddAminUserInput) GetVariable() *pb.AdminUserVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -311,9 +311,9 @@ func (*AdminUserAddAminUserOutput) Descriptor() ([]byte, []int) {
 }
 
 type AdminUserEditAdminUserByIdInput struct {
-	state         protoimpl.MessageState      `protogen:"open.v1"`
-	Variable      *resource.AdminUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint64                      `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.AdminUserVariable  `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -348,7 +348,7 @@ func (*AdminUserEditAdminUserByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *AdminUserEditAdminUserByIdInput) GetVariable() *resource.AdminUserVariable {
+func (x *AdminUserEditAdminUserByIdInput) GetVariable() *pb.AdminUserVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -482,7 +482,7 @@ var File_resource_logic_admin_user_proto protoreflect.FileDescriptor
 
 const file_resource_logic_admin_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1fresource/logic/admin_user.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"\xd8\x01\n" +
+	"\x1fresource/logic/admin_user.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"\xd8\x01\n" +
 	"?AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
 	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
@@ -540,11 +540,11 @@ var file_resource_logic_admin_user_proto_goTypes = []any{
 	(*AdminUserEditAdminUserByIdOutput)(nil),                                 // 7: pb.resource.logic.AdminUserEditAdminUserByIdOutput
 	(*AdminUserRemoveAdminUserByIdInput)(nil),                                // 8: pb.resource.logic.AdminUserRemoveAdminUserByIdInput
 	(*AdminUserRemoveAdminUserByIdOutput)(nil),                               // 9: pb.resource.logic.AdminUserRemoveAdminUserByIdOutput
-	(*resource.Filter)(nil),                                                  // 10: pb.resource.Filter
-	(*resource.Sorter)(nil),                                                  // 11: pb.resource.Sorter
-	(*resource.Pagination)(nil),                                              // 12: pb.resource.Pagination
-	(*resource.AdminUser)(nil),                                               // 13: pb.resource.AdminUser
-	(*resource.AdminUserVariable)(nil),                                       // 14: pb.resource.AdminUserVariable
+	(*pb.Filter)(nil),            // 10: pb.resource.Filter
+	(*pb.Sorter)(nil),            // 11: pb.resource.Sorter
+	(*pb.Pagination)(nil),        // 12: pb.resource.Pagination
+	(*pb.AdminUser)(nil),         // 13: pb.resource.AdminUser
+	(*pb.AdminUserVariable)(nil), // 14: pb.resource.AdminUserVariable
 }
 var file_resource_logic_admin_user_proto_depIdxs = []int32{
 	10, // 0: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter

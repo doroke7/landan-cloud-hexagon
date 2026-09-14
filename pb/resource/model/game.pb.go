@@ -7,7 +7,7 @@
 package pb_resource_model
 
 import (
-	resource "example/pb/resource"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -24,7 +24,7 @@ const (
 
 type GameAddOneInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Variable      *resource.GameVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Variable      *pb.GameVariable       `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,7 +59,7 @@ func (*GameAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GameAddOneInput) GetVariable() *resource.GameVariable {
+func (x *GameAddOneInput) GetVariable() *pb.GameVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -68,7 +68,7 @@ func (x *GameAddOneInput) GetVariable() *resource.GameVariable {
 
 type GameAddOneOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Game          *resource.Game         `protobuf:"bytes,1,opt,name=game,proto3" json:"game,omitempty"`
+	Game          *pb.Game               `protobuf:"bytes,1,opt,name=game,proto3" json:"game,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -103,7 +103,7 @@ func (*GameAddOneOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GameAddOneOutput) GetGame() *resource.Game {
+func (x *GameAddOneOutput) GetGame() *pb.Game {
 	if x != nil {
 		return x.Game
 	}
@@ -156,7 +156,7 @@ func (x *GameShowOneByKeyInput) GetKey() string {
 
 type GameShowOneByKeyOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Game          *resource.Game         `protobuf:"bytes,1,opt,name=game,proto3" json:"game,omitempty"`
+	Game          *pb.Game               `protobuf:"bytes,1,opt,name=game,proto3" json:"game,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -191,7 +191,7 @@ func (*GameShowOneByKeyOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *GameShowOneByKeyOutput) GetGame() *resource.Game {
+func (x *GameShowOneByKeyOutput) GetGame() *pb.Game {
 	if x != nil {
 		return x.Game
 	}
@@ -200,7 +200,7 @@ func (x *GameShowOneByKeyOutput) GetGame() *resource.Game {
 
 type GameEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Variable      *resource.GameVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Variable      *pb.GameVariable       `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -236,7 +236,7 @@ func (*GameEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GameEditOneByIdInput) GetVariable() *resource.GameVariable {
+func (x *GameEditOneByIdInput) GetVariable() *pb.GameVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -368,7 +368,7 @@ func (*GameRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
 
 type GameTotalByFiltersInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -403,7 +403,7 @@ func (*GameTotalByFiltersInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *GameTotalByFiltersInput) GetFilters() []*resource.Filter {
+func (x *GameTotalByFiltersInput) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
@@ -458,7 +458,7 @@ var File_resource_model_game_proto protoreflect.FileDescriptor
 
 const file_resource_model_game_proto_rawDesc = "" +
 	"\n" +
-	"\x19resource/model/game.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"H\n" +
+	"\x19resource/model/game.proto\x12\x11pb.resource.model\x1a\fcommon.proto\"H\n" +
 	"\x0fGameAddOneInput\x125\n" +
 	"\bvariable\x18\x01 \x01(\v2\x19.pb.resource.GameVariableR\bvariable\"9\n" +
 	"\x10GameAddOneOutput\x12%\n" +
@@ -509,9 +509,9 @@ var file_resource_model_game_proto_goTypes = []any{
 	(*GameRemoveOneByIdOutput)(nil),  // 7: pb.resource.model.GameRemoveOneByIdOutput
 	(*GameTotalByFiltersInput)(nil),  // 8: pb.resource.model.GameTotalByFiltersInput
 	(*GameTotalByFiltersOutput)(nil), // 9: pb.resource.model.GameTotalByFiltersOutput
-	(*resource.GameVariable)(nil),    // 10: pb.resource.GameVariable
-	(*resource.Game)(nil),            // 11: pb.resource.Game
-	(*resource.Filter)(nil),          // 12: pb.resource.Filter
+	(*pb.GameVariable)(nil),          // 10: pb.resource.GameVariable
+	(*pb.Game)(nil),                  // 11: pb.resource.Game
+	(*pb.Filter)(nil),                // 12: pb.resource.Filter
 }
 var file_resource_model_game_proto_depIdxs = []int32{
 	10, // 0: pb.resource.model.GameAddOneInput.variable:type_name -> pb.resource.GameVariable

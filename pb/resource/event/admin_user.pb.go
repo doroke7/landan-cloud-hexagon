@@ -7,7 +7,7 @@
 package pb_resource_event
 
 import (
-	resource "example/pb/resource"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -23,8 +23,8 @@ const (
 )
 
 type AdminUserEventAddOneInput struct {
-	state         protoimpl.MessageState    `protogen:"open.v1"`
-	Variable      *resource.AppUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.AppUserVariable    `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,7 +59,7 @@ func (*AdminUserEventAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_event_admin_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminUserEventAddOneInput) GetVariable() *resource.AppUserVariable {
+func (x *AdminUserEventAddOneInput) GetVariable() *pb.AppUserVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -106,7 +106,7 @@ var File_resource_event_admin_user_proto protoreflect.FileDescriptor
 
 const file_resource_event_admin_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1fresource/event/admin_user.proto\x12\x11pb.resource.event\x1a\x15resource/common.proto\"U\n" +
+	"\x1fresource/event/admin_user.proto\x12\x11pb.resource.event\x1a\fcommon.proto\"U\n" +
 	"\x19AdminUserEventAddOneInput\x128\n" +
 	"\bvariable\x18\x01 \x01(\v2\x1c.pb.resource.AppUserVariableR\bvariable\"\x1c\n" +
 	"\x1aAdminUserEventAddOneOutput2w\n" +
@@ -129,7 +129,7 @@ var file_resource_event_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo
 var file_resource_event_admin_user_proto_goTypes = []any{
 	(*AdminUserEventAddOneInput)(nil),  // 0: pb.resource.event.AdminUserEventAddOneInput
 	(*AdminUserEventAddOneOutput)(nil), // 1: pb.resource.event.AdminUserEventAddOneOutput
-	(*resource.AppUserVariable)(nil),   // 2: pb.resource.AppUserVariable
+	(*pb.AppUserVariable)(nil),         // 2: pb.resource.AppUserVariable
 }
 var file_resource_event_admin_user_proto_depIdxs = []int32{
 	2, // 0: pb.resource.event.AdminUserEventAddOneInput.variable:type_name -> pb.resource.AppUserVariable

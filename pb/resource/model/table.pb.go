@@ -7,7 +7,7 @@
 package pb_resource_model
 
 import (
-	resource "example/pb/resource"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -23,8 +23,8 @@ const (
 )
 
 type TableAddOneInput struct {
-	state         protoimpl.MessageState  `protogen:"open.v1"`
-	Variable      *resource.TableVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.TableVariable      `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,7 +59,7 @@ func (*TableAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *TableAddOneInput) GetVariable() *resource.TableVariable {
+func (x *TableAddOneInput) GetVariable() *pb.TableVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -103,9 +103,9 @@ func (*TableAddOneOutput) Descriptor() ([]byte, []int) {
 }
 
 type TableEditOneByIdInput struct {
-	state         protoimpl.MessageState  `protogen:"open.v1"`
-	Variable      *resource.TableVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint64                  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.TableVariable      `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -140,7 +140,7 @@ func (*TableEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *TableEditOneByIdInput) GetVariable() *resource.TableVariable {
+func (x *TableEditOneByIdInput) GetVariable() *pb.TableVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -272,7 +272,7 @@ func (*TableRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
 
 type TableTotalByFiltersInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -307,7 +307,7 @@ func (*TableTotalByFiltersInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *TableTotalByFiltersInput) GetFilters() []*resource.Filter {
+func (x *TableTotalByFiltersInput) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
@@ -362,7 +362,7 @@ var File_resource_model_table_proto protoreflect.FileDescriptor
 
 const file_resource_model_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"J\n" +
+	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\fcommon.proto\"J\n" +
 	"\x10TableAddOneInput\x126\n" +
 	"\bvariable\x18\x01 \x01(\v2\x1a.pb.resource.TableVariableR\bvariable\"\x13\n" +
 	"\x11TableAddOneOutput\"_\n" +
@@ -406,8 +406,8 @@ var file_resource_model_table_proto_goTypes = []any{
 	(*TableRemoveOneByIdOutput)(nil),  // 5: pb.resource.model.TableRemoveOneByIdOutput
 	(*TableTotalByFiltersInput)(nil),  // 6: pb.resource.model.TableTotalByFiltersInput
 	(*TableTotalByFiltersOutput)(nil), // 7: pb.resource.model.TableTotalByFiltersOutput
-	(*resource.TableVariable)(nil),    // 8: pb.resource.TableVariable
-	(*resource.Filter)(nil),           // 9: pb.resource.Filter
+	(*pb.TableVariable)(nil),          // 8: pb.resource.TableVariable
+	(*pb.Filter)(nil),                 // 9: pb.resource.Filter
 }
 var file_resource_model_table_proto_depIdxs = []int32{
 	8, // 0: pb.resource.model.TableAddOneInput.variable:type_name -> pb.resource.TableVariable

@@ -1,7 +1,7 @@
 package outputApplicationResource
 
 import (
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 	pkgInput "example/pkg/input"
 
 	"google.golang.org/protobuf/types/known/structpb"

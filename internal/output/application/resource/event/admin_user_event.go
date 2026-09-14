@@ -3,7 +3,7 @@ package outputApplicationResourceEvent
 import (
 	domain "example/internal/domain"
 	outputPortAnyEvent "example/internal/output/port/any/event"
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 	pbResourceEvent "example/pb/resource/event"
 )
 

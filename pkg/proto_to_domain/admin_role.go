@@ -2,7 +2,7 @@ package protoToDomain
 
 import (
 	domain "example/internal/domain"
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 )
 
 func AdminRole(oProto *pbResource.AdminRole) domain.AdminRole {

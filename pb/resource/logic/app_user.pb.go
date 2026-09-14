@@ -7,7 +7,7 @@
 package pb_resource_logic
 
 import (
-	resource "example/pb/resource"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -23,8 +23,8 @@ const (
 )
 
 type AppUserAddAppUserInput struct {
-	state         protoimpl.MessageState    `protogen:"open.v1"`
-	Variable      *resource.AppUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.AppUserVariable    `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,7 +59,7 @@ func (*AppUserAddAppUserInput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AppUserAddAppUserInput) GetVariable() *resource.AppUserVariable {
+func (x *AppUserAddAppUserInput) GetVariable() *pb.AppUserVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -68,7 +68,7 @@ func (x *AppUserAddAppUserInput) GetVariable() *resource.AppUserVariable {
 
 type AppUserAddAppUserOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AppUser       *resource.AppUser      `protobuf:"bytes,1,opt,name=app_user,json=appUser,proto3" json:"app_user,omitempty"`
+	AppUser       *pb.AppUser            `protobuf:"bytes,1,opt,name=app_user,json=appUser,proto3" json:"app_user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -103,7 +103,7 @@ func (*AppUserAddAppUserOutput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AppUserAddAppUserOutput) GetAppUser() *resource.AppUser {
+func (x *AppUserAddAppUserOutput) GetAppUser() *pb.AppUser {
 	if x != nil {
 		return x.AppUser
 	}
@@ -114,7 +114,7 @@ var File_resource_logic_app_user_proto protoreflect.FileDescriptor
 
 const file_resource_logic_app_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1dresource/logic/app_user.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"R\n" +
+	"\x1dresource/logic/app_user.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"R\n" +
 	"\x16AppUserAddAppUserInput\x128\n" +
 	"\bvariable\x18\x01 \x01(\v2\x1c.pb.resource.AppUserVariableR\bvariable\"J\n" +
 	"\x17AppUserAddAppUserOutput\x12/\n" +
@@ -137,10 +137,10 @@ func file_resource_logic_app_user_proto_rawDescGZIP() []byte {
 
 var file_resource_logic_app_user_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_resource_logic_app_user_proto_goTypes = []any{
-	(*AppUserAddAppUserInput)(nil),   // 0: pb.resource.logic.AppUserAddAppUserInput
-	(*AppUserAddAppUserOutput)(nil),  // 1: pb.resource.logic.AppUserAddAppUserOutput
-	(*resource.AppUserVariable)(nil), // 2: pb.resource.AppUserVariable
-	(*resource.AppUser)(nil),         // 3: pb.resource.AppUser
+	(*AppUserAddAppUserInput)(nil),  // 0: pb.resource.logic.AppUserAddAppUserInput
+	(*AppUserAddAppUserOutput)(nil), // 1: pb.resource.logic.AppUserAddAppUserOutput
+	(*pb.AppUserVariable)(nil),      // 2: pb.resource.AppUserVariable
+	(*pb.AppUser)(nil),              // 3: pb.resource.AppUser
 }
 var file_resource_logic_app_user_proto_depIdxs = []int32{
 	2, // 0: pb.resource.logic.AppUserAddAppUserInput.variable:type_name -> pb.resource.AppUserVariable

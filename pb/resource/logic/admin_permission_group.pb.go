@@ -7,7 +7,7 @@
 package pb_resource_logic
 
 import (
-	resource "example/pb/resource"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -23,8 +23,8 @@ const (
 )
 
 type AdminPermissionGroupAddAdminPermissionGroupInput struct {
-	state         protoimpl.MessageState                 `protogen:"open.v1"`
-	Variable      *resource.AdminPermissionGroupVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	state         protoimpl.MessageState           `protogen:"open.v1"`
+	Variable      *pb.AdminPermissionGroupVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,7 +59,7 @@ func (*AdminPermissionGroupAddAdminPermissionGroupInput) Descriptor() ([]byte, [
 	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminPermissionGroupAddAdminPermissionGroupInput) GetVariable() *resource.AdminPermissionGroupVariable {
+func (x *AdminPermissionGroupAddAdminPermissionGroupInput) GetVariable() *pb.AdminPermissionGroupVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -111,9 +111,9 @@ func (x *AdminPermissionGroupAddAdminPermissionGroupOutput) GetStatus() bool {
 }
 
 type AdminPermissionGroupEditAdminPermissionGroupByIdInput struct {
-	state         protoimpl.MessageState                 `protogen:"open.v1"`
-	Variable      *resource.AdminPermissionGroupVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint64                                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState           `protogen:"open.v1"`
+	Variable      *pb.AdminPermissionGroupVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint64                           `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -148,7 +148,7 @@ func (*AdminPermissionGroupEditAdminPermissionGroupByIdInput) Descriptor() ([]by
 	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *AdminPermissionGroupEditAdminPermissionGroupByIdInput) GetVariable() *resource.AdminPermissionGroupVariable {
+func (x *AdminPermissionGroupEditAdminPermissionGroupByIdInput) GetVariable() *pb.AdminPermissionGroupVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -235,8 +235,8 @@ func (*AdminPermissionGroupShowTreeInput) Descriptor() ([]byte, []int) {
 }
 
 type AdminPermissionGroupShowTreeOutput struct {
-	state                 protoimpl.MessageState           `protogen:"open.v1"`
-	AdminPermissionGroups []*resource.AdminPermissionGroup `protobuf:"bytes,1,rep,name=admin_permission_groups,json=adminPermissionGroups,proto3" json:"admin_permission_groups,omitempty"`
+	state                 protoimpl.MessageState     `protogen:"open.v1"`
+	AdminPermissionGroups []*pb.AdminPermissionGroup `protobuf:"bytes,1,rep,name=admin_permission_groups,json=adminPermissionGroups,proto3" json:"admin_permission_groups,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -271,7 +271,7 @@ func (*AdminPermissionGroupShowTreeOutput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{5}
 }
 
-func (x *AdminPermissionGroupShowTreeOutput) GetAdminPermissionGroups() []*resource.AdminPermissionGroup {
+func (x *AdminPermissionGroupShowTreeOutput) GetAdminPermissionGroups() []*pb.AdminPermissionGroup {
 	if x != nil {
 		return x.AdminPermissionGroups
 	}
@@ -323,8 +323,8 @@ func (x *AdminPermissionGroupShowAdminPermissionGroupByIdInput) GetId() uint64 {
 }
 
 type AdminPermissionGroupShowAdminPermissionGroupByIdOutput struct {
-	state                protoimpl.MessageState         `protogen:"open.v1"`
-	AdminPermissionGroup *resource.AdminPermissionGroup `protobuf:"bytes,1,opt,name=admin_permission_group,json=adminPermissionGroup,proto3" json:"admin_permission_group,omitempty"`
+	state                protoimpl.MessageState   `protogen:"open.v1"`
+	AdminPermissionGroup *pb.AdminPermissionGroup `protobuf:"bytes,1,opt,name=admin_permission_group,json=adminPermissionGroup,proto3" json:"admin_permission_group,omitempty"`
 	unknownFields        protoimpl.UnknownFields
 	sizeCache            protoimpl.SizeCache
 }
@@ -359,7 +359,7 @@ func (*AdminPermissionGroupShowAdminPermissionGroupByIdOutput) Descriptor() ([]b
 	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *AdminPermissionGroupShowAdminPermissionGroupByIdOutput) GetAdminPermissionGroup() *resource.AdminPermissionGroup {
+func (x *AdminPermissionGroupShowAdminPermissionGroupByIdOutput) GetAdminPermissionGroup() *pb.AdminPermissionGroup {
 	if x != nil {
 		return x.AdminPermissionGroup
 	}
@@ -403,8 +403,8 @@ func (*AdminPermissionGroupShowAdminPermissionGroupsInput) Descriptor() ([]byte,
 }
 
 type AdminPermissionGroupShowAdminPermissionGroupsOutput struct {
-	state                 protoimpl.MessageState           `protogen:"open.v1"`
-	AdminPermissionGroups []*resource.AdminPermissionGroup `protobuf:"bytes,1,rep,name=admin_permission_groups,json=adminPermissionGroups,proto3" json:"admin_permission_groups,omitempty"`
+	state                 protoimpl.MessageState     `protogen:"open.v1"`
+	AdminPermissionGroups []*pb.AdminPermissionGroup `protobuf:"bytes,1,rep,name=admin_permission_groups,json=adminPermissionGroups,proto3" json:"admin_permission_groups,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -439,7 +439,7 @@ func (*AdminPermissionGroupShowAdminPermissionGroupsOutput) Descriptor() ([]byte
 	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *AdminPermissionGroupShowAdminPermissionGroupsOutput) GetAdminPermissionGroups() []*resource.AdminPermissionGroup {
+func (x *AdminPermissionGroupShowAdminPermissionGroupsOutput) GetAdminPermissionGroups() []*pb.AdminPermissionGroup {
 	if x != nil {
 		return x.AdminPermissionGroups
 	}
@@ -448,9 +448,9 @@ func (x *AdminPermissionGroupShowAdminPermissionGroupsOutput) GetAdminPermission
 
 type AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
-	Sorters       []*resource.Sorter     `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
-	Pagination    *resource.Pagination   `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*pb.Sorter           `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *pb.Pagination         `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -486,21 +486,21 @@ func (*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPag
 	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
+func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) GetSorters() []*resource.Sorter {
+func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) GetSorters() []*pb.Sorter {
 	if x != nil {
 		return x.Sorters
 	}
 	return nil
 }
 
-func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
+func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput) GetPagination() *pb.Pagination {
 	if x != nil {
 		return x.Pagination
 	}
@@ -508,9 +508,9 @@ func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersP
 }
 
 type AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput struct {
-	state                 protoimpl.MessageState           `protogen:"open.v1"`
-	AdminPermissionGroups []*resource.AdminPermissionGroup `protobuf:"bytes,1,rep,name=admin_permission_groups,json=adminPermissionGroups,proto3" json:"admin_permission_groups,omitempty"`
-	Total                 uint64                           `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
+	state                 protoimpl.MessageState     `protogen:"open.v1"`
+	AdminPermissionGroups []*pb.AdminPermissionGroup `protobuf:"bytes,1,rep,name=admin_permission_groups,json=adminPermissionGroups,proto3" json:"admin_permission_groups,omitempty"`
+	Total                 uint64                     `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields         protoimpl.UnknownFields
 	sizeCache             protoimpl.SizeCache
 }
@@ -546,7 +546,7 @@ func (*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPag
 	return file_resource_logic_admin_permission_group_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput) GetAdminPermissionGroups() []*resource.AdminPermissionGroup {
+func (x *AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput) GetAdminPermissionGroups() []*pb.AdminPermissionGroup {
 	if x != nil {
 		return x.AdminPermissionGroups
 	}
@@ -564,7 +564,7 @@ var File_resource_logic_admin_permission_group_proto protoreflect.FileDescriptor
 
 const file_resource_logic_admin_permission_group_proto_rawDesc = "" +
 	"\n" +
-	"+resource/logic/admin_permission_group.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"y\n" +
+	"+resource/logic/admin_permission_group.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"y\n" +
 	"0AdminPermissionGroupAddAdminPermissionGroupInput\x12E\n" +
 	"\bvariable\x18\x01 \x01(\v2).pb.resource.AdminPermissionGroupVariableR\bvariable\"K\n" +
 	"1AdminPermissionGroupAddAdminPermissionGroupOutput\x12\x16\n" +
@@ -626,11 +626,11 @@ var file_resource_logic_admin_permission_group_proto_goTypes = []any{
 	(*AdminPermissionGroupShowAdminPermissionGroupsOutput)(nil),                                    // 9: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsOutput
 	(*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput)(nil),  // 10: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput
 	(*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput)(nil), // 11: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput
-	(*resource.AdminPermissionGroupVariable)(nil),                                                  // 12: pb.resource.AdminPermissionGroupVariable
-	(*resource.AdminPermissionGroup)(nil),                                                          // 13: pb.resource.AdminPermissionGroup
-	(*resource.Filter)(nil),                                                                        // 14: pb.resource.Filter
-	(*resource.Sorter)(nil),                                                                        // 15: pb.resource.Sorter
-	(*resource.Pagination)(nil),                                                                    // 16: pb.resource.Pagination
+	(*pb.AdminPermissionGroupVariable)(nil),                                                        // 12: pb.resource.AdminPermissionGroupVariable
+	(*pb.AdminPermissionGroup)(nil),                                                                // 13: pb.resource.AdminPermissionGroup
+	(*pb.Filter)(nil),                                                                              // 14: pb.resource.Filter
+	(*pb.Sorter)(nil),                                                                              // 15: pb.resource.Sorter
+	(*pb.Pagination)(nil),                                                                          // 16: pb.resource.Pagination
 }
 var file_resource_logic_admin_permission_group_proto_depIdxs = []int32{
 	12, // 0: pb.resource.logic.AdminPermissionGroupAddAdminPermissionGroupInput.variable:type_name -> pb.resource.AdminPermissionGroupVariable

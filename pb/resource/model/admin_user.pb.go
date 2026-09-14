@@ -7,7 +7,7 @@
 package pb_resource_model
 
 import (
-	resource "example/pb/resource"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -68,7 +68,7 @@ func (x *AdminUserShowOneByNameInput) GetName() string {
 
 type AdminUserShowOneByNameOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AdminUser     *resource.AdminUser    `protobuf:"bytes,1,opt,name=admin_user,json=adminUser,proto3" json:"admin_user,omitempty"`
+	AdminUser     *pb.AdminUser          `protobuf:"bytes,1,opt,name=admin_user,json=adminUser,proto3" json:"admin_user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -103,7 +103,7 @@ func (*AdminUserShowOneByNameOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *AdminUserShowOneByNameOutput) GetAdminUser() *resource.AdminUser {
+func (x *AdminUserShowOneByNameOutput) GetAdminUser() *pb.AdminUser {
 	if x != nil {
 		return x.AdminUser
 	}
@@ -157,7 +157,7 @@ func (x *AdminUserShowOneByIdInput) GetId() uint32 {
 
 type AdminUserShowOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AdminUser     *resource.AdminUser    `protobuf:"bytes,1,opt,name=admin_user,json=adminUser,proto3" json:"admin_user,omitempty"`
+	AdminUser     *pb.AdminUser          `protobuf:"bytes,1,opt,name=admin_user,json=adminUser,proto3" json:"admin_user,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -192,7 +192,7 @@ func (*AdminUserShowOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *AdminUserShowOneByIdOutput) GetAdminUser() *resource.AdminUser {
+func (x *AdminUserShowOneByIdOutput) GetAdminUser() *pb.AdminUser {
 	if x != nil {
 		return x.AdminUser
 	}
@@ -200,8 +200,8 @@ func (x *AdminUserShowOneByIdOutput) GetAdminUser() *resource.AdminUser {
 }
 
 type AdminUserAddOneInput struct {
-	state         protoimpl.MessageState      `protogen:"open.v1"`
-	Variable      *resource.AdminUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.AdminUserVariable  `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -236,7 +236,7 @@ func (*AdminUserAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *AdminUserAddOneInput) GetVariable() *resource.AdminUserVariable {
+func (x *AdminUserAddOneInput) GetVariable() *pb.AdminUserVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -281,9 +281,9 @@ func (*AdminUserAddOneOutput) Descriptor() ([]byte, []int) {
 
 // 數據模型直接對ID查找
 type AdminUserEditOneByIdInput struct {
-	state         protoimpl.MessageState      `protogen:"open.v1"`
-	Variable      *resource.AdminUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
-	Id            uint64                      `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.AdminUserVariable  `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -318,7 +318,7 @@ func (*AdminUserEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *AdminUserEditOneByIdInput) GetVariable() *resource.AdminUserVariable {
+func (x *AdminUserEditOneByIdInput) GetVariable() *pb.AdminUserVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -450,9 +450,9 @@ func (*AdminUserRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
 
 type AdminUserShowOnesByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
-	Sorters       []*resource.Sorter     `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
-	Pagination    *resource.Pagination   `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*pb.Sorter           `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *pb.Pagination         `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -487,21 +487,21 @@ func (*AdminUserShowOnesByFiltersWithSortersPaginationInput) Descriptor() ([]byt
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{10}
 }
 
-func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) GetSorters() []*resource.Sorter {
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) GetSorters() []*pb.Sorter {
 	if x != nil {
 		return x.Sorters
 	}
 	return nil
 }
 
-func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) GetPagination() *pb.Pagination {
 	if x != nil {
 		return x.Pagination
 	}
@@ -510,7 +510,7 @@ func (x *AdminUserShowOnesByFiltersWithSortersPaginationInput) GetPagination() *
 
 type AdminUserShowOnesByFiltersWithSortersPaginationOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	AdminUsers    []*resource.AdminUser  `protobuf:"bytes,1,rep,name=admin_users,json=adminUsers,proto3" json:"admin_users,omitempty"`
+	AdminUsers    []*pb.AdminUser        `protobuf:"bytes,1,rep,name=admin_users,json=adminUsers,proto3" json:"admin_users,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -545,7 +545,7 @@ func (*AdminUserShowOnesByFiltersWithSortersPaginationOutput) Descriptor() ([]by
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{11}
 }
 
-func (x *AdminUserShowOnesByFiltersWithSortersPaginationOutput) GetAdminUsers() []*resource.AdminUser {
+func (x *AdminUserShowOnesByFiltersWithSortersPaginationOutput) GetAdminUsers() []*pb.AdminUser {
 	if x != nil {
 		return x.AdminUsers
 	}
@@ -554,7 +554,7 @@ func (x *AdminUserShowOnesByFiltersWithSortersPaginationOutput) GetAdminUsers() 
 
 type AdminUserTotalByFiltersInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -589,7 +589,7 @@ func (*AdminUserTotalByFiltersInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{12}
 }
 
-func (x *AdminUserTotalByFiltersInput) GetFilters() []*resource.Filter {
+func (x *AdminUserTotalByFiltersInput) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
@@ -644,7 +644,7 @@ var File_resource_model_admin_user_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1fresource/model/admin_user.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"1\n" +
+	"\x1fresource/model/admin_user.proto\x12\x11pb.resource.model\x1a\fcommon.proto\"1\n" +
 	"\x1bAdminUserShowOneByNameInput\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"U\n" +
 	"\x1cAdminUserShowOneByNameOutput\x125\n" +
@@ -715,11 +715,11 @@ var file_resource_model_admin_user_proto_goTypes = []any{
 	(*AdminUserShowOnesByFiltersWithSortersPaginationOutput)(nil), // 11: pb.resource.model.AdminUserShowOnesByFiltersWithSortersPaginationOutput
 	(*AdminUserTotalByFiltersInput)(nil),                          // 12: pb.resource.model.AdminUserTotalByFiltersInput
 	(*AdminUserTotalByFiltersOutput)(nil),                         // 13: pb.resource.model.AdminUserTotalByFiltersOutput
-	(*resource.AdminUser)(nil),                                    // 14: pb.resource.AdminUser
-	(*resource.AdminUserVariable)(nil),                            // 15: pb.resource.AdminUserVariable
-	(*resource.Filter)(nil),                                       // 16: pb.resource.Filter
-	(*resource.Sorter)(nil),                                       // 17: pb.resource.Sorter
-	(*resource.Pagination)(nil),                                   // 18: pb.resource.Pagination
+	(*pb.AdminUser)(nil),                                          // 14: pb.resource.AdminUser
+	(*pb.AdminUserVariable)(nil),                                  // 15: pb.resource.AdminUserVariable
+	(*pb.Filter)(nil),                                             // 16: pb.resource.Filter
+	(*pb.Sorter)(nil),                                             // 17: pb.resource.Sorter
+	(*pb.Pagination)(nil),                                         // 18: pb.resource.Pagination
 }
 var file_resource_model_admin_user_proto_depIdxs = []int32{
 	14, // 0: pb.resource.model.AdminUserShowOneByNameOutput.admin_user:type_name -> pb.resource.AdminUser

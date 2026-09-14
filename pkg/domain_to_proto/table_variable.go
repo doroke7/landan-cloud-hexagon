@@ -5,7 +5,7 @@ import (
 
 	domain "example/internal/domain"
 
-	pbResource "example/pb/resource"
+	pbResource "example/pb"
 )
 
 func TableVariable(oTable *domain.TableVariable) *pbResource.TableVariable {

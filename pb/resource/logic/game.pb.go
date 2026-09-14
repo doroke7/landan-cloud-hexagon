@@ -7,7 +7,7 @@
 package pb_resource_logic
 
 import (
-	resource "example/pb/resource"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -24,9 +24,9 @@ const (
 
 type GameShowGamesTotalByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
-	Sorters       []*resource.Sorter     `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
-	Pagination    *resource.Pagination   `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*pb.Sorter           `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *pb.Pagination         `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -61,21 +61,21 @@ func (*GameShowGamesTotalByFiltersWithSortersPaginationInput) Descriptor() ([]by
 	return file_resource_logic_game_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) GetSorters() []*resource.Sorter {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) GetSorters() []*pb.Sorter {
 	if x != nil {
 		return x.Sorters
 	}
 	return nil
 }
 
-func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) GetPagination() *pb.Pagination {
 	if x != nil {
 		return x.Pagination
 	}
@@ -84,7 +84,7 @@ func (x *GameShowGamesTotalByFiltersWithSortersPaginationInput) GetPagination() 
 
 type GameShowGamesTotalByFiltersWithSortersPaginationOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Games         []*resource.Game       `protobuf:"bytes,1,rep,name=games,proto3" json:"games,omitempty"`
+	Games         []*pb.Game             `protobuf:"bytes,1,rep,name=games,proto3" json:"games,omitempty"`
 	Total         uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -120,7 +120,7 @@ func (*GameShowGamesTotalByFiltersWithSortersPaginationOutput) Descriptor() ([]b
 	return file_resource_logic_game_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *GameShowGamesTotalByFiltersWithSortersPaginationOutput) GetGames() []*resource.Game {
+func (x *GameShowGamesTotalByFiltersWithSortersPaginationOutput) GetGames() []*pb.Game {
 	if x != nil {
 		return x.Games
 	}
@@ -138,7 +138,7 @@ var File_resource_logic_game_proto protoreflect.FileDescriptor
 
 const file_resource_logic_game_proto_rawDesc = "" +
 	"\n" +
-	"\x19resource/logic/game.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"\xce\x01\n" +
+	"\x19resource/logic/game.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"\xce\x01\n" +
 	"5GameShowGamesTotalByFiltersWithSortersPaginationInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
 	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
@@ -167,10 +167,10 @@ var file_resource_logic_game_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_resource_logic_game_proto_goTypes = []any{
 	(*GameShowGamesTotalByFiltersWithSortersPaginationInput)(nil),  // 0: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput
 	(*GameShowGamesTotalByFiltersWithSortersPaginationOutput)(nil), // 1: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput
-	(*resource.Filter)(nil),     // 2: pb.resource.Filter
-	(*resource.Sorter)(nil),     // 3: pb.resource.Sorter
-	(*resource.Pagination)(nil), // 4: pb.resource.Pagination
-	(*resource.Game)(nil),       // 5: pb.resource.Game
+	(*pb.Filter)(nil),     // 2: pb.resource.Filter
+	(*pb.Sorter)(nil),     // 3: pb.resource.Sorter
+	(*pb.Pagination)(nil), // 4: pb.resource.Pagination
+	(*pb.Game)(nil),       // 5: pb.resource.Game
 }
 var file_resource_logic_game_proto_depIdxs = []int32{
 	2, // 0: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
