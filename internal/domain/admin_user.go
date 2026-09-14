@@ -13,13 +13,13 @@ import (
 )
 
 type AdminUser struct {
-	Id         uint64      `json:"id" bson:"_id"`
-	Name       string      `json:"name" bson:"name"`
-	Password   string      `json:"password" bson:"password"`
-	CreatedAt  time.Time   `json:"created_at" bson:"created_at"`
-	UpdatedAt  time.Time   `json:"updated_at" bson:"updated_at"`
-	DeletedAt  time.Time   `json:"deleted_at" bson:"deleted_at"`
-	AdminRoles []AdminRole `json:"admin_roles,omitempty" bson:"-" gorm:"many2many:admin_users_to_admin_roles"`
+	Id         uint64       `json:"id" bson:"_id"`
+	Name       string       `json:"name" bson:"name"`
+	Password   string       `json:"password" bson:"password"`
+	CreatedAt  time.Time    `json:"created_at" bson:"created_at"`
+	UpdatedAt  time.Time    `json:"updated_at" bson:"updated_at"`
+	DeletedAt  time.Time    `json:"deleted_at" bson:"deleted_at"`
+	AdminRoles []*AdminRole `json:"admin_roles,omitempty" bson:"-" gorm:"many2many:admin_users_to_admin_roles"`
 }
 
 type AdminUserVariable struct {

@@ -10,9 +10,10 @@ func AdminUser(oProto *pb.AdminUser) domain.AdminUser {
 		return domain.AdminUser{}
 	}
 
-	aAdminRoles := make([]domain.AdminRole, 0, len(oProto.GetAdminRoles()))
+	aAdminRoles := make([]*domain.AdminRole, 0, len(oProto.GetAdminRoles()))
 	for _, oProtoAdminRole := range oProto.GetAdminRoles() {
-		aAdminRoles = append(aAdminRoles, AdminRole(oProtoAdminRole))
+		oDomainAdminRole := AdminRole(oProtoAdminRole)
+		aAdminRoles = append(aAdminRoles, &oDomainAdminRole)
 	}
 
 	return domain.AdminUser{

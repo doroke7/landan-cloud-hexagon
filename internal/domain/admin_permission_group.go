@@ -27,8 +27,16 @@ type AdminPermissionGroup struct {
 	DeletedAt time.Time `json:"deleted_at" bson:"deleted_at"`
 }
 
-// MarshalJSON 讓 Children / AdminPermissions 為 nil 時序列化成 []（不是 null）——不管是 gorm Preload、
-// mongo/es decode、還是 tree 的葉節點都適用。用 alias 型別避免遞迴呼叫自己。
+type AdminPermissionGroupVariable struct {
+	Key              *string                    `json:"key,omitempty"`
+	Name             *string                    `json:"name,omitempty"`
+	AdminPermissions []*AdminPermissionVariable `json:"admin_permissions" bson:"-" `
+	ParentId         *uint64                    `json:"parent_id,omitempty"`
+	// CreatedAt *time.Time `json:"created_at"`
+	// UpdatedAt *time.Time `json:"updated_at"`
+	// DeletedAt *time.Time `json:"deleted_at"`
+}
+
 func (oSelf AdminPermissionGroup) MarshalJSON() ([]byte, error) {
 	type alias AdminPermissionGroup
 
@@ -44,19 +52,3 @@ func (oSelf AdminPermissionGroup) MarshalJSON() ([]byte, error) {
 
 	return aBytes, oErr
 }
-
-type AdminPermissionGroupVariable struct {
-	Key              *string                    `json:"key,omitempty"`
-	Name             *string                    `json:"name,omitempty"`
-	AdminPermissions []*AdminPermissionVariable `json:"admin_permissions" bson:"-" `
-	ParentId         *uint64                    `json:"parent_id,omitempty"`
-	// CreatedAt *time.Time `json:"created_at"`
-	// UpdatedAt *time.Time `json:"updated_at"`
-	// DeletedAt *time.Time `json:"deleted_at"`
-}
-
-/*
-1. 定義 domain  internal/domain/admin_permission_group.go
-2. 定義 output
-
-*/

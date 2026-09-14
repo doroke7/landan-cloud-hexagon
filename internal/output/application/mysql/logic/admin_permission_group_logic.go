@@ -291,6 +291,8 @@ func (oSelf *AdminPermissionGroupLogic) ShowTree() ([]*domain.AdminPermissionGro
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermissionGroup{}).
+		// Preload("Children").  go程序組裝的 Tree 狀結構，不要用 MYSQL 再找 Children。不然會重複數據
+		Preload("AdminPermissions").
 		Where("deleted_at = ?", "2038-01-19 03:14:07").
 		Order("id ASC").
 		Find(&aFlat)

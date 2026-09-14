@@ -175,6 +175,9 @@ func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissi
 	if oValue.Name != nil {
 		oSet["name"] = *oValue.Name
 	}
+	if oValue.ParentId != nil {
+		oSet["parent_id"] = *oValue.ParentId
+	}
 
 	oResult, oErr := oSelf.Collection.UpdateOne(
 		oSelf.Context,

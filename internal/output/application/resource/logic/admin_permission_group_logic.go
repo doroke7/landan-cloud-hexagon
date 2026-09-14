@@ -66,6 +66,7 @@ func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oDomainAdmi
 		Key:              oDomainAdminPermissionGroupVariable.Key,
 		Name:             oDomainAdminPermissionGroupVariable.Name,
 		AdminPermissions: aProtoAdminPermissions,
+		ParentId:         oDomainAdminPermissionGroupVariable.ParentId,
 	}
 
 	oRequest := &pbResourceLogic.AdminPermissionGroupEditAdminPermissionGroupByIdInput{

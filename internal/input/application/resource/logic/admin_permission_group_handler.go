@@ -66,6 +66,7 @@ func (oSelf *AdminPermissionGroupHandler) EditAdminPermissionGroupById(oContext 
 	if oVariable := oReq.GetVariable(); oVariable != nil {
 		oValue.Key = oVariable.Key
 		oValue.Name = oVariable.Name
+		oValue.ParentId = oVariable.ParentId
 
 		aAdminPermissions := make([]*domain.AdminPermissionVariable, 0, len(oVariable.GetAdminPermissions()))
 		for _, oProtoAdminPermissionValue := range oVariable.GetAdminPermissions() {

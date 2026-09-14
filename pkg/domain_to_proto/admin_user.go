@@ -14,8 +14,8 @@ func AdminUser(oDomain *domain.AdminUser) *pb.AdminUser {
 	}
 
 	aAdminRoles := make([]*pb.AdminRole, 0, len(oDomain.AdminRoles))
-	for i := range oDomain.AdminRoles {
-		aAdminRoles = append(aAdminRoles, AdminRole(&oDomain.AdminRoles[i]))
+	for _, oAdminRole := range oDomain.AdminRoles {
+		aAdminRoles = append(aAdminRoles, AdminRole(oAdminRole))
 	}
 
 	return &pb.AdminUser{

@@ -26,12 +26,67 @@ func NewAdminPermissionGroupUsecase(oAdminPermissionGroupModel outputPortAnyMode
 
 func (oSelf *AdminPermissionGroupUsecase) AddOne(oVariable *domain.AdminPermissionGroupVariable) error {
 
+	if oVariable.ParentId != nil && *oVariable.ParentId != 0 {
+		oParentAdminPermissionGroup, oErr := oSelf.AdminPermissionGroupLogic.ShowAdminPermissionGroupById(*oVariable.ParentId)
+		if oErr != nil {
+			return oErr
+		}
+
+		if oParentAdminPermissionGroup == nil {
+			oParentNotFoundError := pkgUtility.NewDefaultError("parent admin permission group not found", -2, 200)
+
+			return oParentNotFoundError
+		}
+
+		if oParentAdminPermissionGroup.ParentId != 0 {
+			oExceedDepthError := pkgUtility.NewDefaultError("admin permission group depth cannot exceed 2 levels", -2, 200)
+
+			return oExceedDepthError
+		}
+	}
+
 	oErr := oSelf.AdminPermissionGroupLogic.AddAdminPermissionGroup(oVariable)
 
 	return oErr
 }
 
 func (oSelf *AdminPermissionGroupUsecase) EditOne(oVariable *domain.AdminPermissionGroupVariable, iId uint64) error {
+
+	if oVariable.ParentId != nil && *oVariable.ParentId != 0 {
+		if *oVariable.ParentId == iId {
+			oSelfParentError := pkgUtility.NewDefaultError("admin permission group cannot be its own parent", -2, 200)
+
+			return oSelfParentError
+		}
+
+		oParentAdminPermissionGroup, oErr := oSelf.AdminPermissionGroupLogic.ShowAdminPermissionGroupById(*oVariable.ParentId)
+		if oErr != nil {
+			return oErr
+		}
+
+		if oParentAdminPermissionGroup == nil {
+			oParentNotFoundError := pkgUtility.NewDefaultError("parent admin permission group not found", -2, 200)
+
+			return oParentNotFoundError
+		}
+
+		if oParentAdminPermissionGroup.ParentId != 0 {
+			oExceedDepthError := pkgUtility.NewDefaultError("admin permission group depth cannot exceed 2 levels", -2, 200)
+
+			return oExceedDepthError
+		}
+
+		aChildAdminPermissionGroups, oErr := oSelf.AdminPermissionGroupModel.ShowOnesByParentId(iId)
+		if oErr != nil {
+			return oErr
+		}
+
+		if len(aChildAdminPermissionGroups) >= 1 {
+			oHasChildrenError := pkgUtility.NewDefaultError("admin permission group has child groups; moving it would exceed 2 levels", -2, 200)
+
+			return oHasChildrenError
+		}
+	}
 
 	oErr := oSelf.AdminPermissionGroupLogic.EditAdminPermissionGroupById(oVariable, iId)
 

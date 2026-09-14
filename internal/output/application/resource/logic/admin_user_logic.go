@@ -38,9 +38,10 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 
 	aAdminUsers := make([]*domain.AdminUser, 0, len(oResponse.GetAdminUsers()))
 	for _, oOne := range oResponse.GetAdminUsers() {
-		aAdminRoles := make([]domain.AdminRole, 0, len(oOne.GetAdminRoles()))
+		aAdminRoles := make([]*domain.AdminRole, 0, len(oOne.GetAdminRoles()))
 		for _, oProtoAdminRole := range oOne.GetAdminRoles() {
-			aAdminRoles = append(aAdminRoles, pkgProtoToDomain.AdminRole(oProtoAdminRole))
+			oDomainAdminRole := pkgProtoToDomain.AdminRole(oProtoAdminRole)
+			aAdminRoles = append(aAdminRoles, &oDomainAdminRole)
 		}
 
 		oAdminUser := &domain.AdminUser{
@@ -114,9 +115,10 @@ func (oSelf *AdminUserLogic) ShowAdminUserById(iId uint64) (*domain.AdminUser, e
 
 	oOne := oResponse.GetAdminUsers()[0]
 
-	aAdminRoles := make([]domain.AdminRole, 0, len(oOne.GetAdminRoles()))
+	aAdminRoles := make([]*domain.AdminRole, 0, len(oOne.GetAdminRoles()))
 	for _, oProtoAdminRole := range oOne.GetAdminRoles() {
-		aAdminRoles = append(aAdminRoles, pkgProtoToDomain.AdminRole(oProtoAdminRole))
+		oDomainAdminRole := pkgProtoToDomain.AdminRole(oProtoAdminRole)
+		aAdminRoles = append(aAdminRoles, &oDomainAdminRole)
 	}
 
 	oAdminUser := &domain.AdminUser{

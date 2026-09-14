@@ -95,8 +95,9 @@ func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissi
 	oRequest := &pbResourceModel.AdminPermissionGroupEditOneByIdInput{
 		Id: iId,
 		Variable: &pb.AdminPermissionGroupVariable{
-			Key:  oValue.Key,
-			Name: oValue.Name,
+			Key:      oValue.Key,
+			Name:     oValue.Name,
+			ParentId: oValue.ParentId,
 		},
 	}
 
