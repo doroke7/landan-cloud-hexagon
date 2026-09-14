@@ -59,7 +59,9 @@ var tcpBodyPool = sync.Pool{
 // 另外配置的一份，這樣才不會有「呼叫端還在用、池子卻把它重新分配出去」的風險。
 var tcpEncodeBufferPool = sync.Pool{
 	New: func() any {
-		return new(bytes.Buffer)
+		oBuffer := new(bytes.Buffer)
+
+		return oBuffer
 	},
 }
 
@@ -73,7 +75,9 @@ type TcpRouter struct {
 }
 
 func NewTcpRouter() *TcpRouter {
-	return &TcpRouter{routes: make(map[string]TcpHandlerFunc)}
+	aRoutes := make(map[string]TcpHandlerFunc)
+
+	return &TcpRouter{routes: aRoutes}
 }
 
 // HandleFunc 註冊一個 method 對應的處理方法，用法跟 ConsumerRouter.HandleFunc 一樣。
@@ -151,9 +155,14 @@ func (oSelf *TcpRouter) serveConn(oConn net.Conn) {
 func (oSelf *TcpRouter) dispatch(oReq types.TcpRequest) types.TcpResponse {
 	fnHandler, ok := oSelf.routes[oReq.Method]
 	if !ok {
-		return types.TcpResponse{Code: -1, Message: ErrTcpMethodNotFound.Error()}
+		sMessage := ErrTcpMethodNotFound.Error()
+
+		return types.TcpResponse{Code: -1, Message: sMessage}
 	}
-	return fnHandler(oReq)
+
+	oResponse := fnHandler(oReq)
+
+	return oResponse
 }
 
 // EncodeFrame 把 oPayload（types.TcpRequest 或 types.TcpResponse）編碼成一個完整的 frame。
@@ -162,12 +171,14 @@ func (oSelf *TcpRouter) EncodeFrame(oPayload any) ([]byte, error) {
 	oBuf.Reset()
 	defer tcpEncodeBufferPool.Put(oBuf)
 
-	if err := json.NewEncoder(oBuf).Encode(oPayload); err != nil {
+	oEncoder := json.NewEncoder(oBuf)
+	if err := oEncoder.Encode(oPayload); err != nil {
 		return nil, err
 	}
 
 	// json.Encoder.Encode 會多寫一個結尾的 \n，這裡要去掉，行為才會跟 json.Marshal 一致
-	aBody := bytes.TrimRight(oBuf.Bytes(), "\n")
+	aBufBytes := oBuf.Bytes()
+	aBody := bytes.TrimRight(aBufBytes, "\n")
 
 	if len(aBody) > tcpMaxBodyLength {
 		return nil, ErrTcpBodyTooLarge
@@ -200,5 +211,7 @@ func (oSelf *TcpRouter) DecodeFrame(oReader *bufio.Reader, oPayload any) error {
 		return err
 	}
 
-	return json.Unmarshal(aBody, oPayload)
+	oErr := json.Unmarshal(aBody, oPayload)
+
+	return oErr
 }

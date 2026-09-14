@@ -51,7 +51,8 @@ func (oSelf *Aop) Cacheable(sKey string, oTtl time.Duration, pDest interface{}, 
 	}
 
 	// 2. 前置切面 (Before)：查快取
-	sJsonStr, oErr := oSelf.Cache.Get(oCurrentContext, sKey).Result()
+	oStringCmd := oSelf.Cache.Get(oCurrentContext, sKey)
+	sJsonStr, oErr := oStringCmd.Result()
 	if oErr == nil {
 		// 🎉 快取命中 (Hit)！直接反序列化進傳進來的 pDest 指針
 		if oErr := json.Unmarshal([]byte(sJsonStr), pDest); oErr == nil {
@@ -106,7 +107,9 @@ func (oSelf *Aop) CacheEvict(sKey string, cFn func() error) error {
 	}
 
 	// 3. 後置切面 (After Returning)：把快取踢出去
-	if oErr := oSelf.Cache.Del(oCurrentContext, sKey).Err(); oErr != nil && !errors.Is(oErr, redis.Nil) {
+	oIntCmd := oSelf.Cache.Del(oCurrentContext, sKey)
+	oErr := oIntCmd.Err()
+	if oErr != nil && !errors.Is(oErr, redis.Nil) {
 		log.Error("[Aop] 快取清除失敗", "error", oErr, "key", sKey)
 		return oErr
 	}
@@ -123,8 +126,11 @@ func (oSelf *Aop) Key(sPrefix string, aArgs ...interface{}) string {
 		aParts[i] = fmt.Sprint(oArg)
 	}
 
-	aSum := md5.Sum([]byte(strings.Join(aParts, ":")))
-	return sPrefix + ":" + hex.EncodeToString(aSum[:])
+	sJoined := strings.Join(aParts, ":")
+	aSum := md5.Sum([]byte(sJoined))
+	sHex := hex.EncodeToString(aSum[:])
+
+	return sPrefix + ":" + sHex
 }
 
 // Ttl 在 oBase 上下加減一個 [0, oBase/2] 的隨機值，

@@ -14,23 +14,30 @@ func (oSelf *Request) Bind(sString string, oValue any) error {
 
 	if sString == "filters" {
 		sFilters := oSelf.Context.Query("filters")
-		return json.Unmarshal([]byte(sFilters), oValue)
+		oErr := json.Unmarshal([]byte(sFilters), oValue)
+
+		return oErr
 	}
 
 	if sString == "sorters" {
 		sSorters := oSelf.Context.Query("sorters")
-		return json.Unmarshal([]byte(sSorters), oValue)
+		oErr := json.Unmarshal([]byte(sSorters), oValue)
+
+		return oErr
 	}
 
 	if sString == "pagination" {
 		sPagination := oSelf.Context.Query("pagination")
-		return json.Unmarshal([]byte(sPagination), oValue)
+		oErr := json.Unmarshal([]byte(sPagination), oValue)
+
+		return oErr
 	}
 
 	if sString == "variable" {
 		sVariable := oSelf.Context.PostForm("variable")
+		oErr := json.Unmarshal([]byte(sVariable), oValue)
 
-		return json.Unmarshal([]byte(sVariable), oValue)
+		return oErr
 	}
 
 	return nil

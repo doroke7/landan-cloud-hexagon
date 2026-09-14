@@ -25,9 +25,11 @@ type NATSBroker struct {
 var _ centrifuge.Broker = (*NATSBroker)(nil)
 
 func NewNATSBroker(nc *nats.Conn) *NATSBroker {
+	aSubs := make(map[string]*nats.Subscription)
+
 	return &NATSBroker{
 		nc:   nc,
-		subs: make(map[string]*nats.Subscription),
+		subs: aSubs,
 	}
 }
 
@@ -57,7 +59,8 @@ func (oSelf *NATSBroker) Subscribe(sChannel string) error {
 		return nil
 	}
 
-	oSub, err := oSelf.nc.Subscribe(oSelf.subject(sChannel), func(oMsg *nats.Msg) {
+	sSubject := oSelf.subject(sChannel)
+	oSub, err := oSelf.nc.Subscribe(sSubject, func(oMsg *nats.Msg) {
 		var oMessage natsBrokerMessage
 		if err := json.Unmarshal(oMsg.Data, &oMessage); err != nil {
 			return
@@ -94,7 +97,9 @@ func (oSelf *NATSBroker) Unsubscribe(sChannel string) error {
 		return nil
 	}
 	delete(oSelf.subs, sChannel)
-	return oSub.Unsubscribe()
+	oErr := oSub.Unsubscribe()
+
+	return oErr
 }
 
 func (oSelf *NATSBroker) publish(sChannel string, oMessage natsBrokerMessage) error {
@@ -102,7 +107,10 @@ func (oSelf *NATSBroker) publish(sChannel string, oMessage natsBrokerMessage) er
 	if err != nil {
 		return err
 	}
-	return oSelf.nc.Publish(oSelf.subject(sChannel), aBytes)
+	sSubject := oSelf.subject(sChannel)
+	oErr := oSelf.nc.Publish(sSubject, aBytes)
+
+	return oErr
 }
 
 func (oSelf *NATSBroker) Publish(sChannel string, aData []byte, oOpts centrifuge.PublishOptions) (centrifuge.StreamPosition, bool, error) {
@@ -111,11 +119,15 @@ func (oSelf *NATSBroker) Publish(sChannel string, aData []byte, oOpts centrifuge
 }
 
 func (oSelf *NATSBroker) PublishJoin(sChannel string, oInfo *centrifuge.ClientInfo) error {
-	return oSelf.publish(sChannel, natsBrokerMessage{Kind: "join", Info: oInfo})
+	oErr := oSelf.publish(sChannel, natsBrokerMessage{Kind: "join", Info: oInfo})
+
+	return oErr
 }
 
 func (oSelf *NATSBroker) PublishLeave(sChannel string, oInfo *centrifuge.ClientInfo) error {
-	return oSelf.publish(sChannel, natsBrokerMessage{Kind: "leave", Info: oInfo})
+	oErr := oSelf.publish(sChannel, natsBrokerMessage{Kind: "leave", Info: oInfo})
+
+	return oErr
 }
 
 func (oSelf *NATSBroker) History(sChannel string, oOpts centrifuge.HistoryOptions) ([]*centrifuge.Publication, centrifuge.StreamPosition, error) {

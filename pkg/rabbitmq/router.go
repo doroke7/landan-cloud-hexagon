@@ -17,9 +17,11 @@ type RabbitmqRouter struct {
 }
 
 func NewRabbitmqRouter(oConn *amqp.Connection) *RabbitmqRouter {
+	aRoutes := make(map[string]RabbitmqHandlerFunc)
+
 	return &RabbitmqRouter{
 		conn:   oConn,
-		routes: make(map[string]RabbitmqHandlerFunc),
+		routes: aRoutes,
 	}
 }
 

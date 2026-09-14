@@ -28,7 +28,9 @@ type routeNode struct {
 }
 
 func newRouteNode() *routeNode {
-	return &routeNode{children: make(map[string]*routeNode)}
+	aChildren := make(map[string]*routeNode)
+
+	return &routeNode{children: aChildren}
 }
 
 type GrpcRouter struct {
@@ -36,7 +38,9 @@ type GrpcRouter struct {
 }
 
 func NewGrpcRouter() *GrpcRouter {
-	return &GrpcRouter{root: newRouteNode()}
+	oRoot := newRouteNode()
+
+	return &GrpcRouter{root: oRoot}
 }
 
 func ChainInterceptors(aInterceptors ...grpc.UnaryServerInterceptor) grpc.UnaryServerInterceptor {
@@ -47,7 +51,9 @@ func ChainInterceptors(aInterceptors ...grpc.UnaryServerInterceptor) grpc.UnaryS
 		for i := len(aInterceptors) - 1; i >= 0; i-- {
 			i, fnThisHandler := i, fnNextHandler
 			fnNextHandler = func(oCtx context.Context, oReq any) (any, error) {
-				return aInterceptors[i](oCtx, oReq, oServerInfo, fnThisHandler)
+				oResponse, oError := aInterceptors[i](oCtx, oReq, oServerInfo, fnThisHandler)
+
+				return oResponse, oError
 			}
 		}
 
@@ -57,9 +63,11 @@ func ChainInterceptors(aInterceptors ...grpc.UnaryServerInterceptor) grpc.UnaryS
 	}
 }
 func tokenize(sPath string) []string {
-	return strings.FieldsFunc(sPath, func(r rune) bool {
+	aSegments := strings.FieldsFunc(sPath, func(r rune) bool {
 		return r == '.' || r == '/'
 	})
+
+	return aSegments
 }
 
 // Group 每次 aaa.bbb.ccc 的 path 就生成 tree 的結構，並且在最後的 葉子 加上 middlewares
@@ -100,6 +108,9 @@ func (oSelf *GrpcRouter) Build() grpc.UnaryServerInterceptor {
 			}
 		}
 
-		return ChainInterceptors(aInterceptors...)(oContex, oRequest, oServerInfo, fnHandler)
+		fnChained := ChainInterceptors(aInterceptors...)
+		oResponse, oError := fnChained(oContex, oRequest, oServerInfo, fnHandler)
+
+		return oResponse, oError
 	}
 }
