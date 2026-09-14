@@ -5,23 +5,20 @@ import (
 	pbResource "example/pb/resource"
 )
 
-func AdminPermissionValue(oProto *pbResource.AdminPermissionValue) *domain.AdminPermissionVariable {
+func AdminPermissionValue(oProto *pbResource.AdminPermissionValue) domain.AdminPermissionVariable {
+	var oValue domain.AdminPermissionVariable
 	if oProto == nil {
-		return nil
+		return oValue
 	}
 
-	var oType *uint8
+	oValue.Id = oProto.Id
+	oValue.Key = oProto.Key
+	oValue.Name = oProto.Name
+
 	if oProto.Type != nil {
 		iType := uint8(*oProto.Type)
-		oType = &iType
+		oValue.Type = &iType
 	}
 
-	oDomain := &domain.AdminPermissionVariable{
-		Id:   oProto.Id,
-		Type: oType,
-		Key:  oProto.Key,
-		Name: oProto.Name,
-	}
-
-	return oDomain
+	return oValue
 }

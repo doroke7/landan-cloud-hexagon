@@ -13,6 +13,7 @@ import (
 	pbFacade "example/pb/facade"
 	pbFacadeAdminResource "example/pb/facade/admin/resource"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 	pkgUtility "example/pkg/utility"
 )
 
@@ -109,29 +110,10 @@ func idFromFilters(aFilters []*pbFacade.Filter) (uint, error) {
 	return uint(fId), nil
 }
 
-func protoGameVariableToDomainGameValue(oVariable *pbFacade.GameVariable) *domain.GameVariable {
-	oDomain := &domain.GameVariable{}
-	if oVariable == nil {
-		return oDomain
-	}
-
-	if oVariable.GameTypeId != nil {
-		iGameTypeIdValue := oVariable.GetGameTypeId()
-		iGameTypeId := uint64(iGameTypeIdValue)
-		oDomain.GameTypeId = &iGameTypeId
-	}
-
-	oDomain.Key = oVariable.Key
-	oDomain.Name = oVariable.Name
-	oDomain.Description = oVariable.Description
-
-	return oDomain
-}
-
 func (oSelf *GameHandler) AddOne(oContext context.Context, oRequest *pbFacadeAdminResource.GameAddOneRequest) (*pbFacadeAdminResource.GameAddOneResponse, error) {
 
 	oRequestVariable := oRequest.GetVariable()
-	oValue := protoGameVariableToDomainGameValue(oRequestVariable)
+	oValue := pkgProtoToDomain.GameVariable(oRequestVariable)
 
 	if oErr := oSelf.AdminResourceGameUsecase.AddOne(oValue); oErr != nil {
 		oStatusErr := toStatusError(oErr)
@@ -150,7 +132,7 @@ func (oSelf *GameHandler) EditOne(oContext context.Context, oRequest *pbFacadeAd
 	}
 
 	oRequestVariable := oRequest.GetVariable()
-	oValue := protoGameVariableToDomainGameValue(oRequestVariable)
+	oValue := pkgProtoToDomain.GameVariable(oRequestVariable)
 
 	if oErr := oSelf.AdminResourceGameUsecase.EditOne(oValue, uint64(iId)); oErr != nil {
 		oStatusErr := toStatusError(oErr)

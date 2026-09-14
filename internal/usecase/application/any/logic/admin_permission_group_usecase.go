@@ -19,6 +19,13 @@ func NewAdminPermissionGroupUsecase(oAbstractUsecase *AbstractUsecase, oAdminPer
 	}
 }
 
+func (oSelf *AdminPermissionGroupUsecase) EditAdminPermissionGroupById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
+
+	oErr := oSelf.AdminPermissionGroupLogic.EditAdminPermissionGroupById(oValue, iId)
+
+	return oErr
+}
+
 func (oSelf *AdminPermissionGroupUsecase) ShowTree() ([]*domain.AdminPermissionGroup, error) {
 
 	aTree, oErr := oSelf.AdminPermissionGroupLogic.ShowTree()

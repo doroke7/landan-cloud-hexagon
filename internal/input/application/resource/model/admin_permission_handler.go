@@ -14,6 +14,7 @@ import (
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 type AdminPermissionHandler struct {
@@ -46,27 +47,10 @@ func domainAdminPermissionToProtoAdminPermission(oAdminPermission *domain.AdminP
 	}
 }
 
-func protoAdminPermissionValueToDomainAdminPermissionValue(oVariable *pbResource.AdminPermissionValue) domain.AdminPermissionVariable {
-	var oValue domain.AdminPermissionVariable
-	if oVariable == nil {
-		return oValue
-	}
-
-	oValue.Key = oVariable.Key
-	oValue.Name = oVariable.Name
-
-	if oVariable.Type != nil {
-		iType := uint8(*oVariable.Type)
-		oValue.Type = &iType
-	}
-
-	return oValue
-}
-
 func (oSelf *AdminPermissionHandler) AddOne(oContext context.Context, oReq *pbResourceModel.AdminPermissionAddOneInput) (*pbResourceModel.AdminPermissionAddOneOutput, error) {
 
 	oReqValue := oReq.GetValue()
-	oAdminPermissionValue := protoAdminPermissionValueToDomainAdminPermissionValue(oReqValue)
+	oAdminPermissionValue := pkgProtoToDomain.AdminPermissionValue(oReqValue)
 
 	oErr := oSelf.ModelAdminPermissionUsecase.AddOne(&oAdminPermissionValue)
 
@@ -106,7 +90,7 @@ func (oSelf *AdminPermissionHandler) ShowOneById(oContext context.Context, oReq 
 func (oSelf *AdminPermissionHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionEditOneByIdInput) (*pbResourceModel.AdminPermissionEditOneByIdOutput, error) {
 
 	oReqValue := oReq.GetValue()
-	oAdminPermissionValue := protoAdminPermissionValueToDomainAdminPermissionValue(oReqValue)
+	oAdminPermissionValue := pkgProtoToDomain.AdminPermissionValue(oReqValue)
 
 	oErr := oSelf.ModelAdminPermissionUsecase.EditOneById(&oAdminPermissionValue, uint64(oReq.Id))
 

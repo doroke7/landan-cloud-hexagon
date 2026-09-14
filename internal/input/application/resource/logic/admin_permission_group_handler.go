@@ -12,28 +12,8 @@ import (
 	pbResourceLogic "example/pb/resource/logic"
 	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
-
-func protoAdminPermissionValueToDomainAdminPermissionValue(oProto *pbResource.AdminPermissionValue) *domain.AdminPermissionVariable {
-	if oProto == nil {
-		return nil
-	}
-
-	var oType *uint8
-	if oProto.Type != nil {
-		iType := uint8(*oProto.Type)
-		oType = &iType
-	}
-
-	oAdminPermissionValue := &domain.AdminPermissionVariable{
-		Id:   oProto.Id,
-		Type: oType,
-		Key:  oProto.Key,
-		Name: oProto.Name,
-	}
-
-	return oAdminPermissionValue
-}
 
 type AdminPermissionGroupHandler struct {
 	*inputApplicationResource.AbstractHandler
@@ -57,12 +37,12 @@ func (oSelf *AdminPermissionGroupHandler) AddAdminPermissionGroup(oContext conte
 
 		aAdminPermissions := make([]*domain.AdminPermissionVariable, 0, len(oVariable.GetAdminPermissions()))
 		for _, oProtoAdminPermissionValue := range oVariable.GetAdminPermissions() {
-			oAdminPermissionValue := protoAdminPermissionValueToDomainAdminPermissionValue(oProtoAdminPermissionValue)
-			if oAdminPermissionValue == nil {
+			if oProtoAdminPermissionValue == nil {
 				continue
 			}
 
-			aAdminPermissions = append(aAdminPermissions, oAdminPermissionValue)
+			oAdminPermissionValue := pkgProtoToDomain.AdminPermissionValue(oProtoAdminPermissionValue)
+			aAdminPermissions = append(aAdminPermissions, &oAdminPermissionValue)
 		}
 
 		oValue.AdminPermissions = aAdminPermissions
@@ -76,6 +56,35 @@ func (oSelf *AdminPermissionGroupHandler) AddAdminPermissionGroup(oContext conte
 	return &pbResourceLogic.AdminPermissionGroupAddAdminPermissionGroupOutput{
 		Status: true,
 	}, nil
+}
+
+func (oSelf *AdminPermissionGroupHandler) EditAdminPermissionGroupById(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupEditAdminPermissionGroupByIdInput) (*pbResourceLogic.AdminPermissionGroupEditAdminPermissionGroupByIdOutput, error) {
+
+	var oValue domain.AdminPermissionGroupVariable
+	if oVariable := oReq.GetValue(); oVariable != nil {
+		oValue.Key = oVariable.Key
+		oValue.Name = oVariable.Name
+
+		aAdminPermissions := make([]*domain.AdminPermissionVariable, 0, len(oVariable.GetAdminPermissions()))
+		for _, oProtoAdminPermissionValue := range oVariable.GetAdminPermissions() {
+			if oProtoAdminPermissionValue == nil {
+				continue
+			}
+
+			oAdminPermissionValue := pkgProtoToDomain.AdminPermissionValue(oProtoAdminPermissionValue)
+			aAdminPermissions = append(aAdminPermissions, &oAdminPermissionValue)
+		}
+
+		oValue.AdminPermissions = aAdminPermissions
+	}
+
+	iId := oReq.GetId()
+	oErr := oSelf.LogicAdminPermissionGroupUsecase.EditAdminPermissionGroupById(&oValue, iId)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	return &pbResourceLogic.AdminPermissionGroupEditAdminPermissionGroupByIdOutput{}, nil
 }
 
 // ShowTree 從 usecase 拿到組好的 tree，攤平成平的 AdminPermissionGroup 回傳，

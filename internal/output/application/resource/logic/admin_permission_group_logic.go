@@ -48,10 +48,32 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 
 	return oErr
 }
-
-// EditAdminPermissionGroupById resource logic proto 目前還沒有對應的 EditOneById RPC，先回傳 nil。
 func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
-	return nil
+
+	aAdminPermissions := make([]*pbResource.AdminPermissionValue, 0, len(oValue.AdminPermissions))
+	for _, oAdminPermissionValue := range oValue.AdminPermissions {
+		oProtoAdminPermissionValue := pkgDomainToProto.AdminPermissionValue(oAdminPermissionValue)
+		if oProtoAdminPermissionValue == nil {
+			continue
+		}
+
+		aAdminPermissions = append(aAdminPermissions, oProtoAdminPermissionValue)
+	}
+
+	oProtoValue := &pbResource.AdminPermissionGroupValue{
+		Key:              oValue.Key,
+		Name:             oValue.Name,
+		AdminPermissions: aAdminPermissions,
+	}
+
+	oRequest := &pbResourceLogic.AdminPermissionGroupEditAdminPermissionGroupByIdInput{
+		Value: oProtoValue,
+		Id:    iId,
+	}
+
+	_, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.EditAdminPermissionGroupById(oSelf.Context, oRequest)
+
+	return oErr
 }
 
 // ShowTree gRPC 回來就是巢狀好的 tree（每個節點帶 Children），直接遞迴轉成 domain。

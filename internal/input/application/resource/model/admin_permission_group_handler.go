@@ -6,11 +6,11 @@ import (
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
-	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
 	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 type AdminPermissionGroupHandler struct {
@@ -26,22 +26,10 @@ func NewAdminPermissionGroupHandler(oAbstractHandler *inputApplicationResource.A
 	}
 }
 
-func protoAdminPermissionGroupValueToDomainAdminPermissionGroupVariable(oVariable *pbResource.AdminPermissionGroupValue) domain.AdminPermissionGroupVariable {
-	var oValue domain.AdminPermissionGroupVariable
-	if oVariable == nil {
-		return oValue
-	}
-
-	oValue.Key = oVariable.Key
-	oValue.Name = oVariable.Name
-
-	return oValue
-}
-
 func (oSelf *AdminPermissionGroupHandler) AddOne(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupAddOneInput) (*pbResourceModel.AdminPermissionGroupAddOneOutput, error) {
 
 	oReqValue := oReq.GetValue()
-	oValue := protoAdminPermissionGroupValueToDomainAdminPermissionGroupVariable(oReqValue)
+	oValue := pkgProtoToDomain.AdminPermissionGroupValue(oReqValue)
 
 	oErr := oSelf.ModelAdminPermissionGroupUsecase.AddOne(&oValue)
 
@@ -146,7 +134,7 @@ func (oSelf *AdminPermissionGroupHandler) ShowOnesByFiltersWithSortersPagination
 func (oSelf *AdminPermissionGroupHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupEditOneByIdInput) (*pbResourceModel.AdminPermissionGroupEditOneByIdOutput, error) {
 
 	oReqValue := oReq.GetValue()
-	oValue := protoAdminPermissionGroupValueToDomainAdminPermissionGroupVariable(oReqValue)
+	oValue := pkgProtoToDomain.AdminPermissionGroupValue(oReqValue)
 
 	iId := oReq.GetId()
 	oErr := oSelf.ModelAdminPermissionGroupUsecase.EditOneById(&oValue, iId)
