@@ -164,7 +164,6 @@ func (x *AdminPermissionGroupEditOneByIdInput) GetId() uint64 {
 
 type AdminPermissionGroupEditOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -197,13 +196,6 @@ func (x *AdminPermissionGroupEditOneByIdOutput) ProtoReflect() protoreflect.Mess
 // Deprecated: Use AdminPermissionGroupEditOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionGroupEditOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_group_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *AdminPermissionGroupEditOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type AdminPermissionGroupRemoveOneByIdInput struct {
@@ -252,7 +244,6 @@ func (x *AdminPermissionGroupRemoveOneByIdInput) GetId() uint64 {
 
 type AdminPermissionGroupRemoveOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -285,13 +276,6 @@ func (x *AdminPermissionGroupRemoveOneByIdOutput) ProtoReflect() protoreflect.Me
 // Deprecated: Use AdminPermissionGroupRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionGroupRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_group_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *AdminPermissionGroupRemoveOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type AdminPermissionGroupShowOnesByParentIdInput struct {
@@ -585,13 +569,11 @@ const file_resource_model_admin_permission_group_proto_rawDesc = "" +
 	"\x16admin_permission_group\x18\x01 \x01(\v2!.pb.resource.AdminPermissionGroupR\x14adminPermissionGroup\"t\n" +
 	"$AdminPermissionGroupEditOneByIdInput\x12<\n" +
 	"\x05value\x18\x01 \x01(\v2&.pb.resource.AdminPermissionGroupValueR\x05value\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\x04R\x02id\"?\n" +
-	"%AdminPermissionGroupEditOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"8\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"'\n" +
+	"%AdminPermissionGroupEditOneByIdOutput\"8\n" +
 	"&AdminPermissionGroupRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"A\n" +
-	"'AdminPermissionGroupRemoveOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"J\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\")\n" +
+	"'AdminPermissionGroupRemoveOneByIdOutput\"J\n" +
 	"+AdminPermissionGroupShowOnesByParentIdInput\x12\x1b\n" +
 	"\tparent_id\x18\x01 \x01(\x04R\bparentId\"\x89\x01\n" +
 	",AdminPermissionGroupShowOnesByParentIdOutput\x12Y\n" +

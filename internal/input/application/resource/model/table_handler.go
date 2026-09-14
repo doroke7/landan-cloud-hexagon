@@ -77,9 +77,7 @@ func (oSelf *TableHandler) AddOne(oContext context.Context, oReq *pbResourceMode
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
-	return &pbResourceModel.TableAddOneOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.TableAddOneOutput{}, nil
 }
 
 func (oSelf *TableHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.TableEditOneByIdInput) (*pbResourceModel.TableEditOneByIdOutput, error) {
@@ -92,9 +90,7 @@ func (oSelf *TableHandler) EditOneById(oContext context.Context, oReq *pbResourc
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
-	return &pbResourceModel.TableEditOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.TableEditOneByIdOutput{}, nil
 }
 
 func (oSelf *TableHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.TableRemoveOneByIdInput) (*pbResourceModel.TableRemoveOneByIdOutput, error) {
@@ -105,9 +101,7 @@ func (oSelf *TableHandler) RemoveOneById(oContext context.Context, oReq *pbResou
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
-	return &pbResourceModel.TableRemoveOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.TableRemoveOneByIdOutput{}, nil
 }
 
 func (oSelf *TableHandler) TotalByFilters(oContext context.Context, oReq *pbResourceModel.TableTotalByFiltersInput) (*pbResourceModel.TableTotalByFiltersOutput, error) {

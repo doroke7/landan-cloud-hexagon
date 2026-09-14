@@ -180,9 +180,7 @@ func (oSelf *AdminPermissionGroupHandler) EditOneById(oContext context.Context, 
 		return nil, oErr
 	}
 
-	return &pbResourceModel.AdminPermissionGroupEditOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.AdminPermissionGroupEditOneByIdOutput{}, nil
 }
 
 func (oSelf *AdminPermissionGroupHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupRemoveOneByIdInput) (*pbResourceModel.AdminPermissionGroupRemoveOneByIdOutput, error) {
@@ -193,9 +191,7 @@ func (oSelf *AdminPermissionGroupHandler) RemoveOneById(oContext context.Context
 		return nil, oErr
 	}
 
-	return &pbResourceModel.AdminPermissionGroupRemoveOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.AdminPermissionGroupRemoveOneByIdOutput{}, nil
 }
 
 func (oSelf *AdminPermissionGroupHandler) TotalByFilters(oContext context.Context, oReq *pbResourceModel.AdminPermissionGroupTotalByFiltersInput) (*pbResourceModel.AdminPermissionGroupTotalByFiltersOutput, error) {

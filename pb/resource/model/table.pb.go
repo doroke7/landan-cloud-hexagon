@@ -68,7 +68,6 @@ func (x *TableAddOneInput) GetValue() *resource.TableValue {
 
 type TableAddOneOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -101,13 +100,6 @@ func (x *TableAddOneOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use TableAddOneOutput.ProtoReflect.Descriptor instead.
 func (*TableAddOneOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *TableAddOneOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type TableEditOneByIdInput struct {
@@ -164,7 +156,6 @@ func (x *TableEditOneByIdInput) GetId() uint64 {
 
 type TableEditOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -197,13 +188,6 @@ func (x *TableEditOneByIdOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use TableEditOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*TableEditOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *TableEditOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type TableRemoveOneByIdInput struct {
@@ -252,7 +236,6 @@ func (x *TableRemoveOneByIdInput) GetId() uint64 {
 
 type TableRemoveOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -285,13 +268,6 @@ func (x *TableRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use TableRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*TableRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *TableRemoveOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type TableTotalByFiltersInput struct {
@@ -388,18 +364,15 @@ const file_resource_model_table_proto_rawDesc = "" +
 	"\n" +
 	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"A\n" +
 	"\x10TableAddOneInput\x12-\n" +
-	"\x05value\x18\x01 \x01(\v2\x17.pb.resource.TableValueR\x05value\"+\n" +
-	"\x11TableAddOneOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"V\n" +
+	"\x05value\x18\x01 \x01(\v2\x17.pb.resource.TableValueR\x05value\"\x13\n" +
+	"\x11TableAddOneOutput\"V\n" +
 	"\x15TableEditOneByIdInput\x12-\n" +
 	"\x05value\x18\x01 \x01(\v2\x17.pb.resource.TableValueR\x05value\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\x04R\x02id\"0\n" +
-	"\x16TableEditOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\")\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"\x18\n" +
+	"\x16TableEditOneByIdOutput\")\n" +
 	"\x17TableRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"2\n" +
-	"\x18TableRemoveOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"I\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"\x1a\n" +
+	"\x18TableRemoveOneByIdOutput\"I\n" +
 	"\x18TableTotalByFiltersInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\"1\n" +
 	"\x19TableTotalByFiltersOutput\x12\x14\n" +

@@ -116,9 +116,7 @@ func (oSelf *AdminPermissionHandler) EditOneById(oContext context.Context, oReq 
 		return nil, oStatusError
 	}
 
-	return &pbResourceModel.AdminPermissionEditOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.AdminPermissionEditOneByIdOutput{}, nil
 }
 
 func (oSelf *AdminPermissionHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionRemoveOneByIdInput) (*pbResourceModel.AdminPermissionRemoveOneByIdOutput, error) {
@@ -132,9 +130,7 @@ func (oSelf *AdminPermissionHandler) RemoveOneById(oContext context.Context, oRe
 		return nil, oStatusError
 	}
 
-	return &pbResourceModel.AdminPermissionRemoveOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.AdminPermissionRemoveOneByIdOutput{}, nil
 }
 
 func (oSelf *AdminPermissionHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.AdminPermissionShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.AdminPermissionShowOnesByFiltersWithSortersPaginationOutput, error) {

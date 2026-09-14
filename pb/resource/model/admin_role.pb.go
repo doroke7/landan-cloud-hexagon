@@ -68,7 +68,6 @@ func (x *AdminRoleAddOneInput) GetValue() *resource.AdminRoleValue {
 
 type AdminRoleAddOneOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -101,13 +100,6 @@ func (x *AdminRoleAddOneOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AdminRoleAddOneOutput.ProtoReflect.Descriptor instead.
 func (*AdminRoleAddOneOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{1}
-}
-
-func (x *AdminRoleAddOneOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type AdminRoleShowOneByIdInput struct {
@@ -252,7 +244,6 @@ func (x *AdminRoleEditOneByIdInput) GetId() uint64 {
 
 type AdminRoleEditOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -285,13 +276,6 @@ func (x *AdminRoleEditOneByIdOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AdminRoleEditOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminRoleEditOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *AdminRoleEditOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type AdminRoleRemoveOneByIdInput struct {
@@ -340,7 +324,6 @@ func (x *AdminRoleRemoveOneByIdInput) GetId() uint64 {
 
 type AdminRoleRemoveOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -373,13 +356,6 @@ func (x *AdminRoleRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AdminRoleRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminRoleRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *AdminRoleRemoveOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type AdminRoleShowOnesInput struct {
@@ -660,9 +636,8 @@ const file_resource_model_admin_role_proto_rawDesc = "" +
 	"\n" +
 	"\x1fresource/model/admin_role.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"I\n" +
 	"\x14AdminRoleAddOneInput\x121\n" +
-	"\x05value\x18\x01 \x01(\v2\x1b.pb.resource.AdminRoleValueR\x05value\"/\n" +
-	"\x15AdminRoleAddOneOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"+\n" +
+	"\x05value\x18\x01 \x01(\v2\x1b.pb.resource.AdminRoleValueR\x05value\"\x17\n" +
+	"\x15AdminRoleAddOneOutput\"+\n" +
 	"\x19AdminRoleShowOneByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"S\n" +
 	"\x1aAdminRoleShowOneByIdOutput\x125\n" +
@@ -670,13 +645,11 @@ const file_resource_model_admin_role_proto_rawDesc = "" +
 	"admin_role\x18\x01 \x01(\v2\x16.pb.resource.AdminRoleR\tadminRole\"^\n" +
 	"\x19AdminRoleEditOneByIdInput\x121\n" +
 	"\x05value\x18\x01 \x01(\v2\x1b.pb.resource.AdminRoleValueR\x05value\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\x04R\x02id\"4\n" +
-	"\x1aAdminRoleEditOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"-\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"\x1c\n" +
+	"\x1aAdminRoleEditOneByIdOutput\"-\n" +
 	"\x1bAdminRoleRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"6\n" +
-	"\x1cAdminRoleRemoveOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"\x18\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"\x1e\n" +
+	"\x1cAdminRoleRemoveOneByIdOutput\"\x18\n" +
 	"\x16AdminRoleShowOnesInput\"R\n" +
 	"\x17AdminRoleShowOnesOutput\x127\n" +
 	"\vadmin_roles\x18\x01 \x03(\v2\x16.pb.resource.AdminRoleR\n" +

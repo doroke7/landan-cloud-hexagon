@@ -92,9 +92,7 @@ func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResource
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
-	return &pbResourceModel.AdminUserAddOneOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.AdminUserAddOneOutput{}, nil
 }
 
 func (oSelf *AdminUserHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminUserEditOneByIdInput) (*pbResourceModel.AdminUserEditOneByIdOutput, error) {
@@ -113,9 +111,7 @@ func (oSelf *AdminUserHandler) EditOneById(oContext context.Context, oReq *pbRes
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
-	return &pbResourceModel.AdminUserEditOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.AdminUserEditOneByIdOutput{}, nil
 }
 
 func (oSelf *AdminUserHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminUserRemoveOneByIdInput) (*pbResourceModel.AdminUserRemoveOneByIdOutput, error) {
@@ -126,9 +122,7 @@ func (oSelf *AdminUserHandler) RemoveOneById(oContext context.Context, oReq *pbR
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
-	return &pbResourceModel.AdminUserRemoveOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.AdminUserRemoveOneByIdOutput{}, nil
 }
 
 func (oSelf *AdminUserHandler) ShowOnesByFiltersWithSortersPagination(oContext context.Context, oReq *pbResourceModel.AdminUserShowOnesByFiltersWithSortersPaginationInput) (*pbResourceModel.AdminUserShowOnesByFiltersWithSortersPaginationOutput, error) {

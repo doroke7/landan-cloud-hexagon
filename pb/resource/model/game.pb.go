@@ -252,7 +252,6 @@ func (x *GameEditOneByIdInput) GetId() uint64 {
 
 type GameEditOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -285,13 +284,6 @@ func (x *GameEditOneByIdOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GameEditOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*GameEditOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *GameEditOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type GameRemoveOneByIdInput struct {
@@ -340,7 +332,6 @@ func (x *GameRemoveOneByIdInput) GetId() uint64 {
 
 type GameRemoveOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -373,13 +364,6 @@ func (x *GameRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GameRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*GameRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *GameRemoveOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type GameTotalByFiltersInput struct {
@@ -485,13 +469,11 @@ const file_resource_model_game_proto_rawDesc = "" +
 	"\x04game\x18\x01 \x01(\v2\x11.pb.resource.GameR\x04game\"T\n" +
 	"\x14GameEditOneByIdInput\x12,\n" +
 	"\x05value\x18\x01 \x01(\v2\x16.pb.resource.GameValueR\x05value\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\x04R\x02id\"/\n" +
-	"\x15GameEditOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"(\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"\x17\n" +
+	"\x15GameEditOneByIdOutput\"(\n" +
 	"\x16GameRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"1\n" +
-	"\x17GameRemoveOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"H\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"\x19\n" +
+	"\x17GameRemoveOneByIdOutput\"H\n" +
 	"\x17GameTotalByFiltersInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\"0\n" +
 	"\x18GameTotalByFiltersOutput\x12\x14\n" +

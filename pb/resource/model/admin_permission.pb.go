@@ -252,7 +252,6 @@ func (x *AdminPermissionEditOneByIdInput) GetId() uint64 {
 
 type AdminPermissionEditOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -285,13 +284,6 @@ func (x *AdminPermissionEditOneByIdOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AdminPermissionEditOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionEditOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *AdminPermissionEditOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type AdminPermissionRemoveOneByIdInput struct {
@@ -340,7 +332,6 @@ func (x *AdminPermissionRemoveOneByIdInput) GetId() uint64 {
 
 type AdminPermissionRemoveOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -373,13 +364,6 @@ func (x *AdminPermissionRemoveOneByIdOutput) ProtoReflect() protoreflect.Message
 // Deprecated: Use AdminPermissionRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminPermissionRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *AdminPermissionRemoveOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type AdminPermissionShowOnesByFiltersWithSortersPaginationInput struct {
@@ -589,13 +573,11 @@ const file_resource_model_admin_permission_proto_rawDesc = "" +
 	"\x10admin_permission\x18\x01 \x01(\v2\x1c.pb.resource.AdminPermissionR\x0fadminPermission\"j\n" +
 	"\x1fAdminPermissionEditOneByIdInput\x127\n" +
 	"\x05value\x18\x01 \x01(\v2!.pb.resource.AdminPermissionValueR\x05value\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\x04R\x02id\":\n" +
-	" AdminPermissionEditOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"3\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"\"\n" +
+	" AdminPermissionEditOneByIdOutput\"3\n" +
 	"!AdminPermissionRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"<\n" +
-	"\"AdminPermissionRemoveOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"\xd3\x01\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"$\n" +
+	"\"AdminPermissionRemoveOneByIdOutput\"\xd3\x01\n" +
 	":AdminPermissionShowOnesByFiltersWithSortersPaginationInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
 	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +

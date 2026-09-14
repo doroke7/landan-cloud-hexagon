@@ -340,7 +340,6 @@ func (x *AppUserIncreaseBalanceInput) GetAmount() uint64 {
 
 type AppUserIncreaseBalanceOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -375,13 +374,6 @@ func (*AppUserIncreaseBalanceOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_app_user_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *AppUserIncreaseBalanceOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
-}
-
 var File_resource_model_app_user_proto protoreflect.FileDescriptor
 
 const file_resource_model_app_user_proto_rawDesc = "" +
@@ -401,9 +393,8 @@ const file_resource_model_app_user_proto_rawDesc = "" +
 	"\bapp_user\x18\x01 \x01(\v2\x14.pb.resource.AppUserR\aappUser\"E\n" +
 	"\x1bAppUserIncreaseBalanceInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x16\n" +
-	"\x06amount\x18\x02 \x01(\x04R\x06amount\"6\n" +
-	"\x1cAppUserIncreaseBalanceOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status2\xb5\x03\n" +
+	"\x06amount\x18\x02 \x01(\x04R\x06amount\"\x1e\n" +
+	"\x1cAppUserIncreaseBalanceOutput2\xb5\x03\n" +
 	"\fAppUserModel\x12[\n" +
 	"\n" +
 	"AddAppUser\x12%.pb.resource.model.AppUserAddOneInput\x1a&.pb.resource.model.AppUserAddOneOutput\x12l\n" +

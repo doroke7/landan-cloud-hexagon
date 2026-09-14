@@ -245,7 +245,6 @@ func (x *AdminUserAddOneInput) GetValue() *resource.AdminUserValue {
 
 type AdminUserAddOneOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -278,13 +277,6 @@ func (x *AdminUserAddOneOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AdminUserAddOneOutput.ProtoReflect.Descriptor instead.
 func (*AdminUserAddOneOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *AdminUserAddOneOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 // 數據模型直接對ID查找
@@ -342,7 +334,6 @@ func (x *AdminUserEditOneByIdInput) GetId() uint64 {
 
 type AdminUserEditOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -375,13 +366,6 @@ func (x *AdminUserEditOneByIdOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AdminUserEditOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminUserEditOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{7}
-}
-
-func (x *AdminUserEditOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type AdminUserRemoveOneByIdInput struct {
@@ -430,7 +414,6 @@ func (x *AdminUserRemoveOneByIdInput) GetId() uint64 {
 
 type AdminUserRemoveOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -463,13 +446,6 @@ func (x *AdminUserRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use AdminUserRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*AdminUserRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_user_proto_rawDescGZIP(), []int{9}
-}
-
-func (x *AdminUserRemoveOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type AdminUserShowOnesByFiltersWithSortersPaginationInput struct {
@@ -680,18 +656,15 @@ const file_resource_model_admin_user_proto_rawDesc = "" +
 	"\n" +
 	"admin_user\x18\x01 \x01(\v2\x16.pb.resource.AdminUserR\tadminUser\"I\n" +
 	"\x14AdminUserAddOneInput\x121\n" +
-	"\x05value\x18\x01 \x01(\v2\x1b.pb.resource.AdminUserValueR\x05value\"/\n" +
-	"\x15AdminUserAddOneOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"^\n" +
+	"\x05value\x18\x01 \x01(\v2\x1b.pb.resource.AdminUserValueR\x05value\"\x17\n" +
+	"\x15AdminUserAddOneOutput\"^\n" +
 	"\x19AdminUserEditOneByIdInput\x121\n" +
 	"\x05value\x18\x01 \x01(\v2\x1b.pb.resource.AdminUserValueR\x05value\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\x04R\x02id\"4\n" +
-	"\x1aAdminUserEditOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"-\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"\x1c\n" +
+	"\x1aAdminUserEditOneByIdOutput\"-\n" +
 	"\x1bAdminUserRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"6\n" +
-	"\x1cAdminUserRemoveOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"\xcd\x01\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"\x1e\n" +
+	"\x1cAdminUserRemoveOneByIdOutput\"\xcd\x01\n" +
 	"4AdminUserShowOnesByFiltersWithSortersPaginationInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
 	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +

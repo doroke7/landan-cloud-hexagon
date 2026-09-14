@@ -164,7 +164,6 @@ func (x *GameTypeEditOneByIdInput) GetId() uint64 {
 
 type GameTypeEditOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -197,13 +196,6 @@ func (x *GameTypeEditOneByIdOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GameTypeEditOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*GameTypeEditOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_type_proto_rawDescGZIP(), []int{3}
-}
-
-func (x *GameTypeEditOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 // 數據模型直接對ID查找
@@ -253,7 +245,6 @@ func (x *GameTypeRemoveOneByIdInput) GetId() uint64 {
 
 type GameTypeRemoveOneByIdOutput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -286,13 +277,6 @@ func (x *GameTypeRemoveOneByIdOutput) ProtoReflect() protoreflect.Message {
 // Deprecated: Use GameTypeRemoveOneByIdOutput.ProtoReflect.Descriptor instead.
 func (*GameTypeRemoveOneByIdOutput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_type_proto_rawDescGZIP(), []int{5}
-}
-
-func (x *GameTypeRemoveOneByIdOutput) GetStatus() bool {
-	if x != nil {
-		return x.Status
-	}
-	return false
 }
 
 type GameTypeTotalByFiltersInput struct {
@@ -394,13 +378,11 @@ const file_resource_model_game_type_proto_rawDesc = "" +
 	"\tgame_type\x18\x01 \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"\\\n" +
 	"\x18GameTypeEditOneByIdInput\x120\n" +
 	"\x05value\x18\x01 \x01(\v2\x1a.pb.resource.GameTypeValueR\x05value\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\x04R\x02id\"3\n" +
-	"\x19GameTypeEditOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\",\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"\x1b\n" +
+	"\x19GameTypeEditOneByIdOutput\",\n" +
 	"\x1aGameTypeRemoveOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"5\n" +
-	"\x1bGameTypeRemoveOneByIdOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"L\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"\x1d\n" +
+	"\x1bGameTypeRemoveOneByIdOutput\"L\n" +
 	"\x1bGameTypeTotalByFiltersInput\x12-\n" +
 	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\"4\n" +
 	"\x1cGameTypeTotalByFiltersOutput\x12\x14\n" +

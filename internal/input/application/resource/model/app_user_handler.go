@@ -92,7 +92,5 @@ func (oSelf *AppUserHandler) IncreaseBalance(oContext context.Context, oReq *pbR
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
-	return &pbResourceModel.AppUserIncreaseBalanceOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.AppUserIncreaseBalanceOutput{}, nil
 }

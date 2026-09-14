@@ -99,9 +99,7 @@ func (oSelf *GameTypeHandler) EditOneById(oContext context.Context, oReq *pbReso
 		return nil, oErr
 	}
 
-	return &pbResourceModel.GameTypeEditOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.GameTypeEditOneByIdOutput{}, nil
 }
 
 func (oSelf *GameTypeHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.GameTypeRemoveOneByIdInput) (*pbResourceModel.GameTypeRemoveOneByIdOutput, error) {
@@ -111,9 +109,7 @@ func (oSelf *GameTypeHandler) RemoveOneById(oContext context.Context, oReq *pbRe
 		return nil, oErr
 	}
 
-	return &pbResourceModel.GameTypeRemoveOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.GameTypeRemoveOneByIdOutput{}, nil
 }
 
 func (oSelf *GameTypeHandler) TotalByFilters(oContext context.Context, oReq *pbResourceModel.GameTypeTotalByFiltersInput) (*pbResourceModel.GameTypeTotalByFiltersOutput, error) {

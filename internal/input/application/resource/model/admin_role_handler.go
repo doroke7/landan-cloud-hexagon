@@ -66,9 +66,7 @@ func (oSelf *AdminRoleHandler) AddOne(oContext context.Context, oReq *pbResource
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
-	return &pbResourceModel.AdminRoleAddOneOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.AdminRoleAddOneOutput{}, nil
 }
 
 func (oSelf *AdminRoleHandler) ShowOneById(oContext context.Context, oReq *pbResourceModel.AdminRoleShowOneByIdInput) (*pbResourceModel.AdminRoleShowOneByIdOutput, error) {
@@ -97,9 +95,7 @@ func (oSelf *AdminRoleHandler) EditOneById(oContext context.Context, oReq *pbRes
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
-	return &pbResourceModel.AdminRoleEditOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.AdminRoleEditOneByIdOutput{}, nil
 }
 
 func (oSelf *AdminRoleHandler) RemoveOneById(oContext context.Context, oReq *pbResourceModel.AdminRoleRemoveOneByIdInput) (*pbResourceModel.AdminRoleRemoveOneByIdOutput, error) {
@@ -110,9 +106,7 @@ func (oSelf *AdminRoleHandler) RemoveOneById(oContext context.Context, oReq *pbR
 		return nil, status.Error(codes.Aborted, oErr.Error())
 	}
 
-	return &pbResourceModel.AdminRoleRemoveOneByIdOutput{
-		Status: true,
-	}, nil
+	return &pbResourceModel.AdminRoleRemoveOneByIdOutput{}, nil
 }
 
 func (oSelf *AdminRoleHandler) ShowOnes(oContext context.Context, oReq *pbResourceModel.AdminRoleShowOnesInput) (*pbResourceModel.AdminRoleShowOnesOutput, error) {
