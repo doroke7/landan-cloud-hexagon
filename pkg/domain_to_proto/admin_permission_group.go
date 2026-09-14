@@ -1,4 +1,4 @@
-package protoToDomain
+package domainToProto
 
 import (
 	"google.golang.org/protobuf/types/known/timestamppb"
