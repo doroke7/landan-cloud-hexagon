@@ -127,6 +127,8 @@ func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *dom
 
 	delete(oAdminPermissionGroupColumns, "admin_permissions")
 
+	fmt.Println("oAdminPermissionGroupColumns=", oAdminPermissionGroupColumns)
+
 	oError := oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
 
 		// 1. 更新 admin_permission_group 本身欄位
@@ -155,8 +157,15 @@ func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *dom
 			return oResult.Error
 		}
 
-		// 3. 逐筆處理傳進來的 admin_permissions：沒帶 id 就新增，帶 id 就修改
-		aAdminPermissionIds := make(map[uint64]bool, len(oValue.AdminPermissions))
+		oMapAdminPermissionIds := make(map[uint64]bool, len(oValue.AdminPermissions))
+		for _, oAdminPermissionValue := range oValue.AdminPermissions {
+			if oAdminPermissionValue.Id != nil {
+				iAdminPermissionId := *oAdminPermissionValue.Id
+				oMapAdminPermissionIds[iAdminPermissionId] = true
+
+			}
+		}
+
 		for _, oAdminPermissionValue := range oValue.AdminPermissions {
 			if oAdminPermissionValue == nil {
 				continue
@@ -177,7 +186,6 @@ func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *dom
 
 			if oAdminPermissionValue.Id != nil {
 				iAdminPermissionId := *oAdminPermissionValue.Id
-				aAdminPermissionIds[iAdminPermissionId] = true
 
 				oResult = oTx.
 					Model(&domain.AdminPermission{}).
@@ -210,7 +218,7 @@ func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *dom
 		// 4. db 裡面有、但沒出現在傳進來 id 清單裡的，軟刪除
 		oNow := time.Now()
 		for _, oExistingAdminPermission := range aExistingAdminPermissions {
-			if aAdminPermissionIds[oExistingAdminPermission.Id] {
+			if oMapAdminPermissionIds[oExistingAdminPermission.Id] {
 				continue
 			}
 
