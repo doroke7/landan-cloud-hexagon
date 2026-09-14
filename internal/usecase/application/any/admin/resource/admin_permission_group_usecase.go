@@ -24,16 +24,16 @@ func NewAdminPermissionGroupUsecase(oAdminPermissionGroupModel outputPortAnyMode
 	}
 }
 
-func (oSelf *AdminPermissionGroupUsecase) AddOne(oValue *domain.AdminPermissionGroupVariable) error {
+func (oSelf *AdminPermissionGroupUsecase) AddOne(oVariable *domain.AdminPermissionGroupVariable) error {
 
-	oErr := oSelf.AdminPermissionGroupLogic.AddAdminPermissionGroup(oValue)
+	oErr := oSelf.AdminPermissionGroupLogic.AddAdminPermissionGroup(oVariable)
 
 	return oErr
 }
 
-func (oSelf *AdminPermissionGroupUsecase) EditOne(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
+func (oSelf *AdminPermissionGroupUsecase) EditOne(oVariable *domain.AdminPermissionGroupVariable, iId uint64) error {
 
-	oErr := oSelf.AdminPermissionGroupModel.EditOneById(oValue, iId)
+	oErr := oSelf.AdminPermissionGroupModel.EditOneById(oVariable, iId)
 
 	return oErr
 }

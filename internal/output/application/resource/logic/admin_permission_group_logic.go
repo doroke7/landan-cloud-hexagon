@@ -49,6 +49,11 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 	return oErr
 }
 
+// EditAdminPermissionGroupById resource logic proto 目前還沒有對應的 EditOneById RPC，先回傳 nil。
+func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
+	return nil
+}
+
 func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminPermissionVariable) *pbResource.AdminPermissionValue {
 	if oValue == nil {
 		return nil

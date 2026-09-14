@@ -2,23 +2,27 @@ package outputApplicationElasticsearchLogic
 
 import (
 	"encoding/json"
+	"errors"
 	"strconv"
 	"time"
 
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
+	pkgUtility "example/pkg/utility"
 )
 
 type AdminPermissionGroupLogic struct {
 	*AbstractLogic
-	Index string
+	Index                 string
+	AdminPermissionsIndex string
 }
 
 func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminPermissionGroupLogic {
 	return &AdminPermissionGroupLogic{
-		AbstractLogic: oAbstractLogic,
-		Index:         oAbstractLogic.IndexName("admin_permission_groups"),
+		AbstractLogic:         oAbstractLogic,
+		Index:                 oAbstractLogic.IndexName("admin_permission_groups"),
+		AdminPermissionsIndex: oAbstractLogic.IndexName("admin_permissions"),
 	}
 }
 
@@ -45,6 +49,158 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 
 	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
 		return oErr
+	}
+
+	for _, oAdminPermissionValue := range oValue.AdminPermissions {
+		if oAdminPermissionValue == nil {
+			continue
+		}
+
+		if oErr := oSelf.insertAdminPermission(oAdminPermissionValue, uint64(iId)); oErr != nil {
+			return oErr
+		}
+	}
+
+	return nil
+}
+
+func (oSelf *AdminPermissionGroupLogic) insertAdminPermission(oValue *domain.AdminPermissionVariable, iAdminPermissionGroupId uint64) error {
+	iId, oErr := oSelf.NextId("admin_permission")
+	if oErr != nil {
+		return oErr
+	}
+
+	oNow := time.Now()
+	oDoc := &domain.AdminPermission{
+		Id:                     uint64(iId),
+		AdminPermissionGroupId: iAdminPermissionGroupId,
+		CreatedAt:              oNow,
+		UpdatedAt:              oNow,
+		DeletedAt:              oDeletedAtZero,
+	}
+
+	if oValue.Type != nil {
+		oDoc.Type = *oValue.Type
+	}
+	if oValue.Key != nil {
+		oDoc.Key = *oValue.Key
+	}
+	if oValue.Name != nil {
+		oDoc.Name = *oValue.Name
+	}
+
+	sId := strconv.FormatUint(uint64(iId), 10)
+	oErr = oSelf.IndexOne(oSelf.AdminPermissionsIndex, sId, oDoc)
+
+	return oErr
+}
+
+// existingAdminPermissions 撈出某個 admin_permission_group 底下、目前未刪除的 admin_permissions。
+func (oSelf *AdminPermissionGroupLogic) existingAdminPermissions(iAdminPermissionGroupId uint64) ([]*domain.AdminPermission, error) {
+	sGroupIdField := "admin_permission_group_id"
+	sDeletedAtField := "deleted_at"
+	aFilters := []*pkgInput.Filter{
+		{Field: &sGroupIdField, Value: iAdminPermissionGroupId},
+		{Field: &sDeletedAtField, Value: oDeletedAtZero},
+	}
+
+	iSize := uint(10000)
+	iPage := uint(1)
+	oPagination := &pkgInput.Pagination{Size: &iSize, Page: &iPage}
+
+	aOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.AdminPermissionsIndex, aFilters, nil, oPagination)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oResult, oErr := oSelf.SearchWithOptions(aOptions)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aAdminPermissions := make([]*domain.AdminPermission, 0, len(oResult.Hits))
+	for _, oHit := range oResult.Hits {
+		var oAdminPermission domain.AdminPermission
+		if oErr := json.Unmarshal(oHit.Source, &oAdminPermission); oErr != nil {
+			return nil, oErr
+		}
+		aAdminPermissions = append(aAdminPermissions, &oAdminPermission)
+	}
+
+	return aAdminPermissions, nil
+}
+
+// EditAdminPermissionGroupById 更新 group 本身欄位，並同步 admin_permissions：
+// 傳進來沒帶 id 的就新增，帶 id 的就修改；db 裡面現有、但沒出現在傳進來 id 清單裡的就刪除。
+func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
+	oColumns, oErr := pkgUtility.StructToMap(oValue)
+	if oErr != nil {
+		return oErr
+	}
+
+	delete(oColumns, "admin_permissions")
+	oColumns["updated_at"] = time.Now()
+
+	sId := strconv.FormatUint(iId, 10)
+
+	bOk, oErr := oSelf.UpdateOne(oSelf.Index, sId, oColumns)
+	if oErr != nil {
+		return oErr
+	}
+
+	if !bOk {
+		return errors.New("0 rows updated")
+	}
+
+	aExistingAdminPermissions, oErr := oSelf.existingAdminPermissions(iId)
+	if oErr != nil {
+		return oErr
+	}
+
+	aKeptAdminPermissionIds := make(map[uint64]bool, len(oValue.AdminPermissions))
+	for _, oAdminPermissionValue := range oValue.AdminPermissions {
+		if oAdminPermissionValue == nil {
+			continue
+		}
+
+		if oAdminPermissionValue.Id == nil {
+			if oErr := oSelf.insertAdminPermission(oAdminPermissionValue, iId); oErr != nil {
+				return oErr
+			}
+
+			continue
+		}
+
+		iAdminPermissionId := *oAdminPermissionValue.Id
+		aKeptAdminPermissionIds[iAdminPermissionId] = true
+
+		oAdminPermissionColumns, oErr := pkgUtility.StructToMap(oAdminPermissionValue)
+		if oErr != nil {
+			return oErr
+		}
+
+		delete(oAdminPermissionColumns, "id")
+		oAdminPermissionColumns["updated_at"] = time.Now()
+
+		sAdminPermissionId := strconv.FormatUint(iAdminPermissionId, 10)
+
+		if _, oErr := oSelf.UpdateOne(oSelf.AdminPermissionsIndex, sAdminPermissionId, oAdminPermissionColumns); oErr != nil {
+			return oErr
+		}
+	}
+
+	oNow := time.Now()
+	for _, oExistingAdminPermission := range aExistingAdminPermissions {
+		if aKeptAdminPermissionIds[oExistingAdminPermission.Id] {
+			continue
+		}
+
+		sExistingAdminPermissionId := strconv.FormatUint(oExistingAdminPermission.Id, 10)
+		oPartial := map[string]any{"deleted_at": oNow}
+
+		if _, oErr := oSelf.UpdateOne(oSelf.AdminPermissionsIndex, sExistingAdminPermissionId, oPartial); oErr != nil {
+			return oErr
+		}
 	}
 
 	return nil
