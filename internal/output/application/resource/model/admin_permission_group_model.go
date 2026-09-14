@@ -3,38 +3,10 @@ package outputApplicationResourceModel
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
-
-func protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto *pbResource.AdminPermissionGroup) domain.AdminPermissionGroup {
-	if oProto == nil {
-		return domain.AdminPermissionGroup{}
-	}
-
-	oAdminPermissionGroup := domain.AdminPermissionGroup{
-		Id:        uint64(oProto.GetId()),
-		ParentId:  uint64(oProto.GetParentId()),
-		Key:       oProto.GetKey(),
-		Name:      oProto.GetName(),
-		CreatedAt: oProto.GetCreatedAt().AsTime(),
-		UpdatedAt: oProto.GetUpdatedAt().AsTime(),
-		DeletedAt: oProto.GetDeletedAt().AsTime(),
-	}
-
-	if oParent := oProto.GetParent(); oParent != nil {
-		oParentDomain := protoAdminPermissionGroupToDomainAdminPermissionGroup(oParent)
-		oAdminPermissionGroup.Parent = &oParentDomain
-	}
-
-	for _, oChild := range oProto.GetChildren() {
-		oChildDomain := protoAdminPermissionGroupToDomainAdminPermissionGroup(oChild)
-		oAdminPermissionGroup.Children = append(oAdminPermissionGroup.Children, oChildDomain)
-	}
-
-	return oAdminPermissionGroup
-}
 
 type AdminPermissionGroupModel struct {
 	*AbstractModel
@@ -73,7 +45,7 @@ func (oSelf *AdminPermissionGroupModel) ShowOnesByParentId(iParentId uint64) ([]
 
 	aAdminPermissionGroups := make([]*domain.AdminPermissionGroup, 0, len(oResponse.GetAdminPermissionGroups()))
 	for _, oProto := range oResponse.GetAdminPermissionGroups() {
-		oAdminPermissionGroup := protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto)
+		oAdminPermissionGroup := pkgProtoToDomain.AdminPermissionGroup(oProto)
 		aAdminPermissionGroups = append(aAdminPermissionGroups, &oAdminPermissionGroup)
 	}
 
@@ -96,7 +68,7 @@ func (oSelf *AdminPermissionGroupModel) ShowOnesByFiltersWithSortersPagination(a
 
 	aAdminPermissionGroups := make([]*domain.AdminPermissionGroup, 0, len(oResponse.GetAdminPermissionGroups()))
 	for _, oProto := range oResponse.GetAdminPermissionGroups() {
-		oAdminPermissionGroup := protoAdminPermissionGroupToDomainAdminPermissionGroup(oProto)
+		oAdminPermissionGroup := pkgProtoToDomain.AdminPermissionGroup(oProto)
 		aAdminPermissionGroups = append(aAdminPermissionGroups, &oAdminPermissionGroup)
 	}
 
