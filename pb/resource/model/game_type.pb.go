@@ -371,20 +371,21 @@ var File_resource_model_game_type_proto protoreflect.FileDescriptor
 
 const file_resource_model_game_type_proto_rawDesc = "" +
 	"\n" +
-	"\x1eresource/model/game_type.proto\x12\x11pb.resource.model\x1a\fcommon.proto\"P\n" +
-	"\x13GameTypeAddOneInput\x129\n" +
-	"\bvariable\x18\x01 \x01(\v2\x1d.pb.resource.GameTypeVariableR\bvariable\"J\n" +
-	"\x14GameTypeAddOneOutput\x122\n" +
-	"\tgame_type\x18\x01 \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"e\n" +
-	"\x18GameTypeEditOneByIdInput\x129\n" +
-	"\bvariable\x18\x01 \x01(\v2\x1d.pb.resource.GameTypeVariableR\bvariable\x12\x0e\n" +
+	"\x1eresource/model/game_type.proto\x12\x11pb.resource.model\x1a\fcommon.proto\"G\n" +
+	"\x13GameTypeAddOneInput\x120\n" +
+	"\bvariable\x18\x01 \x01(\v2\x14.pb.GameTypeVariableR\bvariable\"A\n" +
+	"\x14GameTypeAddOneOutput\x12)\n" +
+	"\tgame_type\x18\x01 \x01(\v2\f.pb.GameTypeR\bgameType\"\\\n" +
+	"\x18GameTypeEditOneByIdInput\x120\n" +
+	"\bvariable\x18\x01 \x01(\v2\x14.pb.GameTypeVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"\x1b\n" +
 	"\x19GameTypeEditOneByIdOutput\",\n" +
 	"\x1aGameTypeRemoveOneByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"\x1d\n" +
-	"\x1bGameTypeRemoveOneByIdOutput\"L\n" +
-	"\x1bGameTypeTotalByFiltersInput\x12-\n" +
-	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\"4\n" +
+	"\x1bGameTypeRemoveOneByIdOutput\"C\n" +
+	"\x1bGameTypeTotalByFiltersInput\x12$\n" +
+	"\afilters\x18\x01 \x03(\v2\n" +
+	".pb.FilterR\afilters\"4\n" +
 	"\x1cGameTypeTotalByFiltersOutput\x12\x14\n" +
 	"\x05total\x18\x01 \x01(\x04R\x05total2\xb7\x03\n" +
 	"\rGameTypeModel\x12Y\n" +
@@ -415,15 +416,15 @@ var file_resource_model_game_type_proto_goTypes = []any{
 	(*GameTypeRemoveOneByIdOutput)(nil),  // 5: pb.resource.model.GameTypeRemoveOneByIdOutput
 	(*GameTypeTotalByFiltersInput)(nil),  // 6: pb.resource.model.GameTypeTotalByFiltersInput
 	(*GameTypeTotalByFiltersOutput)(nil), // 7: pb.resource.model.GameTypeTotalByFiltersOutput
-	(*pb.GameTypeVariable)(nil),          // 8: pb.resource.GameTypeVariable
-	(*pb.GameType)(nil),                  // 9: pb.resource.GameType
-	(*pb.Filter)(nil),                    // 10: pb.resource.Filter
+	(*pb.GameTypeVariable)(nil),          // 8: pb.GameTypeVariable
+	(*pb.GameType)(nil),                  // 9: pb.GameType
+	(*pb.Filter)(nil),                    // 10: pb.Filter
 }
 var file_resource_model_game_type_proto_depIdxs = []int32{
-	8,  // 0: pb.resource.model.GameTypeAddOneInput.variable:type_name -> pb.resource.GameTypeVariable
-	9,  // 1: pb.resource.model.GameTypeAddOneOutput.game_type:type_name -> pb.resource.GameType
-	8,  // 2: pb.resource.model.GameTypeEditOneByIdInput.variable:type_name -> pb.resource.GameTypeVariable
-	10, // 3: pb.resource.model.GameTypeTotalByFiltersInput.filters:type_name -> pb.resource.Filter
+	8,  // 0: pb.resource.model.GameTypeAddOneInput.variable:type_name -> pb.GameTypeVariable
+	9,  // 1: pb.resource.model.GameTypeAddOneOutput.game_type:type_name -> pb.GameType
+	8,  // 2: pb.resource.model.GameTypeEditOneByIdInput.variable:type_name -> pb.GameTypeVariable
+	10, // 3: pb.resource.model.GameTypeTotalByFiltersInput.filters:type_name -> pb.Filter
 	0,  // 4: pb.resource.model.GameTypeModel.AddOne:input_type -> pb.resource.model.GameTypeAddOneInput
 	2,  // 5: pb.resource.model.GameTypeModel.EditOneById:input_type -> pb.resource.model.GameTypeEditOneByIdInput
 	4,  // 6: pb.resource.model.GameTypeModel.RemoveOneById:input_type -> pb.resource.model.GameTypeRemoveOneByIdInput

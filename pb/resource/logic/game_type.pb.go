@@ -387,27 +387,29 @@ var File_resource_logic_game_type_proto protoreflect.FileDescriptor
 const file_resource_logic_game_type_proto_rawDesc = "" +
 	"\n" +
 	"\x1eresource/logic/game_type.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"\x17\n" +
-	"\x15GameTypeShowTreeInput\"N\n" +
-	"\x16GameTypeShowTreeOutput\x124\n" +
+	"\x15GameTypeShowTreeInput\"E\n" +
+	"\x16GameTypeShowTreeOutput\x12+\n" +
 	"\n" +
-	"game_types\x18\x01 \x03(\v2\x15.pb.resource.GameTypeR\tgameTypes\"/\n" +
+	"game_types\x18\x01 \x03(\v2\f.pb.GameTypeR\tgameTypes\"/\n" +
 	"\x1dGameTypeShowGameTypeByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"T\n" +
-	"\x1eGameTypeShowGameTypeByIdOutput\x122\n" +
-	"\tgame_type\x18\x01 \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"\x1c\n" +
-	"\x1aGameTypeShowGameTypesInput\"S\n" +
-	"\x1bGameTypeShowGameTypesOutput\x124\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"K\n" +
+	"\x1eGameTypeShowGameTypeByIdOutput\x12)\n" +
+	"\tgame_type\x18\x01 \x01(\v2\f.pb.GameTypeR\bgameType\"\x1c\n" +
+	"\x1aGameTypeShowGameTypesInput\"J\n" +
+	"\x1bGameTypeShowGameTypesOutput\x12+\n" +
 	"\n" +
-	"game_types\x18\x01 \x03(\v2\x15.pb.resource.GameTypeR\tgameTypes\"\xd6\x01\n" +
-	"=GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput\x12-\n" +
-	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
-	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
+	"game_types\x18\x01 \x03(\v2\f.pb.GameTypeR\tgameTypes\"\xbb\x01\n" +
+	"=GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput\x12$\n" +
+	"\afilters\x18\x01 \x03(\v2\n" +
+	".pb.FilterR\afilters\x12$\n" +
+	"\asorters\x18\x02 \x03(\v2\n" +
+	".pb.SorterR\asorters\x12.\n" +
 	"\n" +
-	"pagination\x18\x03 \x01(\v2\x17.pb.resource.PaginationR\n" +
-	"pagination\"\x8c\x01\n" +
-	">GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput\x124\n" +
+	"pagination\x18\x03 \x01(\v2\x0e.pb.PaginationR\n" +
+	"pagination\"\x83\x01\n" +
+	">GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput\x12+\n" +
 	"\n" +
-	"game_types\x18\x01 \x03(\v2\x15.pb.resource.GameTypeR\tgameTypes\x12\x14\n" +
+	"game_types\x18\x01 \x03(\v2\f.pb.GameTypeR\tgameTypes\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x04R\x05total2\xb3\x04\n" +
 	"\rGameTypeLogic\x12_\n" +
 	"\bShowTree\x12(.pb.resource.logic.GameTypeShowTreeInput\x1a).pb.resource.logic.GameTypeShowTreeOutput\x12w\n" +
@@ -437,19 +439,19 @@ var file_resource_logic_game_type_proto_goTypes = []any{
 	(*GameTypeShowGameTypesOutput)(nil),                                    // 5: pb.resource.logic.GameTypeShowGameTypesOutput
 	(*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput)(nil),  // 6: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput
 	(*GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput)(nil), // 7: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput
-	(*pb.GameType)(nil),                                                    // 8: pb.resource.GameType
-	(*pb.Filter)(nil),                                                      // 9: pb.resource.Filter
-	(*pb.Sorter)(nil),                                                      // 10: pb.resource.Sorter
-	(*pb.Pagination)(nil),                                                  // 11: pb.resource.Pagination
+	(*pb.GameType)(nil),                                                    // 8: pb.GameType
+	(*pb.Filter)(nil),                                                      // 9: pb.Filter
+	(*pb.Sorter)(nil),                                                      // 10: pb.Sorter
+	(*pb.Pagination)(nil),                                                  // 11: pb.Pagination
 }
 var file_resource_logic_game_type_proto_depIdxs = []int32{
-	8,  // 0: pb.resource.logic.GameTypeShowTreeOutput.game_types:type_name -> pb.resource.GameType
-	8,  // 1: pb.resource.logic.GameTypeShowGameTypeByIdOutput.game_type:type_name -> pb.resource.GameType
-	8,  // 2: pb.resource.logic.GameTypeShowGameTypesOutput.game_types:type_name -> pb.resource.GameType
-	9,  // 3: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	10, // 4: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	11, // 5: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	8,  // 6: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput.game_types:type_name -> pb.resource.GameType
+	8,  // 0: pb.resource.logic.GameTypeShowTreeOutput.game_types:type_name -> pb.GameType
+	8,  // 1: pb.resource.logic.GameTypeShowGameTypeByIdOutput.game_type:type_name -> pb.GameType
+	8,  // 2: pb.resource.logic.GameTypeShowGameTypesOutput.game_types:type_name -> pb.GameType
+	9,  // 3: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.Filter
+	10, // 4: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.Sorter
+	11, // 5: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.Pagination
+	8,  // 6: pb.resource.logic.GameTypeShowGameTypesTotalByFiltersWithSortersPaginationOutput.game_types:type_name -> pb.GameType
 	0,  // 7: pb.resource.logic.GameTypeLogic.ShowTree:input_type -> pb.resource.logic.GameTypeShowTreeInput
 	2,  // 8: pb.resource.logic.GameTypeLogic.ShowGameTypeById:input_type -> pb.resource.logic.GameTypeShowGameTypeByIdInput
 	4,  // 9: pb.resource.logic.GameTypeLogic.ShowGameTypes:input_type -> pb.resource.logic.GameTypeShowGameTypesInput

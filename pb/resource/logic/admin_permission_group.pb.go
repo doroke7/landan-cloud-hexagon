@@ -564,33 +564,35 @@ var File_resource_logic_admin_permission_group_proto protoreflect.FileDescriptor
 
 const file_resource_logic_admin_permission_group_proto_rawDesc = "" +
 	"\n" +
-	"+resource/logic/admin_permission_group.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"y\n" +
-	"0AdminPermissionGroupAddAdminPermissionGroupInput\x12E\n" +
-	"\bvariable\x18\x01 \x01(\v2).pb.resource.AdminPermissionGroupVariableR\bvariable\"K\n" +
+	"+resource/logic/admin_permission_group.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"p\n" +
+	"0AdminPermissionGroupAddAdminPermissionGroupInput\x12<\n" +
+	"\bvariable\x18\x01 \x01(\v2 .pb.AdminPermissionGroupVariableR\bvariable\"K\n" +
 	"1AdminPermissionGroupAddAdminPermissionGroupOutput\x12\x16\n" +
-	"\x06status\x18\x01 \x01(\bR\x06status\"\x8e\x01\n" +
-	"5AdminPermissionGroupEditAdminPermissionGroupByIdInput\x12E\n" +
-	"\bvariable\x18\x01 \x01(\v2).pb.resource.AdminPermissionGroupVariableR\bvariable\x12\x0e\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\"\x85\x01\n" +
+	"5AdminPermissionGroupEditAdminPermissionGroupByIdInput\x12<\n" +
+	"\bvariable\x18\x01 \x01(\v2 .pb.AdminPermissionGroupVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"8\n" +
 	"6AdminPermissionGroupEditAdminPermissionGroupByIdOutput\"#\n" +
-	"!AdminPermissionGroupShowTreeInput\"\x7f\n" +
-	"\"AdminPermissionGroupShowTreeOutput\x12Y\n" +
-	"\x17admin_permission_groups\x18\x01 \x03(\v2!.pb.resource.AdminPermissionGroupR\x15adminPermissionGroups\"G\n" +
+	"!AdminPermissionGroupShowTreeInput\"v\n" +
+	"\"AdminPermissionGroupShowTreeOutput\x12P\n" +
+	"\x17admin_permission_groups\x18\x01 \x03(\v2\x18.pb.AdminPermissionGroupR\x15adminPermissionGroups\"G\n" +
 	"5AdminPermissionGroupShowAdminPermissionGroupByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"\x91\x01\n" +
-	"6AdminPermissionGroupShowAdminPermissionGroupByIdOutput\x12W\n" +
-	"\x16admin_permission_group\x18\x01 \x01(\v2!.pb.resource.AdminPermissionGroupR\x14adminPermissionGroup\"4\n" +
-	"2AdminPermissionGroupShowAdminPermissionGroupsInput\"\x90\x01\n" +
-	"3AdminPermissionGroupShowAdminPermissionGroupsOutput\x12Y\n" +
-	"\x17admin_permission_groups\x18\x01 \x03(\v2!.pb.resource.AdminPermissionGroupR\x15adminPermissionGroups\"\xee\x01\n" +
-	"UAdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput\x12-\n" +
-	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
-	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"\x88\x01\n" +
+	"6AdminPermissionGroupShowAdminPermissionGroupByIdOutput\x12N\n" +
+	"\x16admin_permission_group\x18\x01 \x01(\v2\x18.pb.AdminPermissionGroupR\x14adminPermissionGroup\"4\n" +
+	"2AdminPermissionGroupShowAdminPermissionGroupsInput\"\x87\x01\n" +
+	"3AdminPermissionGroupShowAdminPermissionGroupsOutput\x12P\n" +
+	"\x17admin_permission_groups\x18\x01 \x03(\v2\x18.pb.AdminPermissionGroupR\x15adminPermissionGroups\"\xd3\x01\n" +
+	"UAdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput\x12$\n" +
+	"\afilters\x18\x01 \x03(\v2\n" +
+	".pb.FilterR\afilters\x12$\n" +
+	"\asorters\x18\x02 \x03(\v2\n" +
+	".pb.SorterR\asorters\x12.\n" +
 	"\n" +
-	"pagination\x18\x03 \x01(\v2\x17.pb.resource.PaginationR\n" +
-	"pagination\"\xc9\x01\n" +
-	"VAdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput\x12Y\n" +
-	"\x17admin_permission_groups\x18\x01 \x03(\v2!.pb.resource.AdminPermissionGroupR\x15adminPermissionGroups\x12\x14\n" +
+	"pagination\x18\x03 \x01(\v2\x0e.pb.PaginationR\n" +
+	"pagination\"\xc0\x01\n" +
+	"VAdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput\x12P\n" +
+	"\x17admin_permission_groups\x18\x01 \x03(\v2\x18.pb.AdminPermissionGroupR\x15adminPermissionGroups\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x04R\x05total2\xea\b\n" +
 	"\x19AdminPermissionGroupLogic\x12\xa4\x01\n" +
 	"\x17AddAdminPermissionGroup\x12C.pb.resource.logic.AdminPermissionGroupAddAdminPermissionGroupInput\x1aD.pb.resource.logic.AdminPermissionGroupAddAdminPermissionGroupOutput\x12\xb3\x01\n" +
@@ -626,22 +628,22 @@ var file_resource_logic_admin_permission_group_proto_goTypes = []any{
 	(*AdminPermissionGroupShowAdminPermissionGroupsOutput)(nil),                                    // 9: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsOutput
 	(*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput)(nil),  // 10: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput
 	(*AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput)(nil), // 11: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput
-	(*pb.AdminPermissionGroupVariable)(nil),                                                        // 12: pb.resource.AdminPermissionGroupVariable
-	(*pb.AdminPermissionGroup)(nil),                                                                // 13: pb.resource.AdminPermissionGroup
-	(*pb.Filter)(nil),                                                                              // 14: pb.resource.Filter
-	(*pb.Sorter)(nil),                                                                              // 15: pb.resource.Sorter
-	(*pb.Pagination)(nil),                                                                          // 16: pb.resource.Pagination
+	(*pb.AdminPermissionGroupVariable)(nil),                                                        // 12: pb.AdminPermissionGroupVariable
+	(*pb.AdminPermissionGroup)(nil),                                                                // 13: pb.AdminPermissionGroup
+	(*pb.Filter)(nil),                                                                              // 14: pb.Filter
+	(*pb.Sorter)(nil),                                                                              // 15: pb.Sorter
+	(*pb.Pagination)(nil),                                                                          // 16: pb.Pagination
 }
 var file_resource_logic_admin_permission_group_proto_depIdxs = []int32{
-	12, // 0: pb.resource.logic.AdminPermissionGroupAddAdminPermissionGroupInput.variable:type_name -> pb.resource.AdminPermissionGroupVariable
-	12, // 1: pb.resource.logic.AdminPermissionGroupEditAdminPermissionGroupByIdInput.variable:type_name -> pb.resource.AdminPermissionGroupVariable
-	13, // 2: pb.resource.logic.AdminPermissionGroupShowTreeOutput.admin_permission_groups:type_name -> pb.resource.AdminPermissionGroup
-	13, // 3: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput.admin_permission_group:type_name -> pb.resource.AdminPermissionGroup
-	13, // 4: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsOutput.admin_permission_groups:type_name -> pb.resource.AdminPermissionGroup
-	14, // 5: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	15, // 6: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	16, // 7: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	13, // 8: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput.admin_permission_groups:type_name -> pb.resource.AdminPermissionGroup
+	12, // 0: pb.resource.logic.AdminPermissionGroupAddAdminPermissionGroupInput.variable:type_name -> pb.AdminPermissionGroupVariable
+	12, // 1: pb.resource.logic.AdminPermissionGroupEditAdminPermissionGroupByIdInput.variable:type_name -> pb.AdminPermissionGroupVariable
+	13, // 2: pb.resource.logic.AdminPermissionGroupShowTreeOutput.admin_permission_groups:type_name -> pb.AdminPermissionGroup
+	13, // 3: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput.admin_permission_group:type_name -> pb.AdminPermissionGroup
+	13, // 4: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsOutput.admin_permission_groups:type_name -> pb.AdminPermissionGroup
+	14, // 5: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.Filter
+	15, // 6: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.Sorter
+	16, // 7: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.Pagination
+	13, // 8: pb.resource.logic.AdminPermissionGroupShowAdminPermissionGroupsTotalByFiltersWithSortersPaginationOutput.admin_permission_groups:type_name -> pb.AdminPermissionGroup
 	0,  // 9: pb.resource.logic.AdminPermissionGroupLogic.AddAdminPermissionGroup:input_type -> pb.resource.logic.AdminPermissionGroupAddAdminPermissionGroupInput
 	2,  // 10: pb.resource.logic.AdminPermissionGroupLogic.EditAdminPermissionGroupById:input_type -> pb.resource.logic.AdminPermissionGroupEditAdminPermissionGroupByIdInput
 	4,  // 11: pb.resource.logic.AdminPermissionGroupLogic.ShowTree:input_type -> pb.resource.logic.AdminPermissionGroupShowTreeInput

@@ -228,17 +228,19 @@ const file_resource_logic_table_proto_rawDesc = "" +
 	"\n" +
 	"\x1aresource/logic/table.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\")\n" +
 	"\x17TableShowTableByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"D\n" +
-	"\x18TableShowTableByIdOutput\x12(\n" +
-	"\x05table\x18\x01 \x01(\v2\x12.pb.resource.TableR\x05table\"\xd0\x01\n" +
-	"7TableShowTablesTotalByFiltersWithSortersPaginationInput\x12-\n" +
-	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
-	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\";\n" +
+	"\x18TableShowTableByIdOutput\x12\x1f\n" +
+	"\x05table\x18\x01 \x01(\v2\t.pb.TableR\x05table\"\xb5\x01\n" +
+	"7TableShowTablesTotalByFiltersWithSortersPaginationInput\x12$\n" +
+	"\afilters\x18\x01 \x03(\v2\n" +
+	".pb.FilterR\afilters\x12$\n" +
+	"\asorters\x18\x02 \x03(\v2\n" +
+	".pb.SorterR\asorters\x12.\n" +
 	"\n" +
-	"pagination\x18\x03 \x01(\v2\x17.pb.resource.PaginationR\n" +
-	"pagination\"|\n" +
-	"8TableShowTablesTotalByFiltersWithSortersPaginationOutput\x12*\n" +
-	"\x06tables\x18\x01 \x03(\v2\x12.pb.resource.TableR\x06tables\x12\x14\n" +
+	"pagination\x18\x03 \x01(\v2\x0e.pb.PaginationR\n" +
+	"pagination\"s\n" +
+	"8TableShowTablesTotalByFiltersWithSortersPaginationOutput\x12!\n" +
+	"\x06tables\x18\x01 \x03(\v2\t.pb.TableR\x06tables\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x04R\x05total2\xc1\x02\n" +
 	"\n" +
 	"TableLogic\x12h\n" +
@@ -263,17 +265,17 @@ var file_resource_logic_table_proto_goTypes = []any{
 	(*TableShowTableByIdOutput)(nil),                                 // 1: pb.resource.logic.TableShowTableByIdOutput
 	(*TableShowTablesTotalByFiltersWithSortersPaginationInput)(nil),  // 2: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput
 	(*TableShowTablesTotalByFiltersWithSortersPaginationOutput)(nil), // 3: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutput
-	(*pb.Table)(nil),      // 4: pb.resource.Table
-	(*pb.Filter)(nil),     // 5: pb.resource.Filter
-	(*pb.Sorter)(nil),     // 6: pb.resource.Sorter
-	(*pb.Pagination)(nil), // 7: pb.resource.Pagination
+	(*pb.Table)(nil),      // 4: pb.Table
+	(*pb.Filter)(nil),     // 5: pb.Filter
+	(*pb.Sorter)(nil),     // 6: pb.Sorter
+	(*pb.Pagination)(nil), // 7: pb.Pagination
 }
 var file_resource_logic_table_proto_depIdxs = []int32{
-	4, // 0: pb.resource.logic.TableShowTableByIdOutput.table:type_name -> pb.resource.Table
-	5, // 1: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	6, // 2: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	7, // 3: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	4, // 4: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutput.tables:type_name -> pb.resource.Table
+	4, // 0: pb.resource.logic.TableShowTableByIdOutput.table:type_name -> pb.Table
+	5, // 1: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.Filter
+	6, // 2: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.Sorter
+	7, // 3: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.Pagination
+	4, // 4: pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationOutput.tables:type_name -> pb.Table
 	0, // 5: pb.resource.logic.TableLogic.ShowTableById:input_type -> pb.resource.logic.TableShowTableByIdInput
 	2, // 6: pb.resource.logic.TableLogic.ShowTablesTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.TableShowTablesTotalByFiltersWithSortersPaginationInput
 	1, // 7: pb.resource.logic.TableLogic.ShowTableById:output_type -> pb.resource.logic.TableShowTableByIdOutput

@@ -4,7 +4,7 @@
 // 	protoc        v7.35.1
 // source: common.proto
 
-package pb_resource
+package pb
 
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
@@ -1527,7 +1527,7 @@ var File_common_proto protoreflect.FileDescriptor
 
 const file_common_proto_rawDesc = "" +
 	"\n" +
-	"\fcommon.proto\x12\vpb.resource\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"h\n" +
+	"\fcommon.proto\x12\x02pb\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"h\n" +
 	"\x06Filter\x12\x14\n" +
 	"\x05field\x18\x01 \x01(\tR\x05field\x12\x1a\n" +
 	"\boperator\x18\x02 \x01(\tR\boperator\x12,\n" +
@@ -1538,7 +1538,7 @@ const file_common_proto_rawDesc = "" +
 	"\n" +
 	"Pagination\x12\x12\n" +
 	"\x04size\x18\x01 \x01(\x04R\x04size\x12\x12\n" +
-	"\x04page\x18\x02 \x01(\x04R\x04page\"\xdf\x03\n" +
+	"\x04page\x18\x02 \x01(\x04R\x04page\"\xc4\x03\n" +
 	"\x14AdminPermissionGroup\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x12\n" +
@@ -1549,15 +1549,15 @@ const file_common_proto_rawDesc = "" +
 	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
 	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1b\n" +
-	"\tparent_id\x18\a \x01(\x04R\bparentId\x129\n" +
-	"\x06parent\x18\b \x01(\v2!.pb.resource.AdminPermissionGroupR\x06parent\x12=\n" +
-	"\bchildren\x18\t \x03(\v2!.pb.resource.AdminPermissionGroupR\bchildren\x12I\n" +
+	"\tparent_id\x18\a \x01(\x04R\bparentId\x120\n" +
+	"\x06parent\x18\b \x01(\v2\x18.pb.AdminPermissionGroupR\x06parent\x124\n" +
+	"\bchildren\x18\t \x03(\v2\x18.pb.AdminPermissionGroupR\bchildren\x12@\n" +
 	"\x11admin_permissions\x18\n" +
-	" \x03(\v2\x1c.pb.resource.AdminPermissionR\x10adminPermissions\"\xb2\x01\n" +
+	" \x03(\v2\x13.pb.AdminPermissionR\x10adminPermissions\"\xa9\x01\n" +
 	"\x1cAdminPermissionGroupVariable\x12\x15\n" +
 	"\x03key\x18\x01 \x01(\tH\x00R\x03key\x88\x01\x01\x12\x17\n" +
-	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01\x12Q\n" +
-	"\x11admin_permissions\x18\x03 \x03(\v2$.pb.resource.AdminPermissionVariableR\x10adminPermissionsB\x06\n" +
+	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01\x12H\n" +
+	"\x11admin_permissions\x18\x03 \x03(\v2\x1b.pb.AdminPermissionVariableR\x10adminPermissionsB\x06\n" +
 	"\x04_keyB\a\n" +
 	"\x05_name\"\x98\x01\n" +
 	"\x17AdminPermissionVariable\x12\x13\n" +
@@ -1568,7 +1568,7 @@ const file_common_proto_rawDesc = "" +
 	"\x03_idB\a\n" +
 	"\x05_typeB\x06\n" +
 	"\x04_keyB\a\n" +
-	"\x05_name\"\xf0\x02\n" +
+	"\x05_name\"\xde\x02\n" +
 	"\bGameType\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x12\n" +
@@ -1579,9 +1579,9 @@ const file_common_proto_rawDesc = "" +
 	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
 	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1b\n" +
-	"\tparent_id\x18\a \x01(\x04R\bparentId\x12-\n" +
-	"\x06parent\x18\b \x01(\v2\x15.pb.resource.GameTypeR\x06parent\x121\n" +
-	"\bchildren\x18\t \x03(\v2\x15.pb.resource.GameTypeR\bchildren\"\xb5\x02\n" +
+	"\tparent_id\x18\a \x01(\x04R\bparentId\x12$\n" +
+	"\x06parent\x18\b \x01(\v2\f.pb.GameTypeR\x06parent\x12(\n" +
+	"\bchildren\x18\t \x03(\v2\f.pb.GameTypeR\bchildren\"\xac\x02\n" +
 	"\tAdminUser\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
@@ -1591,8 +1591,8 @@ const file_common_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
-	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x127\n" +
-	"\vadmin_roles\x18\a \x03(\v2\x16.pb.resource.AdminRoleR\n" +
+	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12.\n" +
+	"\vadmin_roles\x18\a \x03(\v2\r.pb.AdminRoleR\n" +
 	"adminRoles\"\x89\x01\n" +
 	"\x11AdminUserVariable\x12\x17\n" +
 	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
@@ -1638,7 +1638,7 @@ const file_common_proto_rawDesc = "" +
 	"\bpassword\x18\x03 \x01(\tH\x02R\bpassword\x88\x01\x01B\x05\n" +
 	"\x03_idB\a\n" +
 	"\x05_nameB\v\n" +
-	"\t_password\"\xe5\x02\n" +
+	"\t_password\"\xdc\x02\n" +
 	"\x04Game\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12 \n" +
 	"\fgame_type_id\x18\x02 \x01(\x04R\n" +
@@ -1651,8 +1651,8 @@ const file_common_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\a \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
-	"deleted_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x122\n" +
-	"\tgame_type\x18\t \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"\xbe\x01\n" +
+	"deleted_at\x18\b \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12)\n" +
+	"\tgame_type\x18\t \x01(\v2\f.pb.GameTypeR\bgameType\"\xbe\x01\n" +
 	"\fGameVariable\x12%\n" +
 	"\fgame_type_id\x18\x01 \x01(\x04H\x00R\n" +
 	"gameTypeId\x88\x01\x01\x12\x15\n" +
@@ -1667,7 +1667,7 @@ const file_common_proto_rawDesc = "" +
 	"\x03key\x18\x01 \x01(\tH\x00R\x03key\x88\x01\x01\x12\x17\n" +
 	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01B\x06\n" +
 	"\x04_keyB\a\n" +
-	"\x05_name\"\xec\x03\n" +
+	"\x05_name\"\xe3\x03\n" +
 	"\x05Table\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x0e\n" +
 	"\x02no\x18\x02 \x01(\tR\x02no\x12\x17\n" +
@@ -1685,8 +1685,8 @@ const file_common_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\v \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
-	"deleted_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12%\n" +
-	"\x04game\x18\r \x01(\v2\x11.pb.resource.GameR\x04game\"\xea\x02\n" +
+	"deleted_at\x18\f \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12\x1c\n" +
+	"\x04game\x18\r \x01(\v2\b.pb.GameR\x04game\"\xea\x02\n" +
 	"\rTableVariable\x12\x13\n" +
 	"\x02no\x18\x01 \x01(\tH\x00R\x02no\x88\x01\x01\x12\x1c\n" +
 	"\agame_id\x18\x02 \x01(\x04H\x01R\x06gameId\x88\x01\x01\x12\x15\n" +
@@ -1703,7 +1703,8 @@ const file_common_proto_rawDesc = "" +
 	"\x04_keyB\b\n" +
 	"\x06_stateB\x0e\n" +
 	"\f_descriptionB\t\n" +
-	"\a_resultB\x18Z\x16example/pb;pb_resourceb\x06proto3"
+	"\a_resultB\fZ\n" +
+	"example/pbb\x06proto3"
 
 var (
 	file_common_proto_rawDescOnce sync.Once
@@ -1719,64 +1720,64 @@ func file_common_proto_rawDescGZIP() []byte {
 
 var file_common_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
 var file_common_proto_goTypes = []any{
-	(*Filter)(nil),                       // 0: pb.resource.Filter
-	(*Sorter)(nil),                       // 1: pb.resource.Sorter
-	(*Pagination)(nil),                   // 2: pb.resource.Pagination
-	(*AdminPermissionGroup)(nil),         // 3: pb.resource.AdminPermissionGroup
-	(*AdminPermissionGroupVariable)(nil), // 4: pb.resource.AdminPermissionGroupVariable
-	(*AdminPermissionVariable)(nil),      // 5: pb.resource.AdminPermissionVariable
-	(*GameType)(nil),                     // 6: pb.resource.GameType
-	(*AdminUser)(nil),                    // 7: pb.resource.AdminUser
-	(*AdminUserVariable)(nil),            // 8: pb.resource.AdminUserVariable
-	(*AdminRole)(nil),                    // 9: pb.resource.AdminRole
-	(*AdminRoleVariable)(nil),            // 10: pb.resource.AdminRoleVariable
-	(*AdminPermission)(nil),              // 11: pb.resource.AdminPermission
-	(*AppUser)(nil),                      // 12: pb.resource.AppUser
-	(*AppUserVariable)(nil),              // 13: pb.resource.AppUserVariable
-	(*Game)(nil),                         // 14: pb.resource.Game
-	(*GameVariable)(nil),                 // 15: pb.resource.GameVariable
-	(*GameTypeVariable)(nil),             // 16: pb.resource.GameTypeVariable
-	(*Table)(nil),                        // 17: pb.resource.Table
-	(*TableVariable)(nil),                // 18: pb.resource.TableVariable
+	(*Filter)(nil),                       // 0: pb.Filter
+	(*Sorter)(nil),                       // 1: pb.Sorter
+	(*Pagination)(nil),                   // 2: pb.Pagination
+	(*AdminPermissionGroup)(nil),         // 3: pb.AdminPermissionGroup
+	(*AdminPermissionGroupVariable)(nil), // 4: pb.AdminPermissionGroupVariable
+	(*AdminPermissionVariable)(nil),      // 5: pb.AdminPermissionVariable
+	(*GameType)(nil),                     // 6: pb.GameType
+	(*AdminUser)(nil),                    // 7: pb.AdminUser
+	(*AdminUserVariable)(nil),            // 8: pb.AdminUserVariable
+	(*AdminRole)(nil),                    // 9: pb.AdminRole
+	(*AdminRoleVariable)(nil),            // 10: pb.AdminRoleVariable
+	(*AdminPermission)(nil),              // 11: pb.AdminPermission
+	(*AppUser)(nil),                      // 12: pb.AppUser
+	(*AppUserVariable)(nil),              // 13: pb.AppUserVariable
+	(*Game)(nil),                         // 14: pb.Game
+	(*GameVariable)(nil),                 // 15: pb.GameVariable
+	(*GameTypeVariable)(nil),             // 16: pb.GameTypeVariable
+	(*Table)(nil),                        // 17: pb.Table
+	(*TableVariable)(nil),                // 18: pb.TableVariable
 	(*structpb.Value)(nil),               // 19: google.protobuf.Value
 	(*timestamppb.Timestamp)(nil),        // 20: google.protobuf.Timestamp
 }
 var file_common_proto_depIdxs = []int32{
-	19, // 0: pb.resource.Filter.value:type_name -> google.protobuf.Value
-	20, // 1: pb.resource.AdminPermissionGroup.created_at:type_name -> google.protobuf.Timestamp
-	20, // 2: pb.resource.AdminPermissionGroup.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 3: pb.resource.AdminPermissionGroup.deleted_at:type_name -> google.protobuf.Timestamp
-	3,  // 4: pb.resource.AdminPermissionGroup.parent:type_name -> pb.resource.AdminPermissionGroup
-	3,  // 5: pb.resource.AdminPermissionGroup.children:type_name -> pb.resource.AdminPermissionGroup
-	11, // 6: pb.resource.AdminPermissionGroup.admin_permissions:type_name -> pb.resource.AdminPermission
-	5,  // 7: pb.resource.AdminPermissionGroupVariable.admin_permissions:type_name -> pb.resource.AdminPermissionVariable
-	20, // 8: pb.resource.GameType.created_at:type_name -> google.protobuf.Timestamp
-	20, // 9: pb.resource.GameType.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 10: pb.resource.GameType.deleted_at:type_name -> google.protobuf.Timestamp
-	6,  // 11: pb.resource.GameType.parent:type_name -> pb.resource.GameType
-	6,  // 12: pb.resource.GameType.children:type_name -> pb.resource.GameType
-	20, // 13: pb.resource.AdminUser.created_at:type_name -> google.protobuf.Timestamp
-	20, // 14: pb.resource.AdminUser.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 15: pb.resource.AdminUser.deleted_at:type_name -> google.protobuf.Timestamp
-	9,  // 16: pb.resource.AdminUser.admin_roles:type_name -> pb.resource.AdminRole
-	20, // 17: pb.resource.AdminRole.created_at:type_name -> google.protobuf.Timestamp
-	20, // 18: pb.resource.AdminRole.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 19: pb.resource.AdminRole.deleted_at:type_name -> google.protobuf.Timestamp
-	20, // 20: pb.resource.AdminPermission.created_at:type_name -> google.protobuf.Timestamp
-	20, // 21: pb.resource.AdminPermission.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 22: pb.resource.AdminPermission.deleted_at:type_name -> google.protobuf.Timestamp
-	20, // 23: pb.resource.Game.created_at:type_name -> google.protobuf.Timestamp
-	20, // 24: pb.resource.Game.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 25: pb.resource.Game.deleted_at:type_name -> google.protobuf.Timestamp
-	6,  // 26: pb.resource.Game.game_type:type_name -> pb.resource.GameType
-	20, // 27: pb.resource.Table.started_at:type_name -> google.protobuf.Timestamp
-	20, // 28: pb.resource.Table.ended_at:type_name -> google.protobuf.Timestamp
-	20, // 29: pb.resource.Table.created_at:type_name -> google.protobuf.Timestamp
-	20, // 30: pb.resource.Table.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 31: pb.resource.Table.deleted_at:type_name -> google.protobuf.Timestamp
-	14, // 32: pb.resource.Table.game:type_name -> pb.resource.Game
-	20, // 33: pb.resource.TableVariable.started_at:type_name -> google.protobuf.Timestamp
-	20, // 34: pb.resource.TableVariable.ended_at:type_name -> google.protobuf.Timestamp
+	19, // 0: pb.Filter.value:type_name -> google.protobuf.Value
+	20, // 1: pb.AdminPermissionGroup.created_at:type_name -> google.protobuf.Timestamp
+	20, // 2: pb.AdminPermissionGroup.updated_at:type_name -> google.protobuf.Timestamp
+	20, // 3: pb.AdminPermissionGroup.deleted_at:type_name -> google.protobuf.Timestamp
+	3,  // 4: pb.AdminPermissionGroup.parent:type_name -> pb.AdminPermissionGroup
+	3,  // 5: pb.AdminPermissionGroup.children:type_name -> pb.AdminPermissionGroup
+	11, // 6: pb.AdminPermissionGroup.admin_permissions:type_name -> pb.AdminPermission
+	5,  // 7: pb.AdminPermissionGroupVariable.admin_permissions:type_name -> pb.AdminPermissionVariable
+	20, // 8: pb.GameType.created_at:type_name -> google.protobuf.Timestamp
+	20, // 9: pb.GameType.updated_at:type_name -> google.protobuf.Timestamp
+	20, // 10: pb.GameType.deleted_at:type_name -> google.protobuf.Timestamp
+	6,  // 11: pb.GameType.parent:type_name -> pb.GameType
+	6,  // 12: pb.GameType.children:type_name -> pb.GameType
+	20, // 13: pb.AdminUser.created_at:type_name -> google.protobuf.Timestamp
+	20, // 14: pb.AdminUser.updated_at:type_name -> google.protobuf.Timestamp
+	20, // 15: pb.AdminUser.deleted_at:type_name -> google.protobuf.Timestamp
+	9,  // 16: pb.AdminUser.admin_roles:type_name -> pb.AdminRole
+	20, // 17: pb.AdminRole.created_at:type_name -> google.protobuf.Timestamp
+	20, // 18: pb.AdminRole.updated_at:type_name -> google.protobuf.Timestamp
+	20, // 19: pb.AdminRole.deleted_at:type_name -> google.protobuf.Timestamp
+	20, // 20: pb.AdminPermission.created_at:type_name -> google.protobuf.Timestamp
+	20, // 21: pb.AdminPermission.updated_at:type_name -> google.protobuf.Timestamp
+	20, // 22: pb.AdminPermission.deleted_at:type_name -> google.protobuf.Timestamp
+	20, // 23: pb.Game.created_at:type_name -> google.protobuf.Timestamp
+	20, // 24: pb.Game.updated_at:type_name -> google.protobuf.Timestamp
+	20, // 25: pb.Game.deleted_at:type_name -> google.protobuf.Timestamp
+	6,  // 26: pb.Game.game_type:type_name -> pb.GameType
+	20, // 27: pb.Table.started_at:type_name -> google.protobuf.Timestamp
+	20, // 28: pb.Table.ended_at:type_name -> google.protobuf.Timestamp
+	20, // 29: pb.Table.created_at:type_name -> google.protobuf.Timestamp
+	20, // 30: pb.Table.updated_at:type_name -> google.protobuf.Timestamp
+	20, // 31: pb.Table.deleted_at:type_name -> google.protobuf.Timestamp
+	14, // 32: pb.Table.game:type_name -> pb.Game
+	20, // 33: pb.TableVariable.started_at:type_name -> google.protobuf.Timestamp
+	20, // 34: pb.TableVariable.ended_at:type_name -> google.protobuf.Timestamp
 	35, // [35:35] is the sub-list for method output_type
 	35, // [35:35] is the sub-list for method input_type
 	35, // [35:35] is the sub-list for extension type_name

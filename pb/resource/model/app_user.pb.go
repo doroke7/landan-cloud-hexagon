@@ -378,19 +378,19 @@ var File_resource_model_app_user_proto protoreflect.FileDescriptor
 
 const file_resource_model_app_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1dresource/model/app_user.proto\x12\x11pb.resource.model\x1a\fcommon.proto\"N\n" +
-	"\x12AppUserAddOneInput\x128\n" +
-	"\bvariable\x18\x01 \x01(\v2\x1c.pb.resource.AppUserVariableR\bvariable\")\n" +
+	"\x1dresource/model/app_user.proto\x12\x11pb.resource.model\x1a\fcommon.proto\"E\n" +
+	"\x12AppUserAddOneInput\x12/\n" +
+	"\bvariable\x18\x01 \x01(\v2\x13.pb.AppUserVariableR\bvariable\")\n" +
 	"\x13AppUserAddOneOutput\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\"/\n" +
 	"\x19AppUserShowOneByNameInput\x12\x12\n" +
-	"\x04name\x18\x01 \x01(\tR\x04name\"M\n" +
-	"\x1aAppUserShowOneByNameOutput\x12/\n" +
-	"\bapp_user\x18\x01 \x01(\v2\x14.pb.resource.AppUserR\aappUser\")\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"D\n" +
+	"\x1aAppUserShowOneByNameOutput\x12&\n" +
+	"\bapp_user\x18\x01 \x01(\v2\v.pb.AppUserR\aappUser\")\n" +
 	"\x17AppUserShowOneByIdInput\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x04R\x02id\"K\n" +
-	"\x18AppUserShowOneByIdOutput\x12/\n" +
-	"\bapp_user\x18\x01 \x01(\v2\x14.pb.resource.AppUserR\aappUser\"E\n" +
+	"\x02id\x18\x01 \x01(\x04R\x02id\"B\n" +
+	"\x18AppUserShowOneByIdOutput\x12&\n" +
+	"\bapp_user\x18\x01 \x01(\v2\v.pb.AppUserR\aappUser\"E\n" +
 	"\x1bAppUserIncreaseBalanceInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x16\n" +
 	"\x06amount\x18\x02 \x01(\x04R\x06amount\"\x1e\n" +
@@ -424,13 +424,13 @@ var file_resource_model_app_user_proto_goTypes = []any{
 	(*AppUserShowOneByIdOutput)(nil),     // 5: pb.resource.model.AppUserShowOneByIdOutput
 	(*AppUserIncreaseBalanceInput)(nil),  // 6: pb.resource.model.AppUserIncreaseBalanceInput
 	(*AppUserIncreaseBalanceOutput)(nil), // 7: pb.resource.model.AppUserIncreaseBalanceOutput
-	(*pb.AppUserVariable)(nil),           // 8: pb.resource.AppUserVariable
-	(*pb.AppUser)(nil),                   // 9: pb.resource.AppUser
+	(*pb.AppUserVariable)(nil),           // 8: pb.AppUserVariable
+	(*pb.AppUser)(nil),                   // 9: pb.AppUser
 }
 var file_resource_model_app_user_proto_depIdxs = []int32{
-	8, // 0: pb.resource.model.AppUserAddOneInput.variable:type_name -> pb.resource.AppUserVariable
-	9, // 1: pb.resource.model.AppUserShowOneByNameOutput.app_user:type_name -> pb.resource.AppUser
-	9, // 2: pb.resource.model.AppUserShowOneByIdOutput.app_user:type_name -> pb.resource.AppUser
+	8, // 0: pb.resource.model.AppUserAddOneInput.variable:type_name -> pb.AppUserVariable
+	9, // 1: pb.resource.model.AppUserShowOneByNameOutput.app_user:type_name -> pb.AppUser
+	9, // 2: pb.resource.model.AppUserShowOneByIdOutput.app_user:type_name -> pb.AppUser
 	0, // 3: pb.resource.model.AppUserModel.AddAppUser:input_type -> pb.resource.model.AppUserAddOneInput
 	2, // 4: pb.resource.model.AppUserModel.ShowOneByName:input_type -> pb.resource.model.AppUserShowOneByNameInput
 	4, // 5: pb.resource.model.AppUserModel.ShowOneById:input_type -> pb.resource.model.AppUserShowOneByIdInput

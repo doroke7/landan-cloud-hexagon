@@ -362,19 +362,20 @@ var File_resource_model_table_proto protoreflect.FileDescriptor
 
 const file_resource_model_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\fcommon.proto\"J\n" +
-	"\x10TableAddOneInput\x126\n" +
-	"\bvariable\x18\x01 \x01(\v2\x1a.pb.resource.TableVariableR\bvariable\"\x13\n" +
-	"\x11TableAddOneOutput\"_\n" +
-	"\x15TableEditOneByIdInput\x126\n" +
-	"\bvariable\x18\x01 \x01(\v2\x1a.pb.resource.TableVariableR\bvariable\x12\x0e\n" +
+	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\fcommon.proto\"A\n" +
+	"\x10TableAddOneInput\x12-\n" +
+	"\bvariable\x18\x01 \x01(\v2\x11.pb.TableVariableR\bvariable\"\x13\n" +
+	"\x11TableAddOneOutput\"V\n" +
+	"\x15TableEditOneByIdInput\x12-\n" +
+	"\bvariable\x18\x01 \x01(\v2\x11.pb.TableVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"\x18\n" +
 	"\x16TableEditOneByIdOutput\")\n" +
 	"\x17TableRemoveOneByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"\x1a\n" +
-	"\x18TableRemoveOneByIdOutput\"I\n" +
-	"\x18TableTotalByFiltersInput\x12-\n" +
-	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\"1\n" +
+	"\x18TableRemoveOneByIdOutput\"@\n" +
+	"\x18TableTotalByFiltersInput\x12$\n" +
+	"\afilters\x18\x01 \x03(\v2\n" +
+	".pb.FilterR\afilters\"1\n" +
 	"\x19TableTotalByFiltersOutput\x12\x14\n" +
 	"\x05total\x18\x01 \x01(\x04R\x05total2\x9c\x03\n" +
 	"\n" +
@@ -406,13 +407,13 @@ var file_resource_model_table_proto_goTypes = []any{
 	(*TableRemoveOneByIdOutput)(nil),  // 5: pb.resource.model.TableRemoveOneByIdOutput
 	(*TableTotalByFiltersInput)(nil),  // 6: pb.resource.model.TableTotalByFiltersInput
 	(*TableTotalByFiltersOutput)(nil), // 7: pb.resource.model.TableTotalByFiltersOutput
-	(*pb.TableVariable)(nil),          // 8: pb.resource.TableVariable
-	(*pb.Filter)(nil),                 // 9: pb.resource.Filter
+	(*pb.TableVariable)(nil),          // 8: pb.TableVariable
+	(*pb.Filter)(nil),                 // 9: pb.Filter
 }
 var file_resource_model_table_proto_depIdxs = []int32{
-	8, // 0: pb.resource.model.TableAddOneInput.variable:type_name -> pb.resource.TableVariable
-	8, // 1: pb.resource.model.TableEditOneByIdInput.variable:type_name -> pb.resource.TableVariable
-	9, // 2: pb.resource.model.TableTotalByFiltersInput.filters:type_name -> pb.resource.Filter
+	8, // 0: pb.resource.model.TableAddOneInput.variable:type_name -> pb.TableVariable
+	8, // 1: pb.resource.model.TableEditOneByIdInput.variable:type_name -> pb.TableVariable
+	9, // 2: pb.resource.model.TableTotalByFiltersInput.filters:type_name -> pb.Filter
 	0, // 3: pb.resource.model.TableModel.AddOne:input_type -> pb.resource.model.TableAddOneInput
 	2, // 4: pb.resource.model.TableModel.EditOneById:input_type -> pb.resource.model.TableEditOneByIdInput
 	4, // 5: pb.resource.model.TableModel.RemoveOneById:input_type -> pb.resource.model.TableRemoveOneByIdInput

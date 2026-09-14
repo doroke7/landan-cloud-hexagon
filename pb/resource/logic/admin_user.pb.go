@@ -482,28 +482,30 @@ var File_resource_logic_admin_user_proto protoreflect.FileDescriptor
 
 const file_resource_logic_admin_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1fresource/logic/admin_user.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"\xd8\x01\n" +
-	"?AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput\x12-\n" +
-	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
-	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
+	"\x1fresource/logic/admin_user.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"\xbd\x01\n" +
+	"?AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput\x12$\n" +
+	"\afilters\x18\x01 \x03(\v2\n" +
+	".pb.FilterR\afilters\x12$\n" +
+	"\asorters\x18\x02 \x03(\v2\n" +
+	".pb.SorterR\asorters\x12.\n" +
 	"\n" +
-	"pagination\x18\x03 \x01(\v2\x17.pb.resource.PaginationR\n" +
-	"pagination\"\x91\x01\n" +
-	"@AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput\x127\n" +
-	"\vadmin_users\x18\x01 \x03(\v2\x16.pb.resource.AdminUserR\n" +
+	"pagination\x18\x03 \x01(\v2\x0e.pb.PaginationR\n" +
+	"pagination\"\x88\x01\n" +
+	"@AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput\x12.\n" +
+	"\vadmin_users\x18\x01 \x03(\v2\r.pb.AdminUserR\n" +
 	"adminUsers\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x04R\x05total\"1\n" +
 	"\x1fAdminUserShowAdminUserByIdInput\x12\x0e\n" +
-	"\x02id\x18\x02 \x01(\x04R\x02id\"q\n" +
-	" AdminUserShowAdminUserByIdOutput\x127\n" +
-	"\vadmin_users\x18\x01 \x03(\v2\x16.pb.resource.AdminUserR\n" +
+	"\x02id\x18\x02 \x01(\x04R\x02id\"h\n" +
+	" AdminUserShowAdminUserByIdOutput\x12.\n" +
+	"\vadmin_users\x18\x01 \x03(\v2\r.pb.AdminUserR\n" +
 	"adminUsers\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total\"W\n" +
-	"\x19AdminUserAddAminUserInput\x12:\n" +
-	"\bvariable\x18\x01 \x01(\v2\x1e.pb.resource.AdminUserVariableR\bvariable\"\x1c\n" +
-	"\x1aAdminUserAddAminUserOutput\"m\n" +
-	"\x1fAdminUserEditAdminUserByIdInput\x12:\n" +
-	"\bvariable\x18\x01 \x01(\v2\x1e.pb.resource.AdminUserVariableR\bvariable\x12\x0e\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\"N\n" +
+	"\x19AdminUserAddAminUserInput\x121\n" +
+	"\bvariable\x18\x01 \x01(\v2\x15.pb.AdminUserVariableR\bvariable\"\x1c\n" +
+	"\x1aAdminUserAddAminUserOutput\"d\n" +
+	"\x1fAdminUserEditAdminUserByIdInput\x121\n" +
+	"\bvariable\x18\x01 \x01(\v2\x15.pb.AdminUserVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"\"\n" +
 	" AdminUserEditAdminUserByIdOutput\"3\n" +
 	"!AdminUserRemoveAdminUserByIdInput\x12\x0e\n" +
@@ -540,20 +542,20 @@ var file_resource_logic_admin_user_proto_goTypes = []any{
 	(*AdminUserEditAdminUserByIdOutput)(nil),                                 // 7: pb.resource.logic.AdminUserEditAdminUserByIdOutput
 	(*AdminUserRemoveAdminUserByIdInput)(nil),                                // 8: pb.resource.logic.AdminUserRemoveAdminUserByIdInput
 	(*AdminUserRemoveAdminUserByIdOutput)(nil),                               // 9: pb.resource.logic.AdminUserRemoveAdminUserByIdOutput
-	(*pb.Filter)(nil),            // 10: pb.resource.Filter
-	(*pb.Sorter)(nil),            // 11: pb.resource.Sorter
-	(*pb.Pagination)(nil),        // 12: pb.resource.Pagination
-	(*pb.AdminUser)(nil),         // 13: pb.resource.AdminUser
-	(*pb.AdminUserVariable)(nil), // 14: pb.resource.AdminUserVariable
+	(*pb.Filter)(nil),            // 10: pb.Filter
+	(*pb.Sorter)(nil),            // 11: pb.Sorter
+	(*pb.Pagination)(nil),        // 12: pb.Pagination
+	(*pb.AdminUser)(nil),         // 13: pb.AdminUser
+	(*pb.AdminUserVariable)(nil), // 14: pb.AdminUserVariable
 }
 var file_resource_logic_admin_user_proto_depIdxs = []int32{
-	10, // 0: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	11, // 1: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	12, // 2: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	13, // 3: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput.admin_users:type_name -> pb.resource.AdminUser
-	13, // 4: pb.resource.logic.AdminUserShowAdminUserByIdOutput.admin_users:type_name -> pb.resource.AdminUser
-	14, // 5: pb.resource.logic.AdminUserAddAminUserInput.variable:type_name -> pb.resource.AdminUserVariable
-	14, // 6: pb.resource.logic.AdminUserEditAdminUserByIdInput.variable:type_name -> pb.resource.AdminUserVariable
+	10, // 0: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.Filter
+	11, // 1: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.Sorter
+	12, // 2: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.Pagination
+	13, // 3: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput.admin_users:type_name -> pb.AdminUser
+	13, // 4: pb.resource.logic.AdminUserShowAdminUserByIdOutput.admin_users:type_name -> pb.AdminUser
+	14, // 5: pb.resource.logic.AdminUserAddAminUserInput.variable:type_name -> pb.AdminUserVariable
+	14, // 6: pb.resource.logic.AdminUserEditAdminUserByIdInput.variable:type_name -> pb.AdminUserVariable
 	0,  // 7: pb.resource.logic.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput
 	2,  // 8: pb.resource.logic.AdminUserLogic.ShowAdminUserById:input_type -> pb.resource.logic.AdminUserShowAdminUserByIdInput
 	4,  // 9: pb.resource.logic.AdminUserLogic.AddAminUser:input_type -> pb.resource.logic.AdminUserAddAminUserInput

@@ -138,15 +138,17 @@ var File_resource_logic_game_proto protoreflect.FileDescriptor
 
 const file_resource_logic_game_proto_rawDesc = "" +
 	"\n" +
-	"\x19resource/logic/game.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"\xce\x01\n" +
-	"5GameShowGamesTotalByFiltersWithSortersPaginationInput\x12-\n" +
-	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
-	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
+	"\x19resource/logic/game.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"\xb3\x01\n" +
+	"5GameShowGamesTotalByFiltersWithSortersPaginationInput\x12$\n" +
+	"\afilters\x18\x01 \x03(\v2\n" +
+	".pb.FilterR\afilters\x12$\n" +
+	"\asorters\x18\x02 \x03(\v2\n" +
+	".pb.SorterR\asorters\x12.\n" +
 	"\n" +
-	"pagination\x18\x03 \x01(\v2\x17.pb.resource.PaginationR\n" +
-	"pagination\"w\n" +
-	"6GameShowGamesTotalByFiltersWithSortersPaginationOutput\x12'\n" +
-	"\x05games\x18\x01 \x03(\v2\x11.pb.resource.GameR\x05games\x12\x14\n" +
+	"pagination\x18\x03 \x01(\v2\x0e.pb.PaginationR\n" +
+	"pagination\"n\n" +
+	"6GameShowGamesTotalByFiltersWithSortersPaginationOutput\x12\x1e\n" +
+	"\x05games\x18\x01 \x03(\v2\b.pb.GameR\x05games\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x04R\x05total2\xd1\x01\n" +
 	"\tGameLogic\x12\xc3\x01\n" +
 	",ShowGamesTotalByFiltersWithSortersPagination\x12H.pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput\x1aI.pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
@@ -167,16 +169,16 @@ var file_resource_logic_game_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_resource_logic_game_proto_goTypes = []any{
 	(*GameShowGamesTotalByFiltersWithSortersPaginationInput)(nil),  // 0: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput
 	(*GameShowGamesTotalByFiltersWithSortersPaginationOutput)(nil), // 1: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput
-	(*pb.Filter)(nil),     // 2: pb.resource.Filter
-	(*pb.Sorter)(nil),     // 3: pb.resource.Sorter
-	(*pb.Pagination)(nil), // 4: pb.resource.Pagination
-	(*pb.Game)(nil),       // 5: pb.resource.Game
+	(*pb.Filter)(nil),     // 2: pb.Filter
+	(*pb.Sorter)(nil),     // 3: pb.Sorter
+	(*pb.Pagination)(nil), // 4: pb.Pagination
+	(*pb.Game)(nil),       // 5: pb.Game
 }
 var file_resource_logic_game_proto_depIdxs = []int32{
-	2, // 0: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	3, // 1: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
-	4, // 2: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	5, // 3: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput.games:type_name -> pb.resource.Game
+	2, // 0: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.Filter
+	3, // 1: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.sorters:type_name -> pb.Sorter
+	4, // 2: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.Pagination
+	5, // 3: pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput.games:type_name -> pb.Game
 	0, // 4: pb.resource.logic.GameLogic.ShowGamesTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationInput
 	1, // 5: pb.resource.logic.GameLogic.ShowGamesTotalByFiltersWithSortersPagination:output_type -> pb.resource.logic.GameShowGamesTotalByFiltersWithSortersPaginationOutput
 	5, // [5:6] is the sub-list for method output_type

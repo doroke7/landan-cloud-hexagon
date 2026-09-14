@@ -106,9 +106,9 @@ var File_resource_event_admin_user_proto protoreflect.FileDescriptor
 
 const file_resource_event_admin_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1fresource/event/admin_user.proto\x12\x11pb.resource.event\x1a\fcommon.proto\"U\n" +
-	"\x19AdminUserEventAddOneInput\x128\n" +
-	"\bvariable\x18\x01 \x01(\v2\x1c.pb.resource.AppUserVariableR\bvariable\"\x1c\n" +
+	"\x1fresource/event/admin_user.proto\x12\x11pb.resource.event\x1a\fcommon.proto\"L\n" +
+	"\x19AdminUserEventAddOneInput\x12/\n" +
+	"\bvariable\x18\x01 \x01(\v2\x13.pb.AppUserVariableR\bvariable\"\x1c\n" +
 	"\x1aAdminUserEventAddOneOutput2w\n" +
 	"\x0eAdminUserEvent\x12e\n" +
 	"\x06AddOne\x12,.pb.resource.event.AdminUserEventAddOneInput\x1a-.pb.resource.event.AdminUserEventAddOneOutputB\x15Z\x13./pb_resource_eventb\x06proto3"
@@ -129,10 +129,10 @@ var file_resource_event_admin_user_proto_msgTypes = make([]protoimpl.MessageInfo
 var file_resource_event_admin_user_proto_goTypes = []any{
 	(*AdminUserEventAddOneInput)(nil),  // 0: pb.resource.event.AdminUserEventAddOneInput
 	(*AdminUserEventAddOneOutput)(nil), // 1: pb.resource.event.AdminUserEventAddOneOutput
-	(*pb.AppUserVariable)(nil),         // 2: pb.resource.AppUserVariable
+	(*pb.AppUserVariable)(nil),         // 2: pb.AppUserVariable
 }
 var file_resource_event_admin_user_proto_depIdxs = []int32{
-	2, // 0: pb.resource.event.AdminUserEventAddOneInput.variable:type_name -> pb.resource.AppUserVariable
+	2, // 0: pb.resource.event.AdminUserEventAddOneInput.variable:type_name -> pb.AppUserVariable
 	0, // 1: pb.resource.event.AdminUserEvent.AddOne:input_type -> pb.resource.event.AdminUserEventAddOneInput
 	1, // 2: pb.resource.event.AdminUserEvent.AddOne:output_type -> pb.resource.event.AdminUserEventAddOneOutput
 	2, // [2:3] is the sub-list for method output_type

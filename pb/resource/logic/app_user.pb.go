@@ -114,11 +114,11 @@ var File_resource_logic_app_user_proto protoreflect.FileDescriptor
 
 const file_resource_logic_app_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1dresource/logic/app_user.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"R\n" +
-	"\x16AppUserAddAppUserInput\x128\n" +
-	"\bvariable\x18\x01 \x01(\v2\x1c.pb.resource.AppUserVariableR\bvariable\"J\n" +
-	"\x17AppUserAddAppUserOutput\x12/\n" +
-	"\bapp_user\x18\x01 \x01(\v2\x14.pb.resource.AppUserR\aappUser2s\n" +
+	"\x1dresource/logic/app_user.proto\x12\x11pb.resource.logic\x1a\fcommon.proto\"I\n" +
+	"\x16AppUserAddAppUserInput\x12/\n" +
+	"\bvariable\x18\x01 \x01(\v2\x13.pb.AppUserVariableR\bvariable\"A\n" +
+	"\x17AppUserAddAppUserOutput\x12&\n" +
+	"\bapp_user\x18\x01 \x01(\v2\v.pb.AppUserR\aappUser2s\n" +
 	"\fAppUserModel\x12c\n" +
 	"\n" +
 	"AddAppUser\x12).pb.resource.logic.AppUserAddAppUserInput\x1a*.pb.resource.logic.AppUserAddAppUserOutputB\x15Z\x13./pb_resource_logicb\x06proto3"
@@ -139,12 +139,12 @@ var file_resource_logic_app_user_proto_msgTypes = make([]protoimpl.MessageInfo, 
 var file_resource_logic_app_user_proto_goTypes = []any{
 	(*AppUserAddAppUserInput)(nil),  // 0: pb.resource.logic.AppUserAddAppUserInput
 	(*AppUserAddAppUserOutput)(nil), // 1: pb.resource.logic.AppUserAddAppUserOutput
-	(*pb.AppUserVariable)(nil),      // 2: pb.resource.AppUserVariable
-	(*pb.AppUser)(nil),              // 3: pb.resource.AppUser
+	(*pb.AppUserVariable)(nil),      // 2: pb.AppUserVariable
+	(*pb.AppUser)(nil),              // 3: pb.AppUser
 }
 var file_resource_logic_app_user_proto_depIdxs = []int32{
-	2, // 0: pb.resource.logic.AppUserAddAppUserInput.variable:type_name -> pb.resource.AppUserVariable
-	3, // 1: pb.resource.logic.AppUserAddAppUserOutput.app_user:type_name -> pb.resource.AppUser
+	2, // 0: pb.resource.logic.AppUserAddAppUserInput.variable:type_name -> pb.AppUserVariable
+	3, // 1: pb.resource.logic.AppUserAddAppUserOutput.app_user:type_name -> pb.AppUser
 	0, // 2: pb.resource.logic.AppUserModel.AddAppUser:input_type -> pb.resource.logic.AppUserAddAppUserInput
 	1, // 3: pb.resource.logic.AppUserModel.AddAppUser:output_type -> pb.resource.logic.AppUserAddAppUserOutput
 	3, // [3:4] is the sub-list for method output_type
