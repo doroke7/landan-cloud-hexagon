@@ -106,6 +106,8 @@ func (oSelf *AdminPermissionGroupModel) TotalByFilters(aFilters []*pkgInput.Filt
 func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupVariable) error {
 	oColumns, _ := pkgUtility.StructToMap(oValue)
 
+	delete(oColumns, "admin_permissions")
+
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermissionGroup{}).
 		Create(oColumns)
@@ -123,6 +125,8 @@ func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGro
 
 func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
 	oColumns, _ := pkgUtility.StructToMap(oValue)
+
+	delete(oColumns, "admin_permissions")
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminPermissionGroup{}).
