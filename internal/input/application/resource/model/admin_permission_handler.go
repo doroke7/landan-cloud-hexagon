@@ -7,7 +7,7 @@ import (
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
@@ -30,12 +30,12 @@ func NewAdminPermissionHandler(oAbstractHandler *inputApplicationResource.Abstra
 	}
 }
 
-func domainAdminPermissionToProtoAdminPermission(oAdminPermission *domain.AdminPermission) *pbResource.AdminPermission {
+func domainAdminPermissionToProtoAdminPermission(oAdminPermission *domain.AdminPermission) *pb.AdminPermission {
 	if oAdminPermission == nil {
 		return nil
 	}
 
-	return &pbResource.AdminPermission{
+	return &pb.AdminPermission{
 		Id:                     uint64(oAdminPermission.Id),
 		AdminPermissionGroupId: oAdminPermission.AdminPermissionGroupId,
 		Type:                   uint64(oAdminPermission.Type),
@@ -171,7 +171,7 @@ func (oSelf *AdminPermissionHandler) ShowOnesByFiltersWithSortersPagination(oCon
 		return nil, oStatusError
 	}
 
-	aProtoAdminPermissions := make([]*pbResource.AdminPermission, 0, len(aAdminPermissions))
+	aProtoAdminPermissions := make([]*pb.AdminPermission, 0, len(aAdminPermissions))
 	for _, oAdminPermission := range aAdminPermissions {
 		oProtoAdminPermission := domainAdminPermissionToProtoAdminPermission(oAdminPermission)
 		aProtoAdminPermissions = append(aProtoAdminPermissions, oProtoAdminPermission)

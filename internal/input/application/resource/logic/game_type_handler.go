@@ -8,7 +8,7 @@ import (
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
@@ -36,11 +36,11 @@ func (oSelf *GameTypeHandler) ShowTree(oContext context.Context, oReq *pbResourc
 		return nil, oErr
 	}
 
-	aNodes := make([]*pbResource.GameType, 0, len(aRoots))
+	aNodes := make([]*pb.GameType, 0, len(aRoots))
 
 	var fnFlatten func(oNode domain.GameType)
 	fnFlatten = func(oNode domain.GameType) {
-		aNodes = append(aNodes, &pbResource.GameType{
+		aNodes = append(aNodes, &pb.GameType{
 			Id:        uint64(oNode.Id),
 			ParentId:  uint64(oNode.ParentId),
 			Key:       oNode.Key,
@@ -87,7 +87,7 @@ func (oSelf *GameTypeHandler) ShowGameTypes(oContext context.Context, oReq *pbRe
 		return nil, oErr
 	}
 
-	aNodes := make([]*pbResource.GameType, 0, len(aGameTypes))
+	aNodes := make([]*pb.GameType, 0, len(aGameTypes))
 	for _, oOne := range aGameTypes {
 		oProtoGameType := pkgDomainToProto.GameType(oOne)
 		aNodes = append(aNodes, oProtoGameType)
@@ -139,9 +139,9 @@ func (oSelf *GameTypeHandler) ShowGameTypesTotalByFiltersWithSortersPagination(o
 		return nil, oErr
 	}
 
-	aNodes := make([]*pbResource.GameType, 0, len(aGameTypes))
+	aNodes := make([]*pb.GameType, 0, len(aGameTypes))
 	for _, oOne := range aGameTypes {
-		aNodes = append(aNodes, &pbResource.GameType{
+		aNodes = append(aNodes, &pb.GameType{
 			Id:        uint64(oOne.Id),
 			ParentId:  uint64(oOne.ParentId),
 			Key:       oOne.Key,

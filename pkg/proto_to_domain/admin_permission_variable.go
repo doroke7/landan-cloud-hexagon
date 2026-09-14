@@ -2,10 +2,10 @@ package protoToDomain
 
 import (
 	domain "example/internal/domain"
-	pbResource "example/pb"
+	pb "example/pb"
 )
 
-func AdminPermissionVariable(oProto *pbResource.AdminPermissionVariable) domain.AdminPermissionVariable {
+func AdminPermissionVariable(oProto *pb.AdminPermissionVariable) domain.AdminPermissionVariable {
 	var oValue domain.AdminPermissionVariable
 	if oProto == nil {
 		return oValue

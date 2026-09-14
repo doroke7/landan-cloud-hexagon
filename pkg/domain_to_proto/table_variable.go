@@ -5,11 +5,11 @@ import (
 
 	domain "example/internal/domain"
 
-	pbResource "example/pb"
+	pb "example/pb"
 )
 
-func TableVariable(oTable *domain.TableVariable) *pbResource.TableVariable {
-	oValue := &pbResource.TableVariable{
+func TableVariable(oTable *domain.TableVariable) *pb.TableVariable {
+	oValue := &pb.TableVariable{
 		No:          oTable.No,
 		Key:         oTable.Key,
 		Description: oTable.Description,

@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
@@ -59,7 +59,7 @@ func (oSelf *AppUserHandler) ShowOneByName(oContext context.Context, oReq *pbRes
 	}
 
 	return &pbResourceModel.AppUserShowOneByNameOutput{
-		AppUser: &pbResource.AppUser{
+		AppUser: &pb.AppUser{
 			Id:       uint64(oAppUser.Id),
 			Name:     oAppUser.Name,
 			Password: oAppUser.Password,
@@ -76,7 +76,7 @@ func (oSelf *AppUserHandler) ShowOneById(oContext context.Context, oReq *pbResou
 	}
 
 	return &pbResourceModel.AppUserShowOneByIdOutput{
-		AppUser: &pbResource.AppUser{
+		AppUser: &pb.AppUser{
 			Id:       uint64(oAppUser.Id),
 			Name:     oAppUser.Name,
 			Password: oAppUser.Password,

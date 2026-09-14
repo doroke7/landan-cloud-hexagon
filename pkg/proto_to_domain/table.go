@@ -2,10 +2,10 @@ package protoToDomain
 
 import (
 	domain "example/internal/domain"
-	pbResource "example/pb"
+	pb "example/pb"
 )
 
-func Table(oProtoTable *pbResource.Table) domain.Table {
+func Table(oProtoTable *pb.Table) domain.Table {
 	if oProtoTable == nil {
 		return domain.Table{}
 	}

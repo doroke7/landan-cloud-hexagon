@@ -3,7 +3,7 @@ package outputApplicationResourceModel
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
 )
@@ -21,7 +21,7 @@ func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameType
 func (oSelf *GameTypeModel) AddOne(oGameTypeParm *domain.GameTypeVariable) error {
 
 	oRequest := &pbResourceModel.GameTypeAddOneInput{
-		Variable: &pbResource.GameTypeVariable{
+		Variable: &pb.GameTypeVariable{
 			Key:  oGameTypeParm.Key,
 			Name: oGameTypeParm.Name,
 		},
@@ -60,7 +60,7 @@ func (oSelf *GameTypeModel) EditOneById(oGameType *domain.GameTypeVariable, iId 
 
 	oRequest := &pbResourceModel.GameTypeEditOneByIdInput{
 		Id: uint64(iId),
-		Variable: &pbResource.GameTypeVariable{
+		Variable: &pb.GameTypeVariable{
 			Key:  oGameType.Key,
 			Name: oGameType.Name,
 		},

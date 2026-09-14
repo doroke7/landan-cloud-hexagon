@@ -5,20 +5,20 @@ import (
 
 	domain "example/internal/domain"
 
-	pbResource "example/pb"
+	pb "example/pb"
 )
 
-func AdminUser(oDomain *domain.AdminUser) *pbResource.AdminUser {
+func AdminUser(oDomain *domain.AdminUser) *pb.AdminUser {
 	if oDomain == nil {
 		return nil
 	}
 
-	aAdminRoles := make([]*pbResource.AdminRole, 0, len(oDomain.AdminRoles))
+	aAdminRoles := make([]*pb.AdminRole, 0, len(oDomain.AdminRoles))
 	for i := range oDomain.AdminRoles {
 		aAdminRoles = append(aAdminRoles, AdminRole(&oDomain.AdminRoles[i]))
 	}
 
-	return &pbResource.AdminUser{
+	return &pb.AdminUser{
 		Id:         oDomain.Id,
 		Name:       oDomain.Name,
 		Password:   oDomain.Password,

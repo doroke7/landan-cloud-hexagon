@@ -2,10 +2,10 @@ package protoToDomain
 
 import (
 	domain "example/internal/domain"
-	pbResource "example/pb"
+	pb "example/pb"
 )
 
-func GameType(oProtoGameType *pbResource.GameType) domain.GameType {
+func GameType(oProtoGameType *pb.GameType) domain.GameType {
 	if oProtoGameType == nil {
 		return domain.GameType{}
 	}

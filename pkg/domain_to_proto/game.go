@@ -5,15 +5,15 @@ import (
 
 	domain "example/internal/domain"
 
-	pbResource "example/pb"
+	pb "example/pb"
 )
 
-func Game(oDomain *domain.Game) *pbResource.Game {
+func Game(oDomain *domain.Game) *pb.Game {
 	if oDomain == nil {
 		return nil
 	}
 
-	return &pbResource.Game{
+	return &pb.Game{
 		Id:          oDomain.Id,
 		GameTypeId:  oDomain.GameTypeId,
 		Key:         oDomain.Key,

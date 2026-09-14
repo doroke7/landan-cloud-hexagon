@@ -5,7 +5,7 @@ import (
 
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
 	pkgProtoToDomain "example/pkg/proto_to_domain"
@@ -67,7 +67,7 @@ func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserVariable) error
 	}
 
 	oRequest := &pbResourceLogic.AdminUserAddAminUserInput{
-		Variable: &pbResource.AdminUserVariable{
+		Variable: &pb.AdminUserVariable{
 			Name:         oValue.Name,
 			Password:     oValue.Password,
 			AdminRoleIds: aAdminRoleIds,
@@ -87,7 +87,7 @@ func (oSelf *AdminUserLogic) EditAdminUserById(oValue *domain.AdminUserVariable,
 	}
 
 	oRequest := &pbResourceLogic.AdminUserEditAdminUserByIdInput{
-		Variable: &pbResource.AdminUserVariable{
+		Variable: &pb.AdminUserVariable{
 			Name:         oValue.Name,
 			Password:     oValue.Password,
 			AdminRoleIds: aAdminRoleIds,

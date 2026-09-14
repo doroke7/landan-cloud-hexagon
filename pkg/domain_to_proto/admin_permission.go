@@ -5,15 +5,15 @@ import (
 
 	domain "example/internal/domain"
 
-	pbResource "example/pb"
+	pb "example/pb"
 )
 
-func AdminPermission(oDomainAdminPermission *domain.AdminPermission) *pbResource.AdminPermission {
+func AdminPermission(oDomainAdminPermission *domain.AdminPermission) *pb.AdminPermission {
 	if oDomainAdminPermission == nil {
 		return nil
 	}
 
-	oProtoAdminPermission := &pbResource.AdminPermission{
+	oProtoAdminPermission := &pb.AdminPermission{
 		Id:                     oDomainAdminPermission.Id,
 		Type:                   uint64(oDomainAdminPermission.Type),
 		Key:                    oDomainAdminPermission.Key,

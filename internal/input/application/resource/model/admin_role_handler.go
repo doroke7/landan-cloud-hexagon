@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
@@ -29,7 +29,7 @@ func NewAdminRoleHandler(oAbstractHandler *inputApplicationResource.AbstractHand
 	}
 }
 
-func protoAdminRoleValueToDomainAdminRoleValue(oVariable *pbResource.AdminRoleVariable) domain.AdminRoleVariable {
+func protoAdminRoleValueToDomainAdminRoleValue(oVariable *pb.AdminRoleVariable) domain.AdminRoleVariable {
 	var oValue domain.AdminRoleVariable
 	if oVariable == nil {
 		return oValue
@@ -104,7 +104,7 @@ func (oSelf *AdminRoleHandler) ShowOnes(oContext context.Context, oReq *pbResour
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
 
-	aProtoAdminRoles := make([]*pbResource.AdminRole, 0, len(aAdminRoles))
+	aProtoAdminRoles := make([]*pb.AdminRole, 0, len(aAdminRoles))
 	for _, oAdminRole := range aAdminRoles {
 		oProtoAdminRole := pkgDomainToProto.AdminRole(oAdminRole)
 		aProtoAdminRoles = append(aProtoAdminRoles, oProtoAdminRole)
@@ -159,7 +159,7 @@ func (oSelf *AdminRoleHandler) ShowOnesByFiltersWithSortersPagination(oContext c
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
 
-	aProtoAdminRoles := make([]*pbResource.AdminRole, 0, len(aAdminRoles))
+	aProtoAdminRoles := make([]*pb.AdminRole, 0, len(aAdminRoles))
 	for _, oAdminRole := range aAdminRoles {
 		oProtoAdminRole := pkgDomainToProto.AdminRole(oAdminRole)
 		aProtoAdminRoles = append(aProtoAdminRoles, oProtoAdminRole)

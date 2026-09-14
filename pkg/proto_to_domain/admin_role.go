@@ -2,10 +2,10 @@ package protoToDomain
 
 import (
 	domain "example/internal/domain"
-	pbResource "example/pb"
+	pb "example/pb"
 )
 
-func AdminRole(oProto *pbResource.AdminRole) domain.AdminRole {
+func AdminRole(oProto *pb.AdminRole) domain.AdminRole {
 	if oProto == nil {
 		return domain.AdminRole{}
 	}

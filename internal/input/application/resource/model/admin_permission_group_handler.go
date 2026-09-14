@@ -3,7 +3,7 @@ package inputApplicationResourceModel
 import (
 	"context"
 
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
 	inputApplicationResource "example/internal/input/application/resource"
@@ -37,7 +37,7 @@ func (oSelf *AdminPermissionGroupHandler) AddOne(oContext context.Context, oReq 
 		return nil, oErr
 	}
 
-	oOut := &pbResource.AdminPermissionGroup{}
+	oOut := &pb.AdminPermissionGroup{}
 	if oValue.Key != nil {
 		oOut.Key = *oValue.Key
 	}
@@ -59,7 +59,7 @@ func (oSelf *AdminPermissionGroupHandler) ShowOnesByParentId(oContext context.Co
 		return nil, oErr
 	}
 
-	aPbAdminPermissionGroups := make([]*pbResource.AdminPermissionGroup, 0, len(aAdminPermissionGroups))
+	aPbAdminPermissionGroups := make([]*pb.AdminPermissionGroup, 0, len(aAdminPermissionGroups))
 	for _, oAdminPermissionGroup := range aAdminPermissionGroups {
 		oPbAdminPermissionGroup := pkgDomainToProto.AdminPermissionGroup(oAdminPermissionGroup)
 		aPbAdminPermissionGroups = append(aPbAdminPermissionGroups, oPbAdminPermissionGroup)
@@ -120,7 +120,7 @@ func (oSelf *AdminPermissionGroupHandler) ShowOnesByFiltersWithSortersPagination
 		return nil, oErr
 	}
 
-	aPbAdminPermissionGroups := make([]*pbResource.AdminPermissionGroup, 0, len(aAdminPermissionGroups))
+	aPbAdminPermissionGroups := make([]*pb.AdminPermissionGroup, 0, len(aAdminPermissionGroups))
 	for _, oAdminPermissionGroup := range aAdminPermissionGroups {
 		oPbAdminPermissionGroup := pkgDomainToProto.AdminPermissionGroup(oAdminPermissionGroup)
 		aPbAdminPermissionGroups = append(aPbAdminPermissionGroups, oPbAdminPermissionGroup)

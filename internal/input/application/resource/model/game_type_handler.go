@@ -3,7 +3,7 @@ package inputApplicationResourceModel
 import (
 	"context"
 
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
@@ -51,7 +51,7 @@ func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceM
 	}
 
 	return &pbResourceModel.GameTypeAddOneOutput{
-		GameType: &pbResource.GameType{
+		GameType: &pb.GameType{
 			Key:  sKey,
 			Name: sName,
 		},

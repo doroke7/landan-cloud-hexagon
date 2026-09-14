@@ -3,7 +3,7 @@ package outputApplicationResourceLogic
 import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
@@ -24,7 +24,7 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 
 func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupVariable) error {
 
-	aAdminPermissions := make([]*pbResource.AdminPermissionVariable, 0, len(oValue.AdminPermissions))
+	aAdminPermissions := make([]*pb.AdminPermissionVariable, 0, len(oValue.AdminPermissions))
 	for _, oAdminPermissionValue := range oValue.AdminPermissions {
 		oProtoAdminPermissionValue := pkgDomainToProto.AdminPermissionVariable(oAdminPermissionValue)
 		if oProtoAdminPermissionValue == nil {
@@ -34,7 +34,7 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 		aAdminPermissions = append(aAdminPermissions, oProtoAdminPermissionValue)
 	}
 
-	oProtoValue := &pbResource.AdminPermissionGroupVariable{
+	oProtoValue := &pb.AdminPermissionGroupVariable{
 		Key:              oValue.Key,
 		Name:             oValue.Name,
 		AdminPermissions: aAdminPermissions,
@@ -50,7 +50,7 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 }
 func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
 
-	aAdminPermissions := make([]*pbResource.AdminPermissionVariable, 0, len(oValue.AdminPermissions))
+	aAdminPermissions := make([]*pb.AdminPermissionVariable, 0, len(oValue.AdminPermissions))
 	for _, oAdminPermissionValue := range oValue.AdminPermissions {
 		oProtoAdminPermissionValue := pkgDomainToProto.AdminPermissionVariable(oAdminPermissionValue)
 		if oProtoAdminPermissionValue == nil {
@@ -60,7 +60,7 @@ func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *dom
 		aAdminPermissions = append(aAdminPermissions, oProtoAdminPermissionValue)
 	}
 
-	oProtoValue := &pbResource.AdminPermissionGroupVariable{
+	oProtoValue := &pb.AdminPermissionGroupVariable{
 		Key:              oValue.Key,
 		Name:             oValue.Name,
 		AdminPermissions: aAdminPermissions,

@@ -1,7 +1,7 @@
 package outputApplicationResource
 
 import (
-	pbResource "example/pb"
+	pb "example/pb"
 	pkgInput "example/pkg/input"
 
 	"google.golang.org/protobuf/types/known/structpb"
@@ -18,8 +18,8 @@ func NewAbstractResource() *AbstractResource {
 	return oResource
 }
 
-func (oSelf *AbstractResource) ToFilters(aFilters []*pkgInput.Filter) []*pbResource.Filter {
-	aPbFilters := make([]*pbResource.Filter, 0, len(aFilters))
+func (oSelf *AbstractResource) ToFilters(aFilters []*pkgInput.Filter) []*pb.Filter {
+	aPbFilters := make([]*pb.Filter, 0, len(aFilters))
 
 	for _, oFilter := range aFilters {
 		if oFilter == nil || oFilter.Field == nil {
@@ -31,7 +31,7 @@ func (oSelf *AbstractResource) ToFilters(aFilters []*pkgInput.Filter) []*pbResou
 			continue
 		}
 
-		oPbFilter := &pbResource.Filter{
+		oPbFilter := &pb.Filter{
 			Field: *oFilter.Field,
 			Value: oValue,
 		}
@@ -45,15 +45,15 @@ func (oSelf *AbstractResource) ToFilters(aFilters []*pkgInput.Filter) []*pbResou
 	return aPbFilters
 }
 
-func (oSelf *AbstractResource) ToSorters(aSorters []*pkgInput.Sorter) []*pbResource.Sorter {
-	aPbSorters := make([]*pbResource.Sorter, 0, len(aSorters))
+func (oSelf *AbstractResource) ToSorters(aSorters []*pkgInput.Sorter) []*pb.Sorter {
+	aPbSorters := make([]*pb.Sorter, 0, len(aSorters))
 
 	for _, oSorter := range aSorters {
 		if oSorter == nil || oSorter.Field == nil || oSorter.Order == nil {
 			continue
 		}
 
-		oPbSorter := &pbResource.Sorter{
+		oPbSorter := &pb.Sorter{
 			Field: *oSorter.Field,
 			Order: *oSorter.Order,
 		}
@@ -63,12 +63,12 @@ func (oSelf *AbstractResource) ToSorters(aSorters []*pkgInput.Sorter) []*pbResou
 	return aPbSorters
 }
 
-func (oSelf *AbstractResource) ToPagination(oPagination *pkgInput.Pagination) *pbResource.Pagination {
+func (oSelf *AbstractResource) ToPagination(oPagination *pkgInput.Pagination) *pb.Pagination {
 	if oPagination == nil {
 		return nil
 	}
 
-	oPbPagination := &pbResource.Pagination{}
+	oPbPagination := &pb.Pagination{}
 
 	if oPagination.Size != nil {
 		oPbPagination.Size = uint64(*oPagination.Size)

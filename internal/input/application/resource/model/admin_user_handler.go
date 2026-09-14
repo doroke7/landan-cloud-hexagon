@@ -6,7 +6,7 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
 	domain "example/internal/domain"
@@ -151,7 +151,7 @@ func (oSelf *AdminUserHandler) ShowOnesByFiltersWithSortersPagination(oContext c
 		return nil, status.Error(codes.NotFound, oErr.Error())
 	}
 
-	aProtoAdminUsers := make([]*pbResource.AdminUser, 0, len(aAdminUsers))
+	aProtoAdminUsers := make([]*pb.AdminUser, 0, len(aAdminUsers))
 	for _, oAdminUser := range aAdminUsers {
 		oProtoAdminUser := pkgDomainToProto.AdminUser(oAdminUser)
 		aProtoAdminUsers = append(aProtoAdminUsers, oProtoAdminUser)

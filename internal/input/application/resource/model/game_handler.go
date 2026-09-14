@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"runtime"
 
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
 	inputApplicationResource "example/internal/input/application/resource"
@@ -39,7 +39,7 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel
 		return nil, oErr
 	}
 
-	oProtoGame := &pbResource.Game{}
+	oProtoGame := &pb.Game{}
 
 	if oGameVariable.GameTypeId != nil {
 		oProtoGame.GameTypeId = uint64(*oGameVariable.GameTypeId)

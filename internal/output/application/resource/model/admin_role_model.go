@@ -3,7 +3,7 @@ package outputApplicationResourceModel
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
 	pkgProtoToDomain "example/pkg/proto_to_domain"
@@ -21,8 +21,8 @@ func NewAdminRoleModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminRo
 	return oModel
 }
 
-func domainAdminRoleValueToProtoAdminRoleValue(oValue *domain.AdminRoleVariable) *pbResource.AdminRoleVariable {
-	oAdminRoleValue := &pbResource.AdminRoleVariable{
+func domainAdminRoleValueToProtoAdminRoleValue(oValue *domain.AdminRoleVariable) *pb.AdminRoleVariable {
+	oAdminRoleValue := &pb.AdminRoleVariable{
 		Key:  oValue.Key,
 		Name: oValue.Name,
 	}

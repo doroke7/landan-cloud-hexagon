@@ -3,11 +3,11 @@ package domainToProto
 import (
 	domain "example/internal/domain"
 
-	pbResource "example/pb"
+	pb "example/pb"
 )
 
-func GameVariable(oGame *domain.GameVariable) *pbResource.GameVariable {
-	oValue := &pbResource.GameVariable{
+func GameVariable(oGame *domain.GameVariable) *pb.GameVariable {
+	oValue := &pb.GameVariable{
 		Key:         oGame.Key,
 		Name:        oGame.Name,
 		Description: oGame.Description,

@@ -5,7 +5,7 @@ import (
 
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
@@ -64,7 +64,7 @@ func (oSelf *GameHandler) ShowGamesTotalByFiltersWithSortersPagination(oContext 
 
 	aGames, iTotal, oErr := oSelf.LogicGameUsecase.ShowGamesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	aPbGames := make([]*pbResource.Game, 0, len(aGames))
+	aPbGames := make([]*pb.Game, 0, len(aGames))
 	for _, oGame := range aGames {
 		oProtoGame := pkgDomainToProto.Game(oGame)
 		aPbGames = append(aPbGames, oProtoGame)

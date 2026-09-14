@@ -3,7 +3,7 @@ package outputApplicationResourceModel
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
 	pkgProtoToDomain "example/pkg/proto_to_domain"
@@ -24,7 +24,7 @@ func NewAdminPermissionGroupModel(oAbstractModel *AbstractModel) outputPortAnyMo
 func (oSelf *AdminPermissionGroupModel) AddOne(oValue *domain.AdminPermissionGroupVariable) error {
 
 	oRequest := &pbResourceModel.AdminPermissionGroupAddOneInput{
-		Variable: &pbResource.AdminPermissionGroupVariable{
+		Variable: &pb.AdminPermissionGroupVariable{
 			Key:  oValue.Key,
 			Name: oValue.Name,
 		},
@@ -93,7 +93,7 @@ func (oSelf *AdminPermissionGroupModel) EditOneById(oValue *domain.AdminPermissi
 
 	oRequest := &pbResourceModel.AdminPermissionGroupEditOneByIdInput{
 		Id: iId,
-		Variable: &pbResource.AdminPermissionGroupVariable{
+		Variable: &pb.AdminPermissionGroupVariable{
 			Key:  oValue.Key,
 			Name: oValue.Name,
 		},

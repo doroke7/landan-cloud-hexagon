@@ -6,7 +6,7 @@ import (
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
@@ -65,7 +65,7 @@ func (oSelf *AdminUserHandler) ShowAdminUsersTotalByFiltersWithSortersPagination
 
 	aAdminUsers, iTotal, oErr := oSelf.LogicAdminUserUsecase.ShowAdminUsersTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	aPbAdminUsers := make([]*pbResource.AdminUser, 0, len(aAdminUsers))
+	aPbAdminUsers := make([]*pb.AdminUser, 0, len(aAdminUsers))
 	for _, oAdminUser := range aAdminUsers {
 		oProtoAdminUser := pkgDomainToProto.AdminUser(oAdminUser)
 		aPbAdminUsers = append(aPbAdminUsers, oProtoAdminUser)
@@ -127,7 +127,7 @@ func (oSelf *AdminUserHandler) ShowAdminUserById(oContext context.Context, oReq 
 		return nil, oErr
 	}
 
-	aPbAdminUsers := make([]*pbResource.AdminUser, 0, 1)
+	aPbAdminUsers := make([]*pb.AdminUser, 0, 1)
 	if oAdminUser != nil {
 		oProtoAdminUser := pkgDomainToProto.AdminUser(oAdminUser)
 		aPbAdminUsers = append(aPbAdminUsers, oProtoAdminUser)

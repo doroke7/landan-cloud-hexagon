@@ -3,7 +3,7 @@ package outputApplicationResourceModel
 import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 	pkgInput "example/pkg/input"
 	pkgProtoToDomain "example/pkg/proto_to_domain"
@@ -90,7 +90,7 @@ func (oSelf *AdminUserModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64
 func (oSelf *AdminUserModel) AddOne(oAdminUser *domain.AdminUserVariable) error {
 
 	oRequest := &pbResourceModel.AdminUserAddOneInput{
-		Variable: &pbResource.AdminUserVariable{
+		Variable: &pb.AdminUserVariable{
 			Name:     oAdminUser.Name,
 			Password: oAdminUser.Password,
 		},
@@ -105,7 +105,7 @@ func (oSelf *AdminUserModel) EditOneById(oAdminUser *domain.AdminUserVariable, i
 
 	oRequest := &pbResourceModel.AdminUserEditOneByIdInput{
 		Id: iId,
-		Variable: &pbResource.AdminUserVariable{
+		Variable: &pb.AdminUserVariable{
 			Name:     oAdminUser.Name,
 			Password: oAdminUser.Password,
 		},

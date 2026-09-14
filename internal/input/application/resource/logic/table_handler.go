@@ -8,7 +8,7 @@ import (
 	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyLogic "example/internal/usecase/port/any/logic"
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
@@ -27,14 +27,14 @@ func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler,
 	}
 }
 
-func domainTableToProtoTable(oTable *domain.Table) *pbResource.Table {
+func domainTableToProtoTable(oTable *domain.Table) *pb.Table {
 	if oTable == nil {
 		return nil
 	}
 
 	oProtoGame := pkgDomainToProto.Game(&oTable.Game)
 
-	return &pbResource.Table{
+	return &pb.Table{
 		Id:          uint64(oTable.Id),
 		No:          oTable.No,
 		GameId:      uint64(oTable.GameId),
@@ -107,11 +107,11 @@ func (oSelf *TableHandler) ShowTablesTotalByFiltersWithSortersPagination(oContex
 
 	aTables, iTotal, oErr := oSelf.LogicTableUsecase.ShowTablesTotalByFiltersWithSortersPagination(aFilters, aSorters, oPagination)
 
-	aPbTables := make([]*pbResource.Table, 0, len(aTables))
+	aPbTables := make([]*pb.Table, 0, len(aTables))
 	for _, oTable := range aTables {
 		oProtoGame := pkgDomainToProto.Game(&oTable.Game)
 
-		oProtoTable := &pbResource.Table{
+		oProtoTable := &pb.Table{
 			Id:          uint64(oTable.Id),
 			No:          oTable.No,
 			GameId:      uint64(oTable.GameId),

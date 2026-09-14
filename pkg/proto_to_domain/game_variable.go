@@ -2,10 +2,10 @@ package protoToDomain
 
 import (
 	domain "example/internal/domain"
-	pbResource "example/pb"
+	pb "example/pb"
 )
 
-func GameVariable(oVariable *pbResource.GameVariable) domain.GameVariable {
+func GameVariable(oVariable *pb.GameVariable) domain.GameVariable {
 	var oValue domain.GameVariable
 	if oVariable == nil {
 		return oValue

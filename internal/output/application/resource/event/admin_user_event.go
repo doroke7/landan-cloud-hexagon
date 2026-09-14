@@ -3,7 +3,7 @@ package outputApplicationResourceEvent
 import (
 	domain "example/internal/domain"
 	outputPortAnyEvent "example/internal/output/port/any/event"
-	pbResource "example/pb"
+	pb "example/pb"
 	pbResourceEvent "example/pb/resource/event"
 )
 
@@ -25,7 +25,7 @@ func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 	sName := oAdminUser.Name
 	sPassword := oAdminUser.Password
 
-	oValue := &pbResource.AppUserVariable{
+	oValue := &pb.AppUserVariable{
 		Id:       &iId,
 		Name:     &sName,
 		Password: &sPassword,

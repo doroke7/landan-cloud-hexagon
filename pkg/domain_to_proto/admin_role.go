@@ -5,15 +5,15 @@ import (
 
 	domain "example/internal/domain"
 
-	pbResource "example/pb"
+	pb "example/pb"
 )
 
-func AdminRole(oDomain *domain.AdminRole) *pbResource.AdminRole {
+func AdminRole(oDomain *domain.AdminRole) *pb.AdminRole {
 	if oDomain == nil {
 		return nil
 	}
 
-	return &pbResource.AdminRole{
+	return &pb.AdminRole{
 		Id:        oDomain.Id,
 		Key:       oDomain.Key,
 		Name:      oDomain.Name,
