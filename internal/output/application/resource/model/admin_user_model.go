@@ -9,27 +9,6 @@ import (
 	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
-func protoAdminUserToDomainAdminUser(oProto *pbResource.AdminUser) domain.AdminUser {
-	if oProto == nil {
-		return domain.AdminUser{}
-	}
-
-	aAdminRoles := make([]domain.AdminRole, 0, len(oProto.GetAdminRoles()))
-	for _, oProtoAdminRole := range oProto.GetAdminRoles() {
-		aAdminRoles = append(aAdminRoles, pkgProtoToDomain.AdminRole(oProtoAdminRole))
-	}
-
-	return domain.AdminUser{
-		Id:         uint64(oProto.GetId()),
-		Name:       oProto.GetName(),
-		Password:   oProto.GetPassword(),
-		CreatedAt:  oProto.GetCreatedAt().AsTime(),
-		UpdatedAt:  oProto.GetUpdatedAt().AsTime(),
-		DeletedAt:  oProto.GetDeletedAt().AsTime(),
-		AdminRoles: aAdminRoles,
-	}
-}
-
 type AdminUserModel struct {
 	*AbstractModel
 }
@@ -51,7 +30,7 @@ func (oSelf *AdminUserModel) ShowOneByName(sName string) (*domain.AdminUser, err
 		return nil, err
 	}
 
-	oAdminUser := protoAdminUserToDomainAdminUser(oResp.GetAdminUser())
+	oAdminUser := pkgProtoToDomain.AdminUser(oResp.GetAdminUser())
 
 	return &oAdminUser, nil
 }
@@ -67,7 +46,7 @@ func (oSelf *AdminUserModel) ShowOneById(iId uint64) (*domain.AdminUser, error) 
 		return nil, err
 	}
 
-	oAdminUser := protoAdminUserToDomainAdminUser(oResp.GetAdminUser())
+	oAdminUser := pkgProtoToDomain.AdminUser(oResp.GetAdminUser())
 
 	return &oAdminUser, nil
 }
@@ -88,7 +67,7 @@ func (oSelf *AdminUserModel) ShowOnesByFiltersWithSortersPagination(aFilters []*
 
 	aAdminUsers := make([]*domain.AdminUser, 0, len(oResponse.GetAdminUsers()))
 	for _, oOne := range oResponse.GetAdminUsers() {
-		oAdminUser := protoAdminUserToDomainAdminUser(oOne)
+		oAdminUser := pkgProtoToDomain.AdminUser(oOne)
 		aAdminUsers = append(aAdminUsers, &oAdminUser)
 	}
 

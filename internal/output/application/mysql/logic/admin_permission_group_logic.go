@@ -120,14 +120,14 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 // EditAdminPermissionGroupById 更新 group 本身欄位，並同步 admin_permissions：
 // 傳進來沒帶 id 的就新增，帶 id 的就修改；db 裡面現有、但沒出現在傳進來 id 清單裡的就刪除。
 func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
+
 	oAdminPermissionGroupColumns, oErr := pkgUtility.StructToMap(oValue)
+
 	if oErr != nil {
 		return oErr
 	}
 
 	delete(oAdminPermissionGroupColumns, "admin_permissions")
-
-	fmt.Println("oAdminPermissionGroupColumns=", oAdminPermissionGroupColumns)
 
 	oError := oSelf.DB.WithContext(oSelf.Context).Transaction(func(oTx *gorm.DB) error {
 

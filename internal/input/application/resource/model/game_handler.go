@@ -8,11 +8,11 @@ import (
 	pbResource "example/pb/resource"
 	pbResourceModel "example/pb/resource/model"
 
-	domain "example/internal/domain"
 	inputApplicationResource "example/internal/input/application/resource"
 	usecasePortAnyModel "example/internal/usecase/port/any/model"
 	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 type GameHandler struct {
@@ -28,31 +28,12 @@ func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, 
 	}
 }
 
-// protoGameValueToDomainGameValue 把 gRPC 帶進來的 variable 攤成 domain.GameVariable（指標欄位可選）。
-func protoGameValueToDomainGameValue(oVariable *pbResource.GameValue) domain.GameVariable {
-	var oValue domain.GameVariable
-	if oVariable == nil {
-		return oValue
-	}
-
-	oValue.Key = oVariable.Key
-	oValue.Name = oVariable.Name
-	oValue.Description = oVariable.Description
-
-	if oVariable.GameTypeId != nil {
-		iGameTypeId := uint64(*oVariable.GameTypeId)
-		oValue.GameTypeId = &iGameTypeId
-	}
-
-	return oValue
-}
-
 func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel.GameAddOneInput) (*pbResourceModel.GameAddOneOutput, error) {
 	fmt.Println(runtime.Caller(0))
 
-	oGameValue := protoGameValueToDomainGameValue(oReq.GetValue())
+	oGameVariable := pkgProtoToDomain.GameValue(oReq.GetValue())
 
-	oErr := oSelf.ModelGameUsecase.AddOne(&oGameValue)
+	oErr := oSelf.ModelGameUsecase.AddOne(&oGameVariable)
 
 	if oErr != nil {
 		return nil, oErr
@@ -60,17 +41,17 @@ func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel
 
 	oProtoGame := &pbResource.Game{}
 
-	if oGameValue.GameTypeId != nil {
-		oProtoGame.GameTypeId = uint64(*oGameValue.GameTypeId)
+	if oGameVariable.GameTypeId != nil {
+		oProtoGame.GameTypeId = uint64(*oGameVariable.GameTypeId)
 	}
-	if oGameValue.Key != nil {
-		oProtoGame.Key = *oGameValue.Key
+	if oGameVariable.Key != nil {
+		oProtoGame.Key = *oGameVariable.Key
 	}
-	if oGameValue.Name != nil {
-		oProtoGame.Name = *oGameValue.Name
+	if oGameVariable.Name != nil {
+		oProtoGame.Name = *oGameVariable.Name
 	}
-	if oGameValue.Description != nil {
-		oProtoGame.Description = *oGameValue.Description
+	if oGameVariable.Description != nil {
+		oProtoGame.Description = *oGameVariable.Description
 	}
 
 	return &pbResourceModel.GameAddOneOutput{
@@ -100,7 +81,7 @@ func (oSelf *GameHandler) ShowOneByKey(oContext context.Context, oReq *pbResourc
 
 func (oSelf *GameHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.GameEditOneByIdInput) (*pbResourceModel.GameEditOneByIdOutput, error) {
 
-	oGameValue := protoGameValueToDomainGameValue(oReq.GetValue())
+	oGameValue := pkgProtoToDomain.GameValue(oReq.GetValue())
 
 	oErr := oSelf.ModelGameUsecase.EditOneById(&oGameValue, uint64(oReq.Id))
 	if oErr != nil {

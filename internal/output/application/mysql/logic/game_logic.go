@@ -89,7 +89,9 @@ func (oSelf *GameLogic) ShowGamesTotalByFiltersWithSortersPagination(aFilters []
 			Limit(int(*oLimit.Count)).
 			Offset(int(*oLimit.Offset)).
 			Find(&aGames)
+
 		oFindErr = oResult.Error
+
 	}()
 
 	go func() {

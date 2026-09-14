@@ -8,21 +8,21 @@ import (
 	pbResource "example/pb/resource"
 )
 
-func AdminPermission(oDomain *domain.AdminPermission) *pbResource.AdminPermission {
-	if oDomain == nil {
+func AdminPermission(oDomainAdminPermission *domain.AdminPermission) *pbResource.AdminPermission {
+	if oDomainAdminPermission == nil {
 		return nil
 	}
 
-	oProto := &pbResource.AdminPermission{
-		Id:                     oDomain.Id,
-		Type:                   uint64(oDomain.Type),
-		Key:                    oDomain.Key,
-		Name:                   oDomain.Name,
-		CreatedAt:              timestamppb.New(oDomain.CreatedAt),
-		UpdatedAt:              timestamppb.New(oDomain.UpdatedAt),
-		DeletedAt:              timestamppb.New(oDomain.DeletedAt),
-		AdminPermissionGroupId: oDomain.AdminPermissionGroupId,
+	oProtoAdminPermission := &pbResource.AdminPermission{
+		Id:                     oDomainAdminPermission.Id,
+		Type:                   uint64(oDomainAdminPermission.Type),
+		Key:                    oDomainAdminPermission.Key,
+		Name:                   oDomainAdminPermission.Name,
+		CreatedAt:              timestamppb.New(oDomainAdminPermission.CreatedAt),
+		UpdatedAt:              timestamppb.New(oDomainAdminPermission.UpdatedAt),
+		DeletedAt:              timestamppb.New(oDomainAdminPermission.DeletedAt),
+		AdminPermissionGroupId: oDomainAdminPermission.AdminPermissionGroupId,
 	}
 
-	return oProto
+	return oProtoAdminPermission
 }
