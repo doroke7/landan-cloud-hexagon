@@ -56,7 +56,7 @@ func (oSelf *GameTypeUsecase) ShowTree() (*domain.GameType, error) {
 
 	oRoot := &domain.GameType{}
 	for _, oOne := range aRoots {
-		oRoot.Children = append(oRoot.Children, *oOne)
+		oRoot.Children = append(oRoot.Children, oOne)
 	}
 
 	return oRoot, nil

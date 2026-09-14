@@ -25,7 +25,7 @@ func GameType(oDomain *domain.GameType) *pb.GameType {
 	}
 
 	for i := range oDomain.Children {
-		oProto.Children = append(oProto.Children, GameType(&oDomain.Children[i]))
+		oProto.Children = append(oProto.Children, GameType(oDomain.Children[i]))
 	}
 
 	return oProto

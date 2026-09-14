@@ -38,8 +38,8 @@ func (oSelf *GameTypeHandler) ShowTree(oContext context.Context, oReq *pbResourc
 
 	aNodes := make([]*pb.GameType, 0, len(aRoots))
 
-	var fnFlatten func(oNode domain.GameType)
-	fnFlatten = func(oNode domain.GameType) {
+	var fnFlatten func(oNode *domain.GameType)
+	fnFlatten = func(oNode *domain.GameType) {
 		aNodes = append(aNodes, &pb.GameType{
 			Id:        uint64(oNode.Id),
 			ParentId:  uint64(oNode.ParentId),
@@ -56,7 +56,7 @@ func (oSelf *GameTypeHandler) ShowTree(oContext context.Context, oReq *pbResourc
 	}
 
 	for _, oRoot := range aRoots {
-		fnFlatten(*oRoot)
+		fnFlatten(oRoot)
 	}
 
 	return &pbResourceLogic.GameTypeShowTreeOutput{GameTypes: aNodes}, nil

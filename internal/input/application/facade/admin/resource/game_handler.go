@@ -49,7 +49,7 @@ func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pb.GameType {
 	}
 
 	for i := range oGameType.Children {
-		oChildProto := domainGameTypeToProtoGameType(&oGameType.Children[i])
+		oChildProto := domainGameTypeToProtoGameType(oGameType.Children[i])
 		oProto.Children = append(oProto.Children, oChildProto)
 	}
 
