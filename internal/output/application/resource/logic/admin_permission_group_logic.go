@@ -6,6 +6,7 @@ import (
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
 	pkgProtoToDomain "example/pkg/proto_to_domain"
+	// pkgDomainToProto "example/pkg/domain_to_proto"
 )
 
 type AdminPermissionGroupLogic struct {

@@ -4,6 +4,7 @@ import (
 	domain "example/internal/domain"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pbResourceModel "example/pb/resource/model"
+	pkgDomainToProto "example/pkg/domain_to_proto"
 	pkgInput "example/pkg/input"
 	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
@@ -37,7 +38,7 @@ func domainAdminPermissionValueToProtoAdminPermissionValue(oValue *domain.AdminP
 func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissionValue) error {
 
 	oRequest := &pbResourceModel.AdminPermissionAddOneInput{
-		Value: domainAdminPermissionValueToProtoAdminPermissionValue(oAdminPermission),
+		Value: pkgDomainToProto.AdminPermissionValue(oAdminPermission),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.AdminPermission.AddOne(oSelf.Context, oRequest)
@@ -68,7 +69,7 @@ func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPer
 
 	oRequest := &pbResourceModel.AdminPermissionEditOneByIdInput{
 		Id:    uint64(iId),
-		Value: domainAdminPermissionValueToProtoAdminPermissionValue(oAdminPermission),
+		Value: pkgDomainToProto.AdminPermissionValue(oAdminPermission),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.AdminPermission.EditOneById(oSelf.Context, oRequest)
