@@ -11,6 +11,7 @@ import (
 	pbResource "example/pb/resource"
 	pbResourceLogic "example/pb/resource/logic"
 	pkgInput "example/pkg/input"
+	pkgProtoToDomain "example/pkg/proto_to_domain"
 )
 
 func protoAdminPermissionValueToDomainAdminPermissionValue(oProto *pbResourceLogic.AdminPermissionValue) *domain.AdminPermissionValue {
@@ -32,30 +33,6 @@ func protoAdminPermissionValueToDomainAdminPermissionValue(oProto *pbResourceLog
 	}
 
 	return oAdminPermissionValue
-}
-
-// domainAdminPermissionGroupToProtoAdminPermissionGroup 遞迴帶出 Parent / Children。
-func domainAdminPermissionGroupToProtoAdminPermissionGroup(oNode *domain.AdminPermissionGroup) *pbResource.AdminPermissionGroup {
-	if oNode == nil {
-		return nil
-	}
-
-	oPb := &pbResource.AdminPermissionGroup{
-		Id:        uint64(oNode.Id),
-		ParentId:  uint64(oNode.ParentId),
-		Key:       oNode.Key,
-		Name:      oNode.Name,
-		CreatedAt: timestamppb.New(oNode.CreatedAt),
-		UpdatedAt: timestamppb.New(oNode.UpdatedAt),
-		DeletedAt: timestamppb.New(oNode.DeletedAt),
-		Parent:    domainAdminPermissionGroupToProtoAdminPermissionGroup(oNode.Parent),
-	}
-
-	for i := range oNode.Children {
-		oPb.Children = append(oPb.Children, domainAdminPermissionGroupToProtoAdminPermissionGroup(&oNode.Children[i]))
-	}
-
-	return oPb
 }
 
 type AdminPermissionGroupHandler struct {
@@ -112,7 +89,8 @@ func (oSelf *AdminPermissionGroupHandler) ShowTree(oContext context.Context, oRe
 
 	aNodes := make([]*pbResource.AdminPermissionGroup, 0, len(aRoots))
 	for _, oRoot := range aRoots {
-		aNodes = append(aNodes, domainAdminPermissionGroupToProtoAdminPermissionGroup(oRoot))
+		oNode := pkgProtoToDomain.AdminPermissionGroup(oRoot)
+		aNodes = append(aNodes, oNode)
 	}
 
 	return &pbResourceLogic.AdminPermissionGroupShowTreeOutput{AdminPermissionGroups: aNodes}, nil
@@ -120,7 +98,8 @@ func (oSelf *AdminPermissionGroupHandler) ShowTree(oContext context.Context, oRe
 
 func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroupById(oContext context.Context, oReq *pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdInput) (*pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput, error) {
 
-	oAdminPermissionGroup, oErr := oSelf.LogicAdminPermissionGroupUsecase.ShowAdminPermissionGroupById(oReq.GetId())
+	iId := oReq.GetId()
+	oAdminPermissionGroup, oErr := oSelf.LogicAdminPermissionGroupUsecase.ShowAdminPermissionGroupById(iId)
 	if oErr != nil {
 		return nil, oErr
 	}
@@ -129,8 +108,10 @@ func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroupById(oContext 
 		return nil, nil
 	}
 
+	oAdminPermissionGroupPb := pkgProtoToDomain.AdminPermissionGroup(oAdminPermissionGroup)
+
 	return &pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupByIdOutput{
-		AdminPermissionGroup: domainAdminPermissionGroupToProtoAdminPermissionGroup(oAdminPermissionGroup),
+		AdminPermissionGroup: oAdminPermissionGroupPb,
 	}, nil
 }
 
@@ -143,7 +124,8 @@ func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroups(oContext con
 
 	aNodes := make([]*pbResource.AdminPermissionGroup, 0, len(aAdminPermissionGroups))
 	for _, oOne := range aAdminPermissionGroups {
-		aNodes = append(aNodes, domainAdminPermissionGroupToProtoAdminPermissionGroup(oOne))
+		oNode := pkgProtoToDomain.AdminPermissionGroup(oOne)
+		aNodes = append(aNodes, oNode)
 	}
 
 	return &pbResourceLogic.AdminPermissionGroupShowAdminPermissionGroupsOutput{AdminPermissionGroups: aNodes}, nil
@@ -159,11 +141,13 @@ func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroupsTotalByFilter
 
 		sField := oOne.GetField()
 		sOperator := oOne.GetOperator()
-		aFilters = append(aFilters, &pkgInput.Filter{
+		oValue := oOne.GetValue().AsInterface()
+		oFilter := &pkgInput.Filter{
 			Field:    &sField,
 			Operator: &sOperator,
-			Value:    oOne.GetValue().AsInterface(),
-		})
+			Value:    oValue,
+		}
+		aFilters = append(aFilters, oFilter)
 	}
 
 	aSorters := make([]*pkgInput.Sorter, 0, len(oReq.GetSorters()))
@@ -174,10 +158,11 @@ func (oSelf *AdminPermissionGroupHandler) ShowAdminPermissionGroupsTotalByFilter
 
 		sField := oOne.GetField()
 		sOrder := oOne.GetOrder()
-		aSorters = append(aSorters, &pkgInput.Sorter{
+		oSorter := &pkgInput.Sorter{
 			Field: &sField,
 			Order: &sOrder,
-		})
+		}
+		aSorters = append(aSorters, oSorter)
 	}
 
 	iSize := uint(oReq.GetPagination().GetSize())
