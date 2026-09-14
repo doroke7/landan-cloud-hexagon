@@ -368,9 +368,9 @@ func (x *AdminPermissionGroupShowOnesByParentIdOutput) GetAdminPermissionGroups(
 
 type AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Pagination    *resource.Pagination   `protobuf:"bytes,1,opt,name=pagination,proto3" json:"pagination,omitempty"`
-	Filters       []*resource.Filter     `protobuf:"bytes,2,rep,name=filters,proto3" json:"filters,omitempty"`
-	Sorters       []*resource.Sorter     `protobuf:"bytes,3,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Filters       []*resource.Filter     `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*resource.Sorter     `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *resource.Pagination   `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -405,13 +405,6 @@ func (*AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput) Descript
 	return file_resource_model_admin_permission_group_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
-	if x != nil {
-		return x.Pagination
-	}
-	return nil
-}
-
 func (x *AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput) GetFilters() []*resource.Filter {
 	if x != nil {
 		return x.Filters
@@ -422,6 +415,13 @@ func (x *AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput) GetFil
 func (x *AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput) GetSorters() []*resource.Sorter {
 	if x != nil {
 		return x.Sorters
+	}
+	return nil
+}
+
+func (x *AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput) GetPagination() *resource.Pagination {
+	if x != nil {
+		return x.Pagination
 	}
 	return nil
 }
@@ -578,12 +578,12 @@ const file_resource_model_admin_permission_group_proto_rawDesc = "" +
 	"\tparent_id\x18\x01 \x01(\x04R\bparentId\"\x89\x01\n" +
 	",AdminPermissionGroupShowOnesByParentIdOutput\x12Y\n" +
 	"\x17admin_permission_groups\x18\x01 \x03(\v2!.pb.resource.AdminPermissionGroupR\x15adminPermissionGroups\"\xd8\x01\n" +
-	"?AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput\x127\n" +
+	"?AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput\x12-\n" +
+	"\afilters\x18\x01 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
+	"\asorters\x18\x02 \x03(\v2\x13.pb.resource.SorterR\asorters\x127\n" +
 	"\n" +
-	"pagination\x18\x01 \x01(\v2\x17.pb.resource.PaginationR\n" +
-	"pagination\x12-\n" +
-	"\afilters\x18\x02 \x03(\v2\x13.pb.resource.FilterR\afilters\x12-\n" +
-	"\asorters\x18\x03 \x03(\v2\x13.pb.resource.SorterR\asorters\"\x9d\x01\n" +
+	"pagination\x18\x03 \x01(\v2\x17.pb.resource.PaginationR\n" +
+	"pagination\"\x9d\x01\n" +
 	"@AdminPermissionGroupShowOnesByFiltersWithSortersPaginationOutput\x12Y\n" +
 	"\x17admin_permission_groups\x18\x01 \x03(\v2!.pb.resource.AdminPermissionGroupR\x15adminPermissionGroups\"X\n" +
 	"'AdminPermissionGroupTotalByFiltersInput\x12-\n" +
@@ -626,20 +626,20 @@ var file_resource_model_admin_permission_group_proto_goTypes = []any{
 	(*AdminPermissionGroupTotalByFiltersOutput)(nil),                         // 11: pb.resource.model.AdminPermissionGroupTotalByFiltersOutput
 	(*resource.AdminPermissionGroupValue)(nil),                               // 12: pb.resource.AdminPermissionGroupValue
 	(*resource.AdminPermissionGroup)(nil),                                    // 13: pb.resource.AdminPermissionGroup
-	(*resource.Pagination)(nil),                                              // 14: pb.resource.Pagination
-	(*resource.Filter)(nil),                                                  // 15: pb.resource.Filter
-	(*resource.Sorter)(nil),                                                  // 16: pb.resource.Sorter
+	(*resource.Filter)(nil),                                                  // 14: pb.resource.Filter
+	(*resource.Sorter)(nil),                                                  // 15: pb.resource.Sorter
+	(*resource.Pagination)(nil),                                              // 16: pb.resource.Pagination
 }
 var file_resource_model_admin_permission_group_proto_depIdxs = []int32{
 	12, // 0: pb.resource.model.AdminPermissionGroupAddOneInput.value:type_name -> pb.resource.AdminPermissionGroupValue
 	13, // 1: pb.resource.model.AdminPermissionGroupAddOneOutput.admin_permission_group:type_name -> pb.resource.AdminPermissionGroup
 	12, // 2: pb.resource.model.AdminPermissionGroupEditOneByIdInput.value:type_name -> pb.resource.AdminPermissionGroupValue
 	13, // 3: pb.resource.model.AdminPermissionGroupShowOnesByParentIdOutput.admin_permission_groups:type_name -> pb.resource.AdminPermissionGroup
-	14, // 4: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
-	15, // 5: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
-	16, // 6: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	14, // 4: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
+	15, // 5: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
+	16, // 6: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
 	13, // 7: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationOutput.admin_permission_groups:type_name -> pb.resource.AdminPermissionGroup
-	15, // 8: pb.resource.model.AdminPermissionGroupTotalByFiltersInput.filters:type_name -> pb.resource.Filter
+	14, // 8: pb.resource.model.AdminPermissionGroupTotalByFiltersInput.filters:type_name -> pb.resource.Filter
 	0,  // 9: pb.resource.model.AdminPermissionGroupModel.AddOne:input_type -> pb.resource.model.AdminPermissionGroupAddOneInput
 	6,  // 10: pb.resource.model.AdminPermissionGroupModel.ShowOnesByParentId:input_type -> pb.resource.model.AdminPermissionGroupShowOnesByParentIdInput
 	8,  // 11: pb.resource.model.AdminPermissionGroupModel.ShowOnesByFiltersWithSortersPagination:input_type -> pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput

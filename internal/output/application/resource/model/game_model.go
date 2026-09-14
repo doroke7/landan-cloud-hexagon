@@ -19,10 +19,10 @@ func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
 	}
 }
 
-func (oSelf *GameModel) AddOne(oGameParm *domain.GameVariable) error {
+func (oSelf *GameModel) AddOne(oGameVariable *domain.GameVariable) error {
 
 	oRequest := &pbResourceModel.GameAddOneInput{
-		Value: pkgDomainToProto.GameValue(oGameParm),
+		Value: pkgDomainToProto.GameValue(oGameVariable),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Game.AddOne(oSelf.Context, oRequest)
