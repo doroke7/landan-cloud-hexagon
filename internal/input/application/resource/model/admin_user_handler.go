@@ -3,9 +3,6 @@ package inputApplicationResourceModel
 import (
 	"context"
 
-	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/status"
-
 	pb "example/pb"
 	pbResourceModel "example/pb/resource/model"
 
