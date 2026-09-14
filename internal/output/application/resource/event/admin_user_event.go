@@ -25,13 +25,13 @@ func (oSelf *AdminUserEvent) AddOne(oAdminUser *domain.AdminUser) error {
 	sName := oAdminUser.Name
 	sPassword := oAdminUser.Password
 
-	oValue := &pbResource.AppUserValue{
+	oValue := &pbResource.AppUserVariable{
 		Id:       &iId,
 		Name:     &sName,
 		Password: &sPassword,
 	}
 	oRequest := &pbResourceEvent.AdminUserEventAddOneInput{
-		Value: oValue,
+		Variable: oValue,
 	}
 	_, oErr := oSelf.ResourceEventClient.AdminUser.AddOne(oSelf.Context, oRequest)
 

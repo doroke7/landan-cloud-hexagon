@@ -22,7 +22,7 @@ func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
 func (oSelf *GameModel) AddOne(oGameVariable *domain.GameVariable) error {
 
 	oRequest := &pbResourceModel.GameAddOneInput{
-		Value: pkgDomainToProto.GameValue(oGameVariable),
+		Variable: pkgDomainToProto.GameVariable(oGameVariable),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Game.AddOne(oSelf.Context, oRequest)
@@ -78,8 +78,8 @@ func (oSelf *GameModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, err
 func (oSelf *GameModel) EditOneById(oGame *domain.GameVariable, iId uint64) error {
 
 	oRequest := &pbResourceModel.GameEditOneByIdInput{
-		Id:    iId,
-		Value: pkgDomainToProto.GameValue(oGame),
+		Id:       iId,
+		Variable: pkgDomainToProto.GameVariable(oGame),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Game.EditOneById(oSelf.Context, oRequest)

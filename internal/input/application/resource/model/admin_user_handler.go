@@ -61,7 +61,7 @@ func (oSelf *AdminUserHandler) ShowOneById(oContext context.Context, oReq *pbRes
 
 func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResourceModel.AdminUserAddOneInput) (*pbResourceModel.AdminUserAddOneOutput, error) {
 
-	oValue := oReq.GetValue()
+	oValue := oReq.GetVariable()
 
 	oAdminUserValue := domain.AdminUserVariable{}
 	if oValue != nil {
@@ -80,7 +80,7 @@ func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResource
 
 func (oSelf *AdminUserHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminUserEditOneByIdInput) (*pbResourceModel.AdminUserEditOneByIdOutput, error) {
 
-	oValue := oReq.GetValue()
+	oValue := oReq.GetVariable()
 
 	oAdminUserValue := domain.AdminUserVariable{}
 	if oValue != nil {

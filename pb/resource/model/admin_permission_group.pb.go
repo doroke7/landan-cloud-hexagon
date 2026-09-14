@@ -23,8 +23,8 @@ const (
 )
 
 type AdminPermissionGroupAddOneInput struct {
-	state         protoimpl.MessageState              `protogen:"open.v1"`
-	Value         *resource.AdminPermissionGroupValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	state         protoimpl.MessageState                 `protogen:"open.v1"`
+	Variable      *resource.AdminPermissionGroupVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,9 +59,9 @@ func (*AdminPermissionGroupAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_group_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminPermissionGroupAddOneInput) GetValue() *resource.AdminPermissionGroupValue {
+func (x *AdminPermissionGroupAddOneInput) GetVariable() *resource.AdminPermissionGroupVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -111,9 +111,9 @@ func (x *AdminPermissionGroupAddOneOutput) GetAdminPermissionGroup() *resource.A
 }
 
 type AdminPermissionGroupEditOneByIdInput struct {
-	state         protoimpl.MessageState              `protogen:"open.v1"`
-	Value         *resource.AdminPermissionGroupValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	Id            uint64                              `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState                 `protogen:"open.v1"`
+	Variable      *resource.AdminPermissionGroupVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint64                                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -148,9 +148,9 @@ func (*AdminPermissionGroupEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_group_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *AdminPermissionGroupEditOneByIdInput) GetValue() *resource.AdminPermissionGroupValue {
+func (x *AdminPermissionGroupEditOneByIdInput) GetVariable() *resource.AdminPermissionGroupVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -562,13 +562,13 @@ var File_resource_model_admin_permission_group_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_permission_group_proto_rawDesc = "" +
 	"\n" +
-	"+resource/model/admin_permission_group.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"_\n" +
-	"\x1fAdminPermissionGroupAddOneInput\x12<\n" +
-	"\x05value\x18\x01 \x01(\v2&.pb.resource.AdminPermissionGroupValueR\x05value\"{\n" +
+	"+resource/model/admin_permission_group.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"h\n" +
+	"\x1fAdminPermissionGroupAddOneInput\x12E\n" +
+	"\bvariable\x18\x01 \x01(\v2).pb.resource.AdminPermissionGroupVariableR\bvariable\"{\n" +
 	" AdminPermissionGroupAddOneOutput\x12W\n" +
-	"\x16admin_permission_group\x18\x01 \x01(\v2!.pb.resource.AdminPermissionGroupR\x14adminPermissionGroup\"t\n" +
-	"$AdminPermissionGroupEditOneByIdInput\x12<\n" +
-	"\x05value\x18\x01 \x01(\v2&.pb.resource.AdminPermissionGroupValueR\x05value\x12\x0e\n" +
+	"\x16admin_permission_group\x18\x01 \x01(\v2!.pb.resource.AdminPermissionGroupR\x14adminPermissionGroup\"}\n" +
+	"$AdminPermissionGroupEditOneByIdInput\x12E\n" +
+	"\bvariable\x18\x01 \x01(\v2).pb.resource.AdminPermissionGroupVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"'\n" +
 	"%AdminPermissionGroupEditOneByIdOutput\"8\n" +
 	"&AdminPermissionGroupRemoveOneByIdInput\x12\x0e\n" +
@@ -624,16 +624,16 @@ var file_resource_model_admin_permission_group_proto_goTypes = []any{
 	(*AdminPermissionGroupShowOnesByFiltersWithSortersPaginationOutput)(nil), // 9: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationOutput
 	(*AdminPermissionGroupTotalByFiltersInput)(nil),                          // 10: pb.resource.model.AdminPermissionGroupTotalByFiltersInput
 	(*AdminPermissionGroupTotalByFiltersOutput)(nil),                         // 11: pb.resource.model.AdminPermissionGroupTotalByFiltersOutput
-	(*resource.AdminPermissionGroupValue)(nil),                               // 12: pb.resource.AdminPermissionGroupValue
+	(*resource.AdminPermissionGroupVariable)(nil),                            // 12: pb.resource.AdminPermissionGroupVariable
 	(*resource.AdminPermissionGroup)(nil),                                    // 13: pb.resource.AdminPermissionGroup
 	(*resource.Filter)(nil),                                                  // 14: pb.resource.Filter
 	(*resource.Sorter)(nil),                                                  // 15: pb.resource.Sorter
 	(*resource.Pagination)(nil),                                              // 16: pb.resource.Pagination
 }
 var file_resource_model_admin_permission_group_proto_depIdxs = []int32{
-	12, // 0: pb.resource.model.AdminPermissionGroupAddOneInput.value:type_name -> pb.resource.AdminPermissionGroupValue
+	12, // 0: pb.resource.model.AdminPermissionGroupAddOneInput.variable:type_name -> pb.resource.AdminPermissionGroupVariable
 	13, // 1: pb.resource.model.AdminPermissionGroupAddOneOutput.admin_permission_group:type_name -> pb.resource.AdminPermissionGroup
-	12, // 2: pb.resource.model.AdminPermissionGroupEditOneByIdInput.value:type_name -> pb.resource.AdminPermissionGroupValue
+	12, // 2: pb.resource.model.AdminPermissionGroupEditOneByIdInput.variable:type_name -> pb.resource.AdminPermissionGroupVariable
 	13, // 3: pb.resource.model.AdminPermissionGroupShowOnesByParentIdOutput.admin_permission_groups:type_name -> pb.resource.AdminPermissionGroup
 	14, // 4: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
 	15, // 5: pb.resource.model.AdminPermissionGroupShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter

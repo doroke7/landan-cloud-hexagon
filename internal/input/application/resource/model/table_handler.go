@@ -29,7 +29,7 @@ func NewTableHandler(oAbstractHandler *inputApplicationResource.AbstractHandler,
 }
 
 // protoTableValueToDomainTableValue 把 gRPC 帶進來的 variable 攤成 domain.TableVariable（指標欄位可選）。
-func protoTableValueToDomainTableValue(oVariable *pbResource.TableValue) domain.TableVariable {
+func protoTableValueToDomainTableValue(oVariable *pbResource.TableVariable) domain.TableVariable {
 	var oValue domain.TableVariable
 	if oVariable == nil {
 		return oValue
@@ -69,7 +69,7 @@ func protoTableValueToDomainTableValue(oVariable *pbResource.TableValue) domain.
 
 func (oSelf *TableHandler) AddOne(oContext context.Context, oReq *pbResourceModel.TableAddOneInput) (*pbResourceModel.TableAddOneOutput, error) {
 
-	oTableValue := protoTableValueToDomainTableValue(oReq.GetValue())
+	oTableValue := protoTableValueToDomainTableValue(oReq.GetVariable())
 
 	oErr := oSelf.ModelTableUsecase.AddOne(&oTableValue)
 
@@ -82,7 +82,7 @@ func (oSelf *TableHandler) AddOne(oContext context.Context, oReq *pbResourceMode
 
 func (oSelf *TableHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.TableEditOneByIdInput) (*pbResourceModel.TableEditOneByIdOutput, error) {
 
-	oTableValue := protoTableValueToDomainTableValue(oReq.GetValue())
+	oTableValue := protoTableValueToDomainTableValue(oReq.GetVariable())
 
 	oErr := oSelf.ModelTableUsecase.EditOneById(&oTableValue, uint64(oReq.Id))
 

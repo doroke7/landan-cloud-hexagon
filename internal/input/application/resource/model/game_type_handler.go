@@ -27,7 +27,7 @@ func NewGameTypeHandler(oAbstractHandler *inputApplicationResource.AbstractHandl
 
 func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceModel.GameTypeAddOneInput) (*pbResourceModel.GameTypeAddOneOutput, error) {
 
-	oValue := oReq.GetValue()
+	oValue := oReq.GetVariable()
 
 	var oGameTypeValue domain.GameTypeVariable
 	if oValue != nil {
@@ -60,7 +60,7 @@ func (oSelf *GameTypeHandler) AddOne(oContext context.Context, oReq *pbResourceM
 
 func (oSelf *GameTypeHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.GameTypeEditOneByIdInput) (*pbResourceModel.GameTypeEditOneByIdOutput, error) {
 
-	oValue := oReq.GetValue()
+	oValue := oReq.GetVariable()
 
 	var oGameTypeValue domain.GameTypeVariable
 	if oValue != nil {

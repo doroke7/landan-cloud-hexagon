@@ -31,7 +31,7 @@ func NewGameHandler(oAbstractHandler *inputApplicationResource.AbstractHandler, 
 func (oSelf *GameHandler) AddOne(oContext context.Context, oReq *pbResourceModel.GameAddOneInput) (*pbResourceModel.GameAddOneOutput, error) {
 	fmt.Println(runtime.Caller(0))
 
-	oGameVariable := pkgProtoToDomain.GameValue(oReq.GetValue())
+	oGameVariable := pkgProtoToDomain.GameVariable(oReq.GetVariable())
 
 	oErr := oSelf.ModelGameUsecase.AddOne(&oGameVariable)
 
@@ -81,7 +81,7 @@ func (oSelf *GameHandler) ShowOneByKey(oContext context.Context, oReq *pbResourc
 
 func (oSelf *GameHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.GameEditOneByIdInput) (*pbResourceModel.GameEditOneByIdOutput, error) {
 
-	oGameValue := pkgProtoToDomain.GameValue(oReq.GetValue())
+	oGameValue := pkgProtoToDomain.GameVariable(oReq.GetVariable())
 
 	oErr := oSelf.ModelGameUsecase.EditOneById(&oGameValue, uint64(oReq.Id))
 	if oErr != nil {

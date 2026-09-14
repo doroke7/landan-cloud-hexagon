@@ -21,8 +21,8 @@ func NewAdminRoleModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminRo
 	return oModel
 }
 
-func domainAdminRoleValueToProtoAdminRoleValue(oValue *domain.AdminRoleVariable) *pbResource.AdminRoleValue {
-	oAdminRoleValue := &pbResource.AdminRoleValue{
+func domainAdminRoleValueToProtoAdminRoleValue(oValue *domain.AdminRoleVariable) *pbResource.AdminRoleVariable {
+	oAdminRoleValue := &pbResource.AdminRoleVariable{
 		Key:  oValue.Key,
 		Name: oValue.Name,
 	}
@@ -33,7 +33,7 @@ func domainAdminRoleValueToProtoAdminRoleValue(oValue *domain.AdminRoleVariable)
 func (oSelf *AdminRoleModel) AddOne(oAdminRole *domain.AdminRoleVariable) error {
 
 	oRequest := &pbResourceModel.AdminRoleAddOneInput{
-		Value: domainAdminRoleValueToProtoAdminRoleValue(oAdminRole),
+		Variable: domainAdminRoleValueToProtoAdminRoleValue(oAdminRole),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.AdminRole.AddOne(oSelf.Context, oRequest)
@@ -65,8 +65,8 @@ func (oSelf *AdminRoleModel) ShowOneById(iId uint64) (*domain.AdminRole, error) 
 func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleVariable, iId uint64) error {
 
 	oRequest := &pbResourceModel.AdminRoleEditOneByIdInput{
-		Id:    uint64(iId),
-		Value: domainAdminRoleValueToProtoAdminRoleValue(oAdminRole),
+		Id:       uint64(iId),
+		Variable: domainAdminRoleValueToProtoAdminRoleValue(oAdminRole),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.AdminRole.EditOneById(oSelf.Context, oRequest)

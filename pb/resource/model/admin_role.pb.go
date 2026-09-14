@@ -23,8 +23,8 @@ const (
 )
 
 type AdminRoleAddOneInput struct {
-	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Value         *resource.AdminRoleValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	state         protoimpl.MessageState      `protogen:"open.v1"`
+	Variable      *resource.AdminRoleVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,9 +59,9 @@ func (*AdminRoleAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminRoleAddOneInput) GetValue() *resource.AdminRoleValue {
+func (x *AdminRoleAddOneInput) GetVariable() *resource.AdminRoleVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -191,9 +191,9 @@ func (x *AdminRoleShowOneByIdOutput) GetAdminRole() *resource.AdminRole {
 }
 
 type AdminRoleEditOneByIdInput struct {
-	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Value         *resource.AdminRoleValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	Id            uint64                   `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState      `protogen:"open.v1"`
+	Variable      *resource.AdminRoleVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint64                      `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -228,9 +228,9 @@ func (*AdminRoleEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_role_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *AdminRoleEditOneByIdInput) GetValue() *resource.AdminRoleValue {
+func (x *AdminRoleEditOneByIdInput) GetVariable() *resource.AdminRoleVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -634,17 +634,17 @@ var File_resource_model_admin_role_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_role_proto_rawDesc = "" +
 	"\n" +
-	"\x1fresource/model/admin_role.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"I\n" +
-	"\x14AdminRoleAddOneInput\x121\n" +
-	"\x05value\x18\x01 \x01(\v2\x1b.pb.resource.AdminRoleValueR\x05value\"\x17\n" +
+	"\x1fresource/model/admin_role.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"R\n" +
+	"\x14AdminRoleAddOneInput\x12:\n" +
+	"\bvariable\x18\x01 \x01(\v2\x1e.pb.resource.AdminRoleVariableR\bvariable\"\x17\n" +
 	"\x15AdminRoleAddOneOutput\"+\n" +
 	"\x19AdminRoleShowOneByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"S\n" +
 	"\x1aAdminRoleShowOneByIdOutput\x125\n" +
 	"\n" +
-	"admin_role\x18\x01 \x01(\v2\x16.pb.resource.AdminRoleR\tadminRole\"^\n" +
-	"\x19AdminRoleEditOneByIdInput\x121\n" +
-	"\x05value\x18\x01 \x01(\v2\x1b.pb.resource.AdminRoleValueR\x05value\x12\x0e\n" +
+	"admin_role\x18\x01 \x01(\v2\x16.pb.resource.AdminRoleR\tadminRole\"g\n" +
+	"\x19AdminRoleEditOneByIdInput\x12:\n" +
+	"\bvariable\x18\x01 \x01(\v2\x1e.pb.resource.AdminRoleVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"\x1c\n" +
 	"\x1aAdminRoleEditOneByIdOutput\"-\n" +
 	"\x1bAdminRoleRemoveOneByIdInput\x12\x0e\n" +
@@ -704,16 +704,16 @@ var file_resource_model_admin_role_proto_goTypes = []any{
 	(*AdminRoleShowOnesByFiltersWithSortersPaginationOutput)(nil), // 11: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationOutput
 	(*AdminRoleTotalByFiltersInput)(nil),                          // 12: pb.resource.model.AdminRoleTotalByFiltersInput
 	(*AdminRoleTotalByFiltersOutput)(nil),                         // 13: pb.resource.model.AdminRoleTotalByFiltersOutput
-	(*resource.AdminRoleValue)(nil),                               // 14: pb.resource.AdminRoleValue
+	(*resource.AdminRoleVariable)(nil),                            // 14: pb.resource.AdminRoleVariable
 	(*resource.AdminRole)(nil),                                    // 15: pb.resource.AdminRole
 	(*resource.Filter)(nil),                                       // 16: pb.resource.Filter
 	(*resource.Sorter)(nil),                                       // 17: pb.resource.Sorter
 	(*resource.Pagination)(nil),                                   // 18: pb.resource.Pagination
 }
 var file_resource_model_admin_role_proto_depIdxs = []int32{
-	14, // 0: pb.resource.model.AdminRoleAddOneInput.value:type_name -> pb.resource.AdminRoleValue
+	14, // 0: pb.resource.model.AdminRoleAddOneInput.variable:type_name -> pb.resource.AdminRoleVariable
 	15, // 1: pb.resource.model.AdminRoleShowOneByIdOutput.admin_role:type_name -> pb.resource.AdminRole
-	14, // 2: pb.resource.model.AdminRoleEditOneByIdInput.value:type_name -> pb.resource.AdminRoleValue
+	14, // 2: pb.resource.model.AdminRoleEditOneByIdInput.variable:type_name -> pb.resource.AdminRoleVariable
 	15, // 3: pb.resource.model.AdminRoleShowOnesOutput.admin_roles:type_name -> pb.resource.AdminRole
 	16, // 4: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
 	17, // 5: pb.resource.model.AdminRoleShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter

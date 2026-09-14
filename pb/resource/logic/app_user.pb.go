@@ -23,8 +23,8 @@ const (
 )
 
 type AppUserAddAppUserInput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Value         *resource.AppUserValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	state         protoimpl.MessageState    `protogen:"open.v1"`
+	Variable      *resource.AppUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,9 +59,9 @@ func (*AppUserAddAppUserInput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_app_user_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AppUserAddAppUserInput) GetValue() *resource.AppUserValue {
+func (x *AppUserAddAppUserInput) GetVariable() *resource.AppUserVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -114,9 +114,9 @@ var File_resource_logic_app_user_proto protoreflect.FileDescriptor
 
 const file_resource_logic_app_user_proto_rawDesc = "" +
 	"\n" +
-	"\x1dresource/logic/app_user.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"I\n" +
-	"\x16AppUserAddAppUserInput\x12/\n" +
-	"\x05value\x18\x01 \x01(\v2\x19.pb.resource.AppUserValueR\x05value\"J\n" +
+	"\x1dresource/logic/app_user.proto\x12\x11pb.resource.logic\x1a\x15resource/common.proto\"R\n" +
+	"\x16AppUserAddAppUserInput\x128\n" +
+	"\bvariable\x18\x01 \x01(\v2\x1c.pb.resource.AppUserVariableR\bvariable\"J\n" +
 	"\x17AppUserAddAppUserOutput\x12/\n" +
 	"\bapp_user\x18\x01 \x01(\v2\x14.pb.resource.AppUserR\aappUser2s\n" +
 	"\fAppUserModel\x12c\n" +
@@ -137,13 +137,13 @@ func file_resource_logic_app_user_proto_rawDescGZIP() []byte {
 
 var file_resource_logic_app_user_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_resource_logic_app_user_proto_goTypes = []any{
-	(*AppUserAddAppUserInput)(nil),  // 0: pb.resource.logic.AppUserAddAppUserInput
-	(*AppUserAddAppUserOutput)(nil), // 1: pb.resource.logic.AppUserAddAppUserOutput
-	(*resource.AppUserValue)(nil),   // 2: pb.resource.AppUserValue
-	(*resource.AppUser)(nil),        // 3: pb.resource.AppUser
+	(*AppUserAddAppUserInput)(nil),   // 0: pb.resource.logic.AppUserAddAppUserInput
+	(*AppUserAddAppUserOutput)(nil),  // 1: pb.resource.logic.AppUserAddAppUserOutput
+	(*resource.AppUserVariable)(nil), // 2: pb.resource.AppUserVariable
+	(*resource.AppUser)(nil),         // 3: pb.resource.AppUser
 }
 var file_resource_logic_app_user_proto_depIdxs = []int32{
-	2, // 0: pb.resource.logic.AppUserAddAppUserInput.value:type_name -> pb.resource.AppUserValue
+	2, // 0: pb.resource.logic.AppUserAddAppUserInput.variable:type_name -> pb.resource.AppUserVariable
 	3, // 1: pb.resource.logic.AppUserAddAppUserOutput.app_user:type_name -> pb.resource.AppUser
 	0, // 2: pb.resource.logic.AppUserModel.AddAppUser:input_type -> pb.resource.logic.AppUserAddAppUserInput
 	1, // 3: pb.resource.logic.AppUserModel.AddAppUser:output_type -> pb.resource.logic.AppUserAddAppUserOutput

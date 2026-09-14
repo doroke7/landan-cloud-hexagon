@@ -29,7 +29,7 @@ func NewAdminRoleHandler(oAbstractHandler *inputApplicationResource.AbstractHand
 	}
 }
 
-func protoAdminRoleValueToDomainAdminRoleValue(oVariable *pbResource.AdminRoleValue) domain.AdminRoleVariable {
+func protoAdminRoleValueToDomainAdminRoleValue(oVariable *pbResource.AdminRoleVariable) domain.AdminRoleVariable {
 	var oValue domain.AdminRoleVariable
 	if oVariable == nil {
 		return oValue
@@ -43,7 +43,7 @@ func protoAdminRoleValueToDomainAdminRoleValue(oVariable *pbResource.AdminRoleVa
 
 func (oSelf *AdminRoleHandler) AddOne(oContext context.Context, oReq *pbResourceModel.AdminRoleAddOneInput) (*pbResourceModel.AdminRoleAddOneOutput, error) {
 
-	oAdminRoleValue := protoAdminRoleValueToDomainAdminRoleValue(oReq.GetValue())
+	oAdminRoleValue := protoAdminRoleValueToDomainAdminRoleValue(oReq.GetVariable())
 
 	oErr := oSelf.ModelAdminRoleUsecase.AddOne(&oAdminRoleValue)
 
@@ -74,7 +74,7 @@ func (oSelf *AdminRoleHandler) ShowOneById(oContext context.Context, oReq *pbRes
 
 func (oSelf *AdminRoleHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminRoleEditOneByIdInput) (*pbResourceModel.AdminRoleEditOneByIdOutput, error) {
 
-	oAdminRoleValue := protoAdminRoleValueToDomainAdminRoleValue(oReq.GetValue())
+	oAdminRoleValue := protoAdminRoleValueToDomainAdminRoleValue(oReq.GetVariable())
 
 	oErr := oSelf.ModelAdminRoleUsecase.EditOneById(&oAdminRoleValue, uint64(oReq.Id))
 

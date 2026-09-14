@@ -113,7 +113,7 @@ func idFromFilters(aFilters []*pbFacade.Filter) (uint, error) {
 func (oSelf *GameHandler) AddOne(oContext context.Context, oRequest *pbFacadeAdminResource.GameAddOneRequest) (*pbFacadeAdminResource.GameAddOneResponse, error) {
 
 	oRequestVariable := oRequest.GetVariable()
-	oValue := pkgProtoToDomain.GameVariable(oRequestVariable)
+	oValue := pkgProtoToDomain.FacadeGameVariable(oRequestVariable)
 
 	if oErr := oSelf.AdminResourceGameUsecase.AddOne(oValue); oErr != nil {
 		oStatusErr := toStatusError(oErr)
@@ -132,7 +132,7 @@ func (oSelf *GameHandler) EditOne(oContext context.Context, oRequest *pbFacadeAd
 	}
 
 	oRequestVariable := oRequest.GetVariable()
-	oValue := pkgProtoToDomain.GameVariable(oRequestVariable)
+	oValue := pkgProtoToDomain.FacadeGameVariable(oRequestVariable)
 
 	if oErr := oSelf.AdminResourceGameUsecase.EditOne(oValue, uint64(iId)); oErr != nil {
 		oStatusErr := toStatusError(oErr)

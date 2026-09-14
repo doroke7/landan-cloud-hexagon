@@ -24,9 +24,9 @@ func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLo
 
 func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.AdminPermissionGroupVariable) error {
 
-	aAdminPermissions := make([]*pbResource.AdminPermissionValue, 0, len(oValue.AdminPermissions))
+	aAdminPermissions := make([]*pbResource.AdminPermissionVariable, 0, len(oValue.AdminPermissions))
 	for _, oAdminPermissionValue := range oValue.AdminPermissions {
-		oProtoAdminPermissionValue := pkgDomainToProto.AdminPermissionValue(oAdminPermissionValue)
+		oProtoAdminPermissionValue := pkgDomainToProto.AdminPermissionVariable(oAdminPermissionValue)
 		if oProtoAdminPermissionValue == nil {
 			continue
 		}
@@ -34,14 +34,14 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 		aAdminPermissions = append(aAdminPermissions, oProtoAdminPermissionValue)
 	}
 
-	oProtoValue := &pbResource.AdminPermissionGroupValue{
+	oProtoValue := &pbResource.AdminPermissionGroupVariable{
 		Key:              oValue.Key,
 		Name:             oValue.Name,
 		AdminPermissions: aAdminPermissions,
 	}
 
 	oRequest := &pbResourceLogic.AdminPermissionGroupAddAdminPermissionGroupInput{
-		Value: oProtoValue,
+		Variable: oProtoValue,
 	}
 
 	_, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.AddAdminPermissionGroup(oSelf.Context, oRequest)
@@ -50,9 +50,9 @@ func (oSelf *AdminPermissionGroupLogic) AddAdminPermissionGroup(oValue *domain.A
 }
 func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *domain.AdminPermissionGroupVariable, iId uint64) error {
 
-	aAdminPermissions := make([]*pbResource.AdminPermissionValue, 0, len(oValue.AdminPermissions))
+	aAdminPermissions := make([]*pbResource.AdminPermissionVariable, 0, len(oValue.AdminPermissions))
 	for _, oAdminPermissionValue := range oValue.AdminPermissions {
-		oProtoAdminPermissionValue := pkgDomainToProto.AdminPermissionValue(oAdminPermissionValue)
+		oProtoAdminPermissionValue := pkgDomainToProto.AdminPermissionVariable(oAdminPermissionValue)
 		if oProtoAdminPermissionValue == nil {
 			continue
 		}
@@ -60,15 +60,15 @@ func (oSelf *AdminPermissionGroupLogic) EditAdminPermissionGroupById(oValue *dom
 		aAdminPermissions = append(aAdminPermissions, oProtoAdminPermissionValue)
 	}
 
-	oProtoValue := &pbResource.AdminPermissionGroupValue{
+	oProtoValue := &pbResource.AdminPermissionGroupVariable{
 		Key:              oValue.Key,
 		Name:             oValue.Name,
 		AdminPermissions: aAdminPermissions,
 	}
 
 	oRequest := &pbResourceLogic.AdminPermissionGroupEditAdminPermissionGroupByIdInput{
-		Value: oProtoValue,
-		Id:    iId,
+		Variable: oProtoValue,
+		Id:       iId,
 	}
 
 	_, oErr := oSelf.ResourceLogicClient.AdminPermissionGroup.EditAdminPermissionGroupById(oSelf.Context, oRequest)

@@ -6,8 +6,8 @@ import (
 	pbResource "example/pb/resource"
 )
 
-func GameValue(oGame *domain.GameVariable) *pbResource.GameValue {
-	oValue := &pbResource.GameValue{
+func GameVariable(oGame *domain.GameVariable) *pbResource.GameVariable {
+	oValue := &pbResource.GameVariable{
 		Key:         oGame.Key,
 		Name:        oGame.Name,
 		Description: oGame.Description,

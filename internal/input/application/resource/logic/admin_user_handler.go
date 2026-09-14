@@ -79,14 +79,14 @@ func (oSelf *AdminUserHandler) ShowAdminUsersTotalByFiltersWithSortersPagination
 
 func (oSelf *AdminUserHandler) AddAminUser(oContext context.Context, oReq *pbResourceLogic.AdminUserAddAminUserInput) (*pbResourceLogic.AdminUserAddAminUserOutput, error) {
 
-	aAdminRoleIds := make([]uint64, 0, len(oReq.GetValue().GetAdminRoleIds()))
-	for _, iAdminRoleId := range oReq.GetValue().GetAdminRoleIds() {
+	aAdminRoleIds := make([]uint64, 0, len(oReq.GetVariable().GetAdminRoleIds()))
+	for _, iAdminRoleId := range oReq.GetVariable().GetAdminRoleIds() {
 		aAdminRoleIds = append(aAdminRoleIds, uint64(iAdminRoleId))
 	}
 
 	oValue := &domain.AdminUserVariable{
-		Name:         oReq.GetValue().Name,
-		Password:     oReq.GetValue().Password,
+		Name:         oReq.GetVariable().Name,
+		Password:     oReq.GetVariable().Password,
 		AdminRoleIds: aAdminRoleIds,
 	}
 
@@ -97,14 +97,14 @@ func (oSelf *AdminUserHandler) AddAminUser(oContext context.Context, oReq *pbRes
 
 func (oSelf *AdminUserHandler) EditAdminUserById(oContext context.Context, oReq *pbResourceLogic.AdminUserEditAdminUserByIdInput) (*pbResourceLogic.AdminUserEditAdminUserByIdOutput, error) {
 
-	aAdminRoleIds := make([]uint64, 0, len(oReq.GetValue().GetAdminRoleIds()))
-	for _, iAdminRoleId := range oReq.GetValue().GetAdminRoleIds() {
+	aAdminRoleIds := make([]uint64, 0, len(oReq.GetVariable().GetAdminRoleIds()))
+	for _, iAdminRoleId := range oReq.GetVariable().GetAdminRoleIds() {
 		aAdminRoleIds = append(aAdminRoleIds, uint64(iAdminRoleId))
 	}
 
 	oValue := &domain.AdminUserVariable{
-		Name:         oReq.GetValue().Name,
-		Password:     oReq.GetValue().Password,
+		Name:         oReq.GetVariable().Name,
+		Password:     oReq.GetVariable().Password,
 		AdminRoleIds: aAdminRoleIds,
 	}
 

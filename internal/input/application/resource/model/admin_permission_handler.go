@@ -49,8 +49,8 @@ func domainAdminPermissionToProtoAdminPermission(oAdminPermission *domain.AdminP
 
 func (oSelf *AdminPermissionHandler) AddOne(oContext context.Context, oReq *pbResourceModel.AdminPermissionAddOneInput) (*pbResourceModel.AdminPermissionAddOneOutput, error) {
 
-	oReqValue := oReq.GetValue()
-	oAdminPermissionValue := pkgProtoToDomain.AdminPermissionValue(oReqValue)
+	oReqValue := oReq.GetVariable()
+	oAdminPermissionValue := pkgProtoToDomain.AdminPermissionVariable(oReqValue)
 
 	oErr := oSelf.ModelAdminPermissionUsecase.AddOne(&oAdminPermissionValue)
 
@@ -89,8 +89,8 @@ func (oSelf *AdminPermissionHandler) ShowOneById(oContext context.Context, oReq 
 
 func (oSelf *AdminPermissionHandler) EditOneById(oContext context.Context, oReq *pbResourceModel.AdminPermissionEditOneByIdInput) (*pbResourceModel.AdminPermissionEditOneByIdOutput, error) {
 
-	oReqValue := oReq.GetValue()
-	oAdminPermissionValue := pkgProtoToDomain.AdminPermissionValue(oReqValue)
+	oReqValue := oReq.GetVariable()
+	oAdminPermissionValue := pkgProtoToDomain.AdminPermissionVariable(oReqValue)
 
 	oErr := oSelf.ModelAdminPermissionUsecase.EditOneById(&oAdminPermissionValue, uint64(oReq.Id))
 

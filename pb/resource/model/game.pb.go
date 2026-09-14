@@ -24,7 +24,7 @@ const (
 
 type GameAddOneInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Value         *resource.GameValue    `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Variable      *resource.GameVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,9 +59,9 @@ func (*GameAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GameAddOneInput) GetValue() *resource.GameValue {
+func (x *GameAddOneInput) GetVariable() *resource.GameVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -200,7 +200,7 @@ func (x *GameShowOneByKeyOutput) GetGame() *resource.Game {
 
 type GameEditOneByIdInput struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Value         *resource.GameValue    `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	Variable      *resource.GameVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -236,9 +236,9 @@ func (*GameEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GameEditOneByIdInput) GetValue() *resource.GameValue {
+func (x *GameEditOneByIdInput) GetVariable() *resource.GameVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -458,17 +458,17 @@ var File_resource_model_game_proto protoreflect.FileDescriptor
 
 const file_resource_model_game_proto_rawDesc = "" +
 	"\n" +
-	"\x19resource/model/game.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"?\n" +
-	"\x0fGameAddOneInput\x12,\n" +
-	"\x05value\x18\x01 \x01(\v2\x16.pb.resource.GameValueR\x05value\"9\n" +
+	"\x19resource/model/game.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"H\n" +
+	"\x0fGameAddOneInput\x125\n" +
+	"\bvariable\x18\x01 \x01(\v2\x19.pb.resource.GameVariableR\bvariable\"9\n" +
 	"\x10GameAddOneOutput\x12%\n" +
 	"\x04game\x18\x01 \x01(\v2\x11.pb.resource.GameR\x04game\")\n" +
 	"\x15GameShowOneByKeyInput\x12\x10\n" +
 	"\x03key\x18\x01 \x01(\tR\x03key\"?\n" +
 	"\x16GameShowOneByKeyOutput\x12%\n" +
-	"\x04game\x18\x01 \x01(\v2\x11.pb.resource.GameR\x04game\"T\n" +
-	"\x14GameEditOneByIdInput\x12,\n" +
-	"\x05value\x18\x01 \x01(\v2\x16.pb.resource.GameValueR\x05value\x12\x0e\n" +
+	"\x04game\x18\x01 \x01(\v2\x11.pb.resource.GameR\x04game\"]\n" +
+	"\x14GameEditOneByIdInput\x125\n" +
+	"\bvariable\x18\x01 \x01(\v2\x19.pb.resource.GameVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"\x17\n" +
 	"\x15GameEditOneByIdOutput\"(\n" +
 	"\x16GameRemoveOneByIdInput\x12\x0e\n" +
@@ -509,15 +509,15 @@ var file_resource_model_game_proto_goTypes = []any{
 	(*GameRemoveOneByIdOutput)(nil),  // 7: pb.resource.model.GameRemoveOneByIdOutput
 	(*GameTotalByFiltersInput)(nil),  // 8: pb.resource.model.GameTotalByFiltersInput
 	(*GameTotalByFiltersOutput)(nil), // 9: pb.resource.model.GameTotalByFiltersOutput
-	(*resource.GameValue)(nil),       // 10: pb.resource.GameValue
+	(*resource.GameVariable)(nil),    // 10: pb.resource.GameVariable
 	(*resource.Game)(nil),            // 11: pb.resource.Game
 	(*resource.Filter)(nil),          // 12: pb.resource.Filter
 }
 var file_resource_model_game_proto_depIdxs = []int32{
-	10, // 0: pb.resource.model.GameAddOneInput.value:type_name -> pb.resource.GameValue
+	10, // 0: pb.resource.model.GameAddOneInput.variable:type_name -> pb.resource.GameVariable
 	11, // 1: pb.resource.model.GameAddOneOutput.game:type_name -> pb.resource.Game
 	11, // 2: pb.resource.model.GameShowOneByKeyOutput.game:type_name -> pb.resource.Game
-	10, // 3: pb.resource.model.GameEditOneByIdInput.value:type_name -> pb.resource.GameValue
+	10, // 3: pb.resource.model.GameEditOneByIdInput.variable:type_name -> pb.resource.GameVariable
 	12, // 4: pb.resource.model.GameTotalByFiltersInput.filters:type_name -> pb.resource.Filter
 	0,  // 5: pb.resource.model.GameModel.AddOne:input_type -> pb.resource.model.GameAddOneInput
 	2,  // 6: pb.resource.model.GameModel.ShowOneByKey:input_type -> pb.resource.model.GameShowOneByKeyInput

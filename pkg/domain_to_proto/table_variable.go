@@ -8,8 +8,8 @@ import (
 	pbResource "example/pb/resource"
 )
 
-func TableValue(oTable *domain.TableVariable) *pbResource.TableValue {
-	oValue := &pbResource.TableValue{
+func TableVariable(oTable *domain.TableVariable) *pbResource.TableVariable {
+	oValue := &pbResource.TableVariable{
 		No:          oTable.No,
 		Key:         oTable.Key,
 		Description: oTable.Description,

@@ -24,7 +24,7 @@ func NewAdminPermissionModel(oAbstractModel *AbstractModel) outputPortAnyModel.A
 func (oSelf *AdminPermissionModel) AddOne(oAdminPermission *domain.AdminPermissionVariable) error {
 
 	oRequest := &pbResourceModel.AdminPermissionAddOneInput{
-		Value: pkgDomainToProto.AdminPermissionValue(oAdminPermission),
+		Variable: pkgDomainToProto.AdminPermissionVariable(oAdminPermission),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.AdminPermission.AddOne(oSelf.Context, oRequest)
@@ -54,8 +54,8 @@ func (oSelf *AdminPermissionModel) ShowOneById(iId uint64) (*domain.AdminPermiss
 func (oSelf *AdminPermissionModel) EditOneById(oAdminPermission *domain.AdminPermissionVariable, iId uint64) error {
 
 	oRequest := &pbResourceModel.AdminPermissionEditOneByIdInput{
-		Id:    uint64(iId),
-		Value: pkgDomainToProto.AdminPermissionValue(oAdminPermission),
+		Id:       uint64(iId),
+		Variable: pkgDomainToProto.AdminPermissionVariable(oAdminPermission),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.AdminPermission.EditOneById(oSelf.Context, oRequest)

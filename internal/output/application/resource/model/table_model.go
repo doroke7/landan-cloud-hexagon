@@ -21,8 +21,8 @@ func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel 
 func (oSelf *TableModel) EditOneById(oTable *domain.TableVariable, iId uint64) error {
 
 	oRequest := &pbResourceModel.TableEditOneByIdInput{
-		Id:    uint64(iId),
-		Value: pkgDomainToProto.TableValue(oTable),
+		Id:       uint64(iId),
+		Variable: pkgDomainToProto.TableVariable(oTable),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Table.EditOneById(oSelf.Context, oRequest)
@@ -56,7 +56,7 @@ func (oSelf *TableModel) TotalByFilters(aFilters []*pkgInput.Filter) (uint64, er
 func (oSelf *TableModel) AddOne(oTable *domain.TableVariable) error {
 
 	oRequest := &pbResourceModel.TableAddOneInput{
-		Value: pkgDomainToProto.TableValue(oTable),
+		Variable: pkgDomainToProto.TableVariable(oTable),
 	}
 
 	_, oErr := oSelf.ResourceModelClient.Table.AddOne(oSelf.Context, oRequest)

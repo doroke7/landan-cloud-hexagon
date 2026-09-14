@@ -231,8 +231,8 @@ func (x *AdminUserShowAdminUserByIdOutput) GetTotal() uint64 {
 }
 
 type AdminUserAddAminUserInput struct {
-	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Value         *resource.AdminUserValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	state         protoimpl.MessageState      `protogen:"open.v1"`
+	Variable      *resource.AdminUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -267,9 +267,9 @@ func (*AdminUserAddAminUserInput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *AdminUserAddAminUserInput) GetValue() *resource.AdminUserValue {
+func (x *AdminUserAddAminUserInput) GetVariable() *resource.AdminUserVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -311,9 +311,9 @@ func (*AdminUserAddAminUserOutput) Descriptor() ([]byte, []int) {
 }
 
 type AdminUserEditAdminUserByIdInput struct {
-	state         protoimpl.MessageState   `protogen:"open.v1"`
-	Value         *resource.AdminUserValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	Id            uint64                   `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState      `protogen:"open.v1"`
+	Variable      *resource.AdminUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint64                      `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -348,9 +348,9 @@ func (*AdminUserEditAdminUserByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_logic_admin_user_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *AdminUserEditAdminUserByIdInput) GetValue() *resource.AdminUserValue {
+func (x *AdminUserEditAdminUserByIdInput) GetVariable() *resource.AdminUserVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -498,12 +498,12 @@ const file_resource_logic_admin_user_proto_rawDesc = "" +
 	" AdminUserShowAdminUserByIdOutput\x127\n" +
 	"\vadmin_users\x18\x01 \x03(\v2\x16.pb.resource.AdminUserR\n" +
 	"adminUsers\x12\x14\n" +
-	"\x05total\x18\x02 \x01(\x04R\x05total\"N\n" +
-	"\x19AdminUserAddAminUserInput\x121\n" +
-	"\x05value\x18\x01 \x01(\v2\x1b.pb.resource.AdminUserValueR\x05value\"\x1c\n" +
-	"\x1aAdminUserAddAminUserOutput\"d\n" +
-	"\x1fAdminUserEditAdminUserByIdInput\x121\n" +
-	"\x05value\x18\x01 \x01(\v2\x1b.pb.resource.AdminUserValueR\x05value\x12\x0e\n" +
+	"\x05total\x18\x02 \x01(\x04R\x05total\"W\n" +
+	"\x19AdminUserAddAminUserInput\x12:\n" +
+	"\bvariable\x18\x01 \x01(\v2\x1e.pb.resource.AdminUserVariableR\bvariable\"\x1c\n" +
+	"\x1aAdminUserAddAminUserOutput\"m\n" +
+	"\x1fAdminUserEditAdminUserByIdInput\x12:\n" +
+	"\bvariable\x18\x01 \x01(\v2\x1e.pb.resource.AdminUserVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"\"\n" +
 	" AdminUserEditAdminUserByIdOutput\"3\n" +
 	"!AdminUserRemoveAdminUserByIdInput\x12\x0e\n" +
@@ -544,7 +544,7 @@ var file_resource_logic_admin_user_proto_goTypes = []any{
 	(*resource.Sorter)(nil),                                                  // 11: pb.resource.Sorter
 	(*resource.Pagination)(nil),                                              // 12: pb.resource.Pagination
 	(*resource.AdminUser)(nil),                                               // 13: pb.resource.AdminUser
-	(*resource.AdminUserValue)(nil),                                          // 14: pb.resource.AdminUserValue
+	(*resource.AdminUserVariable)(nil),                                       // 14: pb.resource.AdminUserVariable
 }
 var file_resource_logic_admin_user_proto_depIdxs = []int32{
 	10, // 0: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
@@ -552,8 +552,8 @@ var file_resource_logic_admin_user_proto_depIdxs = []int32{
 	12, // 2: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination
 	13, // 3: pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationOutput.admin_users:type_name -> pb.resource.AdminUser
 	13, // 4: pb.resource.logic.AdminUserShowAdminUserByIdOutput.admin_users:type_name -> pb.resource.AdminUser
-	14, // 5: pb.resource.logic.AdminUserAddAminUserInput.value:type_name -> pb.resource.AdminUserValue
-	14, // 6: pb.resource.logic.AdminUserEditAdminUserByIdInput.value:type_name -> pb.resource.AdminUserValue
+	14, // 5: pb.resource.logic.AdminUserAddAminUserInput.variable:type_name -> pb.resource.AdminUserVariable
+	14, // 6: pb.resource.logic.AdminUserEditAdminUserByIdInput.variable:type_name -> pb.resource.AdminUserVariable
 	0,  // 7: pb.resource.logic.AdminUserLogic.ShowAdminUsersTotalByFiltersWithSortersPagination:input_type -> pb.resource.logic.AdminUserShowAdminUsersTotalByFiltersWithSortersPaginationInput
 	2,  // 8: pb.resource.logic.AdminUserLogic.ShowAdminUserById:input_type -> pb.resource.logic.AdminUserShowAdminUserByIdInput
 	4,  // 9: pb.resource.logic.AdminUserLogic.AddAminUser:input_type -> pb.resource.logic.AdminUserAddAminUserInput

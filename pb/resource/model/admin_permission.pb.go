@@ -23,8 +23,8 @@ const (
 )
 
 type AdminPermissionAddOneInput struct {
-	state         protoimpl.MessageState         `protogen:"open.v1"`
-	Value         *resource.AdminPermissionValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	state         protoimpl.MessageState            `protogen:"open.v1"`
+	Variable      *resource.AdminPermissionVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,9 +59,9 @@ func (*AdminPermissionAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AdminPermissionAddOneInput) GetValue() *resource.AdminPermissionValue {
+func (x *AdminPermissionAddOneInput) GetVariable() *resource.AdminPermissionVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -199,9 +199,9 @@ func (x *AdminPermissionShowOneByIdOutput) GetAdminPermission() *resource.AdminP
 }
 
 type AdminPermissionEditOneByIdInput struct {
-	state         protoimpl.MessageState         `protogen:"open.v1"`
-	Value         *resource.AdminPermissionValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	Id            uint64                         `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState            `protogen:"open.v1"`
+	Variable      *resource.AdminPermissionVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint64                            `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -236,9 +236,9 @@ func (*AdminPermissionEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_admin_permission_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *AdminPermissionEditOneByIdInput) GetValue() *resource.AdminPermissionValue {
+func (x *AdminPermissionEditOneByIdInput) GetVariable() *resource.AdminPermissionVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -562,17 +562,17 @@ var File_resource_model_admin_permission_proto protoreflect.FileDescriptor
 
 const file_resource_model_admin_permission_proto_rawDesc = "" +
 	"\n" +
-	"%resource/model/admin_permission.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"U\n" +
-	"\x1aAdminPermissionAddOneInput\x127\n" +
-	"\x05value\x18\x01 \x01(\v2!.pb.resource.AdminPermissionValueR\x05value\"5\n" +
+	"%resource/model/admin_permission.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"^\n" +
+	"\x1aAdminPermissionAddOneInput\x12@\n" +
+	"\bvariable\x18\x01 \x01(\v2$.pb.resource.AdminPermissionVariableR\bvariable\"5\n" +
 	"\x1bAdminPermissionAddOneOutput\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\"1\n" +
 	"\x1fAdminPermissionShowOneByIdInput\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\"k\n" +
 	" AdminPermissionShowOneByIdOutput\x12G\n" +
-	"\x10admin_permission\x18\x01 \x01(\v2\x1c.pb.resource.AdminPermissionR\x0fadminPermission\"j\n" +
-	"\x1fAdminPermissionEditOneByIdInput\x127\n" +
-	"\x05value\x18\x01 \x01(\v2!.pb.resource.AdminPermissionValueR\x05value\x12\x0e\n" +
+	"\x10admin_permission\x18\x01 \x01(\v2\x1c.pb.resource.AdminPermissionR\x0fadminPermission\"s\n" +
+	"\x1fAdminPermissionEditOneByIdInput\x12@\n" +
+	"\bvariable\x18\x01 \x01(\v2$.pb.resource.AdminPermissionVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"\"\n" +
 	" AdminPermissionEditOneByIdOutput\"3\n" +
 	"!AdminPermissionRemoveOneByIdInput\x12\x0e\n" +
@@ -624,16 +624,16 @@ var file_resource_model_admin_permission_proto_goTypes = []any{
 	(*AdminPermissionShowOnesByFiltersWithSortersPaginationOutput)(nil), // 9: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationOutput
 	(*AdminPermissionTotalByFiltersInput)(nil),                          // 10: pb.resource.model.AdminPermissionTotalByFiltersInput
 	(*AdminPermissionTotalByFiltersOutput)(nil),                         // 11: pb.resource.model.AdminPermissionTotalByFiltersOutput
-	(*resource.AdminPermissionValue)(nil),                               // 12: pb.resource.AdminPermissionValue
+	(*resource.AdminPermissionVariable)(nil),                            // 12: pb.resource.AdminPermissionVariable
 	(*resource.AdminPermission)(nil),                                    // 13: pb.resource.AdminPermission
 	(*resource.Filter)(nil),                                             // 14: pb.resource.Filter
 	(*resource.Sorter)(nil),                                             // 15: pb.resource.Sorter
 	(*resource.Pagination)(nil),                                         // 16: pb.resource.Pagination
 }
 var file_resource_model_admin_permission_proto_depIdxs = []int32{
-	12, // 0: pb.resource.model.AdminPermissionAddOneInput.value:type_name -> pb.resource.AdminPermissionValue
+	12, // 0: pb.resource.model.AdminPermissionAddOneInput.variable:type_name -> pb.resource.AdminPermissionVariable
 	13, // 1: pb.resource.model.AdminPermissionShowOneByIdOutput.admin_permission:type_name -> pb.resource.AdminPermission
-	12, // 2: pb.resource.model.AdminPermissionEditOneByIdInput.value:type_name -> pb.resource.AdminPermissionValue
+	12, // 2: pb.resource.model.AdminPermissionEditOneByIdInput.variable:type_name -> pb.resource.AdminPermissionVariable
 	14, // 3: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationInput.filters:type_name -> pb.resource.Filter
 	15, // 4: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationInput.sorters:type_name -> pb.resource.Sorter
 	16, // 5: pb.resource.model.AdminPermissionShowOnesByFiltersWithSortersPaginationInput.pagination:type_name -> pb.resource.Pagination

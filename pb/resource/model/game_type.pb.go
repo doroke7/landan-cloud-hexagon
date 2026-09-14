@@ -23,8 +23,8 @@ const (
 )
 
 type GameTypeAddOneInput struct {
-	state         protoimpl.MessageState  `protogen:"open.v1"`
-	Value         *resource.GameTypeValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Variable      *resource.GameTypeVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,9 +59,9 @@ func (*GameTypeAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_type_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GameTypeAddOneInput) GetValue() *resource.GameTypeValue {
+func (x *GameTypeAddOneInput) GetVariable() *resource.GameTypeVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -111,9 +111,9 @@ func (x *GameTypeAddOneOutput) GetGameType() *resource.GameType {
 }
 
 type GameTypeEditOneByIdInput struct {
-	state         protoimpl.MessageState  `protogen:"open.v1"`
-	Value         *resource.GameTypeValue `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	Id            uint64                  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState     `protogen:"open.v1"`
+	Variable      *resource.GameTypeVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint64                     `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -148,9 +148,9 @@ func (*GameTypeEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_game_type_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GameTypeEditOneByIdInput) GetValue() *resource.GameTypeValue {
+func (x *GameTypeEditOneByIdInput) GetVariable() *resource.GameTypeVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -371,13 +371,13 @@ var File_resource_model_game_type_proto protoreflect.FileDescriptor
 
 const file_resource_model_game_type_proto_rawDesc = "" +
 	"\n" +
-	"\x1eresource/model/game_type.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"G\n" +
-	"\x13GameTypeAddOneInput\x120\n" +
-	"\x05value\x18\x01 \x01(\v2\x1a.pb.resource.GameTypeValueR\x05value\"J\n" +
+	"\x1eresource/model/game_type.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"P\n" +
+	"\x13GameTypeAddOneInput\x129\n" +
+	"\bvariable\x18\x01 \x01(\v2\x1d.pb.resource.GameTypeVariableR\bvariable\"J\n" +
 	"\x14GameTypeAddOneOutput\x122\n" +
-	"\tgame_type\x18\x01 \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"\\\n" +
-	"\x18GameTypeEditOneByIdInput\x120\n" +
-	"\x05value\x18\x01 \x01(\v2\x1a.pb.resource.GameTypeValueR\x05value\x12\x0e\n" +
+	"\tgame_type\x18\x01 \x01(\v2\x15.pb.resource.GameTypeR\bgameType\"e\n" +
+	"\x18GameTypeEditOneByIdInput\x129\n" +
+	"\bvariable\x18\x01 \x01(\v2\x1d.pb.resource.GameTypeVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"\x1b\n" +
 	"\x19GameTypeEditOneByIdOutput\",\n" +
 	"\x1aGameTypeRemoveOneByIdInput\x12\x0e\n" +
@@ -415,14 +415,14 @@ var file_resource_model_game_type_proto_goTypes = []any{
 	(*GameTypeRemoveOneByIdOutput)(nil),  // 5: pb.resource.model.GameTypeRemoveOneByIdOutput
 	(*GameTypeTotalByFiltersInput)(nil),  // 6: pb.resource.model.GameTypeTotalByFiltersInput
 	(*GameTypeTotalByFiltersOutput)(nil), // 7: pb.resource.model.GameTypeTotalByFiltersOutput
-	(*resource.GameTypeValue)(nil),       // 8: pb.resource.GameTypeValue
+	(*resource.GameTypeVariable)(nil),    // 8: pb.resource.GameTypeVariable
 	(*resource.GameType)(nil),            // 9: pb.resource.GameType
 	(*resource.Filter)(nil),              // 10: pb.resource.Filter
 }
 var file_resource_model_game_type_proto_depIdxs = []int32{
-	8,  // 0: pb.resource.model.GameTypeAddOneInput.value:type_name -> pb.resource.GameTypeValue
+	8,  // 0: pb.resource.model.GameTypeAddOneInput.variable:type_name -> pb.resource.GameTypeVariable
 	9,  // 1: pb.resource.model.GameTypeAddOneOutput.game_type:type_name -> pb.resource.GameType
-	8,  // 2: pb.resource.model.GameTypeEditOneByIdInput.value:type_name -> pb.resource.GameTypeValue
+	8,  // 2: pb.resource.model.GameTypeEditOneByIdInput.variable:type_name -> pb.resource.GameTypeVariable
 	10, // 3: pb.resource.model.GameTypeTotalByFiltersInput.filters:type_name -> pb.resource.Filter
 	0,  // 4: pb.resource.model.GameTypeModel.AddOne:input_type -> pb.resource.model.GameTypeAddOneInput
 	2,  // 5: pb.resource.model.GameTypeModel.EditOneById:input_type -> pb.resource.model.GameTypeEditOneByIdInput

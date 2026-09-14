@@ -24,7 +24,7 @@ func NewAdminUserHandler(oAbstractHandler *inputApplicationResource.AbstractHand
 
 func (oSelf *AdminUserHandler) AddOne(oContext context.Context, oReq *pbResourceEvent.AdminUserEventAddOneInput) (*pbResourceEvent.AdminUserEventAddOneOutput, error) {
 
-	oValue := oReq.GetValue()
+	oValue := oReq.GetVariable()
 
 	oErr := oSelf.EventAdminUserUsecase.AddOne(&domain.AdminUser{
 		Id:       oValue.GetId(),

@@ -23,8 +23,8 @@ const (
 )
 
 type TableAddOneInput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Value         *resource.TableValue   `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Variable      *resource.TableVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,9 +59,9 @@ func (*TableAddOneInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *TableAddOneInput) GetValue() *resource.TableValue {
+func (x *TableAddOneInput) GetVariable() *resource.TableVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -103,9 +103,9 @@ func (*TableAddOneOutput) Descriptor() ([]byte, []int) {
 }
 
 type TableEditOneByIdInput struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Value         *resource.TableValue   `protobuf:"bytes,1,opt,name=value,proto3" json:"value,omitempty"`
-	Id            uint64                 `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
+	state         protoimpl.MessageState  `protogen:"open.v1"`
+	Variable      *resource.TableVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Id            uint64                  `protobuf:"varint,2,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -140,9 +140,9 @@ func (*TableEditOneByIdInput) Descriptor() ([]byte, []int) {
 	return file_resource_model_table_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *TableEditOneByIdInput) GetValue() *resource.TableValue {
+func (x *TableEditOneByIdInput) GetVariable() *resource.TableVariable {
 	if x != nil {
-		return x.Value
+		return x.Variable
 	}
 	return nil
 }
@@ -362,12 +362,12 @@ var File_resource_model_table_proto protoreflect.FileDescriptor
 
 const file_resource_model_table_proto_rawDesc = "" +
 	"\n" +
-	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"A\n" +
-	"\x10TableAddOneInput\x12-\n" +
-	"\x05value\x18\x01 \x01(\v2\x17.pb.resource.TableValueR\x05value\"\x13\n" +
-	"\x11TableAddOneOutput\"V\n" +
-	"\x15TableEditOneByIdInput\x12-\n" +
-	"\x05value\x18\x01 \x01(\v2\x17.pb.resource.TableValueR\x05value\x12\x0e\n" +
+	"\x1aresource/model/table.proto\x12\x11pb.resource.model\x1a\x15resource/common.proto\"J\n" +
+	"\x10TableAddOneInput\x126\n" +
+	"\bvariable\x18\x01 \x01(\v2\x1a.pb.resource.TableVariableR\bvariable\"\x13\n" +
+	"\x11TableAddOneOutput\"_\n" +
+	"\x15TableEditOneByIdInput\x126\n" +
+	"\bvariable\x18\x01 \x01(\v2\x1a.pb.resource.TableVariableR\bvariable\x12\x0e\n" +
 	"\x02id\x18\x02 \x01(\x04R\x02id\"\x18\n" +
 	"\x16TableEditOneByIdOutput\")\n" +
 	"\x17TableRemoveOneByIdInput\x12\x0e\n" +
@@ -406,12 +406,12 @@ var file_resource_model_table_proto_goTypes = []any{
 	(*TableRemoveOneByIdOutput)(nil),  // 5: pb.resource.model.TableRemoveOneByIdOutput
 	(*TableTotalByFiltersInput)(nil),  // 6: pb.resource.model.TableTotalByFiltersInput
 	(*TableTotalByFiltersOutput)(nil), // 7: pb.resource.model.TableTotalByFiltersOutput
-	(*resource.TableValue)(nil),       // 8: pb.resource.TableValue
+	(*resource.TableVariable)(nil),    // 8: pb.resource.TableVariable
 	(*resource.Filter)(nil),           // 9: pb.resource.Filter
 }
 var file_resource_model_table_proto_depIdxs = []int32{
-	8, // 0: pb.resource.model.TableAddOneInput.value:type_name -> pb.resource.TableValue
-	8, // 1: pb.resource.model.TableEditOneByIdInput.value:type_name -> pb.resource.TableValue
+	8, // 0: pb.resource.model.TableAddOneInput.variable:type_name -> pb.resource.TableVariable
+	8, // 1: pb.resource.model.TableEditOneByIdInput.variable:type_name -> pb.resource.TableVariable
 	9, // 2: pb.resource.model.TableTotalByFiltersInput.filters:type_name -> pb.resource.Filter
 	0, // 3: pb.resource.model.TableModel.AddOne:input_type -> pb.resource.model.TableAddOneInput
 	2, // 4: pb.resource.model.TableModel.EditOneById:input_type -> pb.resource.model.TableEditOneByIdInput

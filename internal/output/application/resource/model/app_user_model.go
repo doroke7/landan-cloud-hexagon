@@ -20,7 +20,7 @@ func NewAppUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AppUserMo
 func (oSelf *AppUserModel) AddOne(oAppUser *domain.AppUserVariable) error {
 
 	oRequest := &pbResourceModel.AppUserAddOneInput{
-		Value: &pbResource.AppUserValue{
+		Variable: &pbResource.AppUserVariable{
 			Name:     oAppUser.Name,
 			Password: oAppUser.Password,
 		},
