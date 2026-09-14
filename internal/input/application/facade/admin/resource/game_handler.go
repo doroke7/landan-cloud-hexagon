@@ -10,7 +10,7 @@ import (
 	domain "example/internal/domain"
 	inputApplicationFacade "example/internal/input/application/facade"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
-	pbFacade "example/pb/facade"
+	pb "example/pb"
 	pbFacadeAdminResource "example/pb/facade/admin/resource"
 	pkgInput "example/pkg/input"
 	pkgProtoToDomain "example/pkg/proto_to_domain"
@@ -48,12 +48,12 @@ func toStatusError(oErr error) error {
 }
 
 // domainGameTypeToProtoGameType 遞迴帶出 Parent / Children。
-func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbFacade.GameType {
+func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pb.GameType {
 	if oGameType == nil {
 		return nil
 	}
 
-	oProto := &pbFacade.GameType{
+	oProto := &pb.GameType{
 		Id:        uint64(oGameType.Id),
 		ParentId:  uint64(oGameType.ParentId),
 		Key:       oGameType.Key,
@@ -72,12 +72,12 @@ func domainGameTypeToProtoGameType(oGameType *domain.GameType) *pbFacade.GameTyp
 	return oProto
 }
 
-func domainGameToProtoGame(oGame *domain.Game) *pbFacade.Game {
+func domainGameToProtoGame(oGame *domain.Game) *pb.Game {
 	if oGame == nil {
 		return nil
 	}
 
-	return &pbFacade.Game{
+	return &pb.Game{
 		Id:          uint64(oGame.Id),
 		GameTypeId:  uint64(oGame.GameTypeId),
 		Key:         oGame.Key,
@@ -91,7 +91,7 @@ func domainGameToProtoGame(oGame *domain.Game) *pbFacade.Game {
 }
 
 // idFromFilters 從 filters[0]（field 必須是 "id"）取出 id，比照 http admin resource handler 的做法。
-func idFromFilters(aFilters []*pbFacade.Filter) (uint, error) {
+func idFromFilters(aFilters []*pb.Filter) (uint, error) {
 	if len(aFilters) == 0 || aFilters[0] == nil || aFilters[0].GetField() != "id" {
 		oStatusError := status.Error(codes.InvalidArgument, "filter position error")
 
@@ -113,7 +113,8 @@ func idFromFilters(aFilters []*pbFacade.Filter) (uint, error) {
 func (oSelf *GameHandler) AddOne(oContext context.Context, oRequest *pbFacadeAdminResource.GameAddOneRequest) (*pbFacadeAdminResource.GameAddOneResponse, error) {
 
 	oRequestVariable := oRequest.GetVariable()
-	oValue := pkgProtoToDomain.FacadeGameVariable(oRequestVariable)
+	oDomainGameVariable := pkgProtoToDomain.GameVariable(oRequestVariable)
+	oValue := &oDomainGameVariable
 
 	if oErr := oSelf.AdminResourceGameUsecase.AddOne(oValue); oErr != nil {
 		oStatusErr := toStatusError(oErr)
@@ -132,7 +133,8 @@ func (oSelf *GameHandler) EditOne(oContext context.Context, oRequest *pbFacadeAd
 	}
 
 	oRequestVariable := oRequest.GetVariable()
-	oValue := pkgProtoToDomain.FacadeGameVariable(oRequestVariable)
+	oDomainGameVariable := pkgProtoToDomain.GameVariable(oRequestVariable)
+	oValue := &oDomainGameVariable
 
 	if oErr := oSelf.AdminResourceGameUsecase.EditOne(oValue, uint64(iId)); oErr != nil {
 		oStatusErr := toStatusError(oErr)
@@ -229,7 +231,7 @@ func (oSelf *GameHandler) ShowOnes(oContext context.Context, oRequest *pbFacadeA
 		return nil, oStatusErr
 	}
 
-	aProtoGames := make([]*pbFacade.Game, 0, len(aGames))
+	aProtoGames := make([]*pb.Game, 0, len(aGames))
 	for _, oGame := range aGames {
 		oProtoGame := domainGameToProtoGame(oGame)
 		aProtoGames = append(aProtoGames, oProtoGame)

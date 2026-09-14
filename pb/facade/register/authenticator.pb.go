@@ -7,7 +7,7 @@
 package pb_facade_register
 
 import (
-	facade "example/pb/facade"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -23,8 +23,8 @@ const (
 )
 
 type AuthenticatorSignInRequest struct {
-	state         protoimpl.MessageState    `protogen:"open.v1"`
-	Variable      *facade.StaffUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.StaffUserVariable  `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,7 +59,7 @@ func (*AuthenticatorSignInRequest) Descriptor() ([]byte, []int) {
 	return file_facade_register_authenticator_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AuthenticatorSignInRequest) GetVariable() *facade.StaffUserVariable {
+func (x *AuthenticatorSignInRequest) GetVariable() *pb.StaffUserVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -114,9 +114,9 @@ var File_facade_register_authenticator_proto protoreflect.FileDescriptor
 
 const file_facade_register_authenticator_proto_rawDesc = "" +
 	"\n" +
-	"#facade/register/authenticator.proto\x12\x12pb.facade.register\x1a\x13facade/common.proto\"V\n" +
-	"\x1aAuthenticatorSignInRequest\x128\n" +
-	"\bvariable\x18\x01 \x01(\v2\x1c.pb.facade.StaffUserVariableR\bvariable\"C\n" +
+	"#facade/register/authenticator.proto\x12\x12pb.facade.register\x1a\fcommon.proto\"O\n" +
+	"\x1aAuthenticatorSignInRequest\x121\n" +
+	"\bvariable\x18\x01 \x01(\v2\x15.pb.StaffUserVariableR\bvariable\"C\n" +
 	"\x1bAuthenticatorSignInResponse\x12$\n" +
 	"\rauthorization\x18\x01 \x01(\tR\rauthorization2\x84\x01\n" +
 	"\x17AuthenticatorController\x12i\n" +
@@ -138,10 +138,10 @@ var file_facade_register_authenticator_proto_msgTypes = make([]protoimpl.Message
 var file_facade_register_authenticator_proto_goTypes = []any{
 	(*AuthenticatorSignInRequest)(nil),  // 0: pb.facade.register.AuthenticatorSignInRequest
 	(*AuthenticatorSignInResponse)(nil), // 1: pb.facade.register.AuthenticatorSignInResponse
-	(*facade.StaffUserVariable)(nil),    // 2: pb.facade.StaffUserVariable
+	(*pb.StaffUserVariable)(nil),        // 2: pb.StaffUserVariable
 }
 var file_facade_register_authenticator_proto_depIdxs = []int32{
-	2, // 0: pb.facade.register.AuthenticatorSignInRequest.variable:type_name -> pb.facade.StaffUserVariable
+	2, // 0: pb.facade.register.AuthenticatorSignInRequest.variable:type_name -> pb.StaffUserVariable
 	0, // 1: pb.facade.register.AuthenticatorController.SignIn:input_type -> pb.facade.register.AuthenticatorSignInRequest
 	1, // 2: pb.facade.register.AuthenticatorController.SignIn:output_type -> pb.facade.register.AuthenticatorSignInResponse
 	2, // [2:3] is the sub-list for method output_type

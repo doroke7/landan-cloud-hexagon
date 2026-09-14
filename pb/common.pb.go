@@ -9,6 +9,7 @@ package pb
 import (
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
+	descriptorpb "google.golang.org/protobuf/types/descriptorpb"
 	structpb "google.golang.org/protobuf/types/known/structpb"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 	reflect "reflect"
@@ -691,6 +692,50 @@ func (x *AdminUserVariable) GetAdminRoleIds() []uint64 {
 	return nil
 }
 
+type StaffUserVariable struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Name          string                 `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *StaffUserVariable) Reset() {
+	*x = StaffUserVariable{}
+	mi := &file_common_proto_msgTypes[9]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *StaffUserVariable) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*StaffUserVariable) ProtoMessage() {}
+
+func (x *StaffUserVariable) ProtoReflect() protoreflect.Message {
+	mi := &file_common_proto_msgTypes[9]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use StaffUserVariable.ProtoReflect.Descriptor instead.
+func (*StaffUserVariable) Descriptor() ([]byte, []int) {
+	return file_common_proto_rawDescGZIP(), []int{9}
+}
+
+func (x *StaffUserVariable) GetName() string {
+	if x != nil {
+		return x.Name
+	}
+	return ""
+}
+
 type AdminRole struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            uint64                 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -705,7 +750,7 @@ type AdminRole struct {
 
 func (x *AdminRole) Reset() {
 	*x = AdminRole{}
-	mi := &file_common_proto_msgTypes[9]
+	mi := &file_common_proto_msgTypes[10]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -717,7 +762,7 @@ func (x *AdminRole) String() string {
 func (*AdminRole) ProtoMessage() {}
 
 func (x *AdminRole) ProtoReflect() protoreflect.Message {
-	mi := &file_common_proto_msgTypes[9]
+	mi := &file_common_proto_msgTypes[10]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -730,7 +775,7 @@ func (x *AdminRole) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminRole.ProtoReflect.Descriptor instead.
 func (*AdminRole) Descriptor() ([]byte, []int) {
-	return file_common_proto_rawDescGZIP(), []int{9}
+	return file_common_proto_rawDescGZIP(), []int{10}
 }
 
 func (x *AdminRole) GetId() uint64 {
@@ -785,7 +830,7 @@ type AdminRoleVariable struct {
 
 func (x *AdminRoleVariable) Reset() {
 	*x = AdminRoleVariable{}
-	mi := &file_common_proto_msgTypes[10]
+	mi := &file_common_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -797,7 +842,7 @@ func (x *AdminRoleVariable) String() string {
 func (*AdminRoleVariable) ProtoMessage() {}
 
 func (x *AdminRoleVariable) ProtoReflect() protoreflect.Message {
-	mi := &file_common_proto_msgTypes[10]
+	mi := &file_common_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -810,7 +855,7 @@ func (x *AdminRoleVariable) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminRoleVariable.ProtoReflect.Descriptor instead.
 func (*AdminRoleVariable) Descriptor() ([]byte, []int) {
-	return file_common_proto_rawDescGZIP(), []int{10}
+	return file_common_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *AdminRoleVariable) GetKey() string {
@@ -843,7 +888,7 @@ type AdminPermission struct {
 
 func (x *AdminPermission) Reset() {
 	*x = AdminPermission{}
-	mi := &file_common_proto_msgTypes[11]
+	mi := &file_common_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -855,7 +900,7 @@ func (x *AdminPermission) String() string {
 func (*AdminPermission) ProtoMessage() {}
 
 func (x *AdminPermission) ProtoReflect() protoreflect.Message {
-	mi := &file_common_proto_msgTypes[11]
+	mi := &file_common_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -868,7 +913,7 @@ func (x *AdminPermission) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AdminPermission.ProtoReflect.Descriptor instead.
 func (*AdminPermission) Descriptor() ([]byte, []int) {
-	return file_common_proto_rawDescGZIP(), []int{11}
+	return file_common_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *AdminPermission) GetId() uint64 {
@@ -939,7 +984,7 @@ type AppUser struct {
 
 func (x *AppUser) Reset() {
 	*x = AppUser{}
-	mi := &file_common_proto_msgTypes[12]
+	mi := &file_common_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -951,7 +996,7 @@ func (x *AppUser) String() string {
 func (*AppUser) ProtoMessage() {}
 
 func (x *AppUser) ProtoReflect() protoreflect.Message {
-	mi := &file_common_proto_msgTypes[12]
+	mi := &file_common_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -964,7 +1009,7 @@ func (x *AppUser) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppUser.ProtoReflect.Descriptor instead.
 func (*AppUser) Descriptor() ([]byte, []int) {
-	return file_common_proto_rawDescGZIP(), []int{12}
+	return file_common_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *AppUser) GetId() uint64 {
@@ -1006,7 +1051,7 @@ type AppUserVariable struct {
 
 func (x *AppUserVariable) Reset() {
 	*x = AppUserVariable{}
-	mi := &file_common_proto_msgTypes[13]
+	mi := &file_common_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1018,7 +1063,7 @@ func (x *AppUserVariable) String() string {
 func (*AppUserVariable) ProtoMessage() {}
 
 func (x *AppUserVariable) ProtoReflect() protoreflect.Message {
-	mi := &file_common_proto_msgTypes[13]
+	mi := &file_common_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1031,7 +1076,7 @@ func (x *AppUserVariable) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use AppUserVariable.ProtoReflect.Descriptor instead.
 func (*AppUserVariable) Descriptor() ([]byte, []int) {
-	return file_common_proto_rawDescGZIP(), []int{13}
+	return file_common_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *AppUserVariable) GetId() uint64 {
@@ -1072,7 +1117,7 @@ type Game struct {
 
 func (x *Game) Reset() {
 	*x = Game{}
-	mi := &file_common_proto_msgTypes[14]
+	mi := &file_common_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1084,7 +1129,7 @@ func (x *Game) String() string {
 func (*Game) ProtoMessage() {}
 
 func (x *Game) ProtoReflect() protoreflect.Message {
-	mi := &file_common_proto_msgTypes[14]
+	mi := &file_common_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1097,7 +1142,7 @@ func (x *Game) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Game.ProtoReflect.Descriptor instead.
 func (*Game) Descriptor() ([]byte, []int) {
-	return file_common_proto_rawDescGZIP(), []int{14}
+	return file_common_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *Game) GetId() uint64 {
@@ -1175,7 +1220,7 @@ type GameVariable struct {
 
 func (x *GameVariable) Reset() {
 	*x = GameVariable{}
-	mi := &file_common_proto_msgTypes[15]
+	mi := &file_common_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1187,7 +1232,7 @@ func (x *GameVariable) String() string {
 func (*GameVariable) ProtoMessage() {}
 
 func (x *GameVariable) ProtoReflect() protoreflect.Message {
-	mi := &file_common_proto_msgTypes[15]
+	mi := &file_common_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1200,7 +1245,7 @@ func (x *GameVariable) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameVariable.ProtoReflect.Descriptor instead.
 func (*GameVariable) Descriptor() ([]byte, []int) {
-	return file_common_proto_rawDescGZIP(), []int{15}
+	return file_common_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *GameVariable) GetGameTypeId() uint64 {
@@ -1241,7 +1286,7 @@ type GameTypeVariable struct {
 
 func (x *GameTypeVariable) Reset() {
 	*x = GameTypeVariable{}
-	mi := &file_common_proto_msgTypes[16]
+	mi := &file_common_proto_msgTypes[17]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1253,7 +1298,7 @@ func (x *GameTypeVariable) String() string {
 func (*GameTypeVariable) ProtoMessage() {}
 
 func (x *GameTypeVariable) ProtoReflect() protoreflect.Message {
-	mi := &file_common_proto_msgTypes[16]
+	mi := &file_common_proto_msgTypes[17]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1266,7 +1311,7 @@ func (x *GameTypeVariable) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use GameTypeVariable.ProtoReflect.Descriptor instead.
 func (*GameTypeVariable) Descriptor() ([]byte, []int) {
-	return file_common_proto_rawDescGZIP(), []int{16}
+	return file_common_proto_rawDescGZIP(), []int{17}
 }
 
 func (x *GameTypeVariable) GetKey() string {
@@ -1304,7 +1349,7 @@ type Table struct {
 
 func (x *Table) Reset() {
 	*x = Table{}
-	mi := &file_common_proto_msgTypes[17]
+	mi := &file_common_proto_msgTypes[18]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1316,7 +1361,7 @@ func (x *Table) String() string {
 func (*Table) ProtoMessage() {}
 
 func (x *Table) ProtoReflect() protoreflect.Message {
-	mi := &file_common_proto_msgTypes[17]
+	mi := &file_common_proto_msgTypes[18]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1329,7 +1374,7 @@ func (x *Table) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use Table.ProtoReflect.Descriptor instead.
 func (*Table) Descriptor() ([]byte, []int) {
-	return file_common_proto_rawDescGZIP(), []int{17}
+	return file_common_proto_rawDescGZIP(), []int{18}
 }
 
 func (x *Table) GetId() uint64 {
@@ -1439,7 +1484,7 @@ type TableVariable struct {
 
 func (x *TableVariable) Reset() {
 	*x = TableVariable{}
-	mi := &file_common_proto_msgTypes[18]
+	mi := &file_common_proto_msgTypes[19]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1451,7 +1496,7 @@ func (x *TableVariable) String() string {
 func (*TableVariable) ProtoMessage() {}
 
 func (x *TableVariable) ProtoReflect() protoreflect.Message {
-	mi := &file_common_proto_msgTypes[18]
+	mi := &file_common_proto_msgTypes[19]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1464,7 +1509,7 @@ func (x *TableVariable) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use TableVariable.ProtoReflect.Descriptor instead.
 func (*TableVariable) Descriptor() ([]byte, []int) {
-	return file_common_proto_rawDescGZIP(), []int{18}
+	return file_common_proto_rawDescGZIP(), []int{19}
 }
 
 func (x *TableVariable) GetNo() string {
@@ -1523,11 +1568,28 @@ func (x *TableVariable) GetEndedAt() *timestamppb.Timestamp {
 	return nil
 }
 
+var file_common_proto_extTypes = []protoimpl.ExtensionInfo{
+	{
+		ExtendedType:  (*descriptorpb.FieldOptions)(nil),
+		ExtensionType: (*bool)(nil),
+		Field:         50001,
+		Name:          "pb.encrypted",
+		Tag:           "varint,50001,opt,name=encrypted",
+		Filename:      "common.proto",
+	},
+}
+
+// Extension fields to descriptorpb.FieldOptions.
+var (
+	// optional bool encrypted = 50001;
+	E_Encrypted = &file_common_proto_extTypes[0]
+)
+
 var File_common_proto protoreflect.FileDescriptor
 
 const file_common_proto_rawDesc = "" +
 	"\n" +
-	"\fcommon.proto\x12\x02pb\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"h\n" +
+	"\fcommon.proto\x12\x02pb\x1a\x1cgoogle/protobuf/struct.proto\x1a\x1fgoogle/protobuf/timestamp.proto\x1a google/protobuf/descriptor.proto\"h\n" +
 	"\x06Filter\x12\x14\n" +
 	"\x05field\x18\x01 \x01(\tR\x05field\x12\x1a\n" +
 	"\boperator\x18\x02 \x01(\tR\boperator\x12,\n" +
@@ -1593,13 +1655,15 @@ const file_common_proto_rawDesc = "" +
 	"\n" +
 	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\x12.\n" +
 	"\vadmin_roles\x18\a \x03(\v2\r.pb.AdminRoleR\n" +
-	"adminRoles\"\x89\x01\n" +
+	"adminRoles\"\x8f\x01\n" +
 	"\x11AdminUserVariable\x12\x17\n" +
-	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
-	"\bpassword\x18\x02 \x01(\tH\x01R\bpassword\x88\x01\x01\x12$\n" +
+	"\x04name\x18\x01 \x01(\tH\x00R\x04name\x88\x01\x01\x12%\n" +
+	"\bpassword\x18\x02 \x01(\tB\x04\x88\xb5\x18\x01H\x01R\bpassword\x88\x01\x01\x12$\n" +
 	"\x0eadmin_role_ids\x18\x03 \x03(\x04R\fadminRoleIdsB\a\n" +
 	"\x05_nameB\v\n" +
-	"\t_password\"\xf2\x01\n" +
+	"\t_password\"'\n" +
+	"\x11StaffUserVariable\x12\x12\n" +
+	"\x04name\x18\x01 \x01(\tR\x04name\"\xf2\x01\n" +
 	"\tAdminRole\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\x04R\x02id\x12\x10\n" +
 	"\x03key\x18\x02 \x01(\tR\x03key\x12\x12\n" +
@@ -1703,7 +1767,8 @@ const file_common_proto_rawDesc = "" +
 	"\x04_keyB\b\n" +
 	"\x06_stateB\x0e\n" +
 	"\f_descriptionB\t\n" +
-	"\a_resultB\fZ\n" +
+	"\a_result:=\n" +
+	"\tencrypted\x12\x1d.google.protobuf.FieldOptions\x18ц\x03 \x01(\bR\tencryptedB\fZ\n" +
 	"example/pbb\x06proto3"
 
 var (
@@ -1718,7 +1783,7 @@ func file_common_proto_rawDescGZIP() []byte {
 	return file_common_proto_rawDescData
 }
 
-var file_common_proto_msgTypes = make([]protoimpl.MessageInfo, 19)
+var file_common_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
 var file_common_proto_goTypes = []any{
 	(*Filter)(nil),                       // 0: pb.Filter
 	(*Sorter)(nil),                       // 1: pb.Sorter
@@ -1729,59 +1794,62 @@ var file_common_proto_goTypes = []any{
 	(*GameType)(nil),                     // 6: pb.GameType
 	(*AdminUser)(nil),                    // 7: pb.AdminUser
 	(*AdminUserVariable)(nil),            // 8: pb.AdminUserVariable
-	(*AdminRole)(nil),                    // 9: pb.AdminRole
-	(*AdminRoleVariable)(nil),            // 10: pb.AdminRoleVariable
-	(*AdminPermission)(nil),              // 11: pb.AdminPermission
-	(*AppUser)(nil),                      // 12: pb.AppUser
-	(*AppUserVariable)(nil),              // 13: pb.AppUserVariable
-	(*Game)(nil),                         // 14: pb.Game
-	(*GameVariable)(nil),                 // 15: pb.GameVariable
-	(*GameTypeVariable)(nil),             // 16: pb.GameTypeVariable
-	(*Table)(nil),                        // 17: pb.Table
-	(*TableVariable)(nil),                // 18: pb.TableVariable
-	(*structpb.Value)(nil),               // 19: google.protobuf.Value
-	(*timestamppb.Timestamp)(nil),        // 20: google.protobuf.Timestamp
+	(*StaffUserVariable)(nil),            // 9: pb.StaffUserVariable
+	(*AdminRole)(nil),                    // 10: pb.AdminRole
+	(*AdminRoleVariable)(nil),            // 11: pb.AdminRoleVariable
+	(*AdminPermission)(nil),              // 12: pb.AdminPermission
+	(*AppUser)(nil),                      // 13: pb.AppUser
+	(*AppUserVariable)(nil),              // 14: pb.AppUserVariable
+	(*Game)(nil),                         // 15: pb.Game
+	(*GameVariable)(nil),                 // 16: pb.GameVariable
+	(*GameTypeVariable)(nil),             // 17: pb.GameTypeVariable
+	(*Table)(nil),                        // 18: pb.Table
+	(*TableVariable)(nil),                // 19: pb.TableVariable
+	(*structpb.Value)(nil),               // 20: google.protobuf.Value
+	(*timestamppb.Timestamp)(nil),        // 21: google.protobuf.Timestamp
+	(*descriptorpb.FieldOptions)(nil),    // 22: google.protobuf.FieldOptions
 }
 var file_common_proto_depIdxs = []int32{
-	19, // 0: pb.Filter.value:type_name -> google.protobuf.Value
-	20, // 1: pb.AdminPermissionGroup.created_at:type_name -> google.protobuf.Timestamp
-	20, // 2: pb.AdminPermissionGroup.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 3: pb.AdminPermissionGroup.deleted_at:type_name -> google.protobuf.Timestamp
+	20, // 0: pb.Filter.value:type_name -> google.protobuf.Value
+	21, // 1: pb.AdminPermissionGroup.created_at:type_name -> google.protobuf.Timestamp
+	21, // 2: pb.AdminPermissionGroup.updated_at:type_name -> google.protobuf.Timestamp
+	21, // 3: pb.AdminPermissionGroup.deleted_at:type_name -> google.protobuf.Timestamp
 	3,  // 4: pb.AdminPermissionGroup.parent:type_name -> pb.AdminPermissionGroup
 	3,  // 5: pb.AdminPermissionGroup.children:type_name -> pb.AdminPermissionGroup
-	11, // 6: pb.AdminPermissionGroup.admin_permissions:type_name -> pb.AdminPermission
+	12, // 6: pb.AdminPermissionGroup.admin_permissions:type_name -> pb.AdminPermission
 	5,  // 7: pb.AdminPermissionGroupVariable.admin_permissions:type_name -> pb.AdminPermissionVariable
-	20, // 8: pb.GameType.created_at:type_name -> google.protobuf.Timestamp
-	20, // 9: pb.GameType.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 10: pb.GameType.deleted_at:type_name -> google.protobuf.Timestamp
+	21, // 8: pb.GameType.created_at:type_name -> google.protobuf.Timestamp
+	21, // 9: pb.GameType.updated_at:type_name -> google.protobuf.Timestamp
+	21, // 10: pb.GameType.deleted_at:type_name -> google.protobuf.Timestamp
 	6,  // 11: pb.GameType.parent:type_name -> pb.GameType
 	6,  // 12: pb.GameType.children:type_name -> pb.GameType
-	20, // 13: pb.AdminUser.created_at:type_name -> google.protobuf.Timestamp
-	20, // 14: pb.AdminUser.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 15: pb.AdminUser.deleted_at:type_name -> google.protobuf.Timestamp
-	9,  // 16: pb.AdminUser.admin_roles:type_name -> pb.AdminRole
-	20, // 17: pb.AdminRole.created_at:type_name -> google.protobuf.Timestamp
-	20, // 18: pb.AdminRole.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 19: pb.AdminRole.deleted_at:type_name -> google.protobuf.Timestamp
-	20, // 20: pb.AdminPermission.created_at:type_name -> google.protobuf.Timestamp
-	20, // 21: pb.AdminPermission.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 22: pb.AdminPermission.deleted_at:type_name -> google.protobuf.Timestamp
-	20, // 23: pb.Game.created_at:type_name -> google.protobuf.Timestamp
-	20, // 24: pb.Game.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 25: pb.Game.deleted_at:type_name -> google.protobuf.Timestamp
+	21, // 13: pb.AdminUser.created_at:type_name -> google.protobuf.Timestamp
+	21, // 14: pb.AdminUser.updated_at:type_name -> google.protobuf.Timestamp
+	21, // 15: pb.AdminUser.deleted_at:type_name -> google.protobuf.Timestamp
+	10, // 16: pb.AdminUser.admin_roles:type_name -> pb.AdminRole
+	21, // 17: pb.AdminRole.created_at:type_name -> google.protobuf.Timestamp
+	21, // 18: pb.AdminRole.updated_at:type_name -> google.protobuf.Timestamp
+	21, // 19: pb.AdminRole.deleted_at:type_name -> google.protobuf.Timestamp
+	21, // 20: pb.AdminPermission.created_at:type_name -> google.protobuf.Timestamp
+	21, // 21: pb.AdminPermission.updated_at:type_name -> google.protobuf.Timestamp
+	21, // 22: pb.AdminPermission.deleted_at:type_name -> google.protobuf.Timestamp
+	21, // 23: pb.Game.created_at:type_name -> google.protobuf.Timestamp
+	21, // 24: pb.Game.updated_at:type_name -> google.protobuf.Timestamp
+	21, // 25: pb.Game.deleted_at:type_name -> google.protobuf.Timestamp
 	6,  // 26: pb.Game.game_type:type_name -> pb.GameType
-	20, // 27: pb.Table.started_at:type_name -> google.protobuf.Timestamp
-	20, // 28: pb.Table.ended_at:type_name -> google.protobuf.Timestamp
-	20, // 29: pb.Table.created_at:type_name -> google.protobuf.Timestamp
-	20, // 30: pb.Table.updated_at:type_name -> google.protobuf.Timestamp
-	20, // 31: pb.Table.deleted_at:type_name -> google.protobuf.Timestamp
-	14, // 32: pb.Table.game:type_name -> pb.Game
-	20, // 33: pb.TableVariable.started_at:type_name -> google.protobuf.Timestamp
-	20, // 34: pb.TableVariable.ended_at:type_name -> google.protobuf.Timestamp
-	35, // [35:35] is the sub-list for method output_type
-	35, // [35:35] is the sub-list for method input_type
-	35, // [35:35] is the sub-list for extension type_name
-	35, // [35:35] is the sub-list for extension extendee
+	21, // 27: pb.Table.started_at:type_name -> google.protobuf.Timestamp
+	21, // 28: pb.Table.ended_at:type_name -> google.protobuf.Timestamp
+	21, // 29: pb.Table.created_at:type_name -> google.protobuf.Timestamp
+	21, // 30: pb.Table.updated_at:type_name -> google.protobuf.Timestamp
+	21, // 31: pb.Table.deleted_at:type_name -> google.protobuf.Timestamp
+	15, // 32: pb.Table.game:type_name -> pb.Game
+	21, // 33: pb.TableVariable.started_at:type_name -> google.protobuf.Timestamp
+	21, // 34: pb.TableVariable.ended_at:type_name -> google.protobuf.Timestamp
+	22, // 35: pb.encrypted:extendee -> google.protobuf.FieldOptions
+	36, // [36:36] is the sub-list for method output_type
+	36, // [36:36] is the sub-list for method input_type
+	36, // [36:36] is the sub-list for extension type_name
+	35, // [35:36] is the sub-list for extension extendee
 	0,  // [0:35] is the sub-list for field type_name
 }
 
@@ -1793,24 +1861,25 @@ func file_common_proto_init() {
 	file_common_proto_msgTypes[4].OneofWrappers = []any{}
 	file_common_proto_msgTypes[5].OneofWrappers = []any{}
 	file_common_proto_msgTypes[8].OneofWrappers = []any{}
-	file_common_proto_msgTypes[10].OneofWrappers = []any{}
-	file_common_proto_msgTypes[13].OneofWrappers = []any{}
-	file_common_proto_msgTypes[15].OneofWrappers = []any{}
+	file_common_proto_msgTypes[11].OneofWrappers = []any{}
+	file_common_proto_msgTypes[14].OneofWrappers = []any{}
 	file_common_proto_msgTypes[16].OneofWrappers = []any{}
-	file_common_proto_msgTypes[18].OneofWrappers = []any{}
+	file_common_proto_msgTypes[17].OneofWrappers = []any{}
+	file_common_proto_msgTypes[19].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_common_proto_rawDesc), len(file_common_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   19,
-			NumExtensions: 0,
+			NumMessages:   20,
+			NumExtensions: 1,
 			NumServices:   0,
 		},
 		GoTypes:           file_common_proto_goTypes,
 		DependencyIndexes: file_common_proto_depIdxs,
 		MessageInfos:      file_common_proto_msgTypes,
+		ExtensionInfos:    file_common_proto_extTypes,
 	}.Build()
 	File_common_proto = out.File
 	file_common_proto_goTypes = nil

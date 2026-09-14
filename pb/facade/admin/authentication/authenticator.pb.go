@@ -7,7 +7,7 @@
 package pb_facade_admin_authentication
 
 import (
-	facade "example/pb/facade"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -23,8 +23,8 @@ const (
 )
 
 type AuthenticatorSignInRequest struct {
-	state         protoimpl.MessageState    `protogen:"open.v1"`
-	Variable      *facade.AdminUserVariable `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Variable      *pb.AdminUserVariable  `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,7 +59,7 @@ func (*AuthenticatorSignInRequest) Descriptor() ([]byte, []int) {
 	return file_facade_admin_authentication_authenticator_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *AuthenticatorSignInRequest) GetVariable() *facade.AdminUserVariable {
+func (x *AuthenticatorSignInRequest) GetVariable() *pb.AdminUserVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -106,9 +106,9 @@ var File_facade_admin_authentication_authenticator_proto protoreflect.FileDescri
 
 const file_facade_admin_authentication_authenticator_proto_rawDesc = "" +
 	"\n" +
-	"/facade/admin/authentication/authenticator.proto\x12\x1epb.facade.admin.authentication\x1a\x13facade/common.proto\"V\n" +
-	"\x1aAuthenticatorSignInRequest\x128\n" +
-	"\bvariable\x18\x01 \x01(\v2\x1c.pb.facade.AdminUserVariableR\bvariable\"\x1d\n" +
+	"/facade/admin/authentication/authenticator.proto\x12\x1epb.facade.admin.authentication\x1a\fcommon.proto\"O\n" +
+	"\x1aAuthenticatorSignInRequest\x121\n" +
+	"\bvariable\x18\x01 \x01(\v2\x15.pb.AdminUserVariableR\bvariable\"\x1d\n" +
 	"\x1bAuthenticatorSignInResponse2\x9d\x01\n" +
 	"\x17AuthenticatorController\x12\x81\x01\n" +
 	"\x06SignIn\x12:.pb.facade.admin.authentication.AuthenticatorSignInRequest\x1a;.pb.facade.admin.authentication.AuthenticatorSignInResponseB\"Z ./pb_facade_admin_authenticationb\x06proto3"
@@ -129,10 +129,10 @@ var file_facade_admin_authentication_authenticator_proto_msgTypes = make([]proto
 var file_facade_admin_authentication_authenticator_proto_goTypes = []any{
 	(*AuthenticatorSignInRequest)(nil),  // 0: pb.facade.admin.authentication.AuthenticatorSignInRequest
 	(*AuthenticatorSignInResponse)(nil), // 1: pb.facade.admin.authentication.AuthenticatorSignInResponse
-	(*facade.AdminUserVariable)(nil),    // 2: pb.facade.AdminUserVariable
+	(*pb.AdminUserVariable)(nil),        // 2: pb.AdminUserVariable
 }
 var file_facade_admin_authentication_authenticator_proto_depIdxs = []int32{
-	2, // 0: pb.facade.admin.authentication.AuthenticatorSignInRequest.variable:type_name -> pb.facade.AdminUserVariable
+	2, // 0: pb.facade.admin.authentication.AuthenticatorSignInRequest.variable:type_name -> pb.AdminUserVariable
 	0, // 1: pb.facade.admin.authentication.AuthenticatorController.SignIn:input_type -> pb.facade.admin.authentication.AuthenticatorSignInRequest
 	1, // 2: pb.facade.admin.authentication.AuthenticatorController.SignIn:output_type -> pb.facade.admin.authentication.AuthenticatorSignInResponse
 	2, // [2:3] is the sub-list for method output_type

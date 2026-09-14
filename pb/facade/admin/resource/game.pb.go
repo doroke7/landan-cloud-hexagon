@@ -7,7 +7,7 @@
 package pb_facade_admin_resource
 
 import (
-	facade "example/pb/facade"
+	pb "example/pb"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -24,7 +24,7 @@ const (
 
 type GameAddOneRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Variable      *facade.GameVariable   `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
+	Variable      *pb.GameVariable       `protobuf:"bytes,1,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -59,7 +59,7 @@ func (*GameAddOneRequest) Descriptor() ([]byte, []int) {
 	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{0}
 }
 
-func (x *GameAddOneRequest) GetVariable() *facade.GameVariable {
+func (x *GameAddOneRequest) GetVariable() *pb.GameVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -104,8 +104,8 @@ func (*GameAddOneResponse) Descriptor() ([]byte, []int) {
 
 type GameEditOneRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*facade.Filter       `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
-	Variable      *facade.GameVariable   `protobuf:"bytes,2,opt,name=variable,proto3" json:"variable,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Variable      *pb.GameVariable       `protobuf:"bytes,2,opt,name=variable,proto3" json:"variable,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -140,14 +140,14 @@ func (*GameEditOneRequest) Descriptor() ([]byte, []int) {
 	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *GameEditOneRequest) GetFilters() []*facade.Filter {
+func (x *GameEditOneRequest) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *GameEditOneRequest) GetVariable() *facade.GameVariable {
+func (x *GameEditOneRequest) GetVariable() *pb.GameVariable {
 	if x != nil {
 		return x.Variable
 	}
@@ -192,7 +192,7 @@ func (*GameEditOneResponse) Descriptor() ([]byte, []int) {
 
 type GameRemoveOneRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*facade.Filter       `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -227,7 +227,7 @@ func (*GameRemoveOneRequest) Descriptor() ([]byte, []int) {
 	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{4}
 }
 
-func (x *GameRemoveOneRequest) GetFilters() []*facade.Filter {
+func (x *GameRemoveOneRequest) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
@@ -272,7 +272,7 @@ func (*GameRemoveOneResponse) Descriptor() ([]byte, []int) {
 
 type GameShowOneRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*facade.Filter       `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -307,7 +307,7 @@ func (*GameShowOneRequest) Descriptor() ([]byte, []int) {
 	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{6}
 }
 
-func (x *GameShowOneRequest) GetFilters() []*facade.Filter {
+func (x *GameShowOneRequest) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
@@ -316,7 +316,7 @@ func (x *GameShowOneRequest) GetFilters() []*facade.Filter {
 
 type GameShowOneResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	One           *facade.Game           `protobuf:"bytes,1,opt,name=One,proto3" json:"One,omitempty"`
+	One           *pb.Game               `protobuf:"bytes,1,opt,name=One,proto3" json:"One,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -351,7 +351,7 @@ func (*GameShowOneResponse) Descriptor() ([]byte, []int) {
 	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{7}
 }
 
-func (x *GameShowOneResponse) GetOne() *facade.Game {
+func (x *GameShowOneResponse) GetOne() *pb.Game {
 	if x != nil {
 		return x.One
 	}
@@ -360,9 +360,9 @@ func (x *GameShowOneResponse) GetOne() *facade.Game {
 
 type GameShowOnesRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Filters       []*facade.Filter       `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
-	Sorters       []*facade.Sorter       `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
-	Pagination    *facade.Pagination     `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
+	Filters       []*pb.Filter           `protobuf:"bytes,1,rep,name=filters,proto3" json:"filters,omitempty"`
+	Sorters       []*pb.Sorter           `protobuf:"bytes,2,rep,name=sorters,proto3" json:"sorters,omitempty"`
+	Pagination    *pb.Pagination         `protobuf:"bytes,3,opt,name=pagination,proto3" json:"pagination,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -397,21 +397,21 @@ func (*GameShowOnesRequest) Descriptor() ([]byte, []int) {
 	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{8}
 }
 
-func (x *GameShowOnesRequest) GetFilters() []*facade.Filter {
+func (x *GameShowOnesRequest) GetFilters() []*pb.Filter {
 	if x != nil {
 		return x.Filters
 	}
 	return nil
 }
 
-func (x *GameShowOnesRequest) GetSorters() []*facade.Sorter {
+func (x *GameShowOnesRequest) GetSorters() []*pb.Sorter {
 	if x != nil {
 		return x.Sorters
 	}
 	return nil
 }
 
-func (x *GameShowOnesRequest) GetPagination() *facade.Pagination {
+func (x *GameShowOnesRequest) GetPagination() *pb.Pagination {
 	if x != nil {
 		return x.Pagination
 	}
@@ -420,7 +420,7 @@ func (x *GameShowOnesRequest) GetPagination() *facade.Pagination {
 
 type GameShowOnesResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Ones          []*facade.Game         `protobuf:"bytes,1,rep,name=Ones,proto3" json:"Ones,omitempty"`
+	Ones          []*pb.Game             `protobuf:"bytes,1,rep,name=Ones,proto3" json:"Ones,omitempty"`
 	Total         uint64                 `protobuf:"varint,2,opt,name=total,proto3" json:"total,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -456,7 +456,7 @@ func (*GameShowOnesResponse) Descriptor() ([]byte, []int) {
 	return file_facade_admin_resource_game_proto_rawDescGZIP(), []int{9}
 }
 
-func (x *GameShowOnesResponse) GetOnes() []*facade.Game {
+func (x *GameShowOnesResponse) GetOnes() []*pb.Game {
 	if x != nil {
 		return x.Ones
 	}
@@ -474,29 +474,34 @@ var File_facade_admin_resource_game_proto protoreflect.FileDescriptor
 
 const file_facade_admin_resource_game_proto_rawDesc = "" +
 	"\n" +
-	" facade/admin/resource/game.proto\x12\x18pb.facade.admin.resource\x1a\x13facade/common.proto\"H\n" +
-	"\x11GameAddOneRequest\x123\n" +
-	"\bvariable\x18\x01 \x01(\v2\x17.pb.facade.GameVariableR\bvariable\"\x14\n" +
-	"\x12GameAddOneResponse\"v\n" +
-	"\x12GameEditOneRequest\x12+\n" +
-	"\afilters\x18\x01 \x03(\v2\x11.pb.facade.FilterR\afilters\x123\n" +
-	"\bvariable\x18\x02 \x01(\v2\x17.pb.facade.GameVariableR\bvariable\"\x15\n" +
-	"\x13GameEditOneResponse\"C\n" +
-	"\x14GameRemoveOneRequest\x12+\n" +
-	"\afilters\x18\x01 \x03(\v2\x11.pb.facade.FilterR\afilters\"\x17\n" +
-	"\x15GameRemoveOneResponse\"A\n" +
-	"\x12GameShowOneRequest\x12+\n" +
-	"\afilters\x18\x01 \x03(\v2\x11.pb.facade.FilterR\afilters\"8\n" +
-	"\x13GameShowOneResponse\x12!\n" +
-	"\x03One\x18\x01 \x01(\v2\x0f.pb.facade.GameR\x03One\"\xa6\x01\n" +
-	"\x13GameShowOnesRequest\x12+\n" +
-	"\afilters\x18\x01 \x03(\v2\x11.pb.facade.FilterR\afilters\x12+\n" +
-	"\asorters\x18\x02 \x03(\v2\x11.pb.facade.SorterR\asorters\x125\n" +
+	" facade/admin/resource/game.proto\x12\x18pb.facade.admin.resource\x1a\fcommon.proto\"A\n" +
+	"\x11GameAddOneRequest\x12,\n" +
+	"\bvariable\x18\x01 \x01(\v2\x10.pb.GameVariableR\bvariable\"\x14\n" +
+	"\x12GameAddOneResponse\"h\n" +
+	"\x12GameEditOneRequest\x12$\n" +
+	"\afilters\x18\x01 \x03(\v2\n" +
+	".pb.FilterR\afilters\x12,\n" +
+	"\bvariable\x18\x02 \x01(\v2\x10.pb.GameVariableR\bvariable\"\x15\n" +
+	"\x13GameEditOneResponse\"<\n" +
+	"\x14GameRemoveOneRequest\x12$\n" +
+	"\afilters\x18\x01 \x03(\v2\n" +
+	".pb.FilterR\afilters\"\x17\n" +
+	"\x15GameRemoveOneResponse\":\n" +
+	"\x12GameShowOneRequest\x12$\n" +
+	"\afilters\x18\x01 \x03(\v2\n" +
+	".pb.FilterR\afilters\"1\n" +
+	"\x13GameShowOneResponse\x12\x1a\n" +
+	"\x03One\x18\x01 \x01(\v2\b.pb.GameR\x03One\"\x91\x01\n" +
+	"\x13GameShowOnesRequest\x12$\n" +
+	"\afilters\x18\x01 \x03(\v2\n" +
+	".pb.FilterR\afilters\x12$\n" +
+	"\asorters\x18\x02 \x03(\v2\n" +
+	".pb.SorterR\asorters\x12.\n" +
 	"\n" +
-	"pagination\x18\x03 \x01(\v2\x15.pb.facade.PaginationR\n" +
-	"pagination\"Q\n" +
-	"\x14GameShowOnesResponse\x12#\n" +
-	"\x04Ones\x18\x01 \x03(\v2\x0f.pb.facade.GameR\x04Ones\x12\x14\n" +
+	"pagination\x18\x03 \x01(\v2\x0e.pb.PaginationR\n" +
+	"pagination\"J\n" +
+	"\x14GameShowOnesResponse\x12\x1c\n" +
+	"\x04Ones\x18\x01 \x03(\v2\b.pb.GameR\x04Ones\x12\x14\n" +
 	"\x05total\x18\x02 \x01(\x04R\x05total2\x9e\x04\n" +
 	"\x0eGameController\x12c\n" +
 	"\x06AddOne\x12+.pb.facade.admin.resource.GameAddOneRequest\x1a,.pb.facade.admin.resource.GameAddOneResponse\x12f\n" +
@@ -529,23 +534,23 @@ var file_facade_admin_resource_game_proto_goTypes = []any{
 	(*GameShowOneResponse)(nil),   // 7: pb.facade.admin.resource.GameShowOneResponse
 	(*GameShowOnesRequest)(nil),   // 8: pb.facade.admin.resource.GameShowOnesRequest
 	(*GameShowOnesResponse)(nil),  // 9: pb.facade.admin.resource.GameShowOnesResponse
-	(*facade.GameVariable)(nil),   // 10: pb.facade.GameVariable
-	(*facade.Filter)(nil),         // 11: pb.facade.Filter
-	(*facade.Game)(nil),           // 12: pb.facade.Game
-	(*facade.Sorter)(nil),         // 13: pb.facade.Sorter
-	(*facade.Pagination)(nil),     // 14: pb.facade.Pagination
+	(*pb.GameVariable)(nil),       // 10: pb.GameVariable
+	(*pb.Filter)(nil),             // 11: pb.Filter
+	(*pb.Game)(nil),               // 12: pb.Game
+	(*pb.Sorter)(nil),             // 13: pb.Sorter
+	(*pb.Pagination)(nil),         // 14: pb.Pagination
 }
 var file_facade_admin_resource_game_proto_depIdxs = []int32{
-	10, // 0: pb.facade.admin.resource.GameAddOneRequest.variable:type_name -> pb.facade.GameVariable
-	11, // 1: pb.facade.admin.resource.GameEditOneRequest.filters:type_name -> pb.facade.Filter
-	10, // 2: pb.facade.admin.resource.GameEditOneRequest.variable:type_name -> pb.facade.GameVariable
-	11, // 3: pb.facade.admin.resource.GameRemoveOneRequest.filters:type_name -> pb.facade.Filter
-	11, // 4: pb.facade.admin.resource.GameShowOneRequest.filters:type_name -> pb.facade.Filter
-	12, // 5: pb.facade.admin.resource.GameShowOneResponse.One:type_name -> pb.facade.Game
-	11, // 6: pb.facade.admin.resource.GameShowOnesRequest.filters:type_name -> pb.facade.Filter
-	13, // 7: pb.facade.admin.resource.GameShowOnesRequest.sorters:type_name -> pb.facade.Sorter
-	14, // 8: pb.facade.admin.resource.GameShowOnesRequest.pagination:type_name -> pb.facade.Pagination
-	12, // 9: pb.facade.admin.resource.GameShowOnesResponse.Ones:type_name -> pb.facade.Game
+	10, // 0: pb.facade.admin.resource.GameAddOneRequest.variable:type_name -> pb.GameVariable
+	11, // 1: pb.facade.admin.resource.GameEditOneRequest.filters:type_name -> pb.Filter
+	10, // 2: pb.facade.admin.resource.GameEditOneRequest.variable:type_name -> pb.GameVariable
+	11, // 3: pb.facade.admin.resource.GameRemoveOneRequest.filters:type_name -> pb.Filter
+	11, // 4: pb.facade.admin.resource.GameShowOneRequest.filters:type_name -> pb.Filter
+	12, // 5: pb.facade.admin.resource.GameShowOneResponse.One:type_name -> pb.Game
+	11, // 6: pb.facade.admin.resource.GameShowOnesRequest.filters:type_name -> pb.Filter
+	13, // 7: pb.facade.admin.resource.GameShowOnesRequest.sorters:type_name -> pb.Sorter
+	14, // 8: pb.facade.admin.resource.GameShowOnesRequest.pagination:type_name -> pb.Pagination
+	12, // 9: pb.facade.admin.resource.GameShowOnesResponse.Ones:type_name -> pb.Game
 	0,  // 10: pb.facade.admin.resource.GameController.AddOne:input_type -> pb.facade.admin.resource.GameAddOneRequest
 	2,  // 11: pb.facade.admin.resource.GameController.EditOne:input_type -> pb.facade.admin.resource.GameEditOneRequest
 	4,  // 12: pb.facade.admin.resource.GameController.RemoveOne:input_type -> pb.facade.admin.resource.GameRemoveOneRequest
