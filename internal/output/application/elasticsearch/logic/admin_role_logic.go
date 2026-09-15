@@ -25,6 +25,56 @@ func NewAdminRoleLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminRo
 	}
 }
 
+// searchAdminRolesToAdminPermissions 查出某個 admin_role_id 底下現有的所有關聯。
+func (oSelf *AdminRoleLogic) searchAdminRolesToAdminPermissions(iAdminRoleId uint64) ([]domain.AdminRolesToAdminPermission, error) {
+	sAdminRoleIdField := "admin_role_id"
+	iSearchSize := uint(10000)
+	iSearchPage := uint(1)
+	aFilters := []*pkgInput.Filter{{Field: &sAdminRoleIdField, Value: iAdminRoleId}}
+	oPagination := &pkgInput.Pagination{Size: &iSearchSize, Page: &iSearchPage}
+
+	aSearchOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.AdminRolesToAdminPermissionsIndex, aFilters, nil, oPagination)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	oSearchResult, oErr := oSelf.SearchWithOptions(aSearchOptions)
+	if oErr != nil {
+		return nil, oErr
+	}
+
+	aExistingAdminRolesToAdminPermissions := make([]domain.AdminRolesToAdminPermission, 0, len(oSearchResult.Hits))
+	for _, oHit := range oSearchResult.Hits {
+		var oExisting domain.AdminRolesToAdminPermission
+		if oErr := json.Unmarshal(oHit.Source, &oExisting); oErr != nil {
+			return nil, oErr
+		}
+
+		aExistingAdminRolesToAdminPermissions = append(aExistingAdminRolesToAdminPermissions, oExisting)
+	}
+
+	return aExistingAdminRolesToAdminPermissions, nil
+}
+
+// deleteAdminRolesToAdminPermissions 清掉某個 admin_role_id 底下現有的所有關聯，
+// 避免髒數據（例如 id 被重用）導致異常。
+func (oSelf *AdminRoleLogic) deleteAdminRolesToAdminPermissions(iAdminRoleId uint64) error {
+	aExistingAdminRolesToAdminPermissions, oErr := oSelf.searchAdminRolesToAdminPermissions(iAdminRoleId)
+	if oErr != nil {
+		return oErr
+	}
+
+	for _, oExisting := range aExistingAdminRolesToAdminPermissions {
+		sRelationId := strconv.FormatUint(iAdminRoleId, 10) + "_" + strconv.FormatUint(oExisting.AdminPermissionId, 10)
+
+		if oErr := oSelf.DeleteOne(oSelf.AdminRolesToAdminPermissionsIndex, sRelationId); oErr != nil {
+			return oErr
+		}
+	}
+
+	return nil
+}
+
 func (oSelf *AdminRoleLogic) AddAdminRole(oVariable *domain.AdminRoleVariable) error {
 	iId, oErr := oSelf.NextId("admin_role")
 	if oErr != nil {
@@ -46,6 +96,11 @@ func (oSelf *AdminRoleLogic) AddAdminRole(oVariable *domain.AdminRoleVariable) e
 	}
 
 	if oErr := oSelf.IndexOne(oSelf.Index, strconv.FormatUint(uint64(iId), 10), oDoc); oErr != nil {
+		return oErr
+	}
+
+	// 避免髒數據（例如 id 被重用）導致異常，插入前先把這個 admin_role_id 底下的關聯清乾淨
+	if oErr := oSelf.deleteAdminRolesToAdminPermissions(uint64(iId)); oErr != nil {
 		return oErr
 	}
 
@@ -94,29 +149,13 @@ func (oSelf *AdminRoleLogic) EditAdminRoleById(oVariable *domain.AdminRoleVariab
 		return nil
 	}
 
-	sAdminRoleIdField := "admin_role_id"
-	iSearchSize := uint(10000)
-	iSearchPage := uint(1)
-	aFilters := []*pkgInput.Filter{{Field: &sAdminRoleIdField, Value: iId}}
-	oPagination := &pkgInput.Pagination{Size: &iSearchSize, Page: &iSearchPage}
-
-	aSearchOptions, oErr := oSelf.IndexFiltersSortersPaginationToOptions(oSelf.AdminRolesToAdminPermissionsIndex, aFilters, nil, oPagination)
+	aExistingAdminRolesToAdminPermissions, oErr := oSelf.searchAdminRolesToAdminPermissions(iId)
 	if oErr != nil {
 		return oErr
 	}
 
-	oSearchResult, oErr := oSelf.SearchWithOptions(aSearchOptions)
-	if oErr != nil {
-		return oErr
-	}
-
-	oMapExistingAdminPermissionIds := make(map[uint64]bool, len(oSearchResult.Hits))
-	for _, oHit := range oSearchResult.Hits {
-		var oExisting domain.AdminRolesToAdminPermission
-		if oErr := json.Unmarshal(oHit.Source, &oExisting); oErr != nil {
-			return oErr
-		}
-
+	oMapExistingAdminPermissionIds := make(map[uint64]bool, len(aExistingAdminRolesToAdminPermissions))
+	for _, oExisting := range aExistingAdminRolesToAdminPermissions {
 		oMapExistingAdminPermissionIds[oExisting.AdminPermissionId] = true
 	}
 

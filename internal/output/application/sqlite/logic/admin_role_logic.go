@@ -51,6 +51,13 @@ func (oSelf *AdminRoleLogic) AddAdminRole(oVariable *domain.AdminRoleVariable) e
 			return oResult.Error
 		}
 
+		// 避免髒數據（例如 id 被重用）導致異常，插入前先把這個 admin_role_id 底下的關聯清乾淨
+		oResult = oTx.Where("admin_role_id = ?", iAdminRoleId).Delete(&domain.AdminRolesToAdminPermission{})
+
+		if oResult.Error != nil {
+			return oResult.Error
+		}
+
 		if oVariable.AdminPermissionIds == nil || len(*oVariable.AdminPermissionIds) == 0 {
 			return nil
 		}
