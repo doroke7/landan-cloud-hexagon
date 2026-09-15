@@ -35,7 +35,7 @@ func (oSelf *AdminUserUsecase) ShowAdminUserById(iId uint64) (*domain.AdminUser,
 
 func (oSelf *AdminUserUsecase) AddAminUser(oValue *domain.AdminUserVariable) error {
 
-	oErr := oSelf.AdminUserLogic.AddAminUser(oValue)
+	oErr := oSelf.AdminUserLogic.AddAdminUser(oValue)
 
 	return oErr
 }

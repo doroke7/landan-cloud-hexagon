@@ -52,7 +52,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 	return aAdminUsers, uint64(oResult.Total), nil
 }
 
-func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserVariable) error {
+func (oSelf *AdminUserLogic) AddAdminUser(oValue *domain.AdminUserVariable) error {
 	iId, oErr := oSelf.NextId("admin_user")
 	if oErr != nil {
 		return oErr

@@ -33,7 +33,7 @@ func (oSelf *AdminUserUsecase) AddOne(oAdminUser *domain.AdminUserVariable) erro
 		return oErr
 	}
 
-	oErr = oSelf.AdminUserLogic.AddAminUser(oAdminUser)
+	oErr = oSelf.AdminUserLogic.AddAdminUser(oAdminUser)
 
 	return oErr
 }

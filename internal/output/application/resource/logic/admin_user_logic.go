@@ -60,7 +60,7 @@ func (oSelf *AdminUserLogic) ShowAdminUsersTotalByFiltersWithSortersPagination(a
 	return aAdminUsers, iTotal, oErr
 }
 
-func (oSelf *AdminUserLogic) AddAminUser(oValue *domain.AdminUserVariable) error {
+func (oSelf *AdminUserLogic) AddAdminUser(oValue *domain.AdminUserVariable) error {
 
 	aAdminRoleIds := make([]uint64, 0, len(oValue.AdminRoleIds))
 	for _, iAdminRoleId := range oValue.AdminRoleIds {
