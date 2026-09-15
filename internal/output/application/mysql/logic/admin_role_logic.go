@@ -35,9 +35,9 @@ func (oSelf *AdminRoleLogic) AddAdminRole(oVariable *domain.AdminRoleVariable) e
 	}
 
 	if oResult.RowsAffected == 0 {
-		oZeroRowsError := errors.New("0 rows inserted")
+		oError := errors.New("0 rows inserted")
 
-		return oZeroRowsError
+		return oError
 	}
 
 	return nil

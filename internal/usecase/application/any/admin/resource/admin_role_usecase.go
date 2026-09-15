@@ -2,6 +2,7 @@ package usecaseApplicationAnyAdminResource
 
 import (
 	domain "example/internal/domain"
+	outputPortAnyLogic "example/internal/output/port/any/logic"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	usecaseApplicationAnyAdmin "example/internal/usecase/application/any/admin"
 	usecasePortAnyAdminResource "example/internal/usecase/port/any/admin/resource"
@@ -10,19 +11,21 @@ import (
 
 type AdminRoleUsecase struct {
 	*usecaseApplicationAnyAdmin.AbstractUsecase
-	outputPortAnyModel.AdminRoleModel
+	AdminRoleModel outputPortAnyModel.AdminRoleModel
+	AdminRoleLogic outputPortAnyLogic.AdminRoleLogic
 }
 
-func NewAdminRoleUsecase(oAdminRoleModel outputPortAnyModel.AdminRoleModel, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminResource.AdminRoleUsecase {
+func NewAdminRoleUsecase(oAdminRoleModel outputPortAnyModel.AdminRoleModel, oAdminRoleLogic outputPortAnyLogic.AdminRoleLogic, oAbstractUsecase *usecaseApplicationAnyAdmin.AbstractUsecase) usecasePortAnyAdminResource.AdminRoleUsecase {
 	return &AdminRoleUsecase{
 		AbstractUsecase: oAbstractUsecase,
 		AdminRoleModel:  oAdminRoleModel,
+		AdminRoleLogic:  oAdminRoleLogic,
 	}
 }
 
 func (oSelf *AdminRoleUsecase) AddOne(oAdminRole *domain.AdminRoleVariable) error {
 
-	oErr := oSelf.AdminRoleModel.AddOne(oAdminRole)
+	oErr := oSelf.AdminRoleLogic.AddAdminRole(oAdminRole)
 
 	return oErr
 }

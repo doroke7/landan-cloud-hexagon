@@ -3,6 +3,8 @@ package outputApplicationResourceLogic
 import (
 	domain "example/internal/domain"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
+	pb "example/pb"
+	pbResourceLogic "example/pb/resource/logic"
 )
 
 type AdminRoleLogic struct {
@@ -18,5 +20,14 @@ func NewAdminRoleLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminRo
 }
 
 func (oSelf *AdminRoleLogic) AddAdminRole(oVariable *domain.AdminRoleVariable) error {
-	return nil
+	oRequest := &pbResourceLogic.AdminRoleAddAdminRoleInput{
+		Variable: &pb.AdminRoleVariable{
+			Key:  oVariable.Key,
+			Name: oVariable.Name,
+		},
+	}
+
+	_, oErr := oSelf.ResourceLogicClient.AdminRole.AddAdminRole(oSelf.Context, oRequest)
+
+	return oErr
 }

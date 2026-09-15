@@ -207,6 +207,7 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 		outputApplicationResourceModel.NewGameTypeModel,
 		outputApplicationResourceModel.NewAdminPermissionGroupModel,
 		outputApplicationResourceLogic.NewAdminUserLogic,
+		outputApplicationResourceLogic.NewAdminRoleLogic,
 		outputApplicationResourceLogic.NewGameLogic,
 		outputApplicationResourceLogic.NewTableLogic,
 		outputApplicationResourceLogic.NewGameTypeLogic,
@@ -418,6 +419,7 @@ type ResourceContainer struct {
 	ResourceModelGameType             *inputApplicationResourceModel.GameTypeHandler
 	ResourceModelAdminPermissionGroup *inputApplicationResourceModel.AdminPermissionGroupHandler
 	ResourceLogicAdminUser            *inputApplicationResourceLogic.AdminUserHandler
+	ResourceLogicAdminRole            *inputApplicationResourceLogic.AdminRoleHandler
 	ResourceLogicGame                 *inputApplicationResourceLogic.GameHandler
 	ResourceLogicTable                *inputApplicationResourceLogic.TableHandler
 	ResourceLogicGameType             *inputApplicationResourceLogic.GameTypeHandler
@@ -464,6 +466,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		outputApplicationMysqlModel.NewAdminPermissionGroupModel,
 		outputApplicationMysqlLogic.NewAbstractLogic,
 		outputApplicationMysqlLogic.NewAdminUserLogic,
+		outputApplicationMysqlLogic.NewAdminRoleLogic,
 		outputApplicationMysqlLogic.NewGameLogic,
 		outputApplicationMysqlLogic.NewTableLogic,
 		outputApplicationMysqlLogic.NewGameTypeLogic,
@@ -484,6 +487,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		usecaseApplicationAnyModel.NewAdminPermissionGroupUsecase,
 		usecaseApplicationAnyLogic.NewAbstractUsecase,
 		usecaseApplicationAnyLogic.NewAdminUserUsecase,
+		usecaseApplicationAnyLogic.NewAdminRoleUsecase,
 		usecaseApplicationAnyLogic.NewGameUsecase,
 		usecaseApplicationAnyLogic.NewTableUsecase,
 		usecaseApplicationAnyLogic.NewGameTypeUsecase,
@@ -501,6 +505,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		inputApplicationResourceModel.NewGameTypeHandler,
 		inputApplicationResourceModel.NewAdminPermissionGroupHandler,
 		inputApplicationResourceLogic.NewAdminUserHandler,
+		inputApplicationResourceLogic.NewAdminRoleHandler,
 		inputApplicationResourceLogic.NewGameHandler,
 		inputApplicationResourceLogic.NewTableHandler,
 		inputApplicationResourceLogic.NewGameTypeHandler,

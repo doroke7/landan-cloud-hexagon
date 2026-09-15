@@ -65,6 +65,7 @@ func Init(oContainer *container.ResourceContainer) *grpc.Server {
 	pbResourceModel.RegisterGameTypeModelServer(oGrpcServer, oContainer.ResourceModelGameType)
 	pbResourceModel.RegisterAdminPermissionGroupModelServer(oGrpcServer, oContainer.ResourceModelAdminPermissionGroup)
 	pbResourceLogic.RegisterAdminUserLogicServer(oGrpcServer, oContainer.ResourceLogicAdminUser)
+	pbResourceLogic.RegisterAdminRoleLogicServer(oGrpcServer, oContainer.ResourceLogicAdminRole)
 	pbResourceLogic.RegisterGameLogicServer(oGrpcServer, oContainer.ResourceLogicGame)
 	pbResourceLogic.RegisterTableLogicServer(oGrpcServer, oContainer.ResourceLogicTable)
 	pbResourceLogic.RegisterGameTypeLogicServer(oGrpcServer, oContainer.ResourceLogicGameType)

@@ -120,7 +120,8 @@ func InitHttpContainer(ctx context.Context) (*HttpContainer, error) {
 	adminUserUsecase := usecaseApplicationAnyAdminResource.NewAdminUserUsecase(adminUserModel, adminUserLogic, abstractUsecase)
 	adminUserHandler := inputApplicationHttpAdminResource.NewAdminUserHandler(abstractHandler, adminUserUsecase)
 	adminRoleModel := outputApplicationResourceModel.NewAdminRoleModel(abstractModel)
-	adminRoleUsecase := usecaseApplicationAnyAdminResource.NewAdminRoleUsecase(adminRoleModel, abstractUsecase)
+	adminRoleLogic := outputApplicationResourceLogic.NewAdminRoleLogic(abstractLogic)
+	adminRoleUsecase := usecaseApplicationAnyAdminResource.NewAdminRoleUsecase(adminRoleModel, adminRoleLogic, abstractUsecase)
 	adminRoleHandler := inputApplicationHttpAdminResource.NewAdminRoleHandler(abstractHandler, adminRoleUsecase)
 	adminPermissionModel := outputApplicationResourceModel.NewAdminPermissionModel(abstractModel)
 	adminPermissionUsecase := usecaseApplicationAnyAdminResource.NewAdminPermissionUsecase(adminPermissionModel, abstractUsecase)
@@ -350,6 +351,9 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 	adminUserLogic := outputApplicationMysqlLogic.NewAdminUserLogic(abstractLogic)
 	usecasePortAnyLogicAdminUserUsecase := usecaseApplicationAnyLogic.NewAdminUserUsecase(usecaseApplicationAnyLogicAbstractUsecase, adminUserLogic)
 	inputApplicationResourceLogicAdminUserHandler := inputApplicationResourceLogic.NewAdminUserHandler(abstractHandler, usecasePortAnyLogicAdminUserUsecase)
+	adminRoleLogic := outputApplicationMysqlLogic.NewAdminRoleLogic(abstractLogic)
+	usecasePortAnyLogicAdminRoleUsecase := usecaseApplicationAnyLogic.NewAdminRoleUsecase(usecaseApplicationAnyLogicAbstractUsecase, adminRoleLogic)
+	inputApplicationResourceLogicAdminRoleHandler := inputApplicationResourceLogic.NewAdminRoleHandler(abstractHandler, usecasePortAnyLogicAdminRoleUsecase)
 	gameLogic := outputApplicationMysqlLogic.NewGameLogic(abstractLogic)
 	usecasePortAnyLogicGameUsecase := usecaseApplicationAnyLogic.NewGameUsecase(usecaseApplicationAnyLogicAbstractUsecase, gameLogic)
 	inputApplicationResourceLogicGameHandler := inputApplicationResourceLogic.NewGameHandler(abstractHandler, usecasePortAnyLogicGameUsecase)
@@ -406,6 +410,7 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		ResourceModelGameType:                  gameTypeHandler,
 		ResourceModelAdminPermissionGroup:      adminPermissionGroupHandler,
 		ResourceLogicAdminUser:                 inputApplicationResourceLogicAdminUserHandler,
+		ResourceLogicAdminRole:                 inputApplicationResourceLogicAdminRoleHandler,
 		ResourceLogicGame:                      inputApplicationResourceLogicGameHandler,
 		ResourceLogicTable:                     inputApplicationResourceLogicTableHandler,
 		ResourceLogicGameType:                  inputApplicationResourceLogicGameTypeHandler,
@@ -855,6 +860,7 @@ type ResourceContainer struct {
 	ResourceModelGameType             *inputApplicationResourceModel.GameTypeHandler
 	ResourceModelAdminPermissionGroup *inputApplicationResourceModel.AdminPermissionGroupHandler
 	ResourceLogicAdminUser            *inputApplicationResourceLogic.AdminUserHandler
+	ResourceLogicAdminRole            *inputApplicationResourceLogic.AdminRoleHandler
 	ResourceLogicGame                 *inputApplicationResourceLogic.GameHandler
 	ResourceLogicTable                *inputApplicationResourceLogic.TableHandler
 	ResourceLogicGameType             *inputApplicationResourceLogic.GameTypeHandler

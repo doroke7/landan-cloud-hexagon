@@ -26,6 +26,7 @@ func NewModel(oClientConn *grpc.ClientConn) *Model {
 func NewLogic(oClientConn *grpc.ClientConn) *Logic {
 	oLogic := &Logic{
 		AdminUser:            pbResourceLogic.NewAdminUserLogicClient(oClientConn),
+		AdminRole:            pbResourceLogic.NewAdminRoleLogicClient(oClientConn),
 		AdminPermissionGroup: pbResourceLogic.NewAdminPermissionGroupLogicClient(oClientConn),
 		Game:                 pbResourceLogic.NewGameLogicClient(oClientConn),
 		Table:                pbResourceLogic.NewTableLogicClient(oClientConn),
@@ -56,6 +57,7 @@ type Model struct {
 
 type Logic struct {
 	AdminUser            pbResourceLogic.AdminUserLogicClient
+	AdminRole            pbResourceLogic.AdminRoleLogicClient
 	AdminPermissionGroup pbResourceLogic.AdminPermissionGroupLogicClient
 	Game                 pbResourceLogic.GameLogicClient
 	Table                pbResourceLogic.TableLogicClient
