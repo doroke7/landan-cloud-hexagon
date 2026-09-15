@@ -1109,11 +1109,12 @@ func (x *AdminRole) GetDeletedAt() *timestamppb.Timestamp {
 }
 
 type AdminRoleVariable struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Key           *string                `protobuf:"bytes,1,opt,name=key,proto3,oneof" json:"key,omitempty"`
-	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state              protoimpl.MessageState `protogen:"open.v1"`
+	Key                *string                `protobuf:"bytes,1,opt,name=key,proto3,oneof" json:"key,omitempty"`
+	Name               *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	AdminPermissionIds []uint64               `protobuf:"varint,3,rep,packed,name=admin_permission_ids,json=adminPermissionIds,proto3" json:"admin_permission_ids,omitempty"` // repeated 本身語意就是可以是空的，不用也不能標。
+	unknownFields      protoimpl.UnknownFields
+	sizeCache          protoimpl.SizeCache
 }
 
 func (x *AdminRoleVariable) Reset() {
@@ -1158,6 +1159,13 @@ func (x *AdminRoleVariable) GetName() string {
 		return *x.Name
 	}
 	return ""
+}
+
+func (x *AdminRoleVariable) GetAdminPermissionIds() []uint64 {
+	if x != nil {
+		return x.AdminPermissionIds
+	}
+	return nil
 }
 
 type AdminPermission struct {
@@ -1723,10 +1731,11 @@ const file_common_proto_rawDesc = "" +
 	"\n" +
 	"updated_at\x18\x05 \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\x129\n" +
 	"\n" +
-	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\"T\n" +
+	"deleted_at\x18\x06 \x01(\v2\x1a.google.protobuf.TimestampR\tdeletedAt\"\x86\x01\n" +
 	"\x11AdminRoleVariable\x12\x15\n" +
 	"\x03key\x18\x01 \x01(\tH\x00R\x03key\x88\x01\x01\x12\x17\n" +
-	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01B\x06\n" +
+	"\x04name\x18\x02 \x01(\tH\x01R\x04name\x88\x01\x01\x120\n" +
+	"\x14admin_permission_ids\x18\x03 \x03(\x04R\x12adminPermissionIdsB\x06\n" +
 	"\x04_keyB\a\n" +
 	"\x05_name\"\xc7\x02\n" +
 	"\x0fAdminPermission\x12\x0e\n" +

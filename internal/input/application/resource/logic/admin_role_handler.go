@@ -24,9 +24,15 @@ func NewAdminRoleHandler(oAbstractHandler *inputApplicationResource.AbstractHand
 
 func (oSelf *AdminRoleHandler) AddAdminRole(oContext context.Context, oReq *pbResourceLogic.AdminRoleAddAdminRoleInput) (*pbResourceLogic.AdminRoleAddAdminRoleOutput, error) {
 
+	aAdminPermissionIds := make([]uint64, 0, len(oReq.GetVariable().GetAdminPermissionIds()))
+	for _, iAdminPermissionId := range oReq.GetVariable().GetAdminPermissionIds() {
+		aAdminPermissionIds = append(aAdminPermissionIds, iAdminPermissionId)
+	}
+
 	oValue := &domain.AdminRoleVariable{
-		Key:  oReq.GetVariable().Key,
-		Name: oReq.GetVariable().Name,
+		Key:                oReq.GetVariable().Key,
+		Name:               oReq.GetVariable().Name,
+		AdminPermissionIds: &aAdminPermissionIds,
 	}
 
 	oErr := oSelf.LogicAdminRoleUsecase.AddAdminRole(oValue)

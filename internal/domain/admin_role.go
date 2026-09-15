@@ -23,8 +23,9 @@ type AdminRole struct {
 }
 
 type AdminRoleVariable struct {
-	Key  *string `json:"key,omitempty"`
-	Name *string `json:"name,omitempty"`
+	Key                *string   `json:"key,omitempty"`
+	Name               *string   `json:"name,omitempty"`
+	AdminPermissionIds *[]uint64 `json:"admin_permission_ids,omitempty" validate:"omitempty,dive,gt=0"`
 	// CreatedAt *time.Time `json:"created_at"`
 	// UpdatedAt *time.Time `json:"updated_at"`
 	// DeletedAt *time.Time `json:"deleted_at"`

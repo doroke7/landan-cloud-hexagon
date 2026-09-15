@@ -29,6 +29,8 @@ func (oSelf *AdminRoleModel) AddOne(oAdminRole *domain.AdminRoleVariable) error 
 		return oErr
 	}
 
+	delete(oColumns, "admin_permission_ids")
+
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminRole{}).
 		Create(oColumns)
@@ -82,6 +84,8 @@ func (oSelf *AdminRoleModel) EditOneById(oAdminRole *domain.AdminRoleVariable, i
 	if oErr != nil {
 		return oErr
 	}
+
+	delete(oColumns, "admin_permission_ids")
 
 	oResult := oSelf.DB.WithContext(oSelf.Context).
 		Model(&domain.AdminRole{}).

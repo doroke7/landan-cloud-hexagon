@@ -386,6 +386,31 @@ func (oSelf *AbstractElasticsearch) UpdateOne(sIndex string, sId string, oPartia
 	return true, nil
 }
 
+// DeleteOne 用文件 id 直接刪一筆，用在多對多關聯 diff 完之後，只刪掉真的被移除的那幾筆。
+func (oSelf *AbstractElasticsearch) DeleteOne(sIndex string, sId string) error {
+	oResponse, oErr := oSelf.Client.Delete(
+		sIndex,
+		sId,
+		oSelf.Client.Delete.WithContext(oSelf.Context),
+		oSelf.Client.Delete.WithRefresh("true"),
+	)
+	if oErr != nil {
+		return oErr
+	}
+	defer oResponse.Body.Close()
+
+	if oResponse.StatusCode == 404 {
+		return nil
+	}
+
+	if oResponse.IsError() {
+		aResponseBody, _ := io.ReadAll(oResponse.Body)
+		return fmt.Errorf("elasticsearch delete %s/%s failed: %s", sIndex, sId, string(aResponseBody))
+	}
+
+	return nil
+}
+
 // NextId 用 painless script 對 counters index 做原子遞增，取得跟其他 adapter
 // 一致的 uint 自增 id（模仿 mongodb adapter 用 counters collection 累加的做法）。
 func (oSelf *AbstractElasticsearch) NextId(sName string) (uint, error) {
