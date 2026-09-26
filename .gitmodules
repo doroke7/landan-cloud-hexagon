@@ -3,4 +3,4 @@
 	url = git@gitlab.com:doroke7/landan-sample-golang.git
 [submodule "proto"]
 	path = proto
-	url = git@gitlab.com:doroke7/landan-proto-hexagon.git
+	url = git@gitlab.com:doroke7/landan-protocol-proto.git
