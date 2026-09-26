@@ -1,6 +1,6 @@
 [submodule "sample"]
 	path = sample
-	url = git@gitlab.com:doroke7/landan-sample-go.git
+	url = git@gitlab.com:doroke7/landan-sample-golang.git
 [submodule "proto"]
 	path = proto
 	url = git@gitlab.com:doroke7/landan-proto-hexagon.git
