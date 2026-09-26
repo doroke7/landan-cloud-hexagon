@@ -7,6 +7,7 @@ import (
 	"time"
 
 	domain "example/internal/domain"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
@@ -15,12 +16,12 @@ import (
 )
 
 type AdminUserLogic struct {
-	*AbstractLogic
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewAdminUserLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminUserLogic {
+func NewAdminUserLogic(oAbstractMysql *outputApplicationMysql.AbstractMysql) outputPortAnyLogic.AdminUserLogic {
 	oLogic := &AdminUserLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractMysql: oAbstractMysql,
 	}
 
 	return oLogic

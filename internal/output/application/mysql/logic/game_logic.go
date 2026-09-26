@@ -8,17 +8,18 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type GameLogic struct {
-	*AbstractLogic
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
+func NewGameLogic(oAbstractMysql *outputApplicationMysql.AbstractMysql) outputPortAnyLogic.GameLogic {
 	oLogic := &GameLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractMysql: oAbstractMysql,
 	}
 
 	return oLogic

@@ -5,19 +5,20 @@ import (
 	"strconv"
 
 	domain "example/internal/domain"
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type TableLogic struct {
-	*AbstractLogic
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index string
 }
 
-func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractElasticsearch *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyLogic.TableLogic {
 	return &TableLogic{
-		AbstractLogic: oAbstractLogic,
-		Index:         oAbstractLogic.IndexName("tables"),
+		AbstractElasticsearch: oAbstractElasticsearch,
+		Index:                 oAbstractElasticsearch.IndexName("tables"),
 	}
 }
 

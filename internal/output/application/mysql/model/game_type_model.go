@@ -5,18 +5,19 @@ import (
 	"time"
 
 	domain "example/internal/domain"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type GameTypeModel struct {
-	*AbstractModel
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameTypeModel {
+func NewGameTypeModel(oAbstractMysql *outputApplicationMysql.AbstractMysql) outputPortAnyModel.GameTypeModel {
 	return &GameTypeModel{
-		AbstractModel: oAbstractModel,
+		AbstractMysql: oAbstractMysql,
 	}
 }
 

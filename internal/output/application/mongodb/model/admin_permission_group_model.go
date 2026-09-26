@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
+	outputApplicationMongodb "example/internal/output/application/mongodb"
 	pkgInput "example/pkg/input"
 
 	domain "example/internal/domain"
@@ -15,14 +16,14 @@ import (
 )
 
 type AdminPermissionGroupModel struct {
-	*AbstractModel
+	*outputApplicationMongodb.AbstractMongodb
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
 // 索引跟 script/mongodb/resource.js 建的一致：key 唯一、name+deleted_at、deleted_at 供查詢用。
-func NewAdminPermissionGroupModel(oAbstractModel *AbstractModel) (outputPortAnyModel.AdminPermissionGroupModel, error) {
-	oCollection := oAbstractModel.Database.Collection("admin_permission_groups")
+func NewAdminPermissionGroupModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.AdminPermissionGroupModel, error) {
+	oCollection := oAbstractMongodb.Database.Collection("admin_permission_groups")
 	oIndexView := oCollection.Indexes()
 
 	oKeyIndexOptions := options.Index()
@@ -50,16 +51,16 @@ func NewAdminPermissionGroupModel(oAbstractModel *AbstractModel) (outputPortAnyM
 		},
 	}
 
-	if _, oErr := oIndexView.CreateMany(oAbstractModel.Context, aIndexModels); oErr != nil {
+	if _, oErr := oIndexView.CreateMany(oAbstractMongodb.Context, aIndexModels); oErr != nil {
 		return nil, oErr
 	}
 
-	oCounters := oAbstractModel.Database.Collection("counters")
+	oCounters := oAbstractMongodb.Database.Collection("counters")
 
 	return &AdminPermissionGroupModel{
-		AbstractModel: oAbstractModel,
-		Collection:    oCollection,
-		Counters:      oCounters,
+		AbstractMongodb: oAbstractMongodb,
+		Collection:      oCollection,
+		Counters:        oCounters,
 	}, nil
 }
 

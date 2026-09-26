@@ -9,6 +9,7 @@ import (
 
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 
@@ -17,14 +18,14 @@ import (
 )
 
 type TableModel struct {
-	*AbstractModel
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index string
 }
 
-func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel {
+func NewTableModel(oAbstractElasticsearch *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyModel.TableModel {
 	return &TableModel{
-		AbstractModel: oAbstractModel,
-		Index:         oAbstractModel.IndexName("tables"),
+		AbstractElasticsearch: oAbstractElasticsearch,
+		Index:                 oAbstractElasticsearch.IndexName("tables"),
 	}
 }
 

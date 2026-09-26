@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	outputApplicationMysql "example/internal/output/application/mysql"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 
@@ -17,12 +18,12 @@ import (
 )
 
 type AdminUserModel struct {
-	*AbstractModel
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewAdminUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminUserModel {
+func NewAdminUserModel(oAbstractMysql *outputApplicationMysql.AbstractMysql) outputPortAnyModel.AdminUserModel {
 	return &AdminUserModel{
-		AbstractModel: oAbstractModel,
+		AbstractMysql: oAbstractMysql,
 	}
 }
 

@@ -4,6 +4,7 @@ import (
 	"errors"
 
 	domain "example/internal/domain"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgUtility "example/pkg/utility"
 
@@ -11,12 +12,12 @@ import (
 )
 
 type AdminRoleLogic struct {
-	*AbstractLogic
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewAdminRoleLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminRoleLogic {
+func NewAdminRoleLogic(oAbstractMysql *outputApplicationMysql.AbstractMysql) outputPortAnyLogic.AdminRoleLogic {
 	oLogic := &AdminRoleLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractMysql: oAbstractMysql,
 	}
 
 	return oLogic

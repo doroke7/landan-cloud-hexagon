@@ -9,23 +9,24 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
 	domain "example/internal/domain"
+	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 )
 
 type AdminRoleLogic struct {
-	*AbstractLogic
+	*outputApplicationMongodb.AbstractMongodb
 	Collection                   *mongo.Collection
 	AdminRolesToAdminPermissions *mongo.Collection
 	Counters                     *mongo.Collection
 }
 
-func NewAdminRoleLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminRoleLogic {
-	oCollection := oAbstractLogic.Database.Collection("admin_roles")
-	oAdminRolesToAdminPermissions := oAbstractLogic.Database.Collection("admin_roles_to_admin_permissions")
-	oCounters := oAbstractLogic.Database.Collection("counters")
+func NewAdminRoleLogic(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyLogic.AdminRoleLogic {
+	oCollection := oAbstractMongodb.Database.Collection("admin_roles")
+	oAdminRolesToAdminPermissions := oAbstractMongodb.Database.Collection("admin_roles_to_admin_permissions")
+	oCounters := oAbstractMongodb.Database.Collection("counters")
 
 	return &AdminRoleLogic{
-		AbstractLogic:                oAbstractLogic,
+		AbstractMongodb:              oAbstractMongodb,
 		Collection:                   oCollection,
 		AdminRolesToAdminPermissions: oAdminRolesToAdminPermissions,
 		Counters:                     oCounters,

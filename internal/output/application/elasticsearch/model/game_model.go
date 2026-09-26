@@ -10,6 +10,7 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 
 	domain "example/internal/domain"
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
@@ -20,14 +21,14 @@ import (
 var oDeletedAtZero = time.Date(2038, 1, 19, 3, 14, 7, 0, time.UTC)
 
 type GameModel struct {
-	*AbstractModel
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index string
 }
 
-func NewGameModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameModel {
+func NewGameModel(oAbstractElasticsearch *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyModel.GameModel {
 	return &GameModel{
-		AbstractModel: oAbstractModel,
-		Index:         oAbstractModel.IndexName("games"),
+		AbstractElasticsearch: oAbstractElasticsearch,
+		Index:                 oAbstractElasticsearch.IndexName("games"),
 	}
 }
 

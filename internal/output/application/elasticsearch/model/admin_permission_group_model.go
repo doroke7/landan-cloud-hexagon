@@ -10,20 +10,21 @@ import (
 	"github.com/elastic/go-elasticsearch/v8/esapi"
 
 	domain "example/internal/domain"
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type AdminPermissionGroupModel struct {
-	*AbstractModel
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index string
 }
 
-func NewAdminPermissionGroupModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminPermissionGroupModel {
+func NewAdminPermissionGroupModel(oAbstractElasticsearch *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyModel.AdminPermissionGroupModel {
 	return &AdminPermissionGroupModel{
-		AbstractModel: oAbstractModel,
-		Index:         oAbstractModel.IndexName("admin_permission_groups"),
+		AbstractElasticsearch: oAbstractElasticsearch,
+		Index:                 oAbstractElasticsearch.IndexName("admin_permission_groups"),
 	}
 }
 

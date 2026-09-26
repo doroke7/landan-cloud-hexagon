@@ -4,19 +4,20 @@ import (
 	"encoding/json"
 
 	domain "example/internal/domain"
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type GameTypeLogic struct {
-	*AbstractLogic
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index string
 }
 
-func NewGameTypeLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameTypeLogic {
+func NewGameTypeLogic(oAbstractElasticsearch *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyLogic.GameTypeLogic {
 	return &GameTypeLogic{
-		AbstractLogic: oAbstractLogic,
-		Index:         oAbstractLogic.IndexName("game_types"),
+		AbstractElasticsearch: oAbstractElasticsearch,
+		Index:                 oAbstractElasticsearch.IndexName("game_types"),
 	}
 }
 

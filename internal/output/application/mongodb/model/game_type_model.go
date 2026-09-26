@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
+	outputApplicationMongodb "example/internal/output/application/mongodb"
 	pkgInput "example/pkg/input"
 
 	domain "example/internal/domain"
@@ -15,14 +16,14 @@ import (
 )
 
 type GameTypeModel struct {
-	*AbstractModel
+	*outputApplicationMongodb.AbstractMongodb
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
 // 索引跟 script/mongodb/resource.js 建的一致：key 唯一、name+deleted_at、deleted_at 供查詢用。
-func NewGameTypeModel(oAbstractModel *AbstractModel) (outputPortAnyModel.GameTypeModel, error) {
-	oCollection := oAbstractModel.Database.Collection("game_types")
+func NewGameTypeModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.GameTypeModel, error) {
+	oCollection := oAbstractMongodb.Database.Collection("game_types")
 	oIndexView := oCollection.Indexes()
 
 	oKeyIndexOptions := options.Index()
@@ -50,16 +51,16 @@ func NewGameTypeModel(oAbstractModel *AbstractModel) (outputPortAnyModel.GameTyp
 		},
 	}
 
-	if _, oErr := oIndexView.CreateMany(oAbstractModel.Context, aIndexModels); oErr != nil {
+	if _, oErr := oIndexView.CreateMany(oAbstractMongodb.Context, aIndexModels); oErr != nil {
 		return nil, oErr
 	}
 
-	oCounters := oAbstractModel.Database.Collection("counters")
+	oCounters := oAbstractMongodb.Database.Collection("counters")
 
 	return &GameTypeModel{
-		AbstractModel: oAbstractModel,
-		Collection:    oCollection,
-		Counters:      oCounters,
+		AbstractMongodb: oAbstractMongodb,
+		Collection:      oCollection,
+		Counters:        oCounters,
 	}, nil
 }
 

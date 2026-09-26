@@ -7,21 +7,22 @@ import (
 	"time"
 
 	domain "example/internal/domain"
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type AdminRoleLogic struct {
-	*AbstractLogic
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index                             string
 	AdminRolesToAdminPermissionsIndex string
 }
 
-func NewAdminRoleLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminRoleLogic {
+func NewAdminRoleLogic(oAbstractElasticsearch *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyLogic.AdminRoleLogic {
 	return &AdminRoleLogic{
-		AbstractLogic:                     oAbstractLogic,
-		Index:                             oAbstractLogic.IndexName("admin_roles"),
-		AdminRolesToAdminPermissionsIndex: oAbstractLogic.IndexName("admin_roles_to_admin_permissions"),
+		AbstractElasticsearch:             oAbstractElasticsearch,
+		Index:                             oAbstractElasticsearch.IndexName("admin_roles"),
+		AdminRolesToAdminPermissionsIndex: oAbstractElasticsearch.IndexName("admin_roles_to_admin_permissions"),
 	}
 }
 

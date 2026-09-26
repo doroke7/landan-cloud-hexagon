@@ -10,24 +10,25 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
 	domain "example/internal/domain"
+	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type AdminPermissionGroupLogic struct {
-	*AbstractLogic
+	*outputApplicationMongodb.AbstractMongodb
 	Collection       *mongo.Collection
 	AdminPermissions *mongo.Collection
 	Counters         *mongo.Collection
 }
 
-func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminPermissionGroupLogic {
-	oCollection := oAbstractLogic.Database.Collection("admin_permission_groups")
-	oAdminPermissions := oAbstractLogic.Database.Collection("admin_permissions")
-	oCounters := oAbstractLogic.Database.Collection("counters")
+func NewAdminPermissionGroupLogic(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyLogic.AdminPermissionGroupLogic {
+	oCollection := oAbstractMongodb.Database.Collection("admin_permission_groups")
+	oAdminPermissions := oAbstractMongodb.Database.Collection("admin_permissions")
+	oCounters := oAbstractMongodb.Database.Collection("counters")
 
 	return &AdminPermissionGroupLogic{
-		AbstractLogic:    oAbstractLogic,
+		AbstractMongodb:  oAbstractMongodb,
 		Collection:       oCollection,
 		AdminPermissions: oAdminPermissions,
 		Counters:         oCounters,

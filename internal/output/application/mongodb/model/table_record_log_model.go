@@ -8,19 +8,20 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
 	domain "example/internal/domain"
+	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 )
 
 type TableRecordLogModel struct {
-	*AbstractModel
+	*outputApplicationMongodb.AbstractMongodb
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
 // 索引跟 script/mongodb/resource.js 建的一致：table_record_id+game_id+state 供查詢用。
-func NewTableRecordLogModel(oAbstractModel *AbstractModel) (outputPortAnyModel.TableRecordLogModel, error) {
-	oCollection := oAbstractModel.Database.Collection("table_record_logs")
+func NewTableRecordLogModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.TableRecordLogModel, error) {
+	oCollection := oAbstractMongodb.Database.Collection("table_record_logs")
 	oIndexView := oCollection.Indexes()
 
 	oTableRecordIdGameIdStateIndexOptions := options.Index()
@@ -37,16 +38,16 @@ func NewTableRecordLogModel(oAbstractModel *AbstractModel) (outputPortAnyModel.T
 		},
 	}
 
-	if _, oErr := oIndexView.CreateMany(oAbstractModel.Context, aIndexModels); oErr != nil {
+	if _, oErr := oIndexView.CreateMany(oAbstractMongodb.Context, aIndexModels); oErr != nil {
 		return nil, oErr
 	}
 
-	oCounters := oAbstractModel.Database.Collection("counters")
+	oCounters := oAbstractMongodb.Database.Collection("counters")
 
 	return &TableRecordLogModel{
-		AbstractModel: oAbstractModel,
-		Collection:    oCollection,
-		Counters:      oCounters,
+		AbstractMongodb: oAbstractMongodb,
+		Collection:      oCollection,
+		Counters:        oCounters,
 	}, nil
 }
 

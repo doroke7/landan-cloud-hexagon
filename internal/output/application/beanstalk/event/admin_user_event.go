@@ -5,16 +5,17 @@ import (
 	"time"
 
 	domain "example/internal/domain"
+	outputApplicationBeanstalk "example/internal/output/application/beanstalk"
 	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
-	*AbstractEvent
+	*outputApplicationBeanstalk.AbstractBeanstalk
 }
 
-func NewAdminUserEvent(oAbstractEvent *AbstractEvent) (outputPortAnyEvent.AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractBeanstalk *outputApplicationBeanstalk.AbstractBeanstalk) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
-		AbstractEvent: oAbstractEvent,
+		AbstractBeanstalk: oAbstractBeanstalk,
 	}, nil
 }
 

@@ -7,20 +7,21 @@ import (
 	"time"
 
 	domain "example/internal/domain"
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type AdminUserLogic struct {
-	*AbstractLogic
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index string
 }
 
-func NewAdminUserLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminUserLogic {
+func NewAdminUserLogic(oAbstractElasticsearch *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyLogic.AdminUserLogic {
 	return &AdminUserLogic{
-		AbstractLogic: oAbstractLogic,
-		Index:         oAbstractLogic.IndexName("admin_users"),
+		AbstractElasticsearch: oAbstractElasticsearch,
+		Index:                 oAbstractElasticsearch.IndexName("admin_users"),
 	}
 }
 

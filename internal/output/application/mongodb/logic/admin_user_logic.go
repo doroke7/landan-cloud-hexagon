@@ -10,24 +10,25 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
 	domain "example/internal/domain"
+	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type AdminUserLogic struct {
-	*AbstractLogic
+	*outputApplicationMongodb.AbstractMongodb
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
-func NewAdminUserLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminUserLogic {
-	oCollection := oAbstractLogic.Database.Collection("admin_users")
-	oCounters := oAbstractLogic.Database.Collection("counters")
+func NewAdminUserLogic(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyLogic.AdminUserLogic {
+	oCollection := oAbstractMongodb.Database.Collection("admin_users")
+	oCounters := oAbstractMongodb.Database.Collection("counters")
 
 	return &AdminUserLogic{
-		AbstractLogic: oAbstractLogic,
-		Collection:    oCollection,
-		Counters:      oCounters,
+		AbstractMongodb: oAbstractMongodb,
+		Collection:      oCollection,
+		Counters:        oCounters,
 	}
 }
 

@@ -6,21 +6,22 @@ import (
 	amqp "github.com/rabbitmq/amqp091-go"
 
 	domain "example/internal/domain"
+	outputApplicationRabbitmq "example/internal/output/application/rabbitmq"
 	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
-	*AbstractEvent
+	*outputApplicationRabbitmq.AbstractRabbitmq
 }
 
-func NewAdminUserEvent(oAbstractEvent *AbstractEvent) (outputPortAnyEvent.AdminUserEvent, error) {
-	_, err := oAbstractEvent.Channel.QueueDeclare("AdminUser.AddOne", true, false, false, false, nil)
+func NewAdminUserEvent(oAbstractRabbitmq *outputApplicationRabbitmq.AbstractRabbitmq) (outputPortAnyEvent.AdminUserEvent, error) {
+	_, err := oAbstractRabbitmq.Channel.QueueDeclare("AdminUser.AddOne", true, false, false, false, nil)
 	if err != nil {
 		return nil, err
 	}
 
 	return &AdminUserEvent{
-		AbstractEvent: oAbstractEvent,
+		AbstractRabbitmq: oAbstractRabbitmq,
 	}, nil
 }
 

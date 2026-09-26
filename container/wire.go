@@ -455,7 +455,6 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 
 		// output
 		outputApplicationMysql.NewAbstractMysql,
-		outputApplicationMysqlModel.NewAbstractModel,
 		outputApplicationMysqlModel.NewAdminUserModel,
 		outputApplicationMysqlModel.NewAdminRoleModel,
 		outputApplicationMysqlModel.NewAdminPermissionModel,
@@ -464,7 +463,6 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		outputApplicationMysqlModel.NewTableModel,
 		outputApplicationMysqlModel.NewGameTypeModel,
 		outputApplicationMysqlModel.NewAdminPermissionGroupModel,
-		outputApplicationMysqlLogic.NewAbstractLogic,
 		outputApplicationMysqlLogic.NewAdminUserLogic,
 		outputApplicationMysqlLogic.NewAdminRoleLogic,
 		outputApplicationMysqlLogic.NewGameLogic,
@@ -472,7 +470,6 @@ func InitResourceContainer(ctx context.Context) (*ResourceContainer, error) {
 		outputApplicationMysqlLogic.NewGameTypeLogic,
 		outputApplicationMysqlLogic.NewAdminPermissionGroupLogic,
 		outputApplicationRabbitmq.NewAbstractRabbitmq,
-		outputApplicationRabbitmqEvent.NewAbstractEvent,
 		outputApplicationRabbitmqEvent.NewAdminUserEvent,
 
 		// usecase
@@ -562,7 +559,6 @@ func InitRabbitmqContainer(ctx context.Context) (*RabbitmqContainer, error) {
 
 		// output
 		outputApplicationMysql.NewAbstractMysql,
-		outputApplicationMysqlModel.NewAbstractModel,
 		outputApplicationMysqlModel.NewAppUserModel,
 
 		// usecase
@@ -613,7 +609,6 @@ func InitCronContainer(ctx context.Context) (*CronContainer, error) {
 
 		// output
 		outputApplicationMysql.NewAbstractMysql,
-		outputApplicationMysqlModel.NewAbstractModel,
 		outputApplicationMysqlModel.NewAppUserModel,
 		outputApplicationMysqlModel.NewAdminUserModel,
 
@@ -821,7 +816,6 @@ func InitCommandContainer(ctx context.Context) (*CommandContainer, error) {
 
 		// output
 		outputApplicationMysql.NewAbstractMysql,
-		outputApplicationMysqlModel.NewAbstractModel,
 		outputApplicationMysqlModel.NewAppUserModel,
 		outputApplicationMysqlModel.NewAdminUserModel,
 
@@ -922,7 +916,6 @@ func InitSourceContainer(ctx context.Context) (*SourceContainer, error) {
 		helper.NewAesHelper,
 
 		outputApplicationMemory.NewAbstractMemory,
-		outputApplicationMemoryModel.NewAbstractModel,
 		outputApplicationMemoryModel.NewLotteryModel,
 		usecaseApplicationAnyAnnouncement.NewAbstractUsecase,
 		usecaseApplicationAnyAnnouncement.NewLotteryUsecase,
@@ -971,7 +964,6 @@ func InitDaemonContainer(ctx context.Context) (*DaemonContainer, error) {
 
 		// output
 		outputApplicationCache.NewAbstractCache,
-		outputApplicationCacheModel.NewAbstractModel,
 		outputApplicationCacheModel.NewLotteryModel,
 
 		// usecase

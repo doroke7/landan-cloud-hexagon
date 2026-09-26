@@ -7,18 +7,19 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
+	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type TableRecordLogModel struct {
-	*AbstractModel
+	*outputApplicationSqlite.AbstractSqlite
 }
 
-func NewTableRecordLogModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableRecordLogModel {
+func NewTableRecordLogModel(oAbstractSqlite *outputApplicationSqlite.AbstractSqlite) outputPortAnyModel.TableRecordLogModel {
 	return &TableRecordLogModel{
-		AbstractModel: oAbstractModel,
+		AbstractSqlite: oAbstractSqlite,
 	}
 }
 

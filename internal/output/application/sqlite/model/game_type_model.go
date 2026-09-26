@@ -5,18 +5,19 @@ import (
 	"time"
 
 	domain "example/internal/domain"
+	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type GameTypeModel struct {
-	*AbstractModel
+	*outputApplicationSqlite.AbstractSqlite
 }
 
-func NewGameTypeModel(oAbstractModel *AbstractModel) outputPortAnyModel.GameTypeModel {
+func NewGameTypeModel(oAbstractSqlite *outputApplicationSqlite.AbstractSqlite) outputPortAnyModel.GameTypeModel {
 	return &GameTypeModel{
-		AbstractModel: oAbstractModel,
+		AbstractSqlite: oAbstractSqlite,
 	}
 }
 

@@ -7,22 +7,23 @@ import (
 	"time"
 
 	domain "example/internal/domain"
+	outputApplicationElasticsearch "example/internal/output/application/elasticsearch"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type AdminPermissionGroupLogic struct {
-	*AbstractLogic
+	*outputApplicationElasticsearch.AbstractElasticsearch
 	Index                 string
 	AdminPermissionsIndex string
 }
 
-func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminPermissionGroupLogic {
+func NewAdminPermissionGroupLogic(oAbstractElasticsearch *outputApplicationElasticsearch.AbstractElasticsearch) outputPortAnyLogic.AdminPermissionGroupLogic {
 	return &AdminPermissionGroupLogic{
-		AbstractLogic:         oAbstractLogic,
-		Index:                 oAbstractLogic.IndexName("admin_permission_groups"),
-		AdminPermissionsIndex: oAbstractLogic.IndexName("admin_permissions"),
+		AbstractElasticsearch: oAbstractElasticsearch,
+		Index:                 oAbstractElasticsearch.IndexName("admin_permission_groups"),
+		AdminPermissionsIndex: oAbstractElasticsearch.IndexName("admin_permissions"),
 	}
 }
 

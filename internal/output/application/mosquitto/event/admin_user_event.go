@@ -4,16 +4,17 @@ import (
 	"encoding/json"
 
 	domain "example/internal/domain"
+	outputApplicationMosquitto "example/internal/output/application/mosquitto"
 	outputPortAnyEvent "example/internal/output/port/any/event"
 )
 
 type AdminUserEvent struct {
-	*AbstractEvent
+	*outputApplicationMosquitto.AbstractMosquitto
 }
 
-func NewAdminUserEvent(oAbstractEvent *AbstractEvent) (outputPortAnyEvent.AdminUserEvent, error) {
+func NewAdminUserEvent(oAbstractMosquitto *outputApplicationMosquitto.AbstractMosquitto) (outputPortAnyEvent.AdminUserEvent, error) {
 	return &AdminUserEvent{
-		AbstractEvent: oAbstractEvent,
+		AbstractMosquitto: oAbstractMosquitto,
 	}, nil
 }
 

@@ -8,17 +8,18 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
+	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type TableLogic struct {
-	*AbstractLogic
+	*outputApplicationSqlite.AbstractSqlite
 }
 
-func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractSqlite *outputApplicationSqlite.AbstractSqlite) outputPortAnyLogic.TableLogic {
 	return &TableLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractSqlite: oAbstractSqlite,
 	}
 }
 

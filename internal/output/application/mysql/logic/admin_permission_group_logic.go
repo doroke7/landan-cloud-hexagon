@@ -10,18 +10,19 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type AdminPermissionGroupLogic struct {
-	*AbstractLogic
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminPermissionGroupLogic {
+func NewAdminPermissionGroupLogic(oAbstractMysql *outputApplicationMysql.AbstractMysql) outputPortAnyLogic.AdminPermissionGroupLogic {
 	oLogic := &AdminPermissionGroupLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractMysql: oAbstractMysql,
 	}
 
 	return oLogic

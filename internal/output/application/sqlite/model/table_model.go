@@ -5,18 +5,19 @@ import (
 	"time"
 
 	domain "example/internal/domain"
+	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyModel "example/internal/output/port/any/model"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type TableModel struct {
-	*AbstractModel
+	*outputApplicationSqlite.AbstractSqlite
 }
 
-func NewTableModel(oAbstractModel *AbstractModel) outputPortAnyModel.TableModel {
+func NewTableModel(oAbstractSqlite *outputApplicationSqlite.AbstractSqlite) outputPortAnyModel.TableModel {
 	return &TableModel{
-		AbstractModel: oAbstractModel,
+		AbstractSqlite: oAbstractSqlite,
 	}
 }
 

@@ -6,6 +6,7 @@ import (
 	"strings"
 	"time"
 
+	outputApplicationSqlite "example/internal/output/application/sqlite"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 
@@ -17,12 +18,12 @@ import (
 )
 
 type AdminUserModel struct {
-	*AbstractModel
+	*outputApplicationSqlite.AbstractSqlite
 }
 
-func NewAdminUserModel(oAbstractModel *AbstractModel) outputPortAnyModel.AdminUserModel {
+func NewAdminUserModel(oAbstractSqlite *outputApplicationSqlite.AbstractSqlite) outputPortAnyModel.AdminUserModel {
 	return &AdminUserModel{
-		AbstractModel: oAbstractModel,
+		AbstractSqlite: oAbstractSqlite,
 	}
 }
 

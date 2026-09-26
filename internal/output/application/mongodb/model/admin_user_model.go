@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 	"go.mongodb.org/mongo-driver/v2/mongo/options"
 
+	outputApplicationMongodb "example/internal/output/application/mongodb"
 	pkgInput "example/pkg/input"
 
 	domain "example/internal/domain"
@@ -15,14 +16,14 @@ import (
 )
 
 type AdminUserModel struct {
-	*AbstractModel
+	*outputApplicationMongodb.AbstractMongodb
 	Collection *mongo.Collection
 	Counters   *mongo.Collection
 }
 
 // 索引跟 script/mongodb/resource.js 建的一致：name 唯一、deleted_at 供軟刪除過濾用。
-func NewAdminUserModel(oAbstractModel *AbstractModel) (outputPortAnyModel.AdminUserModel, error) {
-	oCollection := oAbstractModel.Database.Collection("admin_users")
+func NewAdminUserModel(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) (outputPortAnyModel.AdminUserModel, error) {
+	oCollection := oAbstractMongodb.Database.Collection("admin_users")
 	oIndexView := oCollection.Indexes()
 
 	oNameIndexOptions := options.Index()
@@ -43,16 +44,16 @@ func NewAdminUserModel(oAbstractModel *AbstractModel) (outputPortAnyModel.AdminU
 		},
 	}
 
-	if _, oErr := oIndexView.CreateMany(oAbstractModel.Context, aIndexModels); oErr != nil {
+	if _, oErr := oIndexView.CreateMany(oAbstractMongodb.Context, aIndexModels); oErr != nil {
 		return nil, oErr
 	}
 
-	oCounters := oAbstractModel.Database.Collection("counters")
+	oCounters := oAbstractMongodb.Database.Collection("counters")
 
 	return &AdminUserModel{
-		AbstractModel: oAbstractModel,
-		Collection:    oCollection,
-		Counters:      oCounters,
+		AbstractMongodb: oAbstractMongodb,
+		Collection:      oCollection,
+		Counters:        oCounters,
 	}, nil
 }
 

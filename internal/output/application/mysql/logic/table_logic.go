@@ -8,17 +8,18 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
+	outputApplicationMysql "example/internal/output/application/mysql"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
 
 type TableLogic struct {
-	*AbstractLogic
+	*outputApplicationMysql.AbstractMysql
 }
 
-func NewTableLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.TableLogic {
+func NewTableLogic(oAbstractMysql *outputApplicationMysql.AbstractMysql) outputPortAnyLogic.TableLogic {
 	oLogic := &TableLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractMysql: oAbstractMysql,
 	}
 
 	return oLogic

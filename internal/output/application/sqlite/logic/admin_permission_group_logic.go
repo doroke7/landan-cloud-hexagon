@@ -10,18 +10,19 @@ import (
 	"gorm.io/gorm"
 
 	domain "example/internal/domain"
+	outputApplicationSqlite "example/internal/output/application/sqlite"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 	pkgUtility "example/pkg/utility"
 )
 
 type AdminPermissionGroupLogic struct {
-	*AbstractLogic
+	*outputApplicationSqlite.AbstractSqlite
 }
 
-func NewAdminPermissionGroupLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.AdminPermissionGroupLogic {
+func NewAdminPermissionGroupLogic(oAbstractSqlite *outputApplicationSqlite.AbstractSqlite) outputPortAnyLogic.AdminPermissionGroupLogic {
 	return &AdminPermissionGroupLogic{
-		AbstractLogic: oAbstractLogic,
+		AbstractSqlite: oAbstractSqlite,
 	}
 }
 

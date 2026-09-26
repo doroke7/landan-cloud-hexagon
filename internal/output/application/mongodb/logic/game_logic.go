@@ -8,6 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/v2/mongo"
 
 	domain "example/internal/domain"
+	outputApplicationMongodb "example/internal/output/application/mongodb"
 	outputPortAnyLogic "example/internal/output/port/any/logic"
 	pkgInput "example/pkg/input"
 )
@@ -17,16 +18,16 @@ import (
 var oDeletedAtZero = time.Date(2038, 1, 19, 3, 14, 7, 0, time.UTC)
 
 type GameLogic struct {
-	*AbstractLogic
+	*outputApplicationMongodb.AbstractMongodb
 	Collection *mongo.Collection
 }
 
-func NewGameLogic(oAbstractLogic *AbstractLogic) outputPortAnyLogic.GameLogic {
-	oCollection := oAbstractLogic.Database.Collection("games")
+func NewGameLogic(oAbstractMongodb *outputApplicationMongodb.AbstractMongodb) outputPortAnyLogic.GameLogic {
+	oCollection := oAbstractMongodb.Database.Collection("games")
 
 	return &GameLogic{
-		AbstractLogic: oAbstractLogic,
-		Collection:    oCollection,
+		AbstractMongodb: oAbstractMongodb,
+		Collection:      oCollection,
 	}
 }
 
