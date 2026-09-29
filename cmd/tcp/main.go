@@ -1,4 +1,4 @@
-package cmd
+package tcp
 
 import (
 	"context"
@@ -15,7 +15,7 @@ import (
 	pkgUtility "example/pkg/utility"
 )
 
-var oTcpCommand = &cobra.Command{
+var Command = &cobra.Command{
 	Use:   "tcp",
 	Short: "啟動 TCP 服務",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -42,9 +42,4 @@ var oTcpCommand = &cobra.Command{
 			oLogger.Fatal("TCP server 異常結束", oErrorField)
 		}
 	},
-}
-
-func init() {
-	// 將 server 指令加入到 root 中
-	oRootCommand.AddCommand(oTcpCommand)
 }

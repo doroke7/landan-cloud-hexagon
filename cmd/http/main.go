@@ -1,4 +1,4 @@
-package cmd
+package http
 
 import (
 	"context"
@@ -17,7 +17,7 @@ import (
 	pkgUtility "example/pkg/utility"
 )
 
-var oHttpCommand = &cobra.Command{
+var Command = &cobra.Command{
 	Use:   "http",
 	Short: "啟動 Gin HTTP 服務",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -56,9 +56,4 @@ var oHttpCommand = &cobra.Command{
 			oLogger.Fatal("HTTP server 異常結束", oErrorField)
 		}
 	},
-}
-
-func init() {
-	// 將 server 指令加入到 root 中
-	oRootCommand.AddCommand(oHttpCommand)
 }

@@ -1,4 +1,4 @@
-package cmd
+package websocket
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 	pkgUtility "example/pkg/utility"
 )
 
-var oWebsocketCommand = &cobra.Command{
+var Command = &cobra.Command{
 	Use:   "websocket",
 	Short: "啟動 Websocket 服務",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -51,9 +51,4 @@ var oWebsocketCommand = &cobra.Command{
 		}
 
 	},
-}
-
-func init() {
-	// 將 server 指令加入到 root 中
-	oRootCommand.AddCommand(oWebsocketCommand)
 }

@@ -1,4 +1,4 @@
-package cmd
+package resource
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 	pkgUtility "example/pkg/utility"
 )
 
-var oResourceCommand = &cobra.Command{
+var Command = &cobra.Command{
 	Use:   "resource",
 	Short: "啟動 Resource 服務",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -55,9 +55,4 @@ var oResourceCommand = &cobra.Command{
 			oLogger.Fatal("RESOURCE server 異常結束", oErrorField)
 		}
 	},
-}
-
-func init() {
-	// 將 server 指令加入到 root 中
-	oRootCommand.AddCommand(oResourceCommand)
 }

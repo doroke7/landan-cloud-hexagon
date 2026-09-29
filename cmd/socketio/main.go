@@ -1,4 +1,4 @@
-package cmd
+package socketio
 
 import (
 	"context"
@@ -25,7 +25,7 @@ import (
 	       server ping (每 5 秒推播一次)                              reply ✅
 */
 
-var oSocketioCommand = &cobra.Command{
+var Command = &cobra.Command{
 	Use:   "socketio",
 	Short: "啟動 socketio 服務",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -56,9 +56,4 @@ var oSocketioCommand = &cobra.Command{
 			oLogger.Fatal("SOCKETIO server 異常結束", oErrorField)
 		}
 	},
-}
-
-func init() {
-	// 將 server 指令加入到 root 中
-	oRootCommand.AddCommand(oSocketioCommand)
 }

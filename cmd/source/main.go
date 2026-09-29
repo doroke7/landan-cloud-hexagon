@@ -1,4 +1,4 @@
-package cmd
+package source
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 	pkgUtility "example/pkg/utility"
 )
 
-var oSourceCommand = &cobra.Command{
+var Command = &cobra.Command{
 	Use:   "source",
 	Short: "啟動 Rource 服務",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -54,9 +54,4 @@ var oSourceCommand = &cobra.Command{
 			oLogger.Fatal("SOURCE server 異常結束", oErrorField)
 		}
 	},
-}
-
-func init() {
-	// 將 server 指令加入到 root 中
-	oRootCommand.AddCommand(oSourceCommand)
 }

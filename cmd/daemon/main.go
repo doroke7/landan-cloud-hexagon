@@ -1,4 +1,4 @@
-package cmd
+package daemon
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 	pkgUtility "example/pkg/utility"
 )
 
-var oDaemonCommand = &cobra.Command{
+var Command = &cobra.Command{
 	Use:   "daemon",
 	Short: "啟動 daemon 服務",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -38,9 +38,4 @@ var oDaemonCommand = &cobra.Command{
 			oLogger.Error("DAEMON 服務已停止", oErrorField)
 		}
 	},
-}
-
-func init() {
-	// 將 server 指令加入到 root 中
-	oRootCommand.AddCommand(oDaemonCommand)
 }

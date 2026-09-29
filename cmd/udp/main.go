@@ -1,4 +1,4 @@
-package cmd
+package udp
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 	pkgUtility "example/pkg/utility"
 )
 
-var oUdpCommand = &cobra.Command{
+var Command = &cobra.Command{
 	Use:   "udp",
 	Short: "啟動 UDP 服務",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -71,9 +71,4 @@ var oUdpCommand = &cobra.Command{
 			oConn.WriteToUDP(aOkResponse, oRemoteAddr)
 		}
 	},
-}
-
-func init() {
-	// 將 server 指令加入到 root 中
-	oRootCommand.AddCommand(oUdpCommand)
 }

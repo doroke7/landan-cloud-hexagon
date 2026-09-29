@@ -1,4 +1,4 @@
-package cmd
+package facade
 
 import (
 	"context"
@@ -16,7 +16,7 @@ import (
 	pkgUtility "example/pkg/utility"
 )
 
-var oFacadeCommand = &cobra.Command{
+var Command = &cobra.Command{
 	Use:   "facade",
 	Short: "啟動 Facade 服務",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -50,9 +50,4 @@ var oFacadeCommand = &cobra.Command{
 			oLogger.Fatal("FACADE server 異常結束", oErrorField)
 		}
 	},
-}
-
-func init() {
-	// 將 server 指令加入到 root 中
-	oRootCommand.AddCommand(oFacadeCommand)
 }

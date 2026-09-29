@@ -1,4 +1,4 @@
-package cmd
+package cron
 
 import (
 	"context"
@@ -14,7 +14,7 @@ import (
 	pkgUtility "example/pkg/utility"
 )
 
-var oCronCommand = &cobra.Command{
+var Command = &cobra.Command{
 	Use:   "cron",
 	Short: "啟動排程服務",
 	Run: func(cmd *cobra.Command, args []string) {
@@ -38,9 +38,4 @@ var oCronCommand = &cobra.Command{
 		<-oCtx.Done()
 		oCron.Stop()
 	},
-}
-
-func init() {
-	// 將 server 指令加入到 root 中
-	oRootCommand.AddCommand(oCronCommand)
 }

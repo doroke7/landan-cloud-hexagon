@@ -1,4 +1,4 @@
-package cmd
+package command
 
 import (
 	"github.com/spf13/cobra"
@@ -8,12 +8,11 @@ import (
 
 // command 是子命令的父節點，本身不執行動作；不帶 Run，
 // 直接下 `command` 會印出子命令列表（跟 root 一樣）。
-var CommandCommand = &cobra.Command{
+var Command = &cobra.Command{
 	Use:   "command",
 	Short: "啟動 Command 命令",
 }
 
 func init() {
-	CommandCommand = registerCommand.Init(CommandCommand)
-	oRootCommand.AddCommand(CommandCommand)
+	Command = registerCommand.Init(Command)
 }
